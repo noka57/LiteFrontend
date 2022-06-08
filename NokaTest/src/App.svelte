@@ -11,6 +11,18 @@
 		accountInput.focus();
 	});
 
+	async function getTest(){
+	//alert(window.location);
+	//const res = await fetch(window.location.href+"/testview.html", {
+		//	method: 'GET'
+		//	})
+
+			//alert(res.status);
+			//window.location='/testview.html'
+			//const { body, statusCode, contentType } = pageContext.httpResponse,res.status(statusCode).type(contentType).send(body)
+	 //window.location = '/protected';
+	}
+
 	async function doPost () {
 		const res = await fetch(window.location.href+"login", {
 			method: 'POST',
@@ -19,16 +31,25 @@
 				password
 			})
 		})
+
+		//alert(res.status)
+		if (res.status == 404)
+			getTest();
+			//alert("not found")
 		
-		const json = await res.json()
-		result = JSON.stringify(json)
+
+		//const { body, statusCode, contentType } = pageContext.httpResponse
+    //res.status(statusCode).type(contentType).send(body)
+
+		//const json = await res.json()
+		//result = JSON.stringify(json)
 	};
 	
 	const handleOnSubmit = (evt) => {
 		// Log user into account.
-		alert(account);
-		alert(password);
-		alert(window.location.href);
+		//alert(account);
+		//alert(password);
+		//alert(window.location.href);
 		doPost();
 		
 	};

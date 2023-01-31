@@ -1,5 +1,8 @@
 <script>
 	import '../app.css';
+	import { Hamburger } from 'svelte-hamburgers';
+
+
 	import {
 		Sidebar,
 		SidebarWrapper,
@@ -32,7 +35,7 @@
 		'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 fixed right-2 top-24 z-50';
 
 	// Side component
-	let siteName = 'Svelte-Sidebar';
+	let siteName = 'Etherwan';
 
 	let siteClass = 'w-1/ h-12 text-lg pt-3 pl-5';
 
@@ -50,7 +53,7 @@
 		'flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-md md:font-medium pt-1 bg-white dark:bg-gray-900 dark:text-white';
 
 	let childLi =
-		'block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:py-0 pl-0 pr-2 text-lg dark:text-white bg-yellow-400';
+		'block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:py-0 pl-1 pr-1 text-lg dark:text-white bg-yellow-400';
 
 	let asideClass =
 		'absolute w-auto border-r-2 shadow-lg z-50 bg-white h-screen overflow-scroll dark:bg-gray-900 dark:text-white';
@@ -70,11 +73,13 @@
 		x: -200
 	};
 
+	let open;
+
 	const topMenuList = [
 		{ href: '/test1', name: 'LAN 1' },
 		{ href: '/test2', name: 'LAN 2' },
 		{ href: '/about', name: 'LAN 3' },
-		{ href: '/test1', name: 'LAN 4' },
+		{ href: '/about', name: 'LAN 4' },
 		{ href: '/about', name: 'WAN' },
 		{ href: '/about', name: 'VPN' },
 		{ href: '/about', name: 'Cloud' },
@@ -90,6 +95,8 @@
 		{ href: '/about', name: 'RSSI' }
 	];
 </script>
+
+
 
 <DarkMode {btnClass} />
 <Responsive />
@@ -107,6 +114,12 @@
 	{transitionParams}
 	topMenus={topMenuList}
 >
+<Hamburger
+    bind:open
+    color="white" />
+
+
+{#if open}
 	<Nav {navClass} {navDivClass}>
 		<Sidebar>
 			<SidebarWrapper>
@@ -163,6 +176,8 @@
 			</SidebarWrapper>
 		</Sidebar>
 	</Nav>
+
+{/if}
 </Side>
 <main class="container mx-auto py-32 px-8 lg:pl-80 pr-8 dark:text-white ">
 	<slot />

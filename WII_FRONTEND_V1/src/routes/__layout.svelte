@@ -13,6 +13,7 @@
 		DarkMode
 	} from 'flowbite-svelte';
 
+
 	import {
 		ChartPie,
 		ViewGrid,
@@ -23,8 +24,20 @@
 		ShoppingBag,
 		ShoppingCart,
 		Table,
-		Key
+		Key,
+		InformationCircle,
+		ChartBar,
+		GlobeAlt,
+		ShieldExclamation,
+		Cloud,
+		Logout
 	} from 'svelte-heros';
+
+	import {
+		Wrench,
+		Cube,
+		Cog8Tooth
+	} from 'svelte-heros-v2';
 
 	import { Side, Nav, Responsive } from 'svelte-sidebar-menu';
 
@@ -62,13 +75,14 @@
 		'pl-2 self-center text-lg font-semibold text-gray-900 whitespace-nowrap dark:text-white';
 
 	// Nav component
-	let navClass = 'py-8 px-4 text-lg';
+	let navClass = 'py-3 px-1 text-lg';
 
 	let navDivClass = 'pb-8';
 
+
 	let transitionParams = {
-		duration: 500,
-		delay: 100,
+		duration: 100,
+		delay: 50,
 		easing: quartInOut,
 		x: -200
 	};
@@ -76,8 +90,8 @@
 	let open;
 
 	const topMenuList = [
-		{ href: '/test1', name: 'LAN 1' },
-		{ href: '/test2', name: 'LAN 2' },
+		{ href: '/about', name: 'LAN 1' },
+		{ href: '/about', name: 'LAN 2' },
 		{ href: '/about', name: 'LAN 3' },
 		{ href: '/about', name: 'LAN 4' },
 		{ href: '/about', name: 'WAN' },
@@ -115,8 +129,7 @@
 	topMenus={topMenuList}
 >
 <Hamburger
-    bind:open
-    color="white" />
+    bind:open/>
 
 
 {#if open}
@@ -124,54 +137,86 @@
 		<Sidebar>
 			<SidebarWrapper>
 				<SidebarGroup>
-					<SidebarItem
-						label="Dashboard"
-						icon={{ name: ChartPie, class: 'text-red-500 mr-2 dark:text-blue-500' }}
-					/>
 					<SidebarDropdownWrapper
-						label="E-commerce"
-						icon={{ name: ShoppingCart, class: 'text-blue-500 mr-2 dark:text-pink-500' }}
+						label="ViewStatus"
+						icon={{ name: InformationCircle, class: 'text-blue-500 mr-2 dark:text-pink-500' }}
 					>
-						<SidebarDropdownItem label="Products" />
-						<SidebarDropdownItem label="Billing" />
-						<SidebarDropdownItem label="Invoice" />
+						<SidebarDropdownItem label="System Information" />
+						<SidebarDropdownItem label="Dashboard" />
+						<SidebarDropdownItem label="Network" />
+						<SidebarDropdownItem label="Cloud" />
+						<SidebarDropdownItem label="Security" />
+						<SidebarDropdownItem label="Field" />
+						<SidebarDropdownItem label="Service" />
+						<SidebarDropdownItem label="System Manager" />
+						<SidebarDropdownItem label="Traffic & Counters" />
 					</SidebarDropdownWrapper>
-					<SidebarItem
-						label="Kanban"
-						{spanClass}
-						icon={{ name: ViewGrid, class: 'text-green-500 mr-2 dark:text-purple-500' }}
+					<SidebarDropdownWrapper
+						label="Networking"
+						icon={{ name: GlobeAlt, class: 'text-green-500 mr-2 dark:text-pink-500' }}
 					>
-						<svelte:fragment slot="subtext">
-							<span
-								class="inline-flex justify-center items-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300"
-								>Pro</span
-							>
-						</svelte:fragment>
-					</SidebarItem>
-					<SidebarItem
-						label="Inbox"
-						{spanClass}
-						icon={{ name: InboxIn, class: 'text-yellow-500 mr-2 dark:text-green-500' }}
+						<SidebarDropdownItem label="WAN" />
+						<SidebarDropdownItem label="LAN" />
+						<SidebarDropdownItem label="Port Forwarding" />
+						<SidebarDropdownItem label="NAT" />
+						<SidebarDropdownItem label="Firewall" />
+						<SidebarDropdownItem label="Static Route" />
+					</SidebarDropdownWrapper>
+					<SidebarDropdownWrapper
+						label="VPN"
+						icon={{ name: ShieldExclamation, class: 'text-red-500 mr-2 dark:text-pink-500' }}
 					>
-						<svelte:fragment slot="subtext">
-							<span
-								class="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-200"
-								>3</span
-							>
-						</svelte:fragment>
-					</SidebarItem>
+						<SidebarDropdownItem label="OpenVPN" />
+						<SidebarDropdownItem label="IPSec" />
+					</SidebarDropdownWrapper>
+					<SidebarDropdownWrapper
+						label="Cloud"
+						icon={{ name: Cloud, class: 'text-yellow-500 mr-2 dark:text-pink-500' }}
+					>
+						<SidebarDropdownItem label="Azure" />
+						<SidebarDropdownItem label="AWS" />
+						<SidebarDropdownItem label="Generic" />
+					</SidebarDropdownWrapper>
+					<SidebarDropdownWrapper
+						label="Field Managment"
+						icon={{ name: Wrench, class: 'text-blue-500 mr-2 dark:text-pink-500' }}
+					>
+						<SidebarDropdownItem label="Port Connection" />
+						<SidebarDropdownItem label="Protocol" />
+						<SidebarDropdownItem label="Modbus Transparent" />
+					</SidebarDropdownWrapper>
+
+
+					<SidebarDropdownWrapper
+						label="Service"
+						icon={{ name: Cube, class: 'text-green-500 mr-2 dark:text-pink-500' }}
+					>
+						<SidebarDropdownItem label="Data Tag Pro" />
+						<SidebarDropdownItem label="Data Logger" />
+						<SidebarDropdownItem label="Event Handler" />
+						<SidebarDropdownItem label="Remote Service" />
+						<SidebarDropdownItem label="DREAMS" />
+						<SidebarDropdownItem label="Docker Engine" />
+						<SidebarDropdownItem label="GPS Standalone" />
+						<SidebarDropdownItem label="Power Saving" />
+						<SidebarDropdownItem label="Protocol Converter" />
+					</SidebarDropdownWrapper>
+
+					<SidebarDropdownWrapper
+						label="System Managment"
+						icon={{ name: Cog8Tooth, class: 'text-red-500 mr-2 dark:text-pink-500' }}
+					>
+						<SidebarDropdownItem label="Administrator" />
+						<SidebarDropdownItem label="Configuration" />
+						<SidebarDropdownItem label="Operation" />
+						<SidebarDropdownItem label="Maintainence" />
+					</SidebarDropdownWrapper>
+
 					<SidebarItem
-						label="Users"
-						icon={{ name: User, class: 'text-blue-500 mr-2 dark:text-pink-500' }}
+						label="Sign Out"
+						icon={{ name: Logout, class: 'text-green-500 mr-2 dark:text-yellow-500' }}
 					/>
-					<SidebarItem
-						label="Sign In"
-						icon={{ name: Login, class: 'text-green-500 mr-2 dark:text-yellow-500' }}
-					/>
-					<SidebarItem
-						label="Sign Up"
-						icon={{ name: Cog, class: 'text-pink-500 mr-2 dark:text-blue-500' }}
-					/>
+
 				</SidebarGroup>
 			</SidebarWrapper>
 		</Sidebar>
@@ -179,12 +224,20 @@
 
 {/if}
 </Side>
-<main class="container mx-auto py-32 px-8 lg:pl-80 pr-8 dark:text-white ">
+
+{#if open}
+<main class="container mx-auto py-32 px-8 lg:pl-60 pr-8 dark:text-white ">
 	<slot />
 </main>
+{:else}
+
+<main class="container mx-auto py-32 px-8 lg:pl-10 pr-8 dark:text-white ">
+	<slot />
+</main>
+{/if}
 
 <svelte:head>
-	<title>Flowbite-Svelte-Starter</title>
+	<title>Etherwan</title>
 	<meta
 		name="description"
 		content="Flowbite-Svelte-Starter is a quick way to start Svelte and Flowbite/Tailwind CSS. It comes with SvelteKit, Tailwind CSS, Flowbite,

@@ -246,12 +246,11 @@
 </Side>
 
 {#if open}
-<main class="container mx-auto py-32 px-8 lg:pl-60 pr-8 dark:text-white ">
+<main class="container mx-auto py-32 px-32 lg:pl-42 pr-8 dark:text-white ">
 	<slot />
 </main>
 {:else}
-
-<main class="container mx-auto py-32 px-8 lg:pl-10 pr-8 dark:text-white ">
+<main class="container mx-auto py-32 px-32 lg:pl-10 pr-8 dark:text-white ">
 	<slot />
 </main>
 {/if}

@@ -1,11 +1,10 @@
 <script>
-  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-  export let test=""
+  import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge } from 'flowbite-svelte';
   let tdStyle="width:25%";
   let tableBodyClass="";
   let tdClass="border-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" 
 </script>
-<p>{test}</p>
+
 <Table>
 
   <TableBody>
@@ -146,16 +145,23 @@
 
 
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10"><p class="text-black text-lg">Active Link</p>
-        <p class="text-black text-lg">IP Address</p>
-        <p class="text-black text-lg">Gateway</p>
-        <p class="text-black text-lg">DNS</p>
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="pl-5 w-full"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-14 h-14">
+  <path d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><p class="text-black text-lg">CPU Solo Core</p>
 </div>
-<div class="px-40"><p class="text-lg font-light">wwan</p>
-        <p class="text-lg font-light">10.20.218.162</p>
-        <p class="text-lg font-light">10.20.218.161</p>
-        <p class="text-lg font-light">8.8.8.8</p>
+<div class="w-full"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-14 h-14">
+  <path d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><p class="text-black text-lg">RAM</p>
 </div>
+<div class="w-full"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-14 h-14">
+  <path d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><p class="text-black text-lg">Storage</p>
+</div>
+
+
 </div>
                       </TableBodyCell>
 
@@ -213,6 +219,18 @@
         <p class="text-lg font-light">192.168.1.1</p>
         <p class="text-lg font-light">AA:BB:CC:DD:EE:FF</p>
 </div>
+</div>
+<div class="pt-5 px-10" colspan="2">
+<Badge large color="green">1</Badge>
+<Badge large color="green">2</Badge>
+<Badge large color="green">3</Badge>
+<Badge large color="green">4</Badge>
+<Badge large color="red">5</Badge>
+<Badge large color="red">6</Badge>
+<Badge large color="red">7</Badge>
+<Badge large color="red">8</Badge>
+<Badge large color="red">9</Badge>
+<Badge large color="red">10</Badge>
 </div>
                       </TableBodyCell>
         </TableBodyRow>

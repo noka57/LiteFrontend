@@ -2,4 +2,4 @@
   import Dashboard from './dashboard.svelte';
 </script>
 
-<Dashboard test="" />
+<Dashboard />

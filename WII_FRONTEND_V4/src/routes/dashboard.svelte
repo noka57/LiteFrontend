@@ -1,12 +1,12 @@
 <script>
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
-
+  export let test=""
   let tdStyle="width:25%";
   let tableBodyClass="";
   let tdClass="border-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" 
 </script>
-
-<Table >
+<p>{test}</p>
+<Table>
 
   <TableBody>
     <TableBodyRow>
@@ -161,12 +161,18 @@
 
    
         <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10">
-        <p class="text-black text-lg">IP Address</p>
-        <p class="text-black text-lg">MAC Address</p>
+        <p class="text-black text-lg">Operating System</p>
+        <p class="text-black text-lg">System Time</p>
+        <p class="text-black text-lg">Firmware Version</p>
+        <p class="text-black text-lg">Hardware Version</p>
+        <p class="text-black text-lg">Serial Number</p>
 </div>
 <div class="px-40">
-        <p class="text-lg font-light">192.168.1.1</p>
-        <p class="text-lg font-light">AA:BB:CC:DD:EE:FF</p>
+        <p class="text-lg font-light">OpenWRT</p>
+        <p class="text-lg font-light">Fri Mar 3 10:30:30 2023</p>
+        <p class="text-lg font-light">0.0.1</p>
+        <p class="text-lg font-light">0.0.1</p>
+        <p class="text-lg font-light">12345678</p>
 </div>
 </div>
                       </TableBodyCell>

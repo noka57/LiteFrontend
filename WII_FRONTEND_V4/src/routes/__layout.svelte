@@ -31,7 +31,7 @@
 	let siteClass = '';
 
 	let headerClass =
-		'bg-etherwan-blue px-10 items-center text-gray-600 border-b-2 p-4 dark:bg-gray-900 dark:text-white';
+		'bg-etherwan-blue px-10 items-center text-gray-600 border-b-2 p-2 dark:bg-gray-900 dark:text-white';
 
 	let hamburgerClass =
 		'hover:text-gray-500 cursor-pointer mr-4 border-none focus:outline-none pt-2 lg:hidden';
@@ -248,11 +248,11 @@
 </Side>
 
 {#if open}
-<main class="dark:text-white" style="padding-top: 128px;padding-left: 286px;padding-right: 76px;">
+<main class="dark:text-white" style="padding-top: 115px;padding-left: 286px;padding-right: 76px;">
 	<slot />
 </main>
 {:else}
-<main class="dark:text-white" style="padding-left: 84px;padding-top: 128px;padding-right: 64px;">
+<main class="dark:text-white" style="padding-left: 84px;padding-top: 115px;padding-right: 64px;">
 	<slot />
 </main>
 {/if}

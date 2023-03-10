@@ -26,9 +26,9 @@
 	// Side component
 	let logo = 'EWLOGO.png';
 	let logoClass= 'w-20';
-	let siteName = '';
+	let siteName = 'AiR PACE 2';
 
-	let siteClass = '';
+	let siteClass = 'pl-45';
 
 	let headerClass =
 		'bg-white px-10 items-center text-gray-600 border-b-2 p-2 dark:bg-gray-900 dark:text-white';
@@ -50,7 +50,7 @@
 		'absolute w-auto border-r-2 shadow-lg z-50 bg-white h-screen overflow-scroll dark:bg-gray-900 dark:text-white';
 
 	let spanClass =
-		'pl-2 self-center text-lg font-semibold text-gray-900 whitespace-nowrap dark:text-white';
+		'pl-20 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white';
 
 	// Nav component
 	let navClass = 'py-3 px-1 text-lg';
@@ -65,10 +65,12 @@
 		x: -200
 	};
 
+
+	let buttonClass = 'inline-flex items-center text-base text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200';
+
 	let open;
 
 	const topMenuList = [
-
 	];
 </script>
 
@@ -82,16 +84,14 @@
 	{siteName}
 	{siteClass}
 	{headerClass}
+	{buttonClass}
 	{hamburgerClass}
-	{topDiv}
-	{topMenuDiv}
-	{topul}
-	{childLi}
 	{asideClass}
 	{spanClass}
 	{transitionParams}
 	topMenus={topMenuList}
 >
+
 <Hamburger
     bind:open/>
 
@@ -126,7 +126,7 @@
   <path d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
         </svelte:fragment>
-						<SidebarDropdownItem label="WAN" />
+						<SidebarDropdownItem label="WAN" href='/wan' />
 						<SidebarDropdownItem label="LAN" />
 						<SidebarDropdownItem label="Port Forwarding" />
 						<SidebarDropdownItem label="NAT" />
@@ -227,15 +227,6 @@
 						<SidebarDropdownItem label="Maintainence" />
 					</SidebarDropdownWrapper>
 
-					<SidebarItem
-						label="Sign Out"
-					>
-										<svelte:fragment slot="icon">
-<svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-green-500 mr-2 dark:text-pink-500 w-6 h-6">
-  <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-        </svelte:fragment>
-</SidebarItem>
 				</SidebarGroup>
 			</SidebarWrapper>
 		</Sidebar>

@@ -127,7 +127,7 @@
 </svg>
         </svelte:fragment>
 						<SidebarDropdownItem label="WAN" href='/wan' />
-						<SidebarDropdownItem label="LAN" />
+						<SidebarDropdownItem label="LAN" href='/lan' />
 						<SidebarDropdownItem label="Port Forwarding" />
 						<SidebarDropdownItem label="NAT" />
 						<SidebarDropdownItem label="Firewall" />

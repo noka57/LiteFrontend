@@ -14,7 +14,7 @@
 		"dev": "vite dev --host --port 3000",
 		"build": "vite build",
 		"package": "svelte-kit package",
-		"preview": "vite preview",
+		"preview": "vite preview ",
 		"postinstall": "svelte-kit sync",
 		"test": "playwright test",
 		"check": "svelte-check --tsconfig ./tsconfig.json",

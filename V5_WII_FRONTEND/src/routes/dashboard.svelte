@@ -1,8 +1,15 @@
 <script>
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge } from 'flowbite-svelte';
+  import ProgressCircle from './CircleProgressBar.svelte'
   let tdStyle="width:25%";
   let tableBodyClass="";
-  let tdClass="border-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" 
+  let tdClass="border-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium";
+  let value1=10;
+  let value2=20;
+  let value3=30;
+  let value4=40;
+
+
 </script>
 
 <Table>
@@ -57,7 +64,7 @@
 
 
                     <TableBodyRow>      
-        <TableBodyCell class="border-l-8 border-r-0 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex"><div class=""><p class="text-black text-lg">SIM1</p>
+        <TableBodyCell class="border-l-8 border-r-0 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex"><div class=""><p class="text-black text-lg">SIM A</p>
 <svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
   <path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9A1.5 1.5 0 009.5 18h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z"></path>
 </svg></div>
@@ -69,7 +76,7 @@
 </div>
 
               </TableBodyCell>
-                      <TableBodyCell class="border-l-0 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex"><div class=""><p class="text-black text-lg">SIM2</p>
+                      <TableBodyCell class="border-l-0 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex"><div class=""><p class="text-black text-lg">SIM B</p>
                       <svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
   <path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9A1.5 1.5 0 009.5 18h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z"></path>
 </svg>
@@ -168,80 +175,21 @@
 
 
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="pl-5 w-full">
-
-
-<svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"viewBox="0 0 841.89 595.28" enable-background="new 0 0 841.89 595.28" class="w-64 h-64">
-<g>
-  <g>
-    <defs>
-      <polygon id="SVGID_1_" points="375.865,343.349 465.86,343.349 465.86,253.372 375.865,253.372 375.865,343.349      "/>
-    </defs>
-    <clipPath id="SVGID_2_">
-      <use xlink:href="#SVGID_1_"  overflow="visible"/>
-    </clipPath>
-    <path clip-path="url(#SVGID_2_)" fill-rule="evenodd" clip-rule="evenodd" fill="#E37A34" d="M464.286,298.324L464.286,298.324
-      c0,23.994-19.461,43.45-43.459,43.45l0,0c-23.999,0-43.425-19.456-43.425-43.45l0,0c0-23.957,19.426-43.414,43.425-43.414l0,0
-      C444.825,254.91,464.286,274.367,464.286,298.324"/>
-  </g>
-  <g>
-    <defs>
-      <polygon id="SVGID_3_" points="375.865,342.579 465.86,342.579 465.86,253.372 375.865,253.372 375.865,342.579      "/>
-    </defs>
-    <clipPath id="SVGID_4_">
-      <use xlink:href="#SVGID_3_"  overflow="visible"/>
-    </clipPath>
-    <path opacity="0.302" clip-path="url(#SVGID_4_)" fill-rule="evenodd" clip-rule="evenodd" fill="#1EA750" d="M421.01,254.817
-      c24.052,0,43.55,19.493,43.55,43.54c0,24.048-19.498,43.542-43.55,43.542c-24.053,0-43.551-19.494-43.551-43.542
-      c0-10.131,3.535-19.946,9.994-27.754l33.557,27.754V254.817L421.01,254.817z"/>
-  </g>
-  <g>
-    <defs>
-      <polygon id="SVGID_5_" points="375.865,343.349 465.86,343.349 465.86,253.372 375.865,253.372 375.865,343.349      "/>
-    </defs>
-    <clipPath id="SVGID_6_">
-      <use xlink:href="#SVGID_5_"  overflow="visible"/>
-    </clipPath>
-    <path clip-path="url(#SVGID_6_)" fill-rule="evenodd" clip-rule="evenodd" fill="#E7E6E6" d="M448.902,297.94L448.902,297.94
-      c0,15.306-12.346,27.685-27.655,27.685l0,0c-15.274,0-27.69-12.379-27.69-27.685l0,0c0-15.235,12.416-27.649,27.69-27.649l0,0
-      C436.557,270.291,448.902,282.705,448.902,297.94"/>
-    <g clip-path="url(#SVGID_6_)">
-      <defs>
-        <polygon id="SVGID_7_" points="375.865,343.349 465.86,343.349 465.86,253.372 375.865,253.372 375.865,343.349        "/>
-      </defs>
-      <clipPath id="SVGID_8_">
-        <use xlink:href="#SVGID_7_"  overflow="visible"/>
-      </clipPath>
-      <g clip-path="url(#SVGID_8_)">
-        <defs>
-          <rect id="SVGID_9_" x="375.865" y="253.372" width="89.995" height="89.977"/>
-        </defs>
-        <clipPath id="SVGID_10_">
-          <use xlink:href="#SVGID_9_"  overflow="visible"/>
-        </clipPath>
-        <g clip-path="url(#SVGID_10_)">
-          <text transform="matrix(1.0002 0 0 1 404.5205 302.8975)"><tspan x="0" y="0" fill="#435369" stroke="#435369" stroke-width="0.5054" stroke-miterlimit="10" font-family="'SimplifiedArabicFixed'" font-size="17.6877">8</tspan><tspan x="11.534" y="0" fill="#435369" stroke="#435369" stroke-width="0.5054" stroke-miterlimit="10" font-family="'SimplifiedArabicFixed'" font-size="17.6877">7</tspan><tspan x="22.29" y="0" fill="#435369" stroke="#435369" stroke-width="0.5054" stroke-miterlimit="10" font-family="'SimplifiedArabicFixed'" font-size="17.6877">%</tspan></text>
-        </g>
-      </g>
-    </g>
-  </g>
-</g>
-</svg>
-
-
-<p class="text-black text-lg">CPU Solo Core</p>
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class=""><ProgressCircle max="100" value="{value1}" />
+<p class="text-black text-lg text-center">CPU</p>
 </div>
-<div class="w-full"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-14 h-14">
-  <path d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" stroke-linecap="round" stroke-linejoin="round"></path>
-  <path d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg><p class="text-black text-lg">RAM</p>
+<div class="pl-20">
+<ProgressCircle max="100" value="{value2}" />
+<p class="text-black text-lg text-center">RAM</p>
 </div>
-<div class="w-full"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-14 h-14">
-  <path d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" stroke-linecap="round" stroke-linejoin="round"></path>
-  <path d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg><p class="text-black text-lg">Storage</p>
+<div class="pl-20">
+<ProgressCircle max="100" value="{value3}" />
+<p class="text-black text-lg text-center">EMMC</p>
 </div>
-
+<div class="pl-20">
+<ProgressCircle max="100" value="{value4}" />
+<p class="text-black text-lg text-center">SD Card</p>
+</div>
 
 </div>
                       </TableBodyCell>

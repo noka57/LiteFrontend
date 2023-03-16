@@ -2,7 +2,11 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input } from 'flowbite-svelte';
 
 
+   let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
+   let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
+
+   let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
    let pin="";
    let apn="";
@@ -59,7 +63,11 @@
   ]
 
   let a;
-    let yes = false;
+  let openDetailStatus = false;
+
+  function handleClick() {
+        openDetailStatus=!openDetailStatus;
+  }
 
 </script>
 
@@ -79,15 +87,101 @@
     <TableHeadCell class="text-center">IMSI</TableHeadCell>
     <TableHeadCell class="text-center">Registration</TableHeadCell>
   </TableHead>
-  <TableBody class="divide-y">
-    <TableBodyRow>
-      <TableBodyCell class="text-center">1</TableBodyCell>
-      <TableBodyCell class="text-center">Ready</TableBodyCell>
-      <TableBodyCell class="text-center">EG25</TableBodyCell>
-      <TableBodyCell class="text-center">460015726101417</TableBodyCell>
-      <TableBodyCell class="text-center">Registrated to home network</TableBodyCell>
-    </TableBodyRow>
-  </TableBody>
+ 
+  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"  on:click={handleClick}>
+  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">1</td>
+  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">Ready</td>
+  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">EG25</td>
+  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">460015726101417</td>
+  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">Registrated to home network</td>
+  </tr>
+
+{#if openDetailStatus}
+
+
+ <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Phone Number</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>+886912345678</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Modem Status</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>Connected</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">SIM Status</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>Active</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Active SIM</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>SIM A</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Signal Strength</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>RSSI</TableBodyCell>
+      </TableBodyRow>
+
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Registered Mobile Operator</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>PLMN ID</TableBodyCell>
+      </TableBodyRow>
+
+
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">IMSI</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>ID</TableBodyCell>
+      </TableBodyRow>
+
+
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Connect State</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>PIN</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Connected Network Type</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>LTE</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Connected Band</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>B6</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Modem Vendor</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>ven</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Modem Model</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>ven</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Modem Firmware Version</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>1.0.0</TableBodyCell>
+      </TableBodyRow>
+
+{/if}
+
+
 </Table>
   </AccordionItem>
   <AccordionItem {defaultClass}>
@@ -329,15 +423,6 @@
 
   </AccordionItem>
 </Accordion>
-  </TabItem>
-
-
-  <TabItem title="Cellular WAN-2">
-  <p>TBD</p>
-  </TabItem>
-
-  <TabItem title="Dual Cellular Policy">
-  <p>TBD</p>
   </TabItem>
 
 

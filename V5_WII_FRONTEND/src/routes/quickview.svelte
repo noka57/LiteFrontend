@@ -17,13 +17,14 @@
     { upname: '1up1', uptimestamp: '2023 March', upcontent:"{key: value}" },
     { upname: '2up2', uptimestamp: '2023 March', upcontent:"{key: value}" },
     { upname: '3up3', uptimestamp: '2023 March', upcontent:"{key: value}" },
-    { upname: '4up4', uptimestamp: '2023 March', upcontent:"{key: value}" },
+    { upname: '4up4', uptimestamp: '2023 March', upcontent:"{key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value,key: value}" },
   ];
   $: filteredItems2 = items2.filter(
     (item2) => item2.upname.toLowerCase().indexOf(searchTerm2.toLowerCase()) !== -1
   );
 
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+  let tdClass = 'px-6 py-4 font-medium ';
 
 </script>
 
@@ -165,7 +166,7 @@
       <TableBodyRow>
         <TableBodyCell>{item2.upname}</TableBodyCell>
         <TableBodyCell>{item2.uptimestamp}</TableBodyCell>
-        <TableBodyCell>{item2.upcontent}</TableBodyCell>
+        <TableBodyCell {tdClass}>{item2.upcontent}</TableBodyCell>
       </TableBodyRow>
     {/each}
   </TableBody>

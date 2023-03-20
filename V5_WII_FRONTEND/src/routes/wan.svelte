@@ -30,17 +30,18 @@
   ]
 
 
-  let selected3;
+  let selected3="SimAF";
   let countries3 = [
-    {value:"us3", name: "SIM A First"},
-    {value:"ca3", name: "SIM B First"},
-    {value:"fr3", name: "SIM A Only"},
-    {value:"f3r3", name: "SIM B Only"},
+    {value:"SimAF", name: "SIM A First"},
+    {value:"SimBF", name: "SIM B First"},
+    {value:"SimAO", name: "SIM A Only"},
+    {value:"SimBO", name: "SIM B Only"},
   ]
 
 
-  let selected4;
+  let selected4="None";
   let countries4 = [
+    {value:"None", name: "None"},
     {value:"us4", name: "Reset Modem"},
     {value:"ca4", name: "Power Cycle Modem"},
   ]
@@ -72,6 +73,12 @@
 
    let isActive = true;
 
+   let isActive2 = true;
+
+
+   let isActive3 = true;
+
+   let isActive4 = true;
 
 </script>
 
@@ -232,14 +239,38 @@
     <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td><td class="pl-5"><Select class="mt-2" items={countries2} bind:value={selected2} /></td>
     </tr>
 
+
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-center">Band Lock</p></td><td class="pl-5 pt-5"><Toggle></Toggle></td>
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Extra AT Command </p></td><td class="pl-5 pt-5"><input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    </tr>
+
+    <tr>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Band Lock</p></td><td class="pl-5 pt-5"><Toggle 
+  bind:checked={isActive2} /></td>
+    </tr>
+
+{#if isActive2}
+
+ <tr>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Band Scan and List</p></td><td class="pl-5 pt-5"><Toggle 
+  bind:checked={isActive3} /></td>
+    </tr>
+    
+    <tr>
+    <td><p class="pl-40 pt-1 text-lg font-light text-right"></p></td><td class="pl-5 pt-5">
+    <input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      </td>
     </tr>
 
 
+
+
+
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Initial AT Cmd Set</p></td><td class="pl-5 pt-5"><input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Band Select: </p></td><td class="pl-5 pt-5"><input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     </tr>
+  
+{/if}
 
     </table>
   </AccordionItem>
@@ -248,7 +279,7 @@
     <span slot="header" class="pl-4">SIM Policy</span>
 <table>
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td><td class="pl-5"><Select class="mt-2" items={countries3} bind:value={selected3} placeholder="None"/></td>
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td><td class="pl-5"><Select class="mt-2" items={countries3} bind:value={selected3} /></td>
     <td />
         <td />
     </tr>
@@ -345,7 +376,7 @@
 
 
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">SIM failover Treatment</p></td><td class="pl-5"><Select class="mt-2" items={countries4} bind:value={selected4} placeholder="None"/></td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">SIM failover Treatment</p></td><td class="pl-5"><Select class="mt-2" items={countries4} bind:value={selected4}/></td>
     </tr>
     </table>
   </AccordionItem>
@@ -354,21 +385,21 @@
     <span slot="header" class="pl-4">EWLAP-CWAN</span>
 <table>
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-center">EWLAP</p></td><td class="pl-5 pt-5"><Toggle></Toggle></td>
+    <td class="w-60"><p class="pl-40 pt-5 text-lg font-light text-right">EWLAP</p></td><td class="pl-5 pt-5"><Toggle bind:checked={isActive4}></Toggle></td>
+    </tr>
+{#if isActive4}
+
+    <tr>
+    <td><p class="pl-20 pt-5 text-lg font-light text-right">Checking Rules</p></td><td class="pl-5"><Select class="mt-2" items={countries5} bind:value={selected5} placeholder="None"/></td>
     </tr>
 
 
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Checking Rules</p></td><td class="pl-5"><Select class="mt-2" items={countries5} bind:value={selected5} placeholder="None"/></td>
-    </tr>
-
-
-    <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Checking Target 1/2</p></td><td class="pl-5"><Select class="mt-2" items={countries6} bind:value={selected6} placeholder="None"/></td>
+    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target 1/2</p></td><td class="pl-5"><Select class="mt-2" items={countries6} bind:value={selected6} placeholder="None"/></td>
     </tr>
 
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Checking Period</p></td>
+    <td><p class="pl-20 pt-5 text-lg font-light text-right">Checking Period</p></td>
     <td/>
         <td />
             <td />
@@ -409,7 +440,7 @@
 
               <tr>
               <td class="border-b-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Polling times
+              Interval times
               </td>
               <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
 <input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
@@ -422,7 +453,7 @@
             </table>
         </td>
     <tr>
-
+{/if}
     </table>
   </AccordionItem>
 

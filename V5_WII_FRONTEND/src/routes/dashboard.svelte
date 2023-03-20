@@ -7,7 +7,7 @@
   let value1=10;
   let value2=20;
   let value3=30;
-  let value4=40;
+  let value4=98;
 
 
 </script>
@@ -175,19 +175,19 @@
 
 
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class=""><ProgressCircle max="100" value="{value1}" />
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class=""><ProgressCircle max="102" value="{value1}" color="blue"/>
 <p class="text-black text-lg text-center">CPU</p>
 </div>
 <div class="pl-20">
-<ProgressCircle max="100" value="{value2}" />
+<ProgressCircle max="102" value="{value2}" color="green"/>
 <p class="text-black text-lg text-center">RAM</p>
 </div>
 <div class="pl-20">
-<ProgressCircle max="100" value="{value3}" />
+<ProgressCircle max="102" value="{value3}" color="yellow"/>
 <p class="text-black text-lg text-center">EMMC</p>
 </div>
 <div class="pl-20">
-<ProgressCircle max="100" value="{value4}" />
+<ProgressCircle max="102" value="{value4}" color="orange"/>
 <p class="text-black text-lg text-center">SD Card</p>
 </div>
 

@@ -13,19 +13,20 @@
    let un="";
    let pd="";
 
-   let selected;
+   let selected="auto";
   let countries = [
-    {value:"us", name: "AUTO"},
-    {value:"ca", name: "CHAP"},
-    {value:"fr", name: "PAP"},
+    {value:"auto", name: "AUTO"},
+    {value:"chap", name: "CHAP"},
+    {value:"pap", name: "PAP"},
   ];
 
-  let selected2;
+  let selected2="auto";
   let countries2 = [
-    {value:"us2", name: "3G"},
-    {value:"ca2", name: "4G"},
-    {value:"fr2", name: "5G"},
-    {value:"f2r2", name: "5GNR-SA"},
+    {value:"auto", name: "AUTO"},
+    {value:"3g", name: "3G"},
+    {value:"4g", name: "4G"},
+    {value:"5g", name: "5G"},
+    {value:"5gnrsa", name: "5GNR-SA"},
   ]
 
 
@@ -68,6 +69,9 @@
   function handleClick() {
         openDetailStatus=!openDetailStatus;
   }
+
+   let isActive = true;
+
 
 </script>
 
@@ -191,17 +195,33 @@
     <td><p class="pl-40 pt-1 text-lg font-light text-right">PIN</p></td><td class="pl-5"><input type="text" bind:value={pin} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     </tr>
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-center">Automatic APN Selection</p></td><td class="pl-5 pt-5"><Toggle></Toggle></td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-center">Automatic APN Selection</p></td><td class="pl-5 pt-5"><Toggle 
+  bind:checked={isActive} /></td>
+    </tr>
+{#if isActive}
+<tr>
+
+</tr>
+{:else}
+    <tr>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">APN</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    </tr>
+
+
+    <tr>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Username</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    </tr>
+
+
+    <tr>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     </tr>
 
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">APN</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" placeholder="manually input or auto"></td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Authentication</p></td><td class="pl-5 pt-5"><Select class="mt-2" items={countries} bind:value={selected}/></td>
     </tr>
+{/if}
 
-
-    <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Authentication</p></td><td class="pl-5 pt-5"><Select class="mt-2" items={countries} bind:value={selected} placeholder="None"/></td>
-    </tr>
 
     </table>
   </AccordionItem>
@@ -209,7 +229,7 @@
     <span slot="header" class="pl-4">Advanced Settings</span>
 <table>
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td><td class="pl-5"><Select class="mt-2" items={countries2} bind:value={selected2} placeholder="Auto"/></td>
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td><td class="pl-5"><Select class="mt-2" items={countries2} bind:value={selected2} /></td>
     </tr>
 
     <tr>

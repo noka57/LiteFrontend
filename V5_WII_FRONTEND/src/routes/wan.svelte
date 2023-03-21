@@ -84,7 +84,94 @@
 
 <Tabs style="underline">
   <TabItem open title="General Status">
-  <p>TBD</p>
+  <Table striped={true}>
+  <TableHead>
+    <TableHeadCell></TableHeadCell>
+    <TableHeadCell>Cellular-WAN-1</TableHeadCell>
+    <TableHeadCell>Ethernet WAN</TableHeadCell>
+  </TableHead>
+  <TableBody class="divide-y">
+    <TableBodyRow>
+      <TableBodyCell>Status</TableBodyCell>
+      <TableBodyCell>Connect</TableBodyCell>
+      <TableBodyCell>N.A</TableBodyCell>
+    </TableBodyRow>
+    <TableBodyRow>
+      <TableBodyCell>IP Address</TableBodyCell>
+      <TableBodyCell>10.23.34.3</TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+    </TableBodyRow>
+    <TableBodyRow>
+      <TableBodyCell>Gateway</TableBodyCell>
+      <TableBodyCell>10.23.34.1</TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+    </TableBodyRow>
+    <TableBodyRow>
+      <TableBodyCell>DNS 1</TableBodyCell>
+      <TableBodyCell>168.95.1.1</TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+    </TableBodyRow>
+    <TableBodyRow>
+      <TableBodyCell>DNS 2</TableBodyCell>
+      <TableBodyCell>8.8.8.8</TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+    </TableBodyRow>
+
+    <TableBodyRow>
+      <TableBodyCell>SIM Status</TableBodyCell>
+      <TableBodyCell>SIM A Ready</TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+    </TableBodyRow>
+
+
+    <TableBodyRow>
+      <TableBodyCell>Role</TableBodyCell>
+      <TableBodyCell>Primary</TableBodyCell>
+      <TableBodyCell>Backup</TableBodyCell>
+    </TableBodyRow>
+
+
+    <TableBodyRow>
+      <TableBodyCell>Error Reason</TableBodyCell>
+      <TableBodyCell>SIM missing</TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+    </TableBodyRow>
+
+    <TableBodyRow>
+      <TableBodyCell colspan="2">Cellular Status</TableBodyCell>
+      <TableBodyCell rowspan="6">N.A</TableBodyCell>
+    </TableBodyRow>
+
+    <TableBodyRow>
+      <TableBodyCell>Register Status</TableBodyCell>
+      <TableBodyCell>Registered</TableBodyCell>
+    </TableBodyRow>
+
+    <TableBodyRow>
+      <TableBodyCell>Network Type</TableBodyCell>
+      <TableBodyCell>4G</TableBodyCell>
+    </TableBodyRow>
+
+    <TableBodyRow>
+      <TableBodyCell>Band</TableBodyCell>
+      <TableBodyCell>6</TableBodyCell>
+    </TableBodyRow>
+
+
+    <TableBodyRow>
+      <TableBodyCell>Operator</TableBodyCell>
+      <TableBodyCell>CHT</TableBodyCell>
+    </TableBodyRow>
+
+    <TableBodyRow>
+      <TableBodyCell>RSSI</TableBodyCell>
+      <TableBodyCell>-85dBm</TableBodyCell>
+    </TableBodyRow>
+
+
+
+  </TableBody>
+</Table>
   </TabItem>
   <TabItem title="Cellular WAN-1">
 <Accordion>

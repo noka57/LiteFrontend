@@ -8,25 +8,25 @@
     if (value <= 0) {
       return "";
     } else if (value >= max) {
-      return "M50,5A45 45 0 1 1 49.9999 5";
+      return "M50,5A35 35 0 1 1 49.9999 5";
     } else {
 
 
       const angle = Math.PI * 2 * (value / max);
-      x = 50 + Math.cos(angle - Math.PI / 2) * 45;
-      y = 50 + Math.sin(angle - Math.PI / 2) * 45;
+      x = 50 + Math.cos(angle - Math.PI / 2) * 35;
+      y = 40 + Math.sin(angle - Math.PI / 2) * 35;
       let path = "M50,5";
-      if (value<80)
+      if (value<=80)
       {
         if (angle > Math.PI) {
-          path += "A45 45 0 0 1 50 95";
+          path += "A35 35 0 0 1 50 75";
         }
-        path += `A45 45 0 0 1 ${x} ${y}`;
+        path += `A35 35 0 0 1 ${x} ${y}`;
         return path;
       }
       else
       {
-        path+="A45 45 0 0 1 50 95A45 45 0 0 1 7.202456766718086 36.09423525312737";
+        path+="A35 35 0 0 1 50 75A35 35 0 0 1 15.810308878413977 32.51234208777258";
         return path;
       }
     }
@@ -42,10 +42,10 @@
   }
   path:first-child {
     stroke: var(--progress-trackcolor, #adb5bd);
-    stroke-width: var(--progress-trackwidth, 9px);
+    stroke-width: var(--progress-trackwidth, 19px);
   }
   path:last-child {
-    stroke-width: var(--progress-width, 10px);
+    stroke-width: var(--progress-width, 20px);
   }
   div {
     height: 100%;
@@ -55,16 +55,17 @@
   span {
     left: 50%;
     position: absolute;
-    top: -50%;
+    top: -60%;
     transform: translate(-50%, -50%);
+    color:blue;
   }
 </style>
 <div>
   <svg viewBox="0 0 100 100">
-    <path d="M50,5A45 45 0 1 1 49.9999 5" />
-    <path stroke-width=10px stroke={color} d="{progressPath()}" />
-{#if value >=80}
-    <path d="M{x},{y}A45 45 0 0 0 7.202456766718086, 36.09423525312737A45" stroke="red"/>
+    <path d="M50,5A35 35 0 1 1 49.9999 5" />
+    <path stroke-width=20px stroke={color} d="{progressPath()}" />
+{#if value >80}
+    <path d="M{x},{y}A35 35 0 0 0 15.810308878413977 32.51234208777258A35" stroke="red"/>
 {/if}
   </svg>
   <div>

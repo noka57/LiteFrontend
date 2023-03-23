@@ -4,8 +4,8 @@
   let tdStyle="width:25%";
   let tableBodyClass="";
   let tdClass="border-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium";
-  let value1=10;
-  let value2=90;
+  let value1=50;
+  let value2=80;
   let value3=85;
   let value4=98;
 

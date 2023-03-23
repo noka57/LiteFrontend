@@ -41,7 +41,7 @@
     width: 100%;
   }
   path:first-child {
-    stroke: var(--progress-trackcolor, grey);
+    stroke: var(--progress-trackcolor, #adb5bd);
     stroke-width: var(--progress-trackwidth, 9px);
   }
   path:last-child {

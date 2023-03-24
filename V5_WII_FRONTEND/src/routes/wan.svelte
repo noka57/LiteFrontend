@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip } from 'flowbite-svelte';
+  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio } from 'flowbite-svelte';
 
 
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
@@ -17,11 +17,6 @@
    let interval="1500";
 
    let selected="auto";
-  let countries = [
-    {value:"auto", name: "AUTO"},
-    {value:"chap", name: "CHAP"},
-    {value:"pap", name: "PAP"},
-  ];
 
   let selected2="auto";
   let countries2 = [
@@ -366,8 +361,8 @@
     <tr>
     <td><p class="pl-40 pt-1 text-lg font-light text-right">PIN</p></td><td class="pl-5"><input type="text" bind:value={pin} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     <td class="pl-5 pt-1">
-    <svg id="click" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" stroke-linecap="round" stroke-linejoin="round"></path>
+<svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 <Tooltip trigger="click" triggeredBy="#click">Click tooltip content</Tooltip>
     </td>
@@ -376,11 +371,8 @@
     <td><p class="pl-40 pt-5 text-lg font-light text-center">Automatic APN Selection</p></td><td class="pl-5 pt-5"><Toggle 
   bind:checked={isActive} /></td>
     </tr>
-{#if isActive}
-<tr>
 
-</tr>
-{:else}
+{#if !isActive}
     <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-right">APN</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     </tr>
@@ -396,10 +388,33 @@
     </tr>
 
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Authentication</p></td><td class="pl-5 pt-5"><Select class="mt-2" items={countries} bind:value={selected}/></td>
-    </tr>
-{/if}
+    <td>
 
+    <p class="pl-40 pt-5 text-lg font-light text-right">Authentication</p></td>
+
+
+
+    <td class="pl-5 pt-5">
+<div class="flex gap-4">
+  <Radio bind:group={selected} value='auto' >AUTO</Radio>
+  <Radio bind:group={selected} value='chap' >CHAP</Radio>
+  <Radio bind:group={selected} value='pap' >PAP</Radio>
+
+</div>
+
+
+    </td>
+
+{/if}
+    <tr>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
 
     </table>
   </AccordionItem>
@@ -407,7 +422,15 @@
     <span slot="header" class="pl-4">Advanced Settings</span>
 <table>
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td><td class="pl-5"><Select class="mt-2" items={countries2} bind:value={selected2} /></td>
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td>  <td class="pl-5 pt-5">
+<div class="flex gap-4">
+  <Radio bind:group={selected2} value='auto' >AUTO</Radio>
+  <Radio bind:group={selected2} value='3g' >3G</Radio>
+  <Radio bind:group={selected2} value='4g' >4G</Radio>
+  <Radio bind:group={selected2} value='5g' >5G</Radio>
+  <Radio bind:group={selected2} value='5gnrsa' >5GNR-SA</Radio>
+</div>
+
     </tr>
 
 
@@ -442,7 +465,15 @@
     </tr>
   
 {/if}
+        <tr>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
 
+
+    </tr>
     </table>
   </AccordionItem>
 

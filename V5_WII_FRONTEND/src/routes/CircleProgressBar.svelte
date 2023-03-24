@@ -1,6 +1,6 @@
 <script>
   export let value = 0;
-  export let max = 101;
+  export let max = 105;
   export let color = "currentColor";
   let x;
   let y;
@@ -37,7 +37,7 @@
   svg {
     fill: var(--progress-fill, transparent);
     height: 100%;
-    stroke-linecap: var(--progress-linecap, round);
+    stroke-linecap: var(--progress-linecap, line);
     width: 100%;
   }
   path:first-child {

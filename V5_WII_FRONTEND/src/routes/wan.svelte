@@ -57,12 +57,7 @@
 
 
   let selected12="Off";
-  let countries12 = [
-    {value:"Off", name: "Off"},
-    {value:"Time", name: "Time"},
-    {value:"TA", name: "Traffic Amount"},
-    {value:"DS", name: "Data Source"},
-  ]
+
 
   let selected13="Sch";
   let countries13 = [
@@ -1100,9 +1095,19 @@ Policy">
 
   </td>
 
-  <td class="pl-5">    <Select class="mt-2" items={countries12} bind:value={selected12}/>
-  </td>
 
+      <td class="pl-5"><div class="flex gap-4">
+  <Radio bind:group={selected12} value='Off' >Off</Radio>
+  <Radio bind:group={selected12} value='Time' >Time</Radio>
+  <Radio bind:group={selected12} value='TA'>Traffic Amount</Radio>
+  <Radio bind:group={selected12} value='DS' >Data Source</Radio>
+
+
+</div></td>
+<td/>
+<td/>
+<td/>
+<td/>
   </tr>
 
 
@@ -1201,7 +1206,7 @@ Policy">
   <td>
 
   </td>
-  <td><p class="pl-5 pt-5 text-lg font-light text-left">Data Source</p>
+  <td><p class="pl-5 pt-5 text-lg font-light text-center">Data Source</p>
 
   </td>
 
@@ -1219,7 +1224,7 @@ Policy">
   </tr>
 <tr>
 <td></td>
-  <td class="pl-5 pt-5 text-lg font-light text-left">
+  <td class="pl-5 pt-5 text-lg font-light text-center">
   RX for
   </td>
 
@@ -1243,7 +1248,7 @@ Policy">
   <td>
 
   </td>
-  <td><p class="pl-5 pt-5 text-lg font-light text-left">Data Source</p>
+  <td><p class="pl-5 pt-5 text-lg font-light text-center">Data Source</p>
 
   </td>
 
@@ -1262,7 +1267,7 @@ Policy">
   </tr>
 <tr>
 <td></td>
-  <td class="pl-5 pt-5 text-lg font-light text-left" colspan="2">
+  <td class="pl-5 pt-5 text-lg font-light text-center" colspan="2">
 Once Rx of Modbus and Disconnect lasting time
   </td>
    <td class="pl-5 pt-5">
@@ -1276,6 +1281,19 @@ Once Rx of Modbus and Disconnect lasting time
 
 
 
+ <tr>
+    <td/>
+<td/>
+<td/>
+    <td/>
+<td/>
+<td/>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
 
 
 

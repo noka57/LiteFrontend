@@ -17,91 +17,43 @@
    let interval="1500";
 
    let selected="auto";
-
-  let selected2="auto";
-  let countries2 = [
-    {value:"auto", name: "AUTO"},
-    {value:"3g", name: "3G"},
-    {value:"4g", name: "4G"},
-    {value:"5g", name: "5G"},
-    {value:"5gnrsa", name: "5GNR-SA"},
-  ]
-
+   let selected2="auto";
 
   let selected3="SimAF";
-  let countries3 = [
-    {value:"SimAF", name: "SIM A First"},
-    {value:"SimBF", name: "SIM B First"},
-    {value:"SimAO", name: "SIM A Only"},
-    {value:"SimBO", name: "SIM B Only"},
-  ]
-
 
   let selected4="None";
-  let countries4 = [
-    {value:"None", name: "None"},
-    {value:"us4", name: "Reset Modem"},
-    {value:"ca4", name: "Power Cycle Modem"},
-  ]
-
 
   let selected5="PING";
-  let countries5 = [
-    {value:"PING", name: "PING"},
-    {value:"ca5", name: "DNS Query"},
-    {value:"fr5", name: "DNS Packet Check"},
-  ]
-
 
   let selected6="dns1";
-  let countries6 = [
-    {value:"None", name: "None"},
-    {value:"dns1", name: "DNS 1"},
-    {value:"dns2", name: "DNS 2"},
-    {value:"gw", name: "Gateway"},
-    {value:"ot", name: "Other Host"},
-  ]
 
 
 
   let selected7="DClient";
-  let countries7 = [
-    {value:"Sip", name: "Static IP"},
-    {value:"DClient", name: "DHCP Client"},
-    {value:"PPP", name: "PPPoE"},
-  ]
-
+  let selected5_1="PING";
+  let selected6_1="dns1";
 
   let selected8="Off";
-  let countries8 = [
-    {value:"Off", name: "Off"},
-    {value:"Aon", name: "Always On"},
-    {value:"fo", name: "Fail Over"},
-    {value:"fb", name: "Fail Back"},
-  ]
+
+  let selected5_2="PING";
+  let selected6_2="dns1";
 
 
 
   let selected9="cw1";
-  let countries9 = [
-    {value:"cw1", name: "C-WAN-1"},
-    {value:"ew", name: "E-WAN"},
-  ]
-
+  let selected9_1="cw1";
+  let selected9_2="cw1";
 
 
   let selected10="ew";
-  let countries10 = [
-    {value:"ew", name: "E-WAN"},
-  ]
 
 
   let selected11="cw1";
-  let countries11 = [
-    {value:"cw1", name: "C-WAN-1"},
-  ]
+
+  let selected10_1="ew";
 
 
+  let selected11_1="cw1";
 
 
   let selected12="Off";
@@ -422,7 +374,8 @@
     <span slot="header" class="pl-4">Advanced Settings</span>
 <table>
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td>  <td class="pl-5 pt-5">
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td>  
+    <td class="pl-5">
 <div class="flex gap-4">
   <Radio bind:group={selected2} value='auto' >AUTO</Radio>
   <Radio bind:group={selected2} value='3g' >3G</Radio>
@@ -430,7 +383,7 @@
   <Radio bind:group={selected2} value='5g' >5G</Radio>
   <Radio bind:group={selected2} value='5gnrsa' >5GNR-SA</Radio>
 </div>
-
+</td>
     </tr>
 
 
@@ -481,7 +434,16 @@
     <span slot="header" class="pl-4">SIM Policy</span>
 <table>
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td><td class="pl-5"><Select class="mt-2" items={countries3} bind:value={selected3} /></td>
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td>
+ <td class="pl-5">
+<div class="flex gap-4">
+  <Radio bind:group={selected3} value='SimAF' >SIM A First</Radio>
+  <Radio bind:group={selected3} value='SimBF' >SIM B First</Radio>
+  <Radio bind:group={selected3} value='SimAO' >SIM A Only</Radio>
+  <Radio bind:group={selected3} value='SimBO' >SIM B Only</Radio>
+
+</div>
+</td>
     <td />
         <td />
     </tr>
@@ -578,7 +540,24 @@
 
 
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">SIM failover Treatment</p></td><td class="pl-5"><Select class="mt-2" items={countries4} bind:value={selected4}/></td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">SIM failover Treatment</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected4} value='None' >None</Radio>
+  <Radio bind:group={selected4} value='RM' >Reset Modem</Radio>
+  <Radio bind:group={selected4} value='PCM'>Power Cycle Modem</Radio>
+
+
+</div></td>
+    </tr>
+
+            <tr>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
     </tr>
     </table>
   </AccordionItem>
@@ -592,12 +571,30 @@
 {#if isActive4}
 
     <tr>
-    <td><p class="pl-20 pt-5 text-lg font-light text-right">Checking Rules</p></td><td class="pl-5"><Select class="mt-2" items={countries5} bind:value={selected5} placeholder="None"/></td>
+    <td><p class="pl-20 pt-5 text-lg font-light text-right">Checking Rules</p></td>
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected5} value='PING' >PING</Radio>
+  <Radio bind:group={selected5} value='DNSQ' >DNS Query</Radio>
+  <Radio bind:group={selected5} value='DNSPC'>DNS Packet Check</Radio>
+
+
+</div></td>
+
     </tr>
 
 
     <tr>
-    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target 1/2</p></td><td class="pl-5"><Select class="mt-2" items={countries6} bind:value={selected6} placeholder="None"/></td>
+    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target 1/2</p></td>
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected6} value='None' >None</Radio>
+  <Radio bind:group={selected6} value='dns1' >DNS 1</Radio>
+  <Radio bind:group={selected6} value='dns2'>DNS 2</Radio>
+  <Radio bind:group={selected6} value='gw' >Gateway</Radio>
+  <Radio bind:group={selected6} value='otherH'>Other Host</Radio>
+
+</div></td>
     </tr>
 
     <tr>
@@ -656,6 +653,15 @@
         </td>
     <tr>
 {/if}
+    <tr>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
     </table>
   </AccordionItem>
 
@@ -724,8 +730,15 @@
 
   </td>
 
-  <td class="pl-5">    <Select class="mt-2" items={countries7} bind:value={selected7}/>
-  </td>
+
+  <td class="pl-5"><div class="flex gap-4">
+  <Radio bind:group={selected7} value='Sip' >Static IP</Radio>
+  <Radio bind:group={selected7} value='DClient' >DHCP Client</Radio>
+  <Radio bind:group={selected7} value='PPP'>PPPoE</Radio>
+
+
+</div></td>
+
 
   </tr>
 
@@ -761,6 +774,16 @@
 
 {/if}
 
+    <tr>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
   </table>
 
   </AccordionItem>
@@ -770,17 +793,38 @@
 
 <table>
     <tr>
-    <td class="w-60"><p class="pl-40 pt-5 text-lg font-light text-right">EWLAP</p></td><td class="pl-5 pt-5"><Toggle bind:checked={isActive5}></Toggle></td>
+    <td class="w-60"><p class="pl-40 pt-5 text-lg font-light text-right">EWLAP</p></td>
+    <td class="pl-5 pt-5"><Toggle bind:checked={isActive5}></Toggle></td>
     </tr>
 {#if isActive5}
 
     <tr>
-    <td><p class="pl-20 pt-5 text-lg font-light text-right">Checking Rules</p></td><td class="pl-5"><Select class="mt-2" items={countries5} bind:value={selected5} placeholder="None"/></td>
+    <td><p class="pl-20 pt-5 text-lg font-light text-right">Checking Rules</p></td>
+  <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected5_1} value='PING' >PING</Radio>
+  <Radio bind:group={selected5_1} value='DNSQ' >DNS Query</Radio>
+  <Radio bind:group={selected5_1} value='DNSPC'>DNS Packet Check</Radio>
+
+
+</div></td>
+
     </tr>
 
 
+
+
+
     <tr>
-    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target</p></td><td class="pl-5"><Select class="mt-2" items={countries6} bind:value={selected6} placeholder="None"/></td>
+    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected6_1} value='None' >None</Radio>
+  <Radio bind:group={selected6_1} value='dns1' >DNS 1</Radio>
+  <Radio bind:group={selected6_1} value='dns2'>DNS 2</Radio>
+  <Radio bind:group={selected6_1} value='gw' >Gateway</Radio>
+  <Radio bind:group={selected6_1} value='otherH'>Other Host</Radio>
+
+</div></td>
+
     </tr>
 
     <tr>
@@ -837,6 +881,18 @@
         </td>
     <tr>
 {/if}
+
+
+    <tr>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
     </table>
 
   </AccordionItem>
@@ -853,52 +909,109 @@ Policy">
 
   </td>
 
-  <td class="pl-5">    <Select class="mt-2" items={countries8} bind:value={selected8}/>
-  </td>
+      <td class="pl-5"><div class="flex gap-4">
+  <Radio bind:group={selected8} value='Off' >Off</Radio>
+  <Radio bind:group={selected8} value='Aon' >Always On</Radio>
+  <Radio bind:group={selected8} value='fo'>Fail Over</Radio>
+  <Radio bind:group={selected8} value='fb' >Fail Back</Radio>
+
+
+</div></td>
+
 
   </tr>
 
 {#if selected8=="Aon"}
   <tr>
- <td><p class="pl-40 pt-1 text-lg font-light text-right">Primary WAN</p>
- <td class="pl-5">    <Select class="mt-2" items={countries9} bind:value={selected9}/>
-  </td>
+ <td><p class="pl-40 pt-5 text-lg font-light text-right">Primary WAN</p></td>
+ <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected9} value='cw1' >C-WAN-1</Radio>
+  <Radio bind:group={selected9} value='ew' >E-WAN</Radio>
+
+
+</div></td>
 
 
   </tr>
 
+{:else if selected8=="fo"}
+  <tr>
+ <td><p class="pl-40 pt-5 text-lg font-light text-right">Primary WAN</p></td>
+ <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected9_1} value='cw1' >C-WAN-1</Radio>
+  <Radio bind:group={selected9_1} value='ew' >E-WAN</Radio>
+</div></td>
+
+  </tr>
+{:else if selected8=="fb"}
+  <tr>
+ <td><p class="pl-40 pt-5 text-lg font-light text-right">Primary WAN</p></td>
+ <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected9_2} value='cw1' >C-WAN-1</Radio>
+  <Radio bind:group={selected9_2} value='ew' >E-WAN</Radio>
+</div></td>
+
+  </tr>
 {/if}
 
-
 {#if selected8=="fo" || selected8=="fb"}
-  <tr>
- <td><p class="pl-40 pt-1 text-lg font-light text-right">Primary WAN</p>
- <td class="pl-5">    <Select class="mt-2" items={countries9} bind:value={selected9}/>
-  </td>
-
-  </tr>
     <tr>
- <td><p class="pl-40 pt-1 text-lg font-light text-right">Backup WAN</p></td>
-  {#if selected9=="cw1"}
+ <td><p class="pl-40 pt-5 text-lg font-light text-right">Backup WAN</p></td>
+  {#if selected9_1=="cw1" && selected8=="fo"}
 
-    <td class="pl-5">    <Select class="mt-2" items={countries10} bind:value={selected10}/></td>
+
+ <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected10} value='ew' >E-WAN</Radio>
+  </div></td>
   
-  {:else}
+  {:else if selected9_1=='ew'&& selected8=="fo"}
 
-  <td class="pl-5">    <Select class="mt-2" items={countries11} bind:value={selected11}/></td>
+ <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected11} value='cw1' >C-WAN-1</Radio>
 
-  {/if}
+</div></td>
+  {:else if selected9_2=="cw1" && selected8=="fb"}
 
+<td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected10_1} value='ew' >E-WAN</Radio>
+</div></td>
+  
+  {:else if selected9_2=='ew'&& selected8=="fb"}
+
+ <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected11_1} value='cw1' >C-WAN-1</Radio>
+
+</div></td>
+{/if}
 
 </tr>
 
+
+
+
+
  <tr>
-    <td><p class="pl-20 pt-5 text-lg font-light text-right">Payload Checking Rules</p></td><td class="pl-5"><Select class="mt-2" items={countries5} bind:value={selected5} placeholder="None"/></td>
+    <td><p class="pl-20 pt-5 text-lg font-light text-right">Payload Checking Rules</p></td>
+  <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected5_2} value='PING' >PING</Radio>
+  <Radio bind:group={selected5_2} value='DNSQ' >DNS Query</Radio>
+  <Radio bind:group={selected5_2} value='DNSPC'>DNS Packet Check</Radio>
+
+
+</div></td>
     </tr>
 
 
     <tr>
-    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target 1/2</p></td><td class="pl-5"><Select class="mt-2" items={countries6} bind:value={selected6} placeholder="None"/></td>
+    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target 1/2</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected6_2} value='None' >None</Radio>
+  <Radio bind:group={selected6_2} value='dns1' >DNS 1</Radio>
+  <Radio bind:group={selected6_2} value='dns2'>DNS 2</Radio>
+  <Radio bind:group={selected6_2} value='gw' >Gateway</Radio>
+  <Radio bind:group={selected6_2} value='otherH'>Other Host</Radio>
+
+</div></td>
     </tr>
 
     <tr>
@@ -956,10 +1069,18 @@ Policy">
             </table>
         </td>
     <tr>
-
 {/if}
 
 
+ <tr>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
 
   </table>
 

@@ -131,8 +131,7 @@
         </svelte:fragment>
 						<SidebarDropdownItem label="WAN" href='/wan' active={activeUrl === '/wan'}/>
 						<SidebarDropdownItem label="LAN" href='/lan' active={activeUrl === '/lan'}/>
-						<SidebarDropdownItem label="Port Forwarding" href='/portfwd' active={activeUrl === '/portfwd'}/>
-						<SidebarDropdownItem label="NAT" />
+						<SidebarDropdownItem label="NAT" href='/nat' active={activeUrl === '/nat'}/>
 						<SidebarDropdownItem label="Firewall" />
 						<SidebarDropdownItem label="Static Route" />
 					</SidebarDropdownWrapper>

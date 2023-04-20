@@ -24,29 +24,34 @@
 <p class="text-xl font-bold">1hr 11mins</p>
 </div>
 </div></TableBodyCell>
-      <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class=""><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-white bg-green-500 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
-  <path d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg></div>
+      <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class=""><svg class="w-16 h-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 -3 24 24">
+
+  <circle fill="#1A87C9" cx="9" cy="9" r="9"/>
+  <path fill="#FFFFFF" d="M13.5,9.8H9C8.6,9.8,8.2,9.4,8.2,9V3c0-0.4,0.3-0.8,0.8-0.8S9.8,2.6,9.8,3v5.2h3.8c0.4,0,0.8,0.3,0.8,0.8
+    S13.9,9.8,13.5,9.8z"/>
+
+</svg>
+
+</div>
 <div class="w-full">
 <p class="text-sm font-light">Internet Uptime</p>
 <p class="text-xl font-bold">1hr 3mins</p>
 </div>
 </div></TableBodyCell>
-      <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="660 368 50 30"  class="w-12 h-12">
+      <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class="">
+<svg class="w-16 h-16 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45.3 25">
 
-    <path fill="#076291" d="M702.39,382.07c0.02-0.18,0.03-0.34,0.03-0.49c0-2.85-2.31-5.16-5.15-5.16c-0.53,0-1.04,0.08-1.53,0.23
-      c-0.23-0.35-0.5-0.67-0.78-0.97l-21.3,21.31h19.21c0,0,0.01-0.01,0.01-0.01c0.09,0,0.18,0.01,0.27,0.01
-      c2.71,0,5.11-1.31,6.62-3.33c3.28-0.14,5.9-2.84,5.9-6.15C705.66,385.21,704.41,383.15,702.39,382.07z M700.17,393.04
-      c0.77-1.26,1.23-2.73,1.23-4.32c0-3.26-1.89-6.07-4.63-7.41c0.05-0.3,0.08-0.61,0.08-0.92c0-1.17-0.29-2.27-0.81-3.24
-      c0.39-0.11,0.81-0.17,1.23-0.17c2.53,0,4.58,2.06,4.58,4.59c0,0.18-0.02,0.37-0.05,0.61l-0.03,0.21l0.19,0.09
-      c1.93,0.95,3.13,2.87,3.13,5.01C705.08,390.35,702.93,392.71,700.17,393.04z"/>
+    <path fill="#076291" d="M42,10.1c0-0.2,0-0.3,0-0.5c0-2.9-2.3-5.2-5.2-5.2c-0.5,0-1,0.1-1.5,0.2c-0.2-0.4-0.5-0.7-0.8-1L13.3,25h19.2
+      l0,0c0.1,0,0.2,0,0.3,0c2.7,0,5.1-1.3,6.6-3.3c3.3-0.1,5.9-2.8,5.9-6.1C45.3,13.2,44.1,11.1,42,10.1z M39.8,21
+      c0.8-1.3,1.2-2.7,1.2-4.3c0-3.3-1.9-6.1-4.6-7.4c0-0.3,0.1-0.6,0.1-0.9c0-1.2-0.3-2.3-0.8-3.2C36.1,5,36.5,5,36.9,5
+      c2.5,0,4.6,2.1,4.6,4.6c0,0.2,0,0.4,0,0.6v0.2l0.2,0.1c1.9,1,3.1,2.9,3.1,5C44.7,18.3,42.6,20.7,39.8,21z"/>
 
-    <path fill="#1A87C9" d="M690,373.55c-1.89,0-3.61,0.77-4.85,2c-1.57-2.14-4.06-3.54-6.92-3.54c-4.73,0-8.58,3.84-8.58,8.58
-      c0,0.2,0.05,0.4,0.06,0.62c-0.42-0.08-0.85-0.14-1.27-0.14c-4.47,0-8.1,3.62-8.1,8.09c0,3.81,2.64,6.99,6.2,7.84h7.1l21.31-21.31
-      C693.7,374.37,691.95,373.55,690,373.55z"/>
+    <path fill="#1A87C9" d="M29.7,1.5c-1.9,0-3.6,0.8-4.8,2c-1.7-2.1-4.2-3.5-7-3.5c-4.7,0-8.6,3.8-8.6,8.6c0,0.2,0,0.4,0.1,0.6
+      C9,9.1,8.5,9.1,8.1,9.1c-4.5,0-8.1,3.6-8.1,8c0,3.8,2.6,7,6.2,7.8h7.1L34.6,3.7C33.4,2.4,31.6,1.5,29.7,1.5z"/>
 
-<text transform="matrix(1.0002 0 0 1 667.4022 389.6925)" fill="#FFFFFF" font-family="OpenSans" font-size="6px">Pave2Edge</text>
-</svg></div>
+<text transform="matrix(1.0002 0 0 1 7.4379 17.6826)" fill="#FFFFFF" font-family="OpenSans" font-size="6px">Pave2Edge</text>
+</svg>
+      </div>
 <div class="w-full">
 <p class="text-sm font-light">Pave2Edge</p>
 <p class="text-xl font-bold">Connected</p>
@@ -102,32 +107,52 @@
               </TableBodyCell>
 
               <TableBodyCell class="border-l-8 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class=""><p class="text-black text-lg text-center">LAN 1</p>
-<svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
-  <path clip-rule="evenodd" d="M13.887 3.182c.396.037.79.08 1.183.128C16.194 3.45 17 4.414 17 5.517V16.75A2.25 2.25 0 0114.75 19h-9.5A2.25 2.25 0 013 16.75V5.517c0-1.103.806-2.068 1.93-2.207.393-.048.787-.09 1.183-.128A3.001 3.001 0 019 1h2c1.373 0 2.531.923 2.887 2.182zM7.5 4A1.5 1.5 0 019 2.5h2A1.5 1.5 0 0112.5 4v.5h-5V4z" fill-rule="evenodd"></path>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
+<path fill=blue d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
+     M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
+
 </svg>
 </div>
 <div class="pl-20"><p class="text-black text-lg text-center">LAN 2</p>
-<svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
-  <path clip-rule="evenodd" d="M13.887 3.182c.396.037.79.08 1.183.128C16.194 3.45 17 4.414 17 5.517V16.75A2.25 2.25 0 0114.75 19h-9.5A2.25 2.25 0 013 16.75V5.517c0-1.103.806-2.068 1.93-2.207.393-.048.787-.09 1.183-.128A3.001 3.001 0 019 1h2c1.373 0 2.531.923 2.887 2.182zM7.5 4A1.5 1.5 0 019 2.5h2A1.5 1.5 0 0112.5 4v.5h-5V4z" fill-rule="evenodd"></path>
+<svg xmlns="http://www.w3.org/2000/svg"  viewBox="-5 -5 24 24" class="w-16 h-16">
+  <path fill="none" d="M10.6,3.4V2.6V2.1h-0.3H9.5V1.4V0.8H4v0.6v0.8H3.2H2.9v0.4v0.8H2.1H0.8v6.1h11.9V3.4h-1.4H10.6z M3,8.3H2.2
+    V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8
+    V6.4h0.8V8.3z"/>
+  <path fill="#D0D0D0" d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M12.7,9.4H0.8V3.4h1.4h0.8V2.6V2.2h0.3H4V1.4V0.8
+    h5.5v0.6v0.8h0.8h0.3v0.4v0.8h0.8h1.4L12.7,9.4L12.7,9.4z"/>
+ 
+    <rect x="2.2" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
+    <rect x="3.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
+    <rect x="5.5" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
+    <rect x="7.2" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
+    <rect x="8.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
+    <rect x="10.5" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
+
 </svg>
 </div>
 
 <div class="pl-20"><p class="text-black text-lg text-center">LAN 3</p>
-<svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
-  <path clip-rule="evenodd" d="M13.887 3.182c.396.037.79.08 1.183.128C16.194 3.45 17 4.414 17 5.517V16.75A2.25 2.25 0 0114.75 19h-9.5A2.25 2.25 0 013 16.75V5.517c0-1.103.806-2.068 1.93-2.207.393-.048.787-.09 1.183-.128A3.001 3.001 0 019 1h2c1.373 0 2.531.923 2.887 2.182zM7.5 4A1.5 1.5 0 019 2.5h2A1.5 1.5 0 0112.5 4v.5h-5V4z" fill-rule="evenodd"></path>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
+<path fill=#64A031 d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
+     M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
+
 </svg>
 </div>
 
 <div class="pl-20"><p class="text-black text-lg text-center">LAN 4</p>
-<svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
-  <path clip-rule="evenodd" d="M13.887 3.182c.396.037.79.08 1.183.128C16.194 3.45 17 4.414 17 5.517V16.75A2.25 2.25 0 0114.75 19h-9.5A2.25 2.25 0 013 16.75V5.517c0-1.103.806-2.068 1.93-2.207.393-.048.787-.09 1.183-.128A3.001 3.001 0 019 1h2c1.373 0 2.531.923 2.887 2.182zM7.5 4A1.5 1.5 0 019 2.5h2A1.5 1.5 0 0112.5 4v.5h-5V4z" fill-rule="evenodd"></path>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
+<path fill=#64A031 d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
+     M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
+
 </svg>
 </div>
 
 
 <div class="pl-20"><p class="text-black text-lg text-center">WAN</p>
-<svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
-  <path clip-rule="evenodd" d="M13.887 3.182c.396.037.79.08 1.183.128C16.194 3.45 17 4.414 17 5.517V16.75A2.25 2.25 0 0114.75 19h-9.5A2.25 2.25 0 013 16.75V5.517c0-1.103.806-2.068 1.93-2.207.393-.048.787-.09 1.183-.128A3.001 3.001 0 019 1h2c1.373 0 2.531.923 2.887 2.182zM7.5 4A1.5 1.5 0 019 2.5h2A1.5 1.5 0 0112.5 4v.5h-5V4z" fill-rule="evenodd"></path>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
+<path fill=#64A031 d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
+     M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
+
 </svg>
 </div>
 </div>

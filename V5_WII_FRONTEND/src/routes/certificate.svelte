@@ -29,7 +29,15 @@
 <Radio bind:group={cdefault} class='p-3' value='No'>No</Radio>
 <Radio bind:group={cdefault} class='p-3' value='Always'>Always</Radio>
 <Radio bind:group={cdefault} class='p-3' value='WTS'>Wait for synchronization of the system time</Radio>
+    <tr>
+    <td></td>
+    <td class="pl-10"></td>
+    <td class="pl-80"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
 
+
+    </tr>
 
   </TabItem>
   <TabItem title="Machine Certificates">
@@ -97,7 +105,7 @@
 
       </TableBodyCell>
       <TableBodyCell class="w-10">4</TableBodyCell>
-      <TableBodyCell><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alisa Name"/></TableBodyCell>
+      <TableBodyCell><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alias Name"/></TableBodyCell>
       <TableBodyCell><Fileupload id="mc4" bind:mc4value/></TableBodyCell>
       <TableBodyCell><Button color="dark" on:click={btn1}>Upload</Button></TableBodyCell>
       <TableBodyCell></TableBodyCell>
@@ -171,7 +179,7 @@
 
       </TableBodyCell>
       <TableBodyCell class="w-10">4</TableBodyCell>
-      <TableBodyCell><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alisa Name"/></TableBodyCell>
+      <TableBodyCell><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alias Name"/></TableBodyCell>
       <TableBodyCell><Fileupload id="mc4" bind:mc4value/></TableBodyCell>
       <TableBodyCell><Button color="dark" on:click={btn1}>Upload</Button></TableBodyCell>
       <TableBodyCell></TableBodyCell>
@@ -245,7 +253,7 @@
 
       </TableBodyCell>
       <TableBodyCell class="w-10">4</TableBodyCell>
-      <TableBodyCell><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alisa Name"/></TableBodyCell>
+      <TableBodyCell><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alias Name"/></TableBodyCell>
       <TableBodyCell><Fileupload id="mc4" bind:mc4value/></TableBodyCell>
       <TableBodyCell><Button color="dark" on:click={btn1}>Upload</Button></TableBodyCell>
       <TableBodyCell></TableBodyCell>
@@ -278,7 +286,7 @@
       </button>
       </TableBodyCell>
       <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alisa Name"/></TableBodyCell>
+      <TableBodyCell><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alias Name"/></TableBodyCell>
       <TableBodyCell><Fileupload id="mc4" bind:mc4value/></TableBodyCell>
       <TableBodyCell><Button color="dark" on:click={btn1}>Upload</Button></TableBodyCell>
     </TableBodyRow>
@@ -323,6 +331,17 @@
       <TableBodyCell><Input type="url" id="website" placeholder="URL" required /></TableBodyCell>
     <TableHeadCell><Button color="dark" on:click={btn1}>Add</Button></TableHeadCell>
     </TableBodyRow>
+        <tr>
+    <td ></td>
+    <td ></td>
+    <td ></td>
+        <td ></td>
+    <td ><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
   </TableBody>
 </Table>
 

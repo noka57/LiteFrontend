@@ -1305,35 +1305,6 @@ Once Rx of Modbus and Disconnect lasting time
 
   </TabItem>
 
-
-    <TabItem title="Test">
-
-test
-
-
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-   viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
-<style type="text/css">
-  .st0{fill:#1A87C9;}
-  .st1{fill:#FFFFFF;}
-  .st2{font-family:'OpenSans';}
-  .st3{font-size:6px;}
-</style>
-<g>
-  <path class="st0 w-24 h-24" d="M1.3,15.3c-0.4,0-0.7-0.1-1-0.4c-0.3-0.3-0.4-0.6-0.4-1V1.4c0-0.4,0.1-0.7,0.4-1S0.9,0,1.3,0h38.1
-    c0.4,0,0.7,0.1,1,0.4s0.4,0.6,0.4,1V14c0,0.4-0.1,0.7-0.4,1c-0.3,0.3-0.6,0.4-1,0.4L1.3,15.3L1.3,15.3z"/>
-  <g>
-    <text transform="matrix(1.0002 0 0 1 17.7137 9.9881)" class="st1 st2 st3">GPS</text>
-  </g>
-  <path class="st1" d="M14.8,4.9c-0.1-0.5-0.3-0.9-0.7-1.2c-0.5-0.5-1.1-0.8-1.8-0.9c-0.1,0-0.2,0-0.4,0c0,0-0.1,0-0.2,0
-    c-0.1,0,0,0-0.1,0c-0.8,0-1.4,0.3-2,0.7c-0.5,0.4-0.8,1-0.8,1.6c0,0.3,0,0.7,0.1,1c0.2,0.6,0.4,1.2,0.7,1.7
-    c0.5,0.8,1.1,1.6,1.7,2.4c0.2,0.2,0.3,0.3,0.5,0.5l0,0c0.9-0.9,1.6-1.9,2.2-3c0.4-0.7,0.7-1.4,0.8-2.2C14.9,5.3,14.9,5.1,14.8,4.9z
-     M11.8,7.4c-0.9,0-1.6-0.7-1.6-1.6s0.7-1.6,1.7-1.6c0.9,0,1.6,0.7,1.6,1.6C13.5,6.7,12.7,7.4,11.8,7.4z"/>
-</g>
-</svg>
-
-
-  </TabItem>
   
 </Tabs>
 

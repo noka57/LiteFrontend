@@ -247,9 +247,8 @@
     </TableHeadCell>
     <TableHeadCell class="w-10">Enable</TableHeadCell>
     <TableHeadCell class="w-10">No</TableHeadCell>
-    <TableHeadCell class="w-40">Global IP</TableHeadCell>
-    <TableHeadCell calss="w-40">Local IP</TableHeadCell>
-  <TableHeadCell calss="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10">Global IP</TableHeadCell>
+    <TableHeadCell class="w-10">Local IP</TableHeadCell>
 
 
   </TableHead>

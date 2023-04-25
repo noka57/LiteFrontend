@@ -204,7 +204,7 @@
 
 						<SidebarDropdownItem label="Data Tag Pro" />
 						<SidebarDropdownItem label="Data Logger" />
-						<SidebarDropdownItem label="Event Handler" />
+						<SidebarDropdownItem label="Event Engine" />
 						<SidebarDropdownItem label="Remote Service" />
 						<SidebarDropdownItem label="DREAMS" />
 						<SidebarDropdownItem label="Docker Engine" />

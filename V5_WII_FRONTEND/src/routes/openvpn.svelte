@@ -59,14 +59,16 @@ let name="";
     </p>
   </caption>
   <TableHead>
-    <TableHeadCell>Index</TableHeadCell>
-    <TableHeadCell>VPN Name</TableHeadCell>
-    <TableHeadCell>State</TableHeadCell>
-    <TableHeadCell>VPN State</TableHeadCell>
-    <TableHeadCell>Client IP</TableHeadCell>
-    <TableHeadCell>
-      <span class="sr-only"> Edit </span>
-    </TableHeadCell>
+    <TableHeadCell class="w-10">Index</TableHeadCell>
+    <TableHeadCell class="w-10">VPN Name</TableHeadCell>
+    <TableHeadCell class="w-10">State</TableHeadCell>
+    <TableHeadCell class="w-10">VPN State</TableHeadCell>
+    <TableHeadCell class="w-10">Client IP</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
   </TableHead>
   <TableBody class="divide-y">
     <TableBodyRow>
@@ -77,7 +79,7 @@ test1
       <TableBodyCell>Active</TableBodyCell>
       <TableBodyCell>Connection Established</TableBodyCell>
       <TableBodyCell>10.123.12.2</TableBodyCell>
-
+<TableBodyCell class="w-10"><Button color="dark" pill={true}>Export</Button></TableBodyCell>
     </TableBodyRow>
     <TableBodyRow>
       <TableBodyCell>2</TableBodyCell>
@@ -87,7 +89,7 @@ test2
       <TableBodyCell>Active</TableBodyCell>
       <TableBodyCell>Connection Established</TableBodyCell>
       <TableBodyCell>10.123.12.3</TableBodyCell>
-
+<TableBodyCell class="w-10"><Button color="dark" pill={true}>Export</Button></TableBodyCell>
     </TableBodyRow>
     <TableBodyRow>
       <TableBodyCell>3</TableBodyCell>
@@ -97,7 +99,7 @@ test3
       <TableBodyCell>Active</TableBodyCell>
       <TableBodyCell>Connection Established</TableBodyCell>
       <TableBodyCell>10.123.12.4</TableBodyCell>
-
+<TableBodyCell class="w-10"><Button color="dark" pill={true}>Export</Button></TableBodyCell>
     </TableBodyRow>
   </TableBody>
 </Table>

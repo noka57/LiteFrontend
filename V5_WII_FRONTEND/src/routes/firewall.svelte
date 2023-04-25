@@ -85,7 +85,6 @@
     <TableHeadCell>Source IP</TableHeadCell>
     <TableHeadCell>Destination IP</TableHeadCell>
     <TableHeadCell>Protocol</TableHeadCell>
-    <TableHeadCell>Source Port</TableHeadCell>
     <TableHeadCell>Destination Port</TableHeadCell>
   </TableHead>
   <TableBody>
@@ -175,17 +174,6 @@
 </tr>
 
 
-
- <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Source Port</p>
-
-  </td>
-
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={sport} value='SPort' >Single Port</Radio><input type="text" bind:value={SingleSP} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={sport} value='PortR' >Port Range</Radio><input type="text" bind:value={RangeSPF} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="text" bind:value={RangeSPE} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-</div></td>
-</tr>
 
 
 

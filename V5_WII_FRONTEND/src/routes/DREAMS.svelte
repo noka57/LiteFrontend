@@ -21,7 +21,11 @@
    let DEmail="";
    let DPwd="";
    let SlaveID="3";
-   
+   let PointType="IR";
+   let MAddr="0";
+   let MQ="1";
+   let MDisplay="BE";
+
 
 </script>
 
@@ -827,11 +831,84 @@
 </Table>
  </AccordionItem>
 
-<Modal bind:open={formModal2} autoclose={false} size="lg" class="w-full">
+<Modal bind:open={formModal2} autoclose={false} size="md" class="w-full">
   <form action="#">
 
 
 <p class="mt-10"></p>
+
+<table>
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td><td class="pl-5 pt-5">Line Current Phase A</td>
+
+
+
+  </tr>
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={SlaveID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+<tr>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Point Type</p>
+
+  </td>
+
+    <td class="pl-5 pt-4"><div class="flex gap-4">
+  <Radio bind:group={PointType} value='IR' >Input Register</Radio>
+  <Radio bind:group={PointType} value='HR' >Holding Register</Radio>
+</div></td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={MAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+  <tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={MQ} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+  <tr>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Display</p>
+
+  </td>
+
+    <td class="pl-5 pt-5"><div class="gap-4">
+  <Radio bind:group={MDisplay} value='BE' >Big Endian</Radio>
+  <Radio bind:group={MDisplay} value='LE' >Little Endian</Radio>
+  <Radio bind:group={MDisplay} value='BEBS' >Big Endian Byte Swap</Radio>
+  <Radio bind:group={MDisplay} value='LEBS' >Little Endian Byte Swap</Radio>
+</div></td>
+</tr>
+
+
+      <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+            <td></td>
+    <td></td>
+                <td></td>
+    <td></td>
+    <td><Button color="dark" pill={true}>Submit</Button></td>
+
+
+    </tr>
+
+</table>
  </form>
 </Modal>
 </Accordion>

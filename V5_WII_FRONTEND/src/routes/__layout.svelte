@@ -206,7 +206,7 @@
 						<SidebarDropdownItem label="Data Logger" />
 						<SidebarDropdownItem label="Event Engine" />
 						<SidebarDropdownItem label="Remote Service" />
-						<SidebarDropdownItem label="DREAMS" />
+						<SidebarDropdownItem label="DREAMS" href='/DREAMS' active={activeUrl === '/DREAMS'}/>
 						<SidebarDropdownItem label="Docker Engine" />
 						<SidebarDropdownItem label="GPS Standalone" />
 						<SidebarDropdownItem label="Power Saving" />

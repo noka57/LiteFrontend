@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio } from 'flowbite-svelte';
+  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio,FloatingLabelInput } from 'flowbite-svelte';
 
 
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
@@ -23,15 +23,17 @@
 
   let selected4="None";
 
-  let selected5="PING";
 
-  let selected6="dns1";
-
-
+  let selected5="Enable";
+  let selected6="Enable";
+  let selected6_Enable_1=["Ping"];
+  let selected6_Enable_2=[];
+  let selected6_Enable_3;
+  let selected6_Enable_4=["Relink","SIMSwitch","MSWR"];
 
   let selected7="DClient";
-  let selected5_1="PING";
-  let selected6_1="dns1";
+  let selected6_1="PING";
+  let selected5_1="dns1";
 
   let selected8="Off";
 
@@ -558,97 +560,197 @@
   </AccordionItem>
 
     <AccordionItem {defaultClass}>
-    <span slot="header" class="pl-4">EWLAP-CWAN</span>
+    <span slot="header" class="pl-4">LTE Guarantie Link</span>
 <table>
     <tr>
-    <td class="w-60"><p class="pl-40 pt-5 text-lg font-light text-right">EWLAP</p></td><td class="pl-5 pt-5"><Toggle bind:checked={isActive4}></Toggle></td>
+    <td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">Guarantie Link</p></td><td class="pl-5 pt-5"><Toggle bind:checked={isActive4}></Toggle></td>
     </tr>
 {#if isActive4}
 
     <tr>
-    <td><p class="pl-20 pt-5 text-lg font-light text-right">Checking Rules</p></td>
-
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected5} value='PING' >PING</Radio>
-  <Radio bind:group={selected5} value='DNSQ' >DNS Query</Radio>
-  <Radio bind:group={selected5} value='DNSPC'>DNS Packet Check</Radio>
+    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Parameter</p></td>
 
 
-</div></td>
 
     </tr>
 
 
     <tr>
-    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target 1/2</p></td>
+    <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Cellular Level Checking</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected6} value='None' >None</Radio>
-  <Radio bind:group={selected6} value='dns1' >DNS 1</Radio>
-  <Radio bind:group={selected6} value='dns2'>DNS 2</Radio>
-  <Radio bind:group={selected6} value='gw' >Gateway</Radio>
-  <Radio bind:group={selected6} value='otherH'>Other Host</Radio>
+      <Radio bind:group={selected5} value='Disable'>Disable</Radio>
+  <Radio bind:group={selected5} value='Enable' >Enable</Radio>
 
 </div></td>
     </tr>
 
+
     <tr>
-    <td><p class="pl-20 pt-5 text-lg font-light text-right">Checking Period</p></td>
-    <td/>
-        <td />
-            <td />
+    <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Packet Level Checking</p></td>
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio bind:group={selected6} value='Disable'>Disable</Radio>
+  <Radio bind:group={selected6} value='Enable' >Enable</Radio>
+
+</div></td>
+    </tr>
+{#if selected6 == "Enable"}
+    <tr>
+    <td></td><td><p class="pl-5 pt-5 text-lg font-light text-right">Checking Method</p></td>
+    
+
+    </tr>
+
+
+    <tr>
+    <td></td><td></td><td class="pt-5">
+
+    <Checkbox bind:group={selected6_Enable_1} value="Ping">Ping Packet:</Checkbox></td><td><FloatingLabelInput style="filled" id="packet_size" name="packet_size" type="text" label="Packet Size" value={32}/></td> <td>Bytes,</td>
+    <td><FloatingLabelInput style="filled" id="remote_host" name="remote_host" type="text" label="Remote Host" value="DNS1"/></td> 
+    
+
     </tr>
 
     <tr>
-    <td />
-        <td>
-            <table>
+    <td></td><td></td><td class="pt-5">
 
-              <tr>
-              <td class="border-b-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Polling times
-              </td>
-              <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-<input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-              </td>
+    <Checkbox bind:group={selected6_Enable_1} value="Interface">Test Interface</Checkbox>
+    </td>
 
-              <td>
-              seconds
-              </td> 
-              </tr>
+    <td class="pt-5">
+
+    <div class="flex gap-3">
+    <Checkbox bind:group={selected6_Enable_2} value="lan1">LAN 1</Checkbox>
+    <Checkbox bind:group={selected6_Enable_2} value="wan">WAN</Checkbox>
+    <Checkbox bind:group={selected6_Enable_2} value="cwan">C-WAN</Checkbox>
+    </div>
 
 
+    </td>
+    
 
-              <tr>
-              <td class="border-b-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Retry Count
-              </td>
-              <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-<input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-              </td>
+    </tr>
 
-              <td>
-              times
-              </td> 
-              </tr>
 
-              <tr>
-              <td class="border-b-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Interval times
-              </td>
-              <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-<input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-              </td>
-
-              <td>
-              mini seconds
-              </td> 
-              </tr>
-            </table>
-        </td>
     <tr>
+    <td></td><td></td><td class="pt-5">
+     <Checkbox bind:group={selected6_Enable_1} value="DLookUP">DNS Lookup</Checkbox>
+    </td>
+    
+    <td class="pt-5"><FloatingLabelInput style="filled" id="FQDN" name="FQDN" type="text" label="FQDN"/></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="DNSer" name="DNSer" type="text" label="DNSer"/></td>
+    </tr>
+
+    <tr>
+    <td></td><td></td><td class="pt-5">
+    <Checkbox bind:group={selected6_Enable_1} value="DNSPS">DNS Packet Sniff</Checkbox>
+    </td>
+    
+
+    </tr>
+
+
+    <tr>
+    <td></td><td></td><td class="pt-5">
+    <Checkbox bind:group={selected6_Enable_1} value="Https">Http(s)</Checkbox>
+    </td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="url" name="url" type="text" label="URL"/></td>
+
+
+    </tr>
+
+
+    <tr>
+    <td></td><td></td><td class="pt-5">
+    <Checkbox bind:group={selected6_Enable_1} value="PCI">Packet Count Increse</Checkbox>
+    </td>
+
+    <td class="pt-5">
+    <div class="flex gap-3">
+    <Radio bind:group={selected6_Enable_3} value="RX">RX</Radio>
+    <Radio bind:group={selected6_Enable_3} value="RX_TX">RX + TX</Radio>
+    </div>
+    </td>
+  
+    </tr>
+
+{/if} 
+
+    <tr>
+    <td><p class="pl-5 pt-5 text-lg font-light text-right">Recovery Sequency</p></td>
+    
+
+    </tr>
+
+
+
+    <tr>
+    <td></td><td class="pt-5">
+    <Checkbox bind:group={selected6_Enable_4} value="Relink">Relink Again</Checkbox>
+    </td>
+
+    <td class="pt-5"><FloatingLabelInput style="filled" id="RADelayS" name="RADelayS" type="text" label="Delay Seconds" value={0}/></td>
+    
+    <td class="pt-5"><FloatingLabelInput style="filled" id="RARetryCount" name="RARetryCount" type="text" label="Retry Count" value={3}/></td>
+    </tr>
+
+
+    <tr>
+    <td></td><td class="pt-5">
+    <Checkbox bind:group={selected6_Enable_4} value="SIMSwitch">SIM Switch Over</Checkbox>
+    </td>
+
+    <td class="pt-5"><FloatingLabelInput style="filled" id="SIMSODelayS" name="SIMSODelayS" type="text" label="Delay Seconds" value={1}/></td>
+    
+    <td class="pt-5"><FloatingLabelInput style="filled" id="SIMSORetryCount" name="SIMSORetryCount" type="text" label="Retry Count" value={2}/></td>
+
+    </tr>
+
+    <tr>
+    <td></td><td class="pt-5">
+    <Checkbox bind:group={selected6_Enable_4} value="MSWR">Modem SW Reset</Checkbox>
+    </td>
+
+    <td class="pt-5"><FloatingLabelInput style="filled" id="MSWRDelayS" name="MSWRDelayS" type="text" label="Delay Seconds" value={0}/></td>
+    
+    <td class="pt-5"><FloatingLabelInput style="filled" id="MSWRRetryCount" name="MSWRRetryCount" type="text" label="Retry Count" value={3}/></td>
+
+    </tr>
+
+
+    <tr>
+    <td></td><td class="pt-5">
+    <Checkbox bind:group={selected6_Enable_4} value="MHWR">Modem HW Reset</Checkbox>
+    </td>
+
+
+    <td class="pt-5"><FloatingLabelInput style="filled" id="MHWRDelayS" name="MHWRDelayS" type="text" label="Delay Seconds" /></td>
+    
+    <td class="pt-5"><FloatingLabelInput style="filled" id="MHWRRetryCount" name="MHWRRetryCount" type="text" label="Retry Count" /></td>
+
+    </tr>
+
+
+
+    <tr>
+    <td></td><td class="pt-5">
+    <Checkbox bind:group={selected6_Enable_4} value="Reboot">System Reboot</Checkbox>
+    </td>
+
+    <td class="pt-5"><FloatingLabelInput style="filled" id="SRDelayS" name="SRDelayS" type="text" label="Delay Seconds" /></td>
+    
+    <td class="pt-5"><FloatingLabelInput style="filled" id="SRRetryCount" name="SRRetryCount" type="text" label="Retry Count" /></td>
+
+
+    </tr>
+
+
 {/if}
-    <tr>
+    <tr class="pt-5">
+    <td></td>
+    <td></td>
+    <td></td>
     <td></td>
     <td></td>
     <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

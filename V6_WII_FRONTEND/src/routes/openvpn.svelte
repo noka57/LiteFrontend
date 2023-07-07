@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Breadcrumb, BreadcrumbItem, Radio,Fileupload,  FloatingLabelInput, Input, Dropdown, DropdownItem, Chevron, Select} from 'flowbite-svelte';
+  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Breadcrumb, BreadcrumbItem, Radio,Fileupload,  FloatingLabelInput, Input, Dropdown, DropdownItem, Chevron, Select, Modal} from 'flowbite-svelte';
 
 let openvpnBasic='Enable';
 let openvpnBasic2='Manual';
@@ -31,9 +31,13 @@ let RemoteCAList = [
   ];
 
 
+  let openvpnED="Enable";
+  let openvpnRole="Client";
+
+
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
-let name="";
-  export let ovpnimport;
+  let name="";
+
 
    const btn1 = () => {
     alert('You clicked btn1.');
@@ -45,6 +49,17 @@ let name="";
       alert('no file');
     }
   };
+
+
+
+   let formModal = false;
+
+   let VPNName="";
+   let VRAddr="";
+   let VRPort="";
+   let VProtocol="";
+   let VInitiail="";
+
   </script>
 
   <Tabs style="underline">
@@ -106,32 +121,163 @@ test3
     </TabItem>
 
       <TabItem title="Basic">
-<Accordion>
-  <AccordionItem {defaultClass}>
-    <span slot="header" class="pl-4">OpenVPN Check</span>
-<Radio bind:group={openvpnBasic} class='p-3' value='Disable'>Disable</Radio>
-<Radio bind:group={openvpnBasic} class='p-3' value='Enable'>Enable</Radio>
+      <table>
+      <tr>
+          <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">OpenVPN Service</p></td>
 
-  </AccordionItem>
-  <AccordionItem {defaultClass}>
-    <span slot="header" class="pl-4">Configuration Source</span>
-<Radio bind:group={openvpnBasic2} class='p-3' value='Manual'>Manually edit current configuration file</Radio>
-<Radio bind:group={openvpnBasic2} class='p-3' value='Import'>Import an existing configuration file</Radio>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio bind:group={openvpnED} value='Disable'>Disable</Radio>
+  <Radio bind:group={openvpnED} value='Enable' >Enable</Radio>
 
-<TableBodyCell><Fileupload id="ovpn" bind:ovpnimport/></TableBodyCell>
-<TableBodyCell><Button color="dark" on:click={btn1}>Import</Button></TableBodyCell>
-  </AccordionItem>
+</div></td>
+      </tr>
 
-  <AccordionItem {defaultClass}>
-    <span slot="header" class="pl-4">OpenVPN Role</span>
-    <Radio bind:group={openvpnBasic3} class='p-3' value='Client'>Client</Radio>
-<Radio bind:group={openvpnBasic3} class='p-3' value='Server'>Server</Radio>
-    </AccordionItem>
-</Accordion>
+
+      <tr>
+          <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">OpenVPN Role</p></td>
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio bind:group={openvpnRole} value='Server'>Server</Radio>
+  <Radio bind:group={openvpnRole} value='Client' >Client</Radio>
+
+</div></td>
+      </tr>
+
+      </table>
+
     </TabItem>
 
 
     <TabItem title="Connection">
+
+
+
+ <Table shadow striped={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4 w-10">
+    </TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-10">VPN Name</TableHeadCell>
+    <TableHeadCell class="w-10">Remote VPN Address</TableHeadCell>
+    <TableHeadCell class="w-10">Remote VPN Port</TableHeadCell>
+    <TableHeadCell class="w-10">Protocol</TableHeadCell>
+    <TableHeadCell class="w-10">Initial Mode</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+
+  </TableHead>
+  <TableBody>
+    <TableBodyRow>
+      <TableBodyCell class="!p-4 w-10">
+<button on:click={() => formModal = true}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+
+<Modal bind:open={formModal} autoclose={false} size="lg" class="w-full">
+  <form action="#">
+
+
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">VPN Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote VPN Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VRAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote VPN Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VRPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Protocol</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VProtocol} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Initial Mode</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VInitiail} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+            <tr>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+
+       </TableBodyCell>
+
+            <TableBodyCell class="!p-4 w-10">
+
+            </TableBodyCell>
+                  <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10">1</TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+
+    </TableBodyRow>
+
+
+     <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+                <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+  </TableBody>
+</Table>
+
+    </TabItem>
+
+    <TabItem title="Old Connection">
 
     <Select class="mt-2" items={vpnnameList} bind:value={vpnname} />
 

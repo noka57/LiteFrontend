@@ -127,28 +127,7 @@
 						<SidebarDropdownItem label="Firewall" href='/firewall'  active={activeUrl === '/firewall'}/>
 						<SidebarDropdownItem label="Static Route" href='/staticR' active={activeUrl === '/staticR'}/>
 					</SidebarDropdownWrapper>
-					<SidebarDropdownWrapper
-						label="Authenticaion"
-					>
-
-					<svelte:fragment slot="icon">
-<svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-red-500 mr-2 dark:text-pink-500 w-6 h-6">
-  <path d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-        </svelte:fragment>
-						<SidebarDropdownItem label="Certificate" href='/certificate' active={activeUrl === '/certificate'}/>
-					</SidebarDropdownWrapper>
-					<SidebarDropdownWrapper
-						label="VPN"
-					>
-					<svelte:fragment slot="icon">
-<svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-red-500 mr-2 dark:text-pink-500 w-6 h-6">
-  <path d="M12 9v3.75m0-10.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-        </svelte:fragment>
-						<SidebarDropdownItem label="OpenVPN" href='/openvpn' active={activeUrl === '/openvpn'}/>
-
-					</SidebarDropdownWrapper>
+					
 		
 
 
@@ -164,7 +143,7 @@
         </svelte:fragment>
 
 						<SidebarDropdownItem label="DREAMS" href='/DREAMS' active={activeUrl === '/DREAMS'}/>
-						<SidebarDropdownItem label="GPS Standalone" />
+						<SidebarDropdownItem label="Docker Engine" />
 
 					</SidebarDropdownWrapper>
 
@@ -178,7 +157,7 @@
   <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
         </svelte:fragment>
-						<SidebarDropdownItem label="Administrator" />
+						<SidebarDropdownItem label="Administration" />
 						<SidebarDropdownItem label="Configuration" />
 						<SidebarDropdownItem label="Operation" />
 						<SidebarDropdownItem label="Maintainence" />

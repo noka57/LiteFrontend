@@ -14,13 +14,26 @@
   };
 </script>
 
+
+<td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Restore Configuration</p></td>
+<td class="pl-5 pt-16">
+ <label for="filetest" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-lg">...</label>
+
+  <Fileupload id="filetest"  style="visibility:hidden" bind:value/>
+
+
+<Label>File: {value }</Label>
+
+</td>
+
 <Label class="space-y-2 mb-2">
   <span>Upload file</span>
   <Fileupload id="filetest" bind:value/>
 </Label>
 
 <Button on:click={btn1}>Update</Button>
-
+ <label for="filetest" class="btn">Select Image</label>
+  <input id="filetest" style="visibility:hidden;" type="file">
 
 <script>
     let files;

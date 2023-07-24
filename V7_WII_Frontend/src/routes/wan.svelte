@@ -663,7 +663,7 @@
 
     <tr>
     <td></td><td></td><td class="pt-5">
-    <Checkbox bind:group={selected6_Enable_1} value="PCI">Packet Count Increse</Checkbox>
+    <Checkbox bind:group={selected6_Enable_1} value="PCI">Packet Count Increase</Checkbox>
     </td>
 
     <td class="pt-5">
@@ -678,7 +678,7 @@
 {/if} 
 
     <tr>
-    <td><p class="pl-5 pt-5 text-lg font-light text-right">Recovery Sequency</p></td>
+    <td><p class="pl-5 pt-5 text-lg font-light text-right">Recovery Sequence</p></td>
     
 
     </tr>

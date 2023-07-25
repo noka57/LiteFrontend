@@ -55,7 +55,7 @@
   span {
     left: 50%;
     position: absolute;
-    top: -60%;
+    top: -57%;
     transform: translate(-50%, -50%);
     color:blue;
   }

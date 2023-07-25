@@ -212,18 +212,21 @@
 
 
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class=""><ProgressCircle max="100" value="{value1}" color="blue"/>
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="pb-20"> <p class="text-white">1.5GHz</p><ProgressCircle max="100" value="{value1}" color="blue"/>
 <p class="text-black text-lg text-center">CPU</p>
 </div>
-<div class="pl-20">
+<div class="pl-20 pb-20">
+<p class="text-black text-sm text-center">1 MB</p>
 <ProgressCircle max="100" value="{value2}" color="green"/>
 <p class="text-black text-lg text-center">RAM</p>
 </div>
-<div class="pl-20">
+<div class="pl-20 pb-20">
+<p class="text-black text-sm text-center">1 MB</p>
 <ProgressCircle max="100" value="{value3}" color="yellow"/>
 <p class="text-black text-lg text-center">EMMC</p>
 </div>
-<div class="pl-20">
+<div class="pl-20 pb-20">
+<p class="text-black text-sm text-center">1 MB</p>
 <ProgressCircle max="100" value="{value4}" color="orange"/>
 <p class="text-black text-lg text-center">SD Card</p>
 </div>
@@ -265,7 +268,7 @@
 
 
               </TableBodyCell>
-                      <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">VPN Status</p>
+                      <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg"></p>
               </TableBodyCell>
 
             </TableBodyRow>
@@ -282,27 +285,7 @@
                       </TableBodyCell>
 
    
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10">
-        <p class="text-black text-lg">Type</p>
-        <p class="text-black text-lg">Role</p>
-</div>
-<div class="px-40">
-        <p class="text-lg font-light">OpenVPN</p>
-        <p class="text-lg font-light">Client</p>
-</div>
-</div>
-<div class="pt-5 px-10" colspan="2">
-<Badge large color="green">1</Badge>
-<Badge large color="green">2</Badge>
-<Badge large color="green">3</Badge>
-<Badge large color="green">4</Badge>
-<Badge large color="red">5</Badge>
-<Badge large color="red">6</Badge>
-<Badge large color="red">7</Badge>
-<Badge large color="red">8</Badge>
-<Badge large color="red">9</Badge>
-<Badge large color="red">10</Badge>
-</div>
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
                       </TableBodyCell>
         </TableBodyRow>
 

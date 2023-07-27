@@ -160,7 +160,7 @@
 						<SidebarDropdownItem label="Account" href='/account' active={activeUrl === '/account'}/>
 						<SidebarDropdownItem label="Configuration" href='/configuration' active={activeUrl === '/configuration'}/>
 						<SidebarDropdownItem label="Operation" href='/operation' active={activeUrl === '/operation'}/>
-						<SidebarDropdownItem label="Maintainence" />
+						<SidebarDropdownItem label="Maintenance" href='/maintenance' active={activeUrl === '/maintenance'}/>
 					</SidebarDropdownWrapper>
 
 				</SidebarGroup>

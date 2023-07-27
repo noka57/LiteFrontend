@@ -30,7 +30,7 @@
 
  </script>
 <Tabs style="underline">
-  <TabItem open title="time">
+  <TabItem open title="Time">
 <table>
     <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Current Local Date & Time</p></td>
@@ -130,7 +130,7 @@
     <td class="pt-10">
 
 
-    <Button color="dark" pill={true}>Apply</Button>
+    <Button color="dark" pill>Apply</Button>
 
     </td>
 
@@ -145,11 +145,21 @@
 
   </TabItem>
 
-   <TabItem title="reboot">
-
+   <TabItem title="Reboot">
+<table>
+<tr>
+    <td class="w-65">Reboot Device</td><td class="pl-5">    <Button color="dark" pill>Reboot</Button></td>
+</tr>
+</table>
       </TabItem>
  
-   <TabItem title="reset">
+   <TabItem title="Reset">
+
+<table>
+<tr>
+    <td class="w-65">Reset to default</td><td class="pl-5">    <Button color="dark" pill>Reset</Button></td>
+</tr>
+</table>
 
       </TabItem>
  </Tabs>

@@ -24,7 +24,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.24.2",
-		"@sveltejs/adapter-auto": "1.0.0-next.64",
+		"@sveltejs/adapter-auto": "^1.0.3",
 		"@sveltejs/kit": "1.0.0-next.403",
 		"@typescript-eslint/eslint-plugin": "^5.32.0",
 		"@typescript-eslint/parser": "^5.32.0",
@@ -62,5 +62,8 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/shinokada/flowbite-svelte-starter.git"
+	},
+	"dependencies": {
+		"svelte-timezone-picker": "^2.0.3"
 	}
 }

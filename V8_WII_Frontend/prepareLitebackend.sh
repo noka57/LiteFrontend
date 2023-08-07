@@ -13,6 +13,8 @@ backend_folder="/home/noka/Desktop/LiteBackend/v$version"
 webungzip_folder="$backend_folder/webfile_ungzip/"
 webgzip_folder="$backend_folder/webfile_gzip/"
 
+dashboard_filename="EDashboard.html"
+
 mkdir -p $backend_folder
 mkdir -p $webungzip_folder
 mkdir -p $webgzip_folder
@@ -20,8 +22,8 @@ mkdir -p $webgzip_folder
 # This is a comment
 cp -r .svelte-kit/output/client/. $webungzip_folder
 cp -r .svelte-kit/output/client/. $webgzip_folder
-cp -r "Eindex.html" $webungzip_folder
-cp -r "Eindex.html" $webgzip_folder
+cp -r $dashboard_filename $webungzip_folder
+cp -r $dashboard_filename $webgzip_folder
 
 uselessfile="$webgzip_folder""manifest.json"
 uselessfile2="$webgzip_folder""_app/version.json"
@@ -35,7 +37,7 @@ find $webgzip_folder \( -name '*.css' -o -name '*.html' -o -name '*.js' \) -exec
 
 cd "$webgzip_folder"
 mkdir -p "HtmlFile"
-mv "Eindex.html" "HtmlFile/"
+mv $dashboard_filename "HtmlFile/"
 
 echo -e "%{\r\n#include <stdio.h>\r\n#include <stdlib.h>\r\n#include <string.h>\r\n%}">> ../gperffile/webfileGperf
 echo -e "struct _WEB_FILE{\r\n\tconst char *name;\r\n\tunsigned int size;\r\n\tunsigned int type;\r\n};\r\n%%" >> ../gperffile/webfileGperf
@@ -46,7 +48,7 @@ cd "HtmlFile"
 
 find -maxdepth 1 -type f -printf "\"/%P\",%s,1\r\n" >> ../../gperffile/webfileGperf
 
-mv "Eindex.html" "$webgzip_folder"
+mv $dashboard_filename "$webgzip_folder"
 
 cd ..
 

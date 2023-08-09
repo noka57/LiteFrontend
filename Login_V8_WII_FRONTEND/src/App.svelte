@@ -12,13 +12,15 @@
 	let passwordInput = null;
 	let password_Fail=0;
 
+	let sessionid="test";
+
 
 	onMount(() => {
 		accountInput.focus();
 	});
 
 	async function getNextPage(){
-		window.location = '/EDashboard.html';
+		window.location = '/EDashboard.html?'+encodeURIComponent(sessionid);
 	}
 
 	async function doPost () {
@@ -31,7 +33,10 @@
 
 		//alert(res.status)
 		if (res.status == 200)
+		{
+		    sessionid=await res.text();
 			getNextPage();
+		}
 		else
 		{
 			password = "";

@@ -30,8 +30,8 @@ cp -r public/. $tmpfilefolder
 uselessfile="$tmpfilefolder""build/bundle.js.map"
 uselessfile2="$tmpfilefolder""favicon.png"
 
-rm uselessfile 
-rm uselessfile2
+rm $uselessfile 
+rm $uselessfile2
 
 
 find $tmpfilefolder -type f -exec chmod 777 {} +

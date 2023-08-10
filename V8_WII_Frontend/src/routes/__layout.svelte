@@ -1,8 +1,8 @@
 <script>
 	import '../app.css';
-	  import { page } from '$app/stores';
+	import { page } from '$app/stores';
 	import { Hamburger } from 'svelte-hamburgers';
-
+	import { onMount } from 'svelte';
 
 	import {
 		Img,
@@ -70,11 +70,43 @@
 	let buttonClass = 'inline-flex items-center text-base text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200';
 
 	let open;
+	$: activeUrl = $page.url.pathname;
 
-	const topMenuList = [
-	];
+	let usertype=0;
+	let currentUri = '';
+	let currentOrigin = '';
+	let sessionid='';
 
-	$: activeUrl = $page.url.pathname
+
+	async function getUserType () {
+		const res = await fetch(currentOrigin+"/getUserType", {
+			method: 'POST',
+			body: JSON.stringify({
+				sessionid
+			})
+		})
+
+		if (res.status == 200)
+		{
+			usertype=await res.text();
+			usertype = parseInt(usertype); // Convert the text to an integer
+		}
+	}
+
+
+	onMount(() => {
+		currentUri = window.location.href;
+		currentOrigin = window.location.origin;
+			console.log(currentUri);
+			console.log(currentOrigin);
+
+			sessionid = currentUri.split('?')[1];
+			console.log(sessionid);
+			if (sessionid)
+			{
+				getUserType();
+			}
+	});
 </script>
 
 
@@ -92,7 +124,7 @@
 	{asideClass}
 	{spanClass}
 	{transitionParams}
-	topMenus={topMenuList}
+	topMenus={[]}
 >
 
 <Hamburger
@@ -112,7 +144,7 @@
 </svg>
         </svelte:fragment>
 </SidebarItem>
-
+{#if usertype == 1}
 					<SidebarDropdownWrapper
 						label="Networking"
 					>
@@ -162,7 +194,7 @@
 						<SidebarDropdownItem label="Operation" href='/operation' active={activeUrl === '/operation'}/>
 						<SidebarDropdownItem label="Maintenance" href='/maintenance' active={activeUrl === '/maintenance'}/>
 					</SidebarDropdownWrapper>
-
+{/if}
 				</SidebarGroup>
 			</SidebarWrapper>
 		</Sidebar>
@@ -185,7 +217,6 @@
 	<title>Etherwan</title>
 	<meta
 		name="description"
-		content="Flowbite-Svelte-Starter is a quick way to start Svelte and Flowbite/Tailwind CSS. It comes with SvelteKit, Tailwind CSS, Flowbite,
-		Flowbite-Svelte, ESlint, Typescript, Playwright, Prettier, Svelte-heros (Heroicons), Dark mode activated."
+		content="Flowbite-Svelte, Dark mode activated."
 	/>
 </svelte:head>

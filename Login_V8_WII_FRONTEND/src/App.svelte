@@ -27,6 +27,7 @@
 		const res = await fetch(window.location.href+"Plogin", {
 			method: 'POST',
 			body: JSON.stringify({
+				sessionid,
 				password
 			})
 		})
@@ -34,7 +35,6 @@
 		//alert(res.status)
 		if (res.status == 200)
 		{
-		    sessionid=await res.text();
 			getNextPage();
 		}
 		else
@@ -76,7 +76,10 @@
 				})
 
 		if (res.status == 200)
+		{
+			sessionid=await res.text();
 			active_step='pwd';
+		}
 		else
 		{
 			account = "";

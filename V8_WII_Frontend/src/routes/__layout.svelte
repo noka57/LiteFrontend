@@ -88,8 +88,11 @@
 
 		if (res.status == 200)
 		{
-			usertype=await res.text();
-			usertype = parseInt(usertype); // Convert the text to an integer
+			const data =await res.arrayBuffer();
+			const uint8Array = new Uint8Array(data);
+			console.log(uint8Array);
+			usertype = parseInt(uint8Array, 16);
+			console.log(usertype);
 		}
 	}
 

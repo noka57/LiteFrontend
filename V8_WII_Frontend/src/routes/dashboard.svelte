@@ -2,6 +2,7 @@
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge } from 'flowbite-svelte';
   import ProgressCircle from './CircleProgressBar.svelte'
   import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
   let tdStyle="width:25%";
   let tableBodyClass="";
   let tdClass="border-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium";
@@ -15,6 +16,11 @@
   let sessionid='';
   let getdataAlready=0;
 
+  sessionidG.subscribe(val => {
+    sessionid = val;
+  });
+
+
 
 
    function GPSClick() {
@@ -27,7 +33,7 @@
 
 
 async function getDashboardData () {
-    const res = await fetch(currentOrigin+"/getDashboardData", {
+    const res = await fetch(window.location.origin+"/getDashboardData", {
       method: 'POST',
       body: JSON.stringify({
         sessionid
@@ -47,15 +53,21 @@ async function getDashboardData () {
 
 
   onMount(() => {
-    currentUri = window.location.href;
-    currentOrigin = window.location.origin;
 
-      sessionid = currentUri.split('?')[1];
+    if (!sessionid)
+    {
+      currentUri = window.location.href;
+      sessionidG.set(currentUri.split('?')[1]);
+      sessionid=currentUri.split('?')[1];
+
+      console.log("dashboard sessionid:")
       console.log(sessionid);
-      if (sessionid)
-      {
-        getDashboardData();
-      }
+    }
+
+    if (sessionid)
+    {
+      getDashboardData();
+    }
   });
 
 </script>

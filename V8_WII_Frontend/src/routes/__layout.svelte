@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { Hamburger } from 'svelte-hamburgers';
 	import { onMount } from 'svelte';
+	import { sessionidG } from "./sessionG.js";
 
 	import {
 		Img,
@@ -19,6 +20,7 @@
 	import { Side, Nav, Responsive } from 'svelte-sidebar-menu';
 
 	import { quartInOut } from 'svelte/easing';
+
 
 	// Darkmode component
 	let btnClass =
@@ -74,12 +76,16 @@
 
 	let usertype=0;
 	let currentUri = '';
-	let currentOrigin = '';
 	let sessionid='';
 
 
+
+  	sessionidG.subscribe(val => {
+    	sessionid = val;
+  	});
+
 	async function getUserType () {
-		const res = await fetch(currentOrigin+"/getUserType", {
+		const res = await fetch(window.location.origin+"/getUserType", {
 			method: 'POST',
 			body: JSON.stringify({
 				sessionid
@@ -90,25 +96,27 @@
 		{
 			const data =await res.arrayBuffer();
 			const uint8Array = new Uint8Array(data);
-			console.log(uint8Array);
 			usertype = parseInt(uint8Array, 16);
-			console.log(usertype);
 		}
 	}
 
 
 	onMount(() => {
-		currentUri = window.location.href;
-		currentOrigin = window.location.origin;
-			console.log(currentUri);
-			console.log(currentOrigin);
 
-			sessionid = currentUri.split('?')[1];
+		if (!sessionid)
+		{
+			currentUri = window.location.href;
+
+			console.log("layout sessionid:");
+			sessionidG.set(currentUri.split('?')[1]);
+			sessionid=currentUri.split('?')[1];
 			console.log(sessionid);
-			if (sessionid)
-			{
+		}
+
+		if (sessionid)
+		{
 				getUserType();
-			}
+		}
 	});
 </script>
 

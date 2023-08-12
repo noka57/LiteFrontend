@@ -1,6 +1,7 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, Toggle,Select, Checkbox, Input, Tooltip, Radio,FloatingLabelInput } from 'flowbite-svelte';
-
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
 
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
@@ -102,6 +103,47 @@
 
    let isActive5 = true;
 
+  let wan_data="";
+  let getdataAlready=0;
+
+  let sessionid;
+  sessionidG.subscribe(val => {
+    sessionid = val;
+  });
+
+
+  async function getWANData () {
+    const res = await fetch(window.location.origin+"/getWANData", {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionid
+      })
+    })
+
+    if (res.status == 200)
+    {
+      wan_data =await res.json();
+      console.log(wan_data);
+      getdataAlready=1;
+
+    }
+  }
+
+
+  onMount(() => {
+
+      console.log("wan sessionid: ");
+      console.log(sessionid);
+
+
+    if (sessionid)
+    {
+        getWANData();
+    }
+
+  });
+
+
 </script>
 
 <Tabs style="underline">
@@ -109,18 +151,18 @@
   <Table striped={true}>
   <TableHead>
     <TableHeadCell></TableHeadCell>
-    <TableHeadCell>Cellular-WAN-1</TableHeadCell>
+    <TableHeadCell>{#if getdataAlready}{wan_data.config.networking_wan_general_status[0].name} {/if}</TableHeadCell>
     <TableHeadCell>Ethernet WAN</TableHeadCell>
   </TableHead>
   <TableBody class="divide-y">
     <TableBodyRow>
       <TableBodyCell>Status</TableBodyCell>
-      <TableBodyCell>Connect</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_general_status[0].status} {/if}</TableBodyCell>
       <TableBodyCell>N.A</TableBodyCell>
     </TableBodyRow>
     <TableBodyRow>
       <TableBodyCell>IP Address</TableBodyCell>
-      <TableBodyCell>10.23.34.3</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_general_status[0].ip} {/if}</TableBodyCell>
       <TableBodyCell></TableBodyCell>
     </TableBodyRow>
     <TableBodyRow>

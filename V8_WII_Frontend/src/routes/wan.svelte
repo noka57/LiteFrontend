@@ -151,18 +151,18 @@
   <Table striped={true}>
   <TableHead>
     <TableHeadCell></TableHeadCell>
-    <TableHeadCell>{#if getdataAlready}{wan_data.config.networking_wan_general_status[0].name} {/if}</TableHeadCell>
+    <TableHeadCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].name} {/if}</TableHeadCell>
     <TableHeadCell>Ethernet WAN</TableHeadCell>
   </TableHead>
   <TableBody class="divide-y">
     <TableBodyRow>
       <TableBodyCell>Status</TableBodyCell>
-      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_general_status[0].status} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].status} {/if}</TableBodyCell>
       <TableBodyCell>N.A</TableBodyCell>
     </TableBodyRow>
     <TableBodyRow>
       <TableBodyCell>IP Address</TableBodyCell>
-      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_general_status[0].ip} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].ip} {/if}</TableBodyCell>
       <TableBodyCell></TableBodyCell>
     </TableBodyRow>
     <TableBodyRow>

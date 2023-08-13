@@ -1,6 +1,8 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal } from 'flowbite-svelte';
 
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
 
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
@@ -17,6 +19,50 @@
    let GIP="";
    let Ifce="auto";
    let Metric="";
+
+
+
+
+  let static_route_data="";
+   let getdataAlready=0;
+
+   let sessionid;
+   sessionidG.subscribe(val => {
+     sessionid = val;
+   });
+
+
+   async function getStaticRouteData () {
+    const res = await fetch(window.location.origin+"/getStaticRouteData", {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionid
+      })
+    })
+
+    if (res.status == 200)
+    {
+      static_route_data =await res.json();
+      console.log(static_route_data);
+      getdataAlready=1;
+
+    }
+  }
+
+
+  onMount(() => {
+
+    console.log("static route sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid)
+    {
+        getStaticRouteData();
+    }
+
+  });
+
 </script>
 
 <label>

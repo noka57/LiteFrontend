@@ -1,11 +1,56 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Breadcrumb, BreadcrumbItem, Radio,Fileupload,  FloatingLabelInput, Input, Dropdown, DropdownItem, Chevron, Select, Modal, Toggle} from 'flowbite-svelte';
-
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
    let isActive = false;
    let selected="Local";
    let Serip="";
    let SerPort="";
    let SToken="";
+
+
+
+
+
+    let docker_data="";
+    let getdataAlready=0;
+
+   let sessionid;
+   sessionidG.subscribe(val => {
+     sessionid = val;
+   });
+
+
+   async function getDockerData () {
+    const res = await fetch(window.location.origin+"/getDockerData", {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionid
+      })
+    })
+
+    if (res.status == 200)
+    {
+      docker_data =await res.json();
+      console.log(docker_data);
+      getdataAlready=1;
+
+    }
+  }
+
+
+  onMount(() => {
+
+    console.log("docker sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid)
+    {
+        getDockerData();
+    }
+
+  });
 </script>
 
 

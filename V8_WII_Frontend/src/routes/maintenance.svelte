@@ -1,9 +1,12 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button, Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Fileupload } from 'flowbite-svelte';
 
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
+
 
   let value;
-
+  let isActive = false;
 
 
   const btn2 = () => {
@@ -17,7 +20,49 @@
     }
   };
 
-     let isActive = false;
+
+
+
+
+  let maintenance_data="";
+   let getdataAlready=0;
+
+   let sessionid;
+   sessionidG.subscribe(val => {
+     sessionid = val;
+   });
+
+
+   async function getMaintenanceData () {
+    const res = await fetch(window.location.origin+"/getMaintenanceData", {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionid
+      })
+    })
+
+    if (res.status == 200)
+    {
+      maintenance_data =await res.json();
+      console.log(maintenance_data);
+      getdataAlready=1;
+
+    }
+  }
+
+
+  onMount(() => {
+
+    console.log("maintenance sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid)
+    {
+        getMaintenanceData();
+    }
+
+  });
  </script>
 
 

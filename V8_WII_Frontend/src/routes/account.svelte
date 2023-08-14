@@ -1,6 +1,9 @@
 
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal } from 'flowbite-svelte';
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
+
 
    let isActive = false;
    let oldPW="";
@@ -12,6 +15,48 @@
    let oldPWG="";
    let newPWG="";
    let confmPWG="";
+
+
+
+    let account_data="";
+    let getdataAlready=0;
+
+   let sessionid;
+   sessionidG.subscribe(val => {
+     sessionid = val;
+   });
+
+
+   async function getAccountData () {
+    const res = await fetch(window.location.origin+"/getAccountData", {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionid
+      })
+    })
+
+    if (res.status == 200)
+    {
+      account_data =await res.json();
+      console.log(account_data);
+      getdataAlready=1;
+
+    }
+  }
+
+
+  onMount(() => {
+
+    console.log("account sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid)
+    {
+        getAccountData();
+    }
+
+  });
 
 
  </script>

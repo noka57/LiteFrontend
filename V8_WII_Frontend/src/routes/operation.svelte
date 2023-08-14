@@ -1,7 +1,8 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, FloatingLabelInput, Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Datepicker } from 'flowbite-svelte';
  import TimezonePicker from 'svelte-timezone-picker';
-
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
    let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
@@ -24,9 +25,52 @@
     let MHour=10;
     let MMin=10;
 
+
+    let operation_data="";
+    let getdataAlready=0;
+
+   let sessionid;
+   sessionidG.subscribe(val => {
+     sessionid = val;
+   });
+
   function update(ev) {
     alert(ev.detail.timezone);
   }
+
+
+
+   async function getOperationData () {
+    const res = await fetch(window.location.origin+"/getOperationData", {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionid
+      })
+    })
+
+    if (res.status == 200)
+    {
+      operation_data =await res.json();
+      console.log(operation_data);
+      getdataAlready=1;
+
+    }
+  }
+
+
+  onMount(() => {
+
+    console.log("operation sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid)
+    {
+        getOperationData();
+    }
+
+  });
+
 
  </script>
 <Tabs style="underline">

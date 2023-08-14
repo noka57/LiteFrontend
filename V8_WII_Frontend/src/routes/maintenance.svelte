@@ -3,6 +3,7 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
+  import { maintenanceConfig} from "./configG.js"
 
 
   let value;
@@ -22,14 +23,16 @@
 
 
 
-
-
-  let maintenance_data="";
+   let maintenance_data="";
    let getdataAlready=0;
 
    let sessionid;
    sessionidG.subscribe(val => {
      sessionid = val;
+   });
+
+  maintenanceConfig.subscribe(val => {
+     maintenance_data = val;
    });
 
 
@@ -46,7 +49,8 @@
       maintenance_data =await res.json();
       console.log(maintenance_data);
       getdataAlready=1;
-
+      maintenanceConfig.set(maintenance_data);
+      isActive=!!maintenance_data.config.system_maintenance.fotaEn;
     }
   }
 
@@ -57,7 +61,7 @@
     console.log(sessionid);
 
 
-    if (sessionid)
+    if (sessionid && maintenance_data == "")
     {
         getMaintenanceData();
     }

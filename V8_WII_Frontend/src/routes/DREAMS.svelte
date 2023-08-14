@@ -1,7 +1,8 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal } from 'flowbite-svelte';
 
-
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
    let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
@@ -33,6 +34,50 @@ formModal = true;
 testid=id;
 
    }
+
+
+
+
+    let dreams_data="";
+    let getdataAlready=0;
+
+   let sessionid;
+   sessionidG.subscribe(val => {
+     sessionid = val;
+   });
+
+
+   async function getDREAMSdata () {
+    const res = await fetch(window.location.origin+"/getDREAMSdata", {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionid
+      })
+    })
+
+    if (res.status == 200)
+    {
+      dreams_data =await res.json();
+      console.log(dreams_data);
+      getdataAlready=1;
+
+    }
+  }
+
+
+  onMount(() => {
+
+    console.log("dreams sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid)
+    {
+        getDREAMSdata();
+    }
+
+  });
+
 
 </script>
 

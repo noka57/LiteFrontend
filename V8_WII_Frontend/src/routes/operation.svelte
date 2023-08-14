@@ -1,8 +1,10 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, FloatingLabelInput, Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Datepicker } from 'flowbite-svelte';
- import TimezonePicker from 'svelte-timezone-picker';
+  import TimezonePicker from 'svelte-timezone-picker';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
+  import { operationConfig } from "./configG.js"
+
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
    let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
@@ -34,10 +36,13 @@
      sessionid = val;
    });
 
-  function update(ev) {
-    alert(ev.detail.timezone);
-  }
+    function update(ev) {
+        alert(ev.detail.timezone);
+    }
 
+    operationConfig.subscribe(val => {
+        operation_data = val;
+    });
 
 
    async function getOperationData () {
@@ -53,6 +58,7 @@
       operation_data =await res.json();
       console.log(operation_data);
       getdataAlready=1;
+      operationConfig.set(operation_data);
 
     }
   }
@@ -64,7 +70,7 @@
     console.log(sessionid);
 
 
-    if (sessionid)
+    if (sessionid && operation_data=="")
     {
         getOperationData();
     }

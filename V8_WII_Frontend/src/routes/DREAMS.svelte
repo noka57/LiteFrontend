@@ -13,12 +13,15 @@
    let EnableD=false;;
    let formModal = false;
    let formModal2 = false;
-   let Sinterface="R485";
-   let BR="9600";
-   let Parity="None";
-   let DB="8";
-   let SB="1";
-   let FC="None";
+
+   let serialname=["",""];
+   let serialinterface=[0,0];
+   let serialBR=[0,0];
+   let serialparity=[0,0];
+   let serialdatabit=[0,0];
+   let serialstopbit=[0,0];
+
+
    let DNP3Port="20000";
    let DEmail="";
    let DPwd="";
@@ -27,12 +30,12 @@
    let MAddr="0";
    let MQ="1";
    let MDisplay="BE";
-   let testid="0";
-   let testnumber=+testid;
+   let serialindex=0;
 
-   function modalTrigger(id){
-formModal = true;
-testid=id;
+
+   function modalTrigger(index){
+    formModal = true;
+    serialindex=index;
 
    }
 
@@ -69,8 +72,23 @@ testid=id;
       dreamsConfig.set(dreams_data);
 
       EnableD=!!dreams_data.config.service_dreams.enable;
+      serialname[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].name;
+      serialname[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].name;
 
+      serialinterface[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].interface;
+      serialinterface[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].interface;
 
+      serialBR[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].baudrate;
+      serialBR[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].baudrate;
+
+      serialparity[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].parity;
+      serialparity[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].parity;
+
+      serialdatabit[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].dataBit;
+      serialdatabit[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].dataBit;
+
+      serialstopbit[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].stopBit;
+      serialstopbit[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].stopBit;
     }
   }
 
@@ -88,6 +106,25 @@ testid=id;
     else if (sessionid && dreams_data != "")
     {
       EnableD=!!dreams_data.config.service_dreams.enable;
+      serialname[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].name;
+      serialname[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].name;
+
+      serialinterface[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].interface;
+      serialinterface[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].interface;
+
+      serialBR[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].baudrate;
+      serialBR[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].baudrate;
+
+      serialparity[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].parity;
+      serialparity[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].parity;
+
+      serialdatabit[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].dataBit;
+      serialdatabit[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].dataBit;
+
+      serialstopbit[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].stopBit;
+      serialstopbit[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].stopBit;
+
+
     }
 
   });
@@ -119,7 +156,7 @@ testid=id;
   <TableBody>
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger("0")}>
+<button on:click={() => modalTrigger(0)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -134,7 +171,7 @@ testid=id;
 
 <table>
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td><td class="pl-5 pt-5">Serial Port {testid} {testnumber}</td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td><td class="pl-5 pt-5">{serialname[serialindex]}</td>
 
 
 
@@ -146,13 +183,13 @@ testid=id;
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={Sinterface} value='R485' >RS 485</Radio>
-  <Radio bind:group={Sinterface} value='R232' >RS 232</Radio>
+  <Radio bind:group={serialinterface[serialindex]} value={0} >RS 485</Radio>
+  <Radio bind:group={serialinterface[serialindex]} value={1} >RS 232</Radio>
 </div></td>
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="text" bind:value={BR} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="number" bind:value={serialBR[serialindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -164,9 +201,9 @@ testid=id;
 
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={Parity} value='None' >None</Radio>
-  <Radio bind:group={Parity} value='Even' >Even</Radio>
-  <Radio bind:group={Parity} value='Odd' >Odd</Radio>
+  <Radio bind:group={serialparity[serialindex]} value={0} >None</Radio>
+  <Radio bind:group={serialparity[serialindex]} value={1} >Even</Radio>
+  <Radio bind:group={serialparity[serialindex]} value={2} >Odd</Radio>
 </div></td>
 
 
@@ -174,14 +211,14 @@ testid=id;
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={DB} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="number" bind:value={serialdatabit[serialindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={SB} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="number" bind:value={serialstopbit[serialindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -199,18 +236,34 @@ testid=id;
 </Modal>
  </TableBodyCell>
 
-      <TableBodyCell class="!p-6 w-10"> Serial Port 0</TableBodyCell>
-      <TableBodyCell class="w-10">RS 485</TableBodyCell>
-      <TableBodyCell class="w-10">9600</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{serialname[0]}</TableBodyCell>
+{#if serialinterface[0]==0}
+      <TableBodyCell class="w-10">RS485</TableBodyCell>
+{:else if serialinterface[0]==1}
+      <TableBodyCell class="w-10">RS232</TableBodyCell>
+{:else}
+      <TableBodyCell class="w-10"></TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{serialBR[0]}</TableBodyCell>
+
+{#if serialparity[0]==0}
       <TableBodyCell class="w-10">None</TableBodyCell>
-      <TableBodyCell class="w-10">8</TableBodyCell>
-      <TableBodyCell class="w-22">1</TableBodyCell>
+{:else if serialparity[0]==1}
+      <TableBodyCell class="w-10">Even</TableBodyCell>
+{:else if serialparity[0]==2}
+      <TableBodyCell class="w-10">Odd</TableBodyCell>
+{:else}
+      <TableBodyCell class="w-10"></TableBodyCell>
+{/if}
+
+      <TableBodyCell class="w-10">{serialdatabit[0]}</TableBodyCell>
+      <TableBodyCell class="w-10">{serialstopbit[0]}</TableBodyCell>
     </TableBodyRow>
 
 
  <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger("1")}>
+<button on:click={() => modalTrigger(1)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -219,12 +272,26 @@ testid=id;
 
  </TableBodyCell>
 
-      <TableBodyCell class="!p-6 w-10"> Serial Port 1</TableBodyCell>
-      <TableBodyCell class="w-10">RS 485</TableBodyCell>
-      <TableBodyCell class="w-10">115200</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{serialname[1]}</TableBodyCell>
+{#if serialinterface[1]==0}
+      <TableBodyCell class="w-10">RS485</TableBodyCell>
+{:else if serialinterface[1]==1}
+      <TableBodyCell class="w-10">RS232</TableBodyCell>
+{:else}
+      <TableBodyCell class="w-10"></TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{serialBR[1]}</TableBodyCell>
+{#if serialparity[1]==0}
       <TableBodyCell class="w-10">None</TableBodyCell>
-      <TableBodyCell class="w-10">8</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
+{:else if serialparity[1]==1}
+      <TableBodyCell class="w-10">Even</TableBodyCell>
+{:else if serialparity[1]==2}
+      <TableBodyCell class="w-10">Odd</TableBodyCell>
+{:else}
+      <TableBodyCell class="w-10"></TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{serialdatabit[1]}</TableBodyCell>
+      <TableBodyCell class="w-10">{serialstopbit[1]}</TableBodyCell>
     </TableBodyRow>
 
 

@@ -65,6 +65,10 @@
     {
         getMaintenanceData();
     }
+    else if (sessionid && maintenance_data != "")
+    {
+        isActive=!!maintenance_data.config.system_maintenance.fotaEn;
+    }
 
   });
  </script>

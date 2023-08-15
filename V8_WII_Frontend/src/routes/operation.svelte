@@ -18,6 +18,7 @@
     let formModal = false;
 
     let selected="GPS";
+    let ntpServer="";
 
 
     let timezone = 'Asia/Taipei';
@@ -59,6 +60,10 @@
       console.log(operation_data);
       getdataAlready=1;
       operationConfig.set(operation_data);
+      isActiveST=!!operation_data.config.system_operation_time.autoSyncTime;
+      selected=operation_data.config.system_operation_time.autoSyncTimeParam.type;
+      ntpServer=operation_data.config.system_operation_time.autoSyncTimeParam.ntpServer;
+      isActiveDLS=!!operation_data.config.system_operation_time.autoSyncTimeParam.dstEn;
 
     }
   }
@@ -73,6 +78,13 @@
     if (sessionid && operation_data=="")
     {
         getOperationData();
+    }
+    else if (sessionid && operation_data !="")
+    {
+        isActiveST=!!operation_data.config.system_operation_time.autoSyncTime;
+        selected=operation_data.config.system_operation_time.autoSyncTimeParam.type;
+        ntpServer=operation_data.config.system_operation_time.autoSyncTimeParam.ntpServer;
+        isActiveDLS=!!operation_data.config.system_operation_time.autoSyncTimeParam.dstEn;
     }
 
   });
@@ -110,7 +122,7 @@
 <Radio bind:group={selected} value='NTP'><p class="text-lg pt-1">NTP</p>
 
 <p class="pl-5">
-{#if selected=="NTP"} <FloatingLabelInput style="outlined" id="floating_outlined" name="floating_outlined" type="text" label="NTP Server" />
+{#if selected=="NTP"} <FloatingLabelInput style="outlined" id="floating_outlined" name="floating_outlined" type="text" label="NTP Server" value={ntpServer}/>
 {:else}
 <FloatingLabelInput style="outlined" id="floating_outlined" name="floating_outlined" type="text" label="NTP Server" disabled/>
 {/if}

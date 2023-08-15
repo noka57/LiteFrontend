@@ -2,10 +2,13 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Breadcrumb, BreadcrumbItem, Radio,Fileupload,  FloatingLabelInput, Input, Dropdown, DropdownItem, Chevron, Select, Modal, Toggle} from 'flowbite-svelte';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
+  import { dockerConfig } from "./configG.js"
+
+
    let isActive = false;
-   let selected="Local";
+   let selected=0;
    let Serip="";
-   let SerPort="";
+   let SerPort=0;
    let SToken="";
 
 
@@ -19,6 +22,10 @@
    sessionidG.subscribe(val => {
      sessionid = val;
    });
+
+    dockerConfig.subscribe(val => {
+        docker_data = val;
+    });
 
 
    async function getDockerData () {
@@ -35,6 +42,13 @@
       console.log(docker_data);
       getdataAlready=1;
 
+      dockerConfig.set(docker_data);
+      isActive=!!docker_data.config.service_dockerEngine.enable;
+      selected= docker_data.config.service_dockerEngine.param.mode;
+      Serip=docker_data.config.service_dockerEngine.param.p2eInfo.ip;
+      SerPort=docker_data.config.service_dockerEngine.param.p2eInfo.port;
+      SToken=docker_data.config.service_dockerEngine.param.p2eInfo.token;
+
     }
   }
 
@@ -45,9 +59,17 @@
     console.log(sessionid);
 
 
-    if (sessionid)
+    if (sessionid && docker_data == "")
     {
         getDockerData();
+    }
+    else if (sessionid && docker_data !="")
+    {
+        isActive=!!docker_data.config.service_dockerEngine.enable;
+        selected= docker_data.config.service_dockerEngine.param.mode;
+        Serip=docker_data.config.service_dockerEngine.param.p2eInfo.ip;
+        SerPort=docker_data.config.service_dockerEngine.param.p2eInfo.port;
+        SToken=docker_data.config.service_dockerEngine.param.p2eInfo.token;
     }
 
   });
@@ -64,14 +86,14 @@
 
 <tr><td class="w-60"></td>
 <td class="pl-5 pt-5">
-<Radio bind:group={selected} value='Local'><p class="text-lg">Local Image</p></Radio>
+<Radio bind:group={selected} value={0}><p class="text-lg">Local Image</p></Radio>
 </td>
 <tr><td class="w-60"></td>
 <td class="pl-5 pt-5">
-<Radio bind:group={selected} value='WithP2E'><p class="text-lg">Docker Management With P2E</p></Radio>
+<Radio bind:group={selected} value={1}><p class="text-lg">Docker Management With P2E</p></Radio>
 </td>
 </tr>
-{#if selected=="WithP2E"}
+{#if selected==1}
 <tr><td class="w-60"></td>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Server IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={Serip} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 

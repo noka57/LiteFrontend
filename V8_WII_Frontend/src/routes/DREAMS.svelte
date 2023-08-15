@@ -3,6 +3,7 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
+  import { dreamsConfig} from "./configG.js"
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
    let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
@@ -46,6 +47,10 @@ testid=id;
      sessionid = val;
    });
 
+    dreamsConfig.subscribe(val => {
+        dreams_data = val;
+    });
+
 
    async function getDREAMSdata () {
     const res = await fetch(window.location.origin+"/getDREAMSdata", {
@@ -61,6 +66,11 @@ testid=id;
       console.log(dreams_data);
       getdataAlready=1;
 
+      dreamsConfig.set(dreams_data);
+
+      EnableD=!!dreams_data.config.service_dreams.enable;
+
+
     }
   }
 
@@ -71,9 +81,13 @@ testid=id;
     console.log(sessionid);
 
 
-    if (sessionid)
+    if (sessionid && dreams_data == "")
     {
         getDREAMSdata();
+    }
+    else if (sessionid && dreams_data != "")
+    {
+      EnableD=!!dreams_data.config.service_dreams.enable;
     }
 
   });

@@ -881,7 +881,7 @@
 
 <TableBodyRow>
  <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModal2 = true}>
+<button on:click={() => modalTrigger2(-1,0)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -978,6 +978,8 @@
       <td class="pl-5 pt-5">{serial0modbusName[modbusindex]}</td>
 {:else if serialindex4modbus==1}
       <td class="pl-5 pt-5">{serial1modbusName[modbusindex]}</td>
+{:else if serialindex4modbus==-1}
+      <td class="pl-5 pt-5">{optionName}</td>
 {:else}
       <td class="pl-5 pt-5"></td>
 {/if}
@@ -991,6 +993,8 @@
       <input type="number" bind:value={serial0modbusSID[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if serialindex4modbus==1}
       <input type="number" bind:value={serial1modbusSID[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else if serialindex4modbus==-1}
+      <input type="number" bind:value={optionSID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
       </td>
 
@@ -1013,7 +1017,9 @@
 {:else if serialindex4modbus==1}
   <Radio bind:group={serial1modbusPointType[modbusindex]} value={0} >Input Register</Radio>
   <Radio bind:group={serial1modbusPointType[modbusindex]} value={1} >Holding Register</Radio>
-
+{:else if serialindex4modbus==-1}
+  <Radio bind:group={optionPointType} value={0} >Input Register</Radio>
+  <Radio bind:group={optionPointType} value={1} >Holding Register</Radio>
 {/if}
 
 </div></td>
@@ -1027,7 +1033,8 @@
       <input type="number" bind:value={serial0modbusAddress[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if serialindex4modbus==1}
       <input type="number" bind:value={serial1modbusAddress[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-
+{:else if serialindex4modbus==-1}
+      <input type="number" bind:value={optionAddress} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 {/if}
 
@@ -1045,6 +1052,8 @@
       <input type="number" bind:value={serial0modbusQuantity[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if serialindex4modbus==1}
       <input type="number" bind:value={serial1modbusQuantity[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else if serialindex4modbus==-1}
+      <input type="number" bind:value={optionQuantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
       </td>
 
@@ -1070,8 +1079,12 @@
   <Radio bind:group={serial1modbusDisplay[modbusindex]} value={1} >Little Endian</Radio>
   <Radio bind:group={serial1modbusDisplay[modbusindex]} value={2} >Big Endian Byte Swap</Radio>
   <Radio bind:group={serial1modbusDisplay[modbusindex]} value={3} >Little Endian Byte Swap</Radio>
-
-
+{:else if serialindex4modbus==-1}
+  <Radio bind:group={optionDisplay} value={0} >Big Endian</Radio>
+  <Radio bind:group={optionDisplay} value={1} >Little Endian</Radio>
+  <Radio bind:group={optionDisplay} value={2} >Big Endian Byte Swap</Radio>
+  <Radio bind:group={optionDisplay} value={3} >Little Endian Byte Swap</Radio>
+  
 {/if}
 </div></td>
 </tr>

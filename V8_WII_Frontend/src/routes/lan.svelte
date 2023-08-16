@@ -3,6 +3,7 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
+  import {lanConfig} from "./configG.js"
 
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
@@ -10,16 +11,9 @@
 
    let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
-   let ipMode="Sip";
+   let ipMode;
    let sipAddr="";
    let sipNetMask="";
-   let adIPName="";
-   let adipInterface="lo";
-   let adipAddr="";
-   let adipNetMask="";
-   let formModal = false;
-   let vs=false;
-
 
    let lan_data="";
    let getdataAlready=0;
@@ -28,6 +22,11 @@
    sessionidG.subscribe(val => {
      sessionid = val;
    });
+
+
+    lanConfig.subscribe(val => {
+        lan_data = val;
+    });
 
 
    async function getLANData () {
@@ -43,7 +42,11 @@
       lan_data =await res.json();
       console.log(lan_data);
       getdataAlready=1;
+      lanConfig.set(lan_data);
 
+      ipMode=lan_data.config.networking_lan.ipMode;
+      sipAddr=lan_data.config.networking_lan.ipStatic.ip;
+      sipNetMask=lan_data.config.networking_lan.ipStatic.netmask;
     }
   }
 
@@ -54,9 +57,15 @@
     console.log(sessionid);
 
 
-    if (sessionid)
+    if (sessionid && lan_data=="")
     {
         getLANData();
+    }
+    else if (sessionid && lan_data!="")
+    {
+      ipMode=lan_data.config.networking_lan.ipMode;
+      sipAddr=lan_data.config.networking_lan.ipStatic.ip;
+      sipNetMask=lan_data.config.networking_lan.ipStatic.netmask;
     }
 
   });
@@ -72,12 +81,12 @@
   </td>
 
     <td class="pl-5"><div class="flex gap-4">
-  <Radio bind:group={ipMode} value='Sip' >Static</Radio>
-  <Radio bind:group={ipMode} value='Dip' >DHCP</Radio>
+  <Radio bind:group={ipMode} value={0} >Static</Radio>
+  <Radio bind:group={ipMode} value={1} >DHCP</Radio>
 
 </div></td>
 </tr>
-{#if ipMode=="Sip"}
+{#if ipMode==0}
 <tr>
       <td><p class="pl-40 pt-4 text-lg font-light text-right">IP Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={sipAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 

@@ -2,6 +2,7 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, Toggle,Select, Checkbox, Input, Tooltip, Radio,FloatingLabelInput } from 'flowbite-svelte';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
+  import { wanConfig } from "./configG.js";
 
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
@@ -136,9 +137,14 @@
       console.log(sessionid);
 
 
-    if (sessionid)
+    if (sessionid && wan_data=="")
     {
         getWANData();
+    }
+    else if (sessionid && wan_data!="")
+    {
+        getdataAlready=1;
+
     }
 
   });
@@ -152,84 +158,84 @@
   <TableHead>
     <TableHeadCell></TableHeadCell>
     <TableHeadCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].name} {/if}</TableHeadCell>
-    <TableHeadCell>Ethernet WAN</TableHeadCell>
+    <TableHeadCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[1].name} {/if}</TableHeadCell>
   </TableHead>
   <TableBody class="divide-y">
     <TableBodyRow>
       <TableBodyCell>Status</TableBodyCell>
       <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].status} {/if}</TableBodyCell>
-      <TableBodyCell>N.A</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[1].status} {/if}</TableBodyCell>
     </TableBodyRow>
     <TableBodyRow>
       <TableBodyCell>IP Address</TableBodyCell>
       <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].ip} {/if}</TableBodyCell>
-      <TableBodyCell></TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[1].ip} {/if}</TableBodyCell>
     </TableBodyRow>
     <TableBodyRow>
       <TableBodyCell>Gateway</TableBodyCell>
-      <TableBodyCell>10.23.34.1</TableBodyCell>
-      <TableBodyCell></TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].gateway} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[1].gateway} {/if}</TableBodyCell>
     </TableBodyRow>
     <TableBodyRow>
       <TableBodyCell>DNS 1</TableBodyCell>
-      <TableBodyCell>168.95.1.1</TableBodyCell>
-      <TableBodyCell></TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].dns[0]} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[1].dns[0]} {/if}</TableBodyCell>
     </TableBodyRow>
     <TableBodyRow>
       <TableBodyCell>DNS 2</TableBodyCell>
-      <TableBodyCell>8.8.8.8</TableBodyCell>
-      <TableBodyCell></TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].dns[1]} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[1].dns[1]} {/if}</TableBodyCell>
     </TableBodyRow>
 
     <TableBodyRow>
       <TableBodyCell>SIM Status</TableBodyCell>
-      <TableBodyCell>SIM A Ready</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].simStatus} {/if}</TableBodyCell>
       <TableBodyCell></TableBodyCell>
     </TableBodyRow>
 
 
     <TableBodyRow>
       <TableBodyCell>Role</TableBodyCell>
-      <TableBodyCell>Primary</TableBodyCell>
-      <TableBodyCell>Backup</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].role} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[1].role} {/if}</TableBodyCell>
     </TableBodyRow>
 
 
     <TableBodyRow>
       <TableBodyCell>Error Reason</TableBodyCell>
-      <TableBodyCell>SIM missing</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].errorReason} {/if}</TableBodyCell>
       <TableBodyCell></TableBodyCell>
     </TableBodyRow>
 
     <TableBodyRow>
-      <TableBodyCell colspan="2">Cellular Status</TableBodyCell>
-      <TableBodyCell rowspan="6">N.A</TableBodyCell>
+      <TableBodyCell class="text-center bg-green-400" colspan="3">Cellular Status</TableBodyCell>
     </TableBodyRow>
 
     <TableBodyRow>
       <TableBodyCell>Register Status</TableBodyCell>
-      <TableBodyCell>Registered</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].registerStatus} {/if}</TableBodyCell>
+      <TableBodyCell rowspan="5">N.A</TableBodyCell>
     </TableBodyRow>
 
     <TableBodyRow>
       <TableBodyCell>Network Type</TableBodyCell>
-      <TableBodyCell>4G</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].type} {/if}</TableBodyCell>
     </TableBodyRow>
 
     <TableBodyRow>
       <TableBodyCell>Band</TableBodyCell>
-      <TableBodyCell>6</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].band} {/if}</TableBodyCell>
     </TableBodyRow>
 
 
     <TableBodyRow>
       <TableBodyCell>Operator</TableBodyCell>
-      <TableBodyCell>CHT</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].operator} {/if}</TableBodyCell>
     </TableBodyRow>
 
     <TableBodyRow>
       <TableBodyCell>RSSI</TableBodyCell>
-      <TableBodyCell>-85dBm</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_generalStatus[0].rssi} {/if}</TableBodyCell>
     </TableBodyRow>
 
 

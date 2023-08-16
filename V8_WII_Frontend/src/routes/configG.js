@@ -6,3 +6,4 @@ export const dockerConfig = writable("");
 export const dreamsConfig = writable("");
 export const staticrouteConfig = writable("");
 export const firewallConfig = writable("");
+export const natConfig=writable("");

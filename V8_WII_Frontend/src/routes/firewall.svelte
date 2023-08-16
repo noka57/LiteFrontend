@@ -96,7 +96,12 @@
     }
     else if (sessionid && firewall_data != "")
     {
+      EnableFilter=!!firewall_data.config.networking_firewall_general.enable;
+      IPFilterType=firewall_data.config.networking_firewall_ipFilter.type;
+      IPFilterArrays=firewall_data.config.networking_firewall_ipFilter.list;
 
+      MACFilterType=firewall_data.config.networking_firewall_macFilter.type;
+      MACFilterArrays=firewall_data.config.networking_firewall_macFilter.list;
     }
 
   });

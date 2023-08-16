@@ -3,7 +3,7 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import {staticrouteConfig} from "./configG.js";
+  import { staticrouteConfig} from "./configG.js";
 
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
@@ -59,8 +59,6 @@
       EnableSR=!!static_route_data.config.networking_staticRoute.enable;
       StaticRouteArrays=static_route_data.config.networking_staticRoute.list;
 
-      console.log(StaticRouteArrays);
-
     }
   }
 
@@ -77,7 +75,8 @@
     }
     else if(sessionid && static_route_data!="")
     {
-
+      EnableSR=!!static_route_data.config.networking_staticRoute.enable;
+      StaticRouteArrays=static_route_data.config.networking_staticRoute.list;
 
     }
 

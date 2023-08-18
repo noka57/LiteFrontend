@@ -10,57 +10,35 @@
 
    let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+   let autoApnEn=false;
    let pin="";
    let apn="";
-   let un="";
-   let pd="";
-   let ptime="60";
-   let rcount="5";
-   let interval="1500";
+   let apnuser="";
+   let apnpwd="";
+   let apnauthselected="";
+   let Authselected="";
+   let ExtraAT="";
+   let BandLockEn=false;
+   let BandScanEn=false;
+   let BandScanList="";
+   let BandSelect="";
+   let simPolicy;
+   let gLink;
+   let EthernetWANConnectionType;
+   let EthernetWANStaticIP;
+   let EthernetWANStaticIPnetmask;
+   let EthernetWANStaticIPgateway;
+   let EWANPPPAccount="";
+   let EWANPPPPwd="";
+   let ewlapEn=false;
+   let ewlapCheckRule;
+   let ewlapCheckTarget;
+   let ewlapCheckPeriodPollingTime;
+   let ewlapCheckPeriodRetryCnt;
+   let ewlapCheckPeriodInterval;
+   let wanRedundancyPolicy;
+   let fareSavingPolicy;
 
-   let selected="auto";
-   let selected2="auto";
-
-  let selected3="SimAF";
-
-  let selected4="None";
-
-
-  let selected5="Enable";
-  let selected6="Enable";
-  let selected6_Enable_1=["Ping"];
-  let selected6_Enable_2=[];
-  let selected6_Enable_3;
-  let selected6_Enable_4=["Relink","SIMSwitch","MSWR"];
-
-  let selected7="DClient";
-  let selected6_1="PING";
-  let selected5_1="dns1";
-
-  let selected8="Off";
-
-  let selected5_2="PING";
-  let selected6_2="dns1";
-
-
-
-  let selected9="cw1";
-  let selected9_1="cw1";
-  let selected9_2="cw1";
-
-
-  let selected10="ew";
-
-
-  let selected11="cw1";
-
-  let selected10_1="ew";
-
-
-  let selected11_1="cw1";
-
-
-  let selected12="Off";
 
 
   let selected13="Sch";
@@ -86,23 +64,12 @@
   ]
 
 
-  let a;
   let openDetailStatus = false;
 
   function handleClick() {
         openDetailStatus=!openDetailStatus;
   }
 
-   let isActive = true;
-
-   let isActive2 = true;
-
-
-   let isActive3 = true;
-
-   let isActive4 = true;
-
-   let isActive5 = true;
 
   let wan_data="";
   let getdataAlready=0;
@@ -111,6 +78,11 @@
   sessionidG.subscribe(val => {
     sessionid = val;
   });
+
+
+  wanConfig.subscribe(val => {
+        wan_data = val;
+    });
 
 
   async function getWANData () {
@@ -125,6 +97,43 @@
     {
       wan_data =await res.json();
       console.log(wan_data);
+      wanConfig.set(wan_data);
+      if (getdataAlready == 0)
+      {
+        pin=wan_data.config.networking_wan_cwan[0].basicSetting.pin;
+        autoApnEn=wan_data.config.networking_wan_cwan[0].basicSetting.autoApnEn; 
+        apn=wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.apn;
+        apnuser=wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.username;
+        apnpwd=wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.password;
+        apnauthselected=wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.auth;
+        Authselected=wan_data.config.networking_wan_cwan[0].advancedSetting.auth;
+        ExtraAT=wan_data.config.networking_wan_cwan[0].advancedSetting.extAtCmd;
+        BandLockEn=wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockEn;
+        BandScanEn=wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandScanEn;
+        BandScanList=wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandScanList;
+        BandSelect=wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandSelect;
+        simPolicy=wan_data.config.networking_wan_cwan[0].simPolicy;
+        gLink=wan_data.config.networking_wan_cwan[0].gLink;
+        EthernetWANConnectionType=wan_data.config.networking_wan_ewan[0].basicSetting.connectionType;
+        EthernetWANStaticIP=wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.ip;
+        EthernetWANStaticIPnetmask=wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.netmask;
+        EthernetWANStaticIPgateway=wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.gateway;
+        EWANPPPAccount=wan_data.config.networking_wan_ewan[0].basicSetting.pppoe.account;
+        EWANPPPPwd=wan_data.config.networking_wan_ewan[0].basicSetting.pppoe.password;
+        ewlapEn=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapEn;
+        ewlapCheckRule=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkRule;
+        ewlapCheckTarget=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkTarget;
+
+        ewlapCheckPeriodPollingTime=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkPeriod.pollingTime;
+        ewlapCheckPeriodRetryCnt=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkPeriod.retryCnt;
+        ewlapCheckPeriodInterval=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkPeriod.interval;
+
+        wanRedundancyPolicy=wan_data.config.networking_wan_wanRedundancyPolicy;
+        fareSavingPolicy=wan_data.config.networking_wan_fareSavingPolicy;
+
+
+      }
+
       getdataAlready=1;
 
     }
@@ -144,7 +153,38 @@
     else if (sessionid && wan_data!="")
     {
         getdataAlready=1;
+        console.log("wan_data is not null");
+        pin=wan_data.config.networking_wan_cwan[0].basicSetting.pin;
+        autoApnEn=wan_data.config.networking_wan_cwan[0].basicSetting.autoApnEn; 
+        apn=wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.apn;
+        apnuser=wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.username;
+        apnpwd=wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.password;
+        apnauthselected=wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.auth;
+        Authselected=wan_data.config.networking_wan_cwan[0].advancedSetting.auth;
+        ExtraAT=wan_data.config.networking_wan_cwan[0].advancedSetting.extAtCmd;
+        BandLockEn=wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockEn;
+        BandScanEn=wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandScanEn;
+        BandScanList=wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandScanList;
+        BandSelect=wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandSelect;
+        simPolicy=wan_data.config.networking_wan_cwan[0].simPolicy;
+        gLink=wan_data.config.networking_wan_cwan[0].gLink;
+        EthernetWANConnectionType=wan_data.config.networking_wan_ewan[0].basicSetting.connectionType;
+        EthernetWANStaticIP=wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.ip;
+        EthernetWANStaticIPnetmask=wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.netmask;
+        EthernetWANStaticIPgateway=wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.gateway;
+        EWANPPPAccount=wan_data.config.networking_wan_ewan[0].basicSetting.pppoe.account;
+        EWANPPPPwd=wan_data.config.networking_wan_ewan[0].basicSetting.pppoe.password;
+        ewlapEn=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapEn;
+        ewlapCheckRule=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkRule;
+        ewlapCheckTarget=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkTarget;
 
+        ewlapCheckPeriodPollingTime=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkPeriod.pollingTime;
+        ewlapCheckPeriodRetryCnt=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkPeriod.retryCnt;
+        ewlapCheckPeriodInterval=wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkPeriod.interval;
+
+        wanRedundancyPolicy=wan_data.config.networking_wan_wanRedundancyPolicy;
+        fareSavingPolicy=wan_data.config.networking_wan_fareSavingPolicy;
+        getWANData();
     }
 
   });
@@ -258,10 +298,10 @@
  
   <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"  on:click={handleClick}>
   <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">1</td>
-  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">Ready</td>
-  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">EG25</td>
-  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">460015726101417</td>
-  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">Registrated to home network</td>
+  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.modemStatus} {/if}</td>
+  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.modemModel} {/if}</td>
+  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.imsi} {/if}</td>
+  <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.registerStatus} {/if}</td>
   </tr>
 
 {#if openDetailStatus}
@@ -269,24 +309,24 @@
 
  <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="3">Phone Number</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>+886912345678</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.phoneNumber} {/if}</TableBodyCell>
       </TableBodyRow>
 
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="3">Modem Status</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>Connected</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.status} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="3">SIM Status</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>Active</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.simStatus} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="3">Active SIM</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>SIM A</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.activeSim} {/if}</TableBodyCell>
       </TableBodyRow>
 
       <TableBodyRow {trClass}>
@@ -294,57 +334,49 @@
       <TableBodyCell class="text-left" colspan="2" {tdClass}>RSSI</TableBodyCell>
       </TableBodyRow>
 
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">RSSI</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.rssi} {/if}</TableBodyCell>
+      </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="3">Registered Mobile Operator</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>PLMN ID</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.operator} {/if}</TableBodyCell>
       </TableBodyRow>
 
-
-
-
-      <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">IMSI</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>ID</TableBodyCell>
-      </TableBodyRow>
 
 
 
 
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="3">Connect State</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>PIN</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.connectState} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="3">Connected Network Type</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>LTE</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.type} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="3">Connected Band</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>B6</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.band} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="3">Modem Vendor</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>ven</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.modemVendor} {/if}</TableBodyCell>
       </TableBodyRow>
 
-
-      <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Modem Model</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>ven</TableBodyCell>
-      </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="3">Modem Firmware Version</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>1.0.0</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.modemFwVer} {/if}</TableBodyCell>
       </TableBodyRow>
 
 {/if}
@@ -361,27 +393,27 @@
 <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
-<Tooltip trigger="click" triggeredBy="#click">Click tooltip content</Tooltip>
+<Tooltip trigger="click" triggeredBy="#click">Auto Apn</Tooltip>
     </td>
     </tr>
     <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-center">Automatic APN Selection</p></td><td class="pl-5 pt-5"><Toggle 
-  bind:checked={isActive} /></td>
+  bind:checked={autoApnEn} /></td>
     </tr>
 
-{#if !isActive}
+{#if !autoApnEn}
     <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-right">APN</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     </tr>
 
 
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Username</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Username</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apnuser} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     </tr>
 
 
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="password" bind:value={apnpwd} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     </tr>
 
     <tr>
@@ -393,9 +425,9 @@
 
     <td class="pl-5 pt-5">
 <div class="flex gap-4">
-  <Radio bind:group={selected} value='auto' >AUTO</Radio>
-  <Radio bind:group={selected} value='chap' >CHAP</Radio>
-  <Radio bind:group={selected} value='pap' >PAP</Radio>
+  <Radio bind:group={apnauthselected} value='AUTO' >AUTO</Radio>
+  <Radio bind:group={apnauthselected} value='CHAP' >CHAP</Radio>
+  <Radio bind:group={apnauthselected} value='PAP' >PAP</Radio>
 
 </div>
 
@@ -422,44 +454,45 @@
     <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td>  
     <td class="pl-5">
 <div class="flex gap-4">
-  <Radio bind:group={selected2} value='auto' >AUTO</Radio>
-  <Radio bind:group={selected2} value='3g' >3G</Radio>
-  <Radio bind:group={selected2} value='4g' >4G</Radio>
-  <Radio bind:group={selected2} value='5g' >5G</Radio>
-  <Radio bind:group={selected2} value='5gnrsa' >5GNR-SA</Radio>
+  <Radio bind:group={Authselected} value='AUTO' >AUTO</Radio>
+  <Radio bind:group={Authselected} value='3G' >3G</Radio>
+  <Radio bind:group={Authselected} value='4G' >4G</Radio>
+  <Radio bind:group={Authselected} value='5G' >5G</Radio>
+  <Radio bind:group={Authselected} value='5GNR-SA' >5GNR-SA</Radio>
 </div>
 </td>
     </tr>
 
 
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Extra AT Command </p></td><td class="pl-5 pt-5"><input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Extra AT Command </p></td><td class="pl-5 pt-5"><input type="text" bind:value={ExtraAT} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     </tr>
 
     <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-right">Band Lock</p></td><td class="pl-5 pt-5"><Toggle 
-  bind:checked={isActive2} /></td>
+  bind:checked={BandLockEn} /></td>
     </tr>
 
-{#if isActive2}
+{#if BandLockEn}
 
  <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-right">Band Scan and List</p></td><td class="pl-5 pt-5"><Toggle 
-  bind:checked={isActive3} /></td>
+  bind:checked={BandScanEn} /></td>
     </tr>
-    
+ 
+ {#if BandScanEn}   
     <tr>
     <td><p class="pl-40 pt-1 text-lg font-light text-right"></p></td><td class="pl-5 pt-5">
-    <input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+    <input type="text" bind:value={BandScanList} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
       </td>
     </tr>
-
+{/if}
 
 
 
 
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Band Select: </p></td><td class="pl-5 pt-5"><input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Band Select: </p></td><td class="pl-5 pt-5"><input type="text" bind:value={BandSelect} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     </tr>
   
 {/if}
@@ -482,10 +515,10 @@
     <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td>
  <td class="pl-5">
 <div class="flex gap-4">
-  <Radio bind:group={selected3} value='SimAF' >SIM A First</Radio>
-  <Radio bind:group={selected3} value='SimBF' >SIM B First</Radio>
-  <Radio bind:group={selected3} value='SimAO' >SIM A Only</Radio>
-  <Radio bind:group={selected3} value='SimBO' >SIM B Only</Radio>
+  <Radio bind:group={simPolicy.auth} value={0} >SIM A First</Radio>
+  <Radio bind:group={simPolicy.auth} value={1} >SIM B First</Radio>
+  <Radio bind:group={simPolicy.auth} value={2} >SIM A Only</Radio>
+  <Radio bind:group={simPolicy.auth} value={3} >SIM B Only</Radio>
 
 </div>
 </td>
@@ -509,7 +542,7 @@
               Fail Connections
               </td>
               <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-<input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={simPolicy.checkRule.failConnection} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
               </td>
 
               <td>
@@ -523,14 +556,16 @@
               RSSI Monitor
               </td>
               <td class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
- <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-  <label for="vehicle1" class="font-medium">Enable Threshold</label>
+
+ <input type="checkbox" id="simCheck1" name="simCheck1" bind:checked={simPolicy.checkRule.rssiMonitor.enable}>
+  <label for="simCheck1" class="font-medium">Enable Threshold</label>
               -
               </td>
 
               <td>
+
               
-<input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={simPolicy.checkRule.rssiMonitor.threshold} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
               </td> 
               <td>
               (-90~-113 dBm)
@@ -544,14 +579,14 @@
               Network Service
               </td>
               <td class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
- <input type="checkbox" id="vehicle2" name="vehicle2" value="Bike">
-  <label for="vehicle2" class="font-medium">Enable Loss LTE Signal</label>
+ <input type="checkbox" id="simCheck2" name="simCheck2" bind:checked={simPolicy.checkRule.networkService.enable}>
+  <label for="simCheck2" class="font-medium">Enable Loss LTE Signal</label>
               
               </td>
 
               <td>
               
-<input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={simPolicy.checkRule.networkService.time} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
               </td> 
               <td>
               (1-30 minutes)
@@ -565,13 +600,13 @@
               Roaming Service
               </td>
               <td class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
- <input type="checkbox" id="vehicle3" name="vehicle3" value="Bike">
-  <label for="vehicle3" class="font-medium">Enable Timeout</label>
+ <input type="checkbox" id="simCheck3" name="simCheck3" bind:checked={simPolicy.checkRule.roamingService.enable}>
+  <label for="simCheck3" class="font-medium">Enable Timeout</label>
               </td>
 
               <td>
               
-<input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={simPolicy.checkRule.roamingService.time} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
               </td> 
               <td>
               (1-30 minutes)
@@ -587,9 +622,9 @@
     <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-right">SIM failover Treatment</p></td>
     <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected4} value='None' >None</Radio>
-  <Radio bind:group={selected4} value='RM' >Reset Modem</Radio>
-  <Radio bind:group={selected4} value='PCM'>Power Cycle Modem</Radio>
+  <Radio bind:group={simPolicy.checkRule.simFailover} value={0} >None</Radio>
+  <Radio bind:group={simPolicy.checkRule.simFailover} value={1} >Reset Modem</Radio>
+  <Radio bind:group={simPolicy.checkRule.simFailover} value={2}>Power Cycle Modem</Radio>
 
 
 </div></td>
@@ -611,9 +646,9 @@
     <span slot="header" class="pl-4">LTE Guarantie Link</span>
 <table>
     <tr>
-    <td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">Guarantie Link</p></td><td class="pl-5 pt-5"><Toggle bind:checked={isActive4}></Toggle></td>
+    <td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">Guarantie Link</p></td><td class="pl-5 pt-5"><Toggle bind:checked={gLink.enable}></Toggle></td>
     </tr>
-{#if isActive4}
+{#if gLink.enable}
 
     <tr>
     <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Parameter</p></td>
@@ -627,8 +662,8 @@
     <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Cellular Level Checking</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={selected5} value='Disable'>Disable</Radio>
-  <Radio bind:group={selected5} value='Enable' >Enable</Radio>
+      <Radio bind:group={gLink.checkParam.cellLvChk} value={0}>Disable</Radio>
+  <Radio bind:group={gLink.checkParam.cellLvChk} value={1} >Enable</Radio>
 
 </div></td>
     </tr>
@@ -638,12 +673,12 @@
     <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Packet Level Checking</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={selected6} value='Disable'>Disable</Radio>
-  <Radio bind:group={selected6} value='Enable' >Enable</Radio>
+      <Radio bind:group={gLink.checkParam.pktLvChk} value={0}>Disable</Radio>
+  <Radio bind:group={gLink.checkParam.pktLvChk} value={1} >Enable</Radio>
 
 </div></td>
     </tr>
-{#if selected6 == "Enable"}
+{#if gLink.checkParam.pktLvChk}
     <tr>
     <td></td><td><p class="pl-5 pt-5 text-lg font-light text-right">Checking Method</p></td>
     
@@ -652,10 +687,14 @@
 
 
     <tr>
+
     <td></td><td></td><td class="pt-5">
 
-    <Checkbox bind:group={selected6_Enable_1} value="Ping">Ping Packet:</Checkbox></td><td><FloatingLabelInput style="filled" id="packet_size" name="packet_size" type="text" label="Packet Size" value={32}/></td> <td>Bytes,</td>
-    <td><FloatingLabelInput style="filled" id="remote_host" name="remote_host" type="text" label="Remote Host" value="DNS1"/></td> 
+  <label for="gLinkCheck1" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck1" name="gLinkCheck1" bind:checked={gLink.checkParam.chkMethod.pingEn}>
+Ping Packet:</label>
+    </td><td><FloatingLabelInput style="filled" id="packet_size" name="packet_size" type="number" label="Packet Size (Bytes)" value={gLink.checkParam.chkMethod.pingParam.size}/></td><td>
+    <FloatingLabelInput style="filled" id="remote_host" name="remote_host" type="text" label="Remote Host" value={gLink.checkParam.chkMethod.pingParam.ip}/></td> 
     
 
     </tr>
@@ -663,15 +702,43 @@
     <tr>
     <td></td><td></td><td class="pt-5">
 
-    <Checkbox bind:group={selected6_Enable_1} value="Interface">Test Interface</Checkbox>
+  <label for="gLinkCheck2" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck2" name="gLinkCheck2" bind:checked={gLink.checkParam.chkMethod.testIfEn}>
+Test Interface</label>
+
     </td>
 
-    <td class="pt-5">
+    <td class="pt-5" colspan="2">
 
     <div class="flex gap-3">
-    <Checkbox bind:group={selected6_Enable_2} value="lan1">LAN 1</Checkbox>
-    <Checkbox bind:group={selected6_Enable_2} value="wan">WAN</Checkbox>
-    <Checkbox bind:group={selected6_Enable_2} value="cwan">C-WAN</Checkbox>
+  <label for="gLinkCheck3" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck3" name="gLinkCheck3" bind:checked={gLink.checkParam.chkMethod.testIfParam.lan1En}>
+LAN 1</label>
+
+  <label for="gLinkCheck4" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck4" name="gLinkCheck4" bind:checked={gLink.checkParam.chkMethod.testIfParam.lan2En}>
+LAN 2</label>
+
+
+
+  <label for="gLinkCheck5" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck5" name="gLinkCheck5" bind:checked={gLink.checkParam.chkMethod.testIfParam.lan3En}>
+LAN 3</label>
+
+
+  <label for="gLinkCheck6" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck6" name="gLinkCheck6" bind:checked={gLink.checkParam.chkMethod.testIfParam.lan4En}>
+LAN 4</label>
+
+
+  <label for="gLinkCheck7" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck7" name="gLinkCheck7" bind:checked={gLink.checkParam.chkMethod.testIfParam.wanEn}>
+Ethernet WAN</label>
+
+  <label for="gLinkCheck8" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck8" name="gLinkCheck8" bind:checked={gLink.checkParam.chkMethod.testIfParam.cWanEn}>
+Cellular WAN-1</label>
+
     </div>
 
 
@@ -683,16 +750,23 @@
 
     <tr>
     <td></td><td></td><td class="pt-5">
-     <Checkbox bind:group={selected6_Enable_1} value="DLookUP">DNS Lookup</Checkbox>
+
+      <label for="gLinkCheck9" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck9" name="gLinkCheck9" bind:checked={gLink.checkParam.chkMethod.dnsLockupEn}>
+DNS Lookup</label>
     </td>
     
-    <td class="pt-5"><FloatingLabelInput style="filled" id="FQDN" name="FQDN" type="text" label="FQDN"/></td>
-    <td class="pt-5"><FloatingLabelInput style="filled" id="DNSer" name="DNSer" type="text" label="DNSer"/></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="FQDN" name="FQDN" type="text" label="FQDN" value={gLink.checkParam.chkMethod.dnsLockupParam.fqdn}/></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="DNSer" name="DNSer" type="text" label="DNS Server" value={gLink.checkParam.chkMethod.dnsLockupParam.dnser}/></td>
     </tr>
 
     <tr>
     <td></td><td></td><td class="pt-5">
-    <Checkbox bind:group={selected6_Enable_1} value="DNSPS">DNS Packet Sniff</Checkbox>
+
+          <label for="gLinkCheck10" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck10" name="gLinkCheck10" bind:checked={gLink.checkParam.chkMethod.dnsPktSniffEn}>
+DNS Packet Sniff</label>
+
     </td>
     
 
@@ -701,9 +775,12 @@
 
     <tr>
     <td></td><td></td><td class="pt-5">
-    <Checkbox bind:group={selected6_Enable_1} value="Https">Http(s)</Checkbox>
+    <label for="gLinkCheck11" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck11" name="gLinkCheck11" bind:checked={gLink.checkParam.chkMethod.httpEn}>
+Http(s)</label>
+
     </td>
-    <td class="pt-5"><FloatingLabelInput style="filled" id="url" name="url" type="text" label="URL"/></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="url" name="url" type="text" label="URL" value={gLink.checkParam.chkMethod.httpUrl}/></td>
 
 
     </tr>
@@ -711,13 +788,16 @@
 
     <tr>
     <td></td><td></td><td class="pt-5">
-    <Checkbox bind:group={selected6_Enable_1} value="PCI">Packet Count Increase</Checkbox>
+    <label for="gLinkCheck12" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck12" name="gLinkCheck12" bind:checked={gLink.checkParam.chkMethod.pktCountIncreaseEn}>
+Packet Count Increase</label>
+
     </td>
 
     <td class="pt-5">
     <div class="flex gap-3">
-    <Radio bind:group={selected6_Enable_3} value="RX">RX</Radio>
-    <Radio bind:group={selected6_Enable_3} value="RX_TX">RX + TX</Radio>
+    <Radio bind:group={gLink.checkParam.chkMethod.pktCountIncreaseMode} value={0}>RX</Radio>
+    <Radio bind:group={gLink.checkParam.chkMethod.pktCountIncreaseMode} value={1}>RX + TX</Radio>
     </div>
     </td>
   
@@ -735,47 +815,61 @@
 
     <tr>
     <td></td><td class="pt-5">
-    <Checkbox bind:group={selected6_Enable_4} value="Relink">Relink Again</Checkbox>
+
+    <label for="gLinkCheck13" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck13" name="gLinkCheck13" bind:checked={gLink.recoverySequence.relinkAgainEn}>
+Relink Again</label>
+
     </td>
 
-    <td class="pt-5"><FloatingLabelInput style="filled" id="RADelayS" name="RADelayS" type="text" label="Delay Seconds" value={0}/></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="RADelayS" name="RADelayS" type="number" label="Delay Seconds" value={gLink.recoverySequence.relinkAgainParam.delay}/></td>
     
-    <td class="pt-5"><FloatingLabelInput style="filled" id="RARetryCount" name="RARetryCount" type="text" label="Retry Count" value={3}/></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="RARetryCount" name="RARetryCount" type="number" label="Retry Count" value={gLink.recoverySequence.relinkAgainParam.retryCnt}/></td>
     </tr>
 
 
     <tr>
     <td></td><td class="pt-5">
-    <Checkbox bind:group={selected6_Enable_4} value="SIMSwitch">SIM Switch Over</Checkbox>
+
+    <label for="gLinkCheck14" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck14" name="gLinkCheck14" bind:checked={gLink.recoverySequence.simSwitchOverEn}>
+SIM Switch Over</label>
+
     </td>
 
-    <td class="pt-5"><FloatingLabelInput style="filled" id="SIMSODelayS" name="SIMSODelayS" type="text" label="Delay Seconds" value={1}/></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="SIMSODelayS" name="SIMSODelayS" type="number" label="Delay Seconds" value={gLink.recoverySequence.simSwitchOverParam.delay}/></td>
     
-    <td class="pt-5"><FloatingLabelInput style="filled" id="SIMSORetryCount" name="SIMSORetryCount" type="text" label="Retry Count" value={2}/></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="SIMSORetryCount" name="SIMSORetryCount" type="number" label="Retry Count" value={gLink.recoverySequence.simSwitchOverParam.retryCnt}/></td>
 
     </tr>
 
     <tr>
     <td></td><td class="pt-5">
-    <Checkbox bind:group={selected6_Enable_4} value="MSWR">Modem SW Reset</Checkbox>
+
+    <label for="gLinkCheck15" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck15" name="gLinkCheck15" bind:checked={gLink.recoverySequence.modemSwResetEn}>
+Modem SW Reset</label>
     </td>
 
-    <td class="pt-5"><FloatingLabelInput style="filled" id="MSWRDelayS" name="MSWRDelayS" type="text" label="Delay Seconds" value={0}/></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="MSWRDelayS" name="MSWRDelayS" type="number" label="Delay Seconds" value={gLink.recoverySequence.modemSwResetParam.delay}/></td>
     
-    <td class="pt-5"><FloatingLabelInput style="filled" id="MSWRRetryCount" name="MSWRRetryCount" type="text" label="Retry Count" value={3}/></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="MSWRRetryCount" name="MSWRRetryCount" type="number" label="Retry Count" value={gLink.recoverySequence.modemSwResetParam.retryCnt}/></td>
 
     </tr>
 
 
     <tr>
     <td></td><td class="pt-5">
-    <Checkbox bind:group={selected6_Enable_4} value="MHWR">Modem HW Reset</Checkbox>
+    <label for="gLinkCheck16" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck16" name="gLinkCheck16" bind:checked={gLink.recoverySequence.modemHwResetEn}>
+Modem HW Reset</label>
+
     </td>
 
 
-    <td class="pt-5"><FloatingLabelInput style="filled" id="MHWRDelayS" name="MHWRDelayS" type="text" label="Delay Seconds" /></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="MHWRDelayS" name="MHWRDelayS" type="number" label="Delay Seconds" value={gLink.recoverySequence.modemHwResetParam.delay}/></td>
     
-    <td class="pt-5"><FloatingLabelInput style="filled" id="MHWRRetryCount" name="MHWRRetryCount" type="text" label="Retry Count" /></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="MHWRRetryCount" name="MHWRRetryCount" type="number" label="Retry Count" value={gLink.recoverySequence.modemHwResetParam.retryCnt}/></td>
 
     </tr>
 
@@ -783,12 +877,16 @@
 
     <tr>
     <td></td><td class="pt-5">
-    <Checkbox bind:group={selected6_Enable_4} value="Reboot">System Reboot</Checkbox>
+
+        <label for="gLinkCheck17" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck17" name="gLinkCheck17" bind:checked={gLink.recoverySequence.sysRebootEn}>
+System Reboot</label>
+
     </td>
 
-    <td class="pt-5"><FloatingLabelInput style="filled" id="SRDelayS" name="SRDelayS" type="text" label="Delay Seconds" /></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="SRDelayS" name="SRDelayS" type="number" label="Delay Seconds" value={gLink.recoverySequence.sysRebootParam.delay}/></td>
     
-    <td class="pt-5"><FloatingLabelInput style="filled" id="SRRetryCount" name="SRRetryCount" type="text" label="Retry Count" /></td>
+    <td class="pt-5"><FloatingLabelInput style="filled" id="SRRetryCount" name="SRRetryCount" type="number" label="Retry Count" value={gLink.recoverySequence.sysRebootParam.retryCnt}/></td>
 
 
     </tr>
@@ -830,7 +928,7 @@
   </TabItem>
 
 
-  <TabItem title="Ethernet WAN">
+<TabItem title="Ethernet WAN">
   <Accordion>
   <AccordionItem {defaultClass}>
     <div slot="header" class="pl-4">General Status</div>
@@ -843,7 +941,7 @@
     <TableHeadCell>Connection Type</TableHeadCell>
     <TableHeadCell>Network Type</TableHeadCell>
     <TableHeadCell>IP Address</TableHeadCell>
-    <TableHeadCell>Subnet Mask</TableHeadCell>
+    <TableHeadCell>Netmask</TableHeadCell>
     <TableHeadCell>Gateway</TableHeadCell>
     <TableHeadCell>DNS</TableHeadCell>
     <TableHeadCell>MAC</TableHeadCell>
@@ -851,15 +949,15 @@
   </TableHead>
   <TableBody class="divide-y">
     <TableBodyRow>
-      <TableBodyCell>WAN</TableBodyCell>
-      <TableBodyCell>PPPoE</TableBodyCell>
-      <TableBodyCell>NAT</TableBodyCell>
-      <TableBodyCell>10.18.81.235</TableBodyCell>
-      <TableBodyCell>255.255.255.248</TableBodyCell>
-      <TableBodyCell>10.18.81.236</TableBodyCell>
-      <TableBodyCell>168.95.1.1/168.95.192.1</TableBodyCell>
-      <TableBodyCell>00:E0:B3:12:34:56</TableBodyCell>
-      <TableBodyCell>Connected</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_ewan[0].generalStatus.interface} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_ewan[0].generalStatus.connectionType} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_ewan[0].generalStatus.networkType} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_ewan[0].generalStatus.ip} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_ewan[0].generalStatus.netmask} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_ewan[0].generalStatus.gateway} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_ewan[0].generalStatus.dns[0]} {/if}/{#if getdataAlready}{wan_data.config.networking_wan_ewan[0].generalStatus.dns[1]} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_ewan[0].generalStatus.mac} {/if}</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{wan_data.config.networking_wan_ewan[0].generalStatus.connectionStatus} {/if}</TableBodyCell>
     </TableBodyRow>
   </TableBody>
 </Table>
@@ -877,9 +975,9 @@
 
 
   <td class="pl-5"><div class="flex gap-4">
-  <Radio bind:group={selected7} value='Sip' >Static IP</Radio>
-  <Radio bind:group={selected7} value='DClient' >DHCP Client</Radio>
-  <Radio bind:group={selected7} value='PPP'>PPPoE</Radio>
+  <Radio bind:group={EthernetWANConnectionType} value={0} >Static IP</Radio>
+  <Radio bind:group={EthernetWANConnectionType} value={1} >DHCP Client</Radio>
+  <Radio bind:group={EthernetWANConnectionType} value={2}>PPPoE</Radio>
 
 
 </div></td>
@@ -887,34 +985,31 @@
 
   </tr>
 
-{#if selected7=="Sip"}
+{#if EthernetWANConnectionType==0}
   <tr>
-      <td><p class="pl-40 pt-1 text-lg font-light text-right">IP Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={pin} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-40 pt-1 text-lg font-light text-right">IP Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={EthernetWANStaticIP} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
 
   <tr>
-        <td><p class="pl-40 pt-1 text-lg font-light text-right">Network Mask</p></td><td class="pl-5 pt-5"><input type="text" bind:value={pin} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+        <td><p class="pl-40 pt-1 text-lg font-light text-right">Network Mask</p></td><td class="pl-5 pt-5"><input type="text" bind:value={EthernetWANStaticIPnetmask} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
   </tr>
 
   <tr>
 
-            <td><p class="pl-40 pt-1 text-lg font-light text-right">Gateway</p></td><td class="pl-5 pt-5"><input type="text" bind:value={pin} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+            <td><p class="pl-40 pt-1 text-lg font-light text-right">Gateway</p></td><td class="pl-5 pt-5"><input type="text" bind:value={EthernetWANStaticIPgateway} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
   </tr>
 
-{/if}
-
-
-{#if selected7=="PPP"}
+{:else if EthernetWANConnectionType==2}
   <tr>
-        <td><p class="pl-40 pt-1 text-lg font-light text-right">Account</p></td><td class="pl-5 pt-5"><input type="text" bind:value={pin} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+        <td><p class="pl-40 pt-1 text-lg font-light text-right">Account</p></td><td class="pl-5 pt-5"><input type="text" bind:value={EWANPPPAccount} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
   </tr>
 
   <tr>
 
-            <td><p class="pl-40 pt-1 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={pin} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+            <td><p class="pl-40 pt-1 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="password" bind:value={EWANPPPPwd} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
   </tr>
 
 {/if}
@@ -939,16 +1034,16 @@
 <table>
     <tr>
     <td class="w-60"><p class="pl-40 pt-5 text-lg font-light text-right">EWLAP</p></td>
-    <td class="pl-5 pt-5"><Toggle bind:checked={isActive5}></Toggle></td>
+    <td class="pl-5 pt-5"><Toggle bind:checked={ewlapEn}></Toggle></td>
     </tr>
-{#if isActive5}
+{#if ewlapEn}
 
     <tr>
     <td><p class="pl-20 pt-5 text-lg font-light text-right">Checking Rules</p></td>
   <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected5_1} value='PING' >PING</Radio>
-  <Radio bind:group={selected5_1} value='DNSQ' >DNS Query</Radio>
-  <Radio bind:group={selected5_1} value='DNSPC'>DNS Packet Check</Radio>
+  <Radio bind:group={ewlapCheckRule} value={0} >PING</Radio>
+  <Radio bind:group={ewlapCheckRule} value={1} >DNS Query</Radio>
+  <Radio bind:group={ewlapCheckRule} value={2}>DNS Packet Check</Radio>
 
 
 </div></td>
@@ -962,11 +1057,11 @@
     <tr>
     <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target</p></td>
     <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected6_1} value='None' >None</Radio>
-  <Radio bind:group={selected6_1} value='dns1' >DNS 1</Radio>
-  <Radio bind:group={selected6_1} value='dns2'>DNS 2</Radio>
-  <Radio bind:group={selected6_1} value='gw' >Gateway</Radio>
-  <Radio bind:group={selected6_1} value='otherH'>Other Host</Radio>
+  <Radio bind:group={ewlapCheckTarget} value={0} >None</Radio>
+  <Radio bind:group={ewlapCheckTarget} value={1} >DNS 1</Radio>
+  <Radio bind:group={ewlapCheckTarget} value={2}>DNS 2</Radio>
+  <Radio bind:group={ewlapCheckTarget} value={3} >Gateway</Radio>
+  <Radio bind:group={ewlapCheckTarget} value={4}>Other Host</Radio>
 
 </div></td>
 
@@ -989,7 +1084,7 @@
               Polling times
               </td>
               <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-<input type="text" bind:value={ptime} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={ewlapCheckPeriodPollingTime} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
               </td>
 
               <td>
@@ -1002,7 +1097,7 @@
               Retry Count
               </td>
               <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-<input type="text" bind:value={rcount} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={ewlapCheckPeriodRetryCnt} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
               </td>
 
               <td>
@@ -1015,7 +1110,7 @@
               Interval times
               </td>
               <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-<input type="text" bind:value={interval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={ewlapCheckPeriodInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
               </td>
 
               <td>
@@ -1055,10 +1150,10 @@ Policy">
   </td>
 
       <td class="pl-5"><div class="flex gap-4">
-  <Radio bind:group={selected8} value='Off' >Off</Radio>
-  <Radio bind:group={selected8} value='Aon' >Always On</Radio>
-  <Radio bind:group={selected8} value='fo'>Fail Over</Radio>
-  <Radio bind:group={selected8} value='fb' >Fail Back</Radio>
+  <Radio bind:group={wanRedundancyPolicy.mode} value={0} >Off</Radio>
+  <Radio bind:group={wanRedundancyPolicy.mode} value={1}>Always On</Radio>
+  <Radio bind:group={wanRedundancyPolicy.mode} value={2}>Fail Over</Radio>
+  <Radio bind:group={wanRedundancyPolicy.mode} value={3}>Fail Back</Radio>
 
 
 </div></td>
@@ -1066,12 +1161,12 @@ Policy">
 
   </tr>
 
-{#if selected8=="Aon"}
+{#if wanRedundancyPolicy.mode==1}
   <tr>
  <td><p class="pl-40 pt-5 text-lg font-light text-right">Primary WAN</p></td>
  <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected9} value='cw1' >C-WAN-1</Radio>
-  <Radio bind:group={selected9} value='ew' >E-WAN</Radio>
+  <Radio bind:group={wanRedundancyPolicy.alwaysOn.primaryWan} value={0} >Ethernet-WAN</Radio>
+  <Radio bind:group={wanRedundancyPolicy.alwaysOn.primaryWan} value={1} >Cellular-WAN-1</Radio>
 
 
 </div></td>
@@ -1079,52 +1174,52 @@ Policy">
 
   </tr>
 
-{:else if selected8=="fo"}
+{:else if wanRedundancyPolicy.mode==2}
   <tr>
  <td><p class="pl-40 pt-5 text-lg font-light text-right">Primary WAN</p></td>
  <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected9_1} value='cw1' >C-WAN-1</Radio>
-  <Radio bind:group={selected9_1} value='ew' >E-WAN</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failover.primaryWan} value={0} >Ethernet-WAN</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failover.primaryWan} value={1} >Cellular-WAN-1</Radio>
 </div></td>
 
   </tr>
-{:else if selected8=="fb"}
+{:else if wanRedundancyPolicy.mode==3}
   <tr>
  <td><p class="pl-40 pt-5 text-lg font-light text-right">Primary WAN</p></td>
  <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected9_2} value='cw1' >C-WAN-1</Radio>
-  <Radio bind:group={selected9_2} value='ew' >E-WAN</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failback.primaryWan} value={0} >Ethernet-WAN</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failback.primaryWan} value={1} >Cellular-WAN-1</Radio>
 </div></td>
 
   </tr>
 {/if}
 
-{#if selected8=="fo" || selected8=="fb"}
+{#if wanRedundancyPolicy.mode==2 || wanRedundancyPolicy.mode==3}
     <tr>
  <td><p class="pl-40 pt-5 text-lg font-light text-right">Backup WAN</p></td>
-  {#if selected9_1=="cw1" && selected8=="fo"}
+  {#if wanRedundancyPolicy.failover.primaryWan==1 && wanRedundancyPolicy.mode==2}
 
 
  <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected10} value='ew' >E-WAN</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failover.backupWan} value={0} >Ethernet-WAN</Radio>
   </div></td>
   
-  {:else if selected9_1=='ew'&& selected8=="fo"}
+  {:else if wanRedundancyPolicy.failover.primaryWan==0 && wanRedundancyPolicy.mode==2}
 
  <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected11} value='cw1' >C-WAN-1</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failover.backupWan} value={1} >Cellular-WAN-1</Radio>
 
 </div></td>
-  {:else if selected9_2=="cw1" && selected8=="fb"}
+  {:else if wanRedundancyPolicy.failback.primaryWan==1 && wanRedundancyPolicy.mode==3}
 
 <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected10_1} value='ew' >E-WAN</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failback.backupWan} value={0} >Ethernet-WAN</Radio>
 </div></td>
   
-  {:else if selected9_2=='ew'&& selected8=="fb"}
+  {:else if wanRedundancyPolicy.failback.primaryWan==0 && wanRedundancyPolicy.mode==3}
 
  <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected11_1} value='cw1' >C-WAN-1</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failback.backupWan} value={1} >Cellular-WAN-1</Radio>
 
 </div></td>
 {/if}
@@ -1138,23 +1233,39 @@ Policy">
  <tr>
     <td><p class="pl-20 pt-5 text-lg font-light text-right">Payload Checking Rules</p></td>
   <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected5_2} value='PING' >PING</Radio>
-  <Radio bind:group={selected5_2} value='DNSQ' >DNS Query</Radio>
-  <Radio bind:group={selected5_2} value='DNSPC'>DNS Packet Check</Radio>
+{#if wanRedundancyPolicy.mode==2}
+  <Radio bind:group={wanRedundancyPolicy.failover.chkRule} value={0} >PING</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failover.chkRule} value={1} >DNS Query</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failover.chkRule} value={2}>DNS Packet Check</Radio>
+{:else if wanRedundancyPolicy.mode==3}
+  <Radio bind:group={wanRedundancyPolicy.failback.chkRule} value={0} >PING</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failback.chkRule} value={1} >DNS Query</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failback.chkRule} value={2}>DNS Packet Check</Radio>
 
+{/if}
 
 </div></td>
     </tr>
 
 
     <tr>
-    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target 1/2</p></td>
+    <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target</p></td>
     <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={selected6_2} value='None' >None</Radio>
-  <Radio bind:group={selected6_2} value='dns1' >DNS 1</Radio>
-  <Radio bind:group={selected6_2} value='dns2'>DNS 2</Radio>
-  <Radio bind:group={selected6_2} value='gw' >Gateway</Radio>
-  <Radio bind:group={selected6_2} value='otherH'>Other Host</Radio>
+{#if wanRedundancyPolicy.mode==2}
+  <Radio bind:group={wanRedundancyPolicy.failover.chkTarget} value={0} >None</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failover.chkTarget} value={1} >DNS 1</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failover.chkTarget} value={2} >DNS 2</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failover.chkTarget} value={3} >Gateway</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failover.chkTarget} value={4}>Other Host</Radio>
+{:else if wanRedundancyPolicy.mode==3}
+  <Radio bind:group={wanRedundancyPolicy.failback.chkTarget} value={0} >None</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failback.chkTarget} value={1} >DNS 1</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failback.chkTarget} value={2} >DNS 2</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failback.chkTarget} value={3} >Gateway</Radio>
+  <Radio bind:group={wanRedundancyPolicy.failback.chkTarget} value={4}>Other Host</Radio>
+
+
+{/if}
 
 </div></td>
     </tr>
@@ -1176,7 +1287,13 @@ Policy">
               Polling times
               </td>
               <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-<input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+{#if wanRedundancyPolicy.mode==2}              
+<input type="number" bind:value={wanRedundancyPolicy.failover.chkPeriod.pollingTime} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else if wanRedundancyPolicy.mode==3}
+<input type="number" bind:value={wanRedundancyPolicy.failback.chkPeriod.pollingTime} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+
               </td>
 
               <td>
@@ -1191,7 +1308,12 @@ Policy">
               Retry Count
               </td>
               <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-<input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+{#if wanRedundancyPolicy.mode==2}
+<input type="number" bind:value={wanRedundancyPolicy.failover.chkPeriod.retryCnt} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else if wanRedundancyPolicy.mode==3}
+<input type="number" bind:value={wanRedundancyPolicy.failback.chkPeriod.retryCnt} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
               </td>
 
               <td>
@@ -1204,7 +1326,11 @@ Policy">
               Interval times
               </td>
               <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-<input type="text" bind:value={un} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{#if wanRedundancyPolicy.mode==2}
+<input type="number" bind:value={wanRedundancyPolicy.failover.chkPeriod.interval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else if wanRedundancyPolicy.mode==3}
+<input type="number" bind:value={wanRedundancyPolicy.failback.chkPeriod.interval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
               </td>
 
               <td>
@@ -1246,11 +1372,11 @@ Policy">
   </td>
 
 
-      <td class="pl-5"><div class="flex gap-4">
-  <Radio bind:group={selected12} value='Off' >Off</Radio>
-  <Radio bind:group={selected12} value='Time' >Time</Radio>
-  <Radio bind:group={selected12} value='TA'>Traffic Amount</Radio>
-  <Radio bind:group={selected12} value='DS' >Data Source</Radio>
+      <td class="pl-5" colspan="3"><div class="flex gap-4">
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.mode} value={0} >Off</Radio>
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.mode} value={1} >Time</Radio>
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.mode} value={2} >Traffic Amount</Radio>
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.mode} value={3} >Data Source</Radio>
 
 
 </div></td>
@@ -1261,44 +1387,50 @@ Policy">
   </tr>
 
 
-  {#if selected12=="Time"}
+  {#if fareSavingPolicy.controlTrafficFlow.mode==1}
 
  <tr>
   <td><p class="pl-40 pt-5 text-lg font-light text-right">Select</p>
 
   </td>
 
-  <td class="pl-5">    <Select class="mt-2" items={countries13} bind:value={selected13}/>
+  <td class="pl-5 pt-5" colspan="2"> <div class="flex gap-4">
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.time.select} value={0} >Schedule</Radio>
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.time.select} value={1} >Period</Radio>
+  </div>
   </td>
 
   </tr>
 
-
+  {#if fareSavingPolicy.controlTrafficFlow.time.select==0}
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Start Time(Per month)</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
-    <td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
-    <td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-    <td class="pl-5 pt-5 text-lg font-light text-right">(DD:MM:HH)</td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Start Time(Per month)</p></td><td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.schedule.startTime.day} min="1" max="31" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
+    <td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.schedule.startTime.hour} min="0" max="23" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
+    <td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.schedule.startTime.minute} min="0" max="59" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td class="pl-5 pt-5 text-lg font-light text-right">(DD:HH:MM)</td>
     </tr>
 
-
-  {#if selected13=="Sch"}
-
-
-
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">On Duty Lasting Time</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
-    <td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
-    <td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-      <td class="pl-5 pt-5 text-lg font-light text-right">(DD:MM:HH)</td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">On Duty Lasting Time</p></td><td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.schedule.dutyTime.day} min="1" max="31" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
+    <td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.schedule.dutyTime.hour} min="0" max="23" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
+    <td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.schedule.dutyTime.minute} min="0" max="59" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5 text-lg font-light text-right">(DD:HH:MM)</td>
     </tr>
 
-  {:else if selected13=="Peri"}
+  {:else if fareSavingPolicy.controlTrafficFlow.time.select==1}
+
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">On Duty Lasting Time</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
-    <td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Start Time(Per month)</p></td><td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.period.startTime.day} min="1" max="31" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
+    <td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.period.startTime.hour} min="0" max="23" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
+    <td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.period.startTime.minute} min="0" max="59" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td class="pl-5 pt-5 text-lg font-light text-right">(DD:HH:MM)</td>
+    </tr>
+
+    <tr>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">On Duty Lasting Time</p></td><td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.period.dutyTime.hour} min="0" max="23" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>
+    <td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.period.dutyTime.minute} min="0" max="59" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
           <td class="pl-5 pt-5 text-lg font-light text-right"></td>
-      <td class="pl-5 pt-5 text-lg font-light text-left">(MM:HH)</td>
+      <td class="pl-5 pt-5 text-lg font-light text-left">(HH:MM)</td>
     </tr>
 
      <tr>
@@ -1307,24 +1439,28 @@ Policy">
   </td>
 
 
-    <td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.time.period.periodInterval.interval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 <td></td>
-      <td class="pl-5 pt-5">    <Select class="mt-2" items={countries14} bind:value={selected14}/></td>
-
+      <td class="pl-5 pt-5" colspan="2"> <div class="flex gap-4">
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.time.period.periodInterval.intervalMode} value={0} >Day(s)</Radio>
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.time.period.periodInterval.intervalMode} value={1} >Hour(s)</Radio>
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.time.period.periodInterval.intervalMode} value={2} >Minute(s)</Radio>
+  </div>
+  </td>
 
   </tr>
 
   {/if}
 
 
-  {:else if selected12=="TA"}
+  {:else if fareSavingPolicy.controlTrafficFlow.mode==2}
 
  <tr>
   <td><p class="pl-40 pt-5 text-lg font-light text-right">Start Day of Month</p>
 
   </td>
 
- <td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+ <td class="pl-5 pt-5"><input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.trafficAmount.startTime} min="1" max="31" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 <td class="pl-5 pt-5">(1-31)</td>
 
   </tr>
@@ -1333,18 +1469,24 @@ Policy">
   <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-right">Amount By</p>
 
-  <td class="pl-5 pt-5">    <Select class="mt-2" items={countries15} bind:value={selected15}/>
+ <td class="pl-5 pt-5" colspan="2"> <div class="flex gap-4">
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.trafficAmount.select} value={0} >TX</Radio>
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.trafficAmount.select} value={1} >RX</Radio>
+  <Radio bind:group={fareSavingPolicy.controlTrafficFlow.trafficAmount.select} value={2} >TX + RX</Radio>
+  With
+  </div>
+
   </td>
 
-  <td class="pl-5 pt-5"> With </td>
+
 
    <td class="pl-5 pt-5">
-  <input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+  <input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.trafficAmount.size} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
     <td class="pl-5 pt-5"> Mbs </td>
   </tr>
 
-  {:else if selected12=="DS"}
+  {:else if fareSavingPolicy.controlTrafficFlow.mode==3}
 
    <tr>
   <td><p class="pl-40 pt-5 text-lg font-light text-right">Disconnect Rule</p>
@@ -1379,7 +1521,7 @@ Policy">
   </td>
 
    <td class="pl-5 pt-5">
-  <input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+  <input type="number" bind:value={fareSavingPolicy.controlTrafficFlow.dataSource.disconnectRule} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
     <td class="pl-5 pt-5"> Minutes </td>
   <td></td>
@@ -1421,7 +1563,7 @@ Policy">
 Once Rx of Modbus and Disconnect lasting time
   </td>
    <td class="pl-5 pt-5">
-  <input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+  <input type="text" bind:value={fareSavingPolicy.controlTrafficFlow.dataSource.disconnectRule} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
     <td class="pl-5 pt-5"> Minutes </td>
 

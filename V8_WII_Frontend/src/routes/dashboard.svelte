@@ -272,7 +272,7 @@ async function getDashboardData () {
 
 
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="pb-20"> <p class="text-black text-sm text-center">1.5GHz</p><ProgressCircle max="100" value="{value1}" color="blue"/>
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="pb-20"> <p class="text-black text-sm text-center">{#if getdataAlready}{dashboard_data.config.dashboard.system_resource.cpuRemaining}{/if}</p><ProgressCircle max="100" value="{value1}" color="blue"/>
 <p class="text-black text-lg text-center">CPU</p>
 </div>
 <div class="pl-20 pb-20">

@@ -107,7 +107,7 @@
 	}
 
 	.login{
-		padding-left:900px;
+		padding-left:885px;
 		padding-top:300px;
 		color:#1762BC;
 		font-family:Calibri-Bold;

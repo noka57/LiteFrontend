@@ -5,7 +5,7 @@
 
   let selectedFile = null;
   let sessionid;
-  let fileName;
+  let filename;
   let fileSize;
   let fileContent; 
 
@@ -22,7 +22,7 @@
       console.log(selectedFile);
       console.log(selectedFile.size);
       fileSize=selectedFile.size;
-      fileName=selectedFile.name;
+      file_name=selectedFile.name;
 
 
     const reader = new FileReader();
@@ -43,7 +43,7 @@
       method: 'POST',
       body: JSON.stringify({
         sessionid,
-        fileName,
+        filename,
         fileSize,
         fileContent
       })
@@ -59,6 +59,38 @@
     }
   }
 
+
+
+
+
+  async function downloadFile() {
+    try {
+      const response = await fetch(window.location.origin+"/downloadConfig", {
+        method: 'POST',
+         body: JSON.stringify({
+        sessionid
+      })
+      });
+      
+    if (response.status == 200)
+    {
+      const blob = await response.blob();
+      const export_filename = 'downloaded_file'; // Change this to the desired filename
+
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = export_filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      }
+    } catch (error) {
+      console.error('Error exporting file:', error);
+    }
+  }
+
+
  </script>
 
 
@@ -66,7 +98,7 @@
     <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Backup Current Configuration</p></td>
 
-<td class="pl-5 pt-5"><Button>Download</Button></td>
+<td class="pl-5 pt-5"><Button on:click={downloadFile}>Download</Button></td>
   </tr>
 
 

@@ -5,48 +5,51 @@
 
   let selectedFile = null;
   let sessionid;
-  let filename;
-  let fileSize;
   let fileContent; 
+  let sessionBinary;
 
    sessionidG.subscribe(val => {
      sessionid = val;
    });
 
 
+
   async function handleFileUpload(event) {
     const file = event.target.files[0];
     if (file) {
       selectedFile = file;
-      console.log("selectedFile:");
-      console.log(selectedFile);
-      console.log(selectedFile.size);
-      fileSize=selectedFile.size;
-      file_name=selectedFile.name;
+      if (sessionid) 
+      {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+      }
 
 
     const reader = new FileReader();
       reader.onload = event => {
-        fileContent = event.target.result;
+          const fileBinary= new Uint8Array(event.target.result);
+          fileContent=new Uint8Array(fileBinary.length+sessionBinary.length);
+          fileContent.set(sessionBinary,0);
+          fileContent.set(fileBinary, sessionBinary.length);
       };
 
-      reader.readAsText(file, 'utf-8');
+      reader.readAsArrayBuffer(file);
 
     }
   }
 
 
+
   async function uploadFile() {
     if (selectedFile) {
 
-       const res = await fetch(window.location.origin+"/uploadConfig", {
+      const res = await fetch(window.location.origin+"/uploadConfig", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid,
-        filename,
-        fileSize,
-        fileContent
-      })
+      body: fileContent,
+          headers: {
+            'Content-Type': 'application/octet-stream', // Set the appropriate content type
+          },
     })
 
     if (res.status == 200)
@@ -75,7 +78,7 @@
     if (response.status == 200)
     {
       const blob = await response.blob();
-      const export_filename = 'downloaded_file'; // Change this to the desired filename
+      const export_filename = 'download.config';
 
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);

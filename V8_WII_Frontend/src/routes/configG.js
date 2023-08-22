@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store';
 
+export const dashboadData= writable("");
+
 export const maintenanceConfig = writable("");
 export const operationConfig = writable("");
 export const dockerConfig = writable("");

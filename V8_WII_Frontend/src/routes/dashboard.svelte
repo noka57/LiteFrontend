@@ -1,38 +1,43 @@
 <script>
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge } from 'flowbite-svelte';
   import ProgressCircle from './CircleProgressBar.svelte'
-  import { onMount } from 'svelte';
+  import { onMount} from 'svelte';
   import { sessionidG } from "./sessionG.js";
+  import { dashboadData} from "./configG.js";
   let tdStyle="width:25%";
   let tableBodyClass="";
   let tdClass="border-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium";
-  let value1=50;
-  let value2=20;
-  let value3=5;
-  let value4=28;
+  let value1=0;
+  let value2=0;
+  let value3=0;
+  let value4=0;
   let dashboard_data="";
   let currentUri = '';
   let currentOrigin = '';
   let sessionid='';
-  let getdataAlready=0;
+  let interval;
+
 
   sessionidG.subscribe(val => {
     sessionid = val;
   });
 
-
+  dashboadData.subscribe(val => {
+        dashboard_data = val;
+    });
 
 
    function GPSClick() {
-    console.log("GPS clicked!");
-
-    if (getdataAlready)
-      window.open(dashboard_data.config.dashboard.gps_info.g_map_url, "_blank");
+    if (dashboard_data!="")
+      window.open(dashboard_data.config.dashboard.gpsInfo.gMapUrl, "_blank");
   }
 
 
 
-async function getDashboardData () {
+
+
+
+  async function getDashboardData () {
     const res = await fetch(window.location.origin+"/getDashboardData", {
       method: 'POST',
       body: JSON.stringify({
@@ -44,12 +49,21 @@ async function getDashboardData () {
     {
       dashboard_data =await res.json();
       console.log(dashboard_data);
-      getdataAlready=1;
-      value2=dashboard_data.config.dashboard.system_resource.ram_usage;
-      value3=dashboard_data.config.dashboard.system_resource.emmc_usage;
-      value4=dashboard_data.config.dashboard.system_resource.sd_card_usage;
+      dashboadData.set(dashboard_data);
+      value1=dashboard_data.config.dashboard.systemResource.cpuUsage;
+      value2=dashboard_data.config.dashboard.systemResource.ramUsage;
+      value3=dashboard_data.config.dashboard.systemResource.emmcUsage;
+      value4=dashboard_data.config.dashboard.systemResource.sdCardUsage;
     }
   }
+
+  const startInterval = () => {
+    interval = setInterval(getDashboardData, 60000); // Send POST request every minute (60,000 milliseconds)
+  };
+
+  const stopInterval = () => {
+    clearInterval(interval);
+  };
 
 
   onMount(() => {
@@ -64,11 +78,21 @@ async function getDashboardData () {
       console.log(sessionid);
     }
 
-    if (sessionid)
+    if (sessionid && dashboard_data=="")
     {
       getDashboardData();
+      startInterval();
     }
+    else if (sessionid && dashboard_data!="")
+    {
+      value1=dashboard_data.config.dashboard.systemResource.cpuUsage;
+      value2=dashboard_data.config.dashboard.systemResource.ramUsage;
+      value3=dashboard_data.config.dashboard.systemResource.emmcUsage;
+      value4=dashboard_data.config.dashboard.systemResource.sdCardUsage;
+    }
+
   });
+
 
 </script>
 
@@ -81,7 +105,7 @@ async function getDashboardData () {
 </svg></div>
 <div class="w-full">
 <p class="text-sm font-light">System Uptime</p>
-<p class="text-xl font-bold">{#if getdataAlready}{dashboard_data.config.dashboard.system_uptime}{:else}0 {/if}</p>
+<p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemUptime} {/if}</p>
 </div>
 </div></TableBodyCell>
       <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class=""><svg class="w-16 h-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 -3 24 24">
@@ -95,7 +119,7 @@ async function getDashboardData () {
 </div>
 <div class="w-full">
 <p class="text-sm font-light">Internet Uptime</p>
-<p class="text-xl font-bold">{#if getdataAlready}{dashboard_data.config.dashboard.internet_uptime}{:else}0 {/if}</p>
+<p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.internetUptime} {/if}</p>
 </div>
 </div></TableBodyCell>
       <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class="">
@@ -114,16 +138,16 @@ async function getDashboardData () {
       </div>
 <div class="w-full">
 <p class="text-sm font-light">Pave2Edge</p>
-<p class="text-xl font-bold">{#if getdataAlready}{dashboard_data.config.dashboard.p2e_status}{:else}0 {/if}</p>
+<p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.p2eStatus}{/if}</p>
 </div>
 </div></TableBodyCell>
       <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class="">
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-white bg-blue-500 mr-2 rounded-full dark:text-pink-500 w-12 h-12">
-  <path d="M15 10.5C15 12.1569 13.6569 13.5 12 13.5C10.3431 13.5 9 12.1569 9 10.5C9 8.84315 10.3431 7.5 12 7.5C13.6569 7.5 15 8.84315 15 10.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" on:click={GPSClick} on:keyup={() => {}} on:keydown={() => {}}/> <path d="M19.5 10.5C19.5 17.6421 12 21.75 12 21.75C12 21.75 4.5 17.6421 4.5 10.5C4.5 6.35786 7.85786 3 12 3C16.1421 3 19.5 6.35786 19.5 10.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-white bg-blue-500 mr-2 rounded-full dark:text-pink-500 w-12 h-12" cursor=pointer on:click={GPSClick} on:keyup={() => {}} on:keydown={() => {}}>
+  <path d="M15 10.5C15 12.1569 13.6569 13.5 12 13.5C10.3431 13.5 9 12.1569 9 10.5C9 8.84315 10.3431 7.5 12 7.5C13.6569 7.5 15 8.84315 15 10.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path d="M19.5 10.5C19.5 17.6421 12 21.75 12 21.75C12 21.75 4.5 17.6421 4.5 10.5C4.5 6.35786 7.85786 3 12 3C16.1421 3 19.5 6.35786 19.5 10.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg></div>
 <div class="w-full">
 <p class="text-sm font-light">GPS</p>
-<p class="text-xl font-bold">{#if getdataAlready}{parseFloat(dashboard_data.config.dashboard.gps_info.lat).toFixed(1)}, {parseFloat(dashboard_data.config.dashboard.gps_info.long).toFixed(1)}, {parseFloat(dashboard_data.config.dashboard.gps_info.alt).toFixed(1)}  {:else}0,0,0 {/if}</p>
+<p class="text-xl font-bold">{#if dashboard_data!=""}{parseFloat(dashboard_data.config.dashboard.gpsInfo.lat).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.long).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.alt).toFixed(2)}{/if}</p>
 </div>
 </div>
 
@@ -141,39 +165,39 @@ async function getDashboardData () {
 
 
                     <TableBodyRow>      
-        <TableBodyCell class="border-l-8 border-r-0 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex"><div class=""><p class="text-black text-lg">{#if getdataAlready}{dashboard_data.config.dashboard.modem[0].name}{/if}</p>
+        <TableBodyCell class="border-l-8 border-r-0 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex"><div class=""><p class="text-black text-lg">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].name}{/if}</p>
 <svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
   <path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9A1.5 1.5 0 009.5 18h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z"></path>
 </svg></div>
 <div class="w-full pt-4 px-10">
-<p class="text-sm font-light">{#if getdataAlready}{dashboard_data.config.dashboard.modem[0].type}{/if}</p>
-<p class="text-sm font-light">{#if getdataAlready}{dashboard_data.config.dashboard.modem[0].band}{/if}</p>
-<p class="text-sm font-light">{#if getdataAlready}{dashboard_data.config.dashboard.modem[0].operator}{/if}</p>
+<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].type}{/if}</p>
+<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].band}{/if}</p>
+<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].operator}{/if}</p>
 </div>
 </div>
 
               </TableBodyCell>
-                      <TableBodyCell class="border-l-0 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex"><div class=""><p class="text-black text-lg">{#if getdataAlready}{dashboard_data.config.dashboard.modem[1].name}{/if}</p>
+                      <TableBodyCell class="border-l-0 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex"><div class=""><p class="text-black text-lg">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].name}{/if}</p>
                       <svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
   <path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9A1.5 1.5 0 009.5 18h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z"></path>
 </svg>
 </div>
 <div class="w-full pt-4 px-10">
-<p class="text-sm font-light">{#if getdataAlready}{dashboard_data.config.dashboard.modem[1].type}{/if}</p>
-<p class="text-sm font-light">{#if getdataAlready}{dashboard_data.config.dashboard.modem[1].band}{/if}</p>
-<p class="text-sm font-light">{#if getdataAlready}{dashboard_data.config.dashboard.modem[1].operator}{/if}</p>
+<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].type}{/if}</p>
+<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].band}{/if}</p>
+<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].operator}{/if}</p>
 </div>
 </div>
               </TableBodyCell>
 
-              <TableBodyCell class="border-l-8 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class=""><p class="text-black text-lg text-center">{#if getdataAlready}{dashboard_data.config.dashboard.ethernet.lan[0].name}{/if}</p>
+              <TableBodyCell class="border-l-8 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class=""><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.lan[0].name}{/if}</p>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
 <path fill=blue d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
      M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
 
 </svg>
 </div>
-<div class="pl-20"><p class="text-black text-lg text-center">{#if getdataAlready}{dashboard_data.config.dashboard.ethernet.lan[1].name}{/if}</p>
+<div class="pl-20"><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.lan[1].name}{/if}</p>
 <svg xmlns="http://www.w3.org/2000/svg"  viewBox="-5 -5 24 24" class="w-16 h-16">
   <path fill="none" d="M10.6,3.4V2.6V2.1h-0.3H9.5V1.4V0.8H4v0.6v0.8H3.2H2.9v0.4v0.8H2.1H0.8v6.1h11.9V3.4h-1.4H10.6z M3,8.3H2.2
     V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8
@@ -191,7 +215,7 @@ async function getDashboardData () {
 </svg>
 </div>
 
-<div class="pl-20"><p class="text-black text-lg text-center">{#if getdataAlready}{dashboard_data.config.dashboard.ethernet.lan[2].name}{/if}</p>
+<div class="pl-20"><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.lan[2].name}{/if}</p>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
 <path fill=#64A031 d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
      M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
@@ -199,7 +223,7 @@ async function getDashboardData () {
 </svg>
 </div>
 
-<div class="pl-20"><p class="text-black text-lg text-center">{#if getdataAlready}{dashboard_data.config.dashboard.ethernet.lan[3].name}{/if}</p>
+<div class="pl-20"><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.lan[3].name}{/if}</p>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
 <path fill=#64A031 d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
      M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
@@ -208,7 +232,7 @@ async function getDashboardData () {
 </div>
 
 
-<div class="pl-20"><p class="text-black text-lg text-center">{#if getdataAlready}{dashboard_data.config.dashboard.ethernet.wan[0].name}{/if}</p>
+<div class="pl-20"><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.wan[0].name}{/if}</p>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
 <path fill=#64A031 d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
      M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
@@ -237,10 +261,10 @@ async function getDashboardData () {
         <p class="text-black text-lg">Gateway</p>
         <p class="text-black text-lg">DNS</p>
 </div>
-<div class="px-40"><p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.wan_status.active_link}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.wan_status.ipv4.ip}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.wan_status.ipv4.gateway}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.wan_status.ipv4.dns[0].ip}/{dashboard_data.config.dashboard.wan_status.ipv4.dns[1].ip}{/if}</p>
+<div class="px-40"><p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.active_link}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.ip}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.gateway}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.dns[0]}/{dashboard_data.config.dashboard.wanStatus.ipv4.dns[1]}{/if}</p>
 </div>
 </div>
                       </TableBodyCell>
@@ -252,9 +276,9 @@ async function getDashboardData () {
         <p class="text-black text-lg">DNS</p>
 </div>
 <div class="px-40">
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.lan_status.ipv4.ip}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.lan_status.ipv4.gateway}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.lan_status.ipv4.dns[0].ip}/{dashboard_data.config.dashboard.lan_status.ipv4.dns[1].ip}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.ip}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.gateway}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.dns[0]}/{dashboard_data.config.dashboard.lanStatus.ipv4.dns[1]}{/if}</p>
 </div>
 </div>
                       </TableBodyCell>
@@ -272,21 +296,21 @@ async function getDashboardData () {
 
 
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="pb-20"> <p class="text-black text-sm text-center">{#if getdataAlready}{dashboard_data.config.dashboard.system_resource.cpuRemaining}{/if}</p><ProgressCircle max="100" value="{value1}" color="blue"/>
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="pb-20"> <p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.cpuRemaining}{/if}</p><ProgressCircle max="100" value="{value1}" color="blue"/>
 <p class="text-black text-lg text-center">CPU</p>
 </div>
 <div class="pl-20 pb-20">
-<p class="text-black text-sm text-center">{#if getdataAlready}{dashboard_data.config.dashboard.system_resource.ram_remaining}{/if}</p>
+<p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.ramRemaining}{/if}</p>
 <ProgressCircle max="100" value="{value2}" color="green"/>
 <p class="text-black text-lg text-center">RAM</p>
 </div>
 <div class="pl-20 pb-20">
-<p class="text-black text-sm text-center">{#if getdataAlready}{dashboard_data.config.dashboard.system_resource.emmc_remaining}{/if}</p>
+<p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.emmcRemaining}{/if}</p>
 <ProgressCircle max="100" value="{value3}" color="yellow"/>
 <p class="text-black text-lg text-center">EMMC</p>
 </div>
 <div class="pl-20 pb-20">
-<p class="text-black text-sm text-center">{#if getdataAlready}{dashboard_data.config.dashboard.system_resource.sd_card_remaining}{/if}</p>
+<p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.sdCardRemaining}{/if}</p>
 <ProgressCircle max="100" value="{value4}" color="orange"/>
 <p class="text-black text-lg text-center">SD Card</p>
 </div>
@@ -308,13 +332,13 @@ async function getDashboardData () {
 
 </div>
 <div class="px-40">
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.system_info.model_name}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.system_info.serial_number}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.system_info.firmware_version}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.system_info.mac_address}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.system_info.imei}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.system_info.modem_vendor}{/if}/{#if getdataAlready}{dashboard_data.config.dashboard.system_info.modem_model}{/if}</p>
-        <p class="text-lg font-light">{#if getdataAlready}{dashboard_data.config.dashboard.system_info.system_time}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.modelName}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.serialNumber}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.firmwareVersion}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.macAddress}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.imei}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.modemVendor}{/if}/{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.modemModel}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.systemTime}{/if}</p>
 
 
 </div>

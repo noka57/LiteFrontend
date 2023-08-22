@@ -47,22 +47,22 @@
 
   function handleDetailClick() {
     openDetailStatus=!openDetailStatus;
-  }
+  };
 
   function handleCWAN1BasicSetting(){
     console.log("save CWAN1 Basic Setting\r\n");
-    startInterval();
+    //startInterval();
 
-  }
+  };
 
   const toggleVisibility = () => {
-    isVisible = !isVisible;
+    //isVisible = !isVisible;
     console.log("toggleVisibility");
   };
 
   const startInterval = () => {
-    interval = setInterval(toggleVisibility, 1000);
-  } ;
+    //interval = setInterval(toggleVisibility, 1000);
+  };
 
 
 

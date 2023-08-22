@@ -4,6 +4,7 @@
 	import { Hamburger } from 'svelte-hamburgers';
 	import { onMount } from 'svelte';
 	import { sessionidG } from "./sessionG.js";
+  	import { savedLanConfigChanged} from "./configG.js"
 
 	import {
 		Img,
@@ -39,15 +40,15 @@
 	let hamburgerClass =
 		'hover:text-gray-500 cursor-pointer mr-4 border-none focus:outline-none pt-2 lg:hidden';
 
-	let topDiv = 'w-full md:block md:w-auto absolute top-16 md:top-1 px-8';
+	let topDiv = 'pt-8 w-full md:block md:w-auto absolute right-0';
 
 	let topMenuDiv = 'container flex flex-wrap pt-0 md:pt-2';
 
 	let topul =
-		'flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-md md:font-medium pt-1 bg-white dark:bg-gray-900 dark:text-white';
+		'flex flex-col mt-4 md:flex-row md:mt-0 md:text-md md:font-medium pt-1 bg-white dark:bg-gray-900 dark:text-white';
 
 	let childLi =
-		'block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:py-0 pl-1 pr-1 text-lg dark:text-white bg-yellow-400';
+		'block py-2 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:py-0 pl-1 pr-1 text-lg dark:text-white bg-yellow-400';
 
 	let asideClass =
 		'absolute w-auto border-r-2 shadow-lg z-50 bg-white h-screen overflow-scroll dark:bg-gray-900 dark:text-white';
@@ -72,11 +73,46 @@
 	let buttonClass = 'inline-flex items-center text-base text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200';
 
 	let open;
+	let svg0background="";
+
 	$: activeUrl = $page.url.pathname;
 
 	let usertype=0;
 	let currentUri = '';
 	let sessionid='';
+	let lanSavedChanged=0;
+  	let interval;
+
+	const BlinkApply = () => {
+		console.log("Blink.Apply");
+		if (svg0background=="")
+		{
+    		svg0background="background-color: blue";
+    	}
+    	else if (svg0background == "background-color: blue")
+    	{
+    		svg0background="";
+    	}
+  	};
+
+
+
+ 	const startInterval = () => {
+    	interval = setInterval(BlinkApply, 500); 
+  	};
+
+
+	savedLanConfigChanged.subscribe(val => {
+    	if (lanSavedChanged != val)
+    	{
+    		lanSavedChanged = val;
+    		if (!interval)
+    		{
+    			startInterval();
+    		}
+    	}
+  	});
+
 
 
 
@@ -118,6 +154,11 @@
 				getUserType();
 		}
 	});
+
+
+const topMenuList = [{ href: '/apply', id: 0 },
+					{href: '/logout', id: 1 }];
+
 </script>
 
 
@@ -132,10 +173,14 @@
 	{headerClass}
 	{buttonClass}
 	{hamburgerClass}
+	{topDiv}
+	{topMenuDiv}
+	{topul}
 	{asideClass}
 	{spanClass}
 	{transitionParams}
-	topMenus={[]}
+	{svg0background}
+	topMenus={topMenuList}
 >
 
 <Hamburger

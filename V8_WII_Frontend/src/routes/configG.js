@@ -11,3 +11,5 @@ export const firewallConfig = writable("");
 export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
+
+export const savedLanConfigChanged=writable(0);

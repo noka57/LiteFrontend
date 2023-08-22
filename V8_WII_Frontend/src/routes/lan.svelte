@@ -3,7 +3,7 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import {lanConfig} from "./configG.js"
+  import {lanConfig, savedLanConfigChanged} from "./configG.js"
 
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
@@ -16,7 +16,7 @@
    let sipNetMask="";
 
    let lan_data="";
-   let getdataAlready=0;
+
 
    let sessionid;
    sessionidG.subscribe(val => {
@@ -27,6 +27,57 @@
     lanConfig.subscribe(val => {
         lan_data = val;
     });
+
+  async function SetLANData() {
+    const res = await fetch(window.location.origin+"/SetLANData", {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+        },
+      body: JSON.stringify({
+        lan_data
+      })
+    })
+
+    if (res.status == 200)
+    {
+
+    }
+  }
+
+
+
+  function SaveLanSettings(){
+    console.log("Save LAN Setting\r\n");
+    let changed=0;
+    if (lan_data.config.networking_lan.ipMode != ipMode)
+    {
+      lan_data.config.networking_lan.ipMode=ipMode;
+      changed=1;
+    }
+
+    if (lan_data.config.networking_lan.ipStatic.ip !=sipAddr)
+    {
+      lan_data.config.networking_lan.ipStatic.ip=sipAddr;
+      changed=1;
+    }
+
+    if (lan_data.config.networking_lan.ipStatic.ip !=sipAddr)
+    {
+      lan_data.config.networking_lan.ipStatic.netmask=sipNetMask;
+      changed=1;
+    }
+
+    if (changed)
+    {
+      lanConfig.set(lan_data);
+      savedLanConfigChanged.set(1);
+      //SetLANData();
+    }
+
+    //startInterval();
+
+  };
 
 
    async function getLANData () {
@@ -41,7 +92,6 @@
     {
       lan_data =await res.json();
       console.log(lan_data);
-      getdataAlready=1;
       lanConfig.set(lan_data);
 
       ipMode=lan_data.config.networking_lan.ipMode;
@@ -104,7 +154,7 @@
     <tr>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveLanSettings}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 

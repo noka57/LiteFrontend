@@ -3,6 +3,8 @@
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
   import { wanConfig } from "./configG.js";
+  import { TopMenu } from 'svelte-sidebar-menu';
+
 
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
@@ -38,37 +40,30 @@
    let ewlapCheckPeriodInterval;
    let wanRedundancyPolicy;
    let fareSavingPolicy;
+   let openDetailStatus = false;
 
+   let isVisible = true;
+   let interval;
 
-
-  let selected13="Sch";
-  let countries13 = [
-    {value:"Sch", name: "Schedule"},
-    {value:"Peri", name: "Period"},
-  ]
-
-
-  let selected14="Hour";
-  let countries14 = [
-    {value:"Day", name: "Day(s)"},
-    {value:"Hour", name: "Hour(s)"},
-    {value:"Minute", name: "Minute(s)"},
-  ]
-
-
-  let selected15="TX";
-  let countries15 = [
-    {value:"TX", name: "TX"},
-    {value:"RX", name: "RX"},
-    {value:"TRX", name: "TX+RX"},
-  ]
-
-
-  let openDetailStatus = false;
-
-  function handleClick() {
-        openDetailStatus=!openDetailStatus;
+  function handleDetailClick() {
+    openDetailStatus=!openDetailStatus;
   }
+
+  function handleCWAN1BasicSetting(){
+    console.log("save CWAN1 Basic Setting\r\n");
+    startInterval();
+
+  }
+
+  const toggleVisibility = () => {
+    isVisible = !isVisible;
+    console.log("toggleVisibility");
+  };
+
+  const startInterval = () => {
+    interval = setInterval(toggleVisibility, 1000);
+  } ;
+
 
 
   let wan_data="";
@@ -100,6 +95,7 @@
       wanConfig.set(wan_data);
       if (getdataAlready == 0)
       {
+        console.log("update writable data");
         pin=wan_data.config.networking_wan_cwan[0].basicSetting.pin;
         autoApnEn=wan_data.config.networking_wan_cwan[0].basicSetting.autoApnEn; 
         apn=wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.apn;
@@ -133,6 +129,10 @@
 
 
       }
+      else
+      {
+        console.log("update readable data");
+      }
 
       getdataAlready=1;
 
@@ -153,7 +153,6 @@
     else if (sessionid && wan_data!="")
     {
         getdataAlready=1;
-        console.log("wan_data is not null");
         pin=wan_data.config.networking_wan_cwan[0].basicSetting.pin;
         autoApnEn=wan_data.config.networking_wan_cwan[0].basicSetting.autoApnEn; 
         apn=wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.apn;
@@ -296,7 +295,7 @@
     <TableHeadCell class="text-center">Registration</TableHeadCell>
   </TableHead>
  
-  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"  on:click={handleClick}>
+  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"  on:click={handleDetailClick}>
   <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">1</td>
   <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.modemStatus} {/if}</td>
   <td class="px-6 py-4 text-center whitespace-nowrap font-medium  text-gray-900 dark:text-white">{#if getdataAlready}{wan_data.config.networking_wan_cwan[0].generalStatus.modemModel} {/if}</td>
@@ -398,7 +397,7 @@
     </tr>
     <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-center">Automatic APN Selection</p></td><td class="pl-5 pt-5"><Toggle 
-  bind:checked={autoApnEn} /></td>
+  bind:checked={autoApnEn}/></td>
     </tr>
 
 {#if !autoApnEn}
@@ -438,7 +437,7 @@
     <tr>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={handleCWAN1BasicSetting}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 

@@ -28,22 +28,6 @@
         lan_data = val;
     });
 
-  async function SetLANData() {
-    const res = await fetch(window.location.origin+"/SetLANData", {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-        },
-      body: JSON.stringify({
-        lan_data
-      })
-    })
-
-    if (res.status == 200)
-    {
-
-    }
-  }
 
 
 
@@ -56,13 +40,13 @@
       changed=1;
     }
 
-    if (lan_data.config.networking_lan.ipStatic.ip !=sipAddr)
+    if (lan_data.config.networking_lan.ipStatic.ip != sipAddr)
     {
       lan_data.config.networking_lan.ipStatic.ip=sipAddr;
       changed=1;
     }
 
-    if (lan_data.config.networking_lan.ipStatic.ip !=sipAddr)
+    if (lan_data.config.networking_lan.ipStatic.ip != sipNetMask)
     {
       lan_data.config.networking_lan.ipStatic.netmask=sipNetMask;
       changed=1;
@@ -72,11 +56,7 @@
     {
       lanConfig.set(lan_data);
       savedLanConfigChanged.set(1);
-      //SetLANData();
     }
-
-    //startInterval();
-
   };
 
 

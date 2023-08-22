@@ -61,7 +61,7 @@
 	let hamburgerClass =
 		'hover:text-gray-500 cursor-pointer mr-4 border-none focus:outline-none pt-2 lg:hidden';
 
-	let topDiv = 'w-full md:block md:w-auto absolute top-16 md:top-1 px-8';
+	let topDiv = 'pt-8 w-full md:block md:w-auto absolute px-8 right-0';
 
 	let topMenuDiv = 'container flex flex-wrap pt-0 md:pt-2';
 
@@ -93,23 +93,8 @@
 	let open;
 
 	const topMenuList = [
-		{ href: '/about', name: 'LAN 1' },
-		{ href: '/about', name: 'LAN 2' },
-		{ href: '/about', name: 'LAN 3' },
-		{ href: '/about', name: 'LAN 4' },
-		{ href: '/about', name: 'WAN' },
-		{ href: '/about', name: 'VPN' },
-		{ href: '/about', name: 'Cloud' },
-		{ href: '/about', name: 'PSE' },
-		{ href: '/about', name: 'COM 1' },
-		{ href: '/about', name: 'COM 2' },
-		{ href: '/about', name: 'COM 3' },
-		{ href: '/about', name: 'COM 4' },
-		{ href: '/about', name: 'DI' },
-		{ href: '/about', name: 'DO' },
-		{ href: '/about', name: 'SYS' },
-		{ href: '/about', name: 'LTE' },
-		{ href: '/about', name: 'RSSI' }
+		{ href: '/about', name: 'LTE' , id: 0},
+		{ href: '/about', name: 'RSSI', id: 1}
 	];
 </script>
 

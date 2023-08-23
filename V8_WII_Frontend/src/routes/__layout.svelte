@@ -4,7 +4,7 @@
 	import { Hamburger } from 'svelte-hamburgers';
 	import { onMount } from 'svelte';
 	import { sessionidG } from "./sessionG.js";
-  	import { savedLanConfigChanged} from "./configG.js"
+  	import { LanConfigChangedLog} from "./configG.js"
 
 	import {
 		Img,
@@ -80,9 +80,10 @@
 	let usertype=0;
 	let currentUri = '';
 	let sessionid='';
-	let lanSavedChanged=0;
+
   	let interval;
   	let sessionBinary;
+  	let LANchangedValues = [];
 
 	const BlinkApply = () => {
 		console.log("Blink.Apply");
@@ -103,10 +104,10 @@
   	};
 
 
-	savedLanConfigChanged.subscribe(val => {
-    	if (lanSavedChanged != val)
+	LanConfigChangedLog.subscribe(val => {
+    	LANchangedValues=val;
+    	if (LANchangedValues.length != 0)
     	{
-    		lanSavedChanged = val;
     		if (!interval)
     		{
     			startInterval();

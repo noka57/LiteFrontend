@@ -3,7 +3,7 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import {lanConfig, savedLanConfigChanged} from "./configG.js"
+  import {lanConfig, LanConfigChangedLog, ChangedLANConfig} from "./configG.js"
 
   let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
@@ -11,12 +11,11 @@
 
   let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
-  let ipMode;
-  let sipAddr="";
-  let sipNetMask="";
 
   let lan_data="";
-
+  let changed_lan_data = {};
+  let changedValues = [];
+  let getDataReady=0;
 
   let sessionid;
   let sessionBinary;
@@ -29,35 +28,42 @@
         lan_data = val;
   });
 
+  LanConfigChangedLog.subscribe(val => {
+        changedValues = val;
+  });
 
 
+  function compareObjects(obj1, obj2) {
+    for (const key in obj1) 
+    {
+      if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+      {
+        compareObjects(obj1[key], obj2[key]);
+      } 
+      else if (obj1[key] != obj2[key]) 
+      {
+        let changedstr="Value of "+key+" has changed to "+obj1[key];
+        changedValues=[...changedValues, changedstr];
+      }
+    }
+  }
+
+
+  function compareData() {
+    compareObjects(changed_lan_data, lan_data);
+  }
 
   function SaveLanSettings(){
     console.log("Save LAN Setting\r\n");
-    let changed=0;
-    if (lan_data.config.networking_lan.ipMode != ipMode)
-    {
-      lan_data.config.networking_lan.ipMode=ipMode;
-      changed=1;
-    }
+    compareData();
 
-    if (lan_data.config.networking_lan.ipStatic.ip != sipAddr)
+    LanConfigChangedLog.set(changedValues);
+    if (changedValues.length !=0)
     {
-      lan_data.config.networking_lan.ipStatic.ip=sipAddr;
-      changed=1;
+      ChangedLANConfig.set(changed_lan_data);
     }
+    console.log(changedValues);
 
-    if (lan_data.config.networking_lan.ipStatic.ip != sipNetMask)
-    {
-      lan_data.config.networking_lan.ipStatic.netmask=sipNetMask;
-      changed=1;
-    }
-
-    if (changed)
-    {
-      lanConfig.set(lan_data);
-      savedLanConfigChanged.set(1);
-    }
   };
 
 
@@ -73,9 +79,9 @@
       console.log(lan_data);
       lanConfig.set(lan_data);
 
-      ipMode=lan_data.config.networking_lan.ipMode;
-      sipAddr=lan_data.config.networking_lan.ipStatic.ip;
-      sipNetMask=lan_data.config.networking_lan.ipStatic.netmask;
+
+      changed_lan_data = JSON.parse(JSON.stringify(lan_data));
+      getDataReady=1;
     }
   }
 
@@ -96,9 +102,8 @@
     }
     else if (sessionid && lan_data!="")
     {
-        ipMode=lan_data.config.networking_lan.ipMode;
-        sipAddr=lan_data.config.networking_lan.ipStatic.ip;
-        sipNetMask=lan_data.config.networking_lan.ipStatic.netmask;
+      changed_lan_data = JSON.parse(JSON.stringify(lan_data));
+      getDataReady=1;
     }
 
   });
@@ -112,28 +117,29 @@
   <td><p class="pl-40 pt-1 text-lg font-light text-right">IP Mode</p>
 
   </td>
-
+{#if getDataReady==1}
     <td class="pl-5"><div class="flex gap-4">
-  <Radio bind:group={ipMode} value={0} >Static</Radio>
-  <Radio bind:group={ipMode} value={1} >DHCP</Radio>
-
+  <Radio bind:group={changed_lan_data.config.networking_lan.ipMode} value={0} >Static</Radio>
+  <Radio bind:group={changed_lan_data.config.networking_lan.ipMode} value={1} >DHCP</Radio>
 </div></td>
+{/if}
 </tr>
-{#if ipMode==0}
+{#if getDataReady==1}
+{#if changed_lan_data.config.networking_lan.ipMode==0}
 <tr>
-      <td><p class="pl-40 pt-4 text-lg font-light text-right">IP Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={sipAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-40 pt-4 text-lg font-light text-right">IP Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_lan_data.config.networking_lan.ipStatic.ip} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
 
   <tr>
-        <td><p class="pl-40 pt-4 text-lg font-light text-right">Network Mask</p></td><td class="pl-5 pt-5"><input type="text" bind:value={sipNetMask} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+        <td><p class="pl-40 pt-4 text-lg font-light text-right">Network Mask</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_lan_data.config.networking_lan.ipStatic.netmask} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
   </tr>
 
 
 {/if}
-
+{/if}
     <tr>
     <td></td>
     <td></td>

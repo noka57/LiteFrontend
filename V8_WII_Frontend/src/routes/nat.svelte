@@ -22,14 +22,8 @@
    let newformModal2=false;
 
 
-
     let DMZInfce;
     let DMZHost="";
-
-
-
-
-
 
    let NewVirtualServerItem=[0,0,"","","Any",0,[0,0],0,[0,0]];
    let NewVirtualComputerItem=[0,"",""];
@@ -42,10 +36,10 @@
 
 
    let nat_data="";
-   let getdataAlready=0;
+   let changed_nat_data = {};
 
    let sessionid;
-  let sessionBinary;
+   let sessionBinary;
    sessionidG.subscribe(val => {
      sessionid = val;
    });
@@ -62,11 +56,21 @@
    }
 
 
+   function ModifyVS(index)
+   {
+      formModal = false;
+      console.log("modify VS");
+      console.log(index+1);
+      console.log(changed_nat_data);
+      console.log("----");
+      console.log(nat_data);
+   }
+
+
     function modalTrigger2(index){
       formModal2 = true;
       virtualcomputer_current_index=index;
    }
-
 
 
    async function getNATData () {
@@ -79,18 +83,19 @@
     {
       nat_data =await res.json();
       console.log(nat_data);
-      getdataAlready=1;
+
 
       natConfig.set(nat_data);
+      changed_nat_data = JSON.parse(JSON.stringify(nat_data));
 
-      natlo=!!nat_data.config.networking_nat_loopback.natLoopback;
-      vs=!!nat_data.config.networking_nat_virtualServer.enable;
-      vc=!!nat_data.config.networking_nat_virtualComputer.enable;
-      VirtualServerArrays = nat_data.config.networking_nat_virtualServer.list;
-      VirtualComputerArrays = nat_data.config.networking_nat_virtualComputer.list;
-      dmz=!!nat_data.config.networking_nat_dmz.enable;
-      DMZInfce=nat_data.config.networking_nat_dmz.interface;
-      DMZHost=nat_data.config.networking_nat_dmz.dmzHost;
+      natlo=!!changed_nat_data.config.networking_nat_loopback.natLoopback;
+      vs=!!changed_nat_data.config.networking_nat_virtualServer.enable;
+      vc=!!changed_nat_data.config.networking_nat_virtualComputer.enable;
+      VirtualServerArrays = changed_nat_data.config.networking_nat_virtualServer.list;
+      VirtualComputerArrays = changed_nat_data.config.networking_nat_virtualComputer.list;
+      dmz=!!changed_nat_data.config.networking_nat_dmz.enable;
+      DMZInfce=changed_nat_data.config.networking_nat_dmz.interface;
+      DMZHost=changed_nat_data.config.networking_nat_dmz.dmzHost;
 
     }
   }
@@ -115,12 +120,11 @@
       natlo=!!nat_data.config.networking_nat_loopback.natLoopback;
       vs=!!nat_data.config.networking_nat_virtualServer.enable;
       vc=!!nat_data.config.networking_nat_virtualComputer.enable;
-      VirtualServerArrays = nat_data.config.networking_nat_virtualServer.list
-      VirtualComputerArrays = nat_data.config.networking_nat_virtualComputer.list
+      VirtualServerArrays = Array.from(nat_data.config.networking_nat_virtualServer.list);
+      VirtualComputerArrays = nat_data.config.networking_nat_virtualComputer.list;
       dmz=!!nat_data.config.networking_nat_dmz.enable;
       DMZInfce=nat_data.config.networking_nat_dmz.interface;
       DMZHost=nat_data.config.networking_nat_dmz.dmzHost;
-
 
     }
 
@@ -382,7 +386,7 @@
 
 
 
-<Modal bind:open={formModal} size="lg" class="w-full" autoclose>
+<Modal bind:open={formModal} size="lg" class="w-full" permanent={true}>
   <form action="#">
 
 <label>
@@ -473,7 +477,7 @@
     <td></td>
 
 
-    <td class="pl-10"><Button color="dark" pill={true}>Modify</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyVS(virtualserver_current_index)}>Modify</Button></td>
 
 
     </tr>

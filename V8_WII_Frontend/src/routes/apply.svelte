@@ -1,23 +1,29 @@
 <script>
 	import { List, Li, Heading,Button, Modal} from 'flowbite-svelte';
 	import { sessionidG } from "./sessionG.js";
-	import {lanConfig, savedLanConfigChanged} from "./configG.js"
+	import {LanConfigChangedLog, ChangedLANConfig} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
-   	let lan_data="";
+  let lan_data="";
 
 	let sessionid;
 	let Content; 
   let sessionBinary;
   let lanBinary=null;
-
+  let LANchangedValues = [];
 	sessionidG.subscribe(val => {
 	     sessionid = val;
 	});
 
-	lanConfig.subscribe(val => {
+	ChangedLANConfig.subscribe(val => {
         lan_data = val;
   	});
+
+  LanConfigChangedLog.subscribe(val => {
+    	LANchangedValues=val;
+  });
+
+  
 
 	async function SetLANData() {
 	    const res = await fetch(window.location.origin+"/SetLanData", {
@@ -61,8 +67,16 @@
 
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
-<List tag="ul" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
-  <Li>LAN</Li>
+<List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+{#if LANchangedValues.length!=0}
+  <Li>LAN
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each LANchangedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+{/if}
 </List>
 
 </div>

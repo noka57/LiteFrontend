@@ -48,7 +48,7 @@
       method: 'POST',
       body: fileContent,
           headers: {
-            'Content-Type': 'application/octet-stream', // Set the appropriate content type
+            'Content-Type': 'application/octet-stream',
           },
     })
 

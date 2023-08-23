@@ -23,13 +23,14 @@
 
 
 
-   let maintenance_data="";
-   let getdataAlready=0;
+  let maintenance_data="";
+  let getdataAlready=0;
 
-   let sessionid;
-   sessionidG.subscribe(val => {
+  let sessionid;
+  let sessionBinary;
+  sessionidG.subscribe(val => {
      sessionid = val;
-   });
+  });
 
   maintenanceConfig.subscribe(val => {
      maintenance_data = val;
@@ -39,9 +40,7 @@
    async function getMaintenanceData () {
     const res = await fetch(window.location.origin+"/getMaintenanceData", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+      body: sessionBinary
     })
 
     if (res.status == 200)
@@ -63,6 +62,10 @@
 
     if (sessionid && maintenance_data == "")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+
         getMaintenanceData();
     }
     else if (sessionid && maintenance_data != "")

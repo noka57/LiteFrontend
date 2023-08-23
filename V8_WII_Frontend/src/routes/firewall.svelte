@@ -33,36 +33,33 @@
    let newformModal=false;
    let newformModal2=false;
 
-   let sessionid;
-   sessionidG.subscribe(val => {
-     sessionid = val;
-   });
-
-   firewallConfig.subscribe(val => {
-        firewall_data = val;
+    let sessionid;
+    let sessionBinary;
+    sessionidG.subscribe(val => {
+      sessionid = val;
     });
+
+  firewallConfig.subscribe(val => {
+        firewall_data = val;
+  });
 
 
   function modalTrigger(index){
     formModal = true;
     ipfilter_current_index=index;
-
-   }
+  }
 
 
   function modalTrigger2(index){
     formModal2 = true;
     macfilter_current_index=index;
-
-   }
+  }
 
 
    async function getFirewallData () {
     const res = await fetch(window.location.origin+"/getFirewalldata", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+      body: sessionBinary
     })
 
     if (res.status == 200)
@@ -92,6 +89,9 @@
 
     if (sessionid && firewall_data =="")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
         getFirewallData();
     }
     else if (sessionid && firewall_data != "")

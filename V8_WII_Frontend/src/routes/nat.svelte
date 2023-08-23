@@ -45,6 +45,7 @@
    let getdataAlready=0;
 
    let sessionid;
+  let sessionBinary;
    sessionidG.subscribe(val => {
      sessionid = val;
    });
@@ -71,9 +72,7 @@
    async function getNATData () {
     const res = await fetch(window.location.origin+"/getNATdata", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+      body: sessionBinary
     })
 
     if (res.status == 200)
@@ -105,6 +104,10 @@
 
     if (sessionid && nat_data=="")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+
         getNATData();
     }
     else if (sessionid && nat_data !="")

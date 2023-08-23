@@ -1,39 +1,38 @@
-
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal } from 'flowbite-svelte';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
 
 
-   let isActive = false;
-   let oldPW="";
-   let newPW="";
-   let confmPW="";
+    let isActive = false;
+    let oldPW="";
+    let newPW="";
+    let confmPW="";
 
-   let isActiveG = false;
+    let isActiveG = false;
 
-   let oldPWG="";
-   let newPWG="";
-   let confmPWG="";
+    let oldPWG="";
+    let newPWG="";
+    let confmPWG="";
 
 
 
     let account_data="";
     let getdataAlready=0;
 
-   let sessionid;
-   sessionidG.subscribe(val => {
-     sessionid = val;
-   });
+    let sessionid;
+    let sessionBinary;
+    sessionidG.subscribe(val => {
+        sessionid = val;
+    });
 
 
    async function getAccountData () {
     const res = await fetch(window.location.origin+"/getAccountData", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+      body: sessionBinary
     })
+
 
     if (res.status == 200)
     {
@@ -51,8 +50,12 @@
     console.log(sessionid);
 
 
-    if (sessionid)
+    if (sessionid && account_data == "")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+
         getAccountData();
     }
 

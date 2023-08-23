@@ -82,6 +82,7 @@
 	let sessionid='';
 	let lanSavedChanged=0;
   	let interval;
+  	let sessionBinary;
 
 	const BlinkApply = () => {
 		console.log("Blink.Apply");
@@ -123,9 +124,7 @@
 	async function getUserType () {
 		const res = await fetch(window.location.origin+"/getUserType", {
 			method: 'POST',
-			body: JSON.stringify({
-				sessionid
-			})
+			body: sessionBinary
 		})
 
 		if (res.status == 200)
@@ -150,8 +149,11 @@
 		}
 
 		if (sessionid)
-		{
-				getUserType();
+		{      
+			const hexArray = sessionid.match(/.{1,2}/g); 
+      		const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      		sessionBinary = new Uint8Array(byteValues);
+			getUserType();
 		}
 	});
 

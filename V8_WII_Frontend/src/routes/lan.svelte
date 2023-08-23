@@ -5,28 +5,29 @@
   import { sessionidG } from "./sessionG.js";
   import {lanConfig, savedLanConfigChanged} from "./configG.js"
 
-   let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
+  let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
-   let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
+  let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
 
-   let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
-   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
-   let ipMode;
-   let sipAddr="";
-   let sipNetMask="";
+  let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
+  let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+  let ipMode;
+  let sipAddr="";
+  let sipNetMask="";
 
-   let lan_data="";
+  let lan_data="";
 
 
-   let sessionid;
-   sessionidG.subscribe(val => {
+  let sessionid;
+  let sessionBinary;
+  sessionidG.subscribe(val => {
      sessionid = val;
    });
 
 
-    lanConfig.subscribe(val => {
+  lanConfig.subscribe(val => {
         lan_data = val;
-    });
+  });
 
 
 
@@ -63,9 +64,7 @@
    async function getLANData () {
     const res = await fetch(window.location.origin+"/getLANdata", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+      body: sessionBinary
     })
 
     if (res.status == 200)
@@ -89,13 +88,17 @@
 
     if (sessionid && lan_data=="")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+
         getLANData();
     }
     else if (sessionid && lan_data!="")
     {
-      ipMode=lan_data.config.networking_lan.ipMode;
-      sipAddr=lan_data.config.networking_lan.ipStatic.ip;
-      sipNetMask=lan_data.config.networking_lan.ipStatic.netmask;
+        ipMode=lan_data.config.networking_lan.ipMode;
+        sipAddr=lan_data.config.networking_lan.ipStatic.ip;
+        sipNetMask=lan_data.config.networking_lan.ipStatic.netmask;
     }
 
   });

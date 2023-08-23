@@ -32,7 +32,8 @@
     let operation_data="";
     let getdataAlready=0;
 
-   let sessionid;
+    let sessionid;
+    let sessionBinary;
    sessionidG.subscribe(val => {
      sessionid = val;
    });
@@ -48,10 +49,8 @@
 
    async function getOperationData () {
     const res = await fetch(window.location.origin+"/getOperationData", {
-      method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+        method: 'POST',
+        body: sessionBinary
     })
 
     if (res.status == 200)
@@ -77,6 +76,9 @@
 
     if (sessionid && operation_data=="")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
         getOperationData();
     }
     else if (sessionid && operation_data !="")

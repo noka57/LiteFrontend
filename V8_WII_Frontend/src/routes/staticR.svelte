@@ -24,6 +24,7 @@
   let static_route_current_index;
 
    let sessionid;
+   let sessionBinary;
    sessionidG.subscribe(val => {
      sessionid = val;
    });
@@ -44,9 +45,7 @@
    async function getStaticRouteData () {
     const res = await fetch(window.location.origin+"/getStaticRouteData", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+      body: sessionBinary
     })
 
     if (res.status == 200)
@@ -71,6 +70,9 @@
 
     if (sessionid && static_route_data=="")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
         getStaticRouteData();
     }
     else if(sessionid && static_route_data!="")

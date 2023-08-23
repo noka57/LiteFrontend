@@ -70,6 +70,7 @@
   let getdataAlready=0;
 
   let sessionid;
+  let sessionBinary;
   sessionidG.subscribe(val => {
     sessionid = val;
   });
@@ -83,9 +84,7 @@
   async function getWANData () {
     const res = await fetch(window.location.origin+"/getWANData", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+      body: sessionBinary
     })
 
     if (res.status == 200)
@@ -148,6 +147,9 @@
 
     if (sessionid && wan_data=="")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
         getWANData();
     }
     else if (sessionid && wan_data!="")
@@ -183,6 +185,9 @@
 
         wanRedundancyPolicy=wan_data.config.networking_wan_wanRedundancyPolicy;
         fareSavingPolicy=wan_data.config.networking_wan_fareSavingPolicy;
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
         getWANData();
     }
 

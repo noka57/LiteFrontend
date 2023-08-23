@@ -16,6 +16,7 @@
   let currentOrigin = '';
   let sessionid='';
   let interval;
+  let sessionBinary;
 
 
   sessionidG.subscribe(val => {
@@ -40,9 +41,7 @@
   async function getDashboardData () {
     const res = await fetch(window.location.origin+"/getDashboardData", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+      body: sessionBinary
     })
 
     if (res.status == 200)
@@ -80,6 +79,9 @@
 
     if (sessionid && dashboard_data=="")
     {
+      const hexArray = sessionid.match(/.{1,2}/g); 
+      const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      sessionBinary = new Uint8Array(byteValues);
       getDashboardData();
       startInterval();
     }

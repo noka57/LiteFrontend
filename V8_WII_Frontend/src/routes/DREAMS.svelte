@@ -74,10 +74,11 @@
     let dreams_data="";
     let getdataAlready=0;
 
-   let sessionid;
-   sessionidG.subscribe(val => {
-     sessionid = val;
-   });
+    let sessionid;
+    let sessionBinary;
+    sessionidG.subscribe(val => {
+      sessionid = val;
+    });
 
     dreamsConfig.subscribe(val => {
         dreams_data = val;
@@ -87,9 +88,7 @@
    async function getDREAMSdata () {
     const res = await fetch(window.location.origin+"/getDREAMSdata", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+      body: sessionBinary
     })
 
     if (res.status == 200)
@@ -314,6 +313,10 @@
 
     if (sessionid && dreams_data == "")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+
         getDREAMSdata();
     }
     else if (sessionid && dreams_data != "")

@@ -18,10 +18,11 @@
     let docker_data="";
     let getdataAlready=0;
 
-   let sessionid;
-   sessionidG.subscribe(val => {
-     sessionid = val;
-   });
+    let sessionid;
+    let sessionBinary;
+    sessionidG.subscribe(val => {
+        sessionid = val;
+    });
 
     dockerConfig.subscribe(val => {
         docker_data = val;
@@ -31,9 +32,7 @@
    async function getDockerData () {
     const res = await fetch(window.location.origin+"/getDockerData", {
       method: 'POST',
-      body: JSON.stringify({
-        sessionid
-      })
+      body: sessionBinary
     })
 
     if (res.status == 200)
@@ -61,6 +60,10 @@
 
     if (sessionid && docker_data == "")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+
         getDockerData();
     }
     else if (sessionid && docker_data !="")

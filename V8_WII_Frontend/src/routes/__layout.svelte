@@ -86,7 +86,6 @@
   	let LANchangedValues = [];
 
 	const BlinkApply = () => {
-		console.log("Blink.Apply");
 		if (svg0background=="")
 		{
     		svg0background="background-color: blue";
@@ -111,6 +110,13 @@
     		if (!interval)
     		{
     			startInterval();
+    		}
+    	}
+    	else
+    	{
+    		if (interval)
+    		{
+    			clearInterval(interval);
     		}
     	}
   	});

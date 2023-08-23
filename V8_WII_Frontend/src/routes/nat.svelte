@@ -4,26 +4,13 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import {natConfig} from "./configG.js"
+  import {natConfig, ChangedNATConfig, NATConfigChangedLog} from "./configG.js"
 
-   let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
-
-   let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
-
-   let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
-   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
-   let natlo=false;
-   let vs=false;
-   let vc=false;
-   let dmz=false;
    let formModal = false;
    let newformModal=false;
    let formModal2 = false;
    let newformModal2=false;
 
-
-    let DMZInfce;
-    let DMZHost="";
 
    let NewVirtualServerItem=[0,0,"","","Any",0,[0,0],0,[0,0]];
    let NewVirtualComputerItem=[0,"",""];
@@ -34,9 +21,13 @@
    let virtualserver_current_index;
    let virtualcomputer_current_index;
 
+   let new_vs_index;
+
 
    let nat_data="";
    let changed_nat_data = {};
+   let changedValues = [];
+   let getDataReady=0;
 
    let sessionid;
    let sessionBinary;
@@ -50,20 +41,250 @@
     });
 
 
-    function modalTrigger(index){
+   function SaveVirtualServer(){
+      console.log("Save VirtualServer");
+      console.log(changed_nat_data.config.networking_nat_virtualServer);
+    }
+
+
+
+   function modalTrigger(index){
       formModal = true;
       virtualserver_current_index=index;
    }
 
+   function VS_Item_enableCheck(index)
+   {
+
+      if (changed_nat_data.config.networking_nat_virtualServer.list[index].enable)
+      {
+        changed_nat_data.config.networking_nat_virtualServer.list[index].enable=0;
+      }
+      else
+      {
+        changed_nat_data.config.networking_nat_virtualServer.list[index].enable=1;
+      }
+
+   }
+
+   function EnableVS()
+   {
+      if (changed_nat_data.config.networking_nat_virtualServer.enable)
+      {
+        changed_nat_data.config.networking_nat_virtualServer.enable=0;
+      }
+      else
+      {
+        changed_nat_data.config.networking_nat_virtualServer.enable=1;
+      }
+
+   }
+
+    let newVS_Item = [{
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    },{
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    },{
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    },{
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    },{
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    },{
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    },{
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    },{
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    },{
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    },{
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    }];
+
+
+   function NewVS_Item_Invoker(index)
+   {
+      newVS_Item[index].enable=0;
+      newVS_Item[index].wanIf=0;
+      newVS_Item[index].serverIp="";  
+      newVS_Item[index].sourceIp="";
+      newVS_Item[index].protocol="TCP";
+      newVS_Item[index].pubPort=0;
+      newVS_Item[index].pubPortRange.start=0;
+      newVS_Item[index].pubPortRange.end=0;
+      newVS_Item[index].privPort=0;
+      newVS_Item[index].privPortRange.start=0;
+      newVS_Item[index].privPortRange.end=0;
+
+      new_vs_index=index;
+      newformModal = true;
+
+   }
+
+   function NewVS_ItemEnable(index)
+   {
+      if (newVS_Item[index].enable)
+      {
+        newVS_Item[index].enable=0;
+      }
+      else
+      {
+        newVS_Item[index].enable=1;
+      }
+   } 
 
    function ModifyVS(index)
    {
       formModal = false;
-      console.log("modify VS");
-      console.log(index+1);
-      console.log(changed_nat_data);
-      console.log("----");
-      console.log(nat_data);
+
+   }
+
+   function AddVS(index)
+   {
+      newformModal = false;
+
+      changed_nat_data.config.networking_nat_virtualServer.list=[...changed_nat_data.config.networking_nat_virtualServer.list, newVS_Item[index]];
    }
 
 
@@ -87,16 +308,8 @@
 
       natConfig.set(nat_data);
       changed_nat_data = JSON.parse(JSON.stringify(nat_data));
-
-      natlo=!!changed_nat_data.config.networking_nat_loopback.natLoopback;
-      vs=!!changed_nat_data.config.networking_nat_virtualServer.enable;
-      vc=!!changed_nat_data.config.networking_nat_virtualComputer.enable;
-      VirtualServerArrays = changed_nat_data.config.networking_nat_virtualServer.list;
-      VirtualComputerArrays = changed_nat_data.config.networking_nat_virtualComputer.list;
-      dmz=!!changed_nat_data.config.networking_nat_dmz.enable;
-      DMZInfce=changed_nat_data.config.networking_nat_dmz.interface;
-      DMZHost=changed_nat_data.config.networking_nat_dmz.dmzHost;
-
+      getDataReady=1;
+      
     }
   }
 
@@ -117,15 +330,8 @@
     }
     else if (sessionid && nat_data !="")
     {  
-      natlo=!!nat_data.config.networking_nat_loopback.natLoopback;
-      vs=!!nat_data.config.networking_nat_virtualServer.enable;
-      vc=!!nat_data.config.networking_nat_virtualComputer.enable;
-      VirtualServerArrays = Array.from(nat_data.config.networking_nat_virtualServer.list);
-      VirtualComputerArrays = nat_data.config.networking_nat_virtualComputer.list;
-      dmz=!!nat_data.config.networking_nat_dmz.enable;
-      DMZInfce=nat_data.config.networking_nat_dmz.interface;
-      DMZHost=nat_data.config.networking_nat_dmz.dmzHost;
-
+        changed_nat_data = JSON.parse(JSON.stringify(nat_data));
+        getDataReady=1;
     }
 
   });
@@ -143,7 +349,9 @@
 
     <td class="pl-5"><div class="flex gap-4">
 <label>
-  <input type=checkbox checked={natlo}>
+{#if getDataReady == 1}
+  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_loopback.natLoopback}>
+{/if}
   Enable
 </label>
 
@@ -164,7 +372,9 @@
 
 <TabItem title="Virtual Server">
 <label>
-  <input type=checkbox checked={vs}>
+{#if getDataReady == 1}
+  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_virtualServer.enable} on:click={EnableVS}>
+{/if}
   Enable Virtual Server
 </label>
 
@@ -188,8 +398,8 @@
   </TableHead>
   <TableBody>
 
-
-  {#each VirtualServerArrays as VirtualServer, index}
+{#if getDataReady == 1}
+  {#each changed_nat_data.config.networking_nat_virtualServer.list as VirtualServer, index}
 
     <TableBodyRow>
 
@@ -207,7 +417,6 @@
 
     <TableHeadCell class="!p-4">
     </TableHeadCell>
-
       <TableBodyCell class="w-10">{VirtualServer.enable}</TableBodyCell>
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
 {#if VirtualServer.wanIf==0}
@@ -239,21 +448,27 @@
     </TableBodyRow>
 
 {/each}
-
+{/if}
 
 <TableBodyRow>
 
-      <TableBodyCell class="!p-4 w-10">
-<button on:click={() => newformModal = true}>
+
+ 
+
+      <TableBodyCell class="!p-4 w-10">     
+{#if getDataReady == 1}
+{#if changed_nat_data.config.networking_nat_virtualServer.list.length < 2}
+<button on:click={() => NewVS_Item_Invoker(changed_nat_data.config.networking_nat_virtualServer.list.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
-
+{/if} 
+{/if}    
  </TableBodyCell>
-      
+  
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -281,7 +496,7 @@
         <td></td>
     <td></td>
 
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveVirtualServer}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -289,11 +504,11 @@
     </tr>
 
 
-<Modal bind:open={newformModal} size="lg" class="w-full" autoclose>
+<Modal bind:open={newformModal} size="lg" class="w-full" permanent={true}>
   <form action="#">
 
 <label>
-  <input class="center" type=checkbox checked={NewVirtualServerItem[0]}>
+  <input class="center" type=checkbox checked={!!newVS_Item[new_vs_index].enable} on:click={NewVS_ItemEnable(new_vs_index)}>
   Enable
 </label>
 
@@ -308,15 +523,15 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={NewVirtualServerItem[1]} value={0} >All</Radio>
-  <Radio bind:group={NewVirtualServerItem[1]} value={1} >Ethernet WAN</Radio>
-  <Radio bind:group={NewVirtualServerItem[1]} value={2} >Cellular WAN-1</Radio>
+  <Radio bind:group={newVS_Item[new_vs_index].wanIf} value={0} >All</Radio>
+  <Radio bind:group={newVS_Item[new_vs_index].wanIf} value={1} >Ethernet WAN</Radio>
+  <Radio bind:group={newVS_Item[new_vs_index].wanIf} value={2} >Cellular WAN-1</Radio>
 </div></td>
 </tr>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Server IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewVirtualServerItem[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Server IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newVS_Item[new_vs_index].serverIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -326,7 +541,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Source IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewVirtualServerItem[3]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Source IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newVS_Item[new_vs_index].sourceIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -339,9 +554,9 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={NewVirtualServerItem[4]} value='TCP' >TCP</Radio>
-  <Radio bind:group={NewVirtualServerItem[4]} value='UDP' >UDP</Radio>
-  <Radio bind:group={NewVirtualServerItem[4]} value='TCPUDP' >TCP & UDP</Radio>
+  <Radio bind:group={newVS_Item[new_vs_index].protocol} value='TCP' >TCP</Radio>
+  <Radio bind:group={newVS_Item[new_vs_index].protocol} value='UDP' >UDP</Radio>
+  <Radio bind:group={newVS_Item[new_vs_index].protocol} value='TCPUDP' >TCP & UDP</Radio>
 </div></td>
 </tr>
 
@@ -353,8 +568,8 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={NewVirtualServerItem[5]} value={0} >Single Port</Radio><input type="number" bind:value={NewVirtualServerItem[6][0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={NewVirtualServerItem[5]} value={1} >Port Range</Radio><input type="number" bind:value={NewVirtualServerItem[6][0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={NewVirtualServerItem[6][1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={newVS_Item[new_vs_index].pubPort} value={0} >Single Port</Radio><input type="number" bind:value={newVS_Item[new_vs_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={newVS_Item[new_vs_index].pubPort} value={1} >Port Range</Radio><input type="number" bind:value={newVS_Item[new_vs_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newVS_Item[new_vs_index].pubPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </div></td>
 </tr>
 
@@ -366,8 +581,8 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={NewVirtualServerItem[7]} value={0} >Single Port</Radio><input type="number" bind:value={NewVirtualServerItem[8][0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={NewVirtualServerItem[7]} value={1} >Port Range</Radio><input type="number" bind:value={NewVirtualServerItem[8][0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={NewVirtualServerItem[8][1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={newVS_Item[new_vs_index].privPort} value={0} >Single Port</Radio><input type="number" bind:value={newVS_Item[new_vs_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={newVS_Item[new_vs_index].privPort} value={1} >Port Range</Radio><input type="number" bind:value={newVS_Item[new_vs_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newVS_Item[new_vs_index].privPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </div></td>
 </tr>
 
@@ -375,7 +590,7 @@
       <tr>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddVS(new_vs_index)}>Add</Button></td>
 
 
     </tr>
@@ -390,7 +605,9 @@
   <form action="#">
 
 <label>
-  <input class="center" type=checkbox checked={VirtualServerArrays[virtualserver_current_index].enable}>
+{#if getDataReady == 1}
+  <input class="center" type=checkbox checked={!!changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].enable} on:click={VS_Item_enableCheck(virtualserver_current_index)}>
+{/if}
   Enable
 </label>
 
@@ -404,17 +621,20 @@
 
   </td>
 
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={VirtualServerArrays[virtualserver_current_index].wanIf} value={0} >All</Radio>
-  <Radio bind:group={VirtualServerArrays[virtualserver_current_index].wanIf} value={1} >Ethernet WAN</Radio>
-  <Radio bind:group={VirtualServerArrays[virtualserver_current_index].wanIf} value={2} >Cellular WAN-1</Radio>
+  <td class="pl-5 pt-4"><div class="flex gap-4">
+  {#if getDataReady == 1}
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].wanIf} value={0} >All</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].wanIf} value={1} >Ethernet WAN</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].wanIf} value={2} >Cellular WAN-1</Radio>
+  {/if}
 </div></td>
 </tr>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Server IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VirtualServerArrays[virtualserver_current_index].serverIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
+{#if getDataReady == 1}
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Server IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].serverIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+{/if}
 
 
   </tr>
@@ -423,8 +643,9 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Source IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VirtualServerArrays[virtualserver_current_index].sourceIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
+{#if getDataReady == 1}
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Source IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].sourceIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+{/if}
 
 
   </tr>
@@ -436,9 +657,11 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={VirtualServerArrays[virtualserver_current_index].protocol} value='TCP' >TCP</Radio>
-  <Radio bind:group={VirtualServerArrays[virtualserver_current_index].protocol} value='UDP' >UDP</Radio>
-  <Radio bind:group={VirtualServerArrays[virtualserver_current_index].protocol} value='TCPUDP' >TCP & UDP</Radio>
+{#if getDataReady == 1}
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].protocol} value='TCP' >TCP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].protocol} value='UDP' >UDP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].protocol} value='TCPUDP' >TCP & UDP</Radio>
+{/if}
 </div></td>
 </tr>
 
@@ -450,8 +673,10 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={VirtualServerArrays[virtualserver_current_index].pubPort} value={0} >Single Port</Radio><input type="number" bind:value={VirtualServerArrays[virtualserver_current_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={VirtualServerArrays[virtualserver_current_index].pubPort} value={1} >Port Range</Radio><input type="number" bind:value={VirtualServerArrays[virtualserver_current_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={VirtualServerArrays[virtualserver_current_index].pubPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{#if getDataReady == 1}
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].pubPort} value={0} >Single Port</Radio><input type="number" bind:value={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].pubPort} value={1} >Port Range</Radio><input type="number" bind:value={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].pubPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
 </div></td>
 </tr>
 
@@ -463,8 +688,10 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={VirtualServerArrays[virtualserver_current_index].privPort} value={0} >Single Port</Radio><input type="number" bind:value={VirtualServerArrays[virtualserver_current_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={VirtualServerArrays[virtualserver_current_index].privPort} value={1} >Port Range</Radio><input type="number" bind:value={VirtualServerArrays[virtualserver_current_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={VirtualServerArrays[virtualserver_current_index].privPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{#if getDataReady == 1}
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].privPort} value={0} >Single Port</Radio><input type="number" bind:value={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].privPort} value={1} >Port Range</Radio><input type="number" bind:value={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].privPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
 </div></td>
 </tr>
 
@@ -495,7 +722,9 @@
 
 <TabItem title="Virtual Computer">
 <label>
-  <input type=checkbox checked={vc}>
+{#if getDataReady == 1}
+  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_virtualComputer.enable}>
+{/if}
   Enable Virtual Computer
 </label>
 
@@ -517,8 +746,8 @@
   </TableHead>
   <TableBody>
 
-
-  {#each VirtualComputerArrays as VirtualComputer, index}
+{#if getDataReady == 1}
+  {#each changed_nat_data.config.networking_nat_virtualComputer.list as VirtualComputer, index}
 
     <TableBodyRow>
 
@@ -536,13 +765,14 @@
 
     <TableHeadCell class="!p-4">
     </TableHeadCell>
-    <TableHeadCell class="w-10">{VirtualComputer.enable}</TableHeadCell>
-    <TableHeadCell class="w-10">{index+1}</TableHeadCell>
-    <TableHeadCell class="w-10">{VirtualComputer.globalIp}</TableHeadCell>
-    <TableHeadCell class="w-36">{VirtualComputer.localIp}</TableHeadCell>
+    <TableHeadCell class="text-gray-900 w-10">{VirtualComputer.enable}</TableHeadCell>
+    <TableHeadCell class="text-gray-900 w-10">{index+1}</TableHeadCell>
+    <TableHeadCell class="text-gray-900 w-10">{VirtualComputer.globalIp}</TableHeadCell>
+    <TableHeadCell class="text-gray-900 w-36">{VirtualComputer.localIp}</TableHeadCell>
 
     </TableBodyRow>
 {/each}
+{/if}
 
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
@@ -583,7 +813,7 @@
     </tr>
 
 
-<Modal bind:open={newformModal2} size="md" class="w-full" autoclose>
+<Modal bind:open={newformModal2} size="md" class="w-full" permanent={true}>
   <form action="#">
 
 <label>
@@ -628,12 +858,15 @@
 </Modal>
 
 
-<Modal bind:open={formModal2} size="md" class="w-full" autoclose>
+<Modal bind:open={formModal2} size="md" class="w-full" permanent={true}>
   <form action="#">
 
 <label>
-  <input class="center" type=checkbox checked={VirtualComputerArrays[virtualcomputer_current_index].enable}>
+{#if getDataReady == 1}
+  <input class="center" type=checkbox checked={!!changed_nat_data.config.networking_nat_virtualComputer.list[virtualcomputer_current_index].enable}>
+{/if}
   Enable
+
 </label>
 
 <p class="mt-10"></p>
@@ -642,8 +875,9 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Global IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VirtualComputerArrays[virtualcomputer_current_index].globalIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
+{#if getDataReady == 1}
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Global IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_nat_virtualComputer.list[virtualcomputer_current_index].globalIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+{/if}
 
 
   </tr>
@@ -652,8 +886,9 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VirtualComputerArrays[virtualcomputer_current_index].localIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
+{#if getDataReady == 1}
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_nat_virtualComputer.list[virtualcomputer_current_index].localIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+{/if}
 
 
   </tr>
@@ -681,7 +916,9 @@
   <TabItem title="DMZ">
 
 <label>
-  <input type=checkbox checked={dmz}>
+{#if getDataReady == 1}
+  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_dmz.enable}>
+{/if}
   Enable DMZ
 </label>
 
@@ -693,17 +930,19 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={DMZInfce} value={0} >All</Radio>
-  <Radio bind:group={DMZInfce} value={1} >Ethernet WAN</Radio>
-  <Radio bind:group={DMZInfce} value={2} >Cellular WAN-1</Radio>
-
+{#if getDataReady == 1}
+  <Radio bind:group={changed_nat_data.config.networking_nat_dmz.interface} value={0} >All</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_nat_dmz.interface} value={1} >Ethernet WAN</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_nat_dmz.interface} value={2} >Cellular WAN-1</Radio>
+{/if}
 </div></td>
 </tr>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">DMZ Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={DMZHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
+{#if getDataReady == 1}
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">DMZ Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_nat_dmz.dmzHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+{/if}
 
 
   </tr>

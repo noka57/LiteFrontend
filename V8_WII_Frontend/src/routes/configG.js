@@ -14,3 +14,7 @@ export const wanConfig=writable("");
 
 export const LanConfigChangedLog=writable("");
 export const ChangedLANConfig=writable("");
+
+
+export const NATConfigChangedLog=writable("");
+export const ChangedNATConfig=writable("");

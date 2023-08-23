@@ -33,6 +33,11 @@
   });
 
 
+  ChangedLANConfig.subscribe(val => {
+      changed_lan_data = val;
+  });
+
+
   function compareObjects(obj1, obj2) {
     for (const key in obj1) 
     {
@@ -55,13 +60,16 @@
 
   function SaveLanSettings(){
     console.log("Save LAN Setting\r\n");
+    if (changedValues.length !=0)
+    {
+      changedValues=[];
+    }
+
     compareData();
 
     LanConfigChangedLog.set(changedValues);
-    if (changedValues.length !=0)
-    {
-      ChangedLANConfig.set(changed_lan_data);
-    }
+    ChangedLANConfig.set(changed_lan_data);
+    
     console.log(changedValues);
 
   };
@@ -102,7 +110,10 @@
     }
     else if (sessionid && lan_data!="")
     {
-      changed_lan_data = JSON.parse(JSON.stringify(lan_data));
+      if (changedValues.length == 0)
+      {
+        changed_lan_data = JSON.parse(JSON.stringify(lan_data));
+      }
       getDataReady=1;
     }
 

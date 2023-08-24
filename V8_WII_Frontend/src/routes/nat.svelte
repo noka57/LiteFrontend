@@ -4,16 +4,13 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import {natConfig, ChangedNATConfig, NATConfigChangedLog} from "./configG.js"
+  import {natConfig, ChangedNATConfig, NAT_LoopBack_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_Dmz_ConfigChangedLog} from "./configG.js"
 
    let formModal = false;
    let newformModal=false;
    let formModal2 = false;
    let newformModal2=false;
 
-
-   let NewVirtualServerItem=[0,0,"","","Any",0,[0,0],0,[0,0]];
-   let NewVirtualComputerItem=[0,"",""];
    let VirtualServerArrays = [];
    let VirtualComputerArrays = [];
 
@@ -22,11 +19,15 @@
    let virtualcomputer_current_index;
 
    let new_vs_index;
-
+   let new_vc_index;
 
    let nat_data="";
    let changed_nat_data = {};
-   let changedValues = [];
+   let saved_changed_nat_data ={};
+   let dmz_changedValues = [];
+   let vs_changedValues = [];
+   let vc_changedValues = [];
+   let loopback_changedValues = [];
    let getDataReady=0;
 
    let sessionid;
@@ -40,35 +41,149 @@
         nat_data = val;
     });
 
+    NAT_LoopBack_ConfigChangedLog.subscribe(val => {
+        loopback_changedValues = val;
+    });
 
-   function SaveVirtualServer(){
-      console.log("Save VirtualServer");
-      console.log(changed_nat_data.config.networking_nat_virtualServer);
+    NAT_VC_ConfigChangedLog.subscribe(val => {
+        vc_changedValues = val;
+    });
+
+    NAT_VS_ConfigChangedLog.subscribe(val => {
+        vs_changedValues = val;
+    });
+
+    NAT_Dmz_ConfigChangedLog.subscribe(val => {
+        dmz_changedValues = val;
+    });
+
+    ChangedNATConfig.subscribe(val => {
+      saved_changed_nat_data = JSON.parse(JSON.stringify(val));
+    });
+
+
+
+    function compareObjects(obj1, obj2, type) 
+    {
+      for (const key in obj1) 
+      {
+        if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+        {
+          compareObjects(obj1[key], obj2[key], type);
+        } 
+        else if (obj1[key] != obj2[key]) 
+        {
+          let changedstr="Value of "+key+" has changed to "+obj1[key];
+          if (type == 3)
+          {
+            dmz_changedValues=[...dmz_changedValues, changedstr];
+          }
+          else if (type == 2)
+          {
+            vc_changedValues=[...vc_changedValues, changedstr];
+          }
+          else if (type == 1)
+          {
+            vs_changedValues=[...vs_changedValues, changedstr];
+          }
+          else if (type == 0)
+          {
+            loopback_changedValues=[...loopback_changedValues, changedstr]; 
+          }
+
+        }
+      }
     }
 
 
+    function SaveDMZ()
+    {
+        console.log("Save DMZ");
+        if (dmz_changedValues.length !=0)
+        {
+          dmz_changedValues=[];
+        }
 
-   function modalTrigger(index){
+        compareObjects(changed_nat_data.config.networking_nat_dmz, nat_data.config.networking_nat_dmz,3);
+
+
+        NAT_Dmz_ConfigChangedLog.set(dmz_changedValues);
+        ChangedNATConfig.set(changed_nat_data);
+    
+        console.log(dmz_changedValues);
+    } 
+
+    function SaveVirtualComputer()
+    {
+      console.log("Save VirtualComputer");
+      if (vc_changedValues.length !=0)
+      {
+        vc_changedValues=[];
+      }
+
+      compareObjects(changed_nat_data.config.networking_nat_virtualComputer, nat_data.config.networking_nat_virtualComputer,2);
+
+
+      NAT_VC_ConfigChangedLog.set(vc_changedValues);
+      ChangedNATConfig.set(changed_nat_data);
+    
+      console.log(vc_changedValues);
+    }
+
+    function SaveVirtualServer()
+    {
+      console.log("Save VirtualServer");
+      if (vs_changedValues.length !=0)
+      {
+        vs_changedValues=[];
+      }
+
+      compareObjects(changed_nat_data.config.networking_nat_virtualServer, nat_data.config.networking_nat_virtualServer,1);
+
+
+      NAT_VS_ConfigChangedLog.set(vs_changedValues);
+      ChangedNATConfig.set(changed_nat_data);
+    
+      console.log(vs_changedValues);
+    }
+
+    function SaveNatLoopBack()
+    {
+      console.log("Save Loopback nat");      
+      if (loopback_changedValues.length !=0)
+      {
+        loopback_changedValues=[];
+      }
+
+      compareObjects(changed_nat_data.config.networking_nat_loopback, nat_data.config.networking_nat_loopback,0);
+      NAT_LoopBack_ConfigChangedLog.set(loopback_changedValues);
+      ChangedNATConfig.set(changed_nat_data);
+    
+      console.log(loopback_changedValues);
+    }
+
+
+    function modalTrigger(index)
+    {
       formModal = true;
       virtualserver_current_index=index;
-   }
+    }
 
-   function VS_Item_enableCheck(index)
-   {
 
-      if (changed_nat_data.config.networking_nat_virtualServer.list[index].enable)
+    function LoopBackCheck()
+    {
+      if (changed_nat_data.config.networking_nat_loopback.natLoopback)
       {
-        changed_nat_data.config.networking_nat_virtualServer.list[index].enable=0;
+        changed_nat_data.config.networking_nat_loopback.natLoopback=0;
       }
       else
       {
-        changed_nat_data.config.networking_nat_virtualServer.list[index].enable=1;
+        changed_nat_data.config.networking_nat_loopback.natLoopback=1;
       }
+    }
 
-   }
-
-   function EnableVS()
-   {
+    function EnableVS()
+    {
       if (changed_nat_data.config.networking_nat_virtualServer.enable)
       {
         changed_nat_data.config.networking_nat_virtualServer.enable=0;
@@ -77,8 +192,103 @@
       {
         changed_nat_data.config.networking_nat_virtualServer.enable=1;
       }
+    }
 
+    function VS_Item_enableCheck(index)
+    {
+      if (changed_nat_data.config.networking_nat_virtualServer.list[index].enable)
+      {
+        changed_nat_data.config.networking_nat_virtualServer.list[index].enable=0;
+      }
+      else
+      {
+        changed_nat_data.config.networking_nat_virtualServer.list[index].enable=1;
+      }
+    }
+
+
+
+    function EnableVC()
+    {
+      if (changed_nat_data.config.networking_nat_virtualComputer.enable)
+      {
+        changed_nat_data.config.networking_nat_virtualComputer.enable=0;
+      }
+      else
+      {
+        changed_nat_data.config.networking_nat_virtualComputer.enable=1;
+      }
+    }
+
+
+    function VC_Item_enableCheck(index)
+    {
+      if (changed_nat_data.config.networking_nat_virtualComputer.list[index].enable)
+      {
+        changed_nat_data.config.networking_nat_virtualComputer.list[index].enable=0;
+      }
+      else
+      {
+        changed_nat_data.config.networking_nat_virtualComputer.list[index].enable=1;
+      }
    }
+
+    function EnableDMZ()
+    {
+      if (changed_nat_data.config.networking_nat_dmz.enable)
+      {
+        changed_nat_data.config.networking_nat_dmz.enable=0;
+      }
+      else
+      {
+        changed_nat_data.config.networking_nat_dmz.enable=1;
+      }
+    }
+
+
+    let newVC_Item=[{
+          "enable": 0,
+          "globalIp": "",
+          "localIp": ""
+        },{
+          "enable": 0,
+          "globalIp": "",
+          "localIp": ""
+        },{
+          "enable": 0,
+          "globalIp": "",
+          "localIp": ""
+        },{
+          "enable": 0,
+          "globalIp": "",
+          "localIp": ""
+        },{
+          "enable": 0,
+          "globalIp": "",
+          "localIp": ""
+        },{
+          "enable": 0,
+          "globalIp": "",
+          "localIp": ""
+        },{
+          "enable": 0,
+          "globalIp": "",
+          "localIp": ""
+        },{
+          "enable": 0,
+          "globalIp": "",
+          "localIp": ""
+        },{
+          "enable": 0,
+          "globalIp": "",
+          "localIp": ""
+        },{
+          "enable": 0,
+          "globalIp": "",
+          "localIp": ""
+        }
+        ];
+
 
     let newVS_Item = [{
       "enable": 0,
@@ -262,6 +472,17 @@
 
    }
 
+   function NewVC_Item_Invoker(index)
+   {
+      newVC_Item[index].enable=0;
+      newVC_Item[index].globalIp="";
+      newVC_Item[index].localIp="";
+
+      new_vc_index=index;
+      newformModal2 = true;
+
+   }
+
    function NewVS_ItemEnable(index)
    {
       if (newVS_Item[index].enable)
@@ -274,17 +495,43 @@
       }
    } 
 
+
+   function NewVC_ItemEnable(index)
+   {
+      if (newVC_Item[index].enable)
+      {
+        newVC_Item[index].enable=0;
+      }
+      else
+      {
+        newVC_Item[index].enable=1;
+      }
+   } 
+
    function ModifyVS(index)
    {
       formModal = false;
+   }
 
+
+   function ModifyVC(index)
+   {
+      formModal2 = false;
    }
 
    function AddVS(index)
    {
       newformModal = false;
 
-      changed_nat_data.config.networking_nat_virtualServer.list=[...changed_nat_data.config.networking_nat_virtualServer.list, newVS_Item[index]];
+      changed_nat_data.config.networking_nat_virtualServer.list=[...changed_nat_data.config.networking_nat_virtualServer.list,newVS_Item[index]];
+   }
+
+
+   function AddVC(index)
+   {
+      newformModal2 = false;
+
+      changed_nat_data.config.networking_nat_virtualComputer.list=[...changed_nat_data.config.networking_nat_virtualComputer.list, newVC_Item[index]];
    }
 
 
@@ -304,10 +551,10 @@
     {
       nat_data =await res.json();
       console.log(nat_data);
-
-
       natConfig.set(nat_data);
+
       changed_nat_data = JSON.parse(JSON.stringify(nat_data));
+      ChangedNATConfig.set(changed_nat_data);
       getDataReady=1;
       
     }
@@ -319,7 +566,6 @@
     console.log("nat sessionid: ");
     console.log(sessionid);
 
-
     if (sessionid && nat_data=="")
     {
         const hexArray = sessionid.match(/.{1,2}/g); 
@@ -330,8 +576,33 @@
     }
     else if (sessionid && nat_data !="")
     {  
-        changed_nat_data = JSON.parse(JSON.stringify(nat_data));
-        getDataReady=1;
+      getDataReady=1;
+
+      if (dmz_changedValues.length == 0)
+      {
+        changed_nat_data=JSON.parse(JSON.stringify(saved_changed_nat_data));
+        changed_nat_data.config.networking_nat_dmz = JSON.parse(JSON.stringify(nat_data.config.networking_nat_dmz)); 
+      }
+
+
+      if (vs_changedValues.length == 0)
+      {
+        changed_nat_data=JSON.parse(JSON.stringify(saved_changed_nat_data));
+        changed_nat_data.config.networking_nat_virtualServer = JSON.parse(JSON.stringify(nat_data.config.networking_nat_virtualServer));     
+      }
+
+      if (vc_changedValues.length == 0)
+      {
+        changed_nat_data=JSON.parse(JSON.stringify(saved_changed_nat_data));
+        changed_nat_data.config.networking_nat_virtualComputer = JSON.parse(JSON.stringify(nat_data.config.networking_nat_virtualComputer));     
+      }
+
+      if (loopback_changedValues.length == 0)
+      {
+        changed_nat_data=JSON.parse(JSON.stringify(saved_changed_nat_data));
+        changed_nat_data.config.networking_nat_loopback = JSON.parse(JSON.stringify(nat_data.config.networking_nat_loopback));     
+      }
+
     }
 
   });
@@ -350,7 +621,7 @@
     <td class="pl-5"><div class="flex gap-4">
 <label>
 {#if getDataReady == 1}
-  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_loopback.natLoopback}>
+  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_loopback.natLoopback} on:click={LoopBackCheck}>
 {/if}
   Enable
 </label>
@@ -361,7 +632,7 @@
     <tr>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveNatLoopBack}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -457,7 +728,7 @@
 
       <TableBodyCell class="!p-4 w-10">     
 {#if getDataReady == 1}
-{#if changed_nat_data.config.networking_nat_virtualServer.list.length < 2}
+{#if changed_nat_data.config.networking_nat_virtualServer.list.length < 10}
 <button on:click={() => NewVS_Item_Invoker(changed_nat_data.config.networking_nat_virtualServer.list.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
@@ -504,7 +775,7 @@
     </tr>
 
 
-<Modal bind:open={newformModal} size="lg" class="w-full" permanent={true}>
+<Modal bind:open={newformModal} size="lg" class="w-full" autoclose>
   <form action="#">
 
 <label>
@@ -723,7 +994,7 @@
 <TabItem title="Virtual Computer">
 <label>
 {#if getDataReady == 1}
-  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_virtualComputer.enable}>
+  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_virtualComputer.enable} on:click={EnableVC}>
 {/if}
   Enable Virtual Computer
 </label>
@@ -776,13 +1047,17 @@
 
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => newformModal2 = true}>
+
+{#if getDataReady == 1}
+{#if changed_nat_data.config.networking_nat_virtualComputer.list.length < 10}
+<button on:click={() => NewVC_Item_Invoker(changed_nat_data.config.networking_nat_virtualComputer.list.length)}>      
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
+{/if}
+{/if}
 
       </TableBodyCell>
 
@@ -805,7 +1080,7 @@
     <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveVirtualComputer}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -813,11 +1088,11 @@
     </tr>
 
 
-<Modal bind:open={newformModal2} size="md" class="w-full" permanent={true}>
+<Modal bind:open={newformModal2} size="md" class="w-full" autoclose>
   <form action="#">
 
 <label>
-  <input class="center" type=checkbox checked={NewVirtualComputerItem[0]}>
+  <input class="center" type=checkbox checked={!!newVC_Item[new_vc_index].enable} on:click={NewVC_ItemEnable(new_vc_index)}>
   Enable
 </label>
 
@@ -827,7 +1102,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Global IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewVirtualComputerItem[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Global IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newVC_Item[new_vc_index].globalIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -837,7 +1112,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewVirtualComputerItem[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newVC_Item[new_vc_index].localIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -848,7 +1123,7 @@
             <tr>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddVC(new_vc_index)}>Add</Button></td>
 
 
     </tr>
@@ -863,7 +1138,7 @@
 
 <label>
 {#if getDataReady == 1}
-  <input class="center" type=checkbox checked={!!changed_nat_data.config.networking_nat_virtualComputer.list[virtualcomputer_current_index].enable}>
+  <input class="center" type=checkbox checked={!!changed_nat_data.config.networking_nat_virtualComputer.list[virtualcomputer_current_index].enable} on:click={VC_Item_enableCheck(virtualcomputer_current_index)}>
 {/if}
   Enable
 
@@ -900,7 +1175,7 @@
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Modify</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyVC(virtualcomputer_current_index)}>Modify</Button></td>
 
 
     </tr>
@@ -917,7 +1192,7 @@
 
 <label>
 {#if getDataReady == 1}
-  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_dmz.enable}>
+  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_dmz.enable} on:click={EnableDMZ}>
 {/if}
   Enable DMZ
 </label>
@@ -956,7 +1231,7 @@
         <td></td>
 
 
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveDMZ}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 

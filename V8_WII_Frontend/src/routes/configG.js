@@ -16,5 +16,8 @@ export const LanConfigChangedLog=writable("");
 export const ChangedLANConfig=writable("");
 
 
-export const NATConfigChangedLog=writable("");
+export const NAT_LoopBack_ConfigChangedLog=writable("");
+export const NAT_VS_ConfigChangedLog=writable("");
+export const NAT_VC_ConfigChangedLog=writable("");
+export const NAT_Dmz_ConfigChangedLog=writable("");
 export const ChangedNATConfig=writable("");

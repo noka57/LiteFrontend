@@ -14,6 +14,7 @@
 
   let lan_data="";
   let changed_lan_data = {};
+  let saved_changed_lan_data = {};
   let changedValues = [];
   let getDataReady=0;
 
@@ -34,7 +35,7 @@
 
 
   ChangedLANConfig.subscribe(val => {
-      changed_lan_data = val;
+      saved_changed_lan_data = JSON.parse(JSON.stringify(val));
   });
 
 
@@ -89,6 +90,7 @@
 
 
       changed_lan_data = JSON.parse(JSON.stringify(lan_data));
+      ChangedLANConfig.set(changed_lan_data);
       getDataReady=1;
     }
   }
@@ -113,6 +115,10 @@
       if (changedValues.length == 0)
       {
         changed_lan_data = JSON.parse(JSON.stringify(lan_data));
+      }
+      else
+      {
+        changed_lan_data = JSON.parse(JSON.stringify(saved_changed_lan_data));
       }
       getDataReady=1;
     }

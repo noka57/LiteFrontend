@@ -4,7 +4,13 @@
 	import { Hamburger } from 'svelte-hamburgers';
 	import { onMount } from 'svelte';
 	import { sessionidG } from "./sessionG.js";
-  	import { LanConfigChangedLog} from "./configG.js"
+  	import { 
+  		LanConfigChangedLog,
+  		NAT_LoopBack_ConfigChangedLog, 
+  		NAT_VS_ConfigChangedLog, 
+  		NAT_VC_ConfigChangedLog, 
+  		NAT_Dmz_ConfigChangedLog
+  	} from "./configG.js"
 
 	import {
 		Img,
@@ -84,6 +90,10 @@
   	let interval;
   	let sessionBinary;
   	let LANchangedValues = [];
+  	let NAT_loopback_changedValues =[];
+  	let NAT_virtualServer_changedValues =[];  	
+  	let NAT_virtualComputer_changedValues =[];
+  	let NAT_dmz_changedValues =[];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -102,26 +112,60 @@
     	interval = setInterval(BlinkApply, 500); 
   	};
 
+  	function JudgeChangedOrNot()
+  	{
+  		if (LANchangedValues.length != 0 ||
+  			NAT_loopback_changedValues.length != 0 ||
+  			NAT_virtualServer_changedValues.length !=0 ||
+  			NAT_virtualComputer_changedValues.length !=0 ||
+  			NAT_dmz_changedValues.length !=0)
+  		{
+  			console.log("changed !!");
+  			console.log(interval);
 
-	LanConfigChangedLog.subscribe(val => {
-    	LANchangedValues=val;
-    	if (LANchangedValues.length != 0)
-    	{
     		if (!interval)
     		{
     			startInterval();
     		}
-    	}
-    	else
-    	{
-    		if (interval)
+
+  		}
+  		else
+  		{
+  			if (interval)
     		{
     			clearInterval(interval);
+    			svg0background="";
+    			interval=0;
     		}
-    	}
+  		}
+
+  	}
+
+
+	LanConfigChangedLog.subscribe(val => {
+    	LANchangedValues=val;
+    	JudgeChangedOrNot();
   	});
 
+  	NAT_LoopBack_ConfigChangedLog.subscribe(val => {
+        NAT_loopback_changedValues = val;
+        JudgeChangedOrNot();
+    });
 
+    NAT_VC_ConfigChangedLog.subscribe(val => {
+        NAT_virtualComputer_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    NAT_VS_ConfigChangedLog.subscribe(val => {
+        NAT_virtualServer_changedValues = val;
+       	JudgeChangedOrNot();
+    });
+
+    NAT_Dmz_ConfigChangedLog.subscribe(val => {
+        NAT_dmz_changedValues = val;
+        JudgeChangedOrNot();
+    });
 
 
   	sessionidG.subscribe(val => {

@@ -21,3 +21,8 @@ export const NAT_VS_ConfigChangedLog=writable("");
 export const NAT_VC_ConfigChangedLog=writable("");
 export const NAT_Dmz_ConfigChangedLog=writable("");
 export const ChangedNATConfig=writable("");
+
+export const Firewall_General_ConfigChangedLog=writable("");
+export const Firewall_IPFilter_ConfigChangedLog=writable("");
+export const Firewall_MACFilter_ConfigChangedLog=writable("");
+export const ChangedFirewallConfig=writable("");

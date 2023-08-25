@@ -8,13 +8,17 @@
   		NAT_VS_ConfigChangedLog, 
   		NAT_VC_ConfigChangedLog, 
   		NAT_Dmz_ConfigChangedLog,
-  		ChangedNATConfig
-
+  		ChangedNATConfig,
+  		Firewall_General_ConfigChangedLog,
+    	Firewall_IPFilter_ConfigChangedLog,
+    	Firewall_MACFilter_ConfigChangedLog,
+    	ChangedFirewallConfig
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
   let lan_data="";
   let nat_data="";
+  let firewall_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -30,6 +34,12 @@
   let NAT_virtualComputer_changedValues =[];
   let NAT_dmz_changedValues =[];
 
+  let ContentFirewall; 
+  let firewallBinary=null;
+  let Firewall_general_changedValues = [];
+  let Firewall_ipfilter_changedValues = [];
+  let Firewall_macfilter_changedValues = [];
+
 
 	sessionidG.subscribe(val => {
 	     sessionid = val;
@@ -43,6 +53,10 @@
       nat_data = val;
   });
 
+
+  ChangedFirewallConfig.subscribe(val => {
+      firewall_data = val;
+  });
 
   LanConfigChangedLog.subscribe(val => {
     	LANchangedValues=val;
@@ -64,7 +78,20 @@
 
 	NAT_Dmz_ConfigChangedLog.subscribe(val => {
 	    NAT_dmz_changedValues = val;
-	});  
+	});
+
+ 	Firewall_General_ConfigChangedLog.subscribe(val => {
+      Firewall_general_changedValues = val;
+  });
+
+  Firewall_IPFilter_ConfigChangedLog.subscribe(val => {
+      Firewall_ipfilter_changedValues = val;
+
+  });
+
+  Firewall_MACFilter_ConfigChangedLog.subscribe(val => {
+     Firewall_macfilter_changedValues = val;
+  });  
 
 	async function SetLANData() {
 	    const res = await fetch(window.location.origin+"/SetLanData", {
@@ -87,6 +114,18 @@
 	  if (res.status == 200)
 	  {
 	  	console.log("set nat data OK\r\n");
+	  }
+	};
+
+	async function SetFirewallData() {
+	    const res = await fetch(window.location.origin+"/SetFirewallData", {
+	      method: 'POST',
+	      body: ContentFirewall
+	    })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set firewall data OK\r\n");
 	  }
 	};
 
@@ -121,6 +160,18 @@
 	        ContentNAT.set(natBinary, sessionBinary.length);
 	        SetNATData();
         }
+
+        if (firewall_data != "")
+        {
+        	let FirewallString = JSON.stringify(firewall_data, null, 0);
+					const bytesArray = Array.from(FirewallString).map(char => char.charCodeAt(0));
+	    		firewallBinary = new Uint8Array(bytesArray);
+	      	ContentFirewall=new Uint8Array(firewallBinary.length+sessionBinary.length);
+	        ContentFirewall.set(sessionBinary,0);
+	        ContentFirewall.set(firewallBinary, sessionBinary.length);
+	        SetFirewallData();
+
+        }
       }
 
 
@@ -135,6 +186,7 @@
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+
 {#if LANchangedValues.length!=0}
   <Li>LAN
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
@@ -144,6 +196,8 @@
   </List>
   </Li>
 {/if}
+
+
 {#if NAT_loopback_changedValues.length !=0 || 
 		NAT_virtualServer_changedValues.length !=0 ||
 		NAT_virtualComputer_changedValues.length !=0 ||
@@ -203,6 +257,54 @@
 	{/if}
 
   </Li>
+{/if}
+
+
+{#if Firewall_general_changedValues.length !=0 || 
+		Firewall_ipfilter_changedValues.length !=0 ||
+		Firewall_macfilter_changedValues.length !=0
+		}
+  <Li>Firewall
+ {#if Firewall_general_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	General
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each Firewall_general_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if Firewall_ipfilter_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	IP Filter
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each Firewall_ipfilter_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if Firewall_macfilter_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	MAC Filter
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each Firewall_macfilter_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+  </Li>	
+
 {/if}
 </List>
 

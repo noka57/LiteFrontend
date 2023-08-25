@@ -9,7 +9,10 @@
   		NAT_LoopBack_ConfigChangedLog, 
   		NAT_VS_ConfigChangedLog, 
   		NAT_VC_ConfigChangedLog, 
-  		NAT_Dmz_ConfigChangedLog
+  		NAT_Dmz_ConfigChangedLog,
+  		Firewall_General_ConfigChangedLog,
+    	Firewall_IPFilter_ConfigChangedLog,
+    	Firewall_MACFilter_ConfigChangedLog
   	} from "./configG.js"
 
 	import {
@@ -94,6 +97,9 @@
   	let NAT_virtualServer_changedValues =[];  	
   	let NAT_virtualComputer_changedValues =[];
   	let NAT_dmz_changedValues =[];
+  	let Firewall_general_changedValues = [];
+  	let Firewall_ipfilter_changedValues = [];
+  	let Firewall_macfilter_changedValues = [];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -118,9 +124,12 @@
   			NAT_loopback_changedValues.length != 0 ||
   			NAT_virtualServer_changedValues.length !=0 ||
   			NAT_virtualComputer_changedValues.length !=0 ||
-  			NAT_dmz_changedValues.length !=0)
+  			NAT_dmz_changedValues.length !=0 ||
+  			Firewall_general_changedValues.length !=0 ||
+  			Firewall_ipfilter_changedValues.length !=0 ||
+  			Firewall_macfilter_changedValues.length !=0
+  			)
   		{
-  			console.log(interval);
 
     		if (!interval)
     		{
@@ -165,6 +174,22 @@
         NAT_dmz_changedValues = val;
         JudgeChangedOrNot();
     });
+
+ 	Firewall_General_ConfigChangedLog.subscribe(val => {
+      	Firewall_general_changedValues = val;
+       	JudgeChangedOrNot();
+  	});
+
+  	Firewall_IPFilter_ConfigChangedLog.subscribe(val => {
+      	Firewall_ipfilter_changedValues = val;
+      	JudgeChangedOrNot();
+  	});
+
+
+  	Firewall_MACFilter_ConfigChangedLog.subscribe(val => {
+      	Firewall_macfilter_changedValues = val;
+        JudgeChangedOrNot();
+  	});
 
 
   	sessionidG.subscribe(val => {

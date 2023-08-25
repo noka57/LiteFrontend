@@ -27,13 +27,10 @@
   let new_ipfilter_index;
   let new_macfilter_index;
 
-
-  let NewMacFilterItem=[0,""];
-
-  let newformModal=false;
-  let newformModal2=false;
-  let formModal = false;
-  let formModal2 = false;
+  let newformModalIP=false;
+  let newformModalMAC=false;
+  let formModalIP = false;
+  let formModalMAC = false;
   let getDataReady=0;    
   
   let sessionid;
@@ -326,7 +323,7 @@
       newIPF_Item[index].dstPortRange.end=0;
 
       new_ipfilter_index=index;
-      newformModal = true;
+      newformModalIP = true;
   }
 
   let newMAF_Item=[
@@ -378,7 +375,7 @@
     newMAF_Item[index].macAddr="";
 
     new_macfilter_index=index;
-    newformModal2 = true
+    newformModalMAC = true
   }
 
   function saveIpFilter()
@@ -443,7 +440,7 @@
 
   function AddIPF(index)
   {
-    newformModal = false;
+    newformModalIP = false;
 
     changed_firewall_data.config.networking_firewall_ipFilter.list=[...changed_firewall_data.config.networking_firewall_ipFilter.list,newIPF_Item[index]];
   }
@@ -451,7 +448,7 @@
 
   function AddMAF(index)
   {
-    newformModal2 = false;
+    newformModalMAC = false;
 
     changed_firewall_data.config.networking_firewall_macFilter.list=[...changed_firewall_data.config.networking_firewall_macFilter.list,newMAF_Item[index]];
   }
@@ -485,7 +482,7 @@
 
   function NoModifyIPF(index)
   {
-    formModal = false;
+    formModalIP = false;
     changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable;
     
     changed_firewall_data.config.networking_firewall_ipFilter.list[index].fromIf= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].fromIf;
@@ -508,7 +505,7 @@
 
   function NoModifyMAF(index)
   {
-    formModal2 = false;
+    formModalMAC = false;
     changed_firewall_data.config.networking_firewall_macFilter.list[index].enable= saved_changed_firewall_data.config.networking_firewall_macFilter.list[index].enable;
     
     changed_firewall_data.config.networking_firewall_macFilter.list[index].macAddr= saved_changed_firewall_data.config.networking_firewall_macFilter.list[index].macAddr;   
@@ -517,23 +514,23 @@
 
   function ModifyIPF(index)
   {
-    formModal = false;
+    formModalIP = false;
   }
 
   function ModifyMAF(index)
   {
-    formModal2 = false;
+    formModalMAC = false;
   }
 
 
-  function modalTrigger(index){
-    formModal = true;
+  function modalTriggerIP(index){
+    formModalIP = true;
     ipfilter_current_index=index;
   }
 
 
-  function modalTrigger2(index){
-    formModal2 = true;
+  function modalTriggerMAC(index){
+    formModalMAC = true;
     macfilter_current_index=index;
   }
 
@@ -673,7 +670,7 @@
 
       </TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger(index)}>
+<button on:click={() => modalTriggerIP(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -770,7 +767,7 @@
     </tr>
 
 
-<Modal bind:open={newformModal} size="lg" class="w-full" autoclose>
+<Modal bind:open={newformModalIP} size="lg" class="w-full" autoclose>
   <form action="#">
 
 
@@ -865,7 +862,7 @@
 </Modal>
 
 
-<Modal bind:open={formModal} size="lg" class="w-full" permanent={true}>
+<Modal bind:open={formModalIP} size="lg" class="w-full" permanent={true}>
   <form action="#">
 
 
@@ -1018,7 +1015,7 @@
 
       </TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger2(index)}>
+<button on:click={() => modalTriggerMAC(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1078,7 +1075,7 @@
 
 
 
-<Modal bind:open={newformModal2} size="sm" class="w-full" autoclose>
+<Modal bind:open={newformModalMAC} size="sm" class="w-full" autoclose>
   <form action="#">
 
 
@@ -1112,7 +1109,7 @@
 
 
 
-<Modal bind:open={formModal2} size="sm" class="w-full" permanent={true}>
+<Modal bind:open={formModalMAC} size="sm" class="w-full" permanent={true}>
   <form action="#">
 
 

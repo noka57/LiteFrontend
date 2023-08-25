@@ -26,3 +26,6 @@ export const Firewall_General_ConfigChangedLog=writable("");
 export const Firewall_IPFilter_ConfigChangedLog=writable("");
 export const Firewall_MACFilter_ConfigChangedLog=writable("");
 export const ChangedFirewallConfig=writable("");
+
+export const StaticRouteConfigChangedLog=writable("");
+export const ChangedStaticRouteConfig=writable("");

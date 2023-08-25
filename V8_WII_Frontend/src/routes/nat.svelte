@@ -6,14 +6,10 @@
   import { sessionidG } from "./sessionG.js";
   import {natConfig, ChangedNATConfig, NAT_LoopBack_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_Dmz_ConfigChangedLog} from "./configG.js"
 
-   let formModal = false;
-   let newformModal=false;
-   let formModal2 = false;
-   let newformModal2=false;
-
-   let VirtualServerArrays = [];
-   let VirtualComputerArrays = [];
-
+   let formModalVS = false;
+   let newformModalVS=false;
+   let formModalVC = false;
+   let newformModalVC=false;
 
    let virtualserver_current_index;
    let virtualcomputer_current_index;
@@ -227,9 +223,9 @@
     }
 
 
-    function modalTrigger(index)
+    function modalTriggerVS(index)
     {
-      formModal = true;
+      formModalVS = true;
       virtualserver_current_index=index;
     }
 
@@ -532,7 +528,7 @@
       newVS_Item[index].privPortRange.end=0;
 
       new_vs_index=index;
-      newformModal = true;
+      newformModalVS = true;
 
    }
 
@@ -543,7 +539,7 @@
       newVC_Item[index].localIp="";
 
       new_vc_index=index;
-      newformModal2 = true;
+      newformModalVC = true;
 
    }
 
@@ -574,12 +570,12 @@
 
    function ModifyVS(index)
    {
-      formModal = false;
+      formModalVS = false;
    }
 
    function NoModifyVS(index)
    {
-      formModal = false;
+      formModalVS = false;
       changed_nat_data.config.networking_nat_virtualServer.list[index].enable= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].enable;
 
       changed_nat_data.config.networking_nat_virtualServer.list[index].wanIf= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].wanIf;
@@ -609,12 +605,12 @@
 
    function ModifyVC(index)
    {
-      formModal2 = false;
+      formModalVC = false;
    }
 
    function NoModifyVC(index)
    {
-      formModal2 = false; 
+      formModalVC = false; 
 
       changed_nat_data.config.networking_nat_virtualComputer.list[index].enable= saved_changed_nat_data.config.networking_nat_virtualComputer.list[index].enable;
 
@@ -625,7 +621,7 @@
 
    function AddVS(index)
    {
-      newformModal = false;
+      newformModalVS = false;
 
       changed_nat_data.config.networking_nat_virtualServer.list=[...changed_nat_data.config.networking_nat_virtualServer.list,newVS_Item[index]];
    }
@@ -633,14 +629,14 @@
 
    function AddVC(index)
    {
-      newformModal2 = false;
+      newformModalVC = false;
 
       changed_nat_data.config.networking_nat_virtualComputer.list=[...changed_nat_data.config.networking_nat_virtualComputer.list, newVC_Item[index]];
    }
 
 
-    function modalTrigger2(index){
-      formModal2 = true;
+    function modalTriggerVC(index){
+      formModalVC = true;
       virtualcomputer_current_index=index;
    }
 
@@ -783,7 +779,7 @@
 
       </TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger(index)}>
+<button on:click={() => modalTriggerVS(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -880,7 +876,7 @@
     </tr>
 
 
-<Modal bind:open={newformModal} size="lg" class="w-full" autoclose>
+<Modal bind:open={newformModalVS} size="lg" class="w-full" autoclose>
   <form action="#">
 
 <label>
@@ -977,7 +973,7 @@
 
 
 
-<Modal bind:open={formModal} size="lg" class="w-full" permanent={true}>
+<Modal bind:open={formModalVS} size="lg" class="w-full" permanent={true}>
   <form action="#">
 
 <label>
@@ -1134,7 +1130,7 @@
 
       </TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger2(index)}>
+<button on:click={() => modalTriggerVC(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1196,7 +1192,7 @@
     </tr>
 
 
-<Modal bind:open={newformModal2} size="sm" class="w-full" autoclose>
+<Modal bind:open={newformModalVC} size="sm" class="w-full" autoclose>
   <form action="#">
 
 <label>
@@ -1241,7 +1237,7 @@
 </Modal>
 
 
-<Modal bind:open={formModal2} size="sm" class="w-full" permanent={true}>
+<Modal bind:open={formModalVC} size="sm" class="w-full" permanent={true}>
   <form action="#">
 
 <label>

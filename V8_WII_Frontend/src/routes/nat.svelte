@@ -222,11 +222,42 @@
       console.log(loopback_changedValues);
     }
 
+    let BackupVSItem=
+    {
+      "enable": 0,
+      "wanIf": 0,
+      "serverIp": "",
+      "sourceIp": "",
+      "protocol": "TCP",
+      "pubPort": 0,
+      "pubPortRange": {
+        "start": 0,
+        "end": 0
+      },
+      "privPort": 0,
+      "privPortRange": {
+        "start": 0,
+        "end": 0
+      }
+    };
+
 
     function modalTriggerVS(index)
     {
       formModalVS = true;
       virtualserver_current_index=index;
+
+      BackupVSItem.enable=changed_nat_data.config.networking_nat_virtualServer.list[index].enable;
+      BackupVSItem.wanIf=changed_nat_data.config.networking_nat_virtualServer.list[index].wanIf;
+      BackupVSItem.serverIp=changed_nat_data.config.networking_nat_virtualServer.list[index].serverIp;
+      BackupVSItem.sourceIp=changed_nat_data.config.networking_nat_virtualServer.list[index].sourceIp;
+      BackupVSItem.protocol=changed_nat_data.config.networking_nat_virtualServer.list[index].protocol;
+      BackupVSItem.pubPort=changed_nat_data.config.networking_nat_virtualServer.list[index].pubPort;
+      BackupVSItem.pubPortRange.start=changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.start;
+      BackupVSItem.pubPortRange.end=changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.end;
+      BackupVSItem.privPort=changed_nat_data.config.networking_nat_virtualServer.list[index].privPort;
+      BackupVSItem.privPortRange.start=changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.start;
+      BackupVSItem.privPortRange.end=changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.end;
     }
 
 
@@ -304,6 +335,12 @@
         changed_nat_data.config.networking_nat_dmz.enable=1;
       }
     }
+
+    let BackupVC_Item={
+      "enable": 0,
+      "globalIp": "",
+      "localIp": ""
+    };
 
 
     let newVC_Item=[{
@@ -576,29 +613,29 @@
    function NoModifyVS(index)
    {
       formModalVS = false;
-      changed_nat_data.config.networking_nat_virtualServer.list[index].enable= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].enable;
+      changed_nat_data.config.networking_nat_virtualServer.list[index].enable= BackupVSItem.enable;
 
-      changed_nat_data.config.networking_nat_virtualServer.list[index].wanIf= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].wanIf;
-
-
-      changed_nat_data.config.networking_nat_virtualServer.list[index].serverIp= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].serverIp;
-
-      changed_nat_data.config.networking_nat_virtualServer.list[index].sourceIp= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].sourceIp;
+      changed_nat_data.config.networking_nat_virtualServer.list[index].wanIf= BackupVSItem.wanIf;
 
 
-      changed_nat_data.config.networking_nat_virtualServer.list[index].protocol= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].protocol;
+      changed_nat_data.config.networking_nat_virtualServer.list[index].serverIp= BackupVSItem.serverIp;
 
-      changed_nat_data.config.networking_nat_virtualServer.list[index].pubPort= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].pubPort;
+      changed_nat_data.config.networking_nat_virtualServer.list[index].sourceIp= BackupVSItem.sourceIp;
 
-      changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.start= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.start;
 
-      changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.end= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.end;
+      changed_nat_data.config.networking_nat_virtualServer.list[index].protocol= BackupVSItem.protocol;
 
-      changed_nat_data.config.networking_nat_virtualServer.list[index].privPort= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].privPort;
+      changed_nat_data.config.networking_nat_virtualServer.list[index].pubPort= BackupVSItem.pubPort;
 
-      changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.start= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.start;
+      changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.start= BackupVSItem.pubPortRange.start;
 
-      changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.end= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.end;
+      changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.end= BackupVSItem.pubPortRange.end;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].privPort= BackupVSItem.privPort;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.start= BackupVSItem.privPortRange.start;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.end= BackupVSItem.privPortRange.end;
 
    }
 
@@ -612,11 +649,9 @@
    {
       formModalVC = false; 
 
-      changed_nat_data.config.networking_nat_virtualComputer.list[index].enable= saved_changed_nat_data.config.networking_nat_virtualComputer.list[index].enable;
-
-      changed_nat_data.config.networking_nat_virtualComputer.list[index].globalIp= saved_changed_nat_data.config.networking_nat_virtualComputer.list[index].globalIp;
-   
-      changed_nat_data.config.networking_nat_virtualComputer.list[index].localIp= saved_changed_nat_data.config.networking_nat_virtualComputer.list[index].localIp;
+      changed_nat_data.config.networking_nat_virtualComputer.list[index].enable= BackupVC_Item.enable;
+      changed_nat_data.config.networking_nat_virtualComputer.list[index].globalIp= BackupVC_Item.globalIp;
+      changed_nat_data.config.networking_nat_virtualComputer.list[index].localIp= BackupVC_Item.localIp;
    }
 
    function AddVS(index)
@@ -638,6 +673,9 @@
     function modalTriggerVC(index){
       formModalVC = true;
       virtualcomputer_current_index=index;
+      BackupVC_Item.enable=changed_nat_data.config.networking_nat_virtualComputer.list[index].enable;
+      BackupVC_Item.globalIp=changed_nat_data.config.networking_nat_virtualComputer.list[index].globalIp;
+      BackupVC_Item.localIp=changed_nat_data.config.networking_nat_virtualComputer.list[index].localIp;
    }
 
 

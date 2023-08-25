@@ -239,7 +239,7 @@
     
     compareObjects(changed_staticR_data.config.networking_staticRoute, static_route_data.config.networking_staticRoute,0,0,0);
     StaticRouteConfigChangedLog.set(staticR_changedValues);
-    ChangedStaticRouteConfig.set(changed_firewall_data);
+    ChangedStaticRouteConfig.set(changed_staticR_data);
     
     console.log(staticR_changedValues);
   }

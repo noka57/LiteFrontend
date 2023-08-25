@@ -12,13 +12,17 @@
   		Firewall_General_ConfigChangedLog,
     	Firewall_IPFilter_ConfigChangedLog,
     	Firewall_MACFilter_ConfigChangedLog,
-    	ChangedFirewallConfig
+    	ChangedFirewallConfig,
+    	StaticRouteConfigChangedLog,
+      ChangedStaticRouteConfig 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
   let lan_data="";
   let nat_data="";
   let firewall_data="";
+  let static_route_data="";
+
 
 	let sessionid;
   let sessionBinary;
@@ -40,6 +44,9 @@
   let Firewall_ipfilter_changedValues = [];
   let Firewall_macfilter_changedValues = [];
 
+  let ContentStaticR;
+  let staticRBinary=null;
+  let staticR_changedValues = [];
 
 	sessionidG.subscribe(val => {
 	     sessionid = val;
@@ -56,6 +63,10 @@
 
   ChangedFirewallConfig.subscribe(val => {
       firewall_data = val;
+  });
+
+  ChangedStaticRouteConfig.subscribe(val => {
+      static_route_data = val;
   });
 
   LanConfigChangedLog.subscribe(val => {
@@ -91,6 +102,10 @@
 
   Firewall_MACFilter_ConfigChangedLog.subscribe(val => {
      Firewall_macfilter_changedValues = val;
+  });
+
+ 	StaticRouteConfigChangedLog.subscribe(val => {
+      staticR_changedValues = val;
   });  
 
 	async function SetLANData() {
@@ -128,6 +143,19 @@
 	  	console.log("set firewall data OK\r\n");
 	  }
 	};
+
+	async function SetStaticRData() {
+	    const res = await fetch(window.location.origin+"/SetStaticRdata", {
+	      method: 'POST',
+	      body: ContentStaticR
+	    })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set static route data OK\r\n");
+	  }
+	};
+
 
 
 	function modalTrigger()
@@ -171,6 +199,17 @@
 	        ContentFirewall.set(firewallBinary, sessionBinary.length);
 	        SetFirewallData();
 
+        }
+
+        if (static_route_data !="")
+        {
+          let StaticRString = JSON.stringify(static_route_data, null, 0);
+					const bytesArray = Array.from(StaticRString).map(char => char.charCodeAt(0));
+	    		staticRBinary = new Uint8Array(bytesArray);
+	      	ContentStaticR=new Uint8Array(staticRBinary.length+sessionBinary.length);
+	        ContentStaticR.set(sessionBinary,0);
+	        ContentStaticR.set(staticRBinary, sessionBinary.length);
+        	SetStaticRData();
         }
       }
 
@@ -304,8 +343,19 @@
   </List>
 	{/if}
   </Li>	
-
 {/if}
+
+{#if staticR_changedValues.length !=0}
+  <Li>Static Route
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each staticR_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+{/if}
+
+
 </List>
 
 </div>

@@ -171,6 +171,20 @@
     console.log(general_changedValues);
   }
 
+  let BackupIPF={
+        "enable": 0,
+        "fromIf": 0,
+        "toIf": 0,
+        "srcIp": "",
+        "dstIp": "",
+        "protocol": "TCP",
+        "dstPort": 0,
+        "dstPortRange": {
+          "start": 22222, 
+          "end": 22225
+        }
+      };
+
   let newIPF_Item=[
       {
         "enable": 0,
@@ -325,6 +339,12 @@
       new_ipfilter_index=index;
       newformModalIP = true;
   }
+
+  let BackupMAF=
+  {
+      "enable": 0,
+      "macAddr": "00:11:22:33:44:55"
+  };
 
   let newMAF_Item=[
     {
@@ -483,32 +503,31 @@
   function NoModifyIPF(index)
   {
     formModalIP = false;
-    changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable;
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable= BackupIPF.enable;
     
-    changed_firewall_data.config.networking_firewall_ipFilter.list[index].fromIf= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].fromIf;
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].fromIf= BackupIPF.fromIf;
 
-    changed_firewall_data.config.networking_firewall_ipFilter.list[index].toIf= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].toIf;
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].toIf= BackupIPF.toIf;
 
-    changed_firewall_data.config.networking_firewall_ipFilter.list[index].srcIp= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].srcIp;
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].srcIp= BackupIPF.srcIp;
 
-    changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstIp= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstIp;
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstIp= BackupIPF.dstIp;
 
-    changed_firewall_data.config.networking_firewall_ipFilter.list[index].protocol= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].protocol;
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].protocol= BackupIPF.protocol;
 
-    changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPort= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPort;
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPort= BackupIPF.dstPort;
 
-    changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPortRange.start= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPortRange.start;
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPortRange.start= BackupIPF.dstPortRange.start;
 
-
-    changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPortRange.end= saved_changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPortRange.end;
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPortRange.end= BackupIPF.dstPortRange.end;
   }
 
   function NoModifyMAF(index)
   {
     formModalMAC = false;
-    changed_firewall_data.config.networking_firewall_macFilter.list[index].enable= saved_changed_firewall_data.config.networking_firewall_macFilter.list[index].enable;
+    changed_firewall_data.config.networking_firewall_macFilter.list[index].enable= BackupMAF.enable;
     
-    changed_firewall_data.config.networking_firewall_macFilter.list[index].macAddr= saved_changed_firewall_data.config.networking_firewall_macFilter.list[index].macAddr;   
+    changed_firewall_data.config.networking_firewall_macFilter.list[index].macAddr= BackupMAF.macAddr;   
       
   }
 
@@ -526,12 +545,32 @@
   function modalTriggerIP(index){
     formModalIP = true;
     ipfilter_current_index=index;
+
+    BackupIPF.enable=changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable;
+    BackupIPF.fromIf=changed_firewall_data.config.networking_firewall_ipFilter.list[index].fromIf;
+    BackupIPF.toIf=changed_firewall_data.config.networking_firewall_ipFilter.list[index].toIf
+
+    BackupIPF.srcIp=changed_firewall_data.config.networking_firewall_ipFilter.list[index].srcIp;
+
+    BackupIPF.dstIp=changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstIp;
+
+    BackupIPF.protocol=changed_firewall_data.config.networking_firewall_ipFilter.list[index].protocol;
+
+    BackupIPF.dstPort=changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPort;
+
+    BackupIPF.dstPortRange.start=changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPortRange.start;
+
+    BackupIPF.dstPortRange.end=changed_firewall_data.config.networking_firewall_ipFilter.list[index].dstPortRange.end;
   }
 
 
   function modalTriggerMAC(index){
     formModalMAC = true;
     macfilter_current_index=index;
+
+    BackupMAF.enable=changed_firewall_data.config.networking_firewall_macFilter.list[index].enable;
+    
+    BackupMAF.macAddr=changed_firewall_data.config.networking_firewall_macFilter.list[index].macAddr;   
   }
 
 

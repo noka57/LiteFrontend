@@ -12,7 +12,8 @@
   		NAT_Dmz_ConfigChangedLog,
   		Firewall_General_ConfigChangedLog,
     	Firewall_IPFilter_ConfigChangedLog,
-    	Firewall_MACFilter_ConfigChangedLog
+    	Firewall_MACFilter_ConfigChangedLog,
+    	StaticRouteConfigChangedLog
   	} from "./configG.js"
 
 	import {
@@ -100,6 +101,7 @@
   	let Firewall_general_changedValues = [];
   	let Firewall_ipfilter_changedValues = [];
   	let Firewall_macfilter_changedValues = [];
+  	let staticR_changedValues = [];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -111,8 +113,6 @@
     		svg0background="";
     	}
   	};
-
-
 
  	const startInterval = () => {
     	interval = setInterval(BlinkApply, 500); 
@@ -127,7 +127,8 @@
   			NAT_dmz_changedValues.length !=0 ||
   			Firewall_general_changedValues.length !=0 ||
   			Firewall_ipfilter_changedValues.length !=0 ||
-  			Firewall_macfilter_changedValues.length !=0
+  			Firewall_macfilter_changedValues.length !=0 ||
+  			staticR_changedValues.length != 0
   			)
   		{
 
@@ -189,6 +190,12 @@
   	Firewall_MACFilter_ConfigChangedLog.subscribe(val => {
       	Firewall_macfilter_changedValues = val;
         JudgeChangedOrNot();
+  	});
+
+
+  	StaticRouteConfigChangedLog.subscribe(val => {
+      staticR_changedValues = val;
+      JudgeChangedOrNot();
   	});
 
 

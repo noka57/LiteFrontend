@@ -58,22 +58,86 @@
     });
 
     ChangedNATConfig.subscribe(val => {
-      saved_changed_nat_data = JSON.parse(JSON.stringify(val));
+      saved_changed_nat_data = val;
     });
 
 
 
-    function compareObjects(obj1, obj2, type) 
+
+
+    function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
     {
       for (const key in obj1) 
       {
         if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
         {
-          compareObjects(obj1[key], obj2[key], type);
+          if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) 
+          {
+            for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+            {
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+            }
+
+            if (obj1[key].length > obj2[key].length) 
+            {
+              let addedCount=obj1[key].length-obj2[key].length;
+              let changedstr="Add "+addedCount+" item(s) to "+ key;
+              if (type == 3)
+              {
+                dmz_changedValues=[...dmz_changedValues, changedstr];
+              }
+              else if (type == 2)
+              {
+                vc_changedValues=[...vc_changedValues, changedstr];
+              }
+              else if (type == 1)
+              {
+                vs_changedValues=[...vs_changedValues, changedstr];
+              }
+              else if (type == 0)
+              {
+                loopback_changedValues=[...loopback_changedValues, changedstr]; 
+              }
+            }
+            else if (obj1[key].length < obj2[key].length)
+            {
+              let deletedCount=obj2[key].length-obj1[key].length;
+              let changedstr="Delete "+deletedCount+" item(s) from "+ key;
+              if (type == 3)
+              {
+                dmz_changedValues=[...dmz_changedValues, changedstr];
+              }
+              else if (type == 2)
+              {
+                vc_changedValues=[...vc_changedValues, changedstr];
+              }
+              else if (type == 1)
+              {
+                vs_changedValues=[...vs_changedValues, changedstr];
+              }
+              else if (type == 0)
+              {
+                loopback_changedValues=[...loopback_changedValues, changedstr]; 
+              }
+            }
+          }
+          else
+          {
+            compareObjects(obj1[key], obj2[key], type, 0,0);
+          }
         } 
         else if (obj1[key] != obj2[key]) 
         {
-          let changedstr="Value of "+key+" has changed to "+obj1[key];
+          let changedstr="";
+          if (isArrayItem == 0)
+          {
+            changedstr="Value of "+key+" has changed to "+obj1[key];
+          }
+          else
+          {
+            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+          }
+          
           if (type == 3)
           {
             dmz_changedValues=[...dmz_changedValues, changedstr];
@@ -104,7 +168,7 @@
           dmz_changedValues=[];
         }
 
-        compareObjects(changed_nat_data.config.networking_nat_dmz, nat_data.config.networking_nat_dmz,3);
+        compareObjects(changed_nat_data.config.networking_nat_dmz, nat_data.config.networking_nat_dmz,3,0,0);
 
 
         NAT_Dmz_ConfigChangedLog.set(dmz_changedValues);
@@ -121,7 +185,7 @@
         vc_changedValues=[];
       }
 
-      compareObjects(changed_nat_data.config.networking_nat_virtualComputer, nat_data.config.networking_nat_virtualComputer,2);
+      compareObjects(changed_nat_data.config.networking_nat_virtualComputer, nat_data.config.networking_nat_virtualComputer,2,0,0);
 
 
       NAT_VC_ConfigChangedLog.set(vc_changedValues);
@@ -138,7 +202,7 @@
         vs_changedValues=[];
       }
 
-      compareObjects(changed_nat_data.config.networking_nat_virtualServer, nat_data.config.networking_nat_virtualServer,1);
+      compareObjects(changed_nat_data.config.networking_nat_virtualServer, nat_data.config.networking_nat_virtualServer,1,0,0);
 
 
       NAT_VS_ConfigChangedLog.set(vs_changedValues);
@@ -155,7 +219,7 @@
         loopback_changedValues=[];
       }
 
-      compareObjects(changed_nat_data.config.networking_nat_loopback, nat_data.config.networking_nat_loopback,0);
+      compareObjects(changed_nat_data.config.networking_nat_loopback, nat_data.config.networking_nat_loopback,0,0,0);
       NAT_LoopBack_ConfigChangedLog.set(loopback_changedValues);
       ChangedNATConfig.set(changed_nat_data);
     
@@ -513,10 +577,50 @@
       formModal = false;
    }
 
+   function NoModifyVS(index)
+   {
+      formModal = false;
+      changed_nat_data.config.networking_nat_virtualServer.list[index].enable= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].enable;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].wanIf= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].wanIf;
+
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].serverIp= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].serverIp;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].sourceIp= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].sourceIp;
+
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].protocol= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].protocol;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].pubPort= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].pubPort;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.start= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.start;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.end= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].pubPortRange.end;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].privPort= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].privPort;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.start= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.start;
+
+      changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.end= saved_changed_nat_data.config.networking_nat_virtualServer.list[index].privPortRange.end;
+
+   }
+
 
    function ModifyVC(index)
    {
       formModal2 = false;
+   }
+
+   function NoModifyVC(index)
+   {
+      formModal2 = false; 
+
+      changed_nat_data.config.networking_nat_virtualComputer.list[index].enable= saved_changed_nat_data.config.networking_nat_virtualComputer.list[index].enable;
+
+      changed_nat_data.config.networking_nat_virtualComputer.list[index].globalIp= saved_changed_nat_data.config.networking_nat_virtualComputer.list[index].globalIp;
+   
+      changed_nat_data.config.networking_nat_virtualComputer.list[index].localIp= saved_changed_nat_data.config.networking_nat_virtualComputer.list[index].localIp;
    }
 
    function AddVS(index)
@@ -554,7 +658,8 @@
       natConfig.set(nat_data);
 
       changed_nat_data = JSON.parse(JSON.stringify(nat_data));
-      ChangedNATConfig.set(changed_nat_data);
+      saved_changed_nat_data= JSON.parse(JSON.stringify(nat_data));
+      ChangedNATConfig.set(saved_changed_nat_data);
       getDataReady=1;
       
     }
@@ -593,8 +698,8 @@
 
       if (vc_changedValues.length == 0)
       {
-        changed_nat_data=JSON.parse(JSON.stringify(saved_changed_nat_data));
-        changed_nat_data.config.networking_nat_virtualComputer = JSON.parse(JSON.stringify(nat_data.config.networking_nat_virtualComputer));     
+        changed_nat_data=JSON.parse(JSON.stringify(saved_changed_nat_data));  
+        changed_nat_data.config.networking_nat_virtualComputer = JSON.parse(JSON.stringify(nat_data.config.networking_nat_virtualComputer)); 
       }
 
       if (loopback_changedValues.length == 0)
@@ -882,6 +987,9 @@
   Enable
 </label>
 
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyVS(virtualserver_current_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+
 <p class="mt-10"></p>
 
 <table>
@@ -1088,7 +1196,7 @@
     </tr>
 
 
-<Modal bind:open={newformModal2} size="md" class="w-full" autoclose>
+<Modal bind:open={newformModal2} size="sm" class="w-full" autoclose>
   <form action="#">
 
 <label>
@@ -1102,7 +1210,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Global IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newVC_Item[new_vc_index].globalIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-4"><p class="pt-4 text-lg font-light text-right">Global IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newVC_Item[new_vc_index].globalIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -1112,7 +1220,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newVC_Item[new_vc_index].localIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-4"><p class="pt-4 text-lg font-light text-right">Local IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newVC_Item[new_vc_index].localIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -1133,7 +1241,7 @@
 </Modal>
 
 
-<Modal bind:open={formModal2} size="md" class="w-full" permanent={true}>
+<Modal bind:open={formModal2} size="sm" class="w-full" permanent={true}>
   <form action="#">
 
 <label>
@@ -1144,6 +1252,10 @@
 
 </label>
 
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyVC(virtualcomputer_current_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+
 <p class="mt-10"></p>
 
 <table>
@@ -1151,7 +1263,7 @@
 
 <tr>
 {#if getDataReady == 1}
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Global IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_nat_virtualComputer.list[virtualcomputer_current_index].globalIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-4"><p class="pt-4 text-lg font-light text-right">Global IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_nat_virtualComputer.list[virtualcomputer_current_index].globalIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 {/if}
 
 
@@ -1162,7 +1274,7 @@
 
 <tr>
 {#if getDataReady == 1}
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_nat_virtualComputer.list[virtualcomputer_current_index].localIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-4"><p class="pt-4 text-lg font-light text-right">Local IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_nat_virtualComputer.list[virtualcomputer_current_index].localIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 {/if}
 
 

@@ -120,7 +120,6 @@
   			NAT_virtualComputer_changedValues.length !=0 ||
   			NAT_dmz_changedValues.length !=0)
   		{
-  			console.log("changed !!");
   			console.log(interval);
 
     		if (!interval)

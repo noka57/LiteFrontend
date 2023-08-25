@@ -1,34 +1,75 @@
 <script>
 	import { List, Li, Heading,Button, Modal} from 'flowbite-svelte';
 	import { sessionidG } from "./sessionG.js";
-	import {LanConfigChangedLog, ChangedLANConfig} from "./configG.js"
+	import { 
+			LanConfigChangedLog, 
+			ChangedLANConfig,
+			NAT_LoopBack_ConfigChangedLog, 
+  		NAT_VS_ConfigChangedLog, 
+  		NAT_VC_ConfigChangedLog, 
+  		NAT_Dmz_ConfigChangedLog,
+  		ChangedNATConfig
+
+			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
   let lan_data="";
+  let nat_data="";
 
 	let sessionid;
-	let Content; 
   let sessionBinary;
+  let ContentLAN; 
   let lanBinary=null;
   let LANchangedValues = [];
+
+
+  let ContentNAT; 
+  let natBinary=null;
+  let NAT_loopback_changedValues =[];
+  let NAT_virtualServer_changedValues =[];  	
+  let NAT_virtualComputer_changedValues =[];
+  let NAT_dmz_changedValues =[];
+
+
 	sessionidG.subscribe(val => {
 	     sessionid = val;
 	});
 
 	ChangedLANConfig.subscribe(val => {
-        lan_data = val;
-  	});
+      lan_data = val;
+  });
+
+  ChangedNATConfig.subscribe(val => {
+      nat_data = val;
+  });
+
 
   LanConfigChangedLog.subscribe(val => {
     	LANchangedValues=val;
   });
 
-  
+
+	NAT_LoopBack_ConfigChangedLog.subscribe(val => {
+	  	NAT_loopback_changedValues = val;
+
+	});
+
+	NAT_VC_ConfigChangedLog.subscribe(val => {
+	    NAT_virtualComputer_changedValues = val;
+	});
+
+	NAT_VS_ConfigChangedLog.subscribe(val => {
+	    NAT_virtualServer_changedValues = val; 	
+	});
+
+	NAT_Dmz_ConfigChangedLog.subscribe(val => {
+	    NAT_dmz_changedValues = val;
+	});  
 
 	async function SetLANData() {
 	    const res = await fetch(window.location.origin+"/SetLanData", {
 	      method: 'POST',
-	      body: Content
+	      body: ContentLAN
 	    })
 
 	  if (res.status == 200)
@@ -37,23 +78,49 @@
 	  }
 	};
 
+	async function SetNATData() {
+	    const res = await fetch(window.location.origin+"/SetNATData", {
+	      method: 'POST',
+	      body: ContentNAT
+	    })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set nat data OK\r\n");
+	  }
+	};
+
 
 	function modalTrigger()
 	{
 	    defaultModal = true;
 
-			if (sessionid && lan_data != "") 
+			if (sessionid) 
       {
-        const hexArray = sessionid.match(/.{1,2}/g); 
-        const byteValues = hexArray.map(hex => parseInt(hex, 16));
-        sessionBinary = new Uint8Array(byteValues);
-        let LANString = JSON.stringify(lan_data, null, 0);
-				const bytesArray = Array.from(LANString).map(char => char.charCodeAt(0));
-    		lanBinary = new Uint8Array(bytesArray);
-      	Content=new Uint8Array(lanBinary.length+sessionBinary.length);
-        Content.set(sessionBinary,0);
-        Content.set(lanBinary, sessionBinary.length);
-        SetLANData();
+      	const hexArray = sessionid.match(/.{1,2}/g); 
+	      const byteValues = hexArray.map(hex => parseInt(hex, 16));
+	      sessionBinary = new Uint8Array(byteValues);
+      	if  (lan_data != "")
+      	{
+	        let LANString = JSON.stringify(lan_data, null, 0);
+					const bytesArray = Array.from(LANString).map(char => char.charCodeAt(0));
+	    		lanBinary = new Uint8Array(bytesArray);
+	      	ContentLAN=new Uint8Array(lanBinary.length+sessionBinary.length);
+	        ContentLAN.set(sessionBinary,0);
+	        ContentLAN.set(lanBinary, sessionBinary.length);
+	        SetLANData();
+        }
+
+        if (nat_data != "")
+        {
+	        let NATString = JSON.stringify(nat_data, null, 0);
+					const bytesArray = Array.from(NATString).map(char => char.charCodeAt(0));
+	    		natBinary = new Uint8Array(bytesArray);
+	      	ContentNAT=new Uint8Array(natBinary.length+sessionBinary.length);
+	        ContentNAT.set(sessionBinary,0);
+	        ContentNAT.set(natBinary, sessionBinary.length);
+	        SetNATData();
+        }
       }
 
 
@@ -75,6 +142,66 @@
       <Li>{item}</Li>
    {/each}
   </List>
+  </Li>
+{/if}
+{#if NAT_loopback_changedValues.length !=0 || 
+		NAT_virtualServer_changedValues.length !=0 ||
+		NAT_virtualComputer_changedValues.length !=0 ||
+		NAT_dmz_changedValues.length !=0 
+		}
+  <Li>NAT
+ {#if NAT_loopback_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Loopback
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each NAT_loopback_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if NAT_virtualServer_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Virtual Server
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each NAT_virtualServer_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if NAT_virtualComputer_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Virtual Computer
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each NAT_virtualComputer_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if NAT_dmz_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	DMZ
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each NAT_dmz_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
   </Li>
 {/if}
 </List>

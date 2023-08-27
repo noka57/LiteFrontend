@@ -3,25 +3,40 @@
   import TimezonePicker from 'svelte-timezone-picker';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { operationConfig } from "./configG.js"
+  import { operationConfig,
+  OperationConfigChangedLog,
+  ChangedOperationConfig
+   } from "./configG.js"
 
-   let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
-   let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
+    const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  };
 
-   let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
-   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
-   let isActiveST = false;
-
-   let isActiveDLS = false;
 
     let formModal = false;
 
-    let selected="GPS";
-    let ntpServer="";
-
+    let timestamp = 0;
+    let dateString="";
+    $: {
+        const dateObject=new Date(timestamp*1000);
+        dateString =dateObject.toLocaleString('en-US', options);
+        MYear=dateObject.getFullYear();
+        MMonth=dateObject.getMonth()+1;
+        MDay=dateObject.getDate();
+        MHour=dateObject.getHours();
+        MMin=dateObject.getMinutes();
+    }
 
     let timezone = 'Asia/Taipei';
+
+
     let MYear=2023;
     let MMonth=7;
     let MDay=26;
@@ -30,7 +45,10 @@
 
 
     let operation_data="";
-    let getdataAlready=0;
+    let changed_operation_data = {};
+    let saved_changed_operation_data = {};
+    let operation_changedValues = [];
+    let getDataReady=0;
 
     let sessionid;
     let sessionBinary;
@@ -39,13 +57,57 @@
    });
 
     function update(ev) {
-        alert(ev.detail.timezone);
+        console.log(ev.detail.timezone);
+        changed_operation_data.config.system_operation_time.autoSyncTimeParam.tz=ev.detail.timezone;
+        timezone=ev.detail.timezone;
     }
 
     operationConfig.subscribe(val => {
         operation_data = val;
     });
 
+
+
+    OperationConfigChangedLog.subscribe(val => {
+      operation_changedValues = val;
+    });
+
+
+    ChangedOperationConfig.subscribe(val => {
+      saved_changed_operation_data = val;
+    });
+
+
+  function compareObjects(obj1, obj2) {
+    for (const key in obj1) 
+    {
+      if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+      {
+        compareObjects(obj1[key], obj2[key]);
+      } 
+      else if (obj1[key] != obj2[key]) 
+      {
+        let changedstr="Value of "+key+" has changed to "+obj1[key];
+        operation_changedValues=[...operation_changedValues, changedstr];
+      }
+    }
+  }
+
+  function SaveOperationSettings(){
+    console.log("Save Operation Setting\r\n");
+    if (operation_changedValues.length !=0)
+    {
+      operation_changedValues=[];
+    }
+
+    compareObjects(changed_operation_data, operation_data);
+
+    OperationConfigChangedLog.set(operation_changedValues);
+    ChangedOperationConfig.set(changed_operation_data);
+    
+    console.log(operation_changedValues);
+
+  };
 
    async function getOperationData () {
     const res = await fetch(window.location.origin+"/getOperationData", {
@@ -55,15 +117,41 @@
 
     if (res.status == 200)
     {
-      operation_data =await res.json();
-      console.log(operation_data);
-      getdataAlready=1;
-      operationConfig.set(operation_data);
-      isActiveST=!!operation_data.config.system_operation_time.autoSyncTime;
-      selected=operation_data.config.system_operation_time.autoSyncTimeParam.type;
-      ntpServer=operation_data.config.system_operation_time.autoSyncTimeParam.ntpServer;
-      isActiveDLS=!!operation_data.config.system_operation_time.autoSyncTimeParam.dstEn;
+        operation_data =await res.json();
+        console.log(operation_data);
+        operationConfig.set(operation_data);
 
+
+        changed_operation_data= JSON.parse(JSON.stringify(operation_data));
+        saved_changed_operation_data = JSON.parse(JSON.stringify(operation_data))
+        ChangedOperationConfig.set(saved_changed_operation_data);
+        timezone=changed_operation_data.config.system_operation_time.autoSyncTimeParam.tz;
+        timestamp=changed_operation_data.config.system_operation_time.currTimestamp;
+        getDataReady=1;
+    }
+  }
+
+  function AutoSyncTime()
+  {
+    if (changed_operation_data.config.system_operation_time.autoSyncTime)
+    {
+      changed_operation_data.config.system_operation_time.autoSyncTime=1;
+    }
+    else
+    {
+      changed_operation_data.config.system_operation_time.autoSyncTime=0;
+    }
+  }
+
+  function CheckDLS()
+  {
+    if (changed_operation_data.config.system_operation_time.autoSyncTimeParam.dstEn)
+    {
+      changed_operation_data.config.system_operation_time.autoSyncTimeParam.dstEn=1;
+    }
+    else
+    {
+      changed_operation_data.config.system_operation_time.autoSyncTimeParam.dstEn=0;
     }
   }
 
@@ -83,10 +171,16 @@
     }
     else if (sessionid && operation_data !="")
     {
-        isActiveST=!!operation_data.config.system_operation_time.autoSyncTime;
-        selected=operation_data.config.system_operation_time.autoSyncTimeParam.type;
-        ntpServer=operation_data.config.system_operation_time.autoSyncTimeParam.ntpServer;
-        isActiveDLS=!!operation_data.config.system_operation_time.autoSyncTimeParam.dstEn;
+        if (operation_changedValues.length == 0)
+        {
+            changed_operation_data = JSON.parse(JSON.stringify(operation_data));
+        }
+        else
+        {
+            changed_operation_data = JSON.parse(JSON.stringify(saved_changed_operation_data));
+        }
+
+        getDataReady=1;
     }
 
   });
@@ -98,50 +192,59 @@
 <table>
     <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Current Local Date & Time</p></td>
-    <td class="pl-5 pt-5">7/26/2023, 10:10</td>
+    <td class="pl-5 pt-5">{dateString}</td>
 
 
-  	</tr>
+    </tr>
 
-  	<tr>
-  	<td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Automatic Date & Time</p></td><td class="pl-5 pt-5"><Toggle bind:checked={isActiveST}></Toggle></td>
-  	</tr>
-
-
-
-  	<tr>
-  	<td class="w-85">	</td>
-  	<td class="w-85 pt-5 pl-5">
+    <tr>
+    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Automatic Date & Time</p></td><td class="pl-5 pt-5">
+{#if getDataReady==1}
+    <Toggle bind:checked={changed_operation_data.config.system_operation_time.autoSyncTime} on:change={AutoSyncTime}></Toggle>
+{/if}
+    </td>
+    </tr>
 
 
-{#if !isActiveST}
-	<Button on:click={() => formModal = true}>Manually Set Date & Time</Button>
+
+    <tr>
+    <td class="w-85">   </td>
+    <td class="w-85 pt-5 pl-5">
+
+{#if getDataReady==1}
+{#if !changed_operation_data.config.system_operation_time.autoSyncTime}
+    <Button on:click={() => formModal = true}>Manually Set Date & Time</Button>
 
 {:else}
-<Radio bind:group={selected} value='GPS'><p class="text-lg pt-1">GPS</p></Radio>
+<Radio bind:group={changed_operation_data.config.system_operation_time.autoSyncTimeParam.type} value='GPS'><p class="text-lg pt-1">GPS</p></Radio>
 
 
-<Radio bind:group={selected} value='NTP'><p class="text-lg pt-1">NTP</p>
+<Radio bind:group={changed_operation_data.config.system_operation_time.autoSyncTimeParam.type} value='NTP'><p class="text-lg pt-1">NTP</p>
 
 <p class="pl-5">
-{#if selected=="NTP"} <FloatingLabelInput style="outlined" id="floating_outlined" name="floating_outlined" type="text" label="NTP Server" value={ntpServer}/>
+{#if changed_operation_data.config.system_operation_time.autoSyncTimeParam.type=="NTP"} <FloatingLabelInput style="outlined" id="floating_outlined" name="floating_outlined" type="text" label="NTP Server" bind:value={changed_operation_data.config.system_operation_time.autoSyncTimeParam.ntpServer}/>
 {:else}
 <FloatingLabelInput style="outlined" id="floating_outlined" name="floating_outlined" type="text" label="NTP Server" disabled/>
 {/if}
 </p>
 </Radio>
 {/if}
-	</td>
-  	</tr>
+{/if}
 
-  	<tr>
-  	<td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Time Zone</p></td>
-  	<td class="w-85 pt-5 pl-5"><TimezonePicker {timezone} on:update="{update}" /></td>
-  	</tr>
+    </td>
+    </tr>
 
-  	<tr>
-  	<td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Day Light Saving</p></td><td class="pl-5 pt-5"><Toggle bind:checked={isActiveDLS}></Toggle></td>
-  	</tr>
+<tr>
+    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Time Zone</p></td>
+    <td class="w-85 pt-5 pl-5"><TimezonePicker on:update="{update}" /></td>
+    </tr>
+
+    <tr>
+
+{#if getDataReady==1}
+    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Day Light Saving</p></td><td class="pl-5 pt-5"><Toggle bind:checked={changed_operation_data.config.system_operation_time.autoSyncTimeParam.dstEn} on:change={CheckDLS}></Toggle></td>
+{/if}
+    </tr>
 
 <tr class="pt-5">
     <td></td>
@@ -149,7 +252,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveOperationSettings}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 

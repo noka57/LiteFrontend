@@ -16,7 +16,9 @@
     	StaticRouteConfigChangedLog,
       ChangedStaticRouteConfig,
       ChangedMaintenanceConfig,
-  		MaintenanceConfigChangedLog 
+  		MaintenanceConfigChangedLog,
+  		OperationConfigChangedLog,
+  		ChangedOperationConfig 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -25,7 +27,7 @@
   let firewall_data="";
   let static_route_data="";
   let maintenance_data="";
-
+  let operation_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -55,6 +57,10 @@
   let MaintenanceBinary=null;
   let maintenance_changedValues = [];
 
+  let ContentOperation;
+  let OperationBinary=null;
+  let operation_changedValues = [];
+
 	sessionidG.subscribe(val => {
 	     sessionid = val;
 	});
@@ -78,6 +84,10 @@
 
   ChangedMaintenanceConfig.subscribe(val => {
       maintenance_data = val;
+  });
+
+  ChangedOperationConfig.subscribe(val => {
+      operation_data = val;
   });
 
 
@@ -123,6 +133,11 @@
   MaintenanceConfigChangedLog.subscribe(val => {
       maintenance_changedValues = val;
   });
+
+  OperationConfigChangedLog.subscribe(val => {
+      operation_changedValues = val;
+  });
+
 
 	async function SetLANData() {
 	    const res = await fetch(window.location.origin+"/SetLanData", {
@@ -184,7 +199,20 @@
 	  {
 	  	console.log("set maintenance data OK\r\n");
 	  }
-	}   	
+	}  
+
+	async function SetOperationData()
+	{
+	  const res = await fetch(window.location.origin+"/SetOperationdata", {
+	    method: 'POST',
+	    body: ContentOperation
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set operation data OK\r\n");
+	  }
+	} 
 
 
 	function modalTrigger()
@@ -251,10 +279,20 @@
 	        ContentMaintenance.set(MaintenanceBinary, sessionBinary.length);
 	        SetMaintenanceData();    	
         }
+
+
+        if (operation_data != "")
+        {
+          let OperationString = JSON.stringify(operation_data, null, 0);
+					const bytesArray = Array.from(OperationString).map(char => char.charCodeAt(0));
+	    		OperationBinary = new Uint8Array(bytesArray);
+	      	ContentOperation=new Uint8Array(OperationBinary.length+sessionBinary.length);
+	        ContentOperation.set(sessionBinary,0);
+	        ContentOperation.set(OperationBinary, sessionBinary.length);
+	        SetOperationData();
+
+        }
       }
-
-
-
 
 	};
 
@@ -404,6 +442,18 @@
   </List>
   </Li>
 {/if}
+
+{#if operation_changedValues.length!=0}
+  <Li>Operation
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each operation_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+{/if}
+
+
 
 </List>
 

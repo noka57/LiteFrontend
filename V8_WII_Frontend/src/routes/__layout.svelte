@@ -13,7 +13,8 @@
   		Firewall_General_ConfigChangedLog,
     	Firewall_IPFilter_ConfigChangedLog,
     	Firewall_MACFilter_ConfigChangedLog,
-    	StaticRouteConfigChangedLog
+    	StaticRouteConfigChangedLog,
+    	MaintenanceConfigChangedLog
   	} from "./configG.js"
 
 	import {
@@ -102,6 +103,7 @@
   	let Firewall_ipfilter_changedValues = [];
   	let Firewall_macfilter_changedValues = [];
   	let staticR_changedValues = [];
+  	let maintenance_changedValues = [];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -128,7 +130,8 @@
   			Firewall_general_changedValues.length !=0 ||
   			Firewall_ipfilter_changedValues.length !=0 ||
   			Firewall_macfilter_changedValues.length !=0 ||
-  			staticR_changedValues.length != 0
+  			staticR_changedValues.length != 0 ||
+  			maintenance_changedValues.length != 0
   			)
   		{
 
@@ -194,9 +197,16 @@
 
 
   	StaticRouteConfigChangedLog.subscribe(val => {
-      staticR_changedValues = val;
-      JudgeChangedOrNot();
+      	staticR_changedValues = val;
+     	JudgeChangedOrNot();
   	});
+
+
+  	MaintenanceConfigChangedLog.subscribe(val => {
+    	maintenance_changedValues = val;
+    	JudgeChangedOrNot();
+  	});
+
 
 
   	sessionidG.subscribe(val => {

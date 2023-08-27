@@ -29,3 +29,8 @@ export const ChangedFirewallConfig=writable("");
 
 export const StaticRouteConfigChangedLog=writable("");
 export const ChangedStaticRouteConfig=writable("");
+
+
+
+export const MaintenanceConfigChangedLog=writable("");
+export const ChangedMaintenanceConfig=writable("");

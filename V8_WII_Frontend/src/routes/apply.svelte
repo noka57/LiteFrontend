@@ -14,7 +14,9 @@
     	Firewall_MACFilter_ConfigChangedLog,
     	ChangedFirewallConfig,
     	StaticRouteConfigChangedLog,
-      ChangedStaticRouteConfig 
+      ChangedStaticRouteConfig,
+      ChangedMaintenanceConfig,
+  		MaintenanceConfigChangedLog 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -22,6 +24,7 @@
   let nat_data="";
   let firewall_data="";
   let static_route_data="";
+  let maintenance_data="";
 
 
 	let sessionid;
@@ -48,6 +51,10 @@
   let staticRBinary=null;
   let staticR_changedValues = [];
 
+  let ContentMaintenance;
+  let MaintenanceBinary=null;
+  let maintenance_changedValues = [];
+
 	sessionidG.subscribe(val => {
 	     sessionid = val;
 	});
@@ -68,6 +75,11 @@
   ChangedStaticRouteConfig.subscribe(val => {
       static_route_data = val;
   });
+
+  ChangedMaintenanceConfig.subscribe(val => {
+      maintenance_data = val;
+  });
+
 
   LanConfigChangedLog.subscribe(val => {
     	LANchangedValues=val;
@@ -108,6 +120,10 @@
       staticR_changedValues = val;
   });  
 
+  MaintenanceConfigChangedLog.subscribe(val => {
+      maintenance_changedValues = val;
+  });
+
 	async function SetLANData() {
 	    const res = await fetch(window.location.origin+"/SetLanData", {
 	      method: 'POST',
@@ -144,7 +160,8 @@
 	  }
 	};
 
-	async function SetStaticRData() {
+	async function SetStaticRData() 
+	{
 	    const res = await fetch(window.location.origin+"/SetStaticRdata", {
 	      method: 'POST',
 	      body: ContentStaticR
@@ -156,6 +173,18 @@
 	  }
 	};
 
+	async function SetMaintenanceData()
+	{
+	  const res = await fetch(window.location.origin+"/SetmaintenanceData", {
+	    method: 'POST',
+	    body: ContentMaintenance
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set maintenance data OK\r\n");
+	  }
+	}   	
 
 
 	function modalTrigger()
@@ -210,6 +239,17 @@
 	        ContentStaticR.set(sessionBinary,0);
 	        ContentStaticR.set(staticRBinary, sessionBinary.length);
         	SetStaticRData();
+        }
+
+        if (maintenance_data != "")
+        {
+          let MaintenanceDataString = JSON.stringify(maintenance_data, null, 0);
+					const bytesArray = Array.from(MaintenanceDataString).map(char => char.charCodeAt(0));
+	    		MaintenanceBinary = new Uint8Array(bytesArray);
+	      	ContentMaintenance=new Uint8Array(MaintenanceBinary.length+sessionBinary.length);
+	        ContentMaintenance.set(sessionBinary,0);
+	        ContentMaintenance.set(MaintenanceBinary, sessionBinary.length);
+	        SetMaintenanceData();    	
         }
       }
 
@@ -355,6 +395,15 @@
   </Li>
 {/if}
 
+{#if maintenance_changedValues.length!=0}
+  <Li>Maintenance
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each maintenance_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+{/if}
 
 </List>
 

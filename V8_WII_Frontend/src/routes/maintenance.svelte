@@ -3,11 +3,14 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { maintenanceConfig} from "./configG.js"
+  import { maintenanceConfig,
+  ChangedMaintenanceConfig,
+  MaintenanceConfigChangedLog
+  } from "./configG.js"
 
 
   let value;
-  let isActive = false;
+
 
 
   const btn2 = () => {
@@ -24,7 +27,10 @@
 
 
   let maintenance_data="";
-  let getdataAlready=0;
+  let changed_maintenance_data = {};
+  let saved_changed_maintenance_data = {};
+  let getDataReady=0;
+  let maintenance_changedValues = [];
 
   let sessionid;
   let sessionBinary;
@@ -33,11 +39,67 @@
   });
 
   maintenanceConfig.subscribe(val => {
-     maintenance_data = val;
-   });
+      maintenance_data = val;
+  });
+
+  MaintenanceConfigChangedLog.subscribe(val => {
+      maintenance_changedValues = val;
+  });
 
 
-   async function getMaintenanceData () {
+  ChangedMaintenanceConfig.subscribe(val => {
+      saved_changed_maintenance_data = val;
+  });
+
+
+  function compareObjects(obj1, obj2) {
+    for (const key in obj1) 
+    {
+      if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+      {
+        compareObjects(obj1[key], obj2[key]);
+      } 
+      else if (obj1[key] != obj2[key]) 
+      {
+        let changedstr="Value of "+key+" has changed to "+obj1[key];
+        maintenance_changedValues=[...maintenance_changedValues, changedstr];
+      }
+    }
+  }
+
+  function SaveMaintenanceSettings(){
+    console.log("Save Maintenance Setting\r\n");
+    if (maintenance_changedValues.length !=0)
+    {
+      maintenance_changedValues=[];
+    }
+
+    compareObjects(changed_maintenance_data, maintenance_data);
+
+    MaintenanceConfigChangedLog.set(maintenance_changedValues);
+    ChangedMaintenanceConfig.set(changed_maintenance_data);
+    
+    console.log(maintenance_changedValues);
+
+  };
+
+  function EW_FOTA_Check()
+  {
+    console.log("EW_FOTA_CHACK()");
+    console.log(changed_maintenance_data.config.system_maintenance.fotaEn);
+    if (changed_maintenance_data.config.system_maintenance.fotaEn)
+    {
+      changed_maintenance_data.config.system_maintenance.fotaEn=1;
+    }
+    else
+    {
+      changed_maintenance_data.config.system_maintenance.fotaEn=0;
+    }
+  }
+
+
+   async function getMaintenanceData () 
+   {
     const res = await fetch(window.location.origin+"/getMaintenanceData", {
       method: 'POST',
       body: sessionBinary
@@ -47,9 +109,13 @@
     {
       maintenance_data =await res.json();
       console.log(maintenance_data);
-      getdataAlready=1;
       maintenanceConfig.set(maintenance_data);
-      isActive=!!maintenance_data.config.system_maintenance.fotaEn;
+
+      changed_maintenance_data= JSON.parse(JSON.stringify(maintenance_data));
+      saved_changed_maintenance_data = JSON.parse(JSON.stringify(maintenance_data))
+      ChangedMaintenanceConfig.set(saved_changed_maintenance_data);
+
+      getDataReady=1;
     }
   }
 
@@ -70,7 +136,15 @@
     }
     else if (sessionid && maintenance_data != "")
     {
-        isActive=!!maintenance_data.config.system_maintenance.fotaEn;
+      if (maintenance_changedValues.length == 0)
+      {
+        changed_maintenance_data = JSON.parse(JSON.stringify(maintenance_data));
+      }
+      else
+      {
+        changed_maintenance_data = JSON.parse(JSON.stringify(saved_changed_maintenance_data));
+      }
+      getDataReady=1;
     }
 
   });
@@ -99,7 +173,11 @@
 
     <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Enable EW-FOTA</p></td>
-<td class="pl-5 pt-5"><Toggle bind:checked={isActive}></Toggle></td>
+<td class="pl-5 pt-5">
+{#if getDataReady==1}
+<Toggle bind:checked={changed_maintenance_data.config.system_maintenance.fotaEn} on:change={EW_FOTA_Check}></Toggle>
+{/if}
+</td>
 
   </tr>
 
@@ -109,7 +187,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveMaintenanceSettings}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 

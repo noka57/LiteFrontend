@@ -35,7 +35,7 @@
 
 
   ChangedLANConfig.subscribe(val => {
-      saved_changed_lan_data = JSON.parse(JSON.stringify(val));
+      saved_changed_lan_data=val;
   });
 
 
@@ -90,7 +90,8 @@
 
 
       changed_lan_data = JSON.parse(JSON.stringify(lan_data));
-      ChangedLANConfig.set(changed_lan_data);
+      saved_changed_lan_data = JSON.parse(JSON.stringify(lan_data));
+      ChangedLANConfig.set(saved_changed_lan_data);
       getDataReady=1;
     }
   }

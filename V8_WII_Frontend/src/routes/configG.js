@@ -35,3 +35,6 @@ export const ChangedMaintenanceConfig=writable("");
 
 export const OperationConfigChangedLog=writable("");
 export const ChangedOperationConfig=writable("");
+
+export const DockerConfigChangedLog=writable("");
+export const ChangedDockerConfig=writable("");

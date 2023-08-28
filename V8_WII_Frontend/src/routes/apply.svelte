@@ -18,7 +18,9 @@
       ChangedMaintenanceConfig,
   		MaintenanceConfigChangedLog,
   		OperationConfigChangedLog,
-  		ChangedOperationConfig 
+  		ChangedOperationConfig,
+  		DockerConfigChangedLog,
+      ChangedDockerConfig 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -28,6 +30,7 @@
   let static_route_data="";
   let maintenance_data="";
   let operation_data="";
+  let docker_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -61,6 +64,11 @@
   let OperationBinary=null;
   let operation_changedValues = [];
 
+
+  let ContentDocker;
+  let DockerBinary=null;
+  let docker_changedValues = [];
+
 	sessionidG.subscribe(val => {
 	     sessionid = val;
 	});
@@ -88,6 +96,10 @@
 
   ChangedOperationConfig.subscribe(val => {
       operation_data = val;
+  });
+
+  ChangedDockerConfig.subscribe(val => {
+      docker_data = val;
   });
 
 
@@ -137,6 +149,12 @@
   OperationConfigChangedLog.subscribe(val => {
       operation_changedValues = val;
   });
+
+
+  DockerConfigChangedLog.subscribe(val => {
+      docker_changedValues = val;
+  });
+
 
 
 	async function SetLANData() {
@@ -211,6 +229,19 @@
 	  if (res.status == 200)
 	  {
 	  	console.log("set operation data OK\r\n");
+	  }
+	} 
+
+	async function SetDockerData()
+	{
+	  const res = await fetch(window.location.origin+"/SetDockerdata", {
+	    method: 'POST',
+	    body: ContentDocker
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set docker data OK\r\n");
 	  }
 	} 
 
@@ -290,6 +321,18 @@
 	        ContentOperation.set(sessionBinary,0);
 	        ContentOperation.set(OperationBinary, sessionBinary.length);
 	        SetOperationData();
+
+        }
+
+        if (docker_data != "")
+        {
+          let DockerString = JSON.stringify(docker_data, null, 0);
+					const bytesArray = Array.from(DockerString).map(char => char.charCodeAt(0));
+	    		DockerBinary = new Uint8Array(bytesArray);
+	      	ContentDocker=new Uint8Array(DockerBinary.length+sessionBinary.length);
+	        ContentDocker.set(sessionBinary,0);
+	        ContentDocker.set(DockerBinary, sessionBinary.length);
+	        SetDockerData();
 
         }
       }
@@ -453,6 +496,15 @@
   </Li>
 {/if}
 
+{#if docker_changedValues.length!=0}
+  <Li>Docker Engine
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each docker_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+{/if}
 
 
 </List>

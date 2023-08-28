@@ -20,7 +20,15 @@
   		OperationConfigChangedLog,
   		ChangedOperationConfig,
   		DockerConfigChangedLog,
-      ChangedDockerConfig 
+      ChangedDockerConfig,
+      Dreams_Serial_ConfigChangedLog,
+      Dreams_Modbus_S0_ConfigChangedLog,
+      Dreams_Modbus_S1_ConfigChangedLog,
+      Dreams_Modbus_Option_ConfigChangedLog,
+      Dreams_DNP3_ConfigChangedLog,
+      Dreams_Restful_ConfigChangedLog,
+      Dreams_General_ConfigChangedLog,
+      ChangedDreamsConfig 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -31,6 +39,7 @@
   let maintenance_data="";
   let operation_data="";
   let docker_data="";
+  let dreams_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -69,6 +78,18 @@
   let DockerBinary=null;
   let docker_changedValues = [];
 
+
+  let ContentDreams;
+  let DreamsBinary=null;
+  let serial_changedValues = [];
+  let modbus_s0_changedValues = [];
+  let modbus_s1_changedValues = [];
+  let modbus_option_changedValues = [];
+  let dnp3_changedValues = [];
+  let restful_changedValues = [];
+  let dreams_general_changedValues=[];
+
+
 	sessionidG.subscribe(val => {
 	     sessionid = val;
 	});
@@ -100,6 +121,10 @@
 
   ChangedDockerConfig.subscribe(val => {
       docker_data = val;
+  });
+
+  ChangedDreamsConfig.subscribe(val => {
+      dreams_data = val;
   });
 
 
@@ -153,6 +178,35 @@
 
   DockerConfigChangedLog.subscribe(val => {
       docker_changedValues = val;
+  });
+
+
+  Dreams_Serial_ConfigChangedLog.subscribe(val => {
+      serial_changedValues = val;
+  });
+
+  Dreams_Modbus_S0_ConfigChangedLog.subscribe(val => {
+      modbus_s0_changedValues = val;
+  });
+
+  Dreams_Modbus_S1_ConfigChangedLog.subscribe(val => {
+      modbus_s1_changedValues = val;
+  });
+
+  Dreams_Modbus_Option_ConfigChangedLog.subscribe(val => {
+      modbus_option_changedValues = val;
+  });
+
+  Dreams_DNP3_ConfigChangedLog.subscribe(val => {
+      dnp3_changedValues = val;
+  });
+
+  Dreams_Restful_ConfigChangedLog.subscribe(val => {
+      restful_changedValues = val;
+  });
+
+  Dreams_General_ConfigChangedLog.subscribe(val => {
+      dreams_general_changedValues = val;
   });
 
 
@@ -245,6 +299,20 @@
 	  }
 	} 
 
+	async function SetDreamsData()
+	{
+	  const res = await fetch(window.location.origin+"/SetDreamsdata", {
+	    method: 'POST',
+	    body: ContentDreams
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set dreams data OK\r\n");
+	  }
+	} 
+
+
 
 	function modalTrigger()
 	{
@@ -334,6 +402,24 @@
 	        ContentDocker.set(DockerBinary, sessionBinary.length);
 	        SetDockerData();
 
+        }
+
+        if (dreams_data != "")
+        {
+          let DreamsString = JSON.stringify(dreams_data, null, 0);
+					const encoder = new TextEncoder();
+ 					let bytesArray = [];
+  				const utf8Encoded = encoder.encode(DreamsString);
+  				console.log("utf8Encoded.length");
+  				console.log(utf8Encoded.length);
+  				for (let i = 0; i < utf8Encoded.length; i++) {
+    				bytesArray.push(utf8Encoded[i]);
+  				}
+	    		DreamsBinary = new Uint8Array(bytesArray);
+	      	ContentDreams=new Uint8Array(DreamsBinary.length+sessionBinary.length);
+	        ContentDreams.set(sessionBinary,0);
+	        ContentDreams.set(DreamsBinary, sessionBinary.length);
+        	SetDreamsData();
         }
       }
 
@@ -507,11 +593,146 @@
 {/if}
 
 
+
+{#if dreams_general_changedValues.length !=0 || 
+		serial_changedValues.length !=0 ||
+		modbus_s0_changedValues.length != 0 ||
+		modbus_s1_changedValues.length != 0 ||
+		modbus_option_changedValues.length != 0 ||
+		dnp3_changedValues.length != 0 ||
+		restful_changedValues.length != 0 ||
+		dreams_general_changedValues.length !=0
+
+		}
+  <Li>DREAMS
+ {#if dreams_general_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	General
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each dreams_general_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if serial_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Serial
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each serial_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if modbus_s0_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Modbus Item (Serial 0)
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each modbus_s0_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if modbus_s1_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Modbus Item (Serial 1)
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each modbus_s1_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if modbus_option_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Modbus Item (Option)
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each modbus_option_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if dnp3_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	DNP3
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each dnp3_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if restful_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Restful
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each restful_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+  </Li>	
+{/if}
+
+
+
+
+
 </List>
+
 
 </div>
 <div class="pt-10 pl-10 text-center">
+
+{#if 		LANchangedValues.length != 0 ||
+  			NAT_loopback_changedValues.length != 0 ||
+  			NAT_virtualServer_changedValues.length !=0 ||
+  			NAT_virtualComputer_changedValues.length !=0 ||
+  			NAT_dmz_changedValues.length !=0 ||
+  			Firewall_general_changedValues.length !=0 ||
+  			Firewall_ipfilter_changedValues.length !=0 ||
+  			Firewall_macfilter_changedValues.length !=0 ||
+  			staticR_changedValues.length != 0 ||
+  			maintenance_changedValues.length != 0 ||
+  			operation_changedValues.length != 0 ||
+  			docker_changedValues.length != 0 ||
+  			serial_changedValues.length != 0 ||
+  			modbus_s0_changedValues.length != 0 ||
+  			modbus_s1_changedValues.length != 0 ||
+  			modbus_option_changedValues.length != 0 ||
+  			dnp3_changedValues.length != 0 ||
+  			restful_changedValues.length != 0 ||
+  			dreams_general_changedValues.length != 0
+
+		}
+
 <Button on:click={() => modalTrigger()}>Apply and Reboot</Button>
+{/if}
 </div>
 
 <Modal bind:open={defaultModal} size="lg" class="w-full" >

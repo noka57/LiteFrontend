@@ -10,35 +10,149 @@
         Dreams_Modbus_Option_ConfigChangedLog,
         Dreams_DNP3_ConfigChangedLog,
         Dreams_Restful_ConfigChangedLog,
+        Dreams_General_ConfigChangedLog,
         ChangedDreamsConfig
   } from "./configG.js"
 
 
-   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
-   let formModalSerial = false;
-   let formModalModbus = false;
+    let formModalSerial = false;
+    let formModalModbus = false;
 
   
-   let serialindex=0;
-   let modbusindex=0;
-   let serialindex4modbus=0;
+    let serialindex=0;
+    let modbusindex=0;
+    let serialindex4modbus=0;
 
-   function modalTriggerSerial(index){
-    formModalSerial = true;
-    serialindex=index;
+    function modalTriggerSerial(index)
+    {
+      formModalSerial = true;
+      serialindex=index;
 
-   }
+      BackupSerial_Item.name = changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].name;
+      BackupSerial_Item.interface = changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].interface;
+      BackupSerial_Item.baudrate = changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].baudrate;    
+      BackupSerial_Item.parity = changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].parity; 
+      BackupSerial_Item.dataBit = changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].dataBit; 
+      BackupSerial_Item.stopBit = changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].stopBit; 
 
-   function modalTriggerModbus(sindex,mindex)
-   {
-    formModalModbus= true;
-    modbusindex=mindex;
-    serialindex4modbus=sindex;
+    }
 
-   }
+    function modalTriggerModbus(sindex,mindex)
+    {
+      formModalModbus= true;
+      modbusindex=mindex;
+      serialindex4modbus=sindex;
 
 
+      if (sindex == 0)
+      {
+        BackupModbus_Item.name=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].name;
+        BackupModbus_Item.slaveId=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].slaveId;
+        BackupModbus_Item.pointType=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].pointType;
+        BackupModbus_Item.address=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].address;
+        BackupModbus_Item.quantity=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].quantity;
+        BackupModbus_Item.display=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].display;
+      }
+      else if (sindex == 1)
+      {
+        BackupModbus_Item.name=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].name;
+        BackupModbus_Item.slaveId=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].slaveId;
+        BackupModbus_Item.pointType=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].pointType;
+        BackupModbus_Item.address=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].address;
+        BackupModbus_Item.quantity=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].quantity;
+        BackupModbus_Item.display=changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].display;
+      }
+      else if (sindex == -1)
+      {
+        BackupModbus_Item.name=changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].name;
+        BackupModbus_Item.slaveId=changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].slaveId;
+        BackupModbus_Item.pointType=changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].pointType;
+        BackupModbus_Item.address=changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].address;
+        BackupModbus_Item.quantity=changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].quantity;
+        BackupModbus_Item.display=changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].display;
+      }
+      else
+      {
+        console.log("error sindex:");
+        console.log(sindex);
+      }
+
+
+    }
+
+    let BackupSerial_Item=
+    {
+      "name": "",
+      "interface": 0,
+      "baudrate": 0,
+      "parity": 0,
+      "dataBit": 8,
+      "stopBit": 1
+    };
+
+    function NoModifySerial(index)
+    {
+      changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].name=BackupSerial_Item.name;
+      changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].interface=BackupSerial_Item.interface;
+      changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].baudrate=BackupSerial_Item.baudrate;  
+
+      changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].parity=BackupSerial_Item.parity; 
+      changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].dataBit=BackupSerial_Item.dataBit; 
+      changed_dreams_data.config.service_dreams.service_dreams_serial.list[index].stopBit=BackupSerial_Item.stopBit;
+
+      formModalSerial=false;
+    }
+
+    let BackupModbus_Item=
+    {
+      "name": "",
+      "slaveId": 3,
+      "pointType": 0, 
+      "address": 0,
+      "quantity": 1,
+      "display": 0 
+    };
+
+
+    function NoModifyModbus(sindex, mindex)
+    {
+      if (sindex ==0)
+      {
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].name=BackupModbus_Item.name;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].slaveId=BackupModbus_Item.slaveId;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].pointType=BackupModbus_Item.pointType;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].address=BackupModbus_Item.address;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].quantity=BackupModbus_Item.quantity;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[mindex].display=BackupModbus_Item.display;
+      }
+      else if (sindex ==1)
+      {
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].name=BackupModbus_Item.name;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].slaveId=BackupModbus_Item.slaveId;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].pointType=BackupModbus_Item.pointType;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].address=BackupModbus_Item.address;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].quantity=BackupModbus_Item.quantity;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[mindex].display=BackupModbus_Item.display;
+      }
+      else if (sindex == -1)
+      {
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].name=BackupModbus_Item.name;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].slaveId=BackupModbus_Item.slaveId;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].pointType=BackupModbus_Item.pointType;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].address=BackupModbus_Item.address;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].quantity=BackupModbus_Item.quantity;
+        changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[mindex].display=BackupModbus_Item.display;
+      }
+      else
+      {
+        console.log("error sindex:");
+        console.log(sindex);
+      }
+
+      formModalModbus=false;
+    }
 
 
     let dreams_data="";
@@ -53,6 +167,7 @@
     let modbus_option_changedValues = [];
     let dnp3_changedValues = [];
     let restful_changedValues = [];
+    let dreams_general_changedValues=[];
 
     let sessionid;
     let sessionBinary;
@@ -86,6 +201,10 @@
 
     Dreams_Restful_ConfigChangedLog.subscribe(val => {
         restful_changedValues = val;
+    });
+
+    Dreams_General_ConfigChangedLog.subscribe(val => {
+        dreams_general_changedValues = val;
     });
 
     ChangedDreamsConfig.subscribe(val => {
@@ -180,7 +299,8 @@
           }
           else
           {
-            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+            const name="name";
+            changedstr=obj1[name]+" is changed: "+ "value of "+key+" has changed to "+obj1[key];
           }
           
           if (type == 5)
@@ -211,6 +331,25 @@
       }
     }
 
+    function SaveGeneral()
+    {
+      console.log("save general");
+      if (dreams_general_changedValues !=0)
+      {
+        dreams_general_changedValues=[];
+      }
+
+      if (changed_dreams_data.config.service_dreams.enable != dreams_data.config.service_dreams.enable)
+      {
+        let changedstr="Value of Enable Dreams Service has changed to "+changed_dreams_data.config.service_dreams.enable;
+        dreams_general_changedValues=[...dreams_general_changedValues, changedstr]; 
+      }
+
+      Dreams_General_ConfigChangedLog.set(dreams_general_changedValues);
+      ChangedDreamsConfig.set(changed_dreams_data);
+      console.log(dreams_general_changedValues);
+    }
+
 
     function SaveSerial()
     {
@@ -226,6 +365,7 @@
         ChangedDreamsConfig.set(changed_dreams_data);
     
         console.log(serial_changedValues);
+        SaveGeneral();
     }
 
     function SaveModbusSerial0()
@@ -242,6 +382,7 @@
         ChangedDreamsConfig.set(changed_dreams_data);
     
         console.log(modbus_s0_changedValues);
+        SaveGeneral();
     }
 
     function SaveModbusSerial1()
@@ -258,6 +399,7 @@
         ChangedDreamsConfig.set(changed_dreams_data);
     
         console.log(modbus_s1_changedValues);
+        SaveGeneral();
     }  
 
 
@@ -275,6 +417,7 @@
         ChangedDreamsConfig.set(changed_dreams_data);
     
         console.log(modbus_option_changedValues);
+        SaveGeneral();
     }  
 
     function SaveDNP3()
@@ -291,6 +434,7 @@
         ChangedDreamsConfig.set(changed_dreams_data);
     
         console.log(dnp3_changedValues);
+        SaveGeneral();
     }  
 
     function SaveRestful()
@@ -307,8 +451,20 @@
         ChangedDreamsConfig.set(changed_dreams_data);
     
         console.log(restful_changedValues);
+        SaveGeneral();
     }  
 
+
+    function ModbusModify()
+    {
+      formModalModbus=false;
+    }
+
+
+    function SerialModify()
+    {
+      formModalSerial=false;
+    }
 
    async function getDREAMSdata () {
     const res = await fetch(window.location.origin+"/getDREAMSdata", {
@@ -493,10 +649,10 @@
 
 
 
-<Modal bind:open={formModalSerial} size="md" class="w-full" autoclose>
+<Modal bind:open={formModalSerial} size="md" class="w-full" permanent={true}>
   <form action="#">
 
-
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifySerial(serialindex)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 <p class="mt-10"></p>
 
 
@@ -558,7 +714,12 @@
       <tr>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Submit</Button></td>
+        <td></td>
+    <td></td>    
+    <td></td>
+        <td></td>    
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={SerialModify}>Modify</Button></td>
 
 
     </tr>
@@ -831,9 +992,9 @@
 </Table>
  </AccordionItem>
 
-<Modal bind:open={formModalModbus} size="md" class="w-full" autoclose>
+<Modal bind:open={formModalModbus} size="md" class="w-full" permanent={true}>
   <form action="#">
-
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyModbus(serialindex4modbus,modbusindex)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
 
@@ -967,7 +1128,7 @@
     <td></td>
                 <td></td>
     <td></td>
-    <td><Button color="dark" pill={true}>Submit</Button></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={ModbusModify}>Modify</Button></td>
 
 
     </tr>

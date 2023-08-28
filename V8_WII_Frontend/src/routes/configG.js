@@ -45,4 +45,5 @@ export const Dreams_Modbus_S1_ConfigChangedLog=writable("");
 export const Dreams_Modbus_Option_ConfigChangedLog=writable("");
 export const Dreams_DNP3_ConfigChangedLog=writable("");
 export const Dreams_Restful_ConfigChangedLog=writable("");
+export const Dreams_General_ConfigChangedLog=writable("");
 export const ChangedDreamsConfig=writable("");

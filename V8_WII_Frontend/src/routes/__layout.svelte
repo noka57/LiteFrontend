@@ -16,7 +16,14 @@
     	StaticRouteConfigChangedLog,
     	MaintenanceConfigChangedLog,
     	OperationConfigChangedLog,
-    	DockerConfigChangedLog
+    	DockerConfigChangedLog,
+    	Dreams_Serial_ConfigChangedLog,
+        Dreams_Modbus_S0_ConfigChangedLog,
+        Dreams_Modbus_S1_ConfigChangedLog,
+        Dreams_Modbus_Option_ConfigChangedLog,
+        Dreams_DNP3_ConfigChangedLog,
+        Dreams_Restful_ConfigChangedLog,
+        Dreams_General_ConfigChangedLog,
   	} from "./configG.js"
 
 	import {
@@ -108,6 +115,13 @@
   	let maintenance_changedValues = [];
     let operation_changedValues = [];
     let docker_changedValues = [];
+    let serial_changedValues = [];
+    let modbus_s0_changedValues = [];
+    let modbus_s1_changedValues = [];
+    let modbus_option_changedValues = [];
+    let dnp3_changedValues = [];
+    let restful_changedValues = [];
+    let dreams_general_changedValues=[];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -137,7 +151,14 @@
   			staticR_changedValues.length != 0 ||
   			maintenance_changedValues.length != 0 ||
   			operation_changedValues.length != 0 ||
-  			docker_changedValues.length != 0
+  			docker_changedValues.length != 0 ||
+  			serial_changedValues.length != 0 ||
+  			modbus_s0_changedValues.length != 0 ||
+  			modbus_s1_changedValues.length != 0 ||
+  			modbus_option_changedValues.length != 0 ||
+  			dnp3_changedValues.length != 0 ||
+  			restful_changedValues.length != 0 ||
+  			dreams_general_changedValues.length != 0
   			)
   		{
 
@@ -222,6 +243,44 @@
       	docker_changedValues = val;
         JudgeChangedOrNot();
     });
+
+
+ 	Dreams_Serial_ConfigChangedLog.subscribe(val => {
+        serial_changedValues = val;
+        JudgeChangedOrNot();
+    });
+
+    Dreams_Modbus_S0_ConfigChangedLog.subscribe(val => {
+        modbus_s0_changedValues = val;
+        JudgeChangedOrNot();
+    });
+
+    Dreams_Modbus_S1_ConfigChangedLog.subscribe(val => {
+        modbus_s1_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    Dreams_Modbus_Option_ConfigChangedLog.subscribe(val => {
+        modbus_option_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    Dreams_DNP3_ConfigChangedLog.subscribe(val => {
+        dnp3_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    Dreams_Restful_ConfigChangedLog.subscribe(val => {
+        restful_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    Dreams_General_ConfigChangedLog.subscribe(val => {
+        dreams_general_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+
 
   	sessionidG.subscribe(val => {
     	sessionid = val;

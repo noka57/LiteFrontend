@@ -3,66 +3,36 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { dreamsConfig} from "./configG.js"
-   let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
+  import { dreamsConfig,
+        Dreams_Serial_ConfigChangedLog,
+        Dreams_Modbus_S0_ConfigChangedLog,
+        Dreams_Modbus_S1_ConfigChangedLog,
+        Dreams_Modbus_Option_ConfigChangedLog,
+        Dreams_DNP3_ConfigChangedLog,
+        Dreams_Restful_ConfigChangedLog,
+        ChangedDreamsConfig
+  } from "./configG.js"
 
-   let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
 
-   let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
-   let EnableD=false;;
-   let formModal = false;
-   let formModal2 = false;
 
-   let serialname=["",""];
-   let serialinterface=[0,0];
-   let serialBR=[0,0];
-   let serialparity=[0,0];
-   let serialdatabit=[0,0];
-   let serialstopbit=[0,0];
-   let serial0modbusName=["","","","","","","","","","","",""];
-   let serial0modbusSID=[0,0,0,0,0,0,0,0,0,0,0,0];
-   let serial0modbusPointType=[1,1,1,1,1,1,1,1,1,1,1,1];
-   let serial0modbusAddress=[0,0,0,0,0,0,0,0,0,0,0,0];
-   let serial0modbusQuantity=[0,0,0,0,0,0,0,0,0,0,0,0];
-   let serial0modbusDisplay=[0,0,0,0,0,0,0,0,0,0,0,0];
+   let formModalSerial = false;
+   let formModalModbus = false;
 
-   let serial1modbusName=["","","","","",""];
-   let serial1modbusSID=[0,0,0,0,0,0];
-   let serial1modbusPointType=[1,1,1,1,1,1];
-   let serial1modbusAddress=[0,0,0,0,0,0];
-   let serial1modbusQuantity=[0,0,0,0,0,0];
-   let serial1modbusDisplay=[0,0,0,0,0,0];
-
-
-   let valueListName=["","","","","","","","","","","","","","","","","","",""];
-   let valueListValue=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-   let optionName="";
-   let optionSID=0;
-   let optionPointType=1;
-   let optionAddress=0;
-   let optionQuantity=1;
-   let optionDisplay=0;
-
-
-
-   let DNP3Port=0;
-   let DEmail="";
-   let DPwd="";
   
    let serialindex=0;
    let modbusindex=0;
    let serialindex4modbus=0;
 
-   function modalTrigger(index){
-    formModal = true;
+   function modalTriggerSerial(index){
+    formModalSerial = true;
     serialindex=index;
 
    }
 
-   function modalTrigger2(sindex,mindex)
+   function modalTriggerModbus(sindex,mindex)
    {
-    formModal2= true;
+    formModalModbus= true;
     modbusindex=mindex;
     serialindex4modbus=sindex;
 
@@ -72,7 +42,17 @@
 
 
     let dreams_data="";
-    let getdataAlready=0;
+
+    let changed_dreams_data = {};
+    let saved_changed_dreams_data ={};
+    let getDataReady=0;
+
+    let serial_changedValues = [];
+    let modbus_s0_changedValues = [];
+    let modbus_s1_changedValues = [];
+    let modbus_option_changedValues = [];
+    let dnp3_changedValues = [];
+    let restful_changedValues = [];
 
     let sessionid;
     let sessionBinary;
@@ -83,6 +63,251 @@
     dreamsConfig.subscribe(val => {
         dreams_data = val;
     });
+
+    Dreams_Serial_ConfigChangedLog.subscribe(val => {
+        serial_changedValues = val;
+    });
+
+    Dreams_Modbus_S0_ConfigChangedLog.subscribe(val => {
+        modbus_s0_changedValues = val;
+    });
+
+    Dreams_Modbus_S1_ConfigChangedLog.subscribe(val => {
+        modbus_s1_changedValues = val;
+    });
+
+    Dreams_Modbus_Option_ConfigChangedLog.subscribe(val => {
+        modbus_option_changedValues = val;
+    });
+
+    Dreams_DNP3_ConfigChangedLog.subscribe(val => {
+        dnp3_changedValues = val;
+    });
+
+    Dreams_Restful_ConfigChangedLog.subscribe(val => {
+        restful_changedValues = val;
+    });
+
+    ChangedDreamsConfig.subscribe(val => {
+        saved_changed_dreams_data = val;
+    });
+
+
+
+    function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
+    {
+      for (const key in obj1) 
+      {
+        if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+        {
+          if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) 
+          {
+            for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+            {
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+            }
+
+            if (obj1[key].length > obj2[key].length) 
+            {
+              let addedCount=obj1[key].length-obj2[key].length;
+              let changedstr="Add "+addedCount+" item(s) to "+ key;
+              if (type == 5)
+              {
+                restful_changedValues=[...restful_changedValues, changedstr];
+              }
+              else if (type == 4)
+              {
+                dnp3_changedValues=[...dnp3_changedValues, changedstr];
+              }
+              else if (type == 3)
+              {
+                modbus_option_changedValues=[...modbus_option_changedValues, changedstr];
+              }
+              else if (type == 2)
+              {
+                modbus_s1_changedValues=[...modbus_s1_changedValues, changedstr];
+              }
+              else if (type == 1)
+              {
+                modbus_s0_changedValues=[...modbus_s0_changedValues, changedstr];
+              }
+              else if (type == 0)
+              {
+                serial_changedValues=[...serial_changedValues, changedstr]; 
+              }
+            }
+            else if (obj1[key].length < obj2[key].length)
+            {
+              let deletedCount=obj2[key].length-obj1[key].length;
+              let changedstr="Delete "+deletedCount+" item(s) from "+ key;
+              if (type == 5)
+              {
+                restful_changedValues=[...restful_changedValues, changedstr];
+              }
+              else if (type == 4)
+              {
+                dnp3_changedValues=[...dnp3_changedValues, changedstr];
+              }
+              else if (type == 3)
+              {
+                modbus_option_changedValues=[...modbus_option_changedValues, changedstr];
+              }
+              else if (type == 2)
+              {
+                modbus_s1_changedValues=[...modbus_s1_changedValues, changedstr];
+              }
+              else if (type == 1)
+              {
+                modbus_s0_changedValues=[...modbus_s0_changedValues, changedstr];
+              }
+              else if (type == 0)
+              {
+                serial_changedValues=[...serial_changedValues, changedstr]; 
+              }
+            }
+          }
+          else
+          {
+            compareObjects(obj1[key], obj2[key], type, 0,0);
+          }
+        } 
+        else if (obj1[key] != obj2[key]) 
+        {
+          let changedstr="";
+          if (isArrayItem == 0)
+          {
+            changedstr="Value of "+key+" has changed to "+obj1[key];
+          }
+          else
+          {
+            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+          }
+          
+          if (type == 5)
+          {
+            restful_changedValues=[...restful_changedValues, changedstr];
+          }
+          else if (type == 4)
+          {
+            dnp3_changedValues=[...dnp3_changedValues, changedstr];
+          }
+          else if (type == 3)
+          {
+            modbus_option_changedValues=[...modbus_option_changedValues, changedstr];
+          }
+          else if (type == 2)
+          {
+            modbus_s1_changedValues=[...modbus_s1_changedValues, changedstr];
+          }
+          else if (type == 1)
+          {
+            modbus_s0_changedValues=[...modbus_s0_changedValues, changedstr];
+          }
+          else if (type == 0)
+          {
+            serial_changedValues=[...serial_changedValues, changedstr]; 
+          }
+        }
+      }
+    }
+
+
+    function SaveSerial()
+    {
+        console.log("Save Serial");
+        if (serial_changedValues.length !=0)
+        {
+          serial_changedValues=[];
+        }
+
+        compareObjects(changed_dreams_data.config.service_dreams.service_dreams_serial, dreams_data.config.service_dreams.service_dreams_serial,0,0,0);
+
+        Dreams_Serial_ConfigChangedLog.set(serial_changedValues);
+        ChangedDreamsConfig.set(changed_dreams_data);
+    
+        console.log(serial_changedValues);
+    }
+
+    function SaveModbusSerial0()
+    {
+        console.log("Save Modbus Serial 0");
+        if (modbus_s0_changedValues.length !=0)
+        {
+          modbus_s0_changedValues=[];
+        }
+
+        compareObjects(changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0, dreams_data.config.service_dreams.service_dreams_modbus.serialPort0,1,0,0);
+
+        Dreams_Modbus_S0_ConfigChangedLog.set(modbus_s0_changedValues);
+        ChangedDreamsConfig.set(changed_dreams_data);
+    
+        console.log(modbus_s0_changedValues);
+    }
+
+    function SaveModbusSerial1()
+    {
+        console.log("Save Modbus Serial 1");
+        if (modbus_s1_changedValues.length !=0)
+        {
+          modbus_s1_changedValues=[];
+        }
+
+        compareObjects(changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1, dreams_data.config.service_dreams.service_dreams_modbus.serialPort1,2,0,0);
+
+        Dreams_Modbus_S1_ConfigChangedLog.set(modbus_s1_changedValues);
+        ChangedDreamsConfig.set(changed_dreams_data);
+    
+        console.log(modbus_s1_changedValues);
+    }  
+
+
+    function SaveModbusSerialOption()
+    {
+        console.log("Save Modbus Serial Option");
+        if (modbus_option_changedValues.length !=0)
+        {
+          modbus_option_changedValues=[];
+        }
+
+        compareObjects(changed_dreams_data.config.service_dreams.service_dreams_modbus.option, dreams_data.config.service_dreams.service_dreams_modbus.option,3,0,0);
+
+        Dreams_Modbus_Option_ConfigChangedLog.set(modbus_option_changedValues);
+        ChangedDreamsConfig.set(changed_dreams_data);
+    
+        console.log(modbus_option_changedValues);
+    }  
+
+    function SaveDNP3()
+    {
+        console.log("Save DNP3");
+        if (dnp3_changedValues.length !=0)
+        {
+          dnp3_changedValues=[];
+        }
+
+        compareObjects(changed_dreams_data.config.service_dreams.service_dreams_dnp3, dreams_data.config.service_dreams.service_dreams_dnp3,4,0,0);
+
+        Dreams_DNP3_ConfigChangedLog.set(dnp3_changedValues);
+        ChangedDreamsConfig.set(changed_dreams_data);
+    
+        console.log(dnp3_changedValues);
+    }  
+
+    function SaveRestful()
+    {
+        console.log("Save Restful");
+        if (restful_changedValues.length !=0)
+        {
+          restful_changedValues=[];
+        }
+
+        compareObjects(changed_dreams_data.config.service_dreams.service_dreams_restful, dreams_data.config.service_dreams.service_dreams_restful,5,0,0);
+
+        Dreams_Restful_ConfigChangedLog.set(restful_changedValues);
+        ChangedDreamsConfig.set(changed_dreams_data);
+    
+        console.log(restful_changedValues);
+    }  
 
 
    async function getDREAMSdata () {
@@ -95,212 +320,28 @@
     {
       dreams_data =await res.json();
       console.log(dreams_data);
-      getdataAlready=1;
-
       dreamsConfig.set(dreams_data);
 
-      EnableD=!!dreams_data.config.service_dreams.enable;
-      serialname[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].name;
-      serialname[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].name;
+      changed_dreams_data = JSON.parse(JSON.stringify(dreams_data));
+      saved_changed_dreams_data= JSON.parse(JSON.stringify(dreams_data));
+      ChangedDreamsConfig.set(saved_changed_dreams_data);
 
-      serialinterface[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].interface;
-      serialinterface[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].interface;
+      getDataReady=1;
 
-      serialBR[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].baudrate;
-      serialBR[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].baudrate;
-
-      serialparity[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].parity;
-      serialparity[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].parity;
-
-      serialdatabit[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].dataBit;
-      serialdatabit[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].dataBit;
-
-      serialstopbit[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].stopBit;
-      serialstopbit[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].stopBit;
+     
+    }
+  }
 
 
-      serial0modbusName[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].name;
-      serial0modbusName[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].name;
-      serial0modbusName[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].name;
-      serial0modbusName[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].name;
-      serial0modbusName[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].name;
-      serial0modbusName[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].name;
-      serial0modbusName[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].name;
-      serial0modbusName[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].name;
-      serial0modbusName[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].name;
-      serial0modbusName[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].name;
-      serial0modbusName[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].name;
-      serial0modbusName[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].name;
-
-
-
-      serial0modbusSID[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].slaveId;
-      serial0modbusSID[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].slaveId;
-      serial0modbusSID[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].slaveId;
-      serial0modbusSID[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].slaveId;
-      serial0modbusSID[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].slaveId;
-      serial0modbusSID[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].slaveId;
-      serial0modbusSID[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].slaveId;
-      serial0modbusSID[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].slaveId;
-      serial0modbusSID[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].slaveId;
-      serial0modbusSID[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].slaveId;
-      serial0modbusSID[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].slaveId;
-      serial0modbusSID[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].slaveId;
-
-
-      serial0modbusPointType[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].pointType;
-      serial0modbusPointType[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].pointType;
-      serial0modbusPointType[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].pointType;
-      serial0modbusPointType[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].pointType;
-      serial0modbusPointType[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].pointType;
-      serial0modbusPointType[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].pointType;
-      serial0modbusPointType[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].pointType;
-      serial0modbusPointType[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].pointType;
-      serial0modbusPointType[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].pointType;
-      serial0modbusPointType[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].pointType;
-      serial0modbusPointType[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].pointType;
-      serial0modbusPointType[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].pointType;
-
-
-      serial0modbusAddress[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].address;
-      serial0modbusAddress[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].address;
-      serial0modbusAddress[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].address;
-      serial0modbusAddress[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].address;
-      serial0modbusAddress[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].address;
-      serial0modbusAddress[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].address;
-      serial0modbusAddress[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].address;
-      serial0modbusAddress[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].address;
-      serial0modbusAddress[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].address;
-      serial0modbusAddress[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].address;
-      serial0modbusAddress[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].address;
-      serial0modbusAddress[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].address;
-
-      serial0modbusQuantity[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].quantity;
-      serial0modbusQuantity[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].quantity;
-      serial0modbusQuantity[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].quantity;
-      serial0modbusQuantity[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].quantity;
-      serial0modbusQuantity[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].quantity;
-      serial0modbusQuantity[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].quantity;
-      serial0modbusQuantity[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].quantity;
-      serial0modbusQuantity[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].quantity;
-      serial0modbusQuantity[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].quantity;
-      serial0modbusQuantity[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].quantity;
-      serial0modbusQuantity[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].quantity;
-      serial0modbusQuantity[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].quantity;
-
-
-      serial0modbusDisplay[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].display;
-      serial0modbusDisplay[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].display;
-      serial0modbusDisplay[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].display;
-      serial0modbusDisplay[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].display;
-      serial0modbusDisplay[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].display;
-      serial0modbusDisplay[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].display;
-      serial0modbusDisplay[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].display;
-      serial0modbusDisplay[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].display;
-      serial0modbusDisplay[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].display;
-      serial0modbusDisplay[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].display;
-      serial0modbusDisplay[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].display;
-      serial0modbusDisplay[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].display;
-
-
-
-      serial1modbusName[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].name;
-      serial1modbusName[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].name;
-      serial1modbusName[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].name;
-      serial1modbusName[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].name;
-      serial1modbusName[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].name;
-      serial1modbusName[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].name;
-
-      serial1modbusSID[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].slaveId;
-      serial1modbusSID[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].slaveId;
-      serial1modbusSID[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].slaveId;
-      serial1modbusSID[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].slaveId;
-      serial1modbusSID[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].slaveId;
-      serial1modbusSID[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].slaveId;
-
-      serial1modbusPointType[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].pointType;
-      serial1modbusPointType[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].pointType;
-      serial1modbusPointType[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].pointType;
-      serial1modbusPointType[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].pointType;
-      serial1modbusPointType[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].pointType;
-      serial1modbusPointType[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].pointType;
-
-
-      serial1modbusAddress[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].address;
-      serial1modbusAddress[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].address;
-      serial1modbusAddress[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].address;
-      serial1modbusAddress[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].address;
-      serial1modbusAddress[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].address;
-      serial1modbusAddress[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].address;
-
-      serial1modbusQuantity[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].quantity;
-      serial1modbusQuantity[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].quantity;
-      serial1modbusQuantity[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].quantity;
-      serial1modbusQuantity[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].quantity;
-      serial1modbusQuantity[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].quantity;
-      serial1modbusQuantity[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].quantity;
-
-      serial1modbusDisplay[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].display;
-      serial1modbusDisplay[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].display;
-      serial1modbusDisplay[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].display;
-      serial1modbusDisplay[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].display;
-      serial1modbusDisplay[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].display;
-      serial1modbusDisplay[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].display;
-
-      valueListName[0]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[0].name;
-      valueListName[1]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[1].name;
-      valueListName[2]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[2].name;
-      valueListName[3]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[3].name;
-      valueListName[4]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[4].name;
-      valueListName[5]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[5].name;
-      valueListName[6]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[6].name;
-      valueListName[7]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[7].name;
-      valueListName[8]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[8].name;
-      valueListName[9]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[9].name;
-      valueListName[10]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[10].name;
-      valueListName[11]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[11].name;
-      valueListName[12]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[12].name;
-      valueListName[13]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[13].name;
-      valueListName[14]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[14].name;
-      valueListName[15]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[15].name;
-      valueListName[16]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[16].name;
-      valueListName[17]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[17].name;
-      valueListName[18]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[18].name;
-
-
-      valueListValue[0]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[0].value;
-      valueListValue[1]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[1].value;
-      valueListValue[2]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[2].value;
-      valueListValue[3]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[3].value;
-      valueListValue[4]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[4].value;
-      valueListValue[5]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[5].value;
-      valueListValue[6]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[6].value;
-      valueListValue[7]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[7].value;
-      valueListValue[8]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[8].value;
-      valueListValue[9]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[9].value;
-      valueListValue[10]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[10].value;
-      valueListValue[11]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[11].value;
-      valueListValue[12]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[12].value;
-      valueListValue[13]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[13].value;
-      valueListValue[14]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[14].value;
-      valueListValue[15]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[15].value;
-      valueListValue[16]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[16].value;
-      valueListValue[17]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[17].value;
-      valueListValue[18]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[18].value;
-
-
-      optionName=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].name;
-      optionSID=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].slaveId;
-      optionPointType=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].pointType;
-      optionAddress=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].address;
-      optionQuantity=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].quantity;
-      optionDisplay=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].display;
-
-      DNP3Port=dreams_data.config.service_dreams.service_dreams_dnp3.listenPort;
-
-      DEmail=dreams_data.config.service_dreams.service_dreams_restful.account;
-      DPwd=dreams_data.config.service_dreams.service_dreams_restful.password;
-
+  function EnableDreamsCheck()
+  {
+    if (changed_dreams_data.config.service_dreams.enable)
+    {
+      changed_dreams_data.config.service_dreams.enable=0;
+    }
+    else
+    {
+      changed_dreams_data.config.service_dreams.enable=1;
     }
   }
 
@@ -321,214 +362,54 @@
     }
     else if (sessionid && dreams_data != "")
     {
-      EnableD=!!dreams_data.config.service_dreams.enable;
-      serialname[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].name;
-      serialname[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].name;
+        getDataReady=1;
+        if (serial_changedValues.length == 0)
+        {
+          changed_dreams_data=JSON.parse(JSON.stringify(saved_changed_dreams_data));
+          changed_dreams_data.config.service_dreams.service_dreams_serial = JSON.parse(JSON.stringify(dreams_data.config.service_dreams.service_dreams_serial)); 
+        }
 
-      serialinterface[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].interface;
-      serialinterface[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].interface;
+        if (modbus_s0_changedValues.length == 0)
+        {
+          changed_dreams_data=JSON.parse(JSON.stringify(saved_changed_dreams_data));
+          changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0 = JSON.parse(JSON.stringify(dreams_data.config.service_dreams.service_dreams_modbus.serialPort0));     
+        }
 
-      serialBR[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].baudrate;
-      serialBR[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].baudrate;
+        if (modbus_s1_changedValues.length == 0)
+        {
+          changed_dreams_data=JSON.parse(JSON.stringify(saved_changed_dreams_data));
+          changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1 = JSON.parse(JSON.stringify(dreams_data.config.service_dreams.service_dreams_modbus.serialPort1));     
+        }
 
-      serialparity[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].parity;
-      serialparity[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].parity;
+        if (modbus_option_changedValues.length == 0)
+        {
+          changed_dreams_data=JSON.parse(JSON.stringify(saved_changed_dreams_data));
+          changed_dreams_data.config.service_dreams.service_dreams_modbus.option = JSON.parse(JSON.stringify(dreams_data.config.service_dreams.service_dreams_modbus.option));     
+        }        
 
-      serialdatabit[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].dataBit;
-      serialdatabit[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].dataBit;
+        if (dnp3_changedValues.length == 0)
+        {
+          changed_dreams_data=JSON.parse(JSON.stringify(saved_changed_dreams_data));
+          changed_dreams_data.config.service_dreams.service_dreams_dnp3 = JSON.parse(JSON.stringify(dreams_data.config.service_dreams.service_dreams_dnp3)); 
+        }
 
-      serialstopbit[0]=dreams_data.config.service_dreams.service_dreams_serial.list[0].stopBit;
-      serialstopbit[1]=dreams_data.config.service_dreams.service_dreams_serial.list[1].stopBit;
+        if (restful_changedValues.length == 0)
+        {
+          changed_dreams_data=JSON.parse(JSON.stringify(saved_changed_dreams_data));
+          changed_dreams_data.config.service_dreams.service_dreams_restful = JSON.parse(JSON.stringify(dreams_data.config.service_dreams.service_dreams_restful)); 
+        }
+     
+  }
 
-      serial0modbusName[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].name;
-      serial0modbusName[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].name;
-      serial0modbusName[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].name;
-      serial0modbusName[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].name;
-      serial0modbusName[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].name;
-      serial0modbusName[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].name;
-      serial0modbusName[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].name;
-      serial0modbusName[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].name;
-      serial0modbusName[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].name;
-      serial0modbusName[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].name;
-      serial0modbusName[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].name;
-      serial0modbusName[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].name;
-
-
-
-      serial0modbusSID[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].slaveId;
-      serial0modbusSID[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].slaveId;
-      serial0modbusSID[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].slaveId;
-      serial0modbusSID[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].slaveId;
-      serial0modbusSID[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].slaveId;
-      serial0modbusSID[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].slaveId;
-      serial0modbusSID[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].slaveId;
-      serial0modbusSID[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].slaveId;
-      serial0modbusSID[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].slaveId;
-      serial0modbusSID[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].slaveId;
-      serial0modbusSID[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].slaveId;
-      serial0modbusSID[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].slaveId;
-
-
-      serial0modbusPointType[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].pointType;
-      serial0modbusPointType[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].pointType;
-      serial0modbusPointType[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].pointType;
-      serial0modbusPointType[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].pointType;
-      serial0modbusPointType[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].pointType;
-      serial0modbusPointType[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].pointType;
-      serial0modbusPointType[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].pointType;
-      serial0modbusPointType[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].pointType;
-      serial0modbusPointType[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].pointType;
-      serial0modbusPointType[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].pointType;
-      serial0modbusPointType[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].pointType;
-      serial0modbusPointType[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].pointType;
-
-
-      serial0modbusAddress[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].address;
-      serial0modbusAddress[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].address;
-      serial0modbusAddress[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].address;
-      serial0modbusAddress[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].address;
-      serial0modbusAddress[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].address;
-      serial0modbusAddress[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].address;
-      serial0modbusAddress[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].address;
-      serial0modbusAddress[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].address;
-      serial0modbusAddress[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].address;
-      serial0modbusAddress[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].address;
-      serial0modbusAddress[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].address;
-      serial0modbusAddress[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].address;
-
-      serial0modbusQuantity[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].quantity;
-      serial0modbusQuantity[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].quantity;
-      serial0modbusQuantity[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].quantity;
-      serial0modbusQuantity[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].quantity;
-      serial0modbusQuantity[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].quantity;
-      serial0modbusQuantity[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].quantity;
-      serial0modbusQuantity[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].quantity;
-      serial0modbusQuantity[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].quantity;
-      serial0modbusQuantity[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].quantity;
-      serial0modbusQuantity[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].quantity;
-      serial0modbusQuantity[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].quantity;
-      serial0modbusQuantity[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].quantity;
-
-
-      serial0modbusDisplay[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[0].display;
-      serial0modbusDisplay[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[1].display;
-      serial0modbusDisplay[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[2].display;
-      serial0modbusDisplay[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[3].display;
-      serial0modbusDisplay[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[4].display;
-      serial0modbusDisplay[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[5].display;
-      serial0modbusDisplay[6]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[6].display;
-      serial0modbusDisplay[7]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[7].display;
-      serial0modbusDisplay[8]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[8].display;
-      serial0modbusDisplay[9]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[9].display;
-      serial0modbusDisplay[10]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[10].display;
-      serial0modbusDisplay[11]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[11].display;
-
-
-      serial1modbusName[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].name;
-      serial1modbusName[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].name;
-      serial1modbusName[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].name;
-      serial1modbusName[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].name;
-      serial1modbusName[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].name;
-      serial1modbusName[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].name;
-
-      serial1modbusSID[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].slaveId;
-      serial1modbusSID[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].slaveId;
-      serial1modbusSID[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].slaveId;
-      serial1modbusSID[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].slaveId;
-      serial1modbusSID[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].slaveId;
-      serial1modbusSID[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].slaveId;
-
-      serial1modbusPointType[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].pointType;
-      serial1modbusPointType[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].pointType;
-      serial1modbusPointType[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].pointType;
-      serial1modbusPointType[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].pointType;
-      serial1modbusPointType[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].pointType;
-      serial1modbusPointType[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].pointType;
-
-
-      serial1modbusAddress[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].address;
-      serial1modbusAddress[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].address;
-      serial1modbusAddress[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].address;
-      serial1modbusAddress[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].address;
-      serial1modbusAddress[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].address;
-      serial1modbusAddress[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].address;
-
-      serial1modbusQuantity[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].quantity;
-      serial1modbusQuantity[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].quantity;
-      serial1modbusQuantity[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].quantity;
-      serial1modbusQuantity[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].quantity;
-      serial1modbusQuantity[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].quantity;
-      serial1modbusQuantity[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].quantity;
-
-      serial1modbusDisplay[0]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[0].display;
-      serial1modbusDisplay[1]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[1].display;
-      serial1modbusDisplay[2]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[2].display;
-      serial1modbusDisplay[3]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[3].display;
-      serial1modbusDisplay[4]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[4].display;
-      serial1modbusDisplay[5]=dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[5].display;
-
-
-      valueListName[0]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[0].name;
-      valueListName[1]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[1].name;
-      valueListName[2]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[2].name;
-      valueListName[3]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[3].name;
-      valueListName[4]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[4].name;
-      valueListName[5]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[5].name;
-      valueListName[6]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[6].name;
-      valueListName[7]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[7].name;
-      valueListName[8]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[8].name;
-      valueListName[9]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[9].name;
-      valueListName[10]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[10].name;
-      valueListName[11]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[11].name;
-      valueListName[12]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[12].name;
-      valueListName[13]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[13].name;
-      valueListName[14]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[14].name;
-      valueListName[15]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[15].name;
-      valueListName[16]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[16].name;
-      valueListName[17]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[17].name;
-      valueListName[18]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[18].name;
-
-
-      valueListValue[0]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[0].value;
-      valueListValue[1]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[1].value;
-      valueListValue[2]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[2].value;
-      valueListValue[3]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[3].value;
-      valueListValue[4]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[4].value;
-      valueListValue[5]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[5].value;
-      valueListValue[6]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[6].value;
-      valueListValue[7]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[7].value;
-      valueListValue[8]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[8].value;
-      valueListValue[9]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[9].value;
-      valueListValue[10]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[10].value;
-      valueListValue[11]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[11].value;
-      valueListValue[12]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[12].value;
-      valueListValue[13]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[13].value;
-      valueListValue[14]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[14].value;
-      valueListValue[15]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[15].value;
-      valueListValue[16]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[16].value;
-      valueListValue[17]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[17].value;
-      valueListValue[18]=dreams_data.config.service_dreams.service_dreams_modbus.valueList.list[18].value;
-      
-      optionName=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].name;
-      optionSID=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].slaveId;
-      optionPointType=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].pointType;
-      optionAddress=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].address;
-      optionQuantity=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].quantity;
-      optionDisplay=dreams_data.config.service_dreams.service_dreams_modbus.option.list[0].display;
-
-      DNP3Port=dreams_data.config.service_dreams.service_dreams_dnp3.listenPort;
-
-      DEmail=dreams_data.config.service_dreams.service_dreams_restful.account;
-      DPwd=dreams_data.config.service_dreams.service_dreams_restful.password;
-    }
-
-  });
+});
 
 
 </script>
 
 <label>
-  <input type=checkbox checked={EnableD}>
+{#if getDataReady == 1}
+  <input type=checkbox checked={!!changed_dreams_data.config.service_dreams.enable} on:click={EnableDreamsCheck}>
+{/if}
   Enable DREAMS
 </label>
 
@@ -549,15 +430,70 @@
     <TableHeadCell class="w-22">Stop Bits</TableHeadCell>
   </TableHead>
   <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_dreams_data.config.service_dreams.service_dreams_serial.list as Serial, index}
+
+  
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger(0)}>
+<button on:click={() => modalTriggerSerial(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
-<Modal bind:open={formModal} size="md" class="w-full" autoclose>
+ </TableBodyCell>
+
+
+      <TableBodyCell class="!p-6 w-10">{Serial.name}</TableBodyCell>
+{#if Serial.interface==0}
+      <TableBodyCell class="w-10">RS485</TableBodyCell>
+{:else if Serial.interface==1}
+      <TableBodyCell class="w-10">RS232</TableBodyCell>
+{:else}
+      <TableBodyCell class="w-10"></TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{Serial.baudrate}</TableBodyCell>
+{#if Serial.parity==0}
+      <TableBodyCell class="w-10">None</TableBodyCell>
+{:else if Serial.parity==1}
+      <TableBodyCell class="w-10">Even</TableBodyCell>
+{:else if Serial.parity==2}
+      <TableBodyCell class="w-10">Odd</TableBodyCell>
+{:else}
+      <TableBodyCell class="w-10"></TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{Serial.dataBit}</TableBodyCell>
+      <TableBodyCell class="w-10">{Serial.stopBit}</TableBodyCell>
+    </TableBodyRow>
+{/each}
+{/if}
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveSerial}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+
+
+
+<Modal bind:open={formModalSerial} size="md" class="w-full" autoclose>
   <form action="#">
 
 
@@ -566,7 +502,7 @@
 
 <table>
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td><td class="pl-5 pt-5">{serialname[serialindex]}</td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td><td class="pl-5 pt-5">{changed_dreams_data.config.service_dreams.service_dreams_serial.list[serialindex].name}</td>
 
 
 
@@ -578,13 +514,13 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={serialinterface[serialindex]} value={0} >RS 485</Radio>
-  <Radio bind:group={serialinterface[serialindex]} value={1} >RS 232</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_serial.list[serialindex].interface} value={0} >RS 485</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_serial.list[serialindex].interface} value={1} >RS 232</Radio>
 </div></td>
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="number" bind:value={serialBR[serialindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_serial.list[serialindex].baudrate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -596,9 +532,9 @@
 
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={serialparity[serialindex]} value={0} >None</Radio>
-  <Radio bind:group={serialparity[serialindex]} value={1} >Even</Radio>
-  <Radio bind:group={serialparity[serialindex]} value={2} >Odd</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_serial.list[serialindex].parity} value={0} >None</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_serial.list[serialindex].parity} value={1} >Even</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_serial.list[serialindex].parity} value={2} >Odd</Radio>
 </div></td>
 
 
@@ -606,14 +542,14 @@
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="number" bind:value={serialdatabit[serialindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_serial.list[serialindex].dataBit} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="number" bind:value={serialstopbit[serialindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_serial.list[serialindex].stopBit} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -629,86 +565,7 @@
 </table>
  </form>
 </Modal>
- </TableBodyCell>
 
-      <TableBodyCell class="!p-6 w-10">{serialname[0]}</TableBodyCell>
-{#if serialinterface[0]==0}
-      <TableBodyCell class="w-10">RS485</TableBodyCell>
-{:else if serialinterface[0]==1}
-      <TableBodyCell class="w-10">RS232</TableBodyCell>
-{:else}
-      <TableBodyCell class="w-10"></TableBodyCell>
-{/if}
-      <TableBodyCell class="w-10">{serialBR[0]}</TableBodyCell>
-
-{#if serialparity[0]==0}
-      <TableBodyCell class="w-10">None</TableBodyCell>
-{:else if serialparity[0]==1}
-      <TableBodyCell class="w-10">Even</TableBodyCell>
-{:else if serialparity[0]==2}
-      <TableBodyCell class="w-10">Odd</TableBodyCell>
-{:else}
-      <TableBodyCell class="w-10"></TableBodyCell>
-{/if}
-
-      <TableBodyCell class="w-10">{serialdatabit[0]}</TableBodyCell>
-      <TableBodyCell class="w-10">{serialstopbit[0]}</TableBodyCell>
-    </TableBodyRow>
-
-
- <TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger(1)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
- </TableBodyCell>
-
-      <TableBodyCell class="!p-6 w-10">{serialname[1]}</TableBodyCell>
-{#if serialinterface[1]==0}
-      <TableBodyCell class="w-10">RS485</TableBodyCell>
-{:else if serialinterface[1]==1}
-      <TableBodyCell class="w-10">RS232</TableBodyCell>
-{:else}
-      <TableBodyCell class="w-10"></TableBodyCell>
-{/if}
-      <TableBodyCell class="w-10">{serialBR[1]}</TableBodyCell>
-{#if serialparity[1]==0}
-      <TableBodyCell class="w-10">None</TableBodyCell>
-{:else if serialparity[1]==1}
-      <TableBodyCell class="w-10">Even</TableBodyCell>
-{:else if serialparity[1]==2}
-      <TableBodyCell class="w-10">Odd</TableBodyCell>
-{:else}
-      <TableBodyCell class="w-10"></TableBodyCell>
-{/if}
-      <TableBodyCell class="w-10">{serialdatabit[1]}</TableBodyCell>
-      <TableBodyCell class="w-10">{serialstopbit[1]}</TableBodyCell>
-    </TableBodyRow>
-
-
-
-    <tr>
-    <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>Save</Button></td>
-
-
-    </tr>
 
   </TableBody>
 </Table>
@@ -731,42 +588,42 @@
     <TableHeadCell></TableHeadCell>
   </TableHead>
   <TableBody>
-
-  {#each serial0modbusName as item, index}
+{#if getDataReady == 1}
+  {#each changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list as S0ModbusItem, index}
 
  <TableBodyRow>
 
  <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger2(0,index)}>
+<button on:click={() => modalTriggerModbus(0,index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
  </TableBodyCell>
 
-  <TableBodyCell class="w-10">{item}</TableBodyCell>
-  <TableBodyCell class="w-10">{serial0modbusSID[index]}</TableBodyCell>
-{#if serial0modbusPointType[index]==0}
+  <TableBodyCell class="w-10">{S0ModbusItem.name}</TableBodyCell>
+  <TableBodyCell class="w-10">{S0ModbusItem.slaveId}</TableBodyCell>
+{#if S0ModbusItem.pointType==0}
   <TableBodyCell class="w-10">Input Register</TableBodyCell>
-{:else if serial0modbusPointType[index]==1}
+{:else if S0ModbusItem.pointType==1}
   <TableBodyCell class="w-10">Holding Register</TableBodyCell>
 {/if}
-  <TableBodyCell class="w-10">{serial0modbusAddress[index]}</TableBodyCell>
-  <TableBodyCell class="w-10">{serial0modbusQuantity[index]}</TableBodyCell>
+  <TableBodyCell class="w-10">{S0ModbusItem.address}</TableBodyCell>
+  <TableBodyCell class="w-10">{S0ModbusItem.quantity}</TableBodyCell>
 
-{#if serial0modbusDisplay[index] == 0}
+{#if S0ModbusItem.display == 0}
   <TableBodyCell class="w-10">Big endian</TableBodyCell>
-{:else if serial0modbusDisplay[index] == 1}
+{:else if S0ModbusItem.display == 1}
   <TableBodyCell class="w-10">Little endian</TableBodyCell>
-{:else if serial0modbusDisplay[index] == 2}
+{:else if S0ModbusItem.display == 2}
   <TableBodyCell class="w-10">Big endian byte swap</TableBodyCell>
-{:else if serial0modbusDisplay[index] == 3}
+{:else if S0ModbusItem.display == 3}
   <TableBodyCell class="w-10">Little endian byte swap</TableBodyCell>
 {/if}
 
     </TableBodyRow>
 {/each}
-
+{/if}
 
 
    <tr>
@@ -781,7 +638,7 @@
         <td></td>
     <td></td>
 
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveModbusSerial0}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -808,41 +665,42 @@
     <TableHeadCell></TableHeadCell>
   </TableHead>
   <TableBody>
-
-  {#each serial1modbusName as item, index}
+{#if getDataReady == 1}
+  {#each changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list as S1ModbusItem, index}
 
  <TableBodyRow>
 
  <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger2(1,index)}>
+<button on:click={() => modalTriggerModbus(1,index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
  </TableBodyCell>
 
-  <TableBodyCell class="w-10">{item}</TableBodyCell>
-  <TableBodyCell class="w-10">{serial1modbusSID[index]}</TableBodyCell>
-{#if serial1modbusPointType[index]==0}
+  <TableBodyCell class="w-10">{S1ModbusItem.name}</TableBodyCell>
+  <TableBodyCell class="w-10">{S1ModbusItem.slaveId}</TableBodyCell>
+{#if S1ModbusItem.pointType==0}
   <TableBodyCell class="w-10">Input Register</TableBodyCell>
-{:else if serial1modbusPointType[index]==1}
+{:else if S1ModbusItem.pointType==1}
   <TableBodyCell class="w-10">Holding Register</TableBodyCell>
 {/if}
-  <TableBodyCell class="w-10">{serial1modbusAddress[index]}</TableBodyCell>
-  <TableBodyCell class="w-10">{serial1modbusQuantity[index]}</TableBodyCell>
+  <TableBodyCell class="w-10">{S1ModbusItem.address}</TableBodyCell>
+  <TableBodyCell class="w-10">{S1ModbusItem.quantity}</TableBodyCell>
 
-{#if serial1modbusDisplay[index] == 0}
+{#if S1ModbusItem.display == 0}
   <TableBodyCell class="w-10">Big endian</TableBodyCell>
-{:else if serial1modbusDisplay[index] == 1}
+{:else if S1ModbusItem.display == 1}
   <TableBodyCell class="w-10">Little endian</TableBodyCell>
-{:else if serial1modbusDisplay[index] == 2}
+{:else if S1ModbusItem.display == 2}
   <TableBodyCell class="w-10">Big endian byte swap</TableBodyCell>
-{:else if serial1modbusDisplay[index] == 3}
+{:else if S1ModbusItem.display == 3}
   <TableBodyCell class="w-10">Little endian byte swap</TableBodyCell>
 {/if}
 
     </TableBodyRow>
 {/each}
+{/if}
    <tr>
     <td></td>
     <td></td>
@@ -855,7 +713,7 @@
         <td></td>
     <td></td>
 
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveModbusSerial1}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -881,37 +739,42 @@
     <TableHeadCell></TableHeadCell>
   </TableHead>
   <TableBody>
+{#if getDataReady == 1}
+  {#each changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list as S_OptionModbusItem, index}
 
-<TableBodyRow>
+ <TableBodyRow>
+
  <TableBodyCell class="!p-4 w-10">
-<button on:click={() => modalTrigger2(-1,0)}>
+<button on:click={() => modalTriggerModbus(-1,index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
-
  </TableBodyCell>
-  <TableBodyCell class="w-10">{optionName}</TableBodyCell>
-  <TableBodyCell class="w-10">{optionSID}</TableBodyCell>
-{#if optionPointType==0}
+
+  <TableBodyCell class="w-10">{S_OptionModbusItem.name}</TableBodyCell>
+  <TableBodyCell class="w-10">{S_OptionModbusItem.slaveId}</TableBodyCell>
+{#if S_OptionModbusItem.pointType==0}
   <TableBodyCell class="w-10">Input Register</TableBodyCell>
-{:else if optionPointType==1}
+{:else if S_OptionModbusItem.pointType==1}
   <TableBodyCell class="w-10">Holding Register</TableBodyCell>
 {/if}
+  <TableBodyCell class="w-10">{S_OptionModbusItem.address}</TableBodyCell>
+  <TableBodyCell class="w-10">{S_OptionModbusItem.quantity}</TableBodyCell>
 
-  <TableBodyCell class="w-10">{optionAddress}</TableBodyCell>
-  <TableBodyCell class="w-10">{optionQuantity}</TableBodyCell>
-{#if optionDisplay==0}
+{#if S_OptionModbusItem.display == 0}
   <TableBodyCell class="w-10">Big endian</TableBodyCell>
-{:else if optionDisplay==1}
+{:else if S_OptionModbusItem.display == 1}
   <TableBodyCell class="w-10">Little endian</TableBodyCell>
-{:else if optionDisplay==2}
+{:else if S_OptionModbusItem.display == 2}
   <TableBodyCell class="w-10">Big endian byte swap</TableBodyCell>
-{:else if optionDisplay==3}
+{:else if S_OptionModbusItem.display == 3}
   <TableBodyCell class="w-10">Little endian byte swap</TableBodyCell>
 {/if}
+
     </TableBodyRow>
+{/each}
+{/if}
 
  <tr>
     <td></td>
@@ -925,7 +788,7 @@
         <td></td>
     <td></td>
 
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveModbusSerialOption}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -949,25 +812,26 @@
   </TableHead>
   <TableBody>
 
-
-{#each valueListName as item, index}
+{#if getDataReady == 1}
+{#each changed_dreams_data.config.service_dreams.service_dreams_modbus.valueList.list as item, index}
 
 <TableBodyRow>
  <TableBodyCell class="!p-4 w-10">
 
  </TableBodyCell>
-  <TableBodyCell class="w-10">{item}</TableBodyCell>
-  <TableBodyCell class="w-10">{valueListValue[index]}</TableBodyCell>
+  <TableBodyCell class="w-10">{item.name}</TableBodyCell>
+  <TableBodyCell class="w-10">{item.value}</TableBodyCell>
     </TableBodyRow>
 
 {/each}
+{/if}
 
 
   </TableBody>
 </Table>
  </AccordionItem>
 
-<Modal bind:open={formModal2} size="md" class="w-full" autoclose>
+<Modal bind:open={formModalModbus} size="md" class="w-full" autoclose>
   <form action="#">
 
 
@@ -978,11 +842,11 @@
 
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 {#if serialindex4modbus==0}      
-      <td class="pl-5 pt-5">{serial0modbusName[modbusindex]}</td>
+      <td class="pl-5 pt-5">{changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[modbusindex].name}</td>
 {:else if serialindex4modbus==1}
-      <td class="pl-5 pt-5">{serial1modbusName[modbusindex]}</td>
+      <td class="pl-5 pt-5">{changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[modbusindex].name}</td>
 {:else if serialindex4modbus==-1}
-      <td class="pl-5 pt-5">{optionName}</td>
+      <td class="pl-5 pt-5">{changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[modbusindex].name}</td>
 {:else}
       <td class="pl-5 pt-5"></td>
 {/if}
@@ -993,11 +857,11 @@
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5">
 
 {#if serialindex4modbus==0}      
-      <input type="number" bind:value={serial0modbusSID[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[modbusindex].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if serialindex4modbus==1}
-      <input type="number" bind:value={serial1modbusSID[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[modbusindex].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if serialindex4modbus==-1}
-      <input type="number" bind:value={optionSID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[modbusindex].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
       </td>
 
@@ -1014,15 +878,15 @@
 
 
 {#if serialindex4modbus==0}  
-  <Radio bind:group={serial0modbusPointType[modbusindex]} value={0} >Input Register</Radio>
-  <Radio bind:group={serial0modbusPointType[modbusindex]} value={1} >Holding Register</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[modbusindex].pointType} value={0} >Input Register</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[modbusindex].pointType} value={1} >Holding Register</Radio>
 
 {:else if serialindex4modbus==1}
-  <Radio bind:group={serial1modbusPointType[modbusindex]} value={0} >Input Register</Radio>
-  <Radio bind:group={serial1modbusPointType[modbusindex]} value={1} >Holding Register</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[modbusindex].pointType} value={0} >Input Register</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[modbusindex].pointType} value={1} >Holding Register</Radio>
 {:else if serialindex4modbus==-1}
-  <Radio bind:group={optionPointType} value={0} >Input Register</Radio>
-  <Radio bind:group={optionPointType} value={1} >Holding Register</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[modbusindex].pointType} value={0} >Input Register</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[modbusindex].pointType} value={1} >Holding Register</Radio>
 {/if}
 
 </div></td>
@@ -1033,11 +897,11 @@
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5">
 
 {#if serialindex4modbus==0}  
-      <input type="number" bind:value={serial0modbusAddress[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[modbusindex].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if serialindex4modbus==1}
-      <input type="number" bind:value={serial1modbusAddress[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[modbusindex].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if serialindex4modbus==-1}
-      <input type="number" bind:value={optionAddress} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[modbusindex].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 {/if}
 
@@ -1052,11 +916,11 @@
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5">
 
 {#if serialindex4modbus==0}  
-      <input type="number" bind:value={serial0modbusQuantity[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[modbusindex].quantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if serialindex4modbus==1}
-      <input type="number" bind:value={serial1modbusQuantity[modbusindex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[modbusindex].quantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if serialindex4modbus==-1}
-      <input type="number" bind:value={optionQuantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[modbusindex].quantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
       </td>
 
@@ -1073,20 +937,20 @@
     <td class="pl-5 pt-5"><div class="gap-4">
 
 {#if serialindex4modbus==0}  
-  <Radio bind:group={serial0modbusDisplay[modbusindex]} value={0} >Big Endian</Radio>
-  <Radio bind:group={serial0modbusDisplay[modbusindex]} value={1} >Little Endian</Radio>
-  <Radio bind:group={serial0modbusDisplay[modbusindex]} value={2} >Big Endian Byte Swap</Radio>
-  <Radio bind:group={serial0modbusDisplay[modbusindex]} value={3} >Little Endian Byte Swap</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[modbusindex].display} value={0} >Big Endian</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[modbusindex].display} value={1} >Little Endian</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[modbusindex].display} value={2} >Big Endian Byte Swap</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort0.list[modbusindex].display} value={3} >Little Endian Byte Swap</Radio>
 {:else if serialindex4modbus==1}
-  <Radio bind:group={serial1modbusDisplay[modbusindex]} value={0} >Big Endian</Radio>
-  <Radio bind:group={serial1modbusDisplay[modbusindex]} value={1} >Little Endian</Radio>
-  <Radio bind:group={serial1modbusDisplay[modbusindex]} value={2} >Big Endian Byte Swap</Radio>
-  <Radio bind:group={serial1modbusDisplay[modbusindex]} value={3} >Little Endian Byte Swap</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[modbusindex].display} value={0} >Big Endian</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[modbusindex].display} value={1} >Little Endian</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[modbusindex].display} value={2} >Big Endian Byte Swap</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.serialPort1.list[modbusindex].display} value={3} >Little Endian Byte Swap</Radio>
 {:else if serialindex4modbus==-1}
-  <Radio bind:group={optionDisplay} value={0} >Big Endian</Radio>
-  <Radio bind:group={optionDisplay} value={1} >Little Endian</Radio>
-  <Radio bind:group={optionDisplay} value={2} >Big Endian Byte Swap</Radio>
-  <Radio bind:group={optionDisplay} value={3} >Little Endian Byte Swap</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[modbusindex].display} value={0} >Big Endian</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[modbusindex].display} value={1} >Little Endian</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[modbusindex].display} value={2} >Big Endian Byte Swap</Radio>
+  <Radio bind:group={changed_dreams_data.config.service_dreams.service_dreams_modbus.option.list[modbusindex].display} value={3} >Little Endian Byte Swap</Radio>
   
 {/if}
 </div></td>
@@ -1119,7 +983,7 @@
     <TabItem title="DNP3">
     <table>
     <tr>
-      <td><p class="pl-40 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={DNP3Port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-40 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_dreams_data.config.service_dreams.service_dreams_dnp3.listenPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -1129,7 +993,7 @@
    <tr>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveDNP3}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -1144,7 +1008,7 @@
 
      <table>
     <tr>
-      <td><p class="pl-40 pt-4 text-lg font-light text-right">DREAMS Email</p></td><td class="pl-5 pt-5"><input type="text" bind:value={DEmail} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-40 pt-4 text-lg font-light text-right">DREAMS Email</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_dreams_data.config.service_dreams.service_dreams_restful.account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -1152,7 +1016,7 @@
 
 
     <tr>
-      <td><p class="pl-40 pt-4 text-lg font-light text-right">DREAMS Password</p></td><td class="pl-5 pt-5"><input type="password" bind:value={DPwd} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-40 pt-4 text-lg font-light text-right">DREAMS Password</p></td><td class="pl-5 pt-5"><input type="password" bind:value={changed_dreams_data.config.service_dreams.service_dreams_restful.password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -1161,7 +1025,7 @@
    <tr>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveRestful}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 

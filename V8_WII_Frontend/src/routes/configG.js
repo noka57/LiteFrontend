@@ -38,3 +38,11 @@ export const ChangedOperationConfig=writable("");
 
 export const DockerConfigChangedLog=writable("");
 export const ChangedDockerConfig=writable("");
+
+export const Dreams_Serial_ConfigChangedLog=writable("");
+export const Dreams_Modbus_S0_ConfigChangedLog=writable("");
+export const Dreams_Modbus_S1_ConfigChangedLog=writable("");
+export const Dreams_Modbus_Option_ConfigChangedLog=writable("");
+export const Dreams_DNP3_ConfigChangedLog=writable("");
+export const Dreams_Restful_ConfigChangedLog=writable("");
+export const ChangedDreamsConfig=writable("");

@@ -18,6 +18,16 @@
   let interval;
   let sessionBinary;
 
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  };
+
 
   sessionidG.subscribe(val => {
     sessionid = val;
@@ -475,7 +485,7 @@
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.macAddress}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.imei}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.modemVendor}{/if}/{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.modemModel}{/if}</p>
-        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.systemTime}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{new Date(dashboard_data.config.dashboard.systemInfo.systemTime*1000).toLocaleString('en-US', options)}{/if}</p>
 
 
 </div>

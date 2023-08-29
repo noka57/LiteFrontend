@@ -323,7 +323,7 @@
       	const hexArray = sessionid.match(/.{1,2}/g); 
 	      const byteValues = hexArray.map(hex => parseInt(hex, 16));
 	      sessionBinary = new Uint8Array(byteValues);
-      	if  (lan_data != "")
+      	if  (lan_data != "" && LANchangedValues.length!=0)
       	{
 	        let LANString = JSON.stringify(lan_data, null, 0);
 					const bytesArray = Array.from(LANString).map(char => char.charCodeAt(0));
@@ -334,7 +334,10 @@
 	        SetLANData();
         }
 
-        if (nat_data != "")
+        if (nat_data != "" && (NAT_loopback_changedValues.length !=0 || 
+															NAT_virtualServer_changedValues.length !=0 ||
+															NAT_virtualComputer_changedValues.length !=0 ||
+															NAT_dmz_changedValues.length !=0))
         {
 	        let NATString = JSON.stringify(nat_data, null, 0);
 					const bytesArray = Array.from(NATString).map(char => char.charCodeAt(0));
@@ -345,7 +348,9 @@
 	        SetNATData();
         }
 
-        if (firewall_data != "")
+        if (firewall_data != "" && (Firewall_general_changedValues.length !=0 || 
+																		Firewall_ipfilter_changedValues.length !=0 ||
+																		Firewall_macfilter_changedValues.length !=0))
         {
         	let FirewallString = JSON.stringify(firewall_data, null, 0);
 					const bytesArray = Array.from(FirewallString).map(char => char.charCodeAt(0));
@@ -357,7 +362,7 @@
 
         }
 
-        if (static_route_data !="")
+        if (static_route_data !="" && staticR_changedValues.length !=0)
         {
           let StaticRString = JSON.stringify(static_route_data, null, 0);
 					const bytesArray = Array.from(StaticRString).map(char => char.charCodeAt(0));
@@ -368,7 +373,7 @@
         	SetStaticRData();
         }
 
-        if (maintenance_data != "")
+        if (maintenance_data != "" && maintenance_changedValues.length!=0)
         {
           let MaintenanceDataString = JSON.stringify(maintenance_data, null, 0);
 					const bytesArray = Array.from(MaintenanceDataString).map(char => char.charCodeAt(0));
@@ -380,7 +385,7 @@
         }
 
 
-        if (operation_data != "")
+        if (operation_data != "" && operation_changedValues.length!=0)
         {
           let OperationString = JSON.stringify(operation_data, null, 0);
 					const bytesArray = Array.from(OperationString).map(char => char.charCodeAt(0));
@@ -392,7 +397,7 @@
 
         }
 
-        if (docker_data != "")
+        if (docker_data != "" && docker_changedValues.length!=0)
         {
           let DockerString = JSON.stringify(docker_data, null, 0);
 					const bytesArray = Array.from(DockerString).map(char => char.charCodeAt(0));
@@ -404,7 +409,13 @@
 
         }
 
-        if (dreams_data != "")
+        if (dreams_data != "" && (dreams_general_changedValues.length !=0 || 
+																	serial_changedValues.length !=0 ||
+																	modbus_s0_changedValues.length != 0 ||
+																	modbus_s1_changedValues.length != 0 ||
+																	modbus_option_changedValues.length != 0 ||
+																	dnp3_changedValues.length != 0 ||
+																	restful_changedValues.length != 0))
         {
           let DreamsString = JSON.stringify(dreams_data, null, 0);
 					const encoder = new TextEncoder();
@@ -600,9 +611,7 @@
 		modbus_s1_changedValues.length != 0 ||
 		modbus_option_changedValues.length != 0 ||
 		dnp3_changedValues.length != 0 ||
-		restful_changedValues.length != 0 ||
-		dreams_general_changedValues.length !=0
-
+		restful_changedValues.length != 0 
 		}
   <Li>DREAMS
  {#if dreams_general_changedValues.length !=0}

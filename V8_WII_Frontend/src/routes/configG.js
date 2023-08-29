@@ -47,3 +47,17 @@ export const Dreams_DNP3_ConfigChangedLog=writable("");
 export const Dreams_Restful_ConfigChangedLog=writable("");
 export const Dreams_General_ConfigChangedLog=writable("");
 export const ChangedDreamsConfig=writable("");
+
+
+export const WAN_CWAN1_BASIC_ConfigChangedLog=writable("");
+export const WAN_CWAN1_Advanced_ConfigChangedLog=writable("");
+export const WAN_CWAN1_SimPolicy_ConfigChangedLog=writable("");
+export const WAN_CWAN1_GLink_ConfigChangedLog=writable("");
+
+export const WAN_EWAN1_Basic_ConfigChangedLog=writable("");
+export const WAN_EWAN1_EWLAP_ConfigChangedLog=writable("");
+export const WAN_RedundancyPolicy_ConfigChangedLog=writable("");
+export const WAN_FareSavingPolicy_ConfigChangedLog=writable("");
+
+export const ChangedWANConfig=writable("");
+export const LastestReadableWANConfig=writable("");

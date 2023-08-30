@@ -24,6 +24,14 @@
         Dreams_DNP3_ConfigChangedLog,
         Dreams_Restful_ConfigChangedLog,
         Dreams_General_ConfigChangedLog,
+        WAN_CWAN1_BASIC_ConfigChangedLog,
+    	WAN_CWAN1_Advanced_ConfigChangedLog,
+    	WAN_CWAN1_SimPolicy_ConfigChangedLog,
+    	WAN_CWAN1_GLink_ConfigChangedLog,
+    	WAN_EWAN1_Basic_ConfigChangedLog,
+    	WAN_EWAN1_EWLAP_ConfigChangedLog,
+    	WAN_RedundancyPolicy_ConfigChangedLog,
+    	WAN_FareSavingPolicy_ConfigChangedLog
   	} from "./configG.js"
 
 	import {
@@ -122,6 +130,14 @@
     let dnp3_changedValues = [];
     let restful_changedValues = [];
     let dreams_general_changedValues=[];
+    let cwan1_basic_changedValues = [];
+  	let cwan1_advanced_changedValues = [];
+  	let cwan1_simpolicy_changedValues = [];
+  	let cwan1_glink_changedValues = [];
+  	let ewan1_basic_changedValues = [];
+  	let ewan1_ewlap_changedValues = [];
+  	let redundancy_policy_changedValues = [];
+  	let faresaving_policy_changedValues = [];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -158,7 +174,15 @@
   			modbus_option_changedValues.length != 0 ||
   			dnp3_changedValues.length != 0 ||
   			restful_changedValues.length != 0 ||
-  			dreams_general_changedValues.length != 0
+  			dreams_general_changedValues.length != 0 ||
+  			cwan1_basic_changedValues !=0 ||
+  			cwan1_advanced_changedValues != 0 ||
+  			cwan1_simpolicy_changedValues != 0 ||
+  			cwan1_glink_changedValues != 0 ||
+  			ewan1_basic_changedValues != 0 ||
+  			ewan1_ewlap_changedValues != 0 ||
+  			redundancy_policy_changedValues != 0 ||
+  			faresaving_policy_changedValues != 0
   			)
   		{
 
@@ -279,6 +303,46 @@
         dreams_general_changedValues = val;
     	JudgeChangedOrNot();
     });
+
+	WAN_CWAN1_BASIC_ConfigChangedLog.subscribe(val => {
+	    cwan1_basic_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	WAN_CWAN1_Advanced_ConfigChangedLog.subscribe(val => {
+	    cwan1_advanced_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	WAN_CWAN1_SimPolicy_ConfigChangedLog.subscribe(val => {
+	    cwan1_simpolicy_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	WAN_CWAN1_GLink_ConfigChangedLog.subscribe(val => {
+	    cwan1_glink_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	WAN_EWAN1_Basic_ConfigChangedLog.subscribe(val => {
+	    ewan1_basic_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	WAN_EWAN1_EWLAP_ConfigChangedLog.subscribe(val => {
+	    ewan1_ewlap_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	WAN_RedundancyPolicy_ConfigChangedLog.subscribe(val => {
+	    redundancy_policy_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	WAN_FareSavingPolicy_ConfigChangedLog.subscribe(val => {
+	    faresaving_policy_changedValues = val;
+	    JudgeChangedOrNot();
+	});
 
 
 

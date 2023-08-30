@@ -28,7 +28,16 @@
       Dreams_DNP3_ConfigChangedLog,
       Dreams_Restful_ConfigChangedLog,
       Dreams_General_ConfigChangedLog,
-      ChangedDreamsConfig 
+      ChangedDreamsConfig,
+      WAN_CWAN1_BASIC_ConfigChangedLog,
+    	WAN_CWAN1_Advanced_ConfigChangedLog,
+    	WAN_CWAN1_SimPolicy_ConfigChangedLog,
+    	WAN_CWAN1_GLink_ConfigChangedLog,
+    	WAN_EWAN1_Basic_ConfigChangedLog,
+    	WAN_EWAN1_EWLAP_ConfigChangedLog,
+    	WAN_RedundancyPolicy_ConfigChangedLog,
+    	WAN_FareSavingPolicy_ConfigChangedLog,
+    	ChangedWANConfig 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -40,6 +49,7 @@
   let operation_data="";
   let docker_data="";
   let dreams_data="";
+  let wan_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -89,6 +99,17 @@
   let restful_changedValues = [];
   let dreams_general_changedValues=[];
 
+  let ContentWan;
+  let WanBinary=null;
+  let cwan1_basic_changedValues = [];
+  let cwan1_advanced_changedValues = [];
+  let cwan1_simpolicy_changedValues = [];
+  let cwan1_glink_changedValues = [];
+  let ewan1_basic_changedValues = [];
+  let ewan1_ewlap_changedValues = [];
+  let redundancy_policy_changedValues = [];
+  let faresaving_policy_changedValues = [];  
+
 
 	sessionidG.subscribe(val => {
 	     sessionid = val;
@@ -125,6 +146,42 @@
 
   ChangedDreamsConfig.subscribe(val => {
       dreams_data = val;
+  });
+
+  ChangedWANConfig.subscribe(val => {
+      wan_data = val;
+  }); 
+
+  WAN_CWAN1_BASIC_ConfigChangedLog.subscribe(val => {
+      cwan1_basic_changedValues = val;
+  });
+
+  WAN_CWAN1_Advanced_ConfigChangedLog.subscribe(val => {
+      cwan1_advanced_changedValues = val;
+  });
+
+  WAN_CWAN1_SimPolicy_ConfigChangedLog.subscribe(val => {
+      cwan1_simpolicy_changedValues = val;
+  });
+
+  WAN_CWAN1_GLink_ConfigChangedLog.subscribe(val => {
+      cwan1_glink_changedValues = val;
+  });
+
+  WAN_EWAN1_Basic_ConfigChangedLog.subscribe(val => {
+      ewan1_basic_changedValues = val;
+  });
+
+  WAN_EWAN1_EWLAP_ConfigChangedLog.subscribe(val => {
+      ewan1_ewlap_changedValues = val;
+  });
+
+  WAN_RedundancyPolicy_ConfigChangedLog.subscribe(val => {
+      redundancy_policy_changedValues = val;
+  });
+
+  WAN_FareSavingPolicy_ConfigChangedLog.subscribe(val => {
+      faresaving_policy_changedValues = val;
   });
 
 
@@ -312,6 +369,18 @@
 	  }
 	} 
 
+	async function SetWanData()
+	{
+	  const res = await fetch(window.location.origin+"/SetWandata", {
+	    method: 'POST',
+	    body: ContentWan
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set wan data OK\r\n");
+	  }
+	} 
 
 
 	function modalTrigger()
@@ -432,6 +501,24 @@
 	        ContentDreams.set(DreamsBinary, sessionBinary.length);
         	SetDreamsData();
         }
+
+        if (wan_data != "" && ( cwan1_basic_changedValues !=0 ||
+  															cwan1_advanced_changedValues != 0 ||
+  															cwan1_simpolicy_changedValues != 0 ||
+  															cwan1_glink_changedValues != 0 ||
+  															ewan1_basic_changedValues != 0 ||
+  															ewan1_ewlap_changedValues != 0 ||
+  															redundancy_policy_changedValues != 0 ||
+  															faresaving_policy_changedValues != 0))
+  			{
+          let WanString = JSON.stringify(wan_data, null, 0);
+					const bytesArray = Array.from(WanString).map(char => char.charCodeAt(0));
+	    		WanBinary = new Uint8Array(bytesArray);
+	      	ContentWan=new Uint8Array(WanBinary.length+sessionBinary.length);
+	        ContentWan.set(sessionBinary,0);
+	        ContentWan.set(WanBinary, sessionBinary.length);
+  				SetWanData();
+  			}
       }
 
 	};
@@ -443,6 +530,128 @@
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+
+{#if 	cwan1_basic_changedValues !=0 ||
+  		cwan1_advanced_changedValues != 0 ||
+  		cwan1_simpolicy_changedValues != 0 ||
+  		cwan1_glink_changedValues != 0 ||
+  		ewan1_basic_changedValues != 0 ||
+  		ewan1_ewlap_changedValues != 0 ||
+  		redundancy_policy_changedValues != 0 ||
+  		faresaving_policy_changedValues != 0
+  		}
+  <Li>WAN
+ {#if cwan1_basic_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Cellular-WAN-1 Basic Settings
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each cwan1_basic_changedValues.length as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if cwan1_advanced_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Cellular-WAN-1 Advanced Settings
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each cwan1_advanced_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if cwan1_simpolicy_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Cellular-WAN-1 SIM Policy
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each cwan1_simpolicy_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if cwan1_glink_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Cellular-WAN-1 LTE Guarantie Link
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each cwan1_glink_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+
+	{#if ewan1_basic_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Ethernet WAN Basic Settings
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each ewan1_basic_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+
+	{#if ewan1_ewlap_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Ethernet WAN EWLAP
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each ewan1_ewlap_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if} 
+
+	{#if redundancy_policy_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	WAN Redundancy Policy
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each redundancy_policy_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if} 
+
+	{#if faresaving_policy_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Fare Saving Policy
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each faresaving_policy_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if} 
+
+  </Li>
+
+
+{/if}
+
 
 {#if LANchangedValues.length!=0}
   <Li>LAN
@@ -736,7 +945,15 @@
   			modbus_option_changedValues.length != 0 ||
   			dnp3_changedValues.length != 0 ||
   			restful_changedValues.length != 0 ||
-  			dreams_general_changedValues.length != 0
+  			dreams_general_changedValues.length != 0 ||
+  			cwan1_basic_changedValues !=0 ||
+  			cwan1_advanced_changedValues != 0 ||
+  			cwan1_simpolicy_changedValues != 0 ||
+  			cwan1_glink_changedValues != 0 ||
+  			ewan1_basic_changedValues != 0 ||
+  			ewan1_ewlap_changedValues != 0 ||
+  			redundancy_policy_changedValues != 0 ||
+  			faresaving_policy_changedValues != 0
 
 		}
 

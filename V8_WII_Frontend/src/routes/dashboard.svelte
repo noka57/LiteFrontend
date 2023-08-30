@@ -57,6 +57,7 @@
     if (res.status == 200)
     {
       dashboard_data =await res.json();
+      console.log("get dashboard 200 OK\r\n");
       console.log(dashboard_data);
       dashboadData.set(dashboard_data);
       value1=dashboard_data.config.dashboard.systemResource.cpuUsage;
@@ -106,6 +107,7 @@
       const hexArray = sessionid.match(/.{1,2}/g); 
       const byteValues = hexArray.map(hex => parseInt(hex, 16));
       sessionBinary = new Uint8Array(byteValues);
+      console.log("onMount get dashboard\r\n");
       getDashboardData();
     }
 

@@ -31,7 +31,8 @@
     	WAN_EWAN1_Basic_ConfigChangedLog,
     	WAN_EWAN1_EWLAP_ConfigChangedLog,
     	WAN_RedundancyPolicy_ConfigChangedLog,
-    	WAN_FareSavingPolicy_ConfigChangedLog
+    	WAN_FareSavingPolicy_ConfigChangedLog,
+    	dashboadData
   	} from "./configG.js"
 
 	import {
@@ -108,6 +109,8 @@
 	let usertype=0;
 	let currentUri = '';
 	let sessionid='';
+  	let dashboard_data="";
+
 
   	let interval;
   	let sessionBinary;
@@ -350,6 +353,10 @@
     	sessionid = val;
   	});
 
+  	dashboadData.subscribe(val => {
+        dashboard_data = val;
+    });
+
 	async function getUserType () {
 		const res = await fetch(window.location.origin+"/getUserType", {
 			method: 'POST',
@@ -390,11 +397,66 @@
 const topMenuList = [{ href: '/apply', id: 0 },
 					{href: '/logout', id: 1 }];
 
+
+
+  async function getDashboardData () {
+    const res = await fetch(window.location.origin+"/getDashboardData", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      dashboard_data =await res.json();
+      console.log("New Dashboard");
+      console.log(dashboard_data);
+      dashboadData.set(dashboard_data);
+    }
+  }
+
+	function RefreshDB()
+	{
+		if (!sessionid)
+		{
+			currentUri = window.location.href;
+
+			console.log("refreshDB sessionid:");
+			sessionidG.set(currentUri.split('?')[1]);
+			sessionid=currentUri.split('?')[1];
+			console.log(sessionid);
+		}
+
+		if (sessionid)
+		{      
+			const hexArray = sessionid.match(/.{1,2}/g); 
+      		const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      		sessionBinary = new Uint8Array(byteValues);
+
+      		getDashboardData();
+
+		}
+
+	}
+
 </script>
 
 
 
 <DarkMode {btnClass} />
+
+
+{#if activeUrl == '/dashboard' || activeUrl.substring(0,16)=='/EDashboard.html'}
+<button aria-label="RefreshDB"
+  type="button" on:click={RefreshDB}
+  class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 fixed right-2 top-36 z-50">
+  <span class="">
+    <slot name="ReloadIcon">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2c-5.288 0-9.649 3.914-10.377 9h-3.123l4 5.917 4-5.917h-2.847c.711-3.972 4.174-7 8.347-7 4.687 0 8.5 3.813 8.5 8.5s-3.813 8.5-8.5 8.5c-3.015 0-5.662-1.583-7.171-3.957l-1.2 1.775c1.916 2.536 4.948 4.182 8.371 4.182 5.797 0 10.5-4.702 10.5-10.5s-4.703-10.5-10.5-10.5z"/></svg>
+
+    </slot>
+  </span>
+</button>
+{/if}
 <Responsive />
 <Side
 	{logo}

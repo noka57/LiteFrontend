@@ -1,5 +1,5 @@
 <script>
-	import { List, Li, Heading,Button, Modal} from 'flowbite-svelte';
+	import { List, Li, Heading,Button, Modal, Spinner} from 'flowbite-svelte';
 	import { sessionidG } from "./sessionG.js";
 	import { 
 			LanConfigChangedLog, 
@@ -41,6 +41,9 @@
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
+  let uploadconfigIsValid =1;
+  let CheckedConfigInvalid=0;
+
   let lan_data="";
   let nat_data="";
   let firewall_data="";
@@ -109,6 +112,12 @@
   let ewan1_ewlap_changedValues = [];
   let redundancy_policy_changedValues = [];
   let faresaving_policy_changedValues = [];  
+
+
+  function closeModal()
+  {
+    defaultModal = false;
+  }
 
 
 	sessionidG.subscribe(val => {
@@ -961,16 +970,47 @@
 {/if}
 </div>
 
-<Modal bind:open={defaultModal} size="lg" class="w-full" >
+<Modal bind:open={defaultModal} size="md" class="w-full" permanent={true}>
+{#if CheckedConfigInvalid == 1}
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={closeModal}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+{/if}
 
-<div class="flex"><div class="">
-<svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-
-<path fill-rule="evenodd" clip-rule="evenodd" d="M9.40123 3.0034C10.5557 1.00229 13.4439 1.00229 14.5983 3.0034L21.9527 15.7509C23.1065 17.7509 21.6631 20.2501 19.3541 20.2501H4.64546C2.33649 20.2501 0.893061 17.7509 2.04691 15.7509L9.40123 3.0034ZM12 8.25C12.4142 8.25 12.75 8.58579 12.75 9V12.75C12.75 13.1642 12.4142 13.5 12 13.5C11.5858 13.5 11.25 13.1642 11.25 12.75V9C11.25 8.58579 11.5858 8.25 12 8.25ZM12 16.5C12.4142 16.5 12.75 16.1642 12.75 15.75C12.75 15.3358 12.4142 15 12 15C11.5858 15 11.25 15.3358 11.25 15.75C11.25 16.1642 11.5858 16.5 12 16.5Z" fill="currentColor"/>
+<table>
+{#if uploadconfigIsValid == 0}
+<tr>
+{#if CheckedConfigInvalid == 0}
+<td><Spinner size={16} /></td>
+<td> <p class="pl-5" style="color:red; font-size:18px">Verifying configuration now ....
+</p></td>
+{:else if CheckedConfigInvalid == 1}
+<td>
+<svg class="w-16 h-16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
-</div>
+</td>
+<td> <p class="pl-5" style="color:red; font-size:18px">It's invalid configuration, please upload valid configuration.
+</p></td>
+{/if}
+</tr>
+{:else if uploadconfigIsValid == 1}
+<tr><td>
+<svg class="w-16 h-16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td>
+<p class="pl-5" style="color:red; font-size:18px">It's valid configuration.
+</td>
+</tr>
+<tr>
+<td class="pt-5">
+<Spinner size={16} /></td> 
+<td class="pt-5">
+<p class="pl-5" style="color:red; font-size:18px">Applying configuration and restart ....
+</p>
+</td>
+</tr>
+{/if}
 
-    <p class="pl-4 mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Don't Close This Page Before Finishing</p>
-
-  </div>
+</table>
 </Modal>

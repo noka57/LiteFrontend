@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Breadcrumb, BreadcrumbItem, Radio,Fileupload,  FloatingLabelInput, Input, Dropdown, DropdownItem, Chevron, Select, Modal} from 'flowbite-svelte';
+  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Breadcrumb, BreadcrumbItem, Radio,Fileupload,  FloatingLabelInput, Input, Dropdown, DropdownItem, Chevron, Select, Modal, Label, Textarea} from 'flowbite-svelte';
 
 let openvpnBasic='Enable';
 let openvpnBasic2='Manual';
@@ -146,30 +146,7 @@ let RemoteCAList = [
     <TableHeadCell class="w-10"></TableHeadCell>
     <TableHeadCell class="w-10"></TableHeadCell>
   </TableHead>
-  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"  on:click={handleVPNClientClick}>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white">1</td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white">test1</td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white">Started</td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white">Connection Established</td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white">10.123.12.2</td>
-  </tr>
-
-
-{#if openVPNClientDetailStatus}
-
-
- <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Phone Number</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>+886912345678</TableBodyCell>
-      </TableBodyRow>
-
-      <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Modem Status</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>Connected</TableBodyCell>
-      </TableBodyRow>
-
-{/if}
-
+  
     <TableBodyRow>
       <TableBodyCell>2</TableBodyCell>
             <TableBodyCell>
@@ -591,6 +568,54 @@ test3
   </TableBody>
 </Table>
 
+<Modal bind:open={formModalValidClient} autoclose={false} size="md" class="w-full">
+
+<table>
+
+
+<tr>
+      <td>
+      <p class="pl-10 pt-4 text-lg font-light text-right">
+{#if openvpnAuthS=='X509Cert'}
+    Certificate Common Name
+{:else}
+    Username
+{/if}
+      </p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+{#if openvpnAuthS=='LoginPw'}
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={PWD} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+{/if}
+
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+
+
+    </tr>
+
+</table>
+</Modal>
+
 
 </AccordionItem>
 </Accordion>
@@ -601,6 +626,42 @@ test3
 
 
 
+
+{#if openvpnED == 'Enable'}
+{#if openvpnRole == 'Server'}
+<TabItem title="Advanced">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-44"><option disabled="" value="">Choose Client ...</option><option value="test1">test1</option><option value="test2">test2</option><option value="test3">test3</option></select>
+
+
+<Label for="textarea-id" class="mb-2">Command For This Client</Label>
+<Textarea id="textarea-id" placeholder="Command" rows="4" name="message"/>
+<div class="flex flex-wrap gap-2">
+
+<table>
+<tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+</table>
+
+</TabItem>
+{/if}
+{/if}
 
 
 {#if openvpnED == 'Enable'}

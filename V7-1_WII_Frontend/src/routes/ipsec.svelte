@@ -38,8 +38,8 @@ let RemoteCAList = [
     {value:"ss", name: "Self-sign"},
   ];
 
-  let openvpnED="Enable";
-  let openvpnRole="Client";
+  let IPsecED="Enable";
+  let IPsecRole="Client";
   let openvpnProtocol="UDP";
   let openvpnInitial="Started";
   let openvpnAuth="X509Cert";
@@ -123,16 +123,16 @@ let RemoteCAList = [
   <TabItem open title="Overview">
 
 
-{#if openvpnED == 'Enable'}
+{#if IPsecED == 'Enable'}
 
-{#if openvpnRole == 'Client'}  
+{#if IPsecRole == 'Client'}  
 <Table>
   <caption
     class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
   >
-    Client
+    Initiator
     <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-    List all clients' information
+    List all Initiators' information
     </p>
   </caption>
   <TableHead>
@@ -170,7 +170,7 @@ test2
 
 </Table>
 
-{:else if openvpnRole == 'Server'}  
+{:else if IPsecRole == 'Server'}  
 <Table>
   <caption
     class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
@@ -208,11 +208,11 @@ test2
       <TabItem title="Basic">
       <table>
       <tr>
-          <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">OpenVPN Service</p></td>
+          <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">IPsec Service</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={openvpnED} value='Disable'>Disable</Radio>
-  <Radio bind:group={openvpnED} value='Enable' >Enable</Radio>
+      <Radio bind:group={IPsecED} value='Disable'>Disable</Radio>
+  <Radio bind:group={IPsecED} value='Enable' >Enable</Radio>
 
 </div></td>
       </tr>
@@ -221,20 +221,20 @@ test2
       <tr>
           <td></td>
 
-{#if openvpnED == 'Enable'}    
-          <td><p class="pl-5 pt-5 text-lg font-light text-left">OpenVPN Role</p></td>
+{#if IPsecED == 'Enable'}    
+          <td><p class="pl-5 pt-5 text-lg font-light text-left">IPsec Role</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
 
-      <Radio bind:group={openvpnRole} value='Server'>Server</Radio>
-  <Radio bind:group={openvpnRole} value='Client' >Client</Radio>
+      <Radio bind:group={IPsecRole} value='Server'>Responder</Radio>
+  <Radio bind:group={IPsecRole} value='Client' >Initiator</Radio>
 </div></td>
 {:else}
  <td><p class="pl-5 pt-5 text-lg font-light text-left text-gray-400 dark:text-gray-500">OpenVPN Role</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={openvpnRole} value='Server' disabled>Server</Radio>
-  <Radio bind:group={openvpnRole} value='Client' disabled>Client</Radio>
+      <Radio bind:group={IPsecRole} value='Server' disabled>Server</Radio>
+  <Radio bind:group={IPsecRole} value='Client' disabled>Client</Radio>
 </div></td>
 {/if}
 
@@ -265,9 +265,9 @@ test2
 
     </TabItem>
 
-{#if openvpnED == 'Enable'}
+{#if IPsecED == 'Enable'}
 
-{#if openvpnRole == 'Client'}
+{#if IPsecRole == 'Client'}
 
 <TabItem title="Connection">
 
@@ -459,7 +459,7 @@ test2
 
     </TabItem>
 
-    {:else if openvpnRole == 'Server'}
+    {:else if IPsecRole == 'Server'}
 
     <TabItem title="Connection">
 
@@ -659,8 +659,8 @@ test2
 
 
 
-{#if openvpnED == 'Enable'}
-{#if openvpnRole == 'Server'}
+{#if IPsecED == 'Enable'}
+{#if IPsecRole == 'Server'}
 <TabItem title="Advanced">
 <Accordion>
 
@@ -710,8 +710,8 @@ test2
 {/if}
 
 
-{#if openvpnED == 'Enable'}
-{#if openvpnRole == 'Client'}
+{#if IPsecED == 'Enable'}
+{#if IPsecRole == 'Client'}
 <TabItem title="Advanced">
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-44"><option disabled="" value="">Choose VPN name ...</option><option value="test1">test1</option><option value="test2">test2</option><option value="test3">test3</option></select>
 

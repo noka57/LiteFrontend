@@ -147,6 +147,7 @@
 </svg>
         </svelte:fragment>
 						<SidebarDropdownItem label="OpenVPN" href='/openvpn' active={activeUrl === '/openvpn'}/>
+						<SidebarDropdownItem label="IPsec" href='/ipsec' active={activeUrl === '/ipsec'}/>
 
 					</SidebarDropdownWrapper>
 		

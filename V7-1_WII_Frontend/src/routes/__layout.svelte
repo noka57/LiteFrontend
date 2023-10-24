@@ -164,7 +164,6 @@
 </svg>
         </svelte:fragment>
 
-						<SidebarDropdownItem label="DREAMS" href='/DREAMS' active={activeUrl === '/DREAMS'}/>
 						<SidebarDropdownItem label="Docker Engine" href='/docker' active={activeUrl === '/docker'}/>
 
 					</SidebarDropdownWrapper>

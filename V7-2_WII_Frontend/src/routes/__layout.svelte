@@ -27,7 +27,7 @@
 	// Side component
 	let logo = 'EWLOGO.png';
 	let logoClass= 'w-20';
-	let siteName = 'AiR PACE 2';
+	let siteName = 'EW50-V';
 
 	let siteClass = 'pl-45';
 
@@ -165,7 +165,7 @@
         </svelte:fragment>
 
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
-						<SidebarDropdownItem label="Event Engine2" href='/event2' active={activeUrl === '/event2'}/>
+
 
 						<SidebarDropdownItem label="Docker Engine" href='/docker' active={activeUrl === '/docker'}/>
 

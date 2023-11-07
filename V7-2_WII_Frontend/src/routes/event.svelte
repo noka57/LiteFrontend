@@ -3,8 +3,14 @@
 
  import { writable } from 'svelte/store';
 
-let currentStep = 1;
-  let steps = ['Step 1', 'Step 2', 'Step 3', 'Step 4', 'Step 5'];
+  let currentStep = 1;
+  let steps = ['Step 1', 'Step 2', 'Step 3'];
+  let R_Name;
+  let R_DelayS;
+  let R_Once_Repeat;
+  let R_Repeat;
+  let R_RepeatInterval;
+ 
 
   let isActive = false;
   let formModalsmsT = false;
@@ -85,6 +91,32 @@ let currentStep = 1;
         openDetailStatusMV=!openDetailStatusMV;
   }
 
+  function Rule_Modal_Page1()
+  {
+    currentStep=1;
+  }
+
+
+
+  function Rule_Modal_Page2()
+  {
+    currentStep=2;
+  }
+
+  function Rule_Modal_Page3()
+  {
+    currentStep=3;
+  }
+
+
+  function NewRule()
+  {
+    currentStep=1;
+    formModalRule = true;
+  }
+
+
+
 
 let MVList = [
     {value:"Test1", name: "Line Current Phase A"},
@@ -101,7 +133,6 @@ let OpList = [
   ];
 
 
-  let searchTerm = '';
 
   let items = [
     { tt: '2023/11/01 02:03:30', tc: 'SMS', tn: 'T_sms_', at: '2023/11/01 02:03:35', ac: 'Email', an: 'A_Email_' },
@@ -110,9 +141,60 @@ let OpList = [
     { tt: '2023/11/02 02:03:40', tc: 'SMS', tn: 'T_sms_', at: '2023/11/02 02:03:45', ac: 'Email', an: 'A_Email_'  }
   ];
 
+  let TriggerCatelogList=[
+    {value:"SMS", name: "SMS"},
+    {value:"DI", name: "DI"},
+    {value:"Modbus", name: "Modbus"},
+    {value:"MQTT Notification", name: "MQTT Notification"},
+    {value:"SNMP Trap", name: "SNMP Trap"},
+    {value:"Socket", name: "Socket"},
 
- $: filteredItems = items.filter((item) => item.tc.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1);
+  ];
 
+  let ActionCatelogList=[
+    {value:"SMS", name: "SMS"},
+    {value:"DO", name: "DO"},
+    {value:"Modbus", name: "Modbus"},
+    {value:"Email", name: "Email"},
+    {value:"MQTT Publish", name: "MQTT Publish"},
+    {value:"SNMP Trap", name: "SNMP Trap"},
+    {value:"Line Notification", name: "SNMP Line Notification"},
+    {value:"Socket", name: "Socket"},
+
+  ];
+
+
+  let TriggerSMSList=[
+    {value:"1", name: "T_sms_"},
+  ];
+
+  let TriggerDIList=[
+    {value:"1", name: "T_DI_"},
+  ];
+
+  let TriggerMBList=[
+    {value:"1", name: "T_Modbus_"},
+  ];
+
+  let Tselected;
+  let Aselected;
+
+
+  let ActionSMSList=[
+    {value:"1", name: "A_sms_"},
+  ];
+
+  let ActionDIList=[
+    {value:"1", name: "A_DO_"},
+  ];
+
+  let ActionMBList=[
+    {value:"1", name: "A_Modbus_"},
+  ];
+
+  let ActionEmailList=[
+    {value:"1", name: "A_Email_"},
+  ];
 
   const sortKey = writable('tt'); // default sort key
   const sortDirection = writable(-1); // default sort direction (ascending)
@@ -1926,7 +2008,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </TableBodyRow>
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalRule = true}>
+<button on:click={NewRule}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -1968,38 +2050,193 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <p class="mt-4"></p>
 
 
-<label>
-  <input class="center" type=checkbox checked={ruleitem}>
-  Enable
-</label>
-
-<p class="mt-4"></p>
 
 <table>
 
-
+{#if currentStep == 1}
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">T_sms_</p><input type="text" bind:value={T_SMS_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
+  <input class="center" type=checkbox checked={ruleitem}></td>
 
 
 
   </tr>
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">R_</p><input type="text" bind:value={R_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
+
+
+  </tr>
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Trigger Catelog</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerCatelogList} placeholder="None" bind:value={Tselected}/></td>
+
+
+</tr>
+
+{#if Tselected == 'SMS'}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerSMSList} placeholder="None" /></td>
+
+</tr>
+
+{:else if Tselected == 'DI'}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">DI Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerDIList} placeholder="None" /></td>
+
+</tr>
+{:else if Tselected == "Modbus"}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerMBList} placeholder="None" /></td>
+
+</tr>
+{/if}
 
 
 
 <tr>
     <td></td>
     <td></td>
-        <td></td>
     <td></td>
-        <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={Rule_Modal_Page2}>Next</Button></td>
 
 
     </tr>
+{:else if currentStep==2}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Delay Second</p></td><td class="pl-5 pt-5"><input type="number" bind:value={R_DelayS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+  <tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Action Option</p></td>
+
+    <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+    <Radio bind:group={R_Once_Repeat} value='once' >Once</Radio>
+    <Radio bind:group={R_Once_Repeat} value='repeat'>Repeat</Radio>
+    </div></td>
+    </tr>
+{#if R_Once_Repeat == 'repeat'}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Count</p></td><td class="pl-5 pt-5"><input type="number" bind:value={R_Repeat} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={R_RepeatInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
+
+</tr>
+{:else}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Count</p></td><td class="pl-5 pt-5"><input type="number" bind:value={R_Repeat} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500  disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled></td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={R_RepeatInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-50  disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled></td>
+
+</tr>
+{/if}
+
+
+
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+       <td class="pl-20"><Button color="dark" pill={true} on:click={Rule_Modal_Page1}>Back</Button></td>
+    <td class="pl-1"><Button color="dark" pill={true} on:click={Rule_Modal_Page3}>Next</Button></td>
+
+
+    </tr>
+
+{:else if currentStep==3}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Action Catelog</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionCatelogList} placeholder="None" bind:value={Aselected}/></td>
+
+
+</tr>
+
+
+
+{#if Aselected == 'SMS'}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionSMSList} placeholder="None" /></td>
+
+</tr>
+
+{:else if Aselected == 'DO'}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">DO Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionDIList} placeholder="None" /></td>
+
+</tr>
+{:else if Aselected == "Modbus"}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionMBList} placeholder="None" /></td>
+
+</tr>
+
+
+{:else if Aselected == "Email"}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Email Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionEmailList} placeholder="None" /></td>
+
+</tr>
+{/if}
+
+
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+       <td class="pl-20"><Button color="dark" pill={true} on:click={Rule_Modal_Page2}>Back</Button></td>
+    <td class="pl-1"><Button color="dark" pill={true} >Finish</Button></td>
+
+
+    </tr>
+{/if}
 
   </table>
 

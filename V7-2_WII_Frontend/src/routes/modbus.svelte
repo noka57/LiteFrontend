@@ -550,8 +550,8 @@
   </td>
 
     <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
-  <Radio bind:group={PointType} value='HR' >Coil</Radio>
-  <Radio bind:group={PointType} value='HR' >Discrete Input</Radio>
+  <Radio bind:group={PointType} value='Coil' >Coil</Radio>
+  <Radio bind:group={PointType} value='DI' >Discrete Input</Radio>
   <Radio bind:group={PointType} value='IR' >Input Register</Radio>
   <Radio bind:group={PointType} value='HR' >Holding Register</Radio>
 </div></td>

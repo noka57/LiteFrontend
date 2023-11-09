@@ -34,6 +34,7 @@
   let formModalMT=false;
   let mitemT=true;
   let T_Modbus_name;
+  let T_VType;
   let T_MV_name;
   let T_Comparison;
 
@@ -42,6 +43,7 @@
   let mitemA=true;
   let A_Modbus_name;
   let A_MV_name;
+  let A_VType;
 
   let formModalsmsA = false;
   let A_SMS_Name;
@@ -72,6 +74,9 @@
 
   let formModalRule=false;
   let ruleitem=false;
+
+  let R_TCount='1';
+  let R_TMultipleRelation='OR';
 
   let openDetailStatusMMS = false;
   let openDetailStatusMMT = false;
@@ -174,7 +179,9 @@ let OpList = [
     {value:"1", name: "T_Modbus_"},
   ];
 
-  let Tselected;
+  let Tselected1;
+  let Tselected2;
+  let Tselected3;
   let Aselected;
 
 
@@ -675,6 +682,7 @@ let OpList = [
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
     <TableHeadCell class="w-18">Modbus Variable</TableHeadCell>
+    <TableHeadCell class="w-18">Variable Type</TableHeadCell>
     <TableHeadCell class="w-18">Comparison</TableHeadCell>
 
   </TableHead>
@@ -697,6 +705,7 @@ let OpList = [
       <TableBodyCell class="w-10">1</TableBodyCell>
       <TableBodyCell class="w-18">T_Modbus_</TableBodyCell>
       <TableBodyCell class="w-18">Line Current Phase A</TableBodyCell>
+      <TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
       <TableBodyCell class="w-18"> > 1000</TableBodyCell>
 
     </TableBodyRow>
@@ -759,6 +768,22 @@ let OpList = [
     <td class= "pl-4 pt-4"><Select class="mt-2" items={MVList} placeholder="None" /></td>
 
 
+</tr>
+
+<tr>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Type</p>
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan=""><div>
+  <Radio class="pb-2" bind:group={T_VType} value='bool' >Boolean</Radio>
+  <Radio class="pb-2" bind:group={T_VType} value='uns' >Unsigned Short</Radio>
+  <Radio class="pb-2" bind:group={T_VType} value='ss' >Signed Short</Radio>
+  <Radio class="pb-2" bind:group={T_VType} value='uni' >Unsigned Integer</Radio>
+  <Radio class="pb-2" bind:group={T_VType} value='si' >Signed Integer</Radio>
+  <Radio class="pb-2" bind:group={T_VType} value='float' >Float</Radio>
+  <Radio class="pb-2" bind:group={T_VType} value='double' >Double</Radio>
+</div></td>
 </tr>
 
 
@@ -1664,6 +1689,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-10">1</TableBodyCell>
       <TableBodyCell class="w-18">A_Modbus_</TableBodyCell>
       <TableBodyCell class="w-18">Line Current Phase A</TableBodyCell>
+      <TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
       <TableBodyCell class="w-18">2000</TableBodyCell>
 
     </TableBodyRow>
@@ -1726,6 +1752,23 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td class= "pl-4 pt-4"><Select class="mt-2" items={MVList} placeholder="None" /></td>
 
 
+</tr>
+
+<tr>
+
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Type</p>
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan=""><div>
+  <Radio class="pb-2" bind:group={A_VType} value='bool' >Boolean</Radio>
+  <Radio class="pb-2" bind:group={A_VType} value='uns' >Unsigned Short</Radio>
+  <Radio class="pb-2" bind:group={A_VType} value='ss' >Signed Short</Radio>
+  <Radio class="pb-2" bind:group={A_VType} value='uni' >Unsigned Integer</Radio>
+  <Radio class="pb-2" bind:group={A_VType} value='si' >Signed Integer</Radio>
+  <Radio class="pb-2" bind:group={A_VType} value='float' >Float</Radio>
+  <Radio class="pb-2" bind:group={A_VType} value='double' >Double</Radio>
+</div></td>
 </tr>
 
 
@@ -2054,14 +2097,51 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
   </tr>
+
+
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Trigger Catelog</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerCatelogList} placeholder="None" bind:value={Tselected}/></td>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Trigger Count</p>
 
+  </td>
 
+    <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
+  <Radio bind:group={R_TCount} value='1' >1</Radio>
+  <Radio bind:group={R_TCount} value='2' >2</Radio>
+  <Radio bind:group={R_TCount} value='3' >3</Radio>
+
+</div></td>
 </tr>
 
-{#if Tselected == 'SMS'}
+<tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Multiple Triggers Relationship</p>
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
+{#if R_TCount == '1'}
+  <Radio bind:group={R_TMultipleRelation} value='OR' name="disabled-state" disabled>OR</Radio>
+  <Radio bind:group={R_TMultipleRelation} value='AND' name="disabled-state" disabled>AND</Radio>
+{:else}
+  <Radio bind:group={R_TMultipleRelation} value='OR' >OR</Radio>
+  <Radio bind:group={R_TMultipleRelation} value='AND' >AND</Radio>
+{/if}
+
+</div></td>
+</tr>
+
+{#if R_TCount == '1' || R_TCount == '2' || R_TCount == '3'}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">1st Trigger Catelog</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerCatelogList} placeholder="None" bind:value={Tselected1}/></td>
+
+</tr>
+{/if}
+
+
+
+
+
+{#if Tselected1 == 'SMS'}
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Profile</p></td>
@@ -2069,14 +2149,14 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 </tr>
 
-{:else if Tselected == 'DI'}
+{:else if Tselected1 == 'DI'}
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">DI Profile</p></td>
     <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerDIList} placeholder="None" /></td>
 
 </tr>
-{:else if Tselected == "Modbus"}
+{:else if Tselected1 == "Modbus"}
 
 
 <tr>
@@ -2086,6 +2166,72 @@ on:click={handleClickMV} on:keydown={() => {}}>
 </tr>
 {/if}
 
+{#if R_TCount == '2' || R_TCount=='3'}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">2nd Trigger Catelog</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerCatelogList} placeholder="None" bind:value={Tselected2}/></td>
+</tr>
+{#if Tselected2 == 'SMS'}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerSMSList} placeholder="None" /></td>
+
+</tr>
+
+{:else if Tselected2 == 'DI'}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">DI Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerDIList} placeholder="None" /></td>
+
+</tr>
+{:else if Tselected2 == "Modbus"}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerMBList} placeholder="None" /></td>
+
+</tr>
+{/if}
+
+
+{/if}
+
+
+{#if R_TCount=='3'}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">3rd Trigger Catelog</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerCatelogList} placeholder="None" bind:value={Tselected3}/></td>
+</tr>
+{#if Tselected3 == 'SMS'}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerSMSList} placeholder="None" /></td>
+
+</tr>
+
+{:else if Tselected3 == 'DI'}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">DI Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerDIList} placeholder="None" /></td>
+
+</tr>
+{:else if Tselected3 == "Modbus"}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerMBList} placeholder="None" /></td>
+
+</tr>
+{/if}
+
+
+{/if}
 
 
 <tr>
@@ -2233,6 +2379,14 @@ on:click={handleClickMV} on:keydown={() => {}}>
 </Table>
 
 </TabItem>
+
+<TabItem title="Simulator">
+
+
+
+</TabItem>
+
+
 
     <TabItem title="Log Viewer">
 

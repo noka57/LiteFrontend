@@ -43,8 +43,8 @@ cp -r "$tmpfilefolder""." "$webgzip_folder"
 
 cd "$webgzip_folder"
 
-find -maxdepth 1 -type f -name "Login_2.png" -printf "\"/%P\",%s,3,\"/usr/bin/litebackend/%P\"\r\n" >> ../gperffile/webfileGperf
-find -maxdepth 1 -type f -name "index.html" -printf "\"/%P\",%s,1,\"/usr/bin/litebackend/%P\"\r\n" >> ../gperffile/webfileGperf
-find -maxdepth 1 -type f -name "global.css" -printf "\"/%P\",%s,2,\"/usr/bin/litebackend/%P\"\r\n" >> ../gperffile/webfileGperf
-find -mindepth 2 -type f -name "bundle.js" -printf "\"/%P\",%s,4,\"/usr/bin/litebackend/%P\"\r\n" >> ../gperffile/webfileGperf
-find -mindepth 2 -type f -name "bundle.css" -printf "\"/%P\",%s,2,\"/usr/bin/litebackend/%P\"\r\n" >> ../gperffile/webfileGperf
+find -maxdepth 1 -type f -name "Login_2.png" -printf "\"/%P\",%s,3,\"/usr/sbin/litebackend/%P\"\r\n" >> ../gperffile/webfileGperf
+find -maxdepth 1 -type f -name "index.html" -printf "\"/%P\",%s,1,\"/usr/sbin/litebackend/%P\"\r\n" >> ../gperffile/webfileGperf
+find -maxdepth 1 -type f -name "global.css" -printf "\"/%P\",%s,2,\"/usr/sbin/litebackend/%P\"\r\n" >> ../gperffile/webfileGperf
+find -mindepth 2 -type f -name "bundle.js" -printf "\"/%P\",%s,4,\"/usr/sbin/litebackend/%P\"\r\n" >> ../gperffile/webfileGperf
+find -mindepth 2 -type f -name "bundle.css" -printf "\"/%P\",%s,2,\"/usr/sbin/litebackend/%P\"\r\n" >> ../gperffile/webfileGperf

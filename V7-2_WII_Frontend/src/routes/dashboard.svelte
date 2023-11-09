@@ -34,7 +34,7 @@
 
 </div>
 <div class="w-full">
-<p class="text-sm font-light">Internet Uptime</p>
+<p class="text-sm font-light pt-2">Internet Uptime</p>
 <p class="text-xl font-bold">1hr 3mins</p>
 </div>
 </div></TableBodyCell>

@@ -38,13 +38,13 @@
 
 
  <Tabs style="underline">
-   <TabItem open title="Master">
+   <TabItem open title="RTU">
 <Accordion>
   <AccordionItem {defaultClass}>
 
 
     <span slot="header" class="pl-4">
-    RTU
+    Master
     </span>
 
 <Table shadow striped={true} tableNoWFull={true}>
@@ -172,7 +172,6 @@
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
   <Radio bind:group={Sinterface} value='R485' >RS 485</Radio>
-  <Radio bind:group={Sinterface} value='R232' >RS 232</Radio>
 </div></td>
 </tr>
 
@@ -248,8 +247,26 @@
   <AccordionItem {defaultClass}>
 
     <span slot="header" class="pl-4">
-    TCP
+    Slave
     </span>
+
+</AccordionItem>
+
+
+</Accordion>
+
+   </TabItem>
+     <TabItem title="TCP">
+     
+<Accordion>
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Master
+    </span>
+
 
 <Table shadow striped={true} tableNoWFull={true}>
 <TableHead>
@@ -372,29 +389,15 @@
 
   </TableBody>
 </Table>
-</AccordionItem>
 
 
-</Accordion>
-
-   </TabItem>
-     <TabItem title="Slave">
-     
-<Accordion>
-
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    RTU
-    </span>
 </AccordionItem>
 
   <AccordionItem {defaultClass}>
 
 
     <span slot="header" class="pl-4">
-    TCP
+    Slave
     </span>
 </AccordionItem>
 
@@ -505,7 +508,7 @@
     
   </TableBody>
 
-<Modal bind:open={formModalmvar} autoclose={false} size="md" class="w-full">
+<Modal bind:open={formModalmvar} autoclose={false} size="lg" class="w-full">
 
 <label>
   <input class="center" type=checkbox checked={mvarenable}>
@@ -516,14 +519,13 @@
 
 <table>
   <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Master Profile</p></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Master Profile</p></td>
     <td class= "pl-4 pt-4"><Select class="mt-2" items={MPList} placeholder="None" /></td>
-
 
 </tr>
 
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Variable Name</p></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Variable Name</p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={M_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
@@ -534,18 +536,22 @@
 
 
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={SlaveID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={SlaveID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+<td></td>
+<td></td>
+<td></td>
 
 
   </tr>
 
 <tr>
-  <td><p class="pl-4 pt-4 text-lg font-light text-right">Point Type</p>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Point Type</p>
 
   </td>
 
-    <td class="pl-5 pt-4"><div class="flex gap-4">
+    <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
+  <Radio bind:group={PointType} value='HR' >Coil</Radio>
+  <Radio bind:group={PointType} value='HR' >Discrete Input</Radio>
   <Radio bind:group={PointType} value='IR' >Input Register</Radio>
   <Radio bind:group={PointType} value='HR' >Holding Register</Radio>
 </div></td>
@@ -553,27 +559,32 @@
 
 
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={MAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={MAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={MQ} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+<td></td>
+<td></td>
+<td></td>
 
 
   </tr>
 
 
   <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={MQ} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
-  <tr>
-  <td><p class="pl-4 pt-4 text-lg font-light text-right">Display</p>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Display</p>
 
   </td>
 
-    <td class="pl-4 pt-5"><div class="gap-4">
+    <td class="pl-4 pt-5" colspan="5"><div class="flex gap-2">
   <Radio bind:group={MDisplay} value='BE' >Big Endian</Radio>
   <Radio bind:group={MDisplay} value='LE' >Little Endian</Radio>
   <Radio bind:group={MDisplay} value='BEBS' >Big Endian Byte Swap</Radio>
@@ -583,14 +594,18 @@
 
 
   <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Polling Rate</p></td><td class="pl-5 pt-5"><input type="text" bind:value={PRate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-1 pt-4">ms</td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
+      <input type="text" bind:value={PRate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
 
-
+<td></td>
+<td></td>
+<td></td>
 
   </tr>
 
 
       <tr>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>

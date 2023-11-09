@@ -146,7 +146,6 @@ let OpList = [
     {value:"DI", name: "DI"},
     {value:"Modbus", name: "Modbus"},
     {value:"MQTT Notification", name: "MQTT Notification"},
-    {value:"SNMP Trap", name: "SNMP Trap"},
     {value:"Socket", name: "Socket"},
 
   ];
@@ -157,7 +156,6 @@ let OpList = [
     {value:"Modbus", name: "Modbus"},
     {value:"Email", name: "Email"},
     {value:"MQTT Publish", name: "MQTT Publish"},
-    {value:"SNMP Trap", name: "SNMP Trap"},
     {value:"Line Notification", name: "SNMP Line Notification"},
     {value:"Socket", name: "Socket"},
 
@@ -268,7 +266,7 @@ let OpList = [
 
    </TabItem>
 
-<TabItem title="Trigger Settings">
+<TabItem title="Trigger Profiles">
 
 <Accordion>
   <AccordionItem {defaultClass}>
@@ -965,20 +963,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </span>
 </AccordionItem>
 
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    SNMP Trap
-    </span>
-</AccordionItem>
 
 
   <AccordionItem {defaultClass}>
 
 
     <span slot="header" class="pl-4">
-    Socket
+    TCP Message
     </span>
 </AccordionItem>
 
@@ -987,7 +978,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 </TabItem>
 
 
-<TabItem title="Action Settings">
+<TabItem title="Action Profiles">
 
 
 
@@ -1650,6 +1641,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
     <TableHeadCell class="w-18">Modbus Variable</TableHeadCell>
+    <TableHeadCell class="w-18">Variable Type</TableHeadCell>
     <TableHeadCell class="w-18">Assignment</TableHeadCell>
 
   </TableHead>
@@ -1943,19 +1935,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
 </AccordionItem>
 
 
-  <AccordionItem {defaultClass}>
 
-
-    <span slot="header" class="pl-4">
-    SNMP Trap
-    </span>
-</AccordionItem>
 
   <AccordionItem {defaultClass}>
 
 
     <span slot="header" class="pl-4">
-    Socket
+    TCP Message
     </span>
 </AccordionItem>
 

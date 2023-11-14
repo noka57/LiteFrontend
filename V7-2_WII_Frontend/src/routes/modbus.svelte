@@ -8,6 +8,8 @@
   let Parity="None";
   let DB="8";
   let SB="1";
+  let MM_SerialProfile;
+  let MS_SerialProfile;
   let RM_Name="Modbus_Master_S0";
 
   let smenable=true;
@@ -56,12 +58,7 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-10">Serial Port</TableHeadCell>
-    <TableHeadCell>Interface</TableHeadCell>
-    <TableHeadCell>Baudrate</TableHeadCell>
-    <TableHeadCell>Parity</TableHeadCell>
-    <TableHeadCell class="w-18">Data Bits</TableHeadCell>
-    <TableHeadCell class="w-18">Stop Bits</TableHeadCell>
+    <TableHeadCell class="w-10">Serial Profile</TableHeadCell>
   </TableHead>
   <TableBody>
     <TableBodyRow>
@@ -77,12 +74,7 @@
       <TableBodyCell>1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
       <TableBodyCell class="!p-6 w-18"> RTU_Master_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> Serial Port 0</TableBodyCell>
-      <TableBodyCell class="w-10">RS 485</TableBodyCell>
-      <TableBodyCell class="w-10">9600</TableBodyCell>
-      <TableBodyCell class="w-10">None</TableBodyCell>
-      <TableBodyCell class="w-18">8</TableBodyCell>
-      <TableBodyCell class="w-18">1</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"> SerialPort0</TableBodyCell>
     </TableBodyRow>
 
 
@@ -132,58 +124,18 @@
 
 
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Port</p></td>
-      <td class="pl-5 pt-5">Serial Port 0</td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
+      <td class="pl-5 pt-5">
+      <select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={MM_SerialProfile}>
+<option disabled="" value="">None</option>
+<option value="1" >SerialPort0</option>
+
+      </td>
 
 
 
   </tr>
 
-<tr>
-  <td><p class="pl-4 pt-4 text-lg font-light text-right">Interface</p>
-
-  </td>
-
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={Sinterface} value='R485' >RS 485</Radio>
-</div></td>
-</tr>
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="text" bind:value={BR} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Parity</p></td>
-
-
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={Parity} value='None' >None</Radio>
-  <Radio bind:group={Parity} value='Even' >Even</Radio>
-  <Radio bind:group={Parity} value='Odd' >Odd</Radio>
-</div></td>
-
-
-
-  </tr>
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={DB} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={SB} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
 
 
 
@@ -220,12 +172,7 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-10">Serial Port</TableHeadCell>
-    <TableHeadCell>Interface</TableHeadCell>
-    <TableHeadCell>Baudrate</TableHeadCell>
-    <TableHeadCell>Parity</TableHeadCell>
-    <TableHeadCell class="w-18">Data Bits</TableHeadCell>
-    <TableHeadCell class="w-18">Stop Bits</TableHeadCell>
+    <TableHeadCell class="w-10">Serial Profile</TableHeadCell>
   </TableHead>
   <TableBody>
    
@@ -242,12 +189,8 @@
       <TableBodyCell>1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
       <TableBodyCell class="!p-6 w-18"> RTU_Slave_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> Serial Port 1</TableBodyCell>
-      <TableBodyCell class="w-10">RS 485</TableBodyCell>
-      <TableBodyCell class="w-10">115200</TableBodyCell>
-      <TableBodyCell class="w-10">None</TableBodyCell>
-      <TableBodyCell class="w-18">8</TableBodyCell>
-      <TableBodyCell class="w-18">1</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"> SerialPort1</TableBodyCell>
+
     </TableBodyRow>
 
 
@@ -295,56 +238,14 @@
 
   </tr>
 
-
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Port</p></td>
-      <td class="pl-5 pt-5">Serial Port 0</td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
+      <td class="pl-5 pt-5">
+      <select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={MM_SerialProfile}>
+<option disabled="" value="">None</option>
+<option value="1" >SerialPort1</option>
 
-
-
-  </tr>
-
-<tr>
-  <td><p class="pl-4 pt-4 text-lg font-light text-right">Interface</p>
-
-  </td>
-
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={Sinterface} value='R485' >RS 485</Radio>
-</div></td>
-</tr>
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="text" bind:value={BR} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Parity</p></td>
-
-
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={Parity} value='None' >None</Radio>
-  <Radio bind:group={Parity} value='Even' >Even</Radio>
-  <Radio bind:group={Parity} value='Odd' >Odd</Radio>
-</div></td>
-
-
-
-  </tr>
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={DB} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={SB} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      </td>
 
 
 
@@ -1470,7 +1371,7 @@
       </button></TableBodyCell>
       <TableBodyCell>1</TableBodyCell>
      <TableBodyCell class="!p-6 w-4">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">R_to_T test</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">R_to_R test</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">RTU_Slave_1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">RTU_Master_1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">1000 ms</TableBodyCell>
@@ -1572,7 +1473,7 @@
       </button></TableBodyCell>
       <TableBodyCell>1</TableBodyCell>
      <TableBodyCell class="!p-6 w-4">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">R_to_T test</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">T_to_T test</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">TCP_Slave_1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">TCP_Master_1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">1000 ms</TableBodyCell>

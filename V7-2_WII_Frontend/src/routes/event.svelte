@@ -95,6 +95,7 @@
   let openDetailStatusMMT = false;
   let openDetailStatusMV = false;
   let openDetailStatusRule = false;
+  let finishSimulate=false;
 
   function handleClickRule() {
         openDetailStatusRule=!openDetailStatusRule;
@@ -113,6 +114,12 @@
 
   function handleClickMV() {
         openDetailStatusMV=!openDetailStatusMV;
+  }
+
+
+  function Simulate()
+  {
+    finishSimulate=true;
   }
 
   function Rule_Modal_Page1()
@@ -170,7 +177,7 @@ let OpList = [
     { tt: '2023/11/02 02:03:40', tc: 'SMS', tn: 'T_sms_', at: '2023/11/02 02:03:45', ac: 'Email', an: 'A_Email_'  }
   ];
 
-  let TriggerCatelogList=[
+  let TriggerCatalogList=[
     {value:"SMS", name: "SMS"},
     {value:"DI", name: "DI"},
     {value:"Modbus", name: "Modbus"},
@@ -180,7 +187,7 @@ let OpList = [
 
   ];
 
-  let ActionCatelogList=[
+  let ActionCatalogList=[
     {value:"SMS", name: "SMS"},
     {value:"DO", name: "DO"},
     {value:"Modbus", name: "Modbus"},
@@ -2053,8 +2060,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-18">Trigger Catelog</TableHeadCell>
-    <TableHeadCell class="w-18">Action Catelog</TableHeadCell>
+    <TableHeadCell class="w-18">Trigger Catalog</TableHeadCell>
+    <TableHeadCell class="w-18">Action Catalog</TableHeadCell>
   </TableHead>
   <TableBody>
     <TableBodyRow class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-60" on:click={handleClickRule}>
@@ -2085,7 +2092,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-
+      <TableBodyCell class="w-10"></TableBodyCell>
+            <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="text-right" colspan="3">Delay Second</TableBodyCell>
       <TableBodyCell class="text-left" colspan="2"  {tdClass}>3</TableBodyCell>
       </TableBodyRow>
@@ -2094,6 +2102,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
+            <TableBodyCell class="w-10"></TableBodyCell>
+                  <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="text-right" colspan="3">Action Option</TableBodyCell>
       <TableBodyCell class="text-left" colspan="2"  {tdClass}>Once</TableBodyCell>
       </TableBodyRow>
@@ -2203,7 +2213,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">1st Trigger Catelog</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">1st Trigger Catalog</p></td>
     <td class= "pl-4 pt-4">
 <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Tselected1}>
 <option disabled="" value="">None</option>
@@ -2280,7 +2290,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">2nd Trigger Catelog</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">2nd Trigger Catalog</p></td>
     <td class= "pl-4 pt-4">
 {#if R_TCount=='1'}
 
@@ -2404,7 +2414,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">3rd Trigger Catelog</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">3rd Trigger Catalog</p></td>
     <td class= "pl-4 pt-4">
 
 
@@ -2599,8 +2609,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Action Catelog</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionCatelogList} placeholder="None" bind:value={Aselected}/></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Action Catalog</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionCatalogList} placeholder="None" bind:value={Aselected}/></td>
 
 
 </tr>
@@ -2683,9 +2693,9 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <TabItem title="Simulator">
 
 
-<p>Select Rule: </p><select class="block w-18 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Simulator_Rselected}>
+<p>Select Rule: </p><select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Simulator_Rselected}>
 <option disabled="" value="">None</option>
-<option value="1">R_sms_or_modbus_trigger_do</option>
+<option value="1" >R_sms_or_modbus_trigger_do</option>
 
 </select>
 
@@ -2693,7 +2703,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <p class="pt-5">Select Trigger: </p>
 
-<select class="block w-18 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Simulator_Tselected}>
+<select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Simulator_Tselected}>
 <option disabled="" value="">None</option>
 <option value="1">T_sms</option>
 <option value="2">T_modbus</option>
@@ -2701,19 +2711,27 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if Simulator_Tselected == '1'}
 <div class="flex gap-4">
-<p class="pt-5">Set sms content: </p><input type="text" bind:value={Simulator_ContentValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"/>
+<p class="pt-10">Set sms content: </p><input type="text" bind:value={Simulator_ContentValue} class="mt-5 bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"/>
 </div>
 {:else if Simulator_Tselected == '2'}
 <div class="flex gap-4">
-<p class="pt-5">Set modbus value: </p><input type="text" bind:value={Simulator_ContentValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"/>
+<p class="pt-10">Set modbus value: </p><input type="text" bind:value={Simulator_ContentValue} class="mt-5 bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"/>
 </div>
 {/if}
 {/if}
 
 
-{#if Simulator_Tselected == '1' || Simulator_Tselected == '2'}
+{#if Simulator_Tselected == '1' || Simulator_Tselected == '2' || Simulator_Tselected == '3'}
 
-<button type="button" class="pt-5 text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full">Simulate</button>
+<p class="pt-5"></p>
+<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full" on:click={Simulate}>Simulate</button>
+{/if}
+
+
+{#if finishSimulate == true}
+
+<p class="pt-10 pl-4">2023/11/02 02:03:35 execute DO profile (A_DO) </p>
+
 {/if}
 
 </TabItem>
@@ -2727,10 +2745,10 @@ on:click={handleClickMV} on:keydown={() => {}}>
   <TableHead>
 
     <TableHeadCell on:click={() => sortTable('tt')}>Trigger Timestamp</TableHeadCell>
-    <TableHeadCell on:click={() => sortTable('tc')}>Trigger Catelog</TableHeadCell>
+    <TableHeadCell on:click={() => sortTable('tc')}>Trigger Catalog</TableHeadCell>
     <TableHeadCell on:click={() => sortTable('tn')}>Trigger Alias Name</TableHeadCell>
     <TableHeadCell on:click={() => sortTable('at')}>Action Timestamp</TableHeadCell>
-    <TableHeadCell on:click={() => sortTable('ac')}>Action Catelog</TableHeadCell>
+    <TableHeadCell on:click={() => sortTable('ac')}>Action Catalog</TableHeadCell>
     <TableHeadCell on:click={() => sortTable('an')}>Action Alias Name</TableHeadCell>   
 
   </TableHead>

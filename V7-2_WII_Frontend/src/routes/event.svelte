@@ -3,15 +3,6 @@
 
  import { writable } from 'svelte/store';
 
-  let currentStep = 1;
-  let steps = ['Step 1', 'Step 2', 'Step 3'];
-  let R_Name;
-  let R_DelayS;
-  let R_Once_Repeat;
-  let R_Repeat;
-  let R_RepeatInterval;
- 
-
   let isActive = false;
   let formModalsmsT = false;
   let T_SMS_Name;
@@ -28,7 +19,9 @@
   let T_DI_Duration;
 
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+   let tdClass = 'px-6 py-4 whitespace-nowrap font-light text-center';
 
+   let trClass= 'noborder text-center bg-white dark:bg-gray-800 dark:border-gray-700';
 
 
   let formModalMT=false;
@@ -37,6 +30,14 @@
   let T_VType;
   let T_MV_name;
   let T_Comparison;
+
+  let formModalPINGT = false;
+  let pingitemT=false;
+  let T_PING_Name;
+  let T_PING_Period;
+  let T_PING_RetryCount;
+  let T_PING_RetryInterval;
+  let T_PING_Host;
 
   let A_Modbus_assign;
   let formModalMA=false;
@@ -75,12 +76,30 @@
   let formModalRule=false;
   let ruleitem=false;
 
-  let R_TCount='1';
+  let currentStep = 1;
+  let steps = ['Step 1', 'Step 2', 'Step 3'];
+  let R_Name="sms_or_modbus_trigger_do";
+  let R_DelayS=3;
+  let R_Once_Repeat='once';
+  let R_Repeat;
+  let R_RepeatInterval;
+ 
+  let R_TCount='2';
   let R_TMultipleRelation='OR';
+
+  let Simulator_Rselected;
+  let Simulator_Tselected;
+  let Simulator_ContentValue;
 
   let openDetailStatusMMS = false;
   let openDetailStatusMMT = false;
   let openDetailStatusMV = false;
+  let openDetailStatusRule = false;
+
+  function handleClickRule() {
+        openDetailStatusRule=!openDetailStatusRule;
+  }
+
 
   function handleClickMMS() {
         openDetailStatusMMS=!openDetailStatusMMS;
@@ -113,6 +132,11 @@
     currentStep=3;
   }
 
+  function Rule_Modal_Finish()
+  {
+      formModalRule = false;
+    currentStep=1;
+  }
 
   function NewRule()
   {
@@ -151,7 +175,8 @@ let OpList = [
     {value:"DI", name: "DI"},
     {value:"Modbus", name: "Modbus"},
     {value:"MQTT Notification", name: "MQTT Notification"},
-    {value:"Socket", name: "Socket"},
+    {value:"TCPM", name: "TCP Message"},
+    {value:"WANs", name: "WAN Status"},
 
   ];
 
@@ -161,9 +186,9 @@ let OpList = [
     {value:"Modbus", name: "Modbus"},
     {value:"Email", name: "Email"},
     {value:"MQTT Publish", name: "MQTT Publish"},
-    {value:"Line Notification", name: "SNMP Line Notification"},
-    {value:"Socket", name: "Socket"},
-
+    {value:"Line Notification", name: "Line Notification"},
+    {value:"TCPM", name: "TCP Message"},
+    {value:"System", name: "System"},
   ];
 
 
@@ -179,10 +204,13 @@ let OpList = [
     {value:"1", name: "T_Modbus_"},
   ];
 
-  let Tselected1;
-  let Tselected2;
+  let Tselected1="SMS";
+  let Tselected2="Modbus";
   let Tselected3;
-  let Aselected;
+  let TselectedProfile1;
+  let TselectedProfile2;
+  let TselectedProfile3;
+  let Aselected="DO";
 
 
   let ActionSMSList=[
@@ -200,6 +228,19 @@ let OpList = [
   let ActionEmailList=[
     {value:"1", name: "A_Email_"},
   ];
+
+  let ActionSystemList=[
+      {value:"1", name: "System Reboot"},
+      {value:"2", name: "SysLog server – on"},
+      {value:"3", name: "SysLog server – off"},
+      {value:"4", name: "SW Reset C-WAN module"},
+      {value:"5", name: "HW Reset C-WAN module"},
+      {value:"6", name: "WAN Backup Switch"},
+      {value:"7", name: "C-WAN power cycle"},
+      {value:"8", name: "SIM Switch"},
+  ]
+
+
 
   const sortKey = writable('tt'); // default sort key
   const sortDirection = writable(-1); // default sort direction (ascending)
@@ -823,7 +864,7 @@ let OpList = [
 
 <p class="mt-8">
 
-<Table shadow striped={true} tableNoWFull={true}>
+<Table shadow striped={true}>
 
 
 <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
@@ -862,7 +903,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <p class="mt-4">
 
-<Table shadow striped={true} tableNoWFull={true}>
+<Table shadow striped={true} >
 
 
   <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMS} on:keydown={() => {}}>
@@ -926,7 +967,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <p class="mt-4">
 
-<Table shadow striped={true} tableNoWFull={true}>
+<Table shadow striped={true}>
 
   <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMT} on:keydown={() => {}}>
     Modbus TCP Master Profile
@@ -978,6 +1019,9 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 </AccordionItem>
+
+
+
 
 
   <AccordionItem {defaultClass}>
@@ -1998,7 +2042,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 
- <Table shadow striped={true} tableNoWFull={true}>
+ <Table tableNoWFull={true}>
   <TableHead>
     <TableHeadCell class="!p-4">
     </TableHeadCell>
@@ -2009,13 +2053,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-   
-
+    <TableHeadCell class="w-18">Trigger Catelog</TableHeadCell>
+    <TableHeadCell class="w-18">Action Catelog</TableHeadCell>
   </TableHead>
   <TableBody>
-    <TableBodyRow>
+    <TableBodyRow class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-60" on:click={handleClickRule}>
           <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
 <button on:click={() => formModalRule = true}>
@@ -2030,11 +2072,36 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
     <TableBodyCell class="w-10">0</TableBodyCell>
       <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18">R_sms_or_modbus_trigger_do</TableBodyCell>
+      <TableBodyCell class="w-18">SMS or MODBUS</TableBodyCell>
+      <TableBodyCell class="w-18">DO</TableBodyCell>
 
     </TableBodyRow>
+
+{#if openDetailStatusRule}
+
+
+ <TableBodyRow {trClass}>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+
+      <TableBodyCell class="text-right" colspan="3">Delay Second</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2"  {tdClass}>3</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="text-right" colspan="3">Action Option</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2"  {tdClass}>Once</TableBodyCell>
+      </TableBodyRow>
+
+
+
+{/if}
+
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
 <button on:click={NewRule}>
@@ -2055,6 +2122,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-18"></TableBodyCell>
 
     </TableBodyRow>
+
+
+
+
+
      <tr>
     <td></td>
     <td></td>
@@ -2129,109 +2201,327 @@ on:click={handleClickMV} on:keydown={() => {}}>
 </div></td>
 </tr>
 
-{#if R_TCount == '1' || R_TCount == '2' || R_TCount == '3'}
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">1st Trigger Catelog</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerCatelogList} placeholder="None" bind:value={Tselected1}/></td>
+    <td class= "pl-4 pt-4">
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Tselected1}>
+<option disabled="" value="">None</option>
+<option value="SMS">SMS</option>
+<option value="DI">DI</option>
+<option value="Modbus">Modbus</option>
+<option value="MQTT Notification">MQTT Notification</option>
+<option value="TCPM">TCP Message</option>
+<option value="WANs">WAN Status</option>
+<option value="LANs">LAN Status</option>
+<option value="Logins">Login Status</option>
+<option value="Systems">System Status</option>
+
+</select>
+
+    </td>
 
 </tr>
+
+
+
+<tr>
+      <td>
+
+{#if Tselected1 == "WANs" || Tselected1 == "Logins" ||Tselected1 == "LANs" || Tselected1 == "Systems"}
+      <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
+{:else}
+
+      <p class="pl-20 pt-4 text-lg font-light text-right">Profile</p>
 {/if}
-
-
-
+      </td>
+<td class= "pl-4 pt-4">
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={TselectedProfile1}><option disabled="" value="">None</option>
 
 
 {#if Tselected1 == 'SMS'}
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerSMSList} placeholder="None" /></td>
 
-</tr>
+<option value="1">T_sms_</option>
 
 {:else if Tselected1 == 'DI'}
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">DI Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerDIList} placeholder="None" /></td>
 
-</tr>
+<option value="1">T_DI_</option>
+
 {:else if Tselected1 == "Modbus"}
 
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerMBList} placeholder="None" /></td>
+<option value="1">T_Modbus_</option>
+{:else if Tselected1 == "WANs"}
+<option value="1">C-WAN Link Down</option>
+<option value="2">C-WAN Link Up</option>
+<option value="3">WAN Link Down</option>
+<option value="4">Dial Up failed 5 times</option>
+<option value="5">WAN Failover</option>
+<option value="6">SIM Switch</option>
+{:else if Tselected1 == "LANs"}
+<option value="1">Link Down</option>
+<option value="2">Link Up</option>
+{:else if Tselected1 == "Logins"}
+<option value="1">Web Login Fail from LAN</option>
+<option value="2">Web Login Fail from WAN</option>
+<option value="3">SSH Login Fail</option>
 
-</tr>
+{:else if Tselected1 == "Systems"}
+<option value="1">Cold Start</option>
+<option value="2">Firmware Upgrading</option>
+<option value="3">Password Changed</option>
+<option value="4">Reboot with reason</option>
 {/if}
+</select>
+</td>
+</tr>
 
-{#if R_TCount == '2' || R_TCount=='3'}
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">2nd Trigger Catelog</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerCatelogList} placeholder="None" bind:value={Tselected2}/></td>
-</tr>
-{#if Tselected2 == 'SMS'}
+    <td class= "pl-4 pt-4">
+{#if R_TCount=='1'}
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerSMSList} placeholder="None" /></td>
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled bind:value={Tselected2}>
+<option disabled="" value="">None</option>
+<option value="SMS">SMS</option>
+<option value="DI">DI</option>
+<option value="Modbus">Modbus</option>
+<option value="MQTT Notification">MQTT Notification</option>
+<option value="TCPM">TCP Message</option>
+<option value="WANs">WAN Status</option>
+<option value="LANs">LAN Status</option>
+<option value="Logins">Login Status</option>
+<option value="Systems">System Status</option>
+</select>
 
-</tr>
-
-{:else if Tselected2 == 'DI'}
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">DI Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerDIList} placeholder="None" /></td>
-
-</tr>
-{:else if Tselected2 == "Modbus"}
+{:else}
 
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerMBList} placeholder="None" /></td>
-
-</tr>
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Tselected2}>
+<option disabled="" value="">None</option>
+<option value="SMS">SMS</option>
+<option value="DI">DI</option>
+<option value="Modbus">Modbus</option>
+<option value="MQTT Notification">MQTT Notification</option>
+<option value="TCPM">TCP Message</option>
+<option value="WANs">WAN Status</option>
+<option value="LANs">LAN Status</option>
+<option value="Logins">Login Status</option>
+<option value="Systems">System Status</option>
+</select>
 {/if}
 
 
+    </td>
+</tr>
+
+
+
+<tr>
+      <td>
+{#if Tselected2 == "WANs" || Tselected2 == "Logins" || Tselected2 == "LANs" || Tselected2 == "Systems"}
+      <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
+{:else}
+
+      <p class="pl-20 pt-4 text-lg font-light text-right">Profile</p>
 {/if}
+
+      </td>
+<td class= "pl-4 pt-4">
+
+{#if R_TCount=='1'}
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled bind:value={TselectedProfile2}>
+    <option disabled="" value="">None</option>
+    {#if Tselected2 == 'SMS'}
+      <option value="1">T_sms_</option>
+    {:else if Tselected2 == 'DI'}
+      <option value="2">T_DI_</option>
+    {:else if Tselected2 == "Modbus"}
+    <option value="3">T_Modbus_</option>
+    {:else if Tselected2 == "WANs"}
+<option value="1">C-WAN Link Down</option>
+<option value="2">C-WAN Link Up</option>
+<option value="3">WAN Link Down</option>
+<option value="4">Dial Up failed 5 times</option>
+<option value="5">WAN Failover</option>
+<option value="6">SIM Switch</option>
+{:else if Tselected2 == "LANs"}
+<option value="1">Link Down</option>
+<option value="2">Link Up</option>
+{:else if Tselected2 == "Logins"}
+<option value="1">Web Login Fail from LAN</option>
+<option value="2">Web Login Fail from WAN</option>
+<option value="3">SSH Login Fail</option>
+{:else if Tselected2 == "Systems"}
+<option value="1">Cold Start</option>
+<option value="2">Firmware Upgrading</option>
+<option value="3">Password Changed</option>
+<option value="4">Reboot with reason</option>
+    {/if}
+    </select>
+{:else}
+
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={TselectedProfile2}>
+    <option disabled="" value="">None</option>
+    {#if Tselected2 == 'SMS'}
+      <option value="1">T_sms_</option>
+    {:else if Tselected2 == 'DI'}
+      <option value="2">T_DI_</option>
+    {:else if Tselected2 == "Modbus"}
+    <option value="3">T_Modbus_</option>
+    {:else if Tselected2 == "WANs"}
+<option value="1">C-WAN Link Down</option>
+<option value="2">C-WAN Link Up</option>
+<option value="3">WAN Link Down</option>
+<option value="4">Dial Up failed 5 times</option>
+<option value="5">WAN Failover</option>
+<option value="6">SIM Switch</option>
+{:else if Tselected2 == "LANs"}
+<option value="1">Link Down</option>
+<option value="2">Link Up</option>
+{:else if Tselected2 == "Logins"}
+<option value="1">Web Login Fail from LAN</option>
+<option value="2">Web Login Fail from WAN</option>
+<option value="3">SSH Login Fail</option>
+{:else if Tselected2 == "Systems"}
+<option value="1">Cold Start</option>
+<option value="2">Firmware Upgrading</option>
+<option value="3">Password Changed</option>
+<option value="4">Reboot with reason</option>
+    {/if}
+    </select>
+{/if}
+
+
+</td>
+</tr>
+
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">3rd Trigger Catelog</p></td>
+    <td class= "pl-4 pt-4">
 
 
 {#if R_TCount=='3'}
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">3rd Trigger Catelog</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerCatelogList} placeholder="None" bind:value={Tselected3}/></td>
+
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Tselected3}>
+<option disabled="" value="">None</option>
+<option value="SMS">SMS</option>
+<option value="DI">DI</option>
+<option value="Modbus">Modbus</option>
+<option value="MQTT Notification">MQTT Notification</option>
+<option value="TCPM">TCP Message</option>
+<option value="WANs">WAN Status</option>
+<option value="LANs">LAN Status</option>
+<option value="Logins">Login Status</option>
+<option value="Systems">System Status</option>
+</select>
+
+{:else}
+
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled bind:value={Tselected3}>
+<option disabled="" value="">None</option>
+<option value="SMS">SMS</option>
+<option value="DI">DI</option>
+<option value="Modbus">Modbus</option>
+<option value="MQTT Notification">MQTT Notification</option>
+<option value="TCPM">TCP Message</option>
+<option value="WANs">WAN Status</option>
+<option value="LANs">LAN Status</option>
+<option value="Logins">Login Status</option>
+<option value="Systems">System Status</option>
+</select>
+
+
+{/if}
+    </td>
 </tr>
-{#if Tselected3 == 'SMS'}
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerSMSList} placeholder="None" /></td>
 
-</tr>
-
-{:else if Tselected3 == 'DI'}
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">DI Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerDIList} placeholder="None" /></td>
-
-</tr>
-{:else if Tselected3 == "Modbus"}
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={TriggerMBList} placeholder="None" /></td>
+      <td>
+{#if Tselected3 == "WANs" || Tselected3 == "Logins" || Tselected3 == "LANs" || Tselected3 == "Systems"}
+      <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
+{:else}
 
-</tr>
+      <p class="pl-20 pt-4 text-lg font-light text-right">Profile</p>
+{/if}
+      </td>
+<td class= "pl-4 pt-4">
+
+{#if R_TCount=='3'}
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={TselectedProfile3}>
+    <option disabled="" value="">None</option>
+    {#if Tselected3 == 'SMS'}
+      <option value="1">T_sms_</option>
+    {:else if Tselected3 == 'DI'}
+      <option value="2">T_DI_</option>
+    {:else if Tselected3 == "Modbus"}
+    <option value="3">T_Modbus_</option>
+    {:else if Tselected3 == "WANs"}
+<option value="1">C-WAN Link Down</option>
+<option value="2">C-WAN Link Up</option>
+<option value="3">WAN Link Down</option>
+<option value="4">Dial Up failed 5 times</option>
+<option value="5">WAN Failover</option>
+<option value="6">SIM Switch</option>
+{:else if Tselected3 == "LANs"}
+<option value="1">Link Down</option>
+<option value="2">Link Up</option>
+{:else if Tselected3 == "Logins"}
+<option value="1">Web Login Fail from LAN</option>
+<option value="2">Web Login Fail from WAN</option>
+<option value="3">SSH Login Fail</option>
+{:else if Tselected3 == "Systems"}
+<option value="1">Cold Start</option>
+<option value="2">Firmware Upgrading</option>
+<option value="3">Password Changed</option>
+<option value="4">Reboot with reason</option>
+    {/if}
+    </select>
+{:else}
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled bind:value={TselectedProfile3}>
+    <option disabled="" value="">None</option>
+    {#if Tselected3 == 'SMS'}
+      <option value="1">T_sms_</option>
+    {:else if Tselected3 == 'DI'}
+      <option value="2">T_DI_</option>
+    {:else if Tselected3 == "Modbus"}
+    <option value="3">T_Modbus_</option>
+    {:else if Tselected3 == "WANs"}
+<option value="1">C-WAN Link Down</option>
+<option value="2">C-WAN Link Up</option>
+<option value="3">WAN Link Down</option>
+<option value="4">Dial Up failed 5 times</option>
+<option value="5">WAN Failover</option>
+<option value="6">SIM Switch</option>
+{:else if Tselected3 == "LANs"}
+<option value="1">Link Down</option>
+<option value="2">Link Up</option>
+{:else if Tselected3 == "Logins"}
+<option value="1">Web Login Fail from LAN</option>
+<option value="2">Web Login Fail from WAN</option>
+<option value="3">SSH Login Fail</option>
+{:else if Tselected3 == "Systems"}
+<option value="1">Cold Start</option>
+<option value="2">Firmware Upgrading</option>
+<option value="3">Password Changed</option>
+<option value="4">Reboot with reason</option>
+    {/if}
+    </select>
 {/if}
 
+    </td>
+</tr>
 
-{/if}
 
 
 <tr>
@@ -2320,7 +2610,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if Aselected == 'SMS'}
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Profile</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
     <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionSMSList} placeholder="None" /></td>
 
 </tr>
@@ -2328,7 +2618,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {:else if Aselected == 'DO'}
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">DO Profile</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
     <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionDIList} placeholder="None" /></td>
 
 </tr>
@@ -2336,7 +2626,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Profile</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
     <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionMBList} placeholder="None" /></td>
 
 </tr>
@@ -2346,10 +2636,20 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Email Profile</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
     <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionEmailList} placeholder="None" /></td>
 
 </tr>
+
+{:else if Aselected == "System"}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Operation</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionSystemList} placeholder="None" /></td>
+
+</tr>
+
 {/if}
 
 
@@ -2364,7 +2664,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td></td>
     <td></td>
        <td class="pl-20"><Button color="dark" pill={true} on:click={Rule_Modal_Page2}>Back</Button></td>
-    <td class="pl-1"><Button color="dark" pill={true} >Finish</Button></td>
+    <td class="pl-1"><Button color="dark" pill={true} on:click={Rule_Modal_Finish}>Finish</Button></td>
 
 
     </tr>
@@ -2383,6 +2683,38 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <TabItem title="Simulator">
 
 
+<p>Select Rule: </p><select class="block w-18 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Simulator_Rselected}>
+<option disabled="" value="">None</option>
+<option value="1">R_sms_or_modbus_trigger_do</option>
+
+</select>
+
+{#if Simulator_Rselected == '1'}
+
+<p class="pt-5">Select Trigger: </p>
+
+<select class="block w-18 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Simulator_Tselected}>
+<option disabled="" value="">None</option>
+<option value="1">T_sms</option>
+<option value="2">T_modbus</option>
+</select>
+
+{#if Simulator_Tselected == '1'}
+<div class="flex gap-4">
+<p class="pt-5">Set sms content: </p><input type="text" bind:value={Simulator_ContentValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"/>
+</div>
+{:else if Simulator_Tselected == '2'}
+<div class="flex gap-4">
+<p class="pt-5">Set modbus value: </p><input type="text" bind:value={Simulator_ContentValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"/>
+</div>
+{/if}
+{/if}
+
+
+{#if Simulator_Tselected == '1' || Simulator_Tselected == '2'}
+
+<button type="button" class="pt-5 text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full">Simulate</button>
+{/if}
 
 </TabItem>
 

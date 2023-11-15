@@ -40,13 +40,13 @@ mkdir -p "HtmlFile"
 mv $dashboard_filename "HtmlFile/"
 
 echo -e "%{\r\n#include <stdio.h>\r\n#include <stdlib.h>\r\n#include <string.h>\r\n%}">> ../gperffile/webfileGperf
-echo -e "struct _WEB_FILE{\r\n\tconst char *name;\r\n\tunsigned int size;\r\n\tunsigned int type;\r\n};\r\n%%" >> ../gperffile/webfileGperf
+echo -e "struct _WEB_FILE{\r\n\tconst char *name;\r\n\tunsigned int size;\r\n\tunsigned int type;\r\n\tconst char *realpath;\r\n};\r\n%%" >> ../gperffile/webfileGperf
 
-find -maxdepth 1 -type f -printf "\"/%P\",%s,3\r\n" >> ../gperffile/webfileGperf
+find -maxdepth 1 -type f -printf "\"/%P\",%s,3,\"/usr/sbin/litebackendAP2/%P\"\r\n" >> ../gperffile/webfileGperf
 
 cd "HtmlFile"
 
-find -maxdepth 1 -type f -printf "\"/%P\",%s,1\r\n" >> ../../gperffile/webfileGperf
+find -maxdepth 1 -type f -printf "\"/%P\",%s,1,\"/usr/sbin/litebackendAP2/%P\"\r\n" >> ../../gperffile/webfileGperf
 
 mv $dashboard_filename "$webgzip_folder"
 
@@ -56,21 +56,21 @@ rmdir "HtmlFile"
 
 cd "_app/immutable/"
 
-find -maxdepth 1 -type f -printf "\"/_app/immutable/%P\",%s,4\r\n" >> ../../../gperffile/webfileGperf
+find -maxdepth 1 -type f -printf "\"/_app/immutable/%P\",%s,4,\"/usr/sbin/litebackendAP2/_app/immutable/%P\"\r\n" >> ../../../gperffile/webfileGperf
 
 cd "assets/"
 
-find -maxdepth 1 -type f -printf "\"/_app/immutable/assets/%P\",%s,2\r\n" >> ../../../../gperffile/webfileGperf
+find -maxdepth 1 -type f -printf "\"/_app/immutable/assets/%P\",%s,2,\"/usr/sbin/litebackendAP2/_app/immutable/assets/%P\"\r\n" >> ../../../../gperffile/webfileGperf
 
 cd ..
 cd "chunks/"
 
-find -maxdepth 1 -type f -printf "\"/_app/immutable/chunks/%P\",%s,4\r\n" >> ../../../../gperffile/webfileGperf
+find -maxdepth 1 -type f -printf "\"/_app/immutable/chunks/%P\",%s,4,\"/usr/sbin/litebackendAP2/_app/immutable/chunks/%P\"\r\n" >> ../../../../gperffile/webfileGperf
 
 cd ..
 cd "pages/"
 
-find -maxdepth 1 -type f -printf "\"/_app/immutable/pages/%P\",%s,4\r\n" >> ../../../../gperffile/webfileGperf
+find -maxdepth 1 -type f -printf "\"/_app/immutable/pages/%P\",%s,4,\"/usr/sbin/litebackendAP2/_app/immutable/pages/%P\"\r\n" >> ../../../../gperffile/webfileGperf
 
 cd ..
 cd ..

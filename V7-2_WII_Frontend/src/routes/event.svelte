@@ -19,9 +19,9 @@
   let T_DI_Duration;
 
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
-   let tdClass = 'px-6 py-4 whitespace-nowrap font-light text-center';
+  let tdClass = 'px-6 py-4 whitespace-nowrap font-light text-center';
 
-   let trClass= 'noborder text-center bg-white dark:bg-gray-800 dark:border-gray-700';
+  let trClass= 'noborder text-center bg-white dark:bg-gray-800 dark:border-gray-700';
 
 
   let formModalMT=false;
@@ -869,7 +869,7 @@ let OpList = [
 
   </td>
 
-    <td class="pl-4 pt-4" colspan=""><div>
+    <td class="pl-4 pt-4"><div>
   <Radio class="pb-2" bind:group={T_VType} value='bool' >Boolean</Radio>
   <Radio class="pb-2" bind:group={T_VType} value='uns' >Unsigned Short</Radio>
   <Radio class="pb-2" bind:group={T_VType} value='ss' >Signed Short</Radio>

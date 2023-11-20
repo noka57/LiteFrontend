@@ -9,6 +9,20 @@
   let pdenable=false;
   let pname;
 
+  let MaxStorage="Full";
+  let CloudPInterval="Now";
+  let CloudPIntervalValue;
+  let CloudLostDelayP=0;
+  let CloudPDataP='Latest';
+  let CloudPDataC='No';
+  let CloudAzureProfile;
+  let CloudMQTTProfile;
+  let CloudAvnetProfile;
+  let EnableAzureProfile;
+  let EnableMQTTProfile;
+  let EnableAvnetProfile;
+
+
   let MVList = [
     {value:"Test1", name: "Line Current Phase A"},
 
@@ -326,16 +340,227 @@ let OpList = [
     <span slot="header" class="pl-4">
     SD Storage
     </span>
+<table>
+   <tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Max Storage</p></td>
+      <td class="pl-5 pt-5">
+<div class="flex gap-4">
+  <Radio bind:group={MaxStorage} value='Full' >Full Storage</Radio>
+  <Radio bind:group={MaxStorage} value='2G' >2G</Radio>
+  <Radio bind:group={MaxStorage} value='4G' >4G</Radio>
+  <Radio bind:group={MaxStorage} value='8G' >8G</Radio>
+  <Radio bind:group={MaxStorage} value='16G' >16G</Radio>
+</div>
 
-    <ContextMenu />
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Encryption</p></td>
+</tr>
+
+
+
+  <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+</table>
+
+
 </AccordionItem>
 
   <AccordionItem {defaultClass}>
 
 
     <span slot="header" class="pl-4">
-    Cloud Upload
+    Cloud Settings
     </span>
+
+
+<table>
+   <tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5">
+<div class="flex gap-4">
+  <Radio bind:group={CloudPInterval} value='Now' >Right Away</Radio>
+  <Radio bind:group={CloudPInterval} value='UserDefine' > User Defined (mins): </Radio>
+{#if CloudPInterval == 'Now'}
+  <input type="number" bind:value={CloudPIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+
+{:else}
+  <input type="number" bind:value={CloudPIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+</div>
+
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Link Lost Retransmit:</p></td>
+    <td class="pl-5 pt-5">
+<div class="flex gap-4">
+      <input type="number" bind:value={CloudLostDelayP} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
+</div>
+    </td>
+</tr>
+
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-5 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={CloudPDataP} value='Latest' >Latest First</Radio>
+  <Radio bind:group={CloudPDataP} value='FIFO' > First In, First Out </Radio>
+
+</div>
+
+
+
+</td>
+
+
+</tr>
+
+
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Compression</p></td>
+      <td class="pl-5 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={CloudPDataC} value='No' >No</Radio>
+  <Radio bind:group={CloudPDataC} value='gzip' > gzip</Radio>
+
+</div>
+
+
+
+</td>
+
+
+</tr>
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+<td class= "pl-4 pt-4">
+<div class="flex gap-4">
+<label class="pt-3 w-48">
+  <input type=checkbox bind:checked={EnableAzureProfile}>
+  Azure Profile
+</label>
+
+{#if EnableAzureProfile}
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm mt-2" bind:value={CloudAzureProfile}>
+<option disabled="" value="">None</option>
+<option value="1">Azure Profile 1</option>
+
+
+</select>
+{:else}
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm mt-2 disabled:cursor-not-allowed disabled:opacity-50" bind:value={CloudAzureProfile} disabled>
+</select>
+{/if}
+</div>
+    </td>
+
+
+</tr>
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+<td class= "pl-4 pt-4">
+<div class="flex gap-4">
+<label class="pt-3 w-48">
+  <input type=checkbox bind:checked={EnableMQTTProfile}>
+  MQTT Profile
+</label>
+
+{#if EnableMQTTProfile}
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm mt-2" bind:value={CloudMQTTProfile}>
+<option disabled="" value="">None</option>
+<option value="1">MQTT Profile 1</option>
+
+
+</select>
+{:else}
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm mt-2 disabled:cursor-not-allowed disabled:opacity-50"  disabled>
+</select>
+{/if}
+</div>
+    </td>
+
+
+</tr>
+
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+<td class= "pl-4 pt-4">
+<div class="flex gap-4">
+<label class="pt-3 w-48">
+  <input type=checkbox bind:checked={EnableAvnetProfile}>
+  Avnet Profile
+</label>
+
+{#if EnableAvnetProfile}
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm mt-2" bind:value={CloudAvnetProfile}>
+<option disabled="" value="">None</option>
+<option value="1">Avnet Profile 1</option>
+
+
+</select>
+{:else}
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm mt-2 disabled:cursor-not-allowed disabled:opacity-50"  disabled>
+</select>
+{/if}
+</div>
+    </td>
+
+
+</tr>
+
+  <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+</table>
+
 </AccordionItem>
 
 </Accordion>

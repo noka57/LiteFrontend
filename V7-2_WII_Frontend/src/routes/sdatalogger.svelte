@@ -51,18 +51,57 @@ let OpList = [
 
   ];
 
-  let PDisplay;
-  let PFormat;
-  let PFormatUDefine;
+  let PDisplay='hex';
+  let PFormat='Default';
+  let PFormatUDefine="Hello";
 
+  function AppendUserDefine(string)
+  {
+    if (PFormat =='UserDefined')
+    {
+        console.log("append");
+        console.log(string);
+        PFormatUDefine+=string;
+    }
+
+  }
+ const btn1 = () => 
+ {
+    PFormatUDefine+="$TimeStamp$";
+
+};
+
+ const btn2 = () => 
+ {
+
+    PFormatUDefine+="$Keyword1$";
+ };
+
+ const btn3 = () => 
+ {
+
+    PFormatUDefine+="$Keyword2$";
+ };
+
+ const btn4 = () => 
+ {
+
+    PFormatUDefine+="$Keyword3$";
+ };
+
+  const btn5 = () => 
+ {
+
+    PFormatUDefine+="$Keyword4$";
+ };
 
   let selected = [];
   let countries = [
-    { value: 'us', name: 'United States' },
-    { value: 'ca', name: 'Canada' },
-    { value: 'fr', name: 'France' },
-    { value: 'jp', name: 'Japan' },
-    { value: 'en', name: 'England' }
+    { value: 'Azure1', name: 'Azure Profile 1' },
+    { value: 'Azure2', name: 'Azure Profile 2' },
+    { value: 'MQTT1', name: 'MQTT Profile 1' },
+    { value: 'MQTT2', name: 'MQTT Profile 2' },
+    { value: 'Avnet', name: 'Avnet Profile 1' }
   ];
 
 </script>
@@ -297,19 +336,63 @@ let OpList = [
 </tr>
 
 <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right"></p>
+  <td class="text-right" >
+  <div>
+  <ul style="list-style-type:none;" class="py-1">
+<li class="pt-4">
+{#if PFormat == 'UserDefined'}
+    <Button size="xs" on:click={btn1}>TimeStamp</Button>
+{:else}
+    <Button size="xs" disabled>TimeStamp</Button>
+{/if}
+</li>
 
+<li class="pt-4">
+{#if PFormat == 'UserDefined'}
+<Button size="xs" on:click={btn2}>Keyword1</Button>
+{:else}
+<Button size="xs" disabled>Keyword1</Button>
+{/if}
+</li>
+
+<li class="pt-4">
+{#if PFormat == 'UserDefined'}
+<Button size="xs" on:click={btn3}>Keyword2</Button>
+{:else}
+<Button size="xs" disabled>Keyword2</Button>
+{/if}
+</li>
+
+<li class="pt-4">
+{#if PFormat == 'UserDefined'}
+<Button size="xs" on:click={btn4}>Keyword3</Button>
+{:else}
+<Button size="xs" disabled>Keyword3</Button>
+{/if}
+</li>
+
+
+<li class='pt-4'>
+{#if PFormat == 'UserDefined'}
+<Button size="xs" on:click={btn5}>Keyword4</Button>
+{:else}
+<Button size="xs" disabled>Keyword4</Button>
+{/if}
+</li>
+
+</ul>
+  </div>
   </td>
 
     <td class="pl-4 pt-4">
 {#if PFormat == 'UserDefined'}
 
-<Textarea id="textarea-id" placeholder="Data Format" rows="4" name="message" />
+<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={PFormatUDefine} />
 
 
 
 {:else}
-<Textarea id="textarea-id" placeholder="Disabled" rows="4" name="message" class="disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled/>
+<Textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled/>
 {/if}
 
 

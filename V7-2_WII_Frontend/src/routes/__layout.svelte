@@ -152,9 +152,29 @@
 					</SidebarDropdownWrapper>
 		
 <SidebarDropdownWrapper
+						label="Cloud"
+					>
+					<svelte:fragment slot="icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-yellow-500 mr-2 dark:text-pink-500 w-6 h-6">
+  <path d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+        </svelte:fragment>
+
+						<SidebarDropdownItem label="Generic MQTT" href='/gMQTT' active={activeUrl === '/gMQTT'}/>
+						<SidebarDropdownItem label="Azure IoT Device" />
+						<SidebarDropdownItem label="Azure IoT Edge Runtime" />
+						<SidebarDropdownItem label="AWS IoT Core" />
+						<SidebarDropdownItem label="AWS IoT Green Grass" />
+						<SidebarDropdownItem label="Avnet IoT Connect" />
+						<SidebarDropdownItem label="Log Viewer" />
+					</SidebarDropdownWrapper>
+
+<SidebarDropdownWrapper
 						label="Field Management"
 
 					>
+
+
 
 		<svelte:fragment slot="icon">
 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-red-500 mr-2 dark:text-pink-500 w-6 h-6">
@@ -164,6 +184,8 @@
 </svg>
         </svelte:fragment>
 
+<SidebarDropdownItem label="Port Connection" href='/PortC' active={activeUrl === '/PortC'}/>
+<SidebarDropdownItem label="Protocol" />
 						
 					</SidebarDropdownWrapper>
 

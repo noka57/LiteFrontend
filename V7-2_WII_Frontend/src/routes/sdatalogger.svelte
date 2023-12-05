@@ -1,6 +1,6 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button, Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Fileupload, FloatingLabelInput, Helper, StepIndicator, MultiSelect } from 'flowbite-svelte';
-  import ContextMenu from './ContextMenu.svelte';
+
 
   let isActive=false;
 
@@ -26,6 +26,7 @@
   let EnableAzureProfile;
   let EnableMQTTProfile;
   let EnableAvnetProfile;
+  let ViewerSelect='All';
 
 
   let MVList = [
@@ -702,7 +703,7 @@ let OpList = [
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Display</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Display</p>
 
   </td>
 
@@ -798,7 +799,8 @@ let OpList = [
 
 
 </tr>
-            <tr>
+
+<tr>
     <td></td>
     <td></td>
         <td></td>
@@ -810,7 +812,7 @@ let OpList = [
     <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
 
 
-    </tr>
+</tr>
 
 
 </table>
@@ -948,5 +950,62 @@ let OpList = [
 
 
     <TabItem title="Data Viewer">
+
+<table>
+<tr class="pt-4">
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Select By</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={ViewerSelect} value='All' >All</Radio>
+  <Radio class="pb-2" bind:group={ViewerSelect} value='State' >State</Radio>  <input type="text"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio class="pb-2" bind:group={ViewerSelect} value='Mode' >Mode</Radio>  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+</div></td>
+</tr>
+
+</table>
+
+
+<p class="pt-10"></p>
+
+ <Table shadow striped={true} tableNoWFull={true}>
+
+
+
+  <TableHead>
+
+    <TableHeadCell>Timestamp</TableHeadCell>
+    <TableHeadCell>Mode</TableHeadCell>
+    <TableHeadCell>Edge Data Alias Name</TableHeadCell>
+    <TableHeadCell>Content</TableHeadCell>
+    <TableHeadCell>State</TableHeadCell>
+
+  </TableHead>
+  <TableBody >
+
+
+      <TableBodyRow>
+        <TableBodyCell class="w-18">2023/11/03 13:02:25</TableBodyCell>
+        <TableBodyCell class="w-18">Proxy Mode</TableBodyCell>
+        <TableBodyCell class="w-18">Proxy_EdgeData_</TableBodyCell>
+        <TableBodyCell class="w-18">?</TableBodyCell>
+        <TableBodyCell class="w-18">?</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow>
+        <TableBodyCell class="w-18">2023/11/13 20:02:25</TableBodyCell>
+        <TableBodyCell class="w-18">Monitor Mode</TableBodyCell>
+        <TableBodyCell class="w-18">Monitor_EdgeData_</TableBodyCell>
+        <TableBodyCell class="w-18">?</TableBodyCell>
+        <TableBodyCell class="w-18">?</TableBodyCell>
+      </TableBodyRow>
+
+
+
+  </TableBody>
+</Table>
+
   </TabItem>
    </Tabs>

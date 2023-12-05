@@ -35,7 +35,7 @@
     </TableHeadCell>
       <TableHeadCell class="!p-1">
     </TableHeadCell>
-    <TableHeadCell class="!p-1">No</TableHeadCell>
+    <TableHeadCell class="w-18">Profile Name</TableHeadCell>
     <TableHeadCell class="w-18">IP</TableHeadCell>
     <TableHeadCell class="w-18">Status</TableHeadCell>
 

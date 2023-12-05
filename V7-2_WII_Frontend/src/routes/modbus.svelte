@@ -74,7 +74,7 @@
       <TableBodyCell>1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
       <TableBodyCell class="!p-6 w-18"> RTU_Master_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> SerialPort0</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"> ComPort1</TableBodyCell>
     </TableBodyRow>
 
 
@@ -128,8 +128,8 @@
       <td class="pl-5 pt-5">
       <select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={MM_SerialProfile}>
 <option disabled="" value="">None</option>
-<option value="1" >SerialPort0</option>
-
+<option value="1" >ComPort1</option>
+<option value="1" >ComPort2</option>
       </td>
 
 
@@ -189,7 +189,7 @@
       <TableBodyCell>1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
       <TableBodyCell class="!p-6 w-18"> RTU_Slave_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> SerialPort1</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"> ComPort2</TableBodyCell>
 
     </TableBodyRow>
 
@@ -243,7 +243,8 @@
       <td class="pl-5 pt-5">
       <select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={MM_SerialProfile}>
 <option disabled="" value="">None</option>
-<option value="1" >SerialPort1</option>
+<option value="1" >ComPort1</option>
+<option value="1" >ComPort2</option>
 
       </td>
 
@@ -296,6 +297,7 @@
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
+    <TableHeadCell class="w-18">LAN Profile</TableHeadCell>   
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
     <TableHeadCell class="w-10">Remote Server IP</TableHeadCell>
     <TableHeadCell>Remote Port</TableHeadCell>
@@ -321,6 +323,7 @@
       </button></TableBodyCell>
       <TableBodyCell>1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18"> LAN1</TableBodyCell>
       <TableBodyCell class="!p-6 w-18"> TCP_Master_1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10"> 127.0.0.1</TableBodyCell>
       <TableBodyCell class="w-10">502</TableBodyCell>
@@ -347,6 +350,7 @@
       </button></TableBodyCell>
       <TableBodyCell>1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">2</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18"> LAN2</TableBodyCell>
       <TableBodyCell class="!p-6 w-18"> TCP_Master_2</TableBodyCell>
       <TableBodyCell class="!p-6 w-10"> 192.168.127.254</TableBodyCell>
       <TableBodyCell class="w-10">502</TableBodyCell>
@@ -425,6 +429,7 @@
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
+    <TableHeadCell class="w-18">LAN Profile</TableHeadCell>  
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
     <TableHeadCell>Listen Port</TableHeadCell>
     <TableHeadCell>Max Connection Count</TableHeadCell>
@@ -453,6 +458,7 @@
       </button></TableBodyCell>
       <TableBodyCell>1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18"> LAN2</TableBodyCell>
       <TableBodyCell class="!p-6 w-18"> TCP_Slave_1</TableBodyCell>
       <TableBodyCell class="w-10">502</TableBodyCell>
       <TableBodyCell class="w-10">10</TableBodyCell>
@@ -1112,7 +1118,7 @@
 
     </TabItem>
 
-        <TabItem title="Transparent">
+        <TabItem title="Gateway">
 <Accordion>
 
   <AccordionItem {defaultClass}>

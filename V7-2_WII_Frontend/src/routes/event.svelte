@@ -202,6 +202,10 @@ let MVList = [
 
   ];
 
+let DOList=[
+    {value:"Test1", name: "DO-1"},
+];
+
 let OpList = [
     {value:"GT", name: ">"},
     {value:"LT", name: "<"},
@@ -1938,6 +1942,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
+    <TableHeadCell>DO Profile</TableHeadCell> 
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
     <TableHeadCell class="w-18">Type</TableHeadCell>
     <TableHeadCell class="w-18">Duration</TableHeadCell>
@@ -1960,8 +1965,9 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
     <TableBodyCell class="w-10">0</TableBodyCell>
       <TableBodyCell class="w-10">1</TableBodyCell>
+      <TableBodyCell class="w-10">DO-1</TableBodyCell>
       <TableBodyCell class="w-18">A_DO_</TableBodyCell>
-      <TableBodyCell class="w-18">Pulse : Start</TableBodyCell>
+      <TableBodyCell class="w-18">Pulse : High</TableBodyCell>
       <TableBodyCell class="w-18">2 second(s)</TableBodyCell>
 
     </TableBodyRow>
@@ -2022,6 +2028,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <table>
 
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">DO Profile</p></td>
+    <td class= "pl-4 pt-4"><Select class="mt-2" items={DOList} placeholder="None" /></td>
+
+
+</tr>
+
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">A_DO_</p><input type="text" bind:value={A_DO_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
@@ -2036,7 +2049,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={ADOT} value='Pstart' >Pulse : Start</Radio>
+  <Radio bind:group={ADOT} value='Pstart' >Pulse : High</Radio>
   </td>
 </tr>
 
@@ -2044,16 +2057,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={ADOT} value='Pstop' >Pulse : Stop</Radio>
-  </td>
-</tr>
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
-
-  <td class="pl-5 pt-4">
-  <Radio bind:group={ADOT} value='DOon' >DO : ON</Radio>
+  <Radio bind:group={ADOT} value='Pstop' >Pulse : Low</Radio>
   </td>
 </tr>
 
@@ -2062,11 +2066,26 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={ADOT} value='DOoff' >DO : OFF</Radio>
+  <Radio bind:group={ADOT} value='DOon' >Edge : High to Low</Radio>
   </td>
 </tr>
 
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={ADOT} value='DOoff' >Edge : Low to High</Radio>
+  </td>
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={ADOT} value='DOoff' >Edge : Changed</Radio>
+  </td>
+</tr>
 
 
 

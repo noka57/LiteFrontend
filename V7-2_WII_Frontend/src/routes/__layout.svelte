@@ -185,8 +185,8 @@
         </svelte:fragment>
 
 <SidebarDropdownItem label="Port Connection" href='/PortC' active={activeUrl === '/PortC'}/>
-<SidebarDropdownItem label="Protocol" />
-						
+<SidebarDropdownItem label="Modbus" href='/modbus' active={activeUrl === '/modbus'}/>
+<SidebarDropdownItem label="Serial Transparent" href='/SerialTransparent' active={activeUrl === '/SerialTransparent'}/>						
 					</SidebarDropdownWrapper>
 
 
@@ -201,7 +201,6 @@
 </svg>
         </svelte:fragment>
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
-        				<SidebarDropdownItem label="Modbus" href='/modbus' active={activeUrl === '/modbus'}/>
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
 
 

@@ -161,12 +161,7 @@
         </svelte:fragment>
 
 						<SidebarDropdownItem label="Generic MQTT" href='/gMQTT' active={activeUrl === '/gMQTT'}/>
-						<SidebarDropdownItem label="Azure IoT Device" />
-						<SidebarDropdownItem label="Azure IoT Edge Runtime" />
-						<SidebarDropdownItem label="AWS IoT Core" />
-						<SidebarDropdownItem label="AWS IoT Green Grass" />
-						<SidebarDropdownItem label="Avnet IoT Connect" />
-						<SidebarDropdownItem label="Log Viewer" />
+
 					</SidebarDropdownWrapper>
 
 <SidebarDropdownWrapper

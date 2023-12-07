@@ -1530,5 +1530,45 @@
 </Accordion>
 </TabItem>
 
+<TabItem title="Viewer">
+
+
+<Table shadow striped={true} tableNoWFull={true}>
+
+  <TableHead>
+    <TableHeadCell>Variable Name</TableHeadCell>
+    <TableHeadCell>Status</TableHeadCell>
+
+
+  </TableHead>
+
+   <TableBody>
+
+   <TableBodyRow>
+      <TableBodyCell class="!p-6 w-10"> Line Current Phase A</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"> Valid</TableBodyCell>
+
+   </TableBodyRow>
+
+
+   <TableBodyRow>
+      <TableBodyCell class="!p-6 w-10"> RTU-DI Status</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"> Timeout</TableBodyCell>
+
+   </TableBodyRow>
+
+
+    <TableBodyRow>
+      <TableBodyCell class="!p-6 w-10"> TCP-Line Current Phase B</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"> Error</TableBodyCell>
+
+   </TableBodyRow>
+
+     </TableBody>
+  </Table>
+
+</TabItem>
+
+
 
 </Tabs>

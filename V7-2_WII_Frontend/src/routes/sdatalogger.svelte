@@ -489,22 +489,7 @@ let OpList = [
 
 
 
-<tr>
-<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Compression</p></td>
-      <td class="pl-5 pt-5">
 
-<div class="flex gap-4">
-  <Radio bind:group={CloudPDataC} value='No' >No</Radio>
-  <Radio bind:group={CloudPDataC} value='gzip' > gzip</Radio>
-
-</div>
-
-
-
-</td>
-
-
-</tr>
 
 <tr>
 
@@ -881,22 +866,6 @@ let OpList = [
 
 
 
-<tr>
-<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Compression</p></td>
-      <td class="pl-5 pt-5">
-
-<div class="flex gap-4">
-  <Radio bind:group={CloudPDataC} value='No' >No</Radio>
-  <Radio bind:group={CloudPDataC} value='gzip' > gzip</Radio>
-
-</div>
-
-
-
-</td>
-
-
-</tr>
 
 <tr>
 

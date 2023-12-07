@@ -20,6 +20,7 @@
    let Password;
    let QoS;
    let Kalive;
+   let DataC="gzip";
 
    let localList = [
     {value:"aws", name: "AWS"},
@@ -60,6 +61,7 @@
     <TableHeadCell>Password</TableHeadCell>
     <TableHeadCell>QoS</TableHeadCell>
     <TableHeadCell class="w-18">Keep Alive Interval (sec)</TableHeadCell>
+    <TableHeadCell class="w-18">Data Compression</TableHeadCell>
      </TableHead>
   <TableBody>
     <TableBodyRow>
@@ -94,7 +96,7 @@
       <TableBodyCell class="w-10" style="-webkit-text-security: disc">abcdefgh</TableBodyCell>
       <TableBodyCell class="w-10">0</TableBodyCell>
       <TableBodyCell class="w-18">60</TableBodyCell>
-
+      <TableBodyCell class="w-18">gzip</TableBodyCell>
 
     </TableBodyRow>
 
@@ -121,7 +123,7 @@
       <TableBodyCell class="w-10" style="-webkit-text-security: disc"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
- 
+       <TableBodyCell class="w-18"></TableBodyCell>
 </TableBodyRow>
 
 <tr class="pt-5">
@@ -251,6 +253,23 @@
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Keep Alive Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={Kalive} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
+
+</tr>
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Compression</p></td>
+      <td class="pl-5 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={DataC} value='No' >No</Radio>
+  <Radio bind:group={DataC} value='gzip' > gzip</Radio>
+
+</div>
+
+
+
+</td>
+
 
 </tr>
 

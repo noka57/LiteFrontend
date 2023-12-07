@@ -127,6 +127,21 @@
   let Simulator_Tselected;
   let Simulator_ContentValue;
 
+  const ResetSimulator = () =>
+  {
+      Simulator_Rselected="";
+      Simulator_Tselected="";
+      Simulator_ContentValue="";
+      finishSimulate=false;
+
+  }
+
+  const RefreshEventLog= ()=>
+  {
+
+  }
+
+
   let openDetailStatusMMS = false;
   let openDetailStatusMMT = false;
   let openDetailStatusMV = false;
@@ -3116,10 +3131,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
 {#if R_TCount == '1'}
   <Radio bind:group={R_TMultipleRelation} value='OR' name="disabled-state" disabled>OR</Radio>
-  <Radio bind:group={R_TMultipleRelation} value='AND' name="disabled-state" disabled>AND</Radio>
 {:else}
   <Radio bind:group={R_TMultipleRelation} value='OR' >OR</Radio>
-  <Radio bind:group={R_TMultipleRelation} value='AND' >AND</Radio>
 {/if}
 
 </div></td>
@@ -3625,7 +3638,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 </TabItem>
 
-<TabItem title="Simulator">
+<TabItem title="Simulator" on:click={ResetSimulator}>
 
 
 <p>Select Rule: </p><select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Simulator_Rselected}>
@@ -3675,16 +3688,19 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
     <TabItem title="Log Viewer">
 
+<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full" on:click={RefreshEventLog}>Refresh</button>
+
+<p class="pt-10"></p>
 
  <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
 
-    <TableHeadCell on:click={() => sortTable('tt')}>Trigger Timestamp</TableHeadCell>
-    <TableHeadCell on:click={() => sortTable('tc')}>Trigger Catalog</TableHeadCell>
-    <TableHeadCell on:click={() => sortTable('tn')}>Trigger Alias Name</TableHeadCell>
-    <TableHeadCell on:click={() => sortTable('at')}>Action Timestamp</TableHeadCell>
-    <TableHeadCell on:click={() => sortTable('ac')}>Action Catalog</TableHeadCell>
-    <TableHeadCell on:click={() => sortTable('an')}>Action Alias Name</TableHeadCell>   
+    <TableHeadCell on:click={() => sortTable('tt')} style="cursor:pointer">Trigger Timestamp</TableHeadCell>
+    <TableHeadCell on:click={() => sortTable('tc')} style="cursor:pointer">Trigger Catalog</TableHeadCell>
+    <TableHeadCell on:click={() => sortTable('tn')} style="cursor:pointer">Trigger Alias Name</TableHeadCell>
+    <TableHeadCell on:click={() => sortTable('at')} style="cursor:pointer">Action Timestamp</TableHeadCell>
+    <TableHeadCell on:click={() => sortTable('ac')} style="cursor:pointer">Action Catalog</TableHeadCell>
+    <TableHeadCell on:click={() => sortTable('an')} style="cursor:pointer">Action Alias Name</TableHeadCell>   
 
   </TableHead>
   <TableBody >

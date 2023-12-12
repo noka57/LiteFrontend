@@ -15,6 +15,16 @@
 	let sessionid="test";
 
 
+  $: {
+
+    if (passwordInput && active_step === 'pwd') 
+    {
+       passwordInput.focus();
+    } 
+
+  }
+
+
 	onMount(() => {
 		accountInput.focus();
 	});
@@ -24,6 +34,7 @@
 	}
 
 	async function doPost () {
+		console.log("Plogin");
 		const res = await fetch(window.location.href+"Plogin", {
 			method: 'POST',
 			body: JSON.stringify({
@@ -46,7 +57,6 @@
 	};
 	
 	const handleOnSubmit = (evt) => {
-
 
 		if (active_step=='Acct')
 		{
@@ -84,6 +94,7 @@
 		{
 			account = "";
 			account_Fail++;
+			accountInput.focus();
 		}
 
 

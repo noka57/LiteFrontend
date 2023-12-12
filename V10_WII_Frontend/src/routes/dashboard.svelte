@@ -98,6 +98,7 @@
       {
           console.log("get dashboard error\r\n");
           stopInterval();
+          RestartIntervalId = setInterval(sendPing, 1000);
       }
     }
     catch (error) 

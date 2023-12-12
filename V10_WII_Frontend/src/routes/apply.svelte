@@ -112,6 +112,9 @@
   let ewan1_ewlap_changedValues = [];
   let redundancy_policy_changedValues = [];
   let faresaving_policy_changedValues = [];  
+  let SetCount=0;
+  let SetCountOK=0;
+
 
 
   function closeModal()
@@ -275,7 +278,18 @@
       dreams_general_changedValues = val;
   });
 
+ 	async function SetThenPostReboot () {
+    
+    const res = await fetch(window.location.origin+"/PostReboot", {
+        method: 'POST',
+        body: sessionBinary
+    })
 
+    	if (res.status == 200)
+    	{
+        console.log("reboot command sent\r\n");
+    	}
+   }
 
 	async function SetLANData() {
 	    const res = await fetch(window.location.origin+"/SetLanData", {
@@ -286,6 +300,11 @@
 	  if (res.status == 200)
 	  {
 	  	console.log("set lan data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
 	  }
 	};
 
@@ -298,6 +317,11 @@
 	  if (res.status == 200)
 	  {
 	  	console.log("set nat data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
 	  }
 	};
 
@@ -310,6 +334,11 @@
 	  if (res.status == 200)
 	  {
 	  	console.log("set firewall data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
 	  }
 	};
 
@@ -323,6 +352,11 @@
 	  if (res.status == 200)
 	  {
 	  	console.log("set static route data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
 	  }
 	};
 
@@ -336,6 +370,11 @@
 	  if (res.status == 200)
 	  {
 	  	console.log("set maintenance data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
 	  }
 	}  
 
@@ -349,6 +388,11 @@
 	  if (res.status == 200)
 	  {
 	  	console.log("set operation data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
 	  }
 	} 
 
@@ -362,21 +406,14 @@
 	  if (res.status == 200)
 	  {
 	  	console.log("set docker data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
 	  }
 	} 
 
-	async function SetDreamsData()
-	{
-	  const res = await fetch(window.location.origin+"/SetDreamsdata", {
-	    method: 'POST',
-	    body: ContentDreams
-	   })
-
-	  if (res.status == 200)
-	  {
-	  	console.log("set dreams data OK\r\n");
-	  }
-	} 
 
 	async function SetWanData()
 	{
@@ -388,8 +425,74 @@
 	  if (res.status == 200)
 	  {
 	  	console.log("set wan data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
 	  }
 	} 
+
+	function CalculateTotalSetCount()
+	{
+	  if  (lan_data != "" && LANchangedValues.length!=0)
+    {
+    	SetCount++;
+    }
+
+    if (nat_data != "" && (NAT_loopback_changedValues.length !=0 || 
+															NAT_virtualServer_changedValues.length !=0 ||
+															NAT_virtualComputer_changedValues.length !=0 ||
+															NAT_dmz_changedValues.length !=0))
+    {
+    	SetCount++;    
+    }
+
+
+    if (firewall_data != "" && (Firewall_general_changedValues.length !=0 || 
+																		Firewall_ipfilter_changedValues.length !=0 ||
+																		Firewall_macfilter_changedValues.length !=0))
+   	{
+    	SetCount++; 
+    }
+
+    if (static_route_data !="" && staticR_changedValues.length !=0)
+    {
+    	SetCount++; 
+    }
+    
+
+    if (maintenance_data != "" && maintenance_changedValues.length!=0)
+    {
+    	SetCount++;     
+    }
+
+
+    if (operation_data != "" && operation_changedValues.length!=0)
+    {
+    	SetCount++; 
+    }
+
+
+    if (docker_data != "" && docker_changedValues.length!=0)
+    {
+    	SetCount++;     
+    }
+
+
+    if (wan_data != "" && ( cwan1_basic_changedValues !=0 ||
+  															cwan1_advanced_changedValues != 0 ||
+  															cwan1_simpolicy_changedValues != 0 ||
+  															cwan1_glink_changedValues != 0 ||
+  															ewan1_basic_changedValues != 0 ||
+  															ewan1_ewlap_changedValues != 0 ||
+  															redundancy_policy_changedValues != 0 ||
+  															faresaving_policy_changedValues != 0))
+  	{
+  	  SetCount++; 
+  	}
+
+	}
 
 
 	function modalTrigger()
@@ -401,6 +504,7 @@
       	const hexArray = sessionid.match(/.{1,2}/g); 
 	      const byteValues = hexArray.map(hex => parseInt(hex, 16));
 	      sessionBinary = new Uint8Array(byteValues);
+	      CalculateTotalSetCount();
       	if  (lan_data != "" && LANchangedValues.length!=0)
       	{
 	        let LANString = JSON.stringify(lan_data, null, 0);
@@ -437,7 +541,6 @@
 	        ContentFirewall.set(sessionBinary,0);
 	        ContentFirewall.set(firewallBinary, sessionBinary.length);
 	        SetFirewallData();
-
         }
 
         if (static_route_data !="" && staticR_changedValues.length !=0)
@@ -487,29 +590,6 @@
 
         }
 
-        if (dreams_data != "" && (dreams_general_changedValues.length !=0 || 
-																	serial_changedValues.length !=0 ||
-																	modbus_s0_changedValues.length != 0 ||
-																	modbus_s1_changedValues.length != 0 ||
-																	modbus_option_changedValues.length != 0 ||
-																	dnp3_changedValues.length != 0 ||
-																	restful_changedValues.length != 0))
-        {
-          let DreamsString = JSON.stringify(dreams_data, null, 0);
-					const encoder = new TextEncoder();
- 					let bytesArray = [];
-  				const utf8Encoded = encoder.encode(DreamsString);
-  				console.log("utf8Encoded.length");
-  				console.log(utf8Encoded.length);
-  				for (let i = 0; i < utf8Encoded.length; i++) {
-    				bytesArray.push(utf8Encoded[i]);
-  				}
-	    		DreamsBinary = new Uint8Array(bytesArray);
-	      	ContentDreams=new Uint8Array(DreamsBinary.length+sessionBinary.length);
-	        ContentDreams.set(sessionBinary,0);
-	        ContentDreams.set(DreamsBinary, sessionBinary.length);
-        	SetDreamsData();
-        }
 
         if (wan_data != "" && ( cwan1_basic_changedValues !=0 ||
   															cwan1_advanced_changedValues != 0 ||
@@ -528,6 +608,7 @@
 	        ContentWan.set(WanBinary, sessionBinary.length);
   				SetWanData();
   			}
+
       }
 
 	};

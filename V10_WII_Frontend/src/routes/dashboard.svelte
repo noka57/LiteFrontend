@@ -43,27 +43,68 @@
       window.open(dashboard_data.config.dashboard.gpsInfo.gMapUrl, "_blank");
   }
 
+  let RestartIntervalId;
+  let RestartReady=0;
 
 
+  function sendPing() 
+  {
+    fetch(window.location.origin)
+      .then(response => {
+        if (response.status === 200) 
+        {
+          console.log('Ping successful');
+          RestartReady=1;
+          clearInterval(RestartIntervalId);
+
+          setTimeout(() => {
+              window.location.href = window.location.origin;
+              }, 3000); 
+        } 
+        else 
+        {
+          console.log('Ping failed. Retrying...');
+        }
+      })
+      .catch(error => 
+      {
+        console.error('Ping failed:', error);
+      });
+  }
 
 
 
   async function getDashboardData () {
-    const res = await fetch(window.location.origin+"/getDashboardData", {
-      method: 'POST',
-      body: sessionBinary
-    })
 
-    if (res.status == 200)
+    try
     {
-      dashboard_data =await res.json();
-      console.log("get dashboard 200 OK\r\n");
-      console.log(dashboard_data);
-      dashboadData.set(dashboard_data);
-      value1=dashboard_data.config.dashboard.systemResource.cpuUsage;
-      value2=dashboard_data.config.dashboard.systemResource.ramUsage;
-      value3=dashboard_data.config.dashboard.systemResource.emmcUsage;
-      value4=dashboard_data.config.dashboard.systemResource.sdCardUsage;
+      const res = await fetch(window.location.origin+"/getDashboardData", {
+        method: 'POST',
+        body: sessionBinary
+      })
+
+      if (res.status == 200)
+      {
+        dashboard_data =await res.json();
+        console.log("get dashboard 200 OK\r\n");
+        console.log(dashboard_data);
+        dashboadData.set(dashboard_data);
+        value1=dashboard_data.config.dashboard.systemResource.cpuUsage;
+        value2=dashboard_data.config.dashboard.systemResource.ramUsage;
+        value3=dashboard_data.config.dashboard.systemResource.emmcUsage;
+        value4=dashboard_data.config.dashboard.systemResource.sdCardUsage;
+      }
+      else
+      {
+          console.log("get dashboard error\r\n");
+          stopInterval();
+      }
+    }
+    catch (error) 
+    {
+      console.error('Error fetching data:', error);
+      stopInterval();
+      RestartIntervalId = setInterval(sendPing, 1000);
     }
   }
 

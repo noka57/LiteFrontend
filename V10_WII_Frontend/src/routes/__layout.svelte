@@ -509,8 +509,8 @@ const topMenuList = [{ href: '/apply', id: 0 },
 						<SidebarDropdownItem label="Static Route" href='/staticR' active={activeUrl === '/staticR'}/>
 					</SidebarDropdownWrapper>
 					
-			<SidebarDropdownWrapper
-						label="Authenticaion"
+	<SidebarDropdownWrapper
+						label="Authentication"
 					>
 
 					<svelte:fragment slot="icon">
@@ -532,7 +532,36 @@ const topMenuList = [{ href: '/apply', id: 0 },
 						<SidebarDropdownItem label="IPsec" href='/ipsec' active={activeUrl === '/ipsec'}/>
 
 					</SidebarDropdownWrapper>
+					
+		
+<SidebarDropdownWrapper
+						label="Cloud"
+					>
+					<svelte:fragment slot="icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-yellow-500 mr-2 dark:text-pink-500 w-6 h-6">
+  <path d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+        </svelte:fragment>
 
+						<SidebarDropdownItem label="Generic MQTT" href='/gMQTT' active={activeUrl === '/gMQTT'}/>
+					</SidebarDropdownWrapper>
+					
+<SidebarDropdownWrapper
+						label="Field Management"
+
+					>
+
+		<svelte:fragment slot="icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-red-500 mr-2 dark:text-pink-500 w-6 h-6">
+<path d="M21.75 6.75a4.5 4.5 0 01-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 11-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 016.336-4.486l-3.276 3.276a3.004 3.004 0 002.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852z" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M4.867 19.125h.008v.008h-.008v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</svg>
+        </svelte:fragment>
+
+						<SidebarDropdownItem label="Port Connection" href='/PortC' active={activeUrl === '/PortC'}/>
+						        <SidebarDropdownItem label="Modbus" href='/modbus' active={activeUrl === '/modbus'}/>
+					</SidebarDropdownWrapper>
 
 					<SidebarDropdownWrapper
 						label="Service"
@@ -544,8 +573,10 @@ const topMenuList = [{ href: '/apply', id: 0 },
   <path d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
         </svelte:fragment>
+        				<SidebarDropdownItem label="Remote Service" href='/remoteS' active={activeUrl === '/remoteS'}/>
 
-						
+        			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
+						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
 						<SidebarDropdownItem label="Docker Engine" href='/docker' active={activeUrl === '/docker'}/>
 
 					</SidebarDropdownWrapper>

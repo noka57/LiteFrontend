@@ -151,16 +151,7 @@
 {#if getDataReady == 1}
 {#if changed_docker_data.config.service_dockerEngine.enable}
 
-<tr><td class="w-60"></td>
-<td class="pl-5 pt-5">
-<Radio bind:group={changed_docker_data.config.service_dockerEngine.param.mode} value={0}><p class="text-lg">Local Image</p></Radio>
-</td>
-<tr><td class="w-60"></td>
-<td class="pl-5 pt-5">
-<Radio bind:group={changed_docker_data.config.service_dockerEngine.param.mode} value={1}><p class="text-lg">Docker Management With P2E</p></Radio>
-</td>
-</tr>
-{#if changed_docker_data.config.service_dockerEngine.param.mode==1}
+
 <tr><td class="w-60"></td>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Server IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_docker_data.config.service_dockerEngine.param.p2eInfo.ip} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -176,7 +167,7 @@
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Secret Token</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_docker_data.config.service_dockerEngine.param.p2eInfo.token} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
-{/if}
+
 {/if}
 
 {/if}

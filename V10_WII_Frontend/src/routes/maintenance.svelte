@@ -24,6 +24,9 @@
   let uploadfwrIsValid =0;
   let CheckedFwrInvalid=0;
 
+  let RestartIntervalId;
+  let RestartReady=0;
+
   let sessionid;
   let sessionBinary;
   sessionidG.subscribe(val => {
@@ -81,6 +84,33 @@
   }
 
 
+  function sendPing() 
+  {
+    fetch(window.location.origin)
+      .then(response => {
+        if (response.status === 200) 
+        {
+          console.log('Ping successful');
+          RestartReady=1;
+          clearInterval(RestartIntervalId);
+
+          setTimeout(() => {
+              window.location.href = window.location.origin;
+              }, 3000); 
+        } 
+        else 
+        {
+          console.log('Ping failed. Retrying...');
+        }
+      })
+      .catch(error => 
+      {
+        console.error('Ping failed:', error);
+      });
+  }
+
+
+
 
   async function updateFwr() {
     if (selectedFwr) 
@@ -114,7 +144,8 @@
         if (res.status == 200)
         {
           uploadfwrIsValid=1;
-          console.log("Update Fwr 200 OK");
+          console.log("200 Valid Fwr, updating...");
+          RestartIntervalId = setInterval(sendPing, 5000);
         }
         else
         {
@@ -320,12 +351,23 @@
 </td>
 </tr>
 <tr>
+{#if RestartReady==0}
 <td class="pt-5">
 <Spinner size={16} /></td> 
 <td class="pt-5">
 <p class="pl-5" style="color:red; font-size:18px">Updating firmware and restart ....
 </p>
 </td>
+{:else}
+<td>
+<svg class="w-16 h-16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td>
+<p class="pl-5" style="color:red; font-size:18px">Device has finished updating. It will redirect to first page automatically for logining again.
+</td>
+{/if}
 </tr>
 {/if}
 

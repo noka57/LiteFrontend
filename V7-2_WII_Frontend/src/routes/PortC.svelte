@@ -29,11 +29,7 @@
 
  <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
-  <TableHeadCell class="!p-1">
-    </TableHeadCell>
-      <TableHeadCell class="!p-1">
-    </TableHeadCell>
-      <TableHeadCell class="!p-1">
+  <TableHeadCell class="!p-4">
     </TableHeadCell>
     <TableHeadCell class="w-18">Profile Name</TableHeadCell>
     <TableHeadCell class="w-18">IP</TableHeadCell>
@@ -42,8 +38,7 @@
      </TableHead>
   <TableBody>
     <TableBodyRow>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">
+      <TableBodyCell class="!p-4 w-4">
 <button on:click={() => formModal = true}>
 
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
@@ -55,20 +50,18 @@
 
 
        </TableBodyCell>
-               <TableBodyCell class="!p-1">            
-</TableBodyCell>
 
-      <TableBodyCell class="!p-1 w-4">LAN 1</TableBodyCell>
+
+      <TableBodyCell class="w-18">LAN 1</TableBodyCell>
       <TableBodyCell class="w-18">127.0.0.1</TableBodyCell>
-      <TableBodyCell class="w-18">Active?(On? LinkUp?)</TableBodyCell>
+      <TableBodyCell class="w-18">LinkUp</TableBodyCell>
 
 
 
     </TableBodyRow>
 
  <TableBodyRow>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">
+      <TableBodyCell class="!p-4 w-4">
 <button on:click={() => formModal = true}>
 
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
@@ -80,88 +73,15 @@
 
 
        </TableBodyCell>
-               <TableBodyCell class="!p-1">            
-</TableBodyCell>
 
-      <TableBodyCell class="!p-1 w-4">LAN 2</TableBodyCell>
+      <TableBodyCell class="w-18">LAN 2</TableBodyCell>
       <TableBodyCell class="w-18">127.0.0.1</TableBodyCell>
-      <TableBodyCell class="w-18">Active?(On? LinkUp?)</TableBodyCell>
+      <TableBodyCell class="w-18">LinkUp</TableBodyCell>
 
 
 
     </TableBodyRow>
-     <TableBodyRow>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">
-<button on:click={() => formModal = true}>
-
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-
-
-      </button>
-
-
-       </TableBodyCell>
-               <TableBodyCell class="!p-1">            
-</TableBodyCell>
-
-      <TableBodyCell class="!p-1 w-4">LAN 3</TableBodyCell>
-      <TableBodyCell class="w-18">127.0.0.1</TableBodyCell>
-      <TableBodyCell class="w-18">Active?(On? LinkUp?)</TableBodyCell>
-
-
-
-    </TableBodyRow>
-     <TableBodyRow>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">
-<button on:click={() => formModal = true}>
-
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-
-
-      </button>
-
-
-       </TableBodyCell>
-               <TableBodyCell class="!p-1">            
-</TableBodyCell>
-
-      <TableBodyCell class="!p-1 w-4">LAN 4</TableBodyCell>
-      <TableBodyCell class="w-18">127.0.0.1</TableBodyCell>
-      <TableBodyCell class="w-18">Active?(On? LinkUp?)</TableBodyCell>
-
-
-
-    </TableBodyRow>
-     <TableBodyRow>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">
-<button on:click={() => formModal = true}>
-
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-
-
-      </button>
-
-
-       </TableBodyCell>
-               <TableBodyCell class="!p-1">            
-</TableBodyCell>
-
-      <TableBodyCell class="!p-1 w-4">LAN 5</TableBodyCell>
-      <TableBodyCell class="w-18">127.0.0.1</TableBodyCell>
-      <TableBodyCell class="w-18">Active?(On? LinkUp?)</TableBodyCell>
-
-
-
-    </TableBodyRow>
+  
 
 
 <tr class="pt-5">
@@ -188,6 +108,27 @@
 
 
  </TableBody>
+
+
+<Modal bind:open={formModal} autoclose={false} size="md" class="w-full">
+<table>
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Profile Name</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true}>Submit</Button></td>
+    </tr>
+</table>
+</Modal>
+
 
 
 </Table>
@@ -355,12 +296,27 @@
   </TabItem>
 
 
-  <TabItem title="DI">
+  <TabItem title="Simulator">
 
+  <table>
+<tr>
+   <td class="pl-10"><Button pill={true}>Test DI</Button></td>
+</tr>
+
+<p class="pt-10"></p>
+
+<tr >
+   <td class="pl-10"><Button pill={true}>Test DO High</Button></td>
+</tr>
+
+<p class="pt-10"></p>
+
+<tr>
+   <td class="pl-10"><Button pill={true}>Test DO Low</Button></td>
+</tr>
+
+</table>
   </TabItem>
 
-    <TabItem title="DO">
-
-  </TabItem>
 
  </Tabs>

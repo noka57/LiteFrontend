@@ -26,7 +26,7 @@
   let EnableAzureProfile;
   let EnableMQTTProfile;
   let EnableAvnetProfile;
-  let ViewerSelect='All';
+  let ViewerSelect;
 
 
   let MVList = [
@@ -926,18 +926,45 @@ let OpList = [
 
   </td>
 
-    <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={ViewerSelect} value='All' >All</Radio>
-  <Radio class="pb-2" bind:group={ViewerSelect} value='State' >State</Radio>  <input type="text"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio class="pb-2" bind:group={ViewerSelect} value='Mode' >Mode</Radio>  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+</tr>
 
-</div></td>
+
+
+<tr>
+    <td></td><td class="pt-5">
+    <Checkbox bind:group={ViewerSelect} value="CProfile">Cloud Profile</Checkbox>
+    </td>
+
+    <td class="pl-4 pt-3"><Select class="mt-2" items={countries} placeholder="None" /></td>
+
+</tr>
+
+<tr>
+    <td></td><td class="pt-5">
+    <Checkbox bind:group={ViewerSelect} value="DataDuration">Data Duration</Checkbox>
+    </td>
+
+    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Days" name="Days" type="text" label="Days" value={1}/></td>
+    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Hours" name="Hours" type="text" label="Hours" value={2}/></td>    
+    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Mins" name="Mins" type="text" label="Mins" value={3}/></td>    
+
+
+
+</tr>
+
+
+<tr>
+
+  <td></td><td class="pt-5">
+<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full">Execute</button>
+    </td>
+
 </tr>
 
 </table>
 
 
-<p class="pt-10"></p>
+<p class="pt-20"></p>
 
  <Table shadow striped={true} tableNoWFull={true}>
 
@@ -948,8 +975,9 @@ let OpList = [
     <TableHeadCell>Timestamp</TableHeadCell>
     <TableHeadCell>Mode</TableHeadCell>
     <TableHeadCell>Edge Data Alias Name</TableHeadCell>
+    <TableHeadCell>Cloud Profile</TableHeadCell>
     <TableHeadCell>Content</TableHeadCell>
-    <TableHeadCell>State</TableHeadCell>
+    <TableHeadCell>Data Duration</TableHeadCell>  
 
   </TableHead>
   <TableBody >
@@ -959,16 +987,18 @@ let OpList = [
         <TableBodyCell class="w-18">2023/11/03 13:02:25</TableBodyCell>
         <TableBodyCell class="w-18">Proxy Mode</TableBodyCell>
         <TableBodyCell class="w-18">Proxy_EdgeData_</TableBodyCell>
-        <TableBodyCell class="w-18">?</TableBodyCell>
-        <TableBodyCell class="w-18">?</TableBodyCell>
+        <TableBodyCell class="w-18">MQTT Profile1, Azure Profile1</TableBodyCell>
+        <TableBodyCell class="w-18">LineCurrent A is larger than 1000</TableBodyCell>
+        <TableBodyCell class="w-18">3 days 10 hours 12 mins</TableBodyCell>
       </TableBodyRow>
 
       <TableBodyRow>
         <TableBodyCell class="w-18">2023/11/13 20:02:25</TableBodyCell>
         <TableBodyCell class="w-18">Monitor Mode</TableBodyCell>
         <TableBodyCell class="w-18">Monitor_EdgeData_</TableBodyCell>
-        <TableBodyCell class="w-18">?</TableBodyCell>
-        <TableBodyCell class="w-18">?</TableBodyCell>
+        <TableBodyCell class="w-18">MQTT Profile2, Azure Profile2</TableBodyCell>
+        <TableBodyCell class="w-18">LineCurrent B is larger than 1000</TableBodyCell>
+        <TableBodyCell class="w-18">2 days 20 hours 2 mins</TableBodyCell>
       </TableBodyRow>
 
 

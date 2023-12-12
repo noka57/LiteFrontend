@@ -12,3 +12,19 @@
 
 
 </script>
+
+<Tabs style="underline">
+  <TabItem open title="Mode">
+
+  </TabItem>
+
+
+  <TabItem title="Data Packing">
+
+  </TabItem>
+
+
+    <TabItem title="Control Policy">
+
+  </TabItem>
+</Tabs>

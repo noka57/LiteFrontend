@@ -181,7 +181,7 @@
 
 <SidebarDropdownItem label="Port Connection" href='/PortC' active={activeUrl === '/PortC'}/>
 <SidebarDropdownItem label="Modbus" href='/modbus' active={activeUrl === '/modbus'}/>
-<SidebarDropdownItem label="Serial Transparent" href='/SerialTransparent' active={activeUrl === '/SerialTransparent'}/>						
+						
 					</SidebarDropdownWrapper>
 
 
@@ -195,6 +195,9 @@
   <path d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
         </svelte:fragment>
+
+        			    <SidebarDropdownItem label="Remote Service" href='/remoteS' active={activeUrl === '/remoteS'}/>
+
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
 

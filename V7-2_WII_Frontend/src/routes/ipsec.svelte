@@ -139,7 +139,7 @@ let RemoteCAList = [
   <TableHead>
     <TableHeadCell class="w-10">Index</TableHeadCell>
     <TableHeadCell class="w-10">Name</TableHeadCell>
-    <TableHeadCell class="w-10">State</TableHeadCell>
+    <TableHeadCell class="w-10">VPN State</TableHeadCell>
     <TableHeadCell class="w-10"></TableHeadCell>
     <TableHeadCell class="w-10"></TableHeadCell>
     <TableHeadCell class="w-10"></TableHeadCell>
@@ -153,7 +153,7 @@ let RemoteCAList = [
             <TableBodyCell>
 test1
       </TableBodyCell>
-      <TableBodyCell>Started</TableBodyCell>
+      <TableBodyCell>Connection Established</TableBodyCell>
 
     </TableBodyRow>
     <TableBodyRow>
@@ -161,7 +161,7 @@ test1
             <TableBodyCell>
 test2
       </TableBodyCell>
-      <TableBodyCell>Started</TableBodyCell>
+      <TableBodyCell>Connection Established</TableBodyCell>
     </TableBodyRow>
 
 </Table>
@@ -175,7 +175,14 @@ test2
 
    </caption>
   <TableHead>
-    <TableHeadCell class="w-10">State</TableHeadCell>
+        <TableHeadCell class="w-10">Name</TableHeadCell>
+    <TableHeadCell class="w-10">VPN State</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+        <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
     <TableHeadCell class="w-10"></TableHeadCell>
 
   </TableHead>  
@@ -183,8 +190,8 @@ test2
 
 
     <TableBodyRow>
-
-      <TableBodyCell>Started</TableBodyCell>
+<TableHeadCell>ResponderTest</TableHeadCell>
+      <TableBodyCell>Connection Established</TableBodyCell>
 
     </TableBodyRow>
 </Table>
@@ -262,16 +269,25 @@ test2
 
 <TabItem title="Connection">
 
+
+<Accordion>
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    General
+    </span>
+
  <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
     <TableHeadCell class="!p-4 w-8">
     </TableHeadCell>
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-18">Name</TableHeadCell>
-    <TableHeadCell class="w-18">Remote Address</TableHeadCell>
-    <TableHeadCell class="w-18">Remote CA certificate</TableHeadCell>
-    <TableHeadCell class="w-18">IKE Version</TableHeadCell>
-    <TableHeadCell class="w-18">Initial Mode</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Host</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Certificate</TableHeadCell>
+    <TableHeadCell class="w-18">Local Certificate</TableHeadCell>
 
         <TableHeadCell class="w-10"></TableHeadCell>
 
@@ -325,7 +341,149 @@ test2
   </TableBody>
 </Table>
 
+</AccordionItem>
 
+
+
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Transport and Tunnel
+    </span>
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-44"><option disabled="" value="">Choose VPN name ...</option><option value="test1">test1</option><option value="test2">test2</option></select>
+
+<p class="pt-10">
+
+ <Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4 w-8">
+    </TableHeadCell>
+    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="w-10">Type</TableHeadCell>
+
+
+    <TableHeadCell class="w-18">Local Network</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Network</TableHeadCell>
+
+  </TableHead>
+  <TableBody>
+    <TableBodyRow>
+      <TableBodyCell class="!p-4 w-8">
+<button on:click={() => formModalValidClient2 = true}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </TableBodyCell>
+                    <TableBodyCell class="w-8">1</TableBodyCell>
+                    <TableBodyCell class="w-10"></TableBodyCell>
+   
+              
+                    <TableBodyCell class="w-18"></TableBodyCell>
+                    <TableBodyCell class="w-18"></TableBodyCell>
+    </TableBodyRow>
+
+
+     <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+  </TableBody>
+</Table>
+
+<Modal bind:open={formModalValidClient2} autoclose={false} size="md" class="w-full">
+
+<table>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio bind:group={ipsecResponderType} value='Tunnel'>Tunnel Mode</Radio>
+  <Radio bind:group={ipsecResponderType} value='Transport'>Transport Mode</Radio>
+
+</div></td>
+
+
+  </tr>
+
+
+{#if ipsecResponderType == 'Tunnel'}
+<tr>
+      <td>
+      <p class="pl-10 pt-4 text-lg font-light text-right">
+Local Network
+      </p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+<tr>
+      <td>
+      <p class="pl-10 pt-4 text-lg font-light text-right">
+Remote Network
+      </p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+{:else}
+<tr>
+      <td>
+      <p class="pl-20 pt-4 text-lg font-light text-right">
+      </p></td>
+      <td class="pl-7.5 pt-7.5"></td>
+
+  </tr>
+
+<tr>
+      <td>
+      <p class="pl-20 pt-4 text-lg font-light text-right">
+      </p></td>
+      <td class="pl-7.5 pt-7.5"></td>
+
+  </tr>
+{/if}
+
+
+            <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+
+
+    </tr>
+
+</table>
+</Modal>
+
+ </AccordionItem>
+  
+
+
+</Accordion>
 
 <Modal bind:open={formModal} autoclose={false} size="lg" class="w-full">
 
@@ -342,7 +500,7 @@ test2
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VRAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VRAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -350,35 +508,11 @@ test2
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote CA Certificate</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
     <td class= "pl-4 pt-4"><Select class="mt-2" items={localList} placeholder="None" /></td>
 
 
 </tr>
-
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">IKE Version</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={openvpnProtocol} value='UDP'>IKE2</Radio>
-  <Radio bind:group={openvpnProtocol} value='TCP'>IKE1</Radio>
-
-</div></td>
-
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Initial Mode</p></td><td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={openvpnInitial} value='Started'>Started</Radio>
-  <Radio bind:group={openvpnInitial} value='Stopped'>Stopped</Radio>
-
-</div></td>
-
-
-
-  </tr>
 
 
 
@@ -412,7 +546,7 @@ test2
 
     </TabItem>
 
-    {:else if IPsecRole == 'Server'}
+{:else if IPsecRole == 'Server'}
 
     <TabItem title="Connection">
 
@@ -434,32 +568,17 @@ test2
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote CA Certificate</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
     <td class= "pl-4 pt-4"><Select class="mt-2" items={localList} placeholder="None" /></td>
 
 
   </tr>
 
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Initial Mode</p></td><td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={openvpnInitial} value='Started'>Started</Radio>
-  <Radio bind:group={openvpnInitial} value='Stopped'>Stopped</Radio>
-
-</div></td>
-
-
-
-  </tr>
-
 
 </table>
 <p class="pt-10"></p>
 
-
-    </TabItem>
-
-    <TabItem title="Advanced">
 <Accordion>
 
   <AccordionItem {defaultClass}>
@@ -594,158 +713,14 @@ Remote Network
 
 </AccordionItem>
 </Accordion>
-        </TabItem>
+
+
+    </TabItem>
+
      {/if}
     {/if}
 
 
 
 
-{#if IPsecED == 'Enable'}
-{#if IPsecRole == 'Client'}
-<TabItem title="Advanced">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-44"><option disabled="" value="">Choose VPN name ...</option><option value="test1">test1</option><option value="test2">test2</option></select>
-
-<Accordion>
-
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    Transport and Tunnel
-    </span>
-
-
- <Table shadow striped={true} tableNoWFull={true}>
-  <TableHead>
-    <TableHeadCell class="!p-4 w-8">
-    </TableHeadCell>
-    <TableHeadCell class="w-8">No</TableHeadCell>
-    <TableHeadCell class="w-10">Type</TableHeadCell>
-
-
-    <TableHeadCell class="w-18">Local Network</TableHeadCell>
-    <TableHeadCell class="w-18">Remote Network</TableHeadCell>
-
-  </TableHead>
-  <TableBody>
-    <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
-<button on:click={() => formModalValidClient2 = true}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-
-  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </TableBodyCell>
-                    <TableBodyCell class="w-8">1</TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
-   
-              
-                    <TableBodyCell class="w-18"></TableBodyCell>
-                    <TableBodyCell class="w-18"></TableBodyCell>
-    </TableBodyRow>
-
-
-     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>Save</Button></td>
-
-
-    </tr>
-
-  </TableBody>
-</Table>
-
-<Modal bind:open={formModalValidClient2} autoclose={false} size="md" class="w-full">
-
-<table>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={ipsecResponderType} value='Tunnel'>Tunnel Mode</Radio>
-  <Radio bind:group={ipsecResponderType} value='Transport'>Transport Mode</Radio>
-
-</div></td>
-
-
-  </tr>
-
-
-{#if ipsecResponderType == 'Tunnel'}
-<tr>
-      <td>
-      <p class="pl-10 pt-4 text-lg font-light text-right">
-Local Network
-      </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-  </tr>
-
-<tr>
-      <td>
-      <p class="pl-10 pt-4 text-lg font-light text-right">
-Remote Network
-      </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-  </tr>
-{:else}
-<tr>
-      <td>
-      <p class="pl-20 pt-4 text-lg font-light text-right">
-      </p></td>
-      <td class="pl-7.5 pt-7.5"></td>
-
-  </tr>
-
-<tr>
-      <td>
-      <p class="pl-20 pt-4 text-lg font-light text-right">
-      </p></td>
-      <td class="pl-7.5 pt-7.5"></td>
-
-  </tr>
-{/if}
-
-
-            <tr>
-    <td></td>
-    <td></td>
-
-    <td></td>
-    <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
-
-
-    </tr>
-
-</table>
-</Modal>
-
- </AccordionItem>
-  
-
-
-
-
-
-</Accordion>
-
-
-</TabItem>
-    {/if}
-   {/if}
 </Tabs>

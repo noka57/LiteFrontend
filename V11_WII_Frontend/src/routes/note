@@ -1,0 +1,559 @@
+<script>
+  import { Fileupload, Label, Button } from 'flowbite-svelte'
+  let value;
+
+  const btn1 = () => {
+    alert('You clicked btn1.');
+    if (value) {
+      alert(value);
+    }
+    else
+    {
+      alert('no file');
+    }
+  };
+</script>
+
+
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10">
+        <p class="text-black text-lg">Type</p>
+        <p class="text-black text-lg">Role</p>
+</div>
+<div class="px-40">
+        <p class="text-lg font-light">OpenVPN</p>
+        <p class="text-lg font-light">Client</p>
+</div>
+</div>
+<div class="pt-5 px-10" colspan="2">
+<Badge large color="green">1</Badge>
+<Badge large color="green">2</Badge>
+<Badge large color="green">3</Badge>
+<Badge large color="green">4</Badge>
+<Badge large color="red">5</Badge>
+<Badge large color="red">6</Badge>
+<Badge large color="red">7</Badge>
+<Badge large color="red">8</Badge>
+<Badge large color="red">9</Badge>
+<Badge large color="red">10</Badge>
+</div>
+                      </TableBodyCell>
+
+
+<td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Restore Configuration</p></td>
+<td class="pl-5 pt-16">
+ <label for="filetest" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-lg">...</label>
+
+  <Fileupload id="filetest"  style="visibility:hidden" bind:value/>
+
+
+<Label>File: {value }</Label>
+
+</td>
+
+<Label class="space-y-2 mb-2">
+  <span>Upload file</span>
+  <Fileupload id="filetest" bind:value/>
+</Label>
+
+<Button on:click={btn1}>Update</Button>
+ <label for="filetest" class="btn">Select Image</label>
+  <input id="filetest" style="visibility:hidden;" type="file">
+
+<script>
+    let files;
+    let value;
+    let dataFile = null;
+
+
+    function upload() {
+        const formData = new FormData();
+        formData.append('damName', value);
+        formData.append('dataFile', files[0]);
+        const upload = fetch('http://localhost:4173/file', {
+            method: 'POST',
+            body: formData
+        }).then((response) => response.json()).then((result) => {
+            console.log('Success:', result);
+        })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+    }
+</script>
+
+<input id="fileUpload" type="file" bind:files>
+
+{#if dataFile && files[0]}
+    <p>
+        {files[0].name}
+    </p>
+{/if}
+
+{#if value}
+    <button on:click={upload}>Submit</button>
+{:else}
+    <button on:click={upload} disabled>Submit</button>
+{/if}
+
+
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" aria-label="chevron up" viewBox="0 0 24 24" stroke-width="2" fill="currentColor"><path d="M8.25 4.5L15.75 12L8.25 19.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>
+
+
+                      <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="w-full">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  let file = null;
+
+  function handleFileChange(event) {
+    file = event.target.files[0];
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    let formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      console.log(response);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+</script>
+
+<form on:submit={handleSubmit}>
+  <label>
+    Upload a file:
+    <input type="file" on:change={handleFileChange}>
+  </label>
+  <button type="submit">Submit</button>
+</form>
+
+
+
+      <button on:click={() => formModal = true}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+      </TableBodyCell>
+      <TableBodyCell class="!p-4 w-10">
+
+      </TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10">1</TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+
+    </TableBodyRow>
+
+    </TableBody>
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+        <td></td>
+                <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+  </Table>
+
+
+
+<Modal bind:open={formModal} autoclose={false} class="w-full">
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox checked={vs}>
+  Enable
+</label>
+
+<p class="mt-10"></p>
+
+<table>
+<tr>
+      <td><p class="pl-40 pt-1 text-lg font-light text-right">Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={adIPName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+ <tr>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Interface</p>
+
+  </td>
+
+    <td class="pl-5"><div class="flex gap-4">
+  <Radio bind:group={adipInterface} value='lo' >lo</Radio>
+  <Radio bind:group={adipInterface} value='br0' >br0</Radio>
+
+</div></td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">IP Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={adipAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+  <tr>
+        <td><p class="pl-20 pt-4 text-lg font-light text-right">Subnet Mask</p></td><td class="pl-5 pt-5"><input type="text" bind:value={adipNetMask} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+  </tr>
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+
+
+<CircleProgressBar max="100" value="{value1}" />
+
+<p class="text-black text-center text-lg">CPU</p>
+</div>
+<div class="w-full"><CircleProgressBar max="100" value="{value2}" /><p class="text-black text-center text-lg">RAM</p>
+</div>
+<div class="w-full"><CircleProgressBar max="100" value="{value3}" /><p class="text-black text-center text-lg">EMMC</p>
+</div>
+<div class="w-full"><CircleProgressBar max="100" value="{value4}" /><p class="text-black text-center text-lg">SD Card</p>
+</div>
+</div>
+                      </TableBodyCell>
+
+
+
+                      !getContext('noborder') && 'border-b last:border-b-0'
+
+
+                      <script>
+    function handleClick() {
+        alert('clicked')
+    }
+</script>
+
+<button on:click={handleClick}>
+    Click me
+</button>
+
+
+
+    <TableBodyRow>
+      <TableBodyCell class="text-center">1</TableBodyCell>
+      <TableBodyCell class="text-center">Ready</TableBodyCell>
+      <TableBodyCell class="text-center">EG25</TableBodyCell>
+      <TableBodyCell class="text-center">460015726101417</TableBodyCell>
+      <TableBodyCell class="text-center">Registrated to home network</TableBodyCell>
+    </TableBodyRow>
+
+
+     <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Phone Number</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>+886912345678</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Modem Status</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>Connected</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">SIM Status</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>Active</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Active SIM</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>SIM A</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Signal Strength</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>RSSI</TableBodyCell>
+      </TableBodyRow>
+
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Registered Mobile Operator</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>PLMN ID</TableBodyCell>
+      </TableBodyRow>
+
+
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">IMSI</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>ID</TableBodyCell>
+      </TableBodyRow>
+
+
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Connect State</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>PIN</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Connected Network Type</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>LTE</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Connected Band</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>B6</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Modem Vendor</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>ven</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Modem Model</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>ven</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="3">Modem Firmware Version</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="2" {tdClass}>1.0.0</TableBodyCell>
+      </TableBodyRow>
+
+
+      {#if isActive}
+<tr>
+
+</tr>
+{:else}
+    <tr>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">APN</p></td><td class="pl-5 pt-5"><input type="text" bind:value={apn} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    </tr>
+
+
+    <tr>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Authentication</p></td><td class="pl-5 pt-5"><Select class="mt-2" items={countries} bind:value={selected} placeholder="None"/></td>
+    </tr>
+{/if}
+
+
+    <path d="M7.202456766718086, 36.09423525312737A45 45 0 0 1 50 5" stroke="red"/>
+
+
+
+      <svg viewBox="0 0 100 100">
+    <path d="M50,5A45 45 0 1 1 49.9999 5" />
+    <path stroke-width=10px stroke={color} d="{progressPath()}" />
+{#if value >80}
+    <path d="M{x},{y}A45 45 0 0 0 7.202456766718086, 36.09423525312737A45" stroke="red"/>
+{/if}
+  </svg>
+
+
+
+        if (value<=80)
+      {
+        if (angle > Math.PI) {
+          path += "A45 45 0 0 1 50 95";
+        }
+        path += `A45 45 0 0 1 ${x} ${y}`;
+        return path;
+      }
+      else
+      {
+        path+="A45 45 0 0 1 50 95A45 45 0 0 1 7.202456766718086 36.09423525312737";
+        return path;
+      }
+<div class="flex gap-4">
+  <Radio bind:group={selected3} value='SimAF' >SIM A First</Radio>
+  <Radio bind:group={selected3} value='SimBF' >SIM B First</Radio>
+  <Radio bind:group={selected3} value='SimAO' >SIM A Only</Radio>
+  <Radio bind:group={selected3} value='SimBO' >SIM B Only</Radio>
+
+</div>
+
+        let selected12="Off";
+  let countries12 = [
+    {value:"Off", name: "Off"},
+    {value:"Time", name: "Time"},
+    {value:"TA", name: "Traffic Amount"},
+    {value:"DS", name: "Data Source"},
+
+
+    
+  let selected13="Sch";
+  let countries13 = [
+    {value:"Sch", name: "Schedule"},
+    {value:"Peri", name: "Period"},
+  ]
+  ]
+
+
+
+    {value:"auto", name: "AUTO"},
+    {value:"3g", name: "3G"},
+    {value:"4g", name: "4G"},
+    {value:"5g", name: "5G"},
+    {value:"5gnrsa", name: "5GNR-SA"},
+  ]
+  <Select class="mt-2" items={countries} bind:value={selected}/>
+
+
+    let countries3 = [
+    {value:"SimAF", name: "SIM A First"},
+    {value:"SimBF", name: "SIM B First"},
+    {value:"SimAO", name: "SIM A Only"},
+    {value:"SimBO", name: "SIM B Only"},
+  ]
+
+    let countries4 = [
+    {value:"None", name: "None"},
+    {value:"us4", name: "Reset Modem"},
+    {value:"ca4", name: "Power Cycle Modem"},
+  ]
+
+
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected4} value='None' >None</Radio>
+  <Radio bind:group={selected4} value='RM' >Reset Modem</Radio>
+  <Radio bind:group={selected4} value='PCM'>Power Cycle Modem</Radio>
+
+
+</div></td>
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected5} value='PING' >PING</Radio>
+  <Radio bind:group={selected5} value='DNSQ' >DNS Query</Radio>
+  <Radio bind:group={selected5} value='DNSPC'>DNS Packet Check</Radio>
+
+
+</div></td>
+
+  let countries6 = [
+    {value:"None", name: "None"},
+    {value:"dns1", name: "DNS 1"},
+    {value:"dns2", name: "DNS 2"},
+    {value:"gw", name: "Gateway"},
+    {value:"ot", name: "Other Host"},
+  ]
+
+
+
+  let selected7="DClient";
+
+      <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={selected6} value='None' >None</Radio>
+  <Radio bind:group={selected6} value='dns1' >DNS 1</Radio>
+  <Radio bind:group={selected6} value='dns2'>DNS 2</Radio>
+  <Radio bind:group={selected6} value='gw' >Gateway</Radio>
+  <Radio bind:group={selected6} value='otherH'>Other Host</Radio>
+
+</div></td>
+
+
+
+  let countries8 = [
+    {value:"Off", name: "Off"},
+    {value:"Aon", name: "Always On"},
+    {value:"fo", name: "Fail Over"},
+    {value:"fb", name: "Fail Back"},
+  ]
+  let countries9 = [
+    {value:"cw1", name: "C-WAN-1"},
+    {value:"ew", name: "E-WAN"},
+  ]
+
+    let countries12 = [
+    {value:"Off", name: "Off"},
+    {value:"Time", name: "Time"},
+    {value:"TA", name: "Traffic Amount"},
+    {value:"DS", name: "Data Source"},
+
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="645 366 90 36"  class="w-12 h-12">
+
+    <path fill="#076291" d="M702.39,382.07c0.02-0.18,0.03-0.34,0.03-0.49c0-2.85-2.31-5.16-5.15-5.16c-0.53,0-1.04,0.08-1.53,0.23
+      c-0.23-0.35-0.5-0.67-0.78-0.97l-21.3,21.31h19.21c0,0,0.01-0.01,0.01-0.01c0.09,0,0.18,0.01,0.27,0.01
+      c2.71,0,5.11-1.31,6.62-3.33c3.28-0.14,5.9-2.84,5.9-6.15C705.66,385.21,704.41,383.15,702.39,382.07z M700.17,393.04
+      c0.77-1.26,1.23-2.73,1.23-4.32c0-3.26-1.89-6.07-4.63-7.41c0.05-0.3,0.08-0.61,0.08-0.92c0-1.17-0.29-2.27-0.81-3.24
+      c0.39-0.11,0.81-0.17,1.23-0.17c2.53,0,4.58,2.06,4.58,4.59c0,0.18-0.02,0.37-0.05,0.61l-0.03,0.21l0.19,0.09
+      c1.93,0.95,3.13,2.87,3.13,5.01C705.08,390.35,702.93,392.71,700.17,393.04z"/>
+
+    <path fill="#1A87C9" d="M690,373.55c-1.89,0-3.61,0.77-4.85,2c-1.57-2.14-4.06-3.54-6.92-3.54c-4.73,0-8.58,3.84-8.58,8.58
+      c0,0.2,0.05,0.4,0.06,0.62c-0.42-0.08-0.85-0.14-1.27-0.14c-4.47,0-8.1,3.62-8.1,8.09c0,3.81,2.64,6.99,6.2,7.84h7.1l21.31-21.31
+      C693.7,374.37,691.95,373.55,690,373.55z"/>
+
+<text transform="matrix(1.0002 0 0 1 667.4022 389.6925)" fill="#FFFFFF" font-family="OpenSans" font-size="6px">Pave2Edge</text>
+</svg>
+
+
+<Breadcrumb aria-label="Solid background breadcrumb example" solid>
+  <BreadcrumbItem href="/openvpn">OpenVPN</BreadcrumbItem>
+  <BreadcrumbItem href="/openvpn">Overview</BreadcrumbItem>
+</Breadcrumb>
+
+
+<Button><Chevron>VPN Name: {ConnectionVPNName}</Chevron></Button>
+<Dropdown class="w-48 overflow-y-auto py-1">
+  <DropdownItem class="flex items-center text-base font-semibold gap-2" bind:value={ConnectionVPNName} >
+    test1
+  </DropdownItem>
+  <DropdownItem class="flex items-center text-base font-semibold gap-2" bind:value={ConnectionVPNName} >
+    test2
+  </DropdownItem>
+  <DropdownItem class="flex items-center text-base font-semibold gap-2" bind:value={ConnectionVPNName}>
+    test3
+  </DropdownItem>
+
+  <button class="flex items-center px-3 py-2 -mb-1 text-sm font-medium text-blue-600 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500 hover:underline">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 mr-1"><path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Add new connection
+  </button>
+</Dropdown>  ]

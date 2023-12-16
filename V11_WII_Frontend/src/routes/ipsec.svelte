@@ -55,8 +55,7 @@ let RemoteCAList = [
     {value:"ss", name: "Self-sign"},
   ];
 
-  let IPsecED="Enable";
-  let IPsecRole="Client";
+
   let openvpnProtocol="UDP";
   let openvpnInitial="Started";
   let openvpnAuth="X509Cert";
@@ -159,6 +158,93 @@ let RemoteCAList = [
       saved_changed_ipsec_data = val;
     });
 
+ function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
+  {
+      for (const key in obj1) 
+      {
+        if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+        {
+          if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) 
+          {
+            for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+            {
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+            }
+
+            if (obj1[key].length > obj2[key].length) 
+            {
+              let addedCount=obj1[key].length-obj2[key].length;
+              let changedstr="Add "+addedCount+" item(s) to "+ key;
+              if (type == 1)
+              {
+                conn_changedValues=[...conn_changedValues, changedstr];
+              }
+              else if (type == 0)
+              {
+                basic_changedValues=[...basic_changedValues, changedstr]; 
+              }
+            }
+            else if (obj1[key].length < obj2[key].length)
+            {
+              let deletedCount=obj2[key].length-obj1[key].length;
+              let changedstr="Delete "+deletedCount+" item(s) from "+ key;
+              if (type == 1)
+              {
+                conn_changedValues=[...conn_changedValues, changedstr];
+              }
+              else if (type == 0)
+              {
+                basic_changedValues=[...basic_changedValues, changedstr]; 
+              }
+            }
+          }
+          else
+          {
+            compareObjects(obj1[key], obj2[key], type, 0,0);
+          }
+        } 
+        else if (obj1[key] != obj2[key]) 
+        {
+          let changedstr="";
+          if (isArrayItem == 0)
+          {
+            changedstr="Value of "+key+" has changed to "+obj1[key];
+          }
+          else
+          {
+            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+          }
+          
+          if (type == 1)
+          {
+                conn_changedValues=[...conn_changedValues, changedstr];
+          }
+          else if (type == 0)
+          {
+              basic_changedValues=[...basic_changedValues, changedstr]; 
+          }
+        }
+      }
+  }
+
+
+
+function saveBasic()
+  {
+    console.log("save basic");
+
+    if (basic_changedValues.length!=0)
+    {
+      basic_changedValues=[];
+    }
+    
+    compareObjects(changed_ipsec_data.config.vpn_ipsec_basic, ipsec_data.config.vpn_ipsec_basic,0,0,0);
+    IPsec_Basic_ConfigChangedLog.set(basic_changedValues);
+    ChangedIPsecConfig.set(changed_ipsec_data);
+    
+    console.log(basic_changedValues);
+  }
+
 
    async function getIPsecData () {
     const res = await fetch(window.location.origin+"/getIPsecdata", {
@@ -176,7 +262,6 @@ let RemoteCAList = [
       saved_changed_ipsec_data= JSON.parse(JSON.stringify(ipsec_data));
       ChangedIPsecConfig.set(saved_changed_ipsec_data);
       getDataReady=1;
-      console.log(changed_ipsec_data);
     
     }
   }
@@ -197,18 +282,19 @@ let RemoteCAList = [
     }
     else if (sessionid && ipsec_data != "")
     {
+      console.log("ipsec_data is not null");
       getDataReady=1;
 
       if (basic_changedValues.length==0)
       {
           changed_ipsec_data=JSON.parse(JSON.stringify(saved_changed_ipsec_data));
-         // changed_ipsec_data.config.networking_firewall_general=JSON.parse(JSON.stringify(ipsec_data.config.networking_firewall_general)); 
+          changed_ipsec_data.config.vpn_ipsec_basic=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_basic)); 
       }
       
       if (conn_changedValues.length==0)
       {
           changed_ipsec_data=JSON.parse(JSON.stringify(saved_changed_ipsec_data));
-         // changed_ipsec_data.config.networking_firewall_ipFilter=JSON.parse(JSON.stringify(ipsec_data.config.networking_firewall_ipFilter)); 
+          changed_ipsec_data.config.vpn_ipsec_connection=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection)); 
       }
       
 
@@ -222,10 +308,10 @@ let RemoteCAList = [
  <Tabs style="underline">
   <TabItem open title="Overview">
 
+{#if getDataReady == 1}
+{#if changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1}
 
-{#if IPsecED == 'Enable'}
-
-{#if IPsecRole == 'Client'}  
+{#if changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 1}  
 <Table>
   <caption
     class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
@@ -265,7 +351,7 @@ test2
 
 </Table>
 
-{:else if IPsecRole == 'Server'}  
+{:else if changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 0}  
 <Table>
   <caption
     class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
@@ -296,20 +382,20 @@ test2
 </Table>
 
 {/if}
-
-
-
+{/if}
 {/if}
     </TabItem>
 
       <TabItem title="Basic">
+
+{#if getDataReady == 1}
       <table>
       <tr>
           <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">IPsec Service</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={IPsecED} value='Disable'>Disable</Radio>
-  <Radio bind:group={IPsecED} value='Enable' >Enable</Radio>
+      <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn} value={0}>Disable</Radio>
+  <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn} value={1} >Enable</Radio>
 
 </div></td>
       </tr>
@@ -318,20 +404,20 @@ test2
       <tr>
           <td></td>
 
-{#if IPsecED == 'Enable'}    
+{#if changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1}    
           <td><p class="pl-5 pt-5 text-lg font-light text-left">IPsec Role</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
 
-      <Radio bind:group={IPsecRole} value='Server'>Responder</Radio>
-  <Radio bind:group={IPsecRole} value='Client' >Initiator</Radio>
+      <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole} value={0}>Responder</Radio>
+  <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole} value={1} >Initiator</Radio>
 </div></td>
 {:else}
- <td><p class="pl-5 pt-5 text-lg font-light text-left text-gray-400 dark:text-gray-500">OpenVPN Role</p></td>
+ <td><p class="pl-5 pt-5 text-lg font-light text-left text-gray-400 dark:text-gray-500">IPsec Role</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={IPsecRole} value='Server' disabled>Responder</Radio>
-  <Radio bind:group={IPsecRole} value='Client' disabled>Initiator</Radio>
+      <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole} value={0} disabled>Responder</Radio>
+  <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole} value={1} disabled>Initiator</Radio>
 </div></td>
 {/if}
 
@@ -350,7 +436,7 @@ test2
         <td></td>
         <td></td>
         <td></td>        
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveBasic}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -359,12 +445,14 @@ test2
 
 
       </table>
-
+{/if}
     </TabItem>
 
-{#if IPsecED == 'Enable'}
+{#if getDataReady == 1}
 
-{#if IPsecRole == 'Client'}
+{#if changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1}
+
+{#if changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 1}
 
 <TabItem title="Connection">
 
@@ -627,7 +715,7 @@ Remote Subnet
 
     </TabItem>
 
-{:else if IPsecRole == 'Server'}
+{:else if changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 0}
 
     <TabItem title="Connection">
 
@@ -781,9 +869,8 @@ Remote Subnet
 </AccordionItem>
 </Accordion>
 {/if}
-
     </TabItem>
-
+{/if}
      {/if}
     {/if}
 

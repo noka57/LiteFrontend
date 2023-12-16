@@ -20,7 +20,7 @@
   let general_changedValues = [];
   let ipfilter_changedValues = [];
   let macfilter_changedValues = [];
-  let getdataAlready=0;
+
   let ipfilter_current_index;
   let macfilter_current_index;
 

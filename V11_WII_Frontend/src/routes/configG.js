@@ -2,6 +2,8 @@ import { writable } from 'svelte/store';
 
 export const dashboadData= writable("");
 
+
+export const ipsecConfig= writable("");
 export const maintenanceConfig = writable("");
 export const operationConfig = writable("");
 export const dockerConfig = writable("");
@@ -11,6 +13,13 @@ export const firewallConfig = writable("");
 export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
+
+
+
+export const IPsec_Conn_ConfigChangedLog=writable("");
+export const IPsec_Basic_ConfigChangedLog=writable("");
+export const ChangedIPsecConfig=writable("");
+
 
 export const LanConfigChangedLog=writable("");
 export const ChangedLANConfig=writable("");

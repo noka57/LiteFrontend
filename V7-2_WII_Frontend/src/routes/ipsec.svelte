@@ -46,6 +46,8 @@ let RemoteCAList = [
   let openvpnAuth="X509Cert";
   let openvpnAuthS="X509Cert";
 
+  let ConnType=0;
+
 
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
@@ -231,8 +233,8 @@ test2
  <td><p class="pl-5 pt-5 text-lg font-light text-left text-gray-400 dark:text-gray-500">OpenVPN Role</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={IPsecRole} value='Server' disabled>Server</Radio>
-  <Radio bind:group={IPsecRole} value='Client' disabled>Client</Radio>
+      <Radio bind:group={IPsecRole} value='Server' disabled>Responder</Radio>
+  <Radio bind:group={IPsecRole} value='Client' disabled>Initiator</Radio>
 </div></td>
 {/if}
 
@@ -288,7 +290,7 @@ test2
     <TableHeadCell class="w-18">Remote Host</TableHeadCell>
     <TableHeadCell class="w-18">Remote Certificate</TableHeadCell>
     <TableHeadCell class="w-18">Local Certificate</TableHeadCell>
-
+    <TableHeadCell class="w-18">Type</TableHeadCell>
         <TableHeadCell class="w-10"></TableHeadCell>
 
     <TableHeadCell class="w-10"></TableHeadCell>
@@ -351,7 +353,7 @@ test2
 
 
     <span slot="header" class="pl-4">
-    Transport and Tunnel
+    Tunnel Subnet
     </span>
 
 
@@ -365,11 +367,10 @@ test2
     <TableHeadCell class="!p-4 w-8">
     </TableHeadCell>
     <TableHeadCell class="w-8">No</TableHeadCell>
-    <TableHeadCell class="w-10">Type</TableHeadCell>
 
 
-    <TableHeadCell class="w-18">Local Network</TableHeadCell>
-    <TableHeadCell class="w-18">Remote Network</TableHeadCell>
+    <TableHeadCell class="w-18">Local Subnet</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
 
   </TableHead>
   <TableBody>
@@ -385,7 +386,7 @@ test2
 
        </TableBodyCell>
                     <TableBodyCell class="w-8">1</TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
+                    <TableBodyCell class="w-18"></TableBodyCell>
    
               
                     <TableBodyCell class="w-18"></TableBodyCell>
@@ -417,22 +418,11 @@ test2
 
 <table>
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={ipsecResponderType} value='Tunnel'>Tunnel Mode</Radio>
-  <Radio bind:group={ipsecResponderType} value='Transport'>Transport Mode</Radio>
 
-</div></td>
-
-
-  </tr>
-
-
-{#if ipsecResponderType == 'Tunnel'}
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Local Network
+Local Subnet
       </p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -441,28 +431,11 @@ Local Network
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Remote Network
+Remote Subnet
       </p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
-{:else}
-<tr>
-      <td>
-      <p class="pl-20 pt-4 text-lg font-light text-right">
-      </p></td>
-      <td class="pl-7.5 pt-7.5"></td>
-
-  </tr>
-
-<tr>
-      <td>
-      <p class="pl-20 pt-4 text-lg font-light text-right">
-      </p></td>
-      <td class="pl-7.5 pt-7.5"></td>
-
-  </tr>
-{/if}
 
 
             <tr>
@@ -525,6 +498,17 @@ Remote Network
   </tr>
 
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
+ <td class="pl-5 pt-5"><div class="flex gap-4">
+
+      <Radio bind:group={ConnType} value={0}>Tunnel</Radio>
+  <Radio bind:group={ConnType} value={1} >Transport</Radio>
+</div></td>
+
+
+  </tr>
+
 
 
 
@@ -574,10 +558,23 @@ Remote Network
 
   </tr>
 
+  <tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
+ <td class="pl-5 pt-5"><div class="flex gap-4">
+
+      <Radio bind:group={ipsecResponderType} value={0}>Tunnel</Radio>
+  <Radio bind:group={ipsecResponderType} value={1} >Transport</Radio>
+</div></td>
+
+
+  </tr>
+
 
 
 </table>
 <p class="pt-10"></p>
+
+{#if ipsecResponderType == 0}
 
 <Accordion>
 
@@ -585,7 +582,7 @@ Remote Network
 
 
     <span slot="header" class="pl-4">
-    Transport and Tunnel
+    Tunnel Subnet
     </span>
 
 
@@ -594,11 +591,10 @@ Remote Network
     <TableHeadCell class="!p-4 w-8">
     </TableHeadCell>
     <TableHeadCell class="w-8">No</TableHeadCell>
-    <TableHeadCell class="w-10">Type</TableHeadCell>
 
 
-    <TableHeadCell class="w-18">Local Network</TableHeadCell>
-    <TableHeadCell class="w-18">Remote Network</TableHeadCell>
+    <TableHeadCell class="w-18">Local Subnet</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
 
   </TableHead>
   <TableBody>
@@ -614,7 +610,7 @@ Remote Network
 
        </TableBodyCell>
                     <TableBodyCell class="w-8">1</TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
+                    <TableBodyCell class="w-18"></TableBodyCell>
    
               
                     <TableBodyCell class="w-18"></TableBodyCell>
@@ -646,22 +642,12 @@ Remote Network
 
 <table>
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={ipsecResponderType} value='Tunnel'>Tunnel Mode</Radio>
-  <Radio bind:group={ipsecResponderType} value='Transport'>Transport Mode</Radio>
-
-</div></td>
 
 
-  </tr>
-
-
-{#if ipsecResponderType == 'Tunnel'}
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Local Network
+Local Subnet
       </p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -670,28 +656,12 @@ Local Network
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Remote Network
+Remote Subnet
       </p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
-{:else}
-<tr>
-      <td>
-      <p class="pl-20 pt-4 text-lg font-light text-right">
-      </p></td>
-      <td class="pl-7.5 pt-7.5"></td>
 
-  </tr>
-
-<tr>
-      <td>
-      <p class="pl-20 pt-4 text-lg font-light text-right">
-      </p></td>
-      <td class="pl-7.5 pt-7.5"></td>
-
-  </tr>
-{/if}
 
 
             <tr>
@@ -713,7 +683,7 @@ Remote Network
 
 </AccordionItem>
 </Accordion>
-
+{/if}
 
     </TabItem>
 

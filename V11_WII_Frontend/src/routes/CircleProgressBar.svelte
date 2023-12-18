@@ -65,7 +65,7 @@
     <path d="M50,5A35 35 0 1 1 49.9999 5" />
     <path stroke-width=20px stroke={color} d="{progressPath()}" />
 {#if value >80}
-    <path d="M{x},{y}A35 35 0 0 0 15.810308878413977 32.51234208777258A35" stroke="red"/>
+    <path d="M{x},{y}A35 35 0 0 0 15.810308878413977 32.51234208777258" stroke="red"/>
 {/if}
   </svg>
   <div>

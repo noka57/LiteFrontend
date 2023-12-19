@@ -252,7 +252,9 @@
 
 
       WAN_CWAN1_BASIC_ConfigChangedLog.set(cwan1_basic_changedValues);
-      ChangedWANConfig.set(changed_wan_data);
+
+      saved_changed_wan_data.config.networking_wan_cwan[0].basicSetting=JSON.parse(JSON.stringify(changed_wan_data.config.networking_wan_cwan[0].basicSetting));
+      ChangedWANConfig.set(saved_changed_wan_data);
     
       console.log(cwan1_basic_changedValues);
   };
@@ -269,7 +271,9 @@
 
 
       WAN_CWAN1_Advanced_ConfigChangedLog.set(cwan1_advanced_changedValues);
-      ChangedWANConfig.set(changed_wan_data);
+
+      saved_changed_wan_data.config.networking_wan_cwan[0].advancedSetting=JSON.parse(JSON.stringify(changed_wan_data.config.networking_wan_cwan[0].advancedSetting));
+      ChangedWANConfig.set(saved_changed_wan_data);
 
       console.log(cwan1_advanced_changedValues);
   }
@@ -285,7 +289,9 @@
 
 
       WAN_CWAN1_SimPolicy_ConfigChangedLog.set(cwan1_simpolicy_changedValues);
-      ChangedWANConfig.set(changed_wan_data);
+
+      saved_changed_wan_data.config.networking_wan_cwan[0].simPolicy=JSON.parse(JSON.stringify(changed_wan_data.config.networking_wan_cwan[0].simPolicy));
+      ChangedWANConfig.set(saved_changed_wan_data);
 
       console.log(cwan1_simpolicy_changedValues);  
   }
@@ -302,7 +308,9 @@
 
 
       WAN_CWAN1_GLink_ConfigChangedLog.set(cwan1_glink_changedValues);
-      ChangedWANConfig.set(changed_wan_data);
+      saved_changed_wan_data.config.networking_wan_cwan[0].gLink=JSON.parse(JSON.stringify(changed_wan_data.config.networking_wan_cwan[0].gLink));
+
+      ChangedWANConfig.set(saved_changed_wan_data);
 
       console.log(cwan1_glink_changedValues);      
 
@@ -319,7 +327,8 @@
 
 
     WAN_EWAN1_Basic_ConfigChangedLog.set(ewan1_basic_changedValues);
-    ChangedWANConfig.set(changed_wan_data);
+    saved_changed_wan_data.config.networking_wan_ewan[0].basicSetting=JSON.parse(JSON.stringify(changed_wan_data.config.networking_wan_ewan[0].basicSetting));
+    ChangedWANConfig.set(saved_changed_wan_data);
 
     console.log(ewan1_basic_changedValues);      
   }
@@ -336,7 +345,9 @@
 
 
     WAN_EWAN1_EWLAP_ConfigChangedLog.set(ewan1_ewlap_changedValues);
-    ChangedWANConfig.set(changed_wan_data);
+    saved_changed_wan_data.config.networking_wan_ewan[0].ewlapEthernetWan=JSON.parse(JSON.stringify(changed_wan_data.config.networking_wan_ewan[0].ewlapEthernetWan));
+
+    ChangedWANConfig.set(saved_changed_wan_data);
 
     console.log(ewan1_ewlap_changedValues);     
   }
@@ -353,7 +364,9 @@
 
 
     WAN_RedundancyPolicy_ConfigChangedLog.set(redundancy_policy_changedValues);
-    ChangedWANConfig.set(changed_wan_data);
+
+    saved_changed_wan_data.config.networking_wan_wanRedundancyPolicy=JSON.parse(JSON.stringify(changed_wan_data.config.networking_wan_wanRedundancyPolicy));
+    ChangedWANConfig.set(saved_changed_wan_data);
 
     console.log(redundancy_policy_changedValues);     
   }
@@ -370,6 +383,8 @@
 
 
     WAN_FareSavingPolicy_ConfigChangedLog.set(faresaving_policy_changedValues);
+
+    saved_changed_wan_data.config.networking_wan_fareSavingPolicy=JSON.parse(JSON.stringify(changed_wan_data.config.networking_wan_fareSavingPolicy));
     ChangedWANConfig.set(changed_wan_data);
 
     console.log(faresaving_policy_changedValues);      

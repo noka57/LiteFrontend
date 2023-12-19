@@ -166,7 +166,9 @@
     
     compareObjects(changed_firewall_data.config.networking_firewall_general, firewall_data.config.networking_firewall_general,0,0,0);
     Firewall_General_ConfigChangedLog.set(general_changedValues);
-    ChangedFirewallConfig.set(changed_firewall_data);
+
+    saved_changed_firewall_data.config.networking_firewall_general=JSON.parse(JSON.stringify(changed_firewall_data.config.networking_firewall_general));
+    ChangedFirewallConfig.set(saved_changed_firewall_data);
     
     console.log(general_changedValues);
   }
@@ -409,7 +411,9 @@
     
     compareObjects(changed_firewall_data.config.networking_firewall_ipFilter, firewall_data.config.networking_firewall_ipFilter,1,0,0);
     Firewall_IPFilter_ConfigChangedLog.set(ipfilter_changedValues);
-    ChangedFirewallConfig.set(changed_firewall_data);
+
+    saved_changed_firewall_data.config.networking_firewall_ipFilter=JSON.parse(JSON.stringify(changed_firewall_data.config.networking_firewall_ipFilter));
+    ChangedFirewallConfig.set(saved_changed_firewall_data);
     
     console.log(ipfilter_changedValues);
   }
@@ -426,7 +430,9 @@
     
     compareObjects(changed_firewall_data.config.networking_firewall_macFilter, firewall_data.config.networking_firewall_macFilter,2,0,0);
     Firewall_MACFilter_ConfigChangedLog.set(macfilter_changedValues);
-    ChangedFirewallConfig.set(changed_firewall_data);
+    saved_changed_firewall_data.config.networking_firewall_macFilter=JSON.parse(JSON.stringify(changed_firewall_data.config.networking_firewall_macFilter));
+
+    ChangedFirewallConfig.set(saved_changed_firewall_data);
     
     console.log(macfilter_changedValues);
   }

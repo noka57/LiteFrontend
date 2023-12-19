@@ -103,7 +103,9 @@
     compareObjects(changed_operation_data, operation_data);
 
     OperationConfigChangedLog.set(operation_changedValues);
-    ChangedOperationConfig.set(changed_operation_data);
+
+    saved_changed_operation_data=JSON.parse(JSON.stringify(changed_operation_data));
+    ChangedOperationConfig.set(saved_changed_operation_data);
     
     console.log(operation_changedValues);
 

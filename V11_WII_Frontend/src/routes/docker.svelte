@@ -64,7 +64,8 @@
         compareObjects(changed_docker_data, docker_data);
 
         DockerConfigChangedLog.set(docker_changedValues);
-        ChangedDockerConfig.set(changed_docker_data);
+        saved_changed_docker_data=JSON.parse(JSON.stringify(changed_docker_data))
+        ChangedDockerConfig.set(saved_changed_docker_data);
     
         console.log(docker_changedValues);
 

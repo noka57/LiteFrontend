@@ -6,7 +6,9 @@
   import { sessionidG } from "./sessionG.js";
   import { 
     ipsecConfig,
-    IPsec_Conn_ConfigChangedLog,
+    IPsec_Responder_Conn_ConfigChangedLog,
+    IPsec_Initiator_Conn_General_ConfigChangedLog,
+    IPsec_Initiator_Conn_Subnet_ConfigChangedLog,
     IPsec_Basic_ConfigChangedLog,
     ChangedIPsecConfig
   } from "./configG.js"
@@ -83,7 +85,9 @@ let RemoteCAList = [
     let getDataReady=0;   
 
     let basic_changedValues = [];
-    let conn_changedValues = [];
+    let responder_conn_changedValues=[];
+    let initiator_conn_general_changedValues=[];
+    let initiator_conn_subnet_changedValues=[];
 
 
     sessionidG.subscribe(val => {
@@ -94,9 +98,20 @@ let RemoteCAList = [
       ipsec_data = val;
     });
 
-    IPsec_Conn_ConfigChangedLog.subscribe(val => {
-      conn_changedValues = val;
+
+    IPsec_Responder_Conn_ConfigChangedLog.subscribe(val => {
+      responder_conn_changedValues = val;
     });
+
+    IPsec_Initiator_Conn_General_ConfigChangedLog.subscribe(val => {
+      initiator_conn_general_changedValues = val;
+    });
+
+    IPsec_Initiator_Conn_Subnet_ConfigChangedLog.subscribe(val => {
+      initiator_conn_subnet_changedValues = val;
+    });
+
+
 
     IPsec_Basic_ConfigChangedLog.subscribe(val => {
       basic_changedValues = val;
@@ -126,7 +141,7 @@ let RemoteCAList = [
               let changedstr="Add "+addedCount+" item(s) to "+ key;
               if (type == 1)
               {
-                conn_changedValues=[...conn_changedValues, changedstr];
+                responder_conn_changedValues=[...responder_conn_changedValues, changedstr];
               }
               else if (type == 0)
               {
@@ -139,7 +154,7 @@ let RemoteCAList = [
               let changedstr="Delete "+deletedCount+" item(s) from "+ key;
               if (type == 1)
               {
-                conn_changedValues=[...conn_changedValues, changedstr];
+                responder_conn_changedValues=[...responder_conn_changedValues, changedstr];
               }
               else if (type == 0)
               {
@@ -166,7 +181,7 @@ let RemoteCAList = [
           
           if (type == 1)
           {
-              conn_changedValues=[...conn_changedValues, changedstr];
+              responder_conn_changedValues=[...responder_conn_changedValues, changedstr];
           }
           else if (type == 0)
           {
@@ -188,7 +203,10 @@ let RemoteCAList = [
     
       compareObjects(changed_ipsec_data.config.vpn_ipsec_basic, ipsec_data.config.vpn_ipsec_basic,0,0,0,"");
       IPsec_Basic_ConfigChangedLog.set(basic_changedValues);
-      ChangedIPsecConfig.set(changed_ipsec_data);
+
+
+      saved_changed_ipsec_data.config.vpn_ipsec_basic=JSON.parse(JSON.stringify(changed_ipsec_data.config.vpn_ipsec_basic)); 
+      ChangedIPsecConfig.set(saved_changed_ipsec_data);
     
       console.log(basic_changedValues);
     }
@@ -196,112 +214,332 @@ let RemoteCAList = [
     function saveResponderConn()
     {
       console.log("save responder conn");
-      if (conn_changedValues.length !=0)
+      if (responder_conn_changedValues.length !=0)
       {
-        conn_changedValues=[];
+        responder_conn_changedValues=[];
       }
-      
-      if (0==changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole)
-      {
-        compareObjects(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn, ipsec_data.config.vpn_ipsec_connection.responder_conn,1,0,0,"");
-        IPsec_Conn_ConfigChangedLog.set(conn_changedValues);
-        ChangedIPsecConfig.set(changed_ipsec_data);
-    
-        console.log(conn_changedValues);
 
+      console.log(changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole);
+      console.log(ipsec_data.config.vpn_ipsec_basic.ipsecRole);
+      console.log(saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole);
+
+      if (0==changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole &&  1==saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole)
+      {
+
+              console.log("Please save basic page first.");
+              alert("Please save basic page first.");
+
+      }
+      else
+      {
+        console.log("start to save responder conn");
+        compareObjects(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn, ipsec_data.config.vpn_ipsec_connection.responder_conn,1,0,0,"");
+        IPsec_Responder_Conn_ConfigChangedLog.set(responder_conn_changedValues);
+
+        saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn=JSON.parse(JSON.stringify(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn));
+        ChangedIPsecConfig.set(saved_changed_ipsec_data);
+    
+        console.log(responder_conn_changedValues);
       }
 
     }
 
-      let BackupICG={
+    function saveInitiatorConnGeneral()
+    {
+      console.log("save initiator conn general");
+      if (initiator_conn_general_changedValues.length !=0)
+      {
+        initiator_conn_general_changedValues=[];
+      }
+
+
+      console.log(changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole);
+      console.log(ipsec_data.config.vpn_ipsec_basic.ipsecRole);
+      console.log(saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole);
+
+      if (1==changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole &&  0==saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole)
+      {
+
+            console.log("Please save basic page first.");
+            alert("Please save basic page first.");
+
+      }
+      else
+      {
+        console.log("start to save initiator conn general");
+
+        if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length > ipsec_data.config.vpn_ipsec_connection.initiator_conn.length)
+        {
+            let addedCount = changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length-ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;
+            let changedstr = "Add "+addedCount+" item(s) to initiator_conn";
+            initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+
+        }
+        else if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length < ipsec_data.config.vpn_ipsec_connection.initiator_conn.length)
+        {
+            let deletedCount = ipsec_data.config.vpn_ipsec_connection.initiator_conn.length-changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;
+            let changedstr = "Delete "+deletedCount+" item(s) to initiator_conn";
+            initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+        }
+
+        let i=0;
+        for (;i<Math.min(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length,ipsec_data.config.vpn_ipsec_connection.initiator_conn.length);i++)
+        {
+            console.log(i);
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name !=
+            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: name has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host !=
+            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: remote_host has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            } 
+
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate !=
+            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: local_certificate has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }
+
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate !=
+            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: remote_certificate has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            } 
+
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type !=
+            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: type has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }  
+        }
+
+        if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length)
+        {
+
+            for (;i < changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn=[...saved_changed_ipsec_data.config.vpn_ipsec_connectionion.initiator_conn, changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i]];
+            }
+        }
+        IPsec_Initiator_Conn_General_ConfigChangedLog.set(initiator_conn_general_changedValues);
+        ChangedIPsecConfig.set(saved_changed_ipsec_data);
+
+        console.log(initiator_conn_general_changedValues);
+      }
+    }
+
+
+    function saveInitiatorConnSubnet(Initiator_Conn_Selected)
+    {
+        console.log("save initiator conn subnet");
+        console.log(Initiator_Conn_Selected)
+
+        if (Initiator_Conn_Selected !="none")
+        {
+            console.log(changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole);
+            console.log(ipsec_data.config.vpn_ipsec_basic.ipsecRole);
+            console.log(saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole);
+
+            if (1==changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole &&  0==saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole)
+            {
+
+                console.log("Please save basic page first.");
+                alert("Please save basic page first.");
+
+            }
+            else
+            {
+                console.log("start to save initiator conn subnet");
+            }
+
+
+            let j=0;
+ 
+            if (saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].type == 0)
+            {
+
+                if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length
+                    < ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length
+                    && changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
+                {
+                    let deletedCount = ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length-changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;
+                        
+                    let changedstr = "Delete "+deletedCount+" item(s) to initiator_conn ("+saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].name+") tunnel_subnet.";
+
+                    initiator_conn_subnet_changedValues=[...initiator_conn_subnet_changedValues, changedstr];
+                }
+
+                if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length
+                    > ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length
+                    && changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
+                {
+                    let addedCount = changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length-ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;
+                    let changedstr = "Add "+addedCount+" item(s) to initiator_conn ("+saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].name+") tunnel_subnet.";
+                
+                    initiator_conn_subnet_changedValues=[...initiator_conn_subnet_changedValues, changedstr];
+                }
+
+                for (;j<Math.min(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length, ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);j++)
+                {
+                    if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet !=
+                    ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet
+                    && changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet)
+                    {
+                        saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet;
+                        let arrayindex=j+1;
+                        let changedstr="Initiator Connection("+saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].name+") Tunnel Subnet List No."+arrayindex+" item is changed: local_subnet has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet;
+                        initiator_conn_subnet_changedValues=[...initiator_conn_subnet_changedValues, changedstr];
+
+                    }
+
+                    if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet !=
+                    ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet
+                    && changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet)
+                    {
+
+                        saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet;
+                        let arrayindex=j+1;
+                        let changedstr="Initiator Connection("+saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].name+") Tunnel Subnet List No."+arrayindex+" item is changed: remote_subnet has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet;
+                        initiator_conn_subnet_changedValues=[...initiator_conn_subnet_changedValues, changedstr];
+
+                
+                    }
+                }
+
+
+                if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
+                {
+                    for (;j < changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;j++)
+                    {
+
+                        saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[    Initiator_Conn_Selected].tunnel_subnet=[...saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet, changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j]];
+
+                    }
+                }
+
+            }
+        
+
+
+            IPsec_Initiator_Conn_Subnet_ConfigChangedLog.set(initiator_conn_subnet_changedValues);
+            ChangedIPsecConfig.set(saved_changed_ipsec_data);
+
+            console.log(initiator_conn_subnet_changedValues);
+        }
+
+    }
+
+    let BackupICG={
         "name": 0,
         "remote_host":"",
         "local_certificate": "",
         "remote_certificate": "",
         "type": 0
-      };
+    };
 
-      let newICG_item=[{
-        "name": 0,
-        "remote_host":"",
-        "local_certificate": "",
-        "remote_certificate": "",
-        "type": 0,
-        "tunnel_subnet":[]
-      },
-      {
-        "name": 0,
-        "remote_host":"",
-        "local_certificate": "",
-        "remote_certificate": "",
-        "type": 0,
-        "tunnel_subnet":[]
-      },
-      {
-        "name": 0,
-        "remote_host":"",
-        "local_certificate": "",
-        "remote_certificate": "",
-        "type": 0,
-        "tunnel_subnet":[]
-      },
-      {
-        "name": 0,
-        "remote_host":"",
-        "local_certificate": "",
-        "remote_certificate": "",
-        "type": 0,
-        "tunnel_subnet":[]
-      },
-      {
-        "name": 0,
-        "remote_host":"",
-        "local_certificate": "",
-        "remote_certificate": "",
-        "type": 0,
-        "tunnel_subnet":[]
-      },
-      {
-        "name": 0,
-        "remote_host":"",
-        "local_certificate": "",
-        "remote_certificate": "",
-        "type": 0,
-        "tunnel_subnet":[]
-      },
-      {
-        "name": 0,
-        "remote_host":"",
-        "local_certificate": "",
-        "remote_certificate": "",
-        "type": 0,
-        "tunnel_subnet":[]
-      },
-      {
-        "name": 0,
-        "remote_host":"",
-        "local_certificate": "",
-        "remote_certificate": "",
-        "type": 0,
-        "tunnel_subnet":[]
-      },
-      {
-        "name": 0,
-        "remote_host":"",
-        "local_certificate": "",
-        "remote_certificate": "",
-        "type": 0,
-        "tunnel_subnet":[]
-      },
-      {
-        "name": 0,
-        "remote_host":"",
-        "local_certificate": "",
-        "remote_certificate": "",
-        "type": 0,
-        "tunnel_subnet":[]
-      }
-      ];
+    let newICG_item=[{
+            "name": 0,
+            "remote_host":"",
+            "local_certificate": "",
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "name": 0,
+            "remote_host":"",
+            "local_certificate": "",
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "name": 0,
+            "remote_host":"",
+            "local_certificate": "",
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "name": 0,
+            "remote_host":"",
+            "local_certificate": "",
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "name": 0,
+            "remote_host":"",
+            "local_certificate": "",
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "name": 0,
+            "remote_host":"",
+            "local_certificate": "",
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "name": 0,
+            "remote_host":"",
+            "local_certificate": "",
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "name": 0,
+            "remote_host":"",
+            "local_certificate": "",
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "name": 0,
+            "remote_host":"",
+            "local_certificate": "",
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "name": 0,
+            "remote_host":"",
+            "local_certificate": "",
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        }
+    ];
 
 
     function modalTriggerInitiatorConnGeneral(index){
@@ -1336,7 +1574,7 @@ test2
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveInitiatorConnGeneral}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -1504,8 +1742,8 @@ test2
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={Initiator_Conn_Selected}>
 <option disabled="" value="none">Choose Connection ...</option>
-{#each changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn as initiatorConn, index}
-{#if changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].type == 0}
+{#each saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn as initiatorConn, index}
+{#if saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].type == 0}
 <option value={index}>{initiatorConn.name}</option>
 {/if}
 {/each}
@@ -1594,7 +1832,7 @@ test2
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveInitiatorConnSubnet(Initiator_Conn_Selected)}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 

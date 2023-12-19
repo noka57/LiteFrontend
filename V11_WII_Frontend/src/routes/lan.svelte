@@ -69,7 +69,8 @@
     compareData();
 
     LanConfigChangedLog.set(changedValues);
-    ChangedLANConfig.set(changed_lan_data);
+    saved_changed_lan_data=JSON.parse(JSON.stringify(changed_lan_data));
+    ChangedLANConfig.set(saved_changed_lan_data);
     
     console.log(changedValues);
 

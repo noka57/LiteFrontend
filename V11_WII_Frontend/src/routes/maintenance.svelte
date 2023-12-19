@@ -187,7 +187,10 @@
     compareObjects(changed_maintenance_data, maintenance_data);
 
     MaintenanceConfigChangedLog.set(maintenance_changedValues);
-    ChangedMaintenanceConfig.set(changed_maintenance_data);
+
+
+    saved_changed_maintenance_data=JSON.parse(JSON.stringify(changed_maintenance_data));
+    ChangedMaintenanceConfig.set(saved_changed_maintenance_data);
     
     console.log(maintenance_changedValues);
 

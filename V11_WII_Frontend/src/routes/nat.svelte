@@ -168,7 +168,8 @@
 
 
         NAT_Dmz_ConfigChangedLog.set(dmz_changedValues);
-        ChangedNATConfig.set(changed_nat_data);
+        saved_changed_nat_data.config.networking_nat_dmz=JSON.parse(JSON.stringify(changed_nat_data.config.networking_nat_dmz));        
+        ChangedNATConfig.set(saved_changed_nat_data);
     
         console.log(dmz_changedValues);
     } 
@@ -185,7 +186,9 @@
 
 
       NAT_VC_ConfigChangedLog.set(vc_changedValues);
-      ChangedNATConfig.set(changed_nat_data);
+
+      saved_changed_nat_data.config.networking_nat_virtualComputer=JSON.parse(JSON.stringify(changed_nat_data.config.networking_nat_virtualComputer));
+      ChangedNATConfig.set(saved_changed_nat_data);
     
       console.log(vc_changedValues);
     }
@@ -202,7 +205,8 @@
 
 
       NAT_VS_ConfigChangedLog.set(vs_changedValues);
-      ChangedNATConfig.set(changed_nat_data);
+      saved_changed_nat_data.config.networking_nat_virtualServer=JSON.parse(JSON.stringify(changed_nat_data.config.networking_nat_virtualServer));
+      ChangedNATConfig.set(saved_changed_nat_data);
     
       console.log(vs_changedValues);
     }
@@ -217,7 +221,9 @@
 
       compareObjects(changed_nat_data.config.networking_nat_loopback, nat_data.config.networking_nat_loopback,0,0,0);
       NAT_LoopBack_ConfigChangedLog.set(loopback_changedValues);
-      ChangedNATConfig.set(changed_nat_data);
+
+      saved_changed_nat_data.config.networking_nat_loopback=JSON.parse(JSON.stringify(changed_nat_data.config.networking_nat_loopback));
+      ChangedNATConfig.set(saved_changed_nat_data);
     
       console.log(loopback_changedValues);
     }

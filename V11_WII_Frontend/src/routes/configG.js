@@ -16,7 +16,9 @@ export const wanConfig=writable("");
 
 
 
-export const IPsec_Conn_ConfigChangedLog=writable("");
+export const IPsec_Responder_Conn_ConfigChangedLog=writable("");
+export const IPsec_Initiator_Conn_General_ConfigChangedLog=writable("");
+export const IPsec_Initiator_Conn_Subnet_ConfigChangedLog=writable("");
 export const IPsec_Basic_ConfigChangedLog=writable("");
 export const ChangedIPsecConfig=writable("");
 

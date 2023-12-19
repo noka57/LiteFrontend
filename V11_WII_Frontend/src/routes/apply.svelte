@@ -37,7 +37,12 @@
     	WAN_EWAN1_EWLAP_ConfigChangedLog,
     	WAN_RedundancyPolicy_ConfigChangedLog,
     	WAN_FareSavingPolicy_ConfigChangedLog,
-    	ChangedWANConfig 
+    	ChangedWANConfig,
+    	IPsec_Responder_Conn_ConfigChangedLog,
+    	IPsec_Initiator_Conn_General_ConfigChangedLog,
+    	IPsec_Initiator_Conn_Subnet_ConfigChangedLog,
+    	IPsec_Basic_ConfigChangedLog,
+    	ChangedIPsecConfig 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -53,6 +58,7 @@
   let docker_data="";
   let dreams_data="";
   let wan_data="";
+  let ipsec_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -112,6 +118,15 @@
   let ewan1_ewlap_changedValues = [];
   let redundancy_policy_changedValues = [];
   let faresaving_policy_changedValues = [];  
+
+
+  let ContentIPsec;
+  let IPsecBinary=null;
+  let basic_changedValues = [];
+  let responder_conn_changedValues=[];
+  let initiator_conn_general_changedValues=[];
+  let initiator_conn_subnet_changedValues=[];
+
   let SetCount=0;
   let SetCountOK=0;
 
@@ -163,6 +178,29 @@
   ChangedWANConfig.subscribe(val => {
       wan_data = val;
   }); 
+
+
+  ChangedIPsecConfig.subscribe(val => {
+      ipsec_data = val;
+  });
+
+
+  IPsec_Responder_Conn_ConfigChangedLog.subscribe(val => {
+      responder_conn_changedValues = val;
+  });
+
+  IPsec_Initiator_Conn_General_ConfigChangedLog.subscribe(val => {
+      initiator_conn_general_changedValues = val;
+  });
+
+  IPsec_Initiator_Conn_Subnet_ConfigChangedLog.subscribe(val => {
+      initiator_conn_subnet_changedValues = val;
+  });
+
+  IPsec_Basic_ConfigChangedLog.subscribe(val => {
+      basic_changedValues = val;
+  });
+
 
   WAN_CWAN1_BASIC_ConfigChangedLog.subscribe(val => {
       cwan1_basic_changedValues = val;
@@ -433,6 +471,25 @@
 	  }
 	} 
 
+	async function SetIPsecData()
+	{
+	  const res = await fetch(window.location.origin+"/Setipsecdata", {
+	    method: 'POST',
+	    body: ContentIPsec
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set ipsec data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
+	  }
+	} 
+
+
 	function CalculateTotalSetCount()
 	{
 	  if  (lan_data != "" && LANchangedValues.length!=0)
@@ -491,6 +548,14 @@
   	{
   	  SetCount++; 
   	}
+
+		if (ipsec_data != "" && (basic_changedValues.length !=0 ||
+							responder_conn_changedValues.length !=0 ||
+							initiator_conn_general_changedValues.length !=0 ||
+							initiator_conn_subnet_changedValues.length !=0))
+		{
+			SetCount++;
+		}
 
 	}
 
@@ -591,14 +656,14 @@
         }
 
 
-        if (wan_data != "" && ( cwan1_basic_changedValues !=0 ||
-  															cwan1_advanced_changedValues != 0 ||
-  															cwan1_simpolicy_changedValues != 0 ||
-  															cwan1_glink_changedValues != 0 ||
-  															ewan1_basic_changedValues != 0 ||
-  															ewan1_ewlap_changedValues != 0 ||
-  															redundancy_policy_changedValues != 0 ||
-  															faresaving_policy_changedValues != 0))
+        if (wan_data != "" && ( cwan1_basic_changedValues.length !=0 ||
+  															cwan1_advanced_changedValues.length != 0 ||
+  															cwan1_simpolicy_changedValues.length != 0 ||
+  															cwan1_glink_changedValues.length != 0 ||
+  															ewan1_basic_changedValues.length != 0 ||
+  															ewan1_ewlap_changedValues.length != 0 ||
+  															redundancy_policy_changedValues.length != 0 ||
+  															faresaving_policy_changedValues.length != 0))
   			{
           let WanString = JSON.stringify(wan_data, null, 0);
 					const bytesArray = Array.from(WanString).map(char => char.charCodeAt(0));
@@ -607,6 +672,23 @@
 	        ContentWan.set(sessionBinary,0);
 	        ContentWan.set(WanBinary, sessionBinary.length);
   				SetWanData();
+  			}
+
+
+
+  			if (ipsec_data != "" && (basic_changedValues.length !=0 ||
+  												responder_conn_changedValues.length !=0 ||
+  												initiator_conn_general_changedValues.length !=0 ||
+  												initiator_conn_subnet_changedValues.length !=0))
+  			{
+  				let IPsecString= JSON.stringify(ipsec_data, null, 0);
+  				const bytesArray = Array.from(IPsecString).map(char => char.charCodeAt(0));
+	    		IPsecBinary = new Uint8Array(bytesArray);
+	      	ContentIPsec=new Uint8Array(IPsecBinary.length+sessionBinary.length);
+	        ContentIPsec.set(sessionBinary,0);
+	        ContentIPsec.set(IPsecBinary, sessionBinary.length);
+	        SetIPsecData();
+
   			}
 
       }
@@ -621,14 +703,65 @@
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
 
-{#if 	cwan1_basic_changedValues !=0 ||
-  		cwan1_advanced_changedValues != 0 ||
-  		cwan1_simpolicy_changedValues != 0 ||
-  		cwan1_glink_changedValues != 0 ||
-  		ewan1_basic_changedValues != 0 ||
-  		ewan1_ewlap_changedValues != 0 ||
-  		redundancy_policy_changedValues != 0 ||
-  		faresaving_policy_changedValues != 0
+{#if  basic_changedValues.length !=0 ||
+  		responder_conn_changedValues.length !=0 ||
+  		initiator_conn_general_changedValues.length !=0 ||
+  		initiator_conn_subnet_changedValues.length !=0}
+  <Li>IPsec
+ {#if basic_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Basic
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each basic_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if responder_conn_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Responder Connection
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each responder_conn_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if initiator_conn_general_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Initiator Connection
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each initiator_conn_general_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each initiator_conn_subnet_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+  </Li>	
+{/if}
+
+{#if 	cwan1_basic_changedValues.length !=0 ||
+  		cwan1_advanced_changedValues.length != 0 ||
+  		cwan1_simpolicy_changedValues.length != 0 ||
+  		cwan1_glink_changedValues.length != 0 ||
+  		ewan1_basic_changedValues.length != 0 ||
+  		ewan1_ewlap_changedValues.length != 0 ||
+  		redundancy_policy_changedValues.length != 0 ||
+  		faresaving_policy_changedValues.length != 0
   		}
   <Li>WAN
  {#if cwan1_basic_changedValues.length !=0}
@@ -1039,11 +1172,15 @@
   			cwan1_basic_changedValues !=0 ||
   			cwan1_advanced_changedValues != 0 ||
   			cwan1_simpolicy_changedValues != 0 ||
-  			cwan1_glink_changedValues != 0 ||
-  			ewan1_basic_changedValues != 0 ||
-  			ewan1_ewlap_changedValues != 0 ||
-  			redundancy_policy_changedValues != 0 ||
-  			faresaving_policy_changedValues != 0
+  			cwan1_glink_changedValues.length != 0 ||
+  			ewan1_basic_changedValues.length != 0 ||
+  			ewan1_ewlap_changedValues.length != 0 ||
+  			redundancy_policy_changedValues.length != 0 ||
+  			faresaving_policy_changedValues.length != 0 ||
+  			basic_changedValues.length !=0 ||
+  			responder_conn_changedValues.length !=0 ||
+  			initiator_conn_general_changedValues.length !=0 ||
+  			initiator_conn_subnet_changedValues.length !=0
 
 		}
 

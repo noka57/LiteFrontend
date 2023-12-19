@@ -32,6 +32,10 @@
     	WAN_EWAN1_EWLAP_ConfigChangedLog,
     	WAN_RedundancyPolicy_ConfigChangedLog,
     	WAN_FareSavingPolicy_ConfigChangedLog,
+    	IPsec_Responder_Conn_ConfigChangedLog,
+    	IPsec_Initiator_Conn_General_ConfigChangedLog,
+    	IPsec_Initiator_Conn_Subnet_ConfigChangedLog,
+    	IPsec_Basic_ConfigChangedLog,
     	dashboadData
   	} from "./configG.js"
 
@@ -141,6 +145,10 @@
   	let ewan1_ewlap_changedValues = [];
   	let redundancy_policy_changedValues = [];
   	let faresaving_policy_changedValues = [];
+  	let basic_changedValues = [];
+  	let responder_conn_changedValues=[];
+  	let initiator_conn_general_changedValues=[];
+  	let initiator_conn_subnet_changedValues=[];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -178,14 +186,19 @@
   			dnp3_changedValues.length != 0 ||
   			restful_changedValues.length != 0 ||
   			dreams_general_changedValues.length != 0 ||
-  			cwan1_basic_changedValues !=0 ||
-  			cwan1_advanced_changedValues != 0 ||
-  			cwan1_simpolicy_changedValues != 0 ||
-  			cwan1_glink_changedValues != 0 ||
-  			ewan1_basic_changedValues != 0 ||
-  			ewan1_ewlap_changedValues != 0 ||
-  			redundancy_policy_changedValues != 0 ||
-  			faresaving_policy_changedValues != 0
+  			cwan1_basic_changedValues.length !=0 ||
+  			cwan1_advanced_changedValues.length != 0 ||
+  			cwan1_simpolicy_changedValues.length != 0 ||
+  			cwan1_glink_changedValues.length != 0 ||
+  			ewan1_basic_changedValues.length != 0 ||
+  			ewan1_ewlap_changedValues.length != 0 ||
+  			redundancy_policy_changedValues.length != 0 ||
+  			faresaving_policy_changedValues.length != 0 ||
+			basic_changedValues.length !=0 ||
+			responder_conn_changedValues.length !=0 ||
+			initiator_conn_general_changedValues.length !=0 ||
+			initiator_conn_subnet_changedValues.length !=0
+
   			)
   		{
 
@@ -347,6 +360,26 @@
 	    JudgeChangedOrNot();
 	});
 
+
+	IPsec_Responder_Conn_ConfigChangedLog.subscribe(val => {
+	    responder_conn_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	IPsec_Initiator_Conn_General_ConfigChangedLog.subscribe(val => {
+	    initiator_conn_general_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	IPsec_Initiator_Conn_Subnet_ConfigChangedLog.subscribe(val => {
+	    initiator_conn_subnet_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	IPsec_Basic_ConfigChangedLog.subscribe(val => {
+	    basic_changedValues = val;
+	    JudgeChangedOrNot();
+	});
 
 
   	sessionidG.subscribe(val => {

@@ -50,9 +50,6 @@ let RemoteCAList = [
     let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
 
-
-
-
     let initiatorConnGeneralModal=false;
     let initiatorConnGeneralCurrentIndex;
     let newICG_Modal=false;
@@ -67,8 +64,6 @@ let RemoteCAList = [
 
 
     let Initiator_Conn_Selected="none";
-
-
 
     let initiatorConnSubnetModal=false;
     let initiatorConnSubnetCurrentIndex;
@@ -2175,8 +2170,10 @@ Remote Subnet
 </AccordionItem>
 </Accordion>
 
+<p class="mt-10"></p>
 
-<p class="pt-10"></p>
+
+{/if}
 
 <table>
      <tr>
@@ -2197,7 +2194,6 @@ Remote Subnet
     </tr>
 </table>
 
-{/if}
     </TabItem>
 {/if}
      {/if}

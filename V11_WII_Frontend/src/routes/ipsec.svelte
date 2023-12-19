@@ -257,7 +257,7 @@ let RemoteCAList = [
       console.log(ipsec_data.config.vpn_ipsec_basic.ipsecRole);
       console.log(saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole);
 
-      if (1==changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole &&  0==saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole)
+      if (1==changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole &&   0==saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole)
       {
 
             console.log("Please save basic page first.");
@@ -335,12 +335,14 @@ let RemoteCAList = [
             }  
         }
 
-        if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length)
+    
+        if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length > saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length)
         {
 
-            for (;i < changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
+            for (i=saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i < changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
             {
-                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn=[...saved_changed_ipsec_data.config.vpn_ipsec_connectionion.initiator_conn, changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i]];
+                let new_initiator_conn = JSON.parse(JSON.stringify(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i]))
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn=[...saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn, new_initiator_conn];
             }
         }
         IPsec_Initiator_Conn_General_ConfigChangedLog.set(initiator_conn_general_changedValues);
@@ -362,7 +364,7 @@ let RemoteCAList = [
             console.log(ipsec_data.config.vpn_ipsec_basic.ipsecRole);
             console.log(saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole);
 
-            if (1==changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole &&  0==saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole)
+            if (1==changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole && 0==saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole)
             {
 
                 console.log("Please save basic page first.");
@@ -379,33 +381,28 @@ let RemoteCAList = [
  
             if (saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].type == 0)
             {
-
-                if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length
-                    < ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length
-                    && changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
+                console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+                console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+                if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length < saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
                 {
-                    let deletedCount = ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length-changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;
+                    let deletedCount = saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length-changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;
                         
                     let changedstr = "Delete "+deletedCount+" item(s) to initiator_conn ("+saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].name+") tunnel_subnet.";
 
                     initiator_conn_subnet_changedValues=[...initiator_conn_subnet_changedValues, changedstr];
                 }
 
-                if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length
-                    > ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length
-                    && changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
+                if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length > saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
                 {
-                    let addedCount = changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length-ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;
+                    let addedCount = changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length-saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;
                     let changedstr = "Add "+addedCount+" item(s) to initiator_conn ("+saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].name+") tunnel_subnet.";
                 
                     initiator_conn_subnet_changedValues=[...initiator_conn_subnet_changedValues, changedstr];
                 }
 
-                for (;j<Math.min(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length, ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);j++)
+                for (;j<Math.min(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length, saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);j++)
                 {
-                    if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet !=
-                    ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet
-                    && changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet)
+                    if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet)
                     {
                         saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].local_subnet;
                         let arrayindex=j+1;
@@ -414,9 +411,7 @@ let RemoteCAList = [
 
                     }
 
-                    if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet !=
-                    ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet
-                    && changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet)
+                    if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet)
                     {
 
                         saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].remote_subnet;
@@ -429,12 +424,12 @@ let RemoteCAList = [
                 }
 
 
-                if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
+                if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length > saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
                 {
                     for (;j < changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;j++)
                     {
-
-                        saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[    Initiator_Conn_Selected].tunnel_subnet=[...saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet, changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j]];
+                        let new_ics=JSON.parse(JSON.stringify(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j]));
+                        saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[    Initiator_Conn_Selected].tunnel_subnet=[...saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet, new_ics];
 
                     }
                 }
@@ -586,6 +581,9 @@ let RemoteCAList = [
         newICG_Modal = false;
 
         changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn=[...changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn,newICG_item[index]];
+
+        console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn);
+
     }
 
     let BackupRCS={
@@ -1251,7 +1249,14 @@ let RemoteCAList = [
 
         newICS_Modal = false;
 
+
+        console.log("before");
+        console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+        console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
         changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet=[...changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet,newICS_item[Initiator_Conn_Selected][index]];
+        console.log("addICS");
+        console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+        console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
     }
 
 

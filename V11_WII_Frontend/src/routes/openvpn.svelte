@@ -1,6 +1,74 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Breadcrumb, BreadcrumbItem, Radio,Fileupload,  FloatingLabelInput, Input, Dropdown, DropdownItem, Chevron, Select, Modal, Label, Textarea} from 'flowbite-svelte';
 
+
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
+  import { 
+    openvpnConfig,
+    OpenVPN_Client_Advanced_ConfigChangedLog,
+    OpenVPN_Client_Conn_ConfigChangedLog,
+    OpenVPN_Server_Advanced_ConfigChangedLog,
+    OpenVPN_Server_Conn_ConfigChangedLog,
+    OpenVPN_Basic_ConfigChangedLog,
+    ChangedOpenVPNConfig
+  } from "./configG.js"
+
+    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
+    let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
+    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+
+
+    let sessionid;
+    let sessionBinary;
+    let openvpn_data="";
+    let changed_openvpn_data = {};
+    let saved_changed_openvpn_data ={};
+    let getDataReady=0;   
+
+    let openvpn_basic_changedValues = [];
+    let openvpn_server_conn_changedValues=[];
+    let openvpn_client_conn_changedValues=[];
+    let openvpn_server_advanced_changedValues=[];
+    let openvpn_client_advanced_changedValues=[];
+
+
+    sessionidG.subscribe(val => {
+      sessionid = val;
+    });
+
+    openvpnConfig.subscribe(val => {
+      openvpn_data = val;
+    });
+
+    OpenVPN_Client_Advanced_ConfigChangedLog.subscribe(val => {
+        openvpn_client_advanced_changedValues = val;
+    });
+
+    OpenVPN_Client_Conn_ConfigChangedLog.subscribe(val => {
+        openvpn_client_conn_changedValues= val;
+    });
+
+    OpenVPN_Server_Advanced_ConfigChangedLog.subscribe(val => {
+        openvpn_server_advanced_changedValues= val;
+    });
+
+
+    OpenVPN_Server_Conn_ConfigChangedLog.subscribe(val => {
+        openvpn_server_conn_changedValues= val;
+    });
+
+    OpenVPN_Basic_ConfigChangedLog.subscribe(val => {
+        openvpn_basic_changedValues= val;
+    });
+
+
+    ChangedOpenVPNConfig.subscribe(val => {
+      saved_changed_openvpn_data = val;
+    });
+
+
+
 let openvpnBasic='Enable';
 let openvpnBasic2='Manual';
 let openvpnBasic3='Client';
@@ -46,12 +114,7 @@ let RemoteCAList = [
   let openvpnAuthS="X509Cert";
 
 
-   let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
-   let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
-
-
-  let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
   let name="";
 
@@ -116,6 +179,72 @@ let RemoteCAList = [
         console.log()
         openVPNClientDetailStatus=!openVPNClientDetailStatus;
     }
+
+    async function getOpenVPNData () {
+    const res = await fetch(window.location.origin+"/getOPENvpndata", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      openvpn_data =await res.json();
+      console.log(openvpn_data);
+      openvpnConfig.set(openvpn_data);
+
+      changed_openvpn_data = JSON.parse(JSON.stringify(openvpn_data));
+      saved_changed_openvpn_data= JSON.parse(JSON.stringify(openvpn_data));
+      ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
+      getDataReady=1;
+    
+    }
+  }
+
+
+    onMount(() => {
+
+    console.log("openvpn sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid && openvpn_data =="")
+    {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+        getOpenVPNData();
+    }
+    else if (sessionid && openvpn_data != "")
+    {
+      console.log("openvpn_data is not null");
+      getDataReady=1;
+
+      if (openvpn_basic_changedValues.length==0)
+      {
+          changed_openvpn_data=JSON.parse(JSON.stringify(saved_changed_openvpn_data));
+          changed_openvpn_data.config.vpn_openvpn_basic=JSON.parse(JSON.stringify(openvpn_data.config.vpn_openvpn_basic)); 
+      }
+      
+     // if (conn_changedValues.length==0)
+      //{
+       //   changed_ipsec_data=JSON.parse(JSON.stringify(saved_changed_ipsec_data));
+       //   changed_ipsec_data.config.vpn_ipsec_connection=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection)); 
+     // }
+
+
+
+
+        //let openvpn_basic_changedValues = [];
+        //let openvpn_server_conn_changedValues=[];
+        //let openvpn_client_conn_changedValues=[];
+        //let openvpn_server_advanced_changedValues=[];
+        //let openvpn_client_advanced_changedValues=[];
+
+      
+    }
+
+  });
+
 
   </script>
 

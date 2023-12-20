@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 
 export const dashboadData= writable("");
 
-
+export const openvpnConfig=writable("");
 export const ipsecConfig= writable("");
 export const maintenanceConfig = writable("");
 export const operationConfig = writable("");
@@ -14,7 +14,12 @@ export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
 
-
+export const OpenVPN_Client_Advanced_ConfigChangedLog=writable("");
+export const OpenVPN_Client_Conn_ConfigChangedLog=writable("");
+export const OpenVPN_Server_Advanced_ConfigChangedLog=writable("");
+export const OpenVPN_Server_Conn_ConfigChangedLog=writable("");
+export const OpenVPN_Basic_ConfigChangedLog=writable("");
+export const ChangedOpenVPNConfig=writable("");
 
 export const IPsec_Responder_Conn_ConfigChangedLog=writable("");
 export const IPsec_Initiator_Conn_General_ConfigChangedLog=writable("");

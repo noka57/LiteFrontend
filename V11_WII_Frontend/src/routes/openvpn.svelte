@@ -171,6 +171,8 @@ let RemoteCAList = [
 
     let ClientCNameModal=false;
     let ClientCNameIndex;
+    let NewClientCNameModal=false;
+    let new_client_cname_index;
 
     let BackupCName;
     let NewClientCName=["","","","","","","","","",""];
@@ -178,6 +180,9 @@ let RemoteCAList = [
 
     let ServerConn_ClientAccountPasswordModal=false;
     let ServerConn_ClientAccountPasswordIndex;
+
+    let ServerConn_NewClientAccountPasswordModal=false;
+    let server_conn_new_client_account_password_index;
     let ServerConn_BackupClientAccountPassword={"account": "",
         "password": ""};
     let ServerConn_NewClientAccountPassword=[
@@ -373,6 +378,77 @@ let RemoteCAList = [
     ];
 
 
+    let Modify_CCD_Modal=false;
+    let Modify_CCD_Index;
+
+    let NewCCD_Modal=false;
+    let NewCCD_index;
+    let BackupCCD={"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""};
+    let NewCCD_Item=[
+        {"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""},
+        {"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""},
+        {"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""},
+        {"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""},
+        {"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""},
+        {"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""},
+        {"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""},
+        {"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""},
+        {"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""},
+        {"ccd_client_certificate_common_name": "",
+        "ccd_client_command": ""}
+    ];
+
+    function modalTriggerCCD(index)
+    {
+      Modify_CCD_Modal=true;
+      Modify_CCD_Index=index;
+      BackupCCD.ccd_client_certificate_common_name=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_certificate_common_name;
+      
+      BackupCCD.ccd_client_command=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_command;
+    }
+
+    function NoModifyCCD(index)
+    {
+      Modify_CCD_Modal=false;
+      changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_certificate_common_name=BackupCCD.ccd_client_certificate_common_name;
+      
+      changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_command=BackupCCD.ccd_client_command;
+
+    }
+
+    function ModifyCCD(index)
+    {
+      Modify_CCD_Modal=false;
+    }
+
+    function NewCCD_Item_Invoker(index)
+    {
+      NewCCD_Item[index].ccd_client_certificate_common_name="";
+      NewCCD_Item[index].ccd_client_command="";
+
+
+      NewCCD_index=index;
+      NewCCD_Modal=true;
+    }
+
+    function AddCCD_Item(index)
+    {
+      NewCCD_Modal=false;
+      changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd=[...changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd,NewCCD_Item[index]];
+    }
+
+
+
     function  modalTriggerClientConn(index)
     {
       ClientConnModal = true;
@@ -476,6 +552,41 @@ let RemoteCAList = [
     {
       ClientCNameModal=false;
     }
+
+
+    function NewClientCName_Item_Invoker(index)
+    {
+      NewClientCName[index]="";
+      new_client_cname_index=index;
+      NewClientCNameModal=true;
+    }
+
+
+    function AddClientCName(index)
+    {
+      NewClientCNameModal=false;
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name=[...changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name,NewClientCName[index]];
+    }
+
+    function Server_NewClientAccountPassword_Item_Invoker(index)
+    {
+      ServerConn_NewClientAccountPassword[index].account="";
+      ServerConn_NewClientAccountPassword[index].password="";
+
+      server_conn_new_client_account_password_index=index;
+      ServerConn_NewClientAccountPasswordModal=true;
+    }
+
+
+    function Server_AddClientAccountPassword(index)
+    {
+      ServerConn_NewClientAccountPasswordModal=false;
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password=[...changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password, ServerConn_NewClientAccountPassword[index]];
+
+    }
+
+
+
 
     function saveBasic()
     {
@@ -1223,6 +1334,29 @@ test2
 
 {/each}
 
+<TableBodyRow>
+      <TableBodyCell class="!p-4 w-8">
+
+{#if changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length < 10}    
+<button on:click={() => NewClientCName_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+{/if}  
+ </TableBodyCell>
+      
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+
+    </TableBodyRow>
+
 
 
 
@@ -1278,6 +1412,29 @@ test2
 {/each}
 
 
+<TableBodyRow>
+      <TableBodyCell class="!p-4 w-8">
+
+{#if changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length < 10}    
+<button on:click={() => Server_NewClientAccountPassword_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+{/if}  
+ </TableBodyCell>
+      
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+
+    </TableBodyRow>
 
 
      <tr>
@@ -1375,6 +1532,71 @@ test2
 </table>
 </Modal>
 
+<Modal bind:open={NewClientCNameModal} size="lg" class="w-full" autoclose>
+
+<table>
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-64">
+    Certificate Common Name
+      </p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={NewClientCName[new_client_cname_index]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+  <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddClientCName(new_client_cname_index)}>Add</Button></td>
+
+
+    </tr>
+
+
+</table>
+</Modal>
+
+
+<Modal bind:open={ServerConn_NewClientAccountPasswordModal} size="lg" class="w-full" autoclose>
+
+<table>
+
+<tr>
+      <td>
+      <p class="pl-10 pt-4 text-lg font-light text-right">
+      Account
+      </p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={ServerConn_NewClientAccountPassword[server_conn_new_client_account_password_index].account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+<tr>
+      <td>
+      <p class="pl-10 pt-4 text-lg font-light text-right">
+      Password
+      </p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={ServerConn_NewClientAccountPassword[server_conn_new_client_account_password_index].password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+  <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={Server_AddClientAccountPassword(server_conn_new_client_account_password_index)}>Add</Button></td>
+
+
+    </tr>
+
+
+</table>
+</Modal>
 
 </AccordionItem>
 </Accordion>
@@ -1398,21 +1620,82 @@ test2
 
 
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-44"><option disabled="" value="">Choose Client ...</option><option value="test1">test1</option><option value="test2">test2</option><option value="test3">test3</option></select>
+
+
+ <Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4 w-4">
+    </TableHeadCell>
+    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="w-96">Client Certificate Common Name</TableHeadCell>
+    <TableHeadCell class="w-36">Command</TableHeadCell>
+</TableHead>
+
+<TableBody>
+
+
+{#each changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd as ccd, index}
+
+
+    <TableBodyRow>
+          <TableBodyCell class="!p-4">
+
+      </TableBodyCell>
+      <TableBodyCell class="!p-4 w-8">
+<button on:click={() => modalTriggerCCD(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </TableBodyCell>
+
+   <TableHeadCell class="!p-4">
+    </TableHeadCell>
+
+                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-96">{ccd.ccd_client_certificate_common_name}</TableBodyCell>
+                    <TableBodyCell class="w-36">{ccd.ccd_client_command}</TableBodyCell>
+
+                    <TableBodyCell class="w-10"></TableBodyCell>
+                    <TableBodyCell class="w-10"></TableBodyCell>
+
+    </TableBodyRow>
+
+{/each}
+
+<TableBodyRow>
+      <TableBodyCell class="!p-4 w-8">
+
+{#if changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length < 10}    
+<button on:click={() => NewCCD_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+{/if}  
+ </TableBodyCell>
+      
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="w-96"></TableBodyCell>
+      <TableBodyCell class="w-36"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+    </TableBodyRow>
 
 
 
-<Label for="textarea-id" class="mb-2">Command For This Client</Label>
-<Textarea id="textarea-id" placeholder="Command" rows="4" name="message" value="test cmd">
 
-</Textarea>
-
-
-<table>
-<tr>
-        <td></td>
-        <td></td>
-        <td></td>
+     <tr>
         <td></td>
         <td></td>
         <td></td>
@@ -1425,14 +1708,92 @@ test2
     <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
+  </TableBody>
 
+</Table>
 
-    </tr>
-</table>
 </AccordionItem>
 </Accordion>
 
 </TabItem>
+
+
+
+<Modal bind:open={Modify_CCD_Modal} size="lg" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyCCD(Modify_CCD_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+<table>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-96">Client Certificate Common Name
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[Modify_CCD_Index].ccd_client_certificate_common_name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-96">Command
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[Modify_CCD_Index].ccd_client_command} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+            <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyCCD(Modify_CCD_Index)}>Modify</Button></td>
+
+
+    </tr>
+
+</table>
+</Modal>
+
+
+
+<Modal bind:open={NewCCD_Modal} size="lg" class="w-full" autoclose>
+
+<table>
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-96">Client Certificate Common Name
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={NewCCD_Item[NewCCD_index].ccd_client_certificate_common_name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-96">Command
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={NewCCD_Item[NewCCD_index].ccd_client_command} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+  <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddCCD_Item(NewCCD_index)}>Add</Button></td>
+
+
+    </tr>
+
+
+</table>
+</Modal>
+
+
 {/if}
 {/if}
 {/if}

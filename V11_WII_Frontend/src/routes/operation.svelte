@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, FloatingLabelInput, Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Datepicker } from 'flowbite-svelte';
+  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, FloatingLabelInput, Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Datepicker,Spinner } from 'flowbite-svelte';
   import TimezonePicker from 'svelte-timezone-picker';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
@@ -21,6 +21,7 @@
 
 
     let formModal = false;
+    let WaitToReboot=false;
 
     let timestamp = 0;
     let dateString="";
@@ -122,6 +123,7 @@
     {
 
         console.log("reboot command sent\r\n");
+        WaitToReboot=true;
 
     }
     }
@@ -347,6 +349,22 @@
 <tr>
     <td class="w-65">Reboot Device</td><td class="pl-5">    <Button color="dark" pill on:click={StartReboot}>Reboot</Button></td>
 </tr>
+
+<Modal bind:open={WaitToReboot} size="md" class="w-full" permanent={true}>
+<table>
+<tr>
+<td class="pt-5">
+<Spinner size={16} /></td> 
+<td class="pt-5">
+<p class="pl-5" style="color:red; font-size:18px">Reboot ....
+</p>
+</td>
+
+</tr>
+</table>
+</Modal>
+
+
 </table>
       </TabItem>
  

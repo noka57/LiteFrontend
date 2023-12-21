@@ -533,6 +533,17 @@ let RemoteCAList = [
     }
 
 
+    function modalTriggerFailover(index)
+    {
+
+    }
+
+    function NewFailover_Item_Invoker(index)
+    {
+
+    }
+
+
     function modalTriggerCCD(index)
     {
       Modify_CCD_Modal=true;
@@ -1834,6 +1845,75 @@ test2
 </Table>
 
 </AccordionItem>
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">Preshared Key</span>
+
+ <table>
+      <tr>
+          <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Key Usage</p></td>
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio bind:group={saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage} value={0}>TLS auth key</Radio>
+  <Radio bind:group={saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage} value={1} >TLS crypt-v2 key</Radio>
+
+</div></td>
+      </tr>
+      </table>
+
+<p class="pt-10"></p>
+
+<Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+
+      <TableHeadCell class="w-18">Key File</TableHeadCell>
+
+  </TableHead>
+  <TableBody>
+    <TableBodyRow>
+ <TableBodyCell class="w-18">
+<div class="flex gap-4">
+<svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" on:click={taClick} ><path d="M3.75002 9.77602C3.86206 9.7589 3.97701 9.75 4.0943 9.75H19.9058C20.023 9.75 20.138 9.7589 20.25 9.77602M3.75002 9.77602C2.55402 9.9588 1.68986 11.0788 1.86691 12.3182L2.72405 18.3182C2.8824 19.4267 3.83173 20.25 4.95144 20.25H19.0486C20.1683 20.25 21.1176 19.4267 21.276 18.3182L22.1331 12.3182C22.3102 11.0788 21.446 9.9588 20.25 9.77602M3.75002 9.77602V6C3.75002 4.75736 4.75738 3.75 6.00002 3.75H9.8787C10.2765 3.75 10.6581 3.90804 10.9394 4.18934L13.0607 6.31066C13.342 6.59197 13.7235 6.75 14.1213 6.75H18C19.2427 6.75 20.25 7.75736 20.25 9V9.77602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+{#if saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyFile==""}
+<p class="pt-2">None</p>
+{:else}
+<p class="pt-2">{saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyFile}</p> 
+{/if}
+<input id="ta" type="file" class="hidden" bind:this={fileinput} on:change={handleChange}/>
+</div>
+</TableBodyCell>
+
+   </TableBodyRow>
+     <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+  </TableBody>
+</Table>
+
+
+ </AccordionItem>
+
 </Accordion>
 
 </TabItem>
@@ -2157,44 +2237,84 @@ test2
 
  <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
-    <TableHeadCell class="!p-4 w-8">
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell class="w-8">No</TableHeadCell>
-    <TableHeadCell class="w-18">VPN Name</TableHeadCell>
-    <TableHeadCell class="w-18">Remote VPN Address</TableHeadCell>
-    <TableHeadCell class="w-18">Remote VPN Port</TableHeadCell>
-    <TableHeadCell class="w-10">Protocol</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Host</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Port</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Protocol</TableHeadCell>
 
 
     <TableHeadCell class="w-10"></TableHeadCell>
 
   </TableHead>
   <TableBody>
+
+
+
+{#each saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver as FailOver, index}
+
+
     <TableBodyRow>
+          <TableBodyCell class="!p-4">
+
+      </TableBodyCell>
       <TableBodyCell class="!p-4 w-8">
-<button on:click={() => formModalFailover = true}>
+<button on:click={() => modalTriggerFailover(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </TableBodyCell>
+
+   <TableHeadCell class="!p-4">
+    </TableHeadCell>
+
+                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-18">{FailOver.remote_host}</TableBodyCell>
+                    <TableBodyCell class="w-18">{FailOver.remote_port}</TableBodyCell>
+                    <TableBodyCell class="w-18">{FailOver.remote_protocol}</TableBodyCell>
+                    <TableBodyCell class="w-10"></TableBodyCell>
+
+
+    </TableBodyRow>
+
+{/each}
+
+<TableBodyRow>
+      <TableBodyCell class="!p-4 w-8">
+
+{#if saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length < 10}    
+<button on:click={() => NewFailover_Item_Invoker(saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
+{/if}  
+ </TableBodyCell>
+      
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
 
-       </TableBodyCell>
-                    <TableBodyCell class="w-8">1</TableBodyCell>
-                    <TableBodyCell class="w-18"></TableBodyCell>
-                    <TableBodyCell class="w-18"></TableBodyCell>
-                    <TableBodyCell class="w-18"></TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
-
-                    <TableBodyCell class="w-10"></TableBodyCell>
     </TableBodyRow>
 
 
+
+
      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
         <td></td>
         <td></td>
         <td></td>

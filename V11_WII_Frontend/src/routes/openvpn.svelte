@@ -241,8 +241,18 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     };
 
     let NewClientConn=[{
@@ -255,8 +265,18 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     },
     {
       "name": "",
@@ -268,8 +288,18 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     },
     {
       "name": "",
@@ -281,8 +311,18 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     },
     {
       "name": "",
@@ -294,8 +334,18 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     },
     {
       "name": "",
@@ -307,8 +357,18 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     },
     {
       "name": "",
@@ -320,8 +380,18 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     },
     {
       "name": "",
@@ -333,8 +403,18 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     },
     {
       "name": "",
@@ -346,8 +426,18 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     },
     {
       "name": "",
@@ -359,8 +449,18 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     },
     {
       "name": "",
@@ -372,14 +472,27 @@ let RemoteCAList = [
       "auth": 0,
       "client_account_password": {
         "account": "",
-        "password": ""
-      }
+        "password": ""},
+      "presharedKey": {
+        "tlsAuthKey": "",
+        "tlsCryptV2Key": ""},
+      "remoteNetworkAccess": [{
+        "remoteSubnet": "",
+        "comment": ""}],
+      "failOver": [{
+        "vpnName": "",
+        "remoteVpnAddr": "",
+        "remoteVpnPort": 12345,
+        "protocol": 0}]
     }
     ];
 
 
+    let Advanced_Client_Index_Selected;
     let Modify_CCD_Modal=false;
     let Modify_CCD_Index;
+
+
 
     let NewCCD_Modal=false;
     let NewCCD_index;
@@ -407,6 +520,18 @@ let RemoteCAList = [
         {"ccd_client_certificate_common_name": "",
         "ccd_client_command": ""}
     ];
+
+
+    function modalTriggerRemoteNetworkAccess(index)
+    {
+
+    }
+
+    function NewRemoteNetworkAccess_Item_Invoker(index)
+    {
+
+    }
+
 
     function modalTriggerCCD(index)
     {
@@ -1618,10 +1743,6 @@ test2
 
     <span slot="header" class="pl-4">Client Config Dir (CCD)</span>
 
-
-
-
-
  <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
     <TableHeadCell class="!p-4">
@@ -1803,7 +1924,17 @@ test2
 {#if changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}
 {#if changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
 <TabItem title="Advanced">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-44"><option disabled="" value="">Choose VPN name ...</option><option value="test1">test1</option><option value="test2">test2</option><option value="test3">test3</option></select>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={Advanced_Client_Index_Selected}>
+<option disabled="" value="none">Choose VPN name ...</option>
+
+{#each saved_changed_openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
+<option value={index}>{client_conn.name}</option>
+{/each}
+</select>
+
+<p class="pt-10"></p>
+
+{#if Advanced_Client_Index_Selected !="none" && Advanced_Client_Index_Selected < saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length}
 
 <Accordion>
 
@@ -1812,12 +1943,24 @@ test2
 
     <span slot="header" class="pl-4">Preshared Key</span>
 
+ <table>
+      <tr>
+          <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Key Usage</p></td>
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio bind:group={saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={0}>TLS auth key</Radio>
+  <Radio bind:group={saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={1} >TLS crypt-v2 key</Radio>
+
+</div></td>
+      </tr>
+      </table>
+
+<p class="pt-10"></p>
+
 <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
 
-      <TableHeadCell class="w-18">TLS auth key</TableHeadCell>
-
-    <TableHeadCell class="w-18">TLS crypt key</TableHeadCell>
+      <TableHeadCell class="w-18">Key File</TableHeadCell>
 
   </TableHead>
   <TableBody>
@@ -1826,23 +1969,10 @@ test2
 <div class="flex gap-4">
 <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" on:click={taClick} ><path d="M3.75002 9.77602C3.86206 9.7589 3.97701 9.75 4.0943 9.75H19.9058C20.023 9.75 20.138 9.7589 20.25 9.77602M3.75002 9.77602C2.55402 9.9588 1.68986 11.0788 1.86691 12.3182L2.72405 18.3182C2.8824 19.4267 3.83173 20.25 4.95144 20.25H19.0486C20.1683 20.25 21.1176 19.4267 21.276 18.3182L22.1331 12.3182C22.3102 11.0788 21.446 9.9588 20.25 9.77602M3.75002 9.77602V6C3.75002 4.75736 4.75738 3.75 6.00002 3.75H9.8787C10.2765 3.75 10.6581 3.90804 10.9394 4.18934L13.0607 6.31066C13.342 6.59197 13.7235 6.75 14.1213 6.75H18C19.2427 6.75 20.25 7.75736 20.25 9V9.77602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
-{#if value.length==0}
+{#if saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFile==""}
 <p class="pt-2">None</p>
 {:else}
-<p class="pt-2">{showFiles(value)}</p> 
-{/if}
-<input id="ta" type="file" class="hidden" bind:this={fileinput} on:change={handleChange}/>
-</div>
-</TableBodyCell>
-
-<TableBodyCell class="w-18">
-<div class="flex gap-4">
-<svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" on:click={taClick} ><path d="M3.75002 9.77602C3.86206 9.7589 3.97701 9.75 4.0943 9.75H19.9058C20.023 9.75 20.138 9.7589 20.25 9.77602M3.75002 9.77602C2.55402 9.9588 1.68986 11.0788 1.86691 12.3182L2.72405 18.3182C2.8824 19.4267 3.83173 20.25 4.95144 20.25H19.0486C20.1683 20.25 21.1176 19.4267 21.276 18.3182L22.1331 12.3182C22.3102 11.0788 21.446 9.9588 20.25 9.77602M3.75002 9.77602V6C3.75002 4.75736 4.75738 3.75 6.00002 3.75H9.8787C10.2765 3.75 10.6581 3.90804 10.9394 4.18934L13.0607 6.31066C13.342 6.59197 13.7235 6.75 14.1213 6.75H18C19.2427 6.75 20.25 7.75736 20.25 9V9.77602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-{#if value.length==0}
-<p class="pt-2">None</p>
-{:else}
-<p class="pt-2">{showFiles(value)}</p> 
+<p class="pt-2">{saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFile}</p> 
 {/if}
 <input id="ta" type="file" class="hidden" bind:this={fileinput} on:change={handleChange}/>
 </div>
@@ -1879,89 +2009,84 @@ test2
 
     <span slot="header" class="pl-4">Remote Network Access</span>
 
-<Table shadow striped={true}>
+ <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
     <TableHeadCell class="!p-4">
     </TableHeadCell>
     <TableHeadCell class="!p-4">
     </TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell>Remote Subnet</TableHeadCell>
-    <TableHeadCell>Comment</TableHeadCell>
-    <TableHeadCell></TableHeadCell>
-        <TableHeadCell></TableHeadCell>
+    <TableHeadCell class="!p-4 w-4">
+    </TableHeadCell>
+    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
+    <TableHeadCell class="w-18">Comment</TableHeadCell>
+
+
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+
   </TableHead>
   <TableBody>
+
+{#each saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess as RemoteNetworkAccess, index}
+
+
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
-            <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button>
+          <TableBodyCell class="!p-4">
+
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
-                  <button>
+      <TableBodyCell class="!p-4 w-8">
+<button on:click={() => modalTriggerRemoteNetworkAccess(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-            </TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell>192.168.254.0/24</TableBodyCell>
-      <TableBodyCell>subnet1</TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-    </TableBodyRow>
-    <TableBodyRow>
-      <TableBodyCell class="!p-4">
-      <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</button>
-      </TableBodyCell>
-            <TableBodyCell class="!p-4 w-10">
-                  <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-            </TableBodyCell>
-      <TableBodyCell class="w-10">2</TableBodyCell>
-      <TableBodyCell>192.168.1.0/24</TableBodyCell>
-      <TableBodyCell>subnet2</TableBodyCell>
-    <TableBodyCell class="w-10"></TableBodyCell>      
-    </TableBodyRow>
-
-
-
-<TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
-
-      </TableBodyCell>
-
-      <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalRNA = true}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-
-  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
 
-    <TableBodyCell class="w-10"></TableBodyCell>
-    <TableBodyCell class="w-10"></TableBodyCell>
-    <TableBodyCell class="w-10"></TableBodyCell>
-    
+   <TableHeadCell class="!p-4">
+    </TableHeadCell>
+
+                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-18">{RemoteNetworkAccess.remoteSubnet}</TableBodyCell>
+                    <TableBodyCell class="w-18">{RemoteNetworkAccess.comment}</TableBodyCell>
+
+                    <TableBodyCell class="w-10"></TableBodyCell>
+                    <TableBodyCell class="w-10"></TableBodyCell>
+
+    </TableBodyRow>
+
+{/each}
+
+<TableBodyRow>
+      <TableBodyCell class="!p-4 w-8">
+
+{#if saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length < 10}    
+<button on:click={() => NewRemoteNetworkAccess_Item_Invoker(saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+{/if}  
+ </TableBodyCell>
+      
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+
     </TableBodyRow>
 
 
+
+
      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -2160,7 +2285,7 @@ test2
 
 </Accordion>
 
-
+{/if}
 </TabItem>
     {/if}
    {/if}

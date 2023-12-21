@@ -169,6 +169,62 @@ let RemoteCAList = [
     let NewClientConnModal=false;
     let new_client_conn_index;
 
+    let ClientCNameModal=false;
+    let ClientCNameIndex;
+
+    let BackupCName;
+    let NewClientCName=["","","","","","","","","",""];
+
+
+    let ServerConn_ClientAccountPasswordModal=false;
+    let ServerConn_ClientAccountPasswordIndex;
+    let ServerConn_BackupClientAccountPassword={"account": "",
+        "password": ""};
+    let ServerConn_NewClientAccountPassword=[
+        {
+          "account": "",
+          "password": ""
+        },
+        {
+          "account": "",
+          "password": ""
+        },
+        {
+          "account": "",
+          "password": ""
+        },
+        {
+          "account": "",
+          "password": ""
+        },
+        {
+          "account": "",
+          "password": ""
+        },
+        {
+          "account": "",
+          "password": ""
+        },
+        {
+          "account": "",
+          "password": ""
+        },
+        {
+          "account": "",
+          "password": ""
+        },
+        {
+          "account": "",
+          "password": ""
+        },
+        {
+          "account": "",
+          "password": ""
+        }
+
+    ];
+
+
 
     let BackupClientConn={
       "name": "",
@@ -375,6 +431,50 @@ let RemoteCAList = [
     {
       NewClientConnModal=false;
       changed_openvpn_data.config.vpn_openvpn_client_connection=[...changed_openvpn_data.config.vpn_openvpn_client_connection,NewClientConn[index]];
+    }
+
+    function modalTriggerServer_ClientAccountPassword(index)
+    {
+
+      ServerConn_ClientAccountPasswordModal=true;
+      ServerConn_ClientAccountPasswordIndex=index;
+
+      ServerConn_BackupClientAccountPassword.account=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].account;
+      ServerConn_BackupClientAccountPassword.password=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].password;
+
+    }
+
+
+    function Server_NoModifyClientAccountPassword(index)
+    {
+
+      ServerConn_ClientAccountPasswordModal=false;
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].account=ServerConn_BackupClientAccountPassword.account;
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].password=ServerConn_BackupClientAccountPassword.password;
+    }
+
+    function Server_ModifyClientAccountPassword(index)
+    {
+        ServerConn_ClientAccountPasswordModal=false;
+    }
+
+
+    function modalTriggerClientCName(index)
+    {
+        ClientCNameModal=true;
+        ClientCNameIndex=index;
+        BackupCName=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index];
+    }
+
+    function NoModifyCName(index)
+    {
+      ClientCNameModal=false;
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index]=BackupCName;
+    }
+
+    function ModifyCName(index)
+    {
+      ClientCNameModal=false;
     }
 
     function saveBasic()
@@ -1002,44 +1102,46 @@ test2
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VRPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Server CA Certificate</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={localList} placeholder="None" /></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Protocol</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol} value={0}>UDP</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol} value={1}>TCP</Radio>
+
+</div></td>
+
+
+  </tr>  
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
+    <td class= "pl-4 pt-4">{changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate}</td>
 
 
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Server Certificate</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={localList} placeholder="None" /></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote CA Certificate</p></td>
+    <td class= "pl-4 pt-4">{changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate}</td>
 
 
   </tr>
 
 
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Protocol</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={openvpnProtocol} value='UDP'>UDP</Radio>
-  <Radio bind:group={openvpnProtocol} value='TCP'>TCP</Radio>
 
-</div></td>
-
-
-  </tr>
 
 
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Client Authentication</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={openvpnAuthS} value='X509Cert'>X509 Certificate</Radio>
-  <Radio bind:group={openvpnAuthS} value='LoginPw'>Username/Password</Radio>
+      <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_connection.auth} value={0}>X509 Certificate</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_connection.auth} value={1}>Account/Password</Radio>
 
 </div></td>
 
@@ -1054,28 +1156,32 @@ test2
 
 
     <span slot="header" class="pl-4">
-{#if openvpnAuthS=='X509Cert'}
+{#if changed_openvpn_data.config.vpn_openvpn_server_connection.auth==0}
     Valid Client Certificate Common Name List
 
-{:else}
-    Valid Client Username List
+{:else if changed_openvpn_data.config.vpn_openvpn_server_connection.auth==1}
+    Valid Client Account List
 {/if}
     </span>
 
 
  <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
-    <TableHeadCell class="!p-4 w-8">
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-18">
-{#if openvpnAuthS=='X509Cert'}
+{#if changed_openvpn_data.config.vpn_openvpn_server_connection.auth==0}
     Certificate Common Name
-{:else}
-    Username
+{:else if changed_openvpn_data.config.vpn_openvpn_server_connection.auth==1}
+    Account
 {/if}
     </TableHeadCell>
-{#if openvpnAuthS=='LoginPw'}
+{#if changed_openvpn_data.config.vpn_openvpn_server_connection.auth==1}
     <TableHeadCell class="w-18">Password</TableHeadCell>
 {/if}
 
@@ -1084,24 +1190,40 @@ test2
 
   </TableHead>
   <TableBody>
-    <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
-<button on:click={() => formModalValidClient = true}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
-  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+{#if changed_openvpn_data.config.vpn_openvpn_server_connection.auth==0}
+{#each changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name as clientCN, index}
+
+
+    <TableBodyRow>
+          <TableBodyCell class="!p-4">
+
+      </TableBodyCell>
+      <TableBodyCell class="!p-4 w-8">
+<button on:click={() => modalTriggerClientCName(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-                    <TableBodyCell class="w-8">1</TableBodyCell>
-                    <TableBodyCell class="w-18"></TableBodyCell>
-   
-              
+
+   <TableHeadCell class="!p-4">
+    </TableHeadCell>
+
+                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-18">{clientCN}</TableBodyCell>
+
+
                     <TableBodyCell class="w-10"></TableBodyCell>
                     <TableBodyCell class="w-10"></TableBodyCell>
+
     </TableBodyRow>
+
+{/each}
+
+
 
 
      <tr>
@@ -1120,41 +1242,82 @@ test2
 
 
     </tr>
+{/if}
+
+
+{#if changed_openvpn_data.config.vpn_openvpn_server_connection.auth==1}
+{#each changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password as client_account_password, index}
+
+
+    <TableBodyRow>
+          <TableBodyCell class="!p-4">
+
+      </TableBodyCell>
+      <TableBodyCell class="!p-4 w-8">
+<button on:click={() => modalTriggerServer_ClientAccountPassword(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </TableBodyCell>
+
+   <TableHeadCell class="!p-4">
+    </TableHeadCell>
+
+                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-18">{client_account_password.account}</TableBodyCell>
+                    <TableBodyCell class="w-18">{client_account_password.password}</TableBodyCell>
+
+                    <TableBodyCell class="w-10"></TableBodyCell>
+                    <TableBodyCell class="w-10"></TableBodyCell>
+
+    </TableBodyRow>
+
+{/each}
+
+
+
+
+     <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+{/if}
 
   </TableBody>
+
 </Table>
 
-<Modal bind:open={formModalValidClient} autoclose={false} size="md" class="w-full">
 
+<Modal bind:open={ClientCNameModal} size="md" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyCName(ClientCNameIndex)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
 <table>
 
 
 <tr>
       <td>
-      <p class="pl-10 pt-4 text-lg font-light text-right">
-{#if openvpnAuthS=='X509Cert'}
+      <p class="pl-1 pt-4 text-lg font-light text-right w-64">
     Certificate Common Name
-{:else}
-    Username
-{/if}
       </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={VPNName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[ClientCNameIndex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
-
-
-{#if openvpnAuthS=='LoginPw'}
-<tr>
-      <td><p class="pl-10 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={PWD} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
-
-{/if}
-
 
 
 
@@ -1164,7 +1327,47 @@ test2
 
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyCName(ClientCNameIndex)}>Modify</Button></td>
+
+
+    </tr>
+
+</table>
+</Modal>
+
+
+<Modal bind:open={ServerConn_ClientAccountPasswordModal} size="md" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={Server_NoModifyClientAccountPassword(ServerConn_ClientAccountPasswordIndex)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+<table>
+
+
+<tr>
+      <td>
+      <p class="pl-10 pt-4 text-lg font-light text-right">
+      Account
+      </p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[ServerConn_ClientAccountPasswordIndex].account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+<tr>
+      <td>
+      <p class="pl-10 pt-4 text-lg font-light text-right">
+      Password
+      </p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[ServerConn_ClientAccountPasswordIndex].password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+            <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={Server_ModifyClientAccountPassword(ServerConn_ClientAccountPasswordIndex)}>Modify</Button></td>
 
 
     </tr>

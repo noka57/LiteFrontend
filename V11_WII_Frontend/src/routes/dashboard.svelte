@@ -493,22 +493,23 @@
 
 
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="pb-20"> <p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.cpuRemaining}{/if}</p><ProgressCircle max="100" value="{value1}" color="blue"/>
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="pb-20"> <p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.cpuRemaining}{/if}</p>
+        {#if dashboard_data!=""}<ProgressCircle max="100" value="{value1}" color="blue"/>{/if}
 <p class="text-black text-lg text-center">CPU</p>
 </div>
 <div class="pl-20 pb-20">
 <p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.ramRemaining}{/if}</p>
-<ProgressCircle max="100" value="{value2}" color="green"/>
+{#if dashboard_data!=""}<ProgressCircle max="100" value="{value2}" color="green"/>{/if}
 <p class="text-black text-lg text-center">RAM</p>
 </div>
 <div class="pl-20 pb-20">
 <p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.emmcRemaining}{/if}</p>
-<ProgressCircle max="100" value="{value3}" color="yellow"/>
+{#if dashboard_data!=""}<ProgressCircle max="100" value="{value3}" color="yellow"/>{/if}
 <p class="text-black text-lg text-center">EMMC</p>
 </div>
 <div class="pl-20 pb-20">
 <p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.sdCardRemaining}{/if}</p>
-<ProgressCircle max="100" value="{value4}" color="orange"/>
+{#if dashboard_data!=""}<ProgressCircle max="100" value="{value4}" color="orange"/>{/if}
 <p class="text-black text-lg text-center">SD Card</p>
 </div>
 

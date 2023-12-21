@@ -2,8 +2,8 @@
   export let value = 0;
   export let max = 105;
   export let color = "currentColor";
-  let x;
-  let y;
+  let x=50;
+  let y=5;
   $: progressPath = () => {
     if (value <= 0) {
       return "";

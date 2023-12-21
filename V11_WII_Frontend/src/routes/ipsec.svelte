@@ -577,7 +577,7 @@ let RemoteCAList = [
 
         changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn=[...changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn,newICG_item[index]];
 
-        console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn);
+        //console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn);
 
     }
 

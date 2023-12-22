@@ -1025,7 +1025,7 @@ let RemoteCAList = [
 
           if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].auth != openvpn_data.config.vpn_openvpn_client_connection[i].auth)
           {
-            let changedstr="Client No. "+(i+1)+"Authentication is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].auth;
+            let changedstr="Client No. "+(i+1)+" Authentication is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].auth;
             openvpn_client_conn_changedValues=[...openvpn_client_conn_changedValues, changedstr];
             saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].auth=changed_openvpn_data.config.vpn_openvpn_client_connection[i].auth;
           }

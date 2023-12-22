@@ -243,16 +243,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     };
 
     let NewClientConn=[{
@@ -267,16 +268,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     },
     {
       "name": "",
@@ -290,16 +292,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     },
     {
       "name": "",
@@ -313,16 +316,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     },
     {
       "name": "",
@@ -336,16 +340,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     },
     {
       "name": "",
@@ -359,16 +364,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     },
     {
       "name": "",
@@ -382,16 +388,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     },
     {
       "name": "",
@@ -405,16 +412,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     },
     {
       "name": "",
@@ -428,16 +436,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     },
     {
       "name": "",
@@ -451,16 +460,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     },
     {
       "name": "",
@@ -474,16 +484,17 @@ let RemoteCAList = [
         "account": "",
         "password": ""},
       "presharedKey": {
-        "tlsAuthKey": "",
-        "tlsCryptV2Key": ""},
+        "keyUsage":0,
+        "keyFile": ""
+        },
       "remoteNetworkAccess": [{
         "remoteSubnet": "",
         "comment": ""}],
       "failOver": [{
-        "vpnName": "",
-        "remoteVpnAddr": "",
-        "remoteVpnPort": 12345,
-        "protocol": 0}]
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+        }]
     }
     ];
 
@@ -521,36 +532,217 @@ let RemoteCAList = [
         "ccd_client_command": ""}
     ];
 
+    let ModifyRemoteNetworkAccess_Modal;
+    let ModifyRemoteNetworkAccess_Index;
+    let BackupRemoteNetworkAccess={
+        "remoteSubnet": "",
+        "comment": ""
+    };
+
+    let NewRemoteNetworkAccess_Item=[{
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    }
+
+    ];
+
+    let NewRemoteNetworkAccess_index;
+    let NewRemoteNetworkAccess_Modal;
+
+    let ModifyFailOver_Modal;
+    let ModifyFailOver_Index;
+    let BackupFailOver={
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    };
+
+    let NewFailOver_Index;
+    let NewFailOver_Modal;
+    let NewFailOver_Item=[{
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ];
+
+    
 
     function modalTriggerRemoteNetworkAccess(index)
     {
 
+      BackupRemoteNetworkAccess.remoteSubnet=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].remoteSubnet;
+
+      BackupRemoteNetworkAccess.comment=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].comment;
+      ModifyRemoteNetworkAccess_Index=index
+      ModifyRemoteNetworkAccess_Modal=true;
+
+    }
+
+    function NoModifyRemoteNetworkAccess(index)
+    {
+      ModifyRemoteNetworkAccess_Modal=false;
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].remoteSubnet=BackupRemoteNetworkAccess.remoteSubnet;
+
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].comment=BackupRemoteNetworkAccess.comment;
+
+    }
+
+    function ModifyRemoteNetworkAccess(index)
+    {
+      ModifyRemoteNetworkAccess_Modal=false;
     }
 
     function NewRemoteNetworkAccess_Item_Invoker(index)
     {
+      NewRemoteNetworkAccess_Item[index].remoteSubnet="";
+      NewRemoteNetworkAccess_Item[index].comment="";
+
+      NewRemoteNetworkAccess_index=index;
+      NewRemoteNetworkAccess_Modal=true;
+    }
+
+    function AddRemoteNetworkAccess_Item(index)
+    {
+      NewRemoteNetworkAccess_Modal=false;
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess,NewRemoteNetworkAccess_Item[index]];
 
     }
 
-
     function modalTriggerFailover(index)
     {
+      BackupFailOver.remote_host=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_host;
 
+      BackupFailOver.remote_port=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_port;
+
+      BackupFailOver.remote_protocol=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_protocol;
+
+      ModifyFailOver_Index=index;
+      ModifyFailOver_Modal=true;
+
+    }
+
+    function NoModifyFailover(index)
+    {
+      ModifyFailOver_Modal=false;
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_host=BackupFailOver.remote_host;
+
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_port=BackupFailOver.remote_port;
+
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_protocol=BackupFailOver.remote_protocol;
+    }
+
+    function ModifyFailover(index)
+    {
+      ModifyFailOver_Modal=false;
     }
 
     function NewFailover_Item_Invoker(index)
     {
+      NewFailOver_Item[index].remote_host="";
+      NewFailOver_Item[index].remote_port=0;
+      NewFailOver_Item[index].remote_protocol=0;
 
+      NewFailOver_Index=index;
+      NewFailOver_Modal=true;
+    }
+
+    function AddFailover_Item(index)
+    {
+      NewFailOver_Modal=false;
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver,NewFailOver_Item[index]];
     }
 
 
     function modalTriggerCCD(index)
     {
-      Modify_CCD_Modal=true;
-      Modify_CCD_Index=index;
       BackupCCD.ccd_client_certificate_common_name=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_certificate_common_name;
       
       BackupCCD.ccd_client_command=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_command;
+     
+      Modify_CCD_Index=index;
+      Modify_CCD_Modal=true;
     }
 
     function NoModifyCCD(index)
@@ -2108,7 +2300,7 @@ test2
   </TableHead>
   <TableBody>
 
-{#each saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess as RemoteNetworkAccess, index}
+{#each changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess as RemoteNetworkAccess, index}
 
 
     <TableBodyRow>
@@ -2142,8 +2334,8 @@ test2
 <TableBodyRow>
       <TableBodyCell class="!p-4 w-8">
 
-{#if saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length < 10}    
-<button on:click={() => NewRemoteNetworkAccess_Item_Invoker(saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length)}>
+{#if changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length < 10}    
+<button on:click={() => NewRemoteNetworkAccess_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -2188,13 +2380,16 @@ test2
 
 
 
-<Modal bind:open={formModalRNA} autoclose={false} size="lg" class="w-full">
+<Modal bind:open={ModifyRemoteNetworkAccess_Modal} size="lg" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyRemoteNetworkAccess(ModifyRemoteNetworkAccess_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
 
 <table>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Subnet</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VRAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Subnet</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[ModifyRemoteNetworkAccess_Index].remoteSubnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -2203,7 +2398,7 @@ test2
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Comment</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VRAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Comment</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[ModifyRemoteNetworkAccess_Index].comment} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -2218,7 +2413,7 @@ test2
 
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyRemoteNetworkAccess(ModifyRemoteNetworkAccess_Index)}>Modify</Button></td>
 
 
     </tr>
@@ -2226,6 +2421,44 @@ test2
   </table>
 </Modal>
 
+<Modal bind:open={NewRemoteNetworkAccess_Modal} size="lg" class="w-full" autoclose>
+<table>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Subnet</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewRemoteNetworkAccess_Item[NewRemoteNetworkAccess_index].remoteSubnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Comment</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewRemoteNetworkAccess_Item[NewRemoteNetworkAccess_index].comment} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddRemoteNetworkAccess_Item(NewRemoteNetworkAccess_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+
+
+</Modal>
  </AccordionItem>
 
 
@@ -2256,7 +2489,7 @@ test2
 
 
 
-{#each saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver as FailOver, index}
+{#each changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver as FailOver, index}
 
 
     <TableBodyRow>
@@ -2279,7 +2512,11 @@ test2
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{FailOver.remote_host}</TableBodyCell>
                     <TableBodyCell class="w-18">{FailOver.remote_port}</TableBodyCell>
-                    <TableBodyCell class="w-18">{FailOver.remote_protocol}</TableBodyCell>
+{#if FailOver.remote_protocol == 0}
+                    <TableBodyCell class="w-18">UDP</TableBodyCell>
+{:else if FailOver.remote_protocol == 1}
+                    <TableBodyCell class="w-18">TCP</TableBodyCell>
+{/if} 
                     <TableBodyCell class="w-10"></TableBodyCell>
 
 
@@ -2290,8 +2527,8 @@ test2
 <TableBodyRow>
       <TableBodyCell class="!p-4 w-8">
 
-{#if saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length < 10}    
-<button on:click={() => NewFailover_Item_Invoker(saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length)}>
+{#if changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length < 10}    
+<button on:click={() => NewFailover_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -2336,22 +2573,15 @@ test2
 
 
 
-<Modal bind:open={formModalFailover} autoclose={false} size="lg" class="w-full">
+<Modal bind:open={ModifyFailOver_Modal} size="lg" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyFailover(ModifyFailOver_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
 
 <table>
 
-
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">VPN Name</p></td><td class="pl-5 pt-5">test</td>
-
-
-
-  </tr>
-
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote VPN Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VRAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[ModifyFailOver_Index].remote_host} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -2359,7 +2589,7 @@ test2
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote VPN Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={VRPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[ModifyFailOver_Index].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -2369,9 +2599,9 @@ test2
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Protocol</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={openvpnProtocol} value='UDP'>UDP</Radio>
-  <Radio bind:group={openvpnProtocol} value='TCP'>TCP</Radio>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Protocol</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[ModifyFailOver_Index].remote_protocol} value={0}>UDP</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[ModifyFailOver_Index].remote_protocol} value={1}>TCP</Radio>
 
 </div></td>
 
@@ -2389,7 +2619,7 @@ test2
 
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyFailover(ModifyFailOver_Index)}>Modify</Button></td>
 
 
     </tr>
@@ -2397,6 +2627,57 @@ test2
   </table>
 </Modal>
 
+
+<Modal bind:open={NewFailOver_Modal}  size="lg" class="w-full" autoclose>
+
+<table>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewFailOver_Item[NewFailOver_Index].remote_host} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewFailOver_Item[NewFailOver_Index].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Protocol</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio bind:group={NewFailOver_Item[NewFailOver_Index].remote_protocol} value={0}>UDP</Radio>
+  <Radio bind:group={NewFailOver_Item[NewFailOver_Index].remote_protocol} value={1}>TCP</Radio>
+
+</div></td>
+
+
+  </tr>
+
+
+
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddFailover_Item(NewFailOver_Index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+</Modal>
 
 
  </AccordionItem>

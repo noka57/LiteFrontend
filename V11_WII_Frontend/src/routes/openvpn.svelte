@@ -6,7 +6,9 @@
   import { sessionidG } from "./sessionG.js";
   import { 
     openvpnConfig,
-    OpenVPN_Client_Advanced_ConfigChangedLog,
+    OpenVPN_Client_Advanced_FO_ConfigChangedLog,
+    OpenVPN_Client_Advanced_RNA_ConfigChangedLog,
+    OpenVPN_Client_Advanced_PSK_ConfigChangedLog,
     OpenVPN_Client_Conn_ConfigChangedLog,
     OpenVPN_Server_Advanced_CCD_ConfigChangedLog,
     OpenVPN_Server_Advanced_PSK_ConfigChangedLog,
@@ -32,8 +34,9 @@
     let openvpn_client_conn_changedValues=[];
     let openvpn_server_advanced_ccd_changedValues=[];
     let openvpn_server_advanced_psk_changedValues=[];
-    let openvpn_client_advanced_changedValues=[];
-
+    let openvpn_client_advanced_psk_changedValues=[];
+    let openvpn_client_advanced_rna_changedValues=[];
+    let openvpn_client_advanced_fo_changedValues=[];
 
     sessionidG.subscribe(val => {
       sessionid = val;
@@ -43,8 +46,16 @@
       openvpn_data = val;
     });
 
-    OpenVPN_Client_Advanced_ConfigChangedLog.subscribe(val => {
-        openvpn_client_advanced_changedValues = val;
+    OpenVPN_Client_Advanced_PSK_ConfigChangedLog.subscribe(val => {
+        openvpn_client_advanced_psk_changedValues = val;
+    });
+
+    OpenVPN_Client_Advanced_RNA_ConfigChangedLog.subscribe(val => {
+        openvpn_client_advanced_rna_changedValues = val;
+    });
+
+    OpenVPN_Client_Advanced_FO_ConfigChangedLog.subscribe(val => {
+        openvpn_client_advanced_fo_changedValues = val;
     });
 
     OpenVPN_Client_Conn_ConfigChangedLog.subscribe(val => {
@@ -951,6 +962,123 @@ let RemoteCAList = [
       console.log(openvpn_basic_changedValues);
     }
 
+    function saveClientPSK()
+    {
+      console.log("save client psk");
+      if (openvpn_client_advanced_psk_changedValues.length != 0)
+      {
+        openvpn_client_advanced_psk_changedValues=[];
+      }
+
+      if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
+      {
+
+        console.log("Please save basic page first.");
+        alert("Please save basic page first.");
+
+      }
+      else
+      {
+        console.log("start to save client psk");
+
+        for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection.length,
+          openvpn_data.config.vpn_openvpn_client_connection.length);i++)
+        {
+          if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage != openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage)
+          {
+            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" PSK KeyUsage has changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage;
+
+            openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
+            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage=changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage;
+
+          }
+
+          if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName != openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName)
+          {
+            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" PSK KeyFileName has changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName;
+
+            openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
+            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName=changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName;
+
+          }
+        }
+
+
+        OpenVPN_Client_Advanced_PSK_ConfigChangedLog.set(openvpn_client_advanced_psk_changedValues);
+        console.log(openvpn_client_advanced_psk_changedValues);
+      }
+    }
+
+    function saveClientRNA()
+    {
+      console.log("save client rna");
+      if (openvpn_client_advanced_rna_changedValues.length != 0)
+      {
+        openvpn_client_advanced_rna_changedValues=[];
+      }
+
+      if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
+      {
+
+        console.log("Please save basic page first.");
+        alert("Please save basic page first.");
+
+      }
+      else
+      {
+        console.log("start to save client rna");
+
+        for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection.length,
+          openvpn_data.config.vpn_openvpn_client_connection.length);i++)
+        {
+
+          for (let j=0; j< Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length,
+          openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length);j++)
+          {
+            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet != openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet)
+            {
+              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" Remote Network Access List No." + (j+1) +" has changed: remote subnet is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet;
+
+              openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+              saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet;
+
+            }
+
+            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment != openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment)
+            {
+              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" Remote Network Access List No." + (j+1) +" has changed: comment is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment;
+
+              openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+              saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment;
+
+            }
+          }
+
+
+          if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length > openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length) 
+          {
+            let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length-openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;
+            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+ " add "+addedCount+" item(s) to Remote Network Access";
+          
+              openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+          
+
+            for (let j=openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length; j++)
+            {
+              let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j];
+              saved_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess=[...changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess, new_item];
+            }
+          }
+        }
+
+
+        OpenVPN_Client_Advanced_RNA_ConfigChangedLog.set(openvpn_client_advanced_rna_changedValues);
+        console.log(openvpn_client_advanced_rna_changedValues);
+      }
+
+
+    }
+
 
     function saveClientConn()
     {
@@ -965,7 +1093,7 @@ let RemoteCAList = [
       console.log(openvpn_data.config.vpn_openvpn_basic.ovpnRole);
       console.log(saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
 
-      if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole &&   0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
+      if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole &&  0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
       {
 
             console.log("Please save basic page first.");
@@ -1350,9 +1478,9 @@ let RemoteCAList = [
 
         console.log(openvpn_server_advanced_psk_changedValues);
       }
-
-
     }
+
+
 
     async function getOpenVPNData () {
     const res = await fetch(window.location.origin+"/getOPENvpndata", {
@@ -1439,11 +1567,51 @@ let RemoteCAList = [
         }      
       }
 
-
-
-      if (openvpn_client_advanced_changedValues.length == 0)
+      if (openvpn_client_advanced_psk_changedValues.length == 0)
       {
-               
+        changed_openvpn_data=JSON.parse(JSON.stringify(saved_changed_openvpn_data));
+        for(let i=0;i<openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+        {
+          changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage=openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage;
+
+          changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName=openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName;        
+
+        }
+
+      }
+    
+      if (openvpn_client_advanced_rna_changedValues.length == 0)
+      {
+        changed_openvpn_data=JSON.parse(JSON.stringify(saved_changed_openvpn_data));
+        for(let i=0;i<openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+        {
+          for(let j=0;j< openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;j++)
+          {
+            changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet=openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet;
+
+            changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment=openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment;
+
+          }        
+
+        }
+      }
+    
+      if (openvpn_client_advanced_fo_changedValues.length == 0)
+      {
+        changed_openvpn_data=JSON.parse(JSON.stringify(saved_changed_openvpn_data));
+        for(let i=0;i<openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+        {
+          for(let j=0;j< openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length;j++)
+          {
+            changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_host=openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_host;
+
+            changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port=openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port;
+
+            changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol=openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol;
+
+          }        
+
+        }
       }
 
     }
@@ -2607,7 +2775,7 @@ test2
 
 <p class="pt-10"></p>
 
-{#if Advanced_Client_Index_Selected !="none" && Advanced_Client_Index_Selected < saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length}
+{#if Advanced_Client_Index_Selected !="none" && Advanced_Client_Index_Selected < changed_openvpn_data.config.vpn_openvpn_client_connection.length}
 
 <Accordion>
 
@@ -2621,8 +2789,8 @@ test2
           <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Key Usage</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={0}>TLS auth key</Radio>
-  <Radio bind:group={saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={1} >TLS crypt-v2 key</Radio>
+      <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={0}>TLS auth key</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={1} >TLS crypt-v2 key</Radio>
 
 </div></td>
       </tr>
@@ -2642,10 +2810,10 @@ test2
 <div class="flex gap-4">
 <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" on:click={taClick} ><path d="M3.75002 9.77602C3.86206 9.7589 3.97701 9.75 4.0943 9.75H19.9058C20.023 9.75 20.138 9.7589 20.25 9.77602M3.75002 9.77602C2.55402 9.9588 1.68986 11.0788 1.86691 12.3182L2.72405 18.3182C2.8824 19.4267 3.83173 20.25 4.95144 20.25H19.0486C20.1683 20.25 21.1176 19.4267 21.276 18.3182L22.1331 12.3182C22.3102 11.0788 21.446 9.9588 20.25 9.77602M3.75002 9.77602V6C3.75002 4.75736 4.75738 3.75 6.00002 3.75H9.8787C10.2765 3.75 10.6581 3.90804 10.9394 4.18934L13.0607 6.31066C13.342 6.59197 13.7235 6.75 14.1213 6.75H18C19.2427 6.75 20.25 7.75736 20.25 9V9.77602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
-{#if saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName==""}
+{#if changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName==""}
 <p class="pt-2">None</p>
 {:else}
-<p class="pt-2">{saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName}</p> 
+<p class="pt-2">{changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName}</p> 
 {/if}
 <input id="ta" type="file" class="hidden" bind:this={fileinput} on:change={handleChange}/>
 </div>
@@ -2665,7 +2833,7 @@ test2
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveClientPSK}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -2769,7 +2937,7 @@ test2
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveClientRNA}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 

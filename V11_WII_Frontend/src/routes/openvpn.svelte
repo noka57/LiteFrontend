@@ -912,7 +912,21 @@ let RemoteCAList = [
       changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password=[...changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password, ServerConn_NewClientAccountPassword[index]];
 
     }
-
+  
+    function compareBasicObjects(obj1, obj2) {
+        for (const key in obj1) 
+        {
+            if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+            {
+                compareObjects(obj1[key], obj2[key]);
+            } 
+            else if (obj1[key] != obj2[key]) 
+            {
+                let changedstr="Value of "+key+" has changed to "+obj1[key];
+                openvpn_basic_changedValues=[...openvpn_basic_changedValues, changedstr];
+            }
+        }
+    }
 
 
 
@@ -924,14 +938,11 @@ let RemoteCAList = [
       {
         openvpn_basic_changedValues=[];
       }
-    
-     // compareObjects(changed_ipsec_data.config.vpn_ipsec_basic, ipsec_data.config.vpn_ipsec_basic,0,0,0,"");
-     // IPsec_Basic_ConfigChangedLog.set(basic_changedValues);
 
-
-     // saved_changed_ipsec_data.config.vpn_ipsec_basic=JSON.parse(JSON.stringify(changed_ipsec_data.config.vpn_ipsec_basic)); 
-     // ChangedIPsecConfig.set(saved_changed_ipsec_data);
-    
+      compareBasicObjects(changed_openvpn_data.config.vpn_openvpn_basic, openvpn_data.config.vpn_openvpn_basic);
+      OpenVPN_Basic_ConfigChangedLog.set(openvpn_basic_changedValues);
+      saved_changed_openvpn_data.config.vpn_openvpn_basic=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_basic)); 
+      ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
       console.log(openvpn_basic_changedValues);
     }
 
@@ -1029,8 +1040,7 @@ let RemoteCAList = [
 
       if (openvpn_client_advanced_changedValues.length == 0)
       {
-          changed_openvpn_data=JSON.parse(JSON.stringify(saved_changed_openvpn_data));
-          changed_openvpn_data.config.vpn_openvpn_client_advanced=JSON.parse(JSON.stringify(openvpn_data.config.vpn_openvpn_client_advanced));       
+               
       }
 
     }

@@ -1302,12 +1302,72 @@ let RemoteCAList = [
           changed_ipsec_data.config.vpn_ipsec_basic=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_basic)); 
       }
       
-      if (conn_changedValues.length==0)
+      if (responder_conn_changedValues.length==0)
       {
           changed_ipsec_data=JSON.parse(JSON.stringify(saved_changed_ipsec_data));
-          changed_ipsec_data.config.vpn_ipsec_connection=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection)); 
+          changed_ipsec_data.config.vpn_ipsec_connection.responder_conn=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.responder_conn)); 
       }
       
+      if (initiator_conn_general_changedValues.length==0)
+      {
+        changed_ipsec_data=JSON.parse(JSON.stringify(saved_changed_ipsec_data));
+  
+
+        for (let i=0;i<ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
+        {
+          changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name));
+
+          changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host));
+
+          changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate));
+
+          changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate));
+
+          changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type));
+
+        }
+      }
+
+      if (initiator_conn_subnet_changedValues.length==0)
+      {
+        changed_ipsec_data=JSON.parse(JSON.stringify(saved_changed_ipsec_data));
+        let i=0;
+        for (;i<ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
+        {
+          if (ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type == 0)
+          {
+
+            let j=0;
+            for (;j<ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet.length;j++)
+            {
+              changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet[j].local_subnet=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet[j].local_subnet));
+
+              changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet[j].remote_subnet=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet[j].remote_subnet));
+            }
+
+            for (;j<changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet.length;j++)
+            {
+              changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet[j].local_subnet="";
+              changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet[j].remote_subnet="";
+            }
+          }
+        }
+
+        for (;i<changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length; i++)
+        {
+          if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type == 0)
+          {
+            for (let j=0;j<changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet.length;j++)
+            {
+              changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet[j].local_subnet="";
+              changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].tunnel_subnet[j].remote_subnet="";
+            }
+          }
+
+        }
+
+      }
+
     }
 
   });

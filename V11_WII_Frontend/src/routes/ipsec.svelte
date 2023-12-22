@@ -331,15 +331,14 @@ let RemoteCAList = [
         }
 
     
-        if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length > saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length)
-        {
 
-            for (i=saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i < changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
-            {
-                let new_initiator_conn = JSON.parse(JSON.stringify(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i]))
-                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn=[...saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn, new_initiator_conn];
-            }
+
+        for (i=saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i < changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
+        {
+          let new_initiator_conn = JSON.parse(JSON.stringify(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i]))
+          saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn=[...saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn, new_initiator_conn];
         }
+        
         IPsec_Initiator_Conn_General_ConfigChangedLog.set(initiator_conn_general_changedValues);
         ChangedIPsecConfig.set(saved_changed_ipsec_data);
 

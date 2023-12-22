@@ -1472,6 +1472,7 @@ let RemoteCAList = [
 
     function AddRemoteNetworkAccess_Item(index)
     {
+      console.log("client :"+Advanced_Client_Index_Selected+ ", rna: "+ index);
       NewRemoteNetworkAccess_Modal=false;
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess,NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index]];
 
@@ -1507,9 +1508,9 @@ let RemoteCAList = [
 
     function NewFailover_Item_Invoker(index)
     {
-      NewFailOver_Item[index].remote_host="";
-      NewFailOver_Item[index].remote_port=0;
-      NewFailOver_Item[index].remote_protocol=0;
+      NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_host="";
+      NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_port=0;
+      NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_protocol=0;
 
       NewFailOver_Index=index;
       NewFailOver_Modal=true;
@@ -1518,7 +1519,7 @@ let RemoteCAList = [
     function AddFailover_Item(index)
     {
       NewFailOver_Modal=false;
-      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver,NewFailOver_Item[index]];
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver,NewFailOver_Item[Advanced_Client_Index_Selected][index]];
     }
 
 
@@ -1823,8 +1824,10 @@ let RemoteCAList = [
           for (let j=0; j< Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length,
           openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length);j++)
           {
+
             if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet != openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet)
             {
+
               let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" Remote Network Access List No." + (j+1) +" has changed: remote subnet is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet;
 
               openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
@@ -1851,9 +1854,9 @@ let RemoteCAList = [
             openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
           
 
-            for (let j=openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length; j++)
+            for (let j=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length; j++)
             {
-              let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j];
+              let new_item=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j]));
               saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess, new_item];
             }
           }
@@ -1863,15 +1866,16 @@ let RemoteCAList = [
         {
           for (let i=openvpn_data.config.vpn_openvpn_client_connection.length;i<changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
           {
+  
             if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length > 0)
             {
               let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;
               let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+ " add "+addedCount+" item(s) to Remote Network Access";
               openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
-
               for (let j=0;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length; j++)
               {
-                let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j];
+      
+                let new_item=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j]));
                 saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess, new_item];
               }
             }
@@ -1951,9 +1955,9 @@ let RemoteCAList = [
           
             openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
           
-            for (let j=openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length; j++)
+            for (let j=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length; j++)
             {
-              let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length[j];
+              let new_item=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length[j]))
               saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver, new_item];
             }
           }
@@ -1972,7 +1976,7 @@ let RemoteCAList = [
 
               for (let j=0;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length; j++)
               {
-                let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j];
+                let new_item=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j]))
                 saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver, new_item];
               }
             }
@@ -2013,6 +2017,16 @@ let RemoteCAList = [
       else
       {
         console.log("start to save clientConn");
+
+
+        if (changed_openvpn_data.config.vpn_openvpn_client_connection.length > openvpn_data.config.vpn_openvpn_client_connection.length) 
+        {
+          let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection.length-openvpn_data.config.vpn_openvpn_client_connection.length;
+          let changedstr="Add "+addedCount+" item(s) to Client Connection";
+          
+          openvpn_client_conn_changedValues=[...openvpn_client_conn_changedValues, changedstr];
+
+        }
 
         for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection.length,
           openvpn_data.config.vpn_openvpn_client_connection.length);i++)
@@ -2093,19 +2107,10 @@ let RemoteCAList = [
         }
 
 
-        if (changed_openvpn_data.config.vpn_openvpn_client_connection.length > openvpn_data.config.vpn_openvpn_client_connection.length) 
-        {
-          let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection.length-openvpn_data.config.vpn_openvpn_client_connection.length;
-          let changedstr="Add "+addedCount+" item(s) to Client Connection";
-          
-          openvpn_client_conn_changedValues=[...openvpn_client_conn_changedValues, changedstr];
-          
-
-          for (let i=openvpn_data.config.vpn_openvpn_client_connection.length;i <changed_openvpn_data.config.vpn_openvpn_client_connection.length; i++)
-          {
-            let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i];
-              saved_changed_openvpn_data.config.vpn_openvpn_client_connection=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection, new_item];
-          }
+        for (let i=saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length;i <changed_openvpn_data.config.vpn_openvpn_client_connection.length; i++)
+        { 
+          let new_item=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[i]))
+          saved_changed_openvpn_data.config.vpn_openvpn_client_connection=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection, new_item];
         }
 
 
@@ -2209,9 +2214,9 @@ let RemoteCAList = [
             openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
           
 
-            for (let i=openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length;i <changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length; i++)
+            for (let i=saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length;i <changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length; i++)
             {
-              let new_item=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i];
+              let new_item=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i]))
               saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name=[...saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name, new_item];
             }
           }
@@ -2252,9 +2257,9 @@ let RemoteCAList = [
             openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
           
 
-            for (let i=openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length;i <changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length; i++)
+            for (let i=saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length;i <changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length; i++)
             {
-              let new_item=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i];
+              let new_item=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i]))
               saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password=[...saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password, new_item];
             }
           }
@@ -2290,6 +2295,14 @@ let RemoteCAList = [
       {
         console.log("start to save CCD");
 
+        if (changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length > openvpn_data.config.vpn_openvpn_server_advanced.ccd.length) 
+        {
+          let addedCount=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length-openvpn_data.config.vpn_openvpn_server_advanced.ccd.length;
+          let changedstr="Add "+addedCount+" item(s) to CCD";
+          
+          openvpn_server_advanced_ccd_changedValues=[...openvpn_server_advanced_ccd_changedValues, changedstr];
+        }
+
         for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length,
           openvpn_data.config.vpn_openvpn_server_advanced.ccd.length);i++)
         {
@@ -2317,20 +2330,14 @@ let RemoteCAList = [
           }
         }
 
-        if (changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length > openvpn_data.config.vpn_openvpn_server_advanced.ccd.length) 
-        {
-          let addedCount=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length-openvpn_data.config.vpn_openvpn_server_advanced.ccd.length;
-          let changedstr="Add "+addedCount+" item(s) to CCD";
-          
-          openvpn_server_advanced_ccd_changedValues=[...openvpn_server_advanced_ccd_changedValues, changedstr];
-          
 
-          for (let i=openvpn_data.config.vpn_openvpn_server_advanced.ccd.length;i <changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length; i++)
-          {
-            let new_item=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i];
-              saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd=[...saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd, new_item];
-          }
+
+        for (let i=saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length;i <changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length; i++)
+        {
+          let new_item=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i]))
+          saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd=[...saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd, new_item];
         }
+        
 
 
         OpenVPN_Server_Advanced_CCD_ConfigChangedLog.set(openvpn_server_advanced_ccd_changedValues);
@@ -4112,7 +4119,7 @@ test2
 <table>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewFailOver_Item[NewFailOver_Index].remote_host} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewFailOver_Item[Advanced_Client_Index_Selected][NewFailOver_Index].remote_host} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -4120,7 +4127,7 @@ test2
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewFailOver_Item[NewFailOver_Index].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewFailOver_Item[Advanced_Client_Index_Selected][NewFailOver_Index].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -4131,8 +4138,8 @@ test2
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Protocol</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={NewFailOver_Item[NewFailOver_Index].remote_protocol} value={0}>UDP</Radio>
-  <Radio bind:group={NewFailOver_Item[NewFailOver_Index].remote_protocol} value={1}>TCP</Radio>
+      <Radio bind:group={NewFailOver_Item[Advanced_Client_Index_Selected][NewFailOver_Index].remote_protocol} value={0}>UDP</Radio>
+  <Radio bind:group={NewFailOver_Item[Advanced_Client_Index_Selected][NewFailOver_Index].remote_protocol} value={1}>TCP</Radio>
 
 </div></td>
 

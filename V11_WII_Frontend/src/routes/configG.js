@@ -16,7 +16,8 @@ export const wanConfig=writable("");
 
 export const OpenVPN_Client_Advanced_ConfigChangedLog=writable("");
 export const OpenVPN_Client_Conn_ConfigChangedLog=writable("");
-export const OpenVPN_Server_Advanced_ConfigChangedLog=writable("");
+export const OpenVPN_Server_Advanced_CCD_ConfigChangedLog=writable("");
+export const OpenVPN_Server_Advanced_PSK_ConfigChangedLog=writable("");
 export const OpenVPN_Server_Conn_ConfigChangedLog=writable("");
 export const OpenVPN_Basic_ConfigChangedLog=writable("");
 export const ChangedOpenVPNConfig=writable("");

@@ -262,14 +262,8 @@ let RemoteCAList = [
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     };
 
     let NewClientConn=[{
@@ -283,18 +277,12 @@ let RemoteCAList = [
       "client_account_password": {
         "account": "",
         "password": ""},
-      "presharedKey": {
+      "presharedKey": { 
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     },
     {
       "name": "",
@@ -311,14 +299,8 @@ let RemoteCAList = [
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     },
     {
       "name": "",
@@ -335,14 +317,8 @@ let RemoteCAList = [
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     },
     {
       "name": "",
@@ -359,14 +335,8 @@ let RemoteCAList = [
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     },
     {
       "name": "",
@@ -383,14 +353,8 @@ let RemoteCAList = [
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     },
     {
       "name": "",
@@ -407,14 +371,8 @@ let RemoteCAList = [
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     },
     {
       "name": "",
@@ -431,14 +389,8 @@ let RemoteCAList = [
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     },
     {
       "name": "",
@@ -455,14 +407,8 @@ let RemoteCAList = [
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     },
     {
       "name": "",
@@ -479,14 +425,8 @@ let RemoteCAList = [
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     },
     {
       "name": "",
@@ -503,14 +443,8 @@ let RemoteCAList = [
         "keyUsage":0,
         "keyFileName": ""
         },
-      "remoteNetworkAccess": [{
-        "remoteSubnet": "",
-        "comment": ""}],
-      "failOver": [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-        }]
+      "remoteNetworkAccess": [],
+      "failOver": []
     }
     ];
 
@@ -555,7 +489,87 @@ let RemoteCAList = [
         "comment": ""
     };
 
-    let NewRemoteNetworkAccess_Item=[{
+    let NewRemoteNetworkAccess_Item=[[{
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    }],
+    [{
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    }],
+    [{
         "remoteSubnet": "",
         "comment": ""
     },
@@ -595,6 +609,302 @@ let RemoteCAList = [
         "remoteSubnet": "",
         "comment": ""
     }
+
+    ],
+    [{
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    }
+
+    ],
+    [{
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    }
+
+    ],
+    [{
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    }
+
+    ],
+    [{
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    }
+
+    ],
+    [{
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    }
+
+    ],
+    [{
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    }
+
+    ],
+    [{
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    },
+    {
+        "remoteSubnet": "",
+        "comment": ""
+    }
+
+    ]
 
     ];
 
@@ -611,7 +921,7 @@ let RemoteCAList = [
 
     let NewFailOver_Index;
     let NewFailOver_Modal;
-    let NewFailOver_Item=[{
+    let NewFailOver_Item=[[{
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
@@ -661,6 +971,467 @@ let RemoteCAList = [
         "remote_port": 12345,
         "remote_protocol": 0
     }
+    ],
+    [{
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ],
+    [{
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ],
+    [{
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ],
+    [{
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ],
+    [{
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ],
+    [{
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ],
+    [{
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ],
+    [{
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ],
+    [{
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ]
+
     ];
 
     
@@ -692,8 +1463,8 @@ let RemoteCAList = [
 
     function NewRemoteNetworkAccess_Item_Invoker(index)
     {
-      NewRemoteNetworkAccess_Item[index].remoteSubnet="";
-      NewRemoteNetworkAccess_Item[index].comment="";
+      NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index].remoteSubnet="";
+      NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index].comment="";
 
       NewRemoteNetworkAccess_index=index;
       NewRemoteNetworkAccess_Modal=true;
@@ -702,7 +1473,7 @@ let RemoteCAList = [
     function AddRemoteNetworkAccess_Item(index)
     {
       NewRemoteNetworkAccess_Modal=false;
-      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess,NewRemoteNetworkAccess_Item[index]];
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess,NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index]];
 
     }
 
@@ -1004,6 +1775,23 @@ let RemoteCAList = [
         }
 
 
+        if (changed_openvpn_data.config.vpn_openvpn_client_connection.length > openvpn_data.config.vpn_openvpn_client_connection.length)
+        {
+          for (let i=openvpn_data.config.vpn_openvpn_client_connection.length;i<changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+          {
+            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" PSK: KeyUsage: " + changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage+ ", KeyFile: " + changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName;
+            
+            openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
+           
+            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage=changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage;
+
+            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName=changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName;
+                    
+          }
+
+        }
+
+
         OpenVPN_Client_Advanced_PSK_ConfigChangedLog.set(openvpn_client_advanced_psk_changedValues);
         console.log(openvpn_client_advanced_psk_changedValues);
       }
@@ -1060,15 +1848,35 @@ let RemoteCAList = [
             let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length-openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;
             let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+ " add "+addedCount+" item(s) to Remote Network Access";
           
-              openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+            openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
           
 
             for (let j=openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length; j++)
             {
               let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j];
-              saved_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess=[...changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess, new_item];
+              saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess, new_item];
             }
           }
+        }
+
+        if (changed_openvpn_data.config.vpn_openvpn_client_connection.length > openvpn_data.config.vpn_openvpn_client_connection.length)
+        {
+          for (let i=openvpn_data.config.vpn_openvpn_client_connection.length;i<changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+          {
+            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length > 0)
+            {
+              let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;
+              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+ " add "+addedCount+" item(s) to Remote Network Access";
+              openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+
+              for (let j=0;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length; j++)
+              {
+                let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j];
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess, new_item];
+              }
+            }
+          }
+
         }
 
 
@@ -1078,6 +1886,108 @@ let RemoteCAList = [
 
 
     }
+
+
+    function saveClientFO()
+    {
+      console.log("save client fo");
+      if (openvpn_client_advanced_fo_changedValues.length != 0)
+      {
+        openvpn_client_advanced_fo_changedValues=[];
+      }
+
+      if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
+      {
+
+        console.log("Please save basic page first.");
+        alert("Please save basic page first.");
+
+      }
+      else
+      {
+        console.log("start to save client fo");
+
+        for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection.length,
+          openvpn_data.config.vpn_openvpn_client_connection.length);i++)
+        {
+
+          for (let j=0; j< Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length,
+          openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length);j++)
+          {
+            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_host != openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_host)
+            {
+              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" FailOver List No." + (j+1) +" has changed: remote host is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_host;
+
+              openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+              saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_host=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_host;
+
+            }
+
+            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port != openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port)
+            {
+              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" FailOver List No." + (j+1) +" has changed: remote port is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port;
+
+              openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+              saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port;
+
+            }
+
+            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol != openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol)
+            {
+              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" FailOver List No." + (j+1) +" has changed: remote protocol is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol;
+
+              openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+              saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol;
+
+            }
+           
+          }
+
+
+          if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length > openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length) 
+          {
+            let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length-openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length;
+            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+ " add "+addedCount+" item(s) to Failover";
+          
+            openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+          
+            for (let j=openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length; j++)
+            {
+              let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length[j];
+              saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver, new_item];
+            }
+          }
+        }
+
+
+        if (changed_openvpn_data.config.vpn_openvpn_client_connection.length > openvpn_data.config.vpn_openvpn_client_connection.length)
+        {
+          for (let i=openvpn_data.config.vpn_openvpn_client_connection.length;i<changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+          {
+            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length > 0)
+            {
+              let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length;
+              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+ " add "+addedCount+" item(s) to Failover";
+              openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+
+              for (let j=0;j <changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length; j++)
+              {
+                let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j];
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver, new_item];
+              }
+            }
+          }
+
+        }
+
+        OpenVPN_Client_Advanced_FO_ConfigChangedLog.set(openvpn_client_advanced_fo_changedValues);
+        console.log(openvpn_client_advanced_fo_changedValues);
+      }
+
+
+    }
+
+
 
 
     function saveClientConn()
@@ -1194,7 +2104,7 @@ let RemoteCAList = [
           for (let i=openvpn_data.config.vpn_openvpn_client_connection.length;i <changed_openvpn_data.config.vpn_openvpn_client_connection.length; i++)
           {
             let new_item=changed_openvpn_data.config.vpn_openvpn_client_connection[i];
-              saved_changed_openvpn_data.config.vpn_openvpn_client_connection.ccd=[...changed_openvpn_data.config.vpn_openvpn_client_connection, new_item];
+              saved_changed_openvpn_data.config.vpn_openvpn_client_connection=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection, new_item];
           }
         }
 
@@ -2995,7 +3905,7 @@ test2
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Subnet</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewRemoteNetworkAccess_Item[NewRemoteNetworkAccess_index].remoteSubnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Subnet</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][NewRemoteNetworkAccess_index].remoteSubnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -3004,7 +3914,7 @@ test2
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Comment</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewRemoteNetworkAccess_Item[NewRemoteNetworkAccess_index].comment} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Comment</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][NewRemoteNetworkAccess_index].comment} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -3130,7 +4040,7 @@ test2
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveClientFO}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 

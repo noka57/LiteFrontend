@@ -331,6 +331,58 @@ let RemoteCAList = [
         }
 
     
+        for (i=ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i<saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
+        {
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name !=
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: name has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host !=
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: remote_host has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            } 
+
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate !=
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: local_certificate has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }
+
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate !=
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: remote_certificate has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            } 
+
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type !=
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: type has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }  
+
+        }
 
 
         for (i=saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i < changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)

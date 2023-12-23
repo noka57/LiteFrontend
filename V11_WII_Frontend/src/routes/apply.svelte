@@ -42,7 +42,16 @@
     	IPsec_Initiator_Conn_General_ConfigChangedLog,
     	IPsec_Initiator_Conn_Subnet_ConfigChangedLog,
     	IPsec_Basic_ConfigChangedLog,
-    	ChangedIPsecConfig 
+    	ChangedIPsecConfig,
+	    OpenVPN_Client_Advanced_FO_ConfigChangedLog,
+	    OpenVPN_Client_Advanced_RNA_ConfigChangedLog,
+	    OpenVPN_Client_Advanced_PSK_ConfigChangedLog,
+	    OpenVPN_Client_Conn_ConfigChangedLog,
+	    OpenVPN_Server_Advanced_CCD_ConfigChangedLog,
+	    OpenVPN_Server_Advanced_PSK_ConfigChangedLog,
+	    OpenVPN_Server_Conn_ConfigChangedLog,
+	    OpenVPN_Basic_ConfigChangedLog,
+	    ChangedOpenVPNConfig 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -59,6 +68,7 @@
   let dreams_data="";
   let wan_data="";
   let ipsec_data="";
+  let openvpn_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -127,6 +137,18 @@
   let initiator_conn_general_changedValues=[];
   let initiator_conn_subnet_changedValues=[];
 
+
+  let ContentOpenVPN;
+  let OpenVPNBinary=null;
+  let openvpn_basic_changedValues = [];
+  let openvpn_server_conn_changedValues=[];
+  let openvpn_client_conn_changedValues=[];
+  let openvpn_server_advanced_ccd_changedValues=[];
+  let openvpn_server_advanced_psk_changedValues=[];
+  let openvpn_client_advanced_psk_changedValues=[];
+  let openvpn_client_advanced_rna_changedValues=[];
+  let openvpn_client_advanced_fo_changedValues=[];
+
   let SetCount=0;
   let SetCountOK=0;
 
@@ -179,9 +201,44 @@
       wan_data = val;
   }); 
 
-
   ChangedIPsecConfig.subscribe(val => {
       ipsec_data = val;
+  });
+
+  ChangedOpenVPNConfig.subscribe(val => {
+      openvpn_data = val;
+  });  
+
+  OpenVPN_Client_Advanced_PSK_ConfigChangedLog.subscribe(val => {
+      openvpn_client_advanced_psk_changedValues = val;
+  });
+
+  OpenVPN_Client_Advanced_RNA_ConfigChangedLog.subscribe(val => {
+      openvpn_client_advanced_rna_changedValues = val;
+  });
+
+  OpenVPN_Client_Advanced_FO_ConfigChangedLog.subscribe(val => {
+      openvpn_client_advanced_fo_changedValues = val;
+  });
+
+  OpenVPN_Client_Conn_ConfigChangedLog.subscribe(val => {
+      openvpn_client_conn_changedValues= val;
+  });
+
+  OpenVPN_Server_Advanced_CCD_ConfigChangedLog.subscribe(val => {
+      openvpn_server_advanced_ccd_changedValues= val;
+  });
+
+  OpenVPN_Server_Advanced_PSK_ConfigChangedLog.subscribe(val => {
+      openvpn_server_advanced_psk_changedValues= val;
+  });
+
+  OpenVPN_Server_Conn_ConfigChangedLog.subscribe(val => {
+      openvpn_server_conn_changedValues= val;
+  });
+
+  OpenVPN_Basic_ConfigChangedLog.subscribe(val => {
+      openvpn_basic_changedValues= val;
   });
 
 
@@ -489,6 +546,24 @@
 	  }
 	} 
 
+	async function SetOpenVPNData()
+	{
+	  const res = await fetch(window.location.origin+"/SetopenVpndata", {
+	    method: 'POST',
+	    body: ContentOpenVPN
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set openvpn data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
+	  }	
+	}
+
 
 	function CalculateTotalSetCount()
 	{
@@ -557,6 +632,18 @@
 			SetCount++;
 		}
 
+		if (openvpn_data != "" &&(openvpn_basic_changedValues.length !=0 ||
+  			openvpn_server_conn_changedValues.length !=0 ||
+  			openvpn_client_conn_changedValues.length !=0 ||
+  			openvpn_server_advanced_ccd_changedValues.length !=0 ||
+  			openvpn_server_advanced_psk_changedValues.length !=0 ||
+  			openvpn_client_advanced_psk_changedValues.length !=0 ||
+  			openvpn_client_advanced_rna_changedValues.length !=0 ||
+  			openvpn_client_advanced_fo_changedValues.length !=0)
+		)
+		{
+			SetCount++;
+		}
 	}
 
 
@@ -691,6 +778,25 @@
 
   			}
 
+				if (openvpn_data != "" &&(openvpn_basic_changedValues.length !=0 ||
+  				openvpn_server_conn_changedValues.length !=0 ||
+	  			openvpn_client_conn_changedValues.length !=0 ||
+	  			openvpn_server_advanced_ccd_changedValues.length !=0 ||
+	  			openvpn_server_advanced_psk_changedValues.length !=0 ||
+	  			openvpn_client_advanced_psk_changedValues.length !=0 ||
+	  			openvpn_client_advanced_rna_changedValues.length !=0 ||
+	  			openvpn_client_advanced_fo_changedValues.length !=0)
+				)
+				{
+					let OpenVpnString= JSON.stringify(openvpn_data, null, 0);
+  				const bytesArray = Array.from(OpenVpnString).map(char => char.charCodeAt(0));
+	    		OpenVPNBinary = new Uint8Array(bytesArray);
+	      	ContentOpenVPN=new Uint8Array(OpenVPNBinary.length+sessionBinary.length);
+	        ContentOpenVPN.set(sessionBinary,0);
+	        ContentOpenVPN.set(OpenVPNBinary, sessionBinary.length);
+	        SetOpenVPNData();
+				}
+
       }
 
 	};
@@ -699,9 +805,117 @@
 </script>
 
 
+
+
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+
+{#if openvpn_basic_changedValues.length !=0 ||
+  	openvpn_server_conn_changedValues.length !=0 ||
+  	openvpn_client_conn_changedValues.length !=0 ||
+  	openvpn_server_advanced_ccd_changedValues.length !=0 ||
+  	openvpn_server_advanced_psk_changedValues.length !=0 ||
+  	openvpn_client_advanced_psk_changedValues.length !=0 ||
+  	openvpn_client_advanced_rna_changedValues.length !=0 ||
+  	openvpn_client_advanced_fo_changedValues.length !=0 }
+  <Li>OpenVPN
+  {#if openvpn_basic_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Basic
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each openvpn_basic_changedValues as item}
+  	<Li>{item}</Li>
+	{/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if openvpn_server_conn_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Server Connection
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each openvpn_server_conn_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+	{#if openvpn_client_conn_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Client Connection
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each openvpn_client_conn_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+	{/if}
+
+
+	{#if openvpn_server_advanced_ccd_changedValues.length !=0 || openvpn_server_advanced_psk_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Server Advanced
+  	{#if openvpn_server_advanced_ccd_changedValues.length !=0}
+  		<List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  			{#each openvpn_server_advanced_ccd_changedValues as item}
+      	<Li>{item}</Li>
+   			{/each}
+  		</List>
+  	{/if}
+
+  	{#if openvpn_server_advanced_psk_changedValues.length !=0}
+  		<List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  			{#each openvpn_server_advanced_psk_changedValues as item}
+      	<Li>{item}</Li>
+   			{/each}
+  		</List>
+  	{/if}
+  </Li> 
+  </List>
+	{/if}
+
+	{#if openvpn_client_advanced_psk_changedValues.length !=0 || openvpn_client_advanced_rna_changedValues.length !=0 || openvpn_client_advanced_fo_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	Client Advanced
+  	{#if openvpn_client_advanced_psk_changedValues.length !=0}
+  		<List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  			{#each openvpn_client_advanced_psk_changedValues as item}
+      	<Li>{item}</Li>
+   			{/each}
+  		</List>
+  	{/if}
+
+  	{#if openvpn_client_advanced_rna_changedValues.length !=0}
+  		<List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  			{#each openvpn_client_advanced_rna_changedValues as item}
+      	<Li>{item}</Li>
+   			{/each}
+  		</List>
+  	{/if}
+
+  	{#if openvpn_client_advanced_fo_changedValues.length !=0}
+  		<List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  			{#each openvpn_client_advanced_fo_changedValues as item}
+      	<Li>{item}</Li>
+   			{/each}
+  		</List>
+  	{/if}
+
+  </Li> 
+  </List>
+	{/if}
+	</Li>	
+{/if}
 
 {#if  basic_changedValues.length !=0 ||
   		responder_conn_changedValues.length !=0 ||
@@ -1180,7 +1394,15 @@
   			basic_changedValues.length !=0 ||
   			responder_conn_changedValues.length !=0 ||
   			initiator_conn_general_changedValues.length !=0 ||
-  			initiator_conn_subnet_changedValues.length !=0
+  			initiator_conn_subnet_changedValues.length !=0 ||
+  			openvpn_basic_changedValues.length !=0 ||
+  			openvpn_server_conn_changedValues.length !=0 ||
+  			openvpn_client_conn_changedValues.length !=0 ||
+  			openvpn_server_advanced_ccd_changedValues.length !=0 ||
+  			openvpn_server_advanced_psk_changedValues.length !=0 ||
+  			openvpn_client_advanced_psk_changedValues.length !=0 ||
+  			openvpn_client_advanced_rna_changedValues.length !=0 ||
+  			openvpn_client_advanced_fo_changedValues.length !=0
 
 		}
 

@@ -85,15 +85,6 @@
 
 
 
-let openvpnBasic='Enable';
-let openvpnBasic2='Manual';
-let openvpnBasic3='Client';
-let vpnname="test1";
-let ID="";
-let PWD="";
-let formModalFailover=false;
-let formModalValidClient=false;
-let formModalRNA=false;
 let vpnnameList = [
     {value:"test1", name: "test1"},
     {value:"test2", name: "test2"},
@@ -122,12 +113,6 @@ let RemoteCAList = [
     {value:"ss", name: "Self-sign"},
   ];
 
-  let openvpnED="Enable";
-  let openvpnRole="Client";
-  let openvpnProtocol="UDP";
-  let openvpnInitial="Started";
-  let openvpnAuth="X509Cert";
-  let openvpnAuthS="X509Cert";
 
 
 
@@ -170,13 +155,7 @@ let RemoteCAList = [
  }
 
 
-    let formModal = false;
 
-    let VPNName="";
-    let VRAddr="";
-    let VRPort="";
-    let VProtocol="";
-    let VInitiail="";
     let openvpntakd="None";
 
 
@@ -449,7 +428,7 @@ let RemoteCAList = [
     ];
 
 
-    let Advanced_Client_Index_Selected;
+    let Advanced_Client_Index_Selected="none";
     let Modify_CCD_Modal=false;
     let Modify_CCD_Index;
 
@@ -1736,238 +1715,235 @@ let RemoteCAList = [
 
     function saveClientPSK()
     {
-      console.log("save client psk");
-      if (openvpn_client_advanced_psk_changedValues.length != 0)
-      {
-        openvpn_client_advanced_psk_changedValues=[];
-      }
-
-      if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
-      {
-
-        console.log("Please save basic page first.");
-        alert("Please save basic page first.");
-
-      }
-      else
-      {
-        console.log("start to save client psk");
-
-        for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection.length,
-          openvpn_data.config.vpn_openvpn_client_connection.length);i++)
+        console.log("save client psk");
+        if (openvpn_client_advanced_psk_changedValues.length != 0)
         {
-          if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage != openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage)
-          {
-            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" PSK KeyUsage has changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage;
-
-            openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
-            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage=changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage;
-
-          }
-
-          if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName != openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName)
-          {
-            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" PSK KeyFileName has changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName;
-
-            openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
-            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName=changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName;
-
-          }
+            openvpn_client_advanced_psk_changedValues=[];
         }
 
-
-
-        for (let i=openvpn_data.config.vpn_openvpn_client_connection.length; i < saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+        if (Advanced_Client_Index_Selected != "none")
         {
-            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" PSK: KeyUsage: " + changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage+ ", KeyFile: " + changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName;
-            
-            openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
-           
-            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage=changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage;
 
-            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName=changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName;
-                    
-        }
+          if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
+          {
 
+            console.log("Please save basic page first.");
+            alert("Please save basic page first.");
+
+          }
+          else
+          {
+            console.log("start to save client psk");
+
+            if (Advanced_Client_Index_Selected < openvpn_data.config.vpn_openvpn_client_connection.length)
+            {
+                if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage)
+                {
+                    let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" PSK KeyUsage has changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage;
+
+                    openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
+                    saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage;
+
+                }
+
+                if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName)
+                {
+                    let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" PSK KeyFileName has changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName;
+
+                    openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
+                    saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName;
+                }
+            }
+            else
+            {
+                let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" PSK KeyUsage has changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage;
+
+                openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
+
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage;
+
+
+                let changedstr2=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" PSK KeyFileName has changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName;
+
+                openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr2];
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName;
+            }
         
+            
 
-
-        OpenVPN_Client_Advanced_PSK_ConfigChangedLog.set(openvpn_client_advanced_psk_changedValues);
-        console.log(openvpn_client_advanced_psk_changedValues);
-      }
+            ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
+            OpenVPN_Client_Advanced_PSK_ConfigChangedLog.set(openvpn_client_advanced_psk_changedValues);
+            console.log(openvpn_client_advanced_psk_changedValues);
+          }
+        }
     }
 
     function saveClientRNA()
     {
-      console.log("save client rna");
-      if (openvpn_client_advanced_rna_changedValues.length != 0)
-      {
-        openvpn_client_advanced_rna_changedValues=[];
-      }
+        console.log("save client rna");
+        if (openvpn_client_advanced_rna_changedValues.length != 0)
+        {
+            openvpn_client_advanced_rna_changedValues=[];
+        }
 
-      if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
-      {
-
-        console.log("Please save basic page first.");
-        alert("Please save basic page first.");
-
-      }
-      else
-      {
-        console.log("start to save client rna");
-
-        for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection.length,
-          openvpn_data.config.vpn_openvpn_client_connection.length);i++)
+        if (Advanced_Client_Index_Selected != "none")
         {
 
-            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess));
 
-            for (let j=0; j< Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length,
-          openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length);j++)
+          if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
+          {
+
+            console.log("Please save basic page first.");
+            alert("Please save basic page first.");
+          }
+          else
+          {
+            console.log("start to save client rna");
+            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess));
+
+            if (Advanced_Client_Index_Selected < openvpn_data.config.vpn_openvpn_client_connection.length)
             {
 
-                if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet != openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet)
+                for (let j=0; j< Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length,
+              openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length);j++)
                 {
 
-                    let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" Remote Network Access List No." + (j+1) +" has changed: remote subnet is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].remoteSubnet;
+                    if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[j].remoteSubnet != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[j].remoteSubnet)
+                    {
 
+                        let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Remote Network Access List No." + (j+1) +" has changed: remote subnet is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[j].remoteSubnet;
+
+                        openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+         
+
+                    }
+
+                    if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[j].comment != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[j].comment)
+                    {
+                        let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Remote Network Access List No." + (j+1) +" has changed: comment is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[j].comment;
+
+                        openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+
+                    }
+                }
+
+                if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length > openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length)
+                {
+                    let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length-openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length;
+               
+                    let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Remote Network Access";
+              
                     openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
- 
+                }
+            }
+            else
+            {
+                if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length > 0)
+                {
+                    let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length;
+
+
+                    let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Remote Network Access";
+              
+                    openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
 
                 }
 
-                if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment != openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment)
-                {
-                    let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" Remote Network Access List No." + (j+1) +" has changed: comment is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment;
-
-                    openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
-
-                }
             }
 
-
- 
-            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length > openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length)
-            {
-                let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length-openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;
-           
-                let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+ " add "+addedCount+" item(s) to Remote Network Access";
-          
-                openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
-            }
-
+            ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
+            OpenVPN_Client_Advanced_RNA_ConfigChangedLog.set(openvpn_client_advanced_rna_changedValues);
+            console.log(openvpn_client_advanced_rna_changedValues);
+          }
         }
-        
-
-
-        for (let i=openvpn_data.config.vpn_openvpn_client_connection.length;i<saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
-        {
-
-            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess));
-  
-
-            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length > 0)
-            {
-                let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess.length;
-                let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+ " add "+addedCount+" item(s) to Remote Network Access";
-                openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
-            }
-            
-        }
-
-
-        OpenVPN_Client_Advanced_RNA_ConfigChangedLog.set(openvpn_client_advanced_rna_changedValues);
-        console.log(openvpn_client_advanced_rna_changedValues);
-      }
-
 
     }
 
 
     function saveClientFO()
     {
-      console.log("save client fo");
-      if (openvpn_client_advanced_fo_changedValues.length != 0)
-      {
-        openvpn_client_advanced_fo_changedValues=[];
-      }
+        console.log("save client fo");
+        if (openvpn_client_advanced_fo_changedValues.length != 0)
+        {
+            openvpn_client_advanced_fo_changedValues=[];
+        }
 
-      if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
-      {
-
-        console.log("Please save basic page first.");
-        alert("Please save basic page first.");
-
-      }
-      else
-      {
-        console.log("start to save client fo");
-
-        for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection.length,
-          openvpn_data.config.vpn_openvpn_client_connection.length);i++)
+        if (Advanced_Client_Index_Selected != "none")
         {
 
-            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver));
-
-            for (let j=0; j< Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length,
-            openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length);j++)
+            if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
             {
-                if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_host != openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_host)
-                {
-                    let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" FailOver List No." + (j+1) +"    has changed: remote host is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_host;
 
-                    openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+                console.log("Please save basic page first.");
+                alert("Please save basic page first.");
+
+            }
+            else
+            {
+                console.log("start to save client fo");
+
+
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver));
+
+
+                if (Advanced_Client_Index_Selected < openvpn_data.config.vpn_openvpn_client_connection.length)
+                {
+                    for (let j=0; j< Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length,
+                    openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length);j++)
+                    {
+                        if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_host != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_host)
+                        {
+                            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" FailOver List No." + (j+1) +"    has changed: remote host is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_host;
+
+                            openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+
+                        }
+
+                        if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_port != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_port)
+                        {
+                            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" FailOver List No." + (j+1) +" has changed: remote port is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_port;
+
+                            openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+
+                        }
+
+                        if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_protocol != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_protocol)
+                        {
+                            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" FailOver List No." + (j+1) +" has changed: remote protocol is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_protocol;
+
+                            openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+                        }           
+                    }
+
+                    if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length > openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length)
+                    {
+                        let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length-openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;
+                       
+                        let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Failover";
+                      
+                        openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+                    }
+                }
+                else
+                {
+                    if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length > 0)
+                    {
+                        let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;
+                       
+                        let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Failover";
+                      
+                        openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+
+                    }
 
                 }
 
-                if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port != openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port)
-                {
-                  let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" FailOver List No." + (j+1) +" has changed: remote port is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port;
 
-                  openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
-
-                }
-
-                if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol != openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol)
-                {
-                  let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+" FailOver List No." + (j+1) +" has changed: remote protocol is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol;
-
-                  openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
-                }           
-            }
-
-
-            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length > openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length)
-            {
-                let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length-openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length;
-               
-                let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+ " add "+addedCount+" item(s) to Failover";
-              
-                openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+                ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
+                OpenVPN_Client_Advanced_FO_ConfigChangedLog.set(openvpn_client_advanced_fo_changedValues);
+                console.log(openvpn_client_advanced_fo_changedValues);
             }
         }
-
-
-        for (let i=openvpn_data.config.vpn_openvpn_client_connection.length;i<saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
-        {
-
-            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver));
-  
-
-            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length > 0)
-            {
-                let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver.length;
-                let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[i].name+ " add "+addedCount+" item(s) to Failover";
-                openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
-            }
-            
-        }
-
-        OpenVPN_Client_Advanced_FO_ConfigChangedLog.set(openvpn_client_advanced_fo_changedValues);
-        console.log(openvpn_client_advanced_fo_changedValues);
-      }
-
-
     }
 
 
@@ -2152,7 +2128,7 @@ let RemoteCAList = [
           saved_changed_openvpn_data.config.vpn_openvpn_client_connection=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection, new_item];
         }
 
-
+        ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
         OpenVPN_Client_Conn_ConfigChangedLog.set(openvpn_client_conn_changedValues);
         console.log(openvpn_client_conn_changedValues);
 
@@ -2296,7 +2272,7 @@ let RemoteCAList = [
           }
         }
 
-
+        ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
         OpenVPN_Server_Conn_ConfigChangedLog.set(openvpn_server_conn_changedValues);        
         console.log(openvpn_server_conn_changedValues);
       }
@@ -2367,6 +2343,7 @@ let RemoteCAList = [
 
         saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd))
 
+        ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
         OpenVPN_Server_Advanced_CCD_ConfigChangedLog.set(openvpn_server_advanced_ccd_changedValues);
         console.log(openvpn_server_advanced_ccd_changedValues);
 
@@ -2417,9 +2394,8 @@ let RemoteCAList = [
 
         }
 
-
+        ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
         OpenVPN_Server_Advanced_PSK_ConfigChangedLog.set(openvpn_server_advanced_psk_changedValues);
-
         console.log(openvpn_server_advanced_psk_changedValues);
       }
     }

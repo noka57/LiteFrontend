@@ -36,6 +36,14 @@
     	IPsec_Initiator_Conn_General_ConfigChangedLog,
     	IPsec_Initiator_Conn_Subnet_ConfigChangedLog,
     	IPsec_Basic_ConfigChangedLog,
+    	OpenVPN_Client_Advanced_FO_ConfigChangedLog,
+	    OpenVPN_Client_Advanced_RNA_ConfigChangedLog,
+	    OpenVPN_Client_Advanced_PSK_ConfigChangedLog,
+	    OpenVPN_Client_Conn_ConfigChangedLog,
+	    OpenVPN_Server_Advanced_CCD_ConfigChangedLog,
+	    OpenVPN_Server_Advanced_PSK_ConfigChangedLog,
+	    OpenVPN_Server_Conn_ConfigChangedLog,
+	    OpenVPN_Basic_ConfigChangedLog,
     	dashboadData
   	} from "./configG.js"
 
@@ -149,6 +157,14 @@
   	let responder_conn_changedValues=[];
   	let initiator_conn_general_changedValues=[];
   	let initiator_conn_subnet_changedValues=[];
+  	let openvpn_basic_changedValues = [];
+    let openvpn_server_conn_changedValues=[];
+    let openvpn_client_conn_changedValues=[];
+    let openvpn_server_advanced_ccd_changedValues=[];
+    let openvpn_server_advanced_psk_changedValues=[];
+    let openvpn_client_advanced_psk_changedValues=[];
+    let openvpn_client_advanced_rna_changedValues=[];
+    let openvpn_client_advanced_fo_changedValues=[];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -167,7 +183,15 @@
 
   	function JudgeChangedOrNot()
   	{
-  		if (LANchangedValues.length != 0 ||
+  		if (openvpn_basic_changedValues.length !=0 ||
+  			openvpn_server_conn_changedValues.length !=0 ||
+  			openvpn_client_conn_changedValues.length !=0 ||
+  			openvpn_server_advanced_ccd_changedValues.length !=0 ||
+  			openvpn_server_advanced_psk_changedValues.length !=0 ||
+  			openvpn_client_advanced_psk_changedValues.length !=0 ||
+  			openvpn_client_advanced_rna_changedValues.length !=0 ||
+  			openvpn_client_advanced_fo_changedValues.length !=0 ||
+  			LANchangedValues.length != 0 ||
   			NAT_loopback_changedValues.length != 0 ||
   			NAT_virtualServer_changedValues.length !=0 ||
   			NAT_virtualComputer_changedValues.length !=0 ||
@@ -380,6 +404,47 @@
 	    basic_changedValues = val;
 	    JudgeChangedOrNot();
 	});
+
+    OpenVPN_Client_Advanced_PSK_ConfigChangedLog.subscribe(val => {
+        openvpn_client_advanced_psk_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    OpenVPN_Client_Advanced_RNA_ConfigChangedLog.subscribe(val => {
+        openvpn_client_advanced_rna_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    OpenVPN_Client_Advanced_FO_ConfigChangedLog.subscribe(val => {
+        openvpn_client_advanced_fo_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    OpenVPN_Client_Conn_ConfigChangedLog.subscribe(val => {
+        openvpn_client_conn_changedValues= val;
+    	JudgeChangedOrNot();
+    });
+
+    OpenVPN_Server_Advanced_CCD_ConfigChangedLog.subscribe(val => {
+        openvpn_server_advanced_ccd_changedValues= val;
+    	JudgeChangedOrNot();
+    });
+
+    OpenVPN_Server_Advanced_PSK_ConfigChangedLog.subscribe(val => {
+        openvpn_server_advanced_psk_changedValues= val;
+    	JudgeChangedOrNot();
+    });
+
+    OpenVPN_Server_Conn_ConfigChangedLog.subscribe(val => {
+        openvpn_server_conn_changedValues= val;
+    	JudgeChangedOrNot();
+    });
+
+    OpenVPN_Basic_ConfigChangedLog.subscribe(val => {
+        openvpn_basic_changedValues= val;
+    	JudgeChangedOrNot();
+    });
+
 
 
   	sessionidG.subscribe(val => {

@@ -557,3 +557,62 @@
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 mr-1"><path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Add new connection
   </button>
 </Dropdown>  ]
+
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver));
+
+
+                if (Advanced_Client_Index_Selected < openvpn_data.config.vpn_openvpn_client_connection.length)
+                {
+                    for (let j=0; j< Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length,
+                    openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length);j++)
+                    {
+                        if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_host != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_host)
+                        {
+                            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" FailOver List No." + (j+1) +"    has changed: remote host is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_host;
+
+                            openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+
+                        }
+
+                        if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_port != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_port)
+                        {
+                            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" FailOver List No." + (j+1) +" has changed: remote port is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_port;
+
+                            openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+
+                        }
+
+                        if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_protocol != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_protocol)
+                        {
+                            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" FailOver List No." + (j+1) +" has changed: remote protocol is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[j].remote_protocol;
+
+                            openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+                        }           
+                    }
+
+                    if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length > openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length)
+                    {
+                        let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length-openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;
+                       
+                        let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Failover";
+                      
+                        openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+                    }
+                }
+                else
+                {
+                    if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length > 0)
+                    {
+                        let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;
+                       
+                        let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Failover";
+                      
+                        openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+
+                    }
+
+                }
+
+
+
+

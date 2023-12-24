@@ -2,6 +2,16 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, FloatingLabelInput, Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Datepicker } from 'flowbite-svelte';
 
 
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
+
+  import { 
+    genericMQTTConfig,
+    GenericMQTTConfigChangedLog,
+    ChangedGenericMQTTConfig
+  } from "./configG.js"
+
+
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
 
    let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
@@ -9,7 +19,46 @@
    let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
-   let formModal=false;
+
+
+  let formModal = false;
+  let NewformModal = false;
+
+
+
+  let generic_mqtt_data="";
+  let changed_generic_mqtt_data = {};
+  let saved_changed_generic_mqtt_data ={};
+
+  let generic_mqtt_changedValues = [];
+  let generic_mqtt_current_index;
+  let new_generic_mqtt_index;
+
+  let getDataReady=0;
+
+
+  let sessionid;
+  let sessionBinary;
+  sessionidG.subscribe(val => {
+     sessionid = val;
+  });
+
+
+  genericMQTTConfig.subscribe(val => {
+      generic_mqtt_data = val;
+  });
+
+
+  GenericMQTTConfigChangedLog.subscribe(val => {
+      generic_mqtt_changedValues = val;
+  });
+
+  ChangedGenericMQTTConfig.subscribe(val => {
+      saved_changed_generic_mqtt_data = val;
+  });
+
+
+
    let gPenable=false;
 
    let BrokerAddr="1.1.1.1";
@@ -37,6 +86,59 @@
       BrokerPort = 1883;
     }
   }
+
+
+  async function getStaticRouteData () {
+    const res = await fetch(window.location.origin+"/getGenericMQTTData", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      generic_mqtt_data =await res.json();
+      console.log(generic_mqtt_data);
+      genericMQTTConfig.set(generic_mqtt_data);
+
+      changed_generic_mqtt_data = JSON.parse(JSON.stringify(generic_mqtt_data));
+      saved_changed_generic_mqtt_data= JSON.parse(JSON.stringify(generic_mqtt_data));
+      ChangedGenericMQTTConfig.set(saved_changed_generic_mqtt_data);
+      getDataReady=1;
+    }
+  }
+
+
+
+  onMount(() => {
+
+    console.log("generic mqtt sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid && generic_mqtt_data=="")
+    {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+        getGenericMQTTData();
+    }
+    else if(sessionid && generic_mqtt_data!="")
+    {
+        getDataReady=1;
+        if (generic_mqtt_changedValues.length != 0)
+        {
+          changed_generic_mqtt_data = JSON.parse(JSON.stringify(saved_changed_generic_mqtt_data));
+        }
+        else
+        {
+          changed_generic_mqtt_data = JSON.parse(JSON.stringify(generic_mqtt_data));        
+        }
+
+
+    }
+
+  });
+
 
 
  </script>

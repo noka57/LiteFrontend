@@ -45,6 +45,7 @@
 	    OpenVPN_Server_Conn_ConfigChangedLog,
 	    OpenVPN_Basic_ConfigChangedLog,
 	    GenericMQTTConfigChangedLog,
+	    RemoteServiceConfigChangedLog,
     	dashboadData
   	} from "./configG.js"
 
@@ -167,6 +168,7 @@
     let openvpn_client_advanced_rna_changedValues=[];
     let openvpn_client_advanced_fo_changedValues=[];
     let generic_mqtt_changedValues=[];
+    let remote_service_changedValues = [];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -185,7 +187,8 @@
 
   	function JudgeChangedOrNot()
   	{
-  		if (generic_mqtt_changedValues.length !=0 ||
+  		if (remote_service_changedValues.length !=0 ||
+  			generic_mqtt_changedValues.length !=0 ||
   			openvpn_basic_changedValues.length !=0 ||
   			openvpn_server_conn_changedValues.length !=0 ||
   			openvpn_client_conn_changedValues.length !=0 ||
@@ -453,6 +456,10 @@
         JudgeChangedOrNot();
   	});
 
+  	RemoteServiceConfigChangedLog.subscribe(val => {
+      	remote_service_changedValues = val;
+        JudgeChangedOrNot();
+    });
 
 
   	sessionidG.subscribe(val => {

@@ -53,7 +53,9 @@
 	    OpenVPN_Basic_ConfigChangedLog,
 	    ChangedOpenVPNConfig,
 	    GenericMQTTConfigChangedLog,
-    	ChangedGenericMQTTConfig 
+    	ChangedGenericMQTTConfig,
+    	RemoteServiceConfigChangedLog,
+    	ChangedRemoteServiceConfig 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -72,6 +74,7 @@
   let ipsec_data="";
   let openvpn_data="";
   let generic_mqtt_data="";
+  let remote_service_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -156,6 +159,11 @@
   let GenericMQTTBinary=null;
   let generic_mqtt_changedValues=[];
 
+
+  let ContentRemoteService;
+  let RemoteServiceBinary=null;
+  let remote_service_changedValues=[];
+
   let SetCount=0;
   let SetCountOK=0;
 
@@ -218,7 +226,17 @@
 
   ChangedGenericMQTTConfig.subscribe(val => {
       generic_mqtt_data = val;
-  });  
+  }); 
+
+  ChangedRemoteServiceConfig.subscribe(val => {
+      remote_service_data = val;
+  });
+
+
+
+  RemoteServiceConfigChangedLog.subscribe(val => {
+      remote_service_changedValues = val;
+  });
 
 
   GenericMQTTConfigChangedLog.subscribe(val => {
@@ -599,6 +617,24 @@
 	  }	
 	}
 
+	async function SetRemoteServiceData()
+	{
+	  const res = await fetch(window.location.origin+"/SetRemoteservice", {
+	    method: 'POST',
+	    body: ContentRemoteService
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set remote service data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
+	  }		
+	}
+
 
 	function CalculateTotalSetCount()
 	{
@@ -683,6 +719,11 @@
 		if (generic_mqtt_data != "" && generic_mqtt_changedValues.length != 0)
 		{
 			SetCount++;	
+		}
+
+		if (remote_service_data != "" && remote_service_changedValues.length!=0)
+		{
+			SetCount++;			
 		}
 
 	}
@@ -849,6 +890,18 @@
 	        SetGenericMQTTData();
 				}
 
+				if (remote_service_data != "" && remote_service_changedValues.length!=0)
+				{
+					let RemoteServiceString = JSON.stringify(remote_service_data, null, 0);
+					const bytesArray = Array.from(RemoteServiceString).map(char => char.charCodeAt(0));
+	    		RemoteServiceBinary = new Uint8Array(bytesArray);
+	      	ContentRemoteService=new Uint8Array(RemoteServiceBinary.length+sessionBinary.length);
+	        ContentRemoteService.set(sessionBinary,0);
+	        ContentRemoteService.set(RemoteServiceBinary, sessionBinary.length);
+	        SetRemoteServiceData();
+
+				}
+
       }
 
 	};
@@ -862,6 +915,17 @@
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+{#if remote_service_changedValues.length !=0}
+	<Li>Remote Service
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each remote_service_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+	</Li>
+{/if}
+
+
 {#if generic_mqtt_changedValues.length !=0}
 	<Li>Generic MQTT
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
@@ -1465,7 +1529,8 @@
   			openvpn_client_advanced_psk_changedValues.length !=0 ||
   			openvpn_client_advanced_rna_changedValues.length !=0 ||
   			openvpn_client_advanced_fo_changedValues.length !=0 ||
-  			generic_mqtt_changedValues.length !=0
+  			generic_mqtt_changedValues.length !=0 ||
+  			remote_service_changedValues.length !=0
 
 		}
 

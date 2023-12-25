@@ -1,3 +1,5 @@
+      <TableBodyCell class="w-10" style="-webkit-text-security: disc"></TableBodyCell>
+
 <script>
   import { Fileupload, Label, Button } from 'flowbite-svelte'
   let value;

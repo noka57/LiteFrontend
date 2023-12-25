@@ -51,7 +51,9 @@
 	    OpenVPN_Server_Advanced_PSK_ConfigChangedLog,
 	    OpenVPN_Server_Conn_ConfigChangedLog,
 	    OpenVPN_Basic_ConfigChangedLog,
-	    ChangedOpenVPNConfig 
+	    ChangedOpenVPNConfig,
+	    GenericMQTTConfigChangedLog,
+    	ChangedGenericMQTTConfig 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -69,6 +71,7 @@
   let wan_data="";
   let ipsec_data="";
   let openvpn_data="";
+  let generic_mqtt_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -149,6 +152,10 @@
   let openvpn_client_advanced_rna_changedValues=[];
   let openvpn_client_advanced_fo_changedValues=[];
 
+  let ContentGenericMQTT;
+  let GenericMQTTBinary=null;
+  let generic_mqtt_changedValues=[];
+
   let SetCount=0;
   let SetCountOK=0;
 
@@ -207,7 +214,17 @@
 
   ChangedOpenVPNConfig.subscribe(val => {
       openvpn_data = val;
+  });
+
+  ChangedGenericMQTTConfig.subscribe(val => {
+      generic_mqtt_data = val;
   });  
+
+
+  GenericMQTTConfigChangedLog.subscribe(val => {
+      generic_mqtt_changedValues = val;
+  });
+
 
   OpenVPN_Client_Advanced_PSK_ConfigChangedLog.subscribe(val => {
       openvpn_client_advanced_psk_changedValues = val;
@@ -564,6 +581,24 @@
 	  }	
 	}
 
+	async function SetGenericMQTTData()
+	{
+	  const res = await fetch(window.location.origin+"/SETgenericMqttdata", {
+	    method: 'POST',
+	    body: ContentGenericMQTT
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set generic mqtt data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
+	  }	
+	}
+
 
 	function CalculateTotalSetCount()
 	{
@@ -644,6 +679,12 @@
 		{
 			SetCount++;
 		}
+
+		if (generic_mqtt_data != "" && generic_mqtt_changedValues.length != 0)
+		{
+			SetCount++;	
+		}
+
 	}
 
 
@@ -797,6 +838,17 @@
 	        SetOpenVPNData();
 				}
 
+				if (generic_mqtt_data != "" && generic_mqtt_changedValues.length !=0)
+				{
+					let GenericMQTTString = JSON.stringify(generic_mqtt_data, null, 0);
+					const bytesArray = Array.from(GenericMQTTString).map(char => char.charCodeAt(0));
+	    		GenericMQTTBinary = new Uint8Array(bytesArray);
+	      	ContentGenericMQTT=new Uint8Array(GenericMQTTBinary.length+sessionBinary.length);
+	        ContentGenericMQTT.set(sessionBinary,0);
+	        ContentGenericMQTT.set(GenericMQTTBinary, sessionBinary.length);
+	        SetGenericMQTTData();
+				}
+
       }
 
 	};
@@ -810,6 +862,16 @@
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+{#if generic_mqtt_changedValues.length !=0}
+	<Li>Generic MQTT
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each generic_mqtt_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+	</Li>
+
+{/if}
 
 {#if openvpn_basic_changedValues.length !=0 ||
   	openvpn_server_conn_changedValues.length !=0 ||
@@ -1402,7 +1464,8 @@
   			openvpn_server_advanced_psk_changedValues.length !=0 ||
   			openvpn_client_advanced_psk_changedValues.length !=0 ||
   			openvpn_client_advanced_rna_changedValues.length !=0 ||
-  			openvpn_client_advanced_fo_changedValues.length !=0
+  			openvpn_client_advanced_fo_changedValues.length !=0 ||
+  			generic_mqtt_changedValues.length !=0
 
 		}
 

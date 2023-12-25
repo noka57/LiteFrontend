@@ -19,13 +19,6 @@
    let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
-
-
-  let formModal = false;
-  let NewformModal = false;
-
-
-
   let generic_mqtt_data="";
   let changed_generic_mqtt_data = {};
   let saved_changed_generic_mqtt_data ={};
@@ -58,37 +51,324 @@
   });
 
 
+  let modify_Modal=false;
+  let modify_index;
 
-   let gPenable=false;
+  let BackupItem={
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
+  };
 
-   let BrokerAddr="1.1.1.1";
-   let BrokerPort;
-   let TLS='Yes';
-   let ClientID;
-   let Account;
-   let Password;
-   let QoS;
-   let Kalive;
-   let DataC="gzip";
-
-   let localList = [
-    {value:"aws", name: "AWS"},
-    {value:"azure", name: "Azure"},
-    {value:"self", name: "selfSign"},
-  ];
-
-
-  $: {
-    // Use a reactive statement to update BrokerPort based on the value of TLS
-    if (TLS === 'Yes') {
-      BrokerPort = 8883;
-    } else {
-      BrokerPort = 1883;
-    }
+  let NewItem=[
+  {
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
+  },
+  {
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
+  },
+  {
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
+  },
+  {
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
+  },
+  {
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
+  },
+  {
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
+  }
+  ,{
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
+  },
+  {
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
+  },
+  {
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
+  },
+  {
+    enable: 0,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0
   }
 
 
-  async function getStaticRouteData () {
+  ];
+
+  let new_item_index;
+  let new_modal;
+
+
+  function NewMQTT_Item_Invoker(index)
+  {
+    NewItem[index].enable=false;
+    NewItem[index].brokerHost=""
+    NewItem[index].brokerPort=0;
+    NewItem[index].tls=0;
+    NewItem[index].brokerCaCert="";
+    NewItem[index].clientCert="";
+    NewItem[index].clientId="";
+    NewItem[index].account="";
+    NewItem[index].password="";
+    NewItem[index].qos=0;
+    NewItem[index].keepAliveInterval=60;    
+    NewItem[index].dataCompression=0;        
+
+    new_item_index=index;
+    new_modal = true;
+  }
+
+  function AddNewMQTT(index)
+  {
+    new_modal = false;
+
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile=[...changed_generic_mqtt_data.config.cloud_genericMqtt_profile,NewItem[index]];
+  }
+
+
+
+  function TriggerModifyMQTT(index)
+  {
+    modify_Modal=true;
+    modify_index=index;
+    BackupItem.enable=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].enable;
+    BackupItem.brokerHost=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].brokerHost;
+    BackupItem.brokerPort=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].brokerPort;
+    BackupItem.tls=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].tls;
+    BackupItem.brokerCaCert=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].brokerCaCert;
+    BackupItem.clientCert=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].clientCert;
+    BackupItem.clientId=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].clientId;
+    BackupItem.account=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].account;
+    BackupItem.password=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].password;
+    BackupItem.qos=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].qos;
+    BackupItem.keepAliveInterval=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].keepAliveInterval;    
+    BackupItem.dataCompression=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].dataCompression;   
+
+  }
+
+  function NoModifyMQTT(index)
+  {
+    modify_Modal=false;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].enable=BackupItem.enable;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].brokerHost=BackupItem.brokerHost;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].brokerPort=BackupItem.brokerPort;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].tls=BackupItem.tls;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].brokerCaCert=BackupItem.brokerCaCert;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].clientCert=BackupItem.clientCert;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].clientId=BackupItem.clientId;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].account=BackupItem.account;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].password=BackupItem.password;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].qos=BackupItem.qos;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].keepAliveInterval=BackupItem.keepAliveInterval;    
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].dataCompression=BackupItem.dataCompression;
+
+  }
+
+  function ModifyMQTT(index)
+  {
+    modify_Modal=false;
+  }
+
+
+  function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
+  {
+      for (const key in obj1) 
+      {
+        if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+        {
+          if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) 
+          {
+            for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+            {
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+            }
+
+            if (obj1[key].length > obj2[key].length) 
+            {
+              let addedCount=obj1[key].length-obj2[key].length;
+              let changedstr="Add "+addedCount+" item(s) to "+ key;
+              generic_mqtt_changedValues=[...generic_mqtt_changedValues, changedstr];
+            }
+            else if (obj1[key].length < obj2[key].length)
+            {
+              let deletedCount=obj2[key].length-obj1[key].length;
+              let changedstr="Delete "+deletedCount+" item(s) from "+ key;
+              generic_mqtt_changedValues=[...generic_mqtt_changedValues, changedstr];
+            }
+          }
+          else
+          {
+            compareObjects(obj1[key], obj2[key], type, 0,0);
+          }
+        } 
+        else if (obj1[key] != obj2[key]) 
+        {
+          let changedstr="";
+          if (isArrayItem == 0)
+          {
+            changedstr="Value of "+key+" has changed to "+obj1[key];
+          }
+          else
+          {
+            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+          }
+          
+          generic_mqtt_changedValues=[...generic_mqtt_changedValues, changedstr];
+
+        }
+      }
+  }
+
+
+  function saveMQTT()
+  {
+    console.log("save MQTT");
+    if (generic_mqtt_changedValues.length != 0)
+    {
+      generic_mqtt_changedValues=[];
+    }
+
+    for (let i = 0; i < Math.min(changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length, generic_mqtt_data.config.cloud_genericMqtt_profile.length); i++) 
+    {
+      compareObjects(changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i], generic_mqtt_data.config.cloud_genericMqtt_profile[i], 0, 1,i+1);
+    }
+
+    if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length > generic_mqtt_data.config.cloud_genericMqtt_profile.length)
+    {
+      let addedCount=changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length-generic_mqtt_data.config.cloud_genericMqtt_profile.length;
+      let changedstr="Add "+addedCount+" item(s) to Profile List";
+      generic_mqtt_changedValues=[...generic_mqtt_changedValues, changedstr];
+    }
+
+
+    GenericMQTTConfigChangedLog.set(generic_mqtt_changedValues);
+    saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile=JSON.parse(JSON.stringify(changed_generic_mqtt_data.config.cloud_genericMqtt_profile));
+
+    ChangedGenericMQTTConfig.set(saved_changed_generic_mqtt_data);
+    console.log(generic_mqtt_changedValues);
+
+  }
+
+  async function getGenericMQTTData () {
     const res = await fetch(window.location.origin+"/getGenericMQTTData", {
       method: 'POST',
       body: sessionBinary
@@ -160,16 +440,21 @@
     <TableHeadCell class="!p-1">TLS</TableHeadCell>
     <TableHeadCell>Client ID</TableHeadCell>
     <TableHeadCell>Account</TableHeadCell>
-    <TableHeadCell>Password</TableHeadCell>
     <TableHeadCell>QoS</TableHeadCell>
     <TableHeadCell class="w-18">Keep Alive Interval (sec)</TableHeadCell>
     <TableHeadCell class="w-18">Data Compression</TableHeadCell>
      </TableHead>
   <TableBody>
+
+
+{#if getDataReady == 1}
+{#each changed_generic_mqtt_data.config.cloud_genericMqtt_profile as gMQTT, index}
+
+
     <TableBodyRow>
     <TableBodyCell class="!p-1"></TableBodyCell>
       <TableBodyCell class="!p-1 w-4">
-<button on:click={() => formModal = true}>
+<button on:click={() => TriggerModifyMQTT(index)}>
 
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -180,37 +465,48 @@
 
 
        </TableBodyCell>
-               <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
-
-
+               <TableBodyCell class="!p-1">  </TableBodyCell>
+{#if gMQTT.enable}
+    <TableBodyCell class="w-4">1</TableBodyCell>
+{:else}
     <TableBodyCell class="w-4">0</TableBodyCell>
+{/if}
       <TableBodyCell class="!p-1 w-4">1</TableBodyCell>
-      <TableBodyCell class="w-18">1.1.1.1</TableBodyCell>
-      <TableBodyCell class="w-18">8883</TableBodyCell>
+      <TableBodyCell class="w-18">{gMQTT.brokerHost}</TableBodyCell>
+      <TableBodyCell class="w-18">{gMQTT.brokerPort}</TableBodyCell>
+{#if gMQTT.tls == 0}
+      <TableBodyCell class="w-4 !p-1">No</TableBodyCell>
+{:else if gMQTT.tls==1}
       <TableBodyCell class="w-4 !p-1">Yes</TableBodyCell>
-      <TableBodyCell class="w-10">ew50v12345678</TableBodyCell>
-      <TableBodyCell class="w-10">mqttAccount</TableBodyCell>
-      <TableBodyCell class="w-10" style="-webkit-text-security: disc">abcdefgh</TableBodyCell>
-      <TableBodyCell class="w-10">0</TableBodyCell>
-      <TableBodyCell class="w-18">60</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{gMQTT.clientId}</TableBodyCell>
+      <TableBodyCell class="w-10">{gMQTT.account}</TableBodyCell>
+      <TableBodyCell class="w-10">{gMQTT.qos}</TableBodyCell>
+      <TableBodyCell class="w-18">{gMQTT.keepAliveInterval}</TableBodyCell>
+{#if gMQTT.dataCompression == 0}
+      <TableBodyCell class="w-18">None</TableBodyCell>
+{:else if gMQTT.dataCompression == 1}
       <TableBodyCell class="w-18">gzip</TableBodyCell>
-
+{/if}
     </TableBodyRow>
+{/each}
+{/if}
 
 
  <TableBodyRow>
     <TableBodyCell class="!p-1">
-    <button on:click={() => formModal = true}>
+
+{#if getDataReady == 1}
+{#if changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length < 10}
+    <button on:click={() => NewMQTT_Item_Invoker(changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
+
+{/if} 
+{/if} 
 </TableBodyCell>
     <TableBodyCell class="!p-1"></TableBodyCell>
     <TableBodyCell class="!p-1"></TableBodyCell>
@@ -222,7 +518,6 @@
       <TableBodyCell class="w-4 !p-1"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10" style="-webkit-text-security: disc"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
@@ -242,7 +537,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveMQTT}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -253,24 +548,22 @@
 
  </TableBody>
 
-
-<Modal bind:open={formModal} autoclose={false} size="lg" class="w-full">
-
+<Modal bind:open={modify_Modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={gPenable}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].enable}>
+{/if}
   Enable
 </label>
-<p class="mt-4"></p>
-
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyMQTT(modify_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
 
 
 <table>
 
-
-
-
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={BrokerAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].brokerHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -278,7 +571,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={BrokerPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].brokerPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -291,8 +584,8 @@
   </td>
 
     <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={TLS} value='Yes' >Yes</Radio>
-  <Radio class="pb-2" bind:group={TLS} value='No' >No</Radio>
+  <Radio class="pb-2" bind:group={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].tls} value={1} >Yes</Radio>
+  <Radio class="pb-2" bind:group={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].tls} value={0} >No</Radio>
 
 </div></td>
 </tr>
@@ -302,24 +595,23 @@
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker CA Certificate</p></td>
     <td class= "pl-4 pt-4">
 
-{#if TLS == 'No'}    
-  <Select class="mt-2 disabled:cursor-not-allowed disabled:opacity-50" items={localList} placeholder="None" disabled/>
-{:else}
-  <Select class="mt-2" items={localList} placeholder="None" />
+{#if changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].tls == 0}    
+  None
+{:else if changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].tls == 1}
+ {changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].brokerCaCert}
 {/if}
 
     </td>
 
-
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Client Certificate</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
     <td class= "pl-4 pt-4">
-{#if TLS == 'No'}   
-  <Select class="mt-2 disabled:cursor-not-allowed disabled:opacity-50" items={localList} placeholder="None" disabled/>
-{:else}
-  <Select class="mt-2" items={localList} placeholder="None" />
+{#if changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].tls == 0}   
+ None
+{:else if changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].tls == 1}
+   {changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].clientCert}
 {/if}
 
     </td>
@@ -329,7 +621,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Client ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={ClientID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Client ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].clientId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -338,33 +630,35 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Account</p></td><td class="pl-5 pt-5"><input type="text" bind:value={Account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Account</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={Password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-</tr>
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">QoS</p></td><td class="pl-5 pt-5"><input type="number" bind:value={QoS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Keep Alive Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={Kalive} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">QoS</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].qos} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Keep Alive Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].keepAliveInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
+
+</tr>
+
+
 
 <tr>
 <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Compression</p></td>
       <td class="pl-5 pt-5">
 
 <div class="flex gap-4">
-  <Radio bind:group={DataC} value='No' >No</Radio>
-  <Radio bind:group={DataC} value='gzip' > gzip</Radio>
+  <Radio bind:group={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataCompression} value={0} >No</Radio>
+  <Radio bind:group={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataCompression} value={1} >gzip</Radio>
 
 </div>
 
@@ -385,7 +679,145 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyMQTT(modify_index)}>Modify</Button></td>
+
+  </tr>
+
+</table>
+
+  </form>
+</Modal>
+<Modal bind:open={new_modal} size="lg" class="w-full" autoclose>
+
+<label>
+  <input type="checkbox"  bind:checked={NewItem[new_item_index].enable}>
+  Enable
+</label>
+<p class="mt-10"></p>
+
+
+
+<table>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].brokerHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewItem[new_item_index].brokerPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr class="pt-4">
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">TLS</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={NewItem[new_item_index].tls} value={1} >Yes</Radio>
+  <Radio class="pb-2" bind:group={NewItem[new_item_index].tls} value={0} >No</Radio>
+
+</div></td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker CA Certificate</p></td>
+    <td class= "pl-4 pt-4">
+
+{#if NewItem[new_item_index].tls == 0}    
+  None
+{:else if NewItem[new_item_index].tls == 1}
+ {NewItem[new_item_index].brokerCaCert}
+{/if}
+
+    </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
+    <td class= "pl-4 pt-4">
+{#if NewItem[new_item_index].tls == 0}   
+ None
+{:else if NewItem[new_item_index].tls == 1}
+   {NewItem[new_item_index].clientCert}
+{/if}
+
+    </td>
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Client ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].clientId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Account</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">QoS</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewItem[new_item_index].qos} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Keep Alive Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewItem[new_item_index].keepAliveInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
+
+</tr>
+
+
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Compression</p></td>
+      <td class="pl-5 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={NewItem[new_item_index].dataCompression} value={0} >No</Radio>
+  <Radio bind:group={NewItem[new_item_index].dataCompression} value={1} >gzip</Radio>
+
+</div>
+
+
+
+</td>
+
+
+</tr>
+
+
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddNewMQTT(new_item_index)}>Add</Button></td>
 
   </tr>
 

@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 
 export const dashboadData= writable("");
 
-
+export const portConnectionConfig=writable("");
 export const remoteServiceConfig=writable("");
 export const genericMQTTConfig= writable("");
 export const openvpnConfig= writable("");
@@ -16,6 +16,10 @@ export const firewallConfig = writable("");
 export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
+
+export const PortConnection_LAN_ConfigChangedLog=writable("");
+export const PortConnection_COM_ConfigChangedLog=writable("");
+export const ChangedPortConnectionConfig=writable("");
 
 
 export const RemoteServiceConfigChangedLog=writable("");

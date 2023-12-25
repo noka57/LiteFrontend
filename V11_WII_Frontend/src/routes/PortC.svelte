@@ -2,10 +2,52 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, FloatingLabelInput, Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Datepicker } from 'flowbite-svelte';
 
 
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
+
+  import { 
+    portConnectionConfig,
+    PortConnection_LAN_ConfigChangedLog,
+    PortConnection_COM_ConfigChangedLog,
+    ChangedPortConnectionConfig
+  } from "./configG.js"
+
+
+    let port_connection_data="";
+    let changed_port_connection_data = {};
+    let saved_changed_port_connection_data = {};
+    let getDataReady=0;
+    let port_connection_lan_changedValues = [];
+    let port_connection_com_changedValues = [];
+
+
+    let sessionid;
+    let sessionBinary;
+    sessionidG.subscribe(val => {
+        sessionid = val;
+    });
+
+
+    portConnectionConfig.subscribe(val => {
+      port_connection_data = val;
+    });
+
+    PortConnection_LAN_ConfigChangedLog.subscribe(val => {
+      port_connection_lan_changedValues = val;
+    });
+
+    PortConnection_COM_ConfigChangedLog.subscribe(val => {
+      port_connection_com_changedValues = val;
+    });
+
+    ChangedPortConnectionConfig.subscribe(val => {
+      saved_changed_port_connection_data = val;
+    });
+
+
+
    let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
-
    let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
-
    let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
@@ -20,6 +62,60 @@
   let SB="1";
 
   let smenable=true;
+
+   async function getPortConnectionData () {
+    const res = await fetch(window.location.origin+"/GeTPortConnection", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      port_connection_data =await res.json();
+      console.log(port_connection_data);
+      portConnectionConfig.set(port_connection_data);
+
+      changed_port_connection_data = JSON.parse(JSON.stringify(port_connection_data));
+      saved_changed_port_connection_data= JSON.parse(JSON.stringify(port_connection_data));
+      ChangedPortConnectionConfig.set(saved_changed_port_connection_data);
+      getDataReady=1;
+    
+    }
+  }
+
+
+  onMount(() => {
+
+    console.log("port connection sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid && port_connection_data=="")
+    {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+        getPortConnectionData();
+    }
+    else if(sessionid && port_connection_data!="")
+    {
+        getDataReady=1;
+        if (port_connection_lan_changedValues.length==0)
+        {
+            changed_port_connection_data=JSON.parse(JSON.stringify(saved_changed_port_connection_data));
+            changed_port_connection_data.config.fieldManagement_portConnection_lan=JSON.parse(JSON.stringify(port_connection_data.config.fieldManagement_portConnection_lan)); 
+        }
+      
+
+        if (port_connection_com_changedValues.length==0)
+        {
+            changed_port_connection_data=JSON.parse(JSON.stringify(saved_changed_port_connection_data));
+            changed_port_connection_data.config.fieldManagement_portConnection_com=JSON.parse(JSON.stringify(port_connection_data.config.fieldManagement_portConnection_com)); 
+        }
+
+    }
+
+  });
 
 </script>
 <Tabs style="underline">
@@ -37,6 +133,9 @@
 
      </TableHead>
   <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_port_connection_data.config.fieldManagement_portConnection_lan as LANItem, index}
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-4">
 <button on:click={() => formModal = true}>
@@ -52,36 +151,18 @@
        </TableBodyCell>
 
 
-      <TableBodyCell class="w-18">LAN 1</TableBodyCell>
-      <TableBodyCell class="w-18">127.0.0.1</TableBodyCell>
+      <TableBodyCell class="w-18">{LANItem.profileName}</TableBodyCell>
+      <TableBodyCell class="w-18">{LANItem.ip}</TableBodyCell>
+{#if LANItem.status == 1}
       <TableBodyCell class="w-18">LinkUp</TableBodyCell>
-
-
+{:else if LANItem.status == 0}
+      <TableBodyCell class="w-18">LinkDown</TableBodyCell>
+{/if}
 
     </TableBodyRow>
+{/each}
+{/if}
 
- <TableBodyRow>
-      <TableBodyCell class="!p-4 w-4">
-<button on:click={() => formModal = true}>
-
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-
-
-      </button>
-
-
-       </TableBodyCell>
-
-      <TableBodyCell class="w-18">LAN 2</TableBodyCell>
-      <TableBodyCell class="w-18">127.0.0.1</TableBodyCell>
-      <TableBodyCell class="w-18">LinkUp</TableBodyCell>
-
-
-
-    </TableBodyRow>
-  
 
 
 <tr class="pt-5">

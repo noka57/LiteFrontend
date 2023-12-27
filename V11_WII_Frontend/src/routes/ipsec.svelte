@@ -1307,6 +1307,60 @@ let RemoteCAList = [
 
 
 
+  let getRemoteCertReady=0;
+  let remoteCertList=[];
+  async function getRemoteCertificate() {
+    const res = await fetch(window.location.origin+"/GetRemotecert", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      remoteCertList =await res.json();
+      console.log(remoteCertList);
+      getRemoteCertReady=1;
+    
+    }
+  }
+  let getCaCertReady=0;
+  let caCertList=[];
+
+  async function getCACertificate() {
+    const res = await fetch(window.location.origin+"/getCaCERt", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      caCertList =await res.json();
+      console.log(caCertList);
+      getCaCertReady=1;
+    
+    }
+  }
+
+  let getMachineCertReady=0;
+  let machineCertList=[];
+
+  async function getMachineCertificate() {
+    const res = await fetch(window.location.origin+"/getMachinECert", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      machineCertList =await res.json();
+      console.log(machineCertList);
+      getMachineCertReady=1;
+    
+    }
+  }
+
+
+
 
    async function getIPsecData () {
     const res = await fetch(window.location.origin+"/getIPsecdata", {
@@ -1341,10 +1395,16 @@ let RemoteCAList = [
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
         getIPsecData();
+        getMachineCertificate();
+        getCACertificate();
+        getRemoteCertificate();
     }
     else if (sessionid && ipsec_data != "")
     {
       console.log("ipsec_data is not null");
+        getMachineCertificate();
+        getCACertificate();
+        getRemoteCertificate();
       getDataReady=1;
 
       if (basic_changedValues.length==0)
@@ -1502,6 +1562,15 @@ test2
 </Table>
 
 {/if}
+{:else}
+<Table>
+  <caption
+    class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
+  >
+    IPsec is disabled now. Please go to basic page to enable it.
+
+   </caption>
+</Table>
 {/if}
 {/if}
     </TabItem>
@@ -1717,7 +1786,21 @@ test2
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
-    <td class= "pl-4 pt-4">{newICG_item[newICG_index].remote_certificate}</td>
+    <td class= "pl-4 pt-4">
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={newICG_item[newICG_index].remote_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getRemoteCertReady== 1}
+{#each remoteCertList as remoteCert, index}
+<option value={remoteCert}>{remoteCert}</option>
+{/each}
+{/if}
+</select>
+
+    
+
+    </td>
 
 
 </tr>
@@ -1727,7 +1810,20 @@ test2
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
-    <td class= "pl-4 pt-4">{newICG_item[newICG_index].local_certificate}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={newICG_item[newICG_index].local_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+    
+
+
+    </td>
 
 
   </tr>
@@ -1790,7 +1886,18 @@ test2
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
-    <td class= "pl-4 pt-4">{changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].remote_certificate}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].remote_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getRemoteCertReady== 1}
+{#each remoteCertList as remoteCert, index}
+<option value={remoteCert}>{remoteCert}</option>
+{/each}
+{/if}
+</select>
+
+
+    </td>
 
 
 </tr>
@@ -1800,7 +1907,18 @@ test2
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
-    <td class= "pl-4 pt-4">{changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].local_certificate}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].local_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+
+    </td>
 
 
   </tr>
@@ -2074,14 +2192,38 @@ Remote Subnet
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
-    <td class= "pl-4 pt-4">{changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.local_certificate}</td>
+    <td class= "pl-4 pt-4">
+
+    <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.local_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+    
+
+    </td>
 
 
 </tr>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
-    <td class= "pl-4 pt-4">{changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.remote_certificate}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.remote_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getRemoteCertReady== 1}
+{#each remoteCertList as remoteCert, index}
+<option value={remoteCert}>{remoteCert}</option>
+{/each}
+{/if}
+</select>
+    
+
+
+    </td>
 
 
   </tr>

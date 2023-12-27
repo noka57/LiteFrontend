@@ -123,6 +123,52 @@
       saved_changed_modbus_data = val;
   });
 
+    let backup_rtu_master={
+        enable:false,
+        aliasName:"",
+        serialProfile:""
+    };
+
+
+  let Modify_RTU_Master_Modal=false;
+  let Modify_RTU_Master_index;
+
+  let rtu_master_new=[
+    {
+        enable:false,
+        aliasName:"",
+        serialProfile:""
+    },
+    {
+        enable:false,
+        aliasName:"",
+        serialProfile:""
+    }
+  ];
+
+ function TriggerModifyRtuMaster(index)
+  {
+    Modify_RTU_Master_Modal=true;
+    Modify_RTU_Master_index=index;
+    backup_rtu_master.enable=changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].enable;
+    backup_rtu_master.aliasName=changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].aliasName;
+    backup_rtu_master.serialProfile=changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].serialProfile;
+  }
+
+  function NoModifyRTUMaster(index)
+  {
+    Modify_RTU_Master_Modal=false;
+    changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].enable=backup_rtu_master.enable;
+    changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].aliasName=backup_rtu_master.aliasName;
+    changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].serialProfile= backup_rtu_master.serialProfile;
+  }
+
+  function ModifyRTUMaster()
+  {
+    Modify_RTU_Master_Modal=false;  
+  }
+
+
    async function getModbusData() {
     const res = await fetch(window.location.origin+"/GeTModbuS", {
       method: 'POST',
@@ -257,7 +303,7 @@
 
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalsm = true}>
+<button on:click={() => TriggerModifyRtuMaster(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -305,17 +351,21 @@
 
 
    
-<Modal bind:open={formModalsm} autoclose={false} size="md" class="w-full">
+<Modal bind:open={Modify_RTU_Master_Modal} permanent={true}>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={smenable}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_rtu.master[Modify_RTU_Master_index].enable}>
+{/if}
   Enable
 </label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyRTUMaster(Modify_RTU_Master_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
 
-<p class="mt-4"></p>
 <table>
 
 <tr>
-      <td><p class="pl-10 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={RM_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_rtu.master[Modify_RTU_Master_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -325,10 +375,7 @@
 <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
       <td class="pl-5 pt-5">
-      <select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={MM_SerialProfile}>
-<option disabled="" value="">None</option>
-<option value="1" >ComPort1</option>
-<option value="1" >ComPort2</option>
+{changed_modbus_data.config.fieldManagement_modbus_rtu.master[Modify_RTU_Master_index].serialProfile}
       </td>
 
 
@@ -343,7 +390,7 @@
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-20"><Button color="dark" pill={true}>Submit</Button></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyRTUMaster}>Modify</Button></td>
 
 
     </tr>

@@ -84,7 +84,6 @@
     });
 
 
-
 let vpnnameList = [
     {value:"test1", name: "test1"},
     {value:"test2", name: "test2"},
@@ -118,8 +117,6 @@ let RemoteCAList = [
 
 
   let name="";
-
-
 
  let value = [];
 
@@ -2384,6 +2381,59 @@ let RemoteCAList = [
     }
 
 
+  let getRemoteCertReady=0;
+  let remoteCertList=[];
+  async function getRemoteCertificate() {
+    const res = await fetch(window.location.origin+"/GetRemotecert", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      remoteCertList =await res.json();
+      console.log(remoteCertList);
+      getRemoteCertReady=1;
+    
+    }
+  }
+  let getCaCertReady=0;
+  let caCertList=[];
+
+  async function getCACertificate() {
+    const res = await fetch(window.location.origin+"/getCaCERt", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      caCertList =await res.json();
+      console.log(caCertList);
+      getCaCertReady=1;
+    
+    }
+  }
+
+  let getMachineCertReady=0;
+  let machineCertList=[];
+
+  async function getMachineCertificate() {
+    const res = await fetch(window.location.origin+"/getMachinECert", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      machineCertList =await res.json();
+      console.log(machineCertList);
+      getMachineCertReady=1;
+    
+    }
+  }
+
+
 
     async function getOpenVPNData () {
     const res = await fetch(window.location.origin+"/getOPENvpndata", {
@@ -2418,11 +2468,17 @@ let RemoteCAList = [
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
         getOpenVPNData();
+        getMachineCertificate();
+        getCACertificate();
+        getRemoteCertificate();
     }
     else if (sessionid && openvpn_data != "")
     {
       console.log("openvpn_data is not null");
       getDataReady=1;
+      getMachineCertificate();
+      getCACertificate();
+      getRemoteCertificate();
 
       if (openvpn_basic_changedValues.length==0)
       {
@@ -2605,6 +2661,16 @@ test2
 
 {/if}
 
+
+{:else}
+<Table>
+  <caption
+    class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
+  >
+    OpenVPN is disabled now. Please go to basic page to enable it.
+
+   </caption>
+</Table>
 {/if}
 
 {/if}
@@ -2848,14 +2914,35 @@ test2
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote CA Certificate</p></td>
-    <td class= "pl-4 pt-4">{changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_ca_certificate}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_ca_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+</td>
 
 
 </tr>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
-    <td class= "pl-4 pt-4">{changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].local_certificate}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].local_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+    </td>
 
 
   </tr>
@@ -2953,14 +3040,37 @@ test2
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote CA Certificate</p></td>
-    <td class= "pl-4 pt-4">{NewClientConn[new_client_conn_index].remote_ca_certificate}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewClientConn[new_client_conn_index].remote_ca_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+
+    
+
+    </td>
 
 
 </tr>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
-    <td class= "pl-4 pt-4">{NewClientConn[new_client_conn_index].local_certificate}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewClientConn[new_client_conn_index].local_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+
+    </td>
 
 
   </tr>
@@ -3043,14 +3153,36 @@ test2
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
-    <td class= "pl-4 pt-4">{changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>    
+
+
+    </td>
 
 
 </tr>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote CA Certificate</p></td>
-    <td class= "pl-4 pt-4">{changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+
+    </td>
 
 
   </tr>

@@ -48,6 +48,7 @@
 	    RemoteServiceConfigChangedLog,
 	    PortConnection_LAN_ConfigChangedLog,
     	PortConnection_COM_ConfigChangedLog,
+    	Certificate_Settings_ConfigChangedLog,
     	dashboadData
   	} from "./configG.js"
 
@@ -173,6 +174,7 @@
     let remote_service_changedValues = [];
     let port_connection_lan_changedValues = [];
     let port_connection_com_changedValues = [];
+    let certificate_settings_changedValues = [];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -191,7 +193,8 @@
 
   	function JudgeChangedOrNot()
   	{
-  		if (port_connection_lan_changedValues.length !=0 ||
+  		if (certificate_settings_changedValues.length !=0 ||
+  			port_connection_lan_changedValues.length !=0 ||
   			port_connection_com_changedValues.length !=0 ||
   			remote_service_changedValues.length !=0 ||
   			generic_mqtt_changedValues.length !=0 ||
@@ -475,6 +478,11 @@
     PortConnection_COM_ConfigChangedLog.subscribe(val => {
       	port_connection_com_changedValues = val;
       	JudgeChangedOrNot();
+    });
+
+    Certificate_Settings_ConfigChangedLog.subscribe(val => {
+      certificate_settings_changedValues = val;
+      JudgeChangedOrNot();
     });
 
 

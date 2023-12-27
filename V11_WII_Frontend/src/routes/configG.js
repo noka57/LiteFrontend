@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 
 export const dashboadData= writable("");
 
-
+export const certificateConfig=writable("");
 export const modbusConfig= writable("");
 export const portConnectionConfig=writable("");
 export const remoteServiceConfig=writable("");
@@ -19,8 +19,20 @@ export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
 
+export const Certificate_Settings_ConfigChangedLog=writable("");
+export const Certificate_CRL_ConfigChangedLog=writable("");
+export const ChangedCertificateConfig=writable("");
 
-export const ModbusRTU_ConfigChangedLog=writable("");
+export const ModbusGateway_TtR=writable("");
+export const ModbusGateway_RtT=writable("");
+export const ModbusGateway_RtR=writable("");
+export const ModbusGateway_TtT=writable("");
+export const ModbusVariable_Slave_ConfigChangedLog=writable("");
+export const ModbusVariable_Master_ConfigChangedLog=writable("");
+export const ModbusTCP_Slave_ConfigChangedLog=writable("");
+export const ModbusTCP_Master_ConfigChangedLog=writable("");
+export const ModbusRTU_Slave_ConfigChangedLog=writable("");
+export const ModbusRTU_Master_ConfigChangedLog=writable("");
 export const ChangedModbusConfig=writable("");
 
 export const PortConnection_LAN_ConfigChangedLog=writable("");

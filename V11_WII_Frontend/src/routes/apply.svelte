@@ -58,7 +58,9 @@
     	ChangedRemoteServiceConfig,
     	PortConnection_LAN_ConfigChangedLog,
     	PortConnection_COM_ConfigChangedLog,
-    	ChangedPortConnectionConfig 
+    	ChangedPortConnectionConfig,
+    	Certificate_Settings_ConfigChangedLog,
+    	ChangedCertificateConfig
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -79,6 +81,7 @@
   let generic_mqtt_data="";
   let remote_service_data="";
   let port_connection_data="";
+  let certificate_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -174,6 +177,10 @@
   let port_connection_lan_changedValues = [];
   let port_connection_com_changedValues = [];
 
+  let ContentCertificate;
+  let CertificateBinary=null;
+  let certificate_settings_changedValues = [];
+
   let SetCount=0;
   let SetCountOK=0;
 
@@ -245,6 +252,17 @@
   ChangedPortConnectionConfig.subscribe(val => {
       port_connection_data = val;
   });
+
+  ChangedCertificateConfig.subscribe(val => {
+      certificate_data = val;
+  });
+
+  Certificate_Settings_ConfigChangedLog.subscribe(val => {
+      certificate_settings_changedValues = val;
+  });
+
+
+
 
 
   PortConnection_LAN_ConfigChangedLog.subscribe(val => {
@@ -677,6 +695,25 @@
 	}
 
 
+	async function SetCertificateData()
+	{
+	  const res = await fetch(window.location.origin+"/SeTCertificateData", {
+	    method: 'POST',
+	    body: ContentCertificate
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set certificate data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
+	  }		
+	}
+
+
 	function CalculateTotalSetCount()
 	{
 	  if  (lan_data != "" && LANchangedValues.length!=0)
@@ -771,6 +808,11 @@
   			port_connection_com_changedValues.length !=0 ))
   	{
 			SetCount++;	
+  	}
+
+  	if (certificate_data !="" && certificate_settings_changedValues.length !=0)
+  	{
+  		SetCount++;	
   	}
 
 	}
@@ -961,8 +1003,18 @@
   				SetPortConnectionData();
   			}
 
-      }
+  			if (certificate_data != ""  && certificate_settings_changedValues !=0)
+  			{
+					let CertificateString = JSON.stringify(certificate_data, null, 0);
+					const bytesArray = Array.from(CertificateString).map(char => char.charCodeAt(0));
+	    		CertificateBinary = new Uint8Array(bytesArray);
+	      	ContentCertificate=new Uint8Array(CertificateBinary.length+sessionBinary.length);
+	        ContentCertificate.set(sessionBinary,0);
+	        ContentCertificate.set(CertificateBinary, sessionBinary.length);
+  				SetCertificateData();
+  			}
 
+      }
 	};
 
 
@@ -974,6 +1026,20 @@
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+
+{#if certificate_settings_changedValues.length !=0}
+	<Li>Certificate 
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+	<Li>Check the validity period of certificates and CRLs
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each certificate_settings_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+  </List>
+	</Li>
+{/if}
 
 {#if port_connection_lan_changedValues.length !=0 ||
   			port_connection_com_changedValues.length !=0}
@@ -1625,7 +1691,8 @@
   			generic_mqtt_changedValues.length !=0 ||
   			remote_service_changedValues.length !=0 ||
   			port_connection_lan_changedValues.length !=0 ||
-  			port_connection_com_changedValues.length !=0
+  			port_connection_com_changedValues.length !=0 ||
+  			certificate_settings_changedValues.length !=0
 
 		}
 

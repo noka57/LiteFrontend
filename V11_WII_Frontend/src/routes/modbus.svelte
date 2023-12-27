@@ -6,7 +6,16 @@
 
   import { 
     modbusConfig,
-
+    ModbusGateway_TtR,
+    ModbusGateway_RtT,
+    ModbusGateway_RtR,
+    ModbusGateway_TtT,
+    ModbusVariable_Slave_ConfigChangedLog,
+    ModbusVariable_Master_ConfigChangedLog,
+    ModbusTCP_Slave_ConfigChangedLog,
+    ModbusTCP_Master_ConfigChangedLog,
+    ModbusRTU_Slave_ConfigChangedLog,
+    ModbusRTU_Master_ConfigChangedLog,
     ChangedModbusConfig
   } from "./configG.js"
 
@@ -22,6 +31,52 @@
     sessionidG.subscribe(val => {
         sessionid = val;
     });
+
+    let modbus_gateway_TtR_changedValues;
+    let modbus_gateway_RtT_changedValues;
+    let modbus_gateway_RtR_changedValues;
+    let modbus_gateway_TtT_changedValues;
+
+    let modbus_variable_master_changedValues;
+    let modbus_variable_slave_changedValues;
+    let modbus_tcp_master_changedValues;
+    let modbus_tcp_slave_changedValues;
+    let modbus_rtu_master_changedValues;
+    let modbus_rtu_slave_changedValues;
+
+    ModbusGateway_TtR.subscribe(val => {
+          modbus_gateway_TtR_changedValues = val;
+      });
+    ModbusGateway_RtT.subscribe(val => {
+          modbus_gateway_RtT_changedValues = val;
+      });
+    ModbusGateway_RtR.subscribe(val => {
+          modbus_gateway_RtR_changedValues = val;
+      });
+    ModbusGateway_TtT.subscribe(val => {
+          modbus_gateway_TtT_changedValues = val;
+      });
+
+
+    ModbusVariable_Slave_ConfigChangedLog.subscribe(val => {
+              modbus_variable_slave_changedValues = val;
+          });
+
+    ModbusVariable_Master_ConfigChangedLog.subscribe(val => {
+              modbus_variable_master_changedValues = val;
+          });
+    ModbusTCP_Slave_ConfigChangedLog.subscribe(val => {
+              modbus_tcp_slave_changedValues = val;
+          });
+    ModbusTCP_Master_ConfigChangedLog.subscribe(val => {
+              modbus_tcp_master_changedValues = val;
+          });
+    ModbusRTU_Slave_ConfigChangedLog.subscribe(val => {
+              modbus_rtu_slave_changedValues = val;
+          });
+    ModbusRTU_Master_ConfigChangedLog.subscribe(val => {
+              modbus_rtu_master_changedValues = val;
+          });
 
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
   let formModalsm=false;
@@ -107,6 +162,67 @@
         getDataReady=1;
 
 
+        if (modbus_gateway_TtR_changedValues.length ==0)
+        {
+            changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
+            changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu)); 
+        }
+        
+        if (modbus_gateway_RtT_changedValues.length ==0)
+        {
+            changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
+            changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp)); 
+        }
+
+        if (modbus_gateway_RtR_changedValues.length ==0)
+        {
+            changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
+            changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu)); 
+        }
+
+        if (modbus_gateway_TtT_changedValues.length ==0)
+        {
+            changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
+            changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp)); 
+        }
+
+        if(modbus_variable_master_changedValues.length ==0)
+        {
+            changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
+            changed_modbus_data.config.fieldManagement_modbus_variable.master=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_variable.master)); 
+        }
+
+        if(modbus_variable_slave_changedValues.length ==0)
+        {
+            changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
+            changed_modbus_data.config.fieldManagement_modbus_variable.slave=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_variable.slave)); 
+        }
+
+        if(modbus_tcp_master_changedValues.length ==0)
+        {
+            changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
+            changed_modbus_data.config.fieldManagement_modbus_tcp.master=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_tcp.master)); 
+        }
+
+        if(modbus_tcp_slave_changedValues.length ==0)
+        {
+            changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
+            changed_modbus_data.config.fieldManagement_modbus_tcp.slave=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_tcp.slave)); 
+        }
+
+        if(modbus_rtu_master_changedValues.length ==0)
+        {
+            changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
+            changed_modbus_data.config.fieldManagement_modbus_rtu.master=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_rtu.master)); 
+        }
+
+        if(modbus_rtu_slave_changedValues.length ==0)
+        {
+            changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
+            changed_modbus_data.config.fieldManagement_modbus_rtu.slave=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_rtu.slave)); 
+        }
+
+
     }
 
   });
@@ -135,6 +251,10 @@
     <TableHeadCell class="w-10">Serial Profile</TableHeadCell>
   </TableHead>
   <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_modbus_data.config.fieldManagement_modbus_rtu.master as RTUMasterItem, index}
+
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
 <button on:click={() => formModalsm = true}>
@@ -145,13 +265,18 @@
 
 
        </TableBodyCell>
+{#if RTUMasterItem.enable}
       <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> RTU_Master_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> ComPort1</TableBodyCell>
+{:else}
+      <TableBodyCell>0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{RTUMasterItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{RTUMasterItem.serialProfile}</TableBodyCell>
     </TableBodyRow>
 
-
+{/each}
+{/if}
 <tr>
     <td></td>
     <td></td>
@@ -249,6 +374,8 @@
     <TableHeadCell class="w-10">Serial Profile</TableHeadCell>
   </TableHead>
   <TableBody>
+{#if getDataReady == 1}
+{#each changed_modbus_data.config.fieldManagement_modbus_rtu.slave as RTUSlaveItem, index}
    
  <TableBodyRow>
    <TableBodyCell class="!p-4 w-10">
@@ -260,13 +387,19 @@
 
 
        </TableBodyCell>
+{#if RTUSlaveItem.enable}
       <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> RTU_Slave_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> ComPort2</TableBodyCell>
+{:else}
+
+      <TableBodyCell>0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{RTUSlaveItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{RTUSlaveItem.serialProfile}</TableBodyCell>
 
     </TableBodyRow>
-
+{/each}
+{/if}
 
 <tr>
     <td></td>
@@ -379,6 +512,10 @@
 
   </TableHead>
   <TableBody>
+{#if getDataReady == 1}
+{#each changed_modbus_data.config.fieldManagement_modbus_tcp.master as TCPMasterItem, index}
+   
+
     <TableBodyRow>
     <TableBodyCell class="!p-1"></TableBodyCell>
        <TableBodyCell class="!p-1">
@@ -390,47 +527,21 @@
 
 
        </TableBodyCell>
-       <TableBodyCell class="!p-1">            <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
+       <TableBodyCell class="!p-1"></TableBodyCell>
+{#if TCPMasterItem.enable}
       <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> LAN1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> TCP_Master_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> 127.0.0.1</TableBodyCell>
-      <TableBodyCell class="w-10">502</TableBodyCell>
-      <TableBodyCell class="w-10">3000 ms</TableBodyCell>
+{:else}
+      <TableBodyCell>0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{TCPMasterItem.lanProfile}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{TCPMasterItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.remoteServerIp}</TableBodyCell>
+      <TableBodyCell class="w-10">{TCPMasterItem.remotePort}</TableBodyCell>
+      <TableBodyCell class="w-10">{TCPMasterItem.connectionTimeout} ms</TableBodyCell>
     </TableBodyRow>
-
-
- <TableBodyRow>
-     <TableBodyCell class="!p-1"></TableBodyCell>
-       <TableBodyCell class="!p-1">
-<button on:click={() => formModaltm = true}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </TableBodyCell>
-       <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
-      <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">2</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> LAN2</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> TCP_Master_2</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> 192.168.127.254</TableBodyCell>
-      <TableBodyCell class="w-10">502</TableBodyCell>
-      <TableBodyCell class="w-10">3000 ms</TableBodyCell>
-
-    </TableBodyRow>
+{/each}
+{/if}
 
 
  <TableBodyRow>
@@ -511,7 +622,9 @@
   </TableHead>
   <TableBody>
 
-
+{#if getDataReady == 1}
+{#each changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TCPSlaveItem, index}
+   
 
  <TableBodyRow>
      <TableBodyCell class="!p-1"></TableBodyCell>
@@ -530,15 +643,20 @@
   <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
       </button></TableBodyCell>
+{#if TCPSlaveItem.enable}
       <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> LAN2</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> TCP_Slave_1</TableBodyCell>
-      <TableBodyCell class="w-10">502</TableBodyCell>
-      <TableBodyCell class="w-10">10</TableBodyCell>
+{:else}
+      <TableBodyCell>0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{TCPSlaveItem.lanProfile}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{TCPSlaveItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-10">{TCPSlaveItem.listenPort}</TableBodyCell>
+      <TableBodyCell class="w-10">{TCPSlaveItem.maxConnectionCount}</TableBodyCell>
 
     </TableBodyRow>
-
+{/each}
+{/if}
 
  <TableBodyRow>
      <TableBodyCell class="!p-1">
@@ -618,7 +736,7 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell class="!p-1">No</TableHeadCell>
     <TableHeadCell class="!p-1">Variable Name</TableHeadCell>
-    <TableHeadCell>Profile</TableHeadCell>
+    <TableHeadCell class="w-18">Master Profile</TableHeadCell>
     <TableHeadCell class="w-18">Slave ID</TableHeadCell>
     <TableHeadCell class="w-18">Point Type</TableHeadCell>
     <TableHeadCell class="w-18">Address (DEC)</TableHeadCell>
@@ -629,6 +747,11 @@
         <TableHeadCell>Byte Order</TableHeadCell>
   </TableHead>
   <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_modbus_data.config.fieldManagement_modbus_variable.master as TCPVariableMasterItem, index}
+   
+
  <TableBodyRow>
    <TableBodyCell class="!p-1"></TableBodyCell>
   <TableBodyCell class="!p-1 w-4">
@@ -640,96 +763,49 @@
 
 
        </TableBodyCell>
-        <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
+        <TableBodyCell class="!p-1">        </TableBodyCell>
+{#if TCPVariableMasterItem.enable}
        <TableBodyCell class='w-4'>1</TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">1</TableBodyCell>
-  <TableBodyCell class="!p-1 w-18">Line Current Phase A</TableBodyCell>
-  <TableBodyCell class="w-10">TCP_Master_1</TableBodyCell>
-  <TableBodyCell class="w-18">2</TableBodyCell>
-  <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
-  <TableBodyCell class="w-18">0</TableBodyCell>
-  <TableBodyCell class="w-10">1</TableBodyCell>
-  <TableBodyCell class="w-18">1000 ms</TableBodyCell>
-<TableBodyCell class="w-18">1000 ms</TableBodyCell>
-    <TableBodyCell class="w-18">20 ms</TableBodyCell>
+{:else}
+       <TableBodyCell class='w-4'>0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
+  <TableBodyCell class="!p-1 w-18">{TCPVariableMasterItem.variableName}</TableBodyCell>
+  <TableBodyCell class="w-10">{TCPVariableMasterItem.profile}</TableBodyCell>
+  <TableBodyCell class="w-18">{TCPVariableMasterItem.slaveId}</TableBodyCell>
+{#if TCPVariableMasterItem.pointType == 0}
+    <TableBodyCell class="w-10">Coil</TableBodyCell>
+{:else if TCPVariableMasterItem.pointType == 1}
+    <TableBodyCell class="w-10">Discrete Input</TableBodyCell>
+{:else if TCPVariableMasterItem.pointType == 2}
+    <TableBodyCell class="w-10">Input Registers</TableBodyCell>
+{:else if TCPVariableMasterItem.pointType == 3}
+    <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
+{:else}
+  <TableBodyCell class="w-10"></TableBodyCell>
+{/if}
+  <TableBodyCell class="w-18">{TCPVariableMasterItem.address}</TableBodyCell>
+  <TableBodyCell class="w-10">{TCPVariableMasterItem.quantity}</TableBodyCell>
+  <TableBodyCell class="w-18">{TCPVariableMasterItem.responseTimeout} ms</TableBodyCell>
+<TableBodyCell class="w-18">{TCPVariableMasterItem.pollingRate} ms</TableBodyCell>
+    <TableBodyCell class="w-18">{TCPVariableMasterItem.delayBetweenPolls} ms</TableBodyCell>
+
+{#if TCPVariableMasterItem.byteOrder==0} 
+    <TableBodyCell class="w-18">Big Endian</TableBodyCell>
+{:else if TCPVariableMasterItem.byteOrder==1}   
         <TableBodyCell class="w-18">Little Endian</TableBodyCell>
+{:else if TCPVariableMasterItem.byteOrder==2}
+    <TableBodyCell class="w-18">Big Endian Byte Swap</TableBodyCell>
+{:else if TCPVariableMasterItem.byteOrder==3}
+        <TableBodyCell class="w-18">Little Endian Byte Swap</TableBodyCell>
+{:else}
+    <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
+
     </TableBodyRow>
+{/each}
+{/if}
 
-
-
-
-
-
- <TableBodyRow>
-   <TableBodyCell class="!p-1"></TableBodyCell>
-  <TableBodyCell class="!p-1 w-4">
-<button on:click={() => formModalmvar = true}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </TableBodyCell>
-        <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
-       <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">2</TableBodyCell>
-  <TableBodyCell class="!p-1 w-18">RTU-DI Status</TableBodyCell>
-  <TableBodyCell class="w-10">RTU_Master_1</TableBodyCell>
-  <TableBodyCell class="w-18">2</TableBodyCell>
-  <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
-  <TableBodyCell class="w-18">0</TableBodyCell>
-  <TableBodyCell class="w-10">1</TableBodyCell>
-  <TableBodyCell class="w-18">1000 ms</TableBodyCell>
-        <TableBodyCell class="w-18">1000 ms</TableBodyCell>
-      <TableBodyCell class="w-18">20 ms</TableBodyCell>
-            <TableBodyCell class="w-18">Little Endian Byte Swap</TableBodyCell>
-    </TableBodyRow>
-
-
-
-
-
-     <TableBodyRow>
-   <TableBodyCell class="!p-1"></TableBodyCell>
-  <TableBodyCell class="!p-1 w-4">
-<button on:click={() => formModalmvar = true}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </TableBodyCell>
-        <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
-       <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">3</TableBodyCell>
-  <TableBodyCell class="!p-1 w-18">TCP-Line Current Phase B</TableBodyCell>  
-  <TableBodyCell class="w-10">TCP_Master_1</TableBodyCell>
-  <TableBodyCell class="w-18">2</TableBodyCell>
-  <TableBodyCell class="w-10">Input Registers</TableBodyCell>
-  <TableBodyCell class="w-18">0</TableBodyCell>
-  <TableBodyCell class="w-10">1</TableBodyCell>
-  <TableBodyCell class="w-18">1000 ms</TableBodyCell>
-        <TableBodyCell class="w-18">1000 ms</TableBodyCell>
-      <TableBodyCell class="w-18">20 ms</TableBodyCell>
-      <TableBodyCell class="w-18">Big Endian Byte Swap</TableBodyCell>
-    </TableBodyRow>
 
 
      <TableBodyRow>
@@ -944,7 +1020,7 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell>Variable Name</TableHeadCell>
-    <TableHeadCell>Profile</TableHeadCell>
+    <TableHeadCell class="w-18">Slave Profile</TableHeadCell>
     <TableHeadCell class="w-18">Slave ID</TableHeadCell>
     <TableHeadCell class="w-18">Point Type</TableHeadCell>
     <TableHeadCell class="w-18">Address (DEC)</TableHeadCell>
@@ -954,6 +1030,10 @@
   <TableBody>
 
 
+
+{#if getDataReady == 1}
+{#each changed_modbus_data.config.fieldManagement_modbus_variable.slave as TCPVariableSlaveItem, index}
+   
 
  <TableBodyRow>
    <TableBodyCell class="!p-1 w-10"></TableBodyCell>
@@ -966,55 +1046,50 @@
 
 
        </TableBodyCell>
-        <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
+        <TableBodyCell class="!p-1">            </TableBodyCell>
+
+{#if TCPVariableSlaveItem.enable}
+
        <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-  <TableBodyCell class="w-18">TCP-DI Status</TableBodyCell>
-  <TableBodyCell class="w-10">TCP_Slave_1</TableBodyCell>
-  <TableBodyCell class="w-18">2</TableBodyCell>
-  <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
-  <TableBodyCell class="w-18">0</TableBodyCell>
-  <TableBodyCell class="w-10">1</TableBodyCell>
-    <TableBodyCell class="w-10">Big-Endian</TableBodyCell>
+{:else}
+
+       <TableBodyCell>0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+  <TableBodyCell class="w-18">{TCPVariableSlaveItem.variableName}</TableBodyCell>
+  <TableBodyCell class="w-10">{TCPVariableSlaveItem.profile}</TableBodyCell>
+  <TableBodyCell class="w-18">{TCPVariableSlaveItem.slaveId}</TableBodyCell>
+
+{#if TCPVariableSlaveItem.pointType == 0}
+    <TableBodyCell class="w-10">Coil</TableBodyCell>
+{:else if TCPVariableSlaveItem.pointType == 1}
+    <TableBodyCell class="w-10">Discrete Input</TableBodyCell>
+{:else if TCPVariableSlaveItem.pointType == 2}
+    <TableBodyCell class="w-10">Input Registers</TableBodyCell>
+{:else if TCPVariableSlaveItem.pointType == 3}
+    <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
+{:else}
+  <TableBodyCell class="w-10"></TableBodyCell>
+{/if}
+
+
+  <TableBodyCell class="w-18">{TCPVariableSlaveItem.address}</TableBodyCell>
+  <TableBodyCell class="w-10">{TCPVariableSlaveItem.quantity}</TableBodyCell>
+{#if TCPVariableSlaveItem.byteOrder==0} 
+    <TableBodyCell class="w-18">Big Endian</TableBodyCell>
+{:else if TCPVariableSlaveItem.byteOrder==1}   
+        <TableBodyCell class="w-18">Little Endian</TableBodyCell>
+{:else if TCPVariableSlaveItem.byteOrder==2}
+    <TableBodyCell class="w-18">Big Endian Byte Swap</TableBodyCell>
+{:else if TCPVariableSlaveItem.byteOrder==3}
+        <TableBodyCell class="w-18">Little Endian Byte Swap</TableBodyCell>
+{:else}
+    <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
     </TableBodyRow>
 
-
-
-
-<TableBodyRow>
-   <TableBodyCell class="!p-1 w-10"></TableBodyCell>
-  <TableBodyCell class="!p-1 w-10">
-<button on:click={() => formModalmvar = true}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </TableBodyCell>
-        <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
-       <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">2</TableBodyCell>
-  <TableBodyCell class="w-18">RTU-Line Current Phase B</TableBodyCell>
-  <TableBodyCell class="w-10">RTU_Slave_1</TableBodyCell>
-  <TableBodyCell class="w-18">2</TableBodyCell>
-  <TableBodyCell class="w-10">Input Registers</TableBodyCell>
-  <TableBodyCell class="w-18">0</TableBodyCell>
-  <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-10">Big Endian Byte Swap</TableBodyCell>
-    </TableBodyRow>
-
-
+{/each}
+{/if}
 
 
 
@@ -1220,6 +1295,10 @@
   </TableHead>
   <TableBody>
 
+{#if getDataReady == 1}
+{#each changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu as Tcp2RtuItem, index}
+   
+
    <TableBodyRow>
      <TableBodyCell class="!p-1"></TableBodyCell>
   <TableBodyCell class="!p-1 w-10">
@@ -1231,20 +1310,23 @@
 
 
        </TableBodyCell>
-        <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
+        <TableBodyCell class="!p-1">            </TableBodyCell>
+
+{#if Tcp2RtuItem.enable}
       <TableBodyCell>1</TableBodyCell>
-     <TableBodyCell class="!p-6 w-4">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">T_to_R test</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18">TCP_Slave_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">RTU_Master_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1000 ms</TableBodyCell>
+{:else}
+      <TableBodyCell>0</TableBodyCell>
+{/if}
+
+     <TableBodyCell class="!p-6 w-4">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Tcp2RtuItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{Tcp2RtuItem.tcpProfileSlave}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Tcp2RtuItem.rtuProfileMaster}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Tcp2RtuItem.responseTimeout} ms</TableBodyCell>
 
     </TableBodyRow>
+{/each}
+{/if}
 
 
    <TableBodyRow>
@@ -1321,6 +1403,9 @@
   </TableHead>
   <TableBody>
 
+{#if getDataReady == 1}
+{#each changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp as Rtu2TcpItem, index}
+   
    <TableBodyRow>
      <TableBodyCell class="!p-1"></TableBodyCell>
   <TableBodyCell class="!p-1 w-10">
@@ -1333,21 +1418,22 @@
 
        </TableBodyCell>
         <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
+</TableBodyCell>
+{#if Rtu2TcpItem.enable}
       <TableBodyCell>1</TableBodyCell>
-     <TableBodyCell class="!p-6 w-4">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">R_to_T test</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18">RTU_Slave_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">TCP_Master_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1000 ms</TableBodyCell>
+{:else}
+      <TableBodyCell>0</TableBodyCell>
+{/if}
+     <TableBodyCell class="!p-6 w-4">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{Rtu2TcpItem.rtuProfileSlave}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.tcpProfileMaster}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.responseTimeout} ms</TableBodyCell>
 
 
     </TableBodyRow>
-
+{/each}
+{/if}
 
    <TableBodyRow>
      <TableBodyCell class="!p-1">
@@ -1423,6 +1509,10 @@
   </TableHead>
   <TableBody>
 
+
+{#if getDataReady == 1}
+{#each changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu as Rtu2RtuItem, index}
+   
    <TableBodyRow>
      <TableBodyCell class="!p-1"></TableBodyCell>
   <TableBodyCell class="!p-1 w-10">
@@ -1435,21 +1525,22 @@
 
        </TableBodyCell>
         <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
+</TableBodyCell>
+{#if Rtu2RtuItem.enable}
       <TableBodyCell>1</TableBodyCell>
-     <TableBodyCell class="!p-6 w-4">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">R_to_R test</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18">RTU_Slave_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">RTU_Master_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1000 ms</TableBodyCell>
+{:else}
+      <TableBodyCell>0</TableBodyCell>
+{/if}
+     <TableBodyCell class="!p-6 w-4">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Rtu2RtuItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{Rtu2RtuItem.rtuProfileSlave}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Rtu2RtuItem.rtuProfileMaster}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Rtu2RtuItem.responseTimeout} ms</TableBodyCell>
 
 
     </TableBodyRow>
-
+{/each}
+{/if}
 
    <TableBodyRow>
      <TableBodyCell class="!p-1">
@@ -1525,6 +1616,10 @@
   </TableHead>
   <TableBody>
 
+{#if getDataReady == 1}
+{#each changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp as Tcp2TcpItem, index}
+   
+
    <TableBodyRow>
      <TableBodyCell class="!p-1"></TableBodyCell>
   <TableBodyCell class="!p-1 w-10">
@@ -1537,20 +1632,23 @@
 
        </TableBodyCell>
         <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
+</TableBodyCell>
+{#if Tcp2TcpItem.enable}
       <TableBodyCell>1</TableBodyCell>
+
+{:else}
+      <TableBodyCell>0</TableBodyCell>
+{/if}
      <TableBodyCell class="!p-6 w-4">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">T_to_T test</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18">TCP_Slave_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">TCP_Master_1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1000 ms</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Tcp2TcpItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{Tcp2TcpItem.tcpProfileSlave}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Tcp2TcpItem.tcpProfileMaster}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Tcp2TcpItem.responseTimeout} ms</TableBodyCell>
 
 
     </TableBodyRow>
+{/each}
+{/if}
 
 
    <TableBodyRow>

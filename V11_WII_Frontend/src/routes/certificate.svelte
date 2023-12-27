@@ -1,6 +1,39 @@
 <script>
   import { Fileupload, Tabs, TabItem, Radio, Button, Dropdown, DropdownItem, Label, FloatingLabelInput, Modal,
   Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, AccordionItem, Accordion, Input} from 'flowbite-svelte';
+
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
+
+  import { 
+    certificateConfig,
+    Certificate_Settings_ConfigChangedLog,
+    Certificate_CRL_ConfigChangedLog,
+    ChangedCertificateConfig
+  } from "./configG.js"
+
+    let certificate_data="";
+    let changed_certificate_data = {};
+    let saved_changed_certificate_data = {};
+    let getDataReady=0;
+    let certificate_settings_changedValues = [];
+    let certificate_crl_changedValues = [];
+
+    let sessionid;
+    let sessionBinary;
+    sessionidG.subscribe(val => {
+        sessionid = val;
+    });
+
+    Certificate_Settings_ConfigChangedLog.subscribe(val => {
+      certificate_settings_changedValues = val;
+    });
+
+
+    ChangedCertificateConfig.subscribe(val => {
+      saved_changed_certificate_data = val;
+    });
+
   let cdefault='No';
   let ddefault='Never';
   let newCRL=false;
@@ -31,6 +64,75 @@
     newCRLFileUpload=true;
   }
 
+  function saveCertificatesetting()
+  {
+    console.log("save certificate");
+    if (certificate_settings_changedValues.length != 0)
+    {
+      certificate_settings_changedValues=[];
+    }
+    if (changed_certificate_data.config.certificateSettings.checkCert != certificate_data.config.certificateSettings.checkCert)
+    {
+      saved_changed_certificate_data.config.certificateSettings.checkCert=changed_certificate_data.config.certificateSettings.checkCert;
+      let changedstr="Check the validity period of certificates and CRLs is changed to "+changed_certificate_data.config.certificateSettings.checkCert;
+
+      certificate_settings_changedValues=[...certificate_settings_changedValues, changedstr];    
+    }
+
+    Certificate_Settings_ConfigChangedLog.set(certificate_settings_changedValues);
+    ChangedCertificateConfig.set(saved_changed_certificate_data);
+
+    console.log(certificate_settings_changedValues);
+  }
+
+
+ async function getCertificateData() {
+    const res = await fetch(window.location.origin+"/GetCertificateData", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      certificate_data =await res.json();
+      console.log(certificate_data);
+      portConnectionConfig.set(certificate_data);
+
+      changed_certificate_data = JSON.parse(JSON.stringify(certificate_data));
+      saved_changed_certificate_data= JSON.parse(JSON.stringify(certificate_data));
+      ChangedCertificateConfig.set(saved_changed_certificate_data);
+      getDataReady=1;
+    
+    }
+  }
+
+  onMount(() => {
+
+    console.log("certificate sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid && certificate_data=="")
+    {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+        getCertificateData();
+    }
+    else if(sessionid && certificate_data!="")
+    {
+        getDataReady=1;
+        if (certificate_settings_changedValues.length==0)
+        {
+            changed_certificate_data=JSON.parse(JSON.stringify(saved_changed_certificate_data));
+            changed_certificate_data.config.certificateSettings=JSON.parse(JSON.stringify(certificate_data.config.certificateSettings)); 
+        }
+      
+
+    }
+
+  });
+
 </script>
 
 
@@ -38,23 +140,30 @@
 <Tabs style="underline">
   <TabItem open title="Certificate Settings">
 
-<p class="mb-4 font-semibold text-gray-900 dark:text-white">Check the validity period of certificates and CRLs</p>
-<Radio bind:group={cdefault} class='p-3' value='No'>No</Radio>
-<Radio bind:group={cdefault} class='p-3' value='Always'>Always</Radio>
-<Radio bind:group={cdefault} class='p-3' value='WTS'>Wait for synchronization of the system time</Radio>
-<p class="pt-10"></p>
 
+<p class="mb-4 font-semibold text-gray-900 dark:text-white">Check the validity period of certificates and CRLs</p>
+{#if getDataReady == 1}
+<Radio bind:group={changed_certificate_data.config.certificateSettings.checkCert} class='p-3' value={0}>No</Radio>
+<Radio bind:group={changed_certificate_data.config.certificateSettings.checkCert} class='p-3' value={1}>Always</Radio>
+<Radio bind:group={changed_certificate_data.config.certificateSettings.checkCert} class='p-3' value={2}>Wait for synchronization of the system time</Radio>
+
+
+<p class="pt-10"></p>
+<table>
     <tr>
     <td></td>
     <td class="pl-10"></td>
-    <td class="pl-80"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-80"><Button color="blue" pill={true} on:click={saveCertificatesetting}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
 
     </tr>
-
+</table>
+{/if}
   </TabItem>
+
+
   <TabItem title="Machine Certificates">
   <Table shadow striped={true}>
   <TableHead>

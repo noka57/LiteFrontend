@@ -1,6 +1,28 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button, Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Fileupload, FloatingLabelInput, Helper, StepIndicator } from 'flowbite-svelte';
 
+  import { onMount } from 'svelte';
+  import { sessionidG } from "./sessionG.js";
+
+  import { 
+    modbusConfig,
+
+    ChangedModbusConfig
+  } from "./configG.js"
+
+  let modbus_data="";
+  let changed_modbus_data = {};
+  let saved_changed_modbus_data = {};
+  let getDataReady=0;
+
+
+
+    let sessionid;
+    let sessionBinary;
+    sessionidG.subscribe(val => {
+        sessionid = val;
+    });
+
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
   let formModalsm=false;
   let Sinterface="R485";
@@ -36,6 +58,58 @@
     {value:"Test2", name: "Modbus_Master_S1"},
     {value:"Test3", name: "Modbus_Master_T0"},
   ];
+
+
+  modbusConfig.subscribe(val => {
+      modbus_data = val;
+  });
+
+  ChangedModbusConfig.subscribe(val => {
+      saved_changed_modbus_data = val;
+  });
+
+   async function getModbusData() {
+    const res = await fetch(window.location.origin+"/GeTModbuS", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      modbus_data =await res.json();
+      console.log(modbus_data);
+      modbusConfig.set(modbus_data);
+
+      changed_modbus_data = JSON.parse(JSON.stringify(modbus_data));
+      saved_changed_modbus_data= JSON.parse(JSON.stringify(modbus_data));
+      ChangedModbusConfig.set(saved_changed_modbus_data);
+      getDataReady=1;
+    
+    }
+  }
+
+
+ onMount(() => {
+
+    console.log("modbus sessionid: ");
+    console.log(sessionid);
+
+
+    if (sessionid && modbus_data=="")
+    {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+        getModbusData();
+    }
+    else if(sessionid && modbus_data!="")
+    {
+        getDataReady=1;
+
+
+    }
+
+  });
 
 
   </script>

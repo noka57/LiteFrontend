@@ -55,7 +55,10 @@
 	    GenericMQTTConfigChangedLog,
     	ChangedGenericMQTTConfig,
     	RemoteServiceConfigChangedLog,
-    	ChangedRemoteServiceConfig 
+    	ChangedRemoteServiceConfig,
+    	PortConnection_LAN_ConfigChangedLog,
+    	PortConnection_COM_ConfigChangedLog,
+    	ChangedPortConnectionConfig 
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -75,6 +78,7 @@
   let openvpn_data="";
   let generic_mqtt_data="";
   let remote_service_data="";
+  let port_connection_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -164,6 +168,12 @@
   let RemoteServiceBinary=null;
   let remote_service_changedValues=[];
 
+
+  let ContentPortConnection;
+  let PortConnectionBinary=null;
+  let port_connection_lan_changedValues = [];
+  let port_connection_com_changedValues = [];
+
   let SetCount=0;
   let SetCountOK=0;
 
@@ -232,6 +242,18 @@
       remote_service_data = val;
   });
 
+  ChangedPortConnectionConfig.subscribe(val => {
+      port_connection_data = val;
+  });
+
+
+  PortConnection_LAN_ConfigChangedLog.subscribe(val => {
+    port_connection_lan_changedValues = val;
+  });
+
+  PortConnection_COM_ConfigChangedLog.subscribe(val => {
+    port_connection_com_changedValues = val;
+ 	});
 
 
   RemoteServiceConfigChangedLog.subscribe(val => {
@@ -636,6 +658,25 @@
 	}
 
 
+	async function SetPortConnectionData()
+	{
+	  const res = await fetch(window.location.origin+"/SEtPortConnection", {
+	    method: 'POST',
+	    body: ContentPortConnection
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set port connection data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
+	  }		
+	}
+
+
 	function CalculateTotalSetCount()
 	{
 	  if  (lan_data != "" && LANchangedValues.length!=0)
@@ -725,6 +766,12 @@
 		{
 			SetCount++;			
 		}
+
+		if (port_connection_data != ""  && (port_connection_lan_changedValues.length !=0 ||
+  			port_connection_com_changedValues.length !=0 ))
+  	{
+			SetCount++;	
+  	}
 
 	}
 
@@ -902,6 +949,18 @@
 
 				}
 
+				if (port_connection_data != ""  && (port_connection_lan_changedValues.length !=0 ||
+  			port_connection_com_changedValues.length !=0 ))
+  			{
+					let PortConnectionString = JSON.stringify(port_connection_data, null, 0);
+					const bytesArray = Array.from(PortConnectionString).map(char => char.charCodeAt(0));
+	    		PortConnectionBinary = new Uint8Array(bytesArray);
+	      	ContentPortConnection=new Uint8Array(PortConnectionBinary.length+sessionBinary.length);
+	        ContentPortConnection.set(sessionBinary,0);
+	        ContentPortConnection.set(PortConnectionBinary, sessionBinary.length);
+  				SetPortConnectionData();
+  			}
+
       }
 
 	};
@@ -915,6 +974,40 @@
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+
+{#if port_connection_lan_changedValues.length !=0 ||
+  			port_connection_com_changedValues.length !=0}
+  			<Li>Port Connection
+    {#if port_connection_lan_changedValues.length !=0}			
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	LAN
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+   {#each port_connection_lan_changedValues as item}
+  	<Li>{item}</Li>
+	{/each}
+  </List>
+  </Li> 
+  </List>
+  {/if}
+
+
+    {#if port_connection_com_changedValues.length !=0}			
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+  	LAN
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+   {#each port_connection_com_changedValues as item}
+  	<Li>{item}</Li>
+	{/each}
+  </List>
+  </Li> 
+  </List>
+  {/if}
+  			</Li>
+
+{/if}
+
 {#if remote_service_changedValues.length !=0}
 	<Li>Remote Service
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
@@ -1530,7 +1623,9 @@
   			openvpn_client_advanced_rna_changedValues.length !=0 ||
   			openvpn_client_advanced_fo_changedValues.length !=0 ||
   			generic_mqtt_changedValues.length !=0 ||
-  			remote_service_changedValues.length !=0
+  			remote_service_changedValues.length !=0 ||
+  			port_connection_lan_changedValues.length !=0 ||
+  			port_connection_com_changedValues.length !=0
 
 		}
 

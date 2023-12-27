@@ -51,19 +51,192 @@
    let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
-   let formModal=false;
 
 
-  let formModalsm=false;
-  let Sinterface="R485";
-  let BR="9600";
-  let Parity="None";
-  let DB="8";
-  let SB="1";
+  let modify_lan_modal=false;
+  let modify_lan_index;
 
-  let smenable=true;
+  let backup_lan_profile={
+    profileName:"",
+    ip:""
 
-   async function getPortConnectionData () {
+  };
+
+  let modify_com_modal=false;
+  let modify_com_index;
+
+  let backup_com_profile={
+    enable: false,
+    serialProfile: "ComPort1",
+    interface: 0,
+    baudrate: 9600,
+    parity: 0,
+    dataBits: 8,
+    stopBits: 1
+  };
+
+
+  function TriggerModifyCOM(index)
+  {
+    modify_com_modal=true;
+    modify_com_index=index;    
+    backup_com_profile.enable=changed_port_connection_data.config.fieldManagement_portConnection_com[index].enable;
+    backup_com_profile.serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[index].serialProfile;
+    backup_com_profile.interface=changed_port_connection_data.config.fieldManagement_portConnection_com[index].interface;
+    backup_com_profile.baudrate=changed_port_connection_data.config.fieldManagement_portConnection_com[index].baudrate;
+    backup_com_profile.parity=changed_port_connection_data.config.fieldManagement_portConnection_com[index].parity;
+    backup_com_profile.dataBits=changed_port_connection_data.config.fieldManagement_portConnection_com[index].dataBits;
+    backup_com_profile.stopBits=changed_port_connection_data.config.fieldManagement_portConnection_com[index].stopBits;
+
+  }
+
+  function NoModifyCOM(index)
+  {
+    modify_com_modal=false;
+
+    changed_port_connection_data.config.fieldManagement_portConnection_com[index].enable=backup_com_profile.enable;
+    changed_port_connection_data.config.fieldManagement_portConnection_com[index].serialProfile=backup_com_profile.serialProfile;
+    changed_port_connection_data.config.fieldManagement_portConnection_com[index].interface=backup_com_profile.interface;
+    changed_port_connection_data.config.fieldManagement_portConnection_com[index].baudrate=backup_com_profile.baudrate;
+    changed_port_connection_data.config.fieldManagement_portConnection_com[index].parity=backup_com_profile.parity;
+    changed_port_connection_data.config.fieldManagement_portConnection_com[index].dataBits=backup_com_profile.dataBits;
+    changed_port_connection_data.config.fieldManagement_portConnection_com[index].stopBits=backup_com_profile.stopBits;
+
+  }
+
+  function ModifyCom()
+  {
+    modify_com_modal=false;  
+  }
+
+  function saveCom()
+  {
+    console.log("save com");
+    if (port_connection_com_changedValues.length != 0)
+    {
+      port_connection_com_changedValues=[];
+    }
+
+    for (let i=0;i<changed_port_connection_data.config.fieldManagement_portConnection_com.length;i++)
+    {
+        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable != changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable)
+        {
+            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable=changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable;
+            let changedstr="COM List No."+(i+1)+" Enable is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable;
+
+            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
+        }
+
+
+        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile)
+        {
+            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+            let changedstr="COM List No."+(i+1)+" Serial Profile is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+
+            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
+        }
+
+
+        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface != changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface)
+        {
+            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface=changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface;
+            let changedstr="COM List No."+(i+1)+" interface is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface;
+
+            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
+        }
+
+        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate != changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate)
+        {
+            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate=changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate;
+            let changedstr="COM List No."+(i+1)+" baudrate is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate;
+
+            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
+        }
+
+
+        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity != changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity)
+        {
+            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity=changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity;
+            let changedstr="COM List No."+(i+1)+" parity is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity;
+
+            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
+        }
+
+
+        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits != changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits)
+        {
+            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits=changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits;
+            let changedstr="COM List No."+(i+1)+" dataBits is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits;
+
+            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
+        }
+
+
+        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits != changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits)
+        {
+            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits=changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits;
+            let changedstr="COM List No."+(i+1)+" stopBits is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits;
+
+            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
+        }
+
+    }
+
+    PortConnection_COM_ConfigChangedLog.set(port_connection_com_changedValues);
+    ChangedPortConnectionConfig.set(saved_changed_port_connection_data);
+    console.log(port_connection_com_changedValues);   
+
+  }
+
+
+
+  function TriggerModifyLAN(index)
+  {
+    modify_lan_modal=true;
+    modify_lan_index=index;
+    backup_lan_profile.profileName=changed_port_connection_data.config.fieldManagement_portConnection_lan[index].profileName;
+
+
+  }
+
+  function NoModifyLAN(index)
+  {
+    modify_lan_modal=false;
+    changed_port_connection_data.config.fieldManagement_portConnection_lan[index].profileName=backup_lan_profile.profileName;
+  }
+
+  function ModifyLANProfile()
+  {
+    modify_lan_modal=false;  
+  }
+
+  function saveLanProfile()
+  {
+    console.log("save lan profile");
+    if (port_connection_lan_changedValues.length != 0)
+    {
+      port_connection_lan_changedValues=[];
+    }
+
+    for (let i=0;i<changed_port_connection_data.config.fieldManagement_portConnection_lan.length;i++)
+    {
+        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName != changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName)
+        {
+            saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName=changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName;
+            let changedstr="LAN List No."+(i+1)+" Profile Name is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName;
+
+            port_connection_lan_changedValues=[...port_connection_lan_changedValues, changedstr];            
+        }
+    }
+
+    PortConnection_LAN_ConfigChangedLog.set(port_connection_lan_changedValues);
+    ChangedPortConnectionConfig.set(saved_changed_port_connection_data);
+    console.log(port_connection_lan_changedValues);
+    console.log("end save");
+  }
+
+
+   async function getPortConnectionData() {
     const res = await fetch(window.location.origin+"/GeTPortConnection", {
       method: 'POST',
       body: sessionBinary
@@ -138,7 +311,7 @@
 {#each changed_port_connection_data.config.fieldManagement_portConnection_lan as LANItem, index}
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-4">
-<button on:click={() => formModal = true}>
+<button on:click={() =>TriggerModifyLAN(index)}>
 
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -179,7 +352,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveLanProfile}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -191,10 +364,14 @@
  </TableBody>
 
 
-<Modal bind:open={formModal} autoclose={false} size="md" class="w-full">
+<Modal bind:open={modify_lan_modal} size="md" class="w-full" permanent={true}>
+<form action="#">
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyLAN(modify_lan_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
 <table>
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Profile Name</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Profile Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_portConnection_lan[modify_lan_index].profileName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" ></td>
 
 
 
@@ -205,9 +382,10 @@
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-20"><Button color="dark" pill={true}>Submit</Button></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyLANProfile}>Modify</Button></td>
     </tr>
 </table>
+  </form>
 </Modal>
 
 
@@ -234,51 +412,46 @@
     <TableHeadCell class="w-18">Stop Bits</TableHeadCell>
   </TableHead>
   <TableBody>
-    <TableBodyRow>
 
-    
-        
-          
-  
-  
+{#if getDataReady == 1}
+{#each changed_port_connection_data.config.fieldManagement_portConnection_com as ComItem, index}
+
+    <TableBodyRow>   
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalsm = true}>
+<button on:click={() => TriggerModifyCOM(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
        </TableBodyCell>
+{#if ComItem.enable}
       <TableBodyCell>1</TableBodyCell>
+{:else}
+      <TableBodyCell>0</TableBodyCell>
+{/if}
       <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">ComPort1</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{ComItem.serialProfile}</TableBodyCell>
+{#if ComItem.interface == 0}
       <TableBodyCell class="w-10">RS 485</TableBodyCell>
-      <TableBodyCell class="w-10">9600</TableBodyCell>
-      <TableBodyCell class="w-10">None</TableBodyCell>
-      <TableBodyCell class="w-18">8</TableBodyCell>
-      <TableBodyCell class="w-18">1</TableBodyCell>
-    </TableBodyRow>
-    <TableBodyRow>
+{:else}
+      <TableBodyCell class="w-10">Unknown</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{ComItem.baudrate}</TableBodyCell>
 
-      <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalsm = true}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-       </TableBodyCell>
-      <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">2</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">ComPort2</TableBodyCell>
-      <TableBodyCell class="w-10">RS 485</TableBodyCell>
-      <TableBodyCell class="w-10">9600</TableBodyCell>
+{#if ComItem.parity == 0}
       <TableBodyCell class="w-10">None</TableBodyCell>
-      <TableBodyCell class="w-18">8</TableBodyCell>
-      <TableBodyCell class="w-18">1</TableBodyCell>
+{:else if ComItem.parity == 1}
+      <TableBodyCell class="w-10">Even</TableBodyCell>
+{:else if ComItem.parity == 2}
+      <TableBodyCell class="w-10">Odd</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-18">{ComItem.dataBits}</TableBodyCell>
+      <TableBodyCell class="w-18">{ComItem.stopBits}</TableBodyCell>
     </TableBodyRow>
+{/each}
+{/if}
 
-    
-        
-  
+
 <tr>
     <td></td>
     <td></td>
@@ -301,18 +474,20 @@
     </tr>
   </TableBody>
    
-<Modal bind:open={formModalsm} autoclose={false} size="md" class="w-full">
+<Modal bind:open={modify_com_modal} size="md" class="w-full" permanent={true}>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={smenable}>
+  <input type="checkbox"  bind:checked={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].enable} >
   Enable
 </label>
-<p class="mt-4"></p>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyCOM(modify_com_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
 <table>
   
 <tr>
   <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
 
-      <td class="pl-5 pt-5">ComPort1</td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].serialProfile} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
 
@@ -322,12 +497,12 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={Sinterface} value='R485' >RS 485</Radio>
+  <Radio bind:group={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].interface} value={0} >RS 485</Radio>
 </div></td>
 </tr>
 
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="text" bind:value={BR} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].baudrate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -339,9 +514,9 @@
 
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={Parity} value='None' >None</Radio>
-  <Radio bind:group={Parity} value='Even' >Even</Radio>
-  <Radio bind:group={Parity} value='Odd' >Odd</Radio>
+  <Radio bind:group={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].parity} value={0} >None</Radio>
+  <Radio bind:group={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].parity} value={1} >Even</Radio>
+  <Radio bind:group={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].parity} value={2} >Odd</Radio>
 </div></td>
 
 
@@ -349,14 +524,14 @@
   </tr>
 
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={DB} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].dataBits} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={SB} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].stopBits} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
   
@@ -366,9 +541,10 @@
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-20"><Button color="dark" pill={true}>Submit</Button></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyCom}>Modify</Button></td>
     </tr>
 </table>
+  </form>
 </Modal>
 
 </Table>

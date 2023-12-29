@@ -23,10 +23,10 @@ export const Certificate_Settings_ConfigChangedLog=writable("");
 export const Certificate_CRL_ConfigChangedLog=writable("");
 export const ChangedCertificateConfig=writable("");
 
-export const ModbusGateway_TtR=writable("");
-export const ModbusGateway_RtT=writable("");
-export const ModbusGateway_RtR=writable("");
-export const ModbusGateway_TtT=writable("");
+export const ModbusGateway_TtR_ConfigChangedLog=writable("");
+export const ModbusGateway_RtT_ConfigChangedLog=writable("");
+export const ModbusGateway_RtR_ConfigChangedLog=writable("");
+export const ModbusGateway_TtT_ConfigChangedLog=writable("");
 export const ModbusVariable_Slave_ConfigChangedLog=writable("");
 export const ModbusVariable_Master_ConfigChangedLog=writable("");
 export const ModbusTCP_Slave_ConfigChangedLog=writable("");

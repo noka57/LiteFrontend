@@ -60,7 +60,18 @@
     	PortConnection_COM_ConfigChangedLog,
     	ChangedPortConnectionConfig,
     	Certificate_Settings_ConfigChangedLog,
-    	ChangedCertificateConfig
+    	ChangedCertificateConfig,
+    	ModbusGateway_TtR_ConfigChangedLog,
+	    ModbusGateway_RtT_ConfigChangedLog,
+	    ModbusGateway_RtR_ConfigChangedLog,
+	    ModbusGateway_TtT_ConfigChangedLog,
+	    ModbusVariable_Slave_ConfigChangedLog,
+	    ModbusVariable_Master_ConfigChangedLog,
+	    ModbusTCP_Slave_ConfigChangedLog,
+	    ModbusTCP_Master_ConfigChangedLog,
+	    ModbusRTU_Slave_ConfigChangedLog,
+	    ModbusRTU_Master_ConfigChangedLog,
+	    ChangedModbusConfig
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -82,6 +93,7 @@
   let remote_service_data="";
   let port_connection_data="";
   let certificate_data="";
+  let modbus_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -181,6 +193,21 @@
   let CertificateBinary=null;
   let certificate_settings_changedValues = [];
 
+  let ContentModbus;
+  let ModbusBinary=null;
+  let modbus_gateway_TtR_changedValues=[];
+  let modbus_gateway_RtT_changedValues=[];
+  let modbus_gateway_RtR_changedValues=[];
+  let modbus_gateway_TtT_changedValues=[];
+
+  let modbus_variable_master_changedValues=[];
+  let modbus_variable_slave_changedValues=[];
+  let modbus_tcp_master_changedValues=[];
+  let modbus_tcp_slave_changedValues=[];
+  let modbus_rtu_master_changedValues=[];
+  let modbus_rtu_slave_changedValues=[];
+
+
   let SetCount=0;
   let SetCountOK=0;
 
@@ -257,13 +284,52 @@
       certificate_data = val;
   });
 
+  ChangedModbusConfig.subscribe(val => {
+      modbus_data = val;
+  });
+
+
   Certificate_Settings_ConfigChangedLog.subscribe(val => {
       certificate_settings_changedValues = val;
   });
 
 
 
+  ModbusGateway_TtR_ConfigChangedLog.subscribe(val => {
+        modbus_gateway_TtR_changedValues = val;
+    });
+  ModbusGateway_RtT_ConfigChangedLog.subscribe(val => {
+        modbus_gateway_RtT_changedValues = val;
+    });
+  ModbusGateway_RtR_ConfigChangedLog.subscribe(val => {
+        modbus_gateway_RtR_changedValues = val;
+    });
+  ModbusGateway_TtT_ConfigChangedLog.subscribe(val => {
+        modbus_gateway_TtT_changedValues = val;
+    });
 
+  ModbusVariable_Slave_ConfigChangedLog.subscribe(val => {
+      modbus_variable_slave_changedValues = val;
+  });
+
+  ModbusVariable_Master_ConfigChangedLog.subscribe(val => {
+      modbus_variable_master_changedValues = val;
+  });
+
+  ModbusTCP_Slave_ConfigChangedLog.subscribe(val => {
+      modbus_tcp_slave_changedValues = val;
+  });
+  ModbusTCP_Master_ConfigChangedLog.subscribe(val => {
+      modbus_tcp_master_changedValues = val;
+  });
+
+  ModbusRTU_Slave_ConfigChangedLog.subscribe(val => {
+      modbus_rtu_slave_changedValues = val;
+  });
+
+  ModbusRTU_Master_ConfigChangedLog.subscribe(val => {
+      modbus_rtu_master_changedValues = val;
+  });
 
   PortConnection_LAN_ConfigChangedLog.subscribe(val => {
     port_connection_lan_changedValues = val;
@@ -714,6 +780,26 @@
 	}
 
 
+	async function SetModbusData()
+	{
+	  const res = await fetch(window.location.origin+"/sETMODbus", {
+	    method: 'POST',
+	    body: ContentModbus
+	   })
+
+	  if (res.status == 200)
+	  {
+	  	console.log("set modbus data OK\r\n");
+	  	SetCountOK++;
+	  	if (SetCountOK == SetCount)
+	  	{
+	  		SetThenPostReboot();
+	  	}
+	  }		
+	}  				
+
+
+
 	function CalculateTotalSetCount()
 	{
 	  if  (lan_data != "" && LANchangedValues.length!=0)
@@ -815,8 +901,21 @@
   		SetCount++;	
   	}
 
-	}
+  	if (modbus_data !="" && (modbus_gateway_TtR_changedValues.length !=0 ||
+		    modbus_gateway_RtT_changedValues.length !=0 ||
+		    modbus_gateway_RtR_changedValues.length !=0 ||
+		    modbus_gateway_TtT_changedValues.length !=0 ||
+		    modbus_variable_master_changedValues.length !=0 ||
+		    modbus_variable_slave_changedValues.length !=0 ||
+		    modbus_tcp_master_changedValues.length !=0 ||
+		    modbus_tcp_slave_changedValues.length !=0 ||
+		    modbus_rtu_master_changedValues.length !=0 ||
+		    modbus_rtu_slave_changedValues.length !=0 ))
+  	{
+  		SetCount++;	
+  	}
 
+	}
 
 	function modalTrigger()
 	{
@@ -1012,6 +1111,26 @@
 	        ContentCertificate.set(sessionBinary,0);
 	        ContentCertificate.set(CertificateBinary, sessionBinary.length);
   				SetCertificateData();
+  			}
+  			if (modbus_data !="" && (modbus_gateway_TtR_changedValues.length !=0 ||
+										    modbus_gateway_RtT_changedValues.length !=0 ||
+										    modbus_gateway_RtR_changedValues.length !=0 ||
+										    modbus_gateway_TtT_changedValues.length !=0 ||
+										    modbus_variable_master_changedValues.length !=0 ||
+										    modbus_variable_slave_changedValues.length !=0 ||
+										    modbus_tcp_master_changedValues.length !=0 ||
+										    modbus_tcp_slave_changedValues.length !=0 ||
+										    modbus_rtu_master_changedValues.length !=0 ||
+										    modbus_rtu_slave_changedValues.length !=0 ))
+  			{
+  				let ModbusString = JSON.stringify(modbus_data, null, 0);
+					const bytesArray = Array.from(ModbusString).map(char => char.charCodeAt(0));
+	    		ModbusBinary = new Uint8Array(bytesArray);
+	      	ContentModbus=new Uint8Array(ModbusBinary.length+sessionBinary.length);
+	        ContentModbus.set(sessionBinary,0);
+	        ContentModbus.set(ModbusBinary, sessionBinary.length);
+  				SetModbusData();
+
   			}
 
       }
@@ -1649,7 +1768,18 @@
 </div>
 <div class="pt-10 pl-10 text-center">
 
-{#if 		LANchangedValues.length != 0 ||
+{#if 		
+  			modbus_gateway_TtR_changedValues.length !=0 ||
+		    modbus_gateway_RtT_changedValues.length !=0 ||
+		    modbus_gateway_RtR_changedValues.length !=0 ||
+		    modbus_gateway_TtT_changedValues.length !=0 ||
+		    modbus_variable_master_changedValues.length !=0 ||
+		    modbus_variable_slave_changedValues.length !=0 ||
+		    modbus_tcp_master_changedValues.length !=0 ||
+		    modbus_tcp_slave_changedValues.length !=0 ||
+		    modbus_rtu_master_changedValues.length !=0 ||
+		    modbus_rtu_slave_changedValues.length !=0 ||
+				LANchangedValues.length != 0 ||
   			NAT_loopback_changedValues.length != 0 ||
   			NAT_virtualServer_changedValues.length !=0 ||
   			NAT_virtualComputer_changedValues.length !=0 ||

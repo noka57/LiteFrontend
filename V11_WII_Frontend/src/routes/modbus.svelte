@@ -6,10 +6,10 @@
 
   import { 
     modbusConfig,
-    ModbusGateway_TtR,
-    ModbusGateway_RtT,
-    ModbusGateway_RtR,
-    ModbusGateway_TtT,
+    ModbusGateway_TtR_ConfigChangedLog,
+    ModbusGateway_RtT_ConfigChangedLog,
+    ModbusGateway_RtR_ConfigChangedLog,
+    ModbusGateway_TtT_ConfigChangedLog,
     ModbusVariable_Slave_ConfigChangedLog,
     ModbusVariable_Master_ConfigChangedLog,
     ModbusTCP_Slave_ConfigChangedLog,
@@ -32,88 +32,56 @@
         sessionid = val;
     });
 
-    let modbus_gateway_TtR_changedValues;
-    let modbus_gateway_RtT_changedValues;
-    let modbus_gateway_RtR_changedValues;
-    let modbus_gateway_TtT_changedValues;
+    let modbus_gateway_TtR_changedValues=[];
+    let modbus_gateway_RtT_changedValues=[];
+    let modbus_gateway_RtR_changedValues=[];
+    let modbus_gateway_TtT_changedValues=[];
 
-    let modbus_variable_master_changedValues;
-    let modbus_variable_slave_changedValues;
-    let modbus_tcp_master_changedValues;
-    let modbus_tcp_slave_changedValues;
-    let modbus_rtu_master_changedValues;
-    let modbus_rtu_slave_changedValues;
+    let modbus_variable_master_changedValues=[];
+    let modbus_variable_slave_changedValues=[];
+    let modbus_tcp_master_changedValues=[];
+    let modbus_tcp_slave_changedValues=[];
+    let modbus_rtu_master_changedValues=[];
+    let modbus_rtu_slave_changedValues=[];
 
-    ModbusGateway_TtR.subscribe(val => {
+    ModbusGateway_TtR_ConfigChangedLog.subscribe(val => {
           modbus_gateway_TtR_changedValues = val;
       });
-    ModbusGateway_RtT.subscribe(val => {
+    ModbusGateway_RtT_ConfigChangedLog.subscribe(val => {
           modbus_gateway_RtT_changedValues = val;
       });
-    ModbusGateway_RtR.subscribe(val => {
+    ModbusGateway_RtR_ConfigChangedLog.subscribe(val => {
           modbus_gateway_RtR_changedValues = val;
       });
-    ModbusGateway_TtT.subscribe(val => {
+    ModbusGateway_TtT_ConfigChangedLog.subscribe(val => {
           modbus_gateway_TtT_changedValues = val;
       });
 
 
     ModbusVariable_Slave_ConfigChangedLog.subscribe(val => {
-              modbus_variable_slave_changedValues = val;
-          });
+        modbus_variable_slave_changedValues = val;
+    });
 
     ModbusVariable_Master_ConfigChangedLog.subscribe(val => {
-              modbus_variable_master_changedValues = val;
-          });
+        modbus_variable_master_changedValues = val;
+    });
+
     ModbusTCP_Slave_ConfigChangedLog.subscribe(val => {
-              modbus_tcp_slave_changedValues = val;
-          });
+        modbus_tcp_slave_changedValues = val;
+    });
     ModbusTCP_Master_ConfigChangedLog.subscribe(val => {
-              modbus_tcp_master_changedValues = val;
-          });
+        modbus_tcp_master_changedValues = val;
+    });
+
     ModbusRTU_Slave_ConfigChangedLog.subscribe(val => {
-              modbus_rtu_slave_changedValues = val;
-          });
+        modbus_rtu_slave_changedValues = val;
+    });
+
     ModbusRTU_Master_ConfigChangedLog.subscribe(val => {
-              modbus_rtu_master_changedValues = val;
-          });
+        modbus_rtu_master_changedValues = val;
+    });
 
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
-  let formModalsm=false;
-  let Sinterface="R485";
-  let BR="9600";
-  let Parity="None";
-  let DB="8";
-  let SB="1";
-  let MM_SerialProfile;
-  let MS_SerialProfile;
-  let RM_Name="Modbus_Master_S0";
-
-  let smenable=true;
-
-  let formModaltm=false;
-  let formModalmvar=false;
-
-
-   let SlaveID="2";
-   let PointType="IR";
-   let MAddr="0";
-   let MQ="1";
-   let MDisplay="BE";
-   let mvarenable=true;
-   let M_Name="Line Current Phase A";
-   let PRate;
-  let RMIntervalP;
-  let RMRTimeout;
-   let Vrole;
-
-
-  let MPList = [
-    {value:"Test1", name: "Modbus_Master_S0"},
-    {value:"Test2", name: "Modbus_Master_S1"},
-    {value:"Test3", name: "Modbus_Master_T0"},
-  ];
-
 
   modbusConfig.subscribe(val => {
       modbus_data = val;
@@ -123,6 +91,314 @@
       saved_changed_modbus_data = val;
   });
 
+  let new_tcp_slave=[
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    }
+
+  ];
+
+    let new_tcp_slave_modal=false;
+    let new_tcp_slave_index;
+
+    function new_tcp_slave_trigger(index)
+    {
+        new_tcp_slave[index].enable=false;
+        new_tcp_slave[index].lanProfile="";
+        new_tcp_slave[index].aliasName="";
+        new_tcp_slave[index].listenPort=502;
+        new_tcp_slave[index].maxConnectionCount=10;
+
+        new_tcp_slave_index=index;
+        new_tcp_slave_modal=true;
+
+    }
+
+    function add_new_tcp_slave(index)
+    {
+        new_tcp_slave_modal=false;
+
+        changed_modbus_data.config.fieldManagement_modbus_tcp.slave=[...changed_modbus_data.config.fieldManagement_modbus_tcp.slave,new_tcp_slave[index]];
+    }
+
+  let backup_tcp_slave={
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        listenPort: 12345,
+        maxConnectionCount: 3000
+
+    };
+
+    let Modify_TCP_Slave_Modal=false;
+    let Modify_TCP_Slave_index;
+
+    function TriggerModifyTCPSlave(index)
+    {
+        Modify_TCP_Slave_Modal=true;
+        Modify_TCP_Slave_index=index;
+        backup_tcp_slave.enable=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].enable;
+        backup_tcp_slave.aliasName=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].aliasName;
+        backup_tcp_slave.lanProfile=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].lanProfile;
+        backup_tcp_slave.listenPort=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].listenPort;
+        backup_tcp_slave.maxConnectionCount=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].maxConnectionCount;
+
+    }
+
+    function NoModifyTCPSlave(index)
+    {
+        Modify_TCP_Slave_Modal=false;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].enable=backup_tcp_slave.enable;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].aliasName=backup_tcp_slave.aliasName;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].lanProfile=backup_tcp_slave.lanProfile;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].listenPort=backup_tcp_slave.listenPort;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].maxConnectionCount=backup_tcp_slave.maxConnectionCount;
+    }
+
+    function ModifyTCPSlave()
+    {
+        Modify_TCP_Slave_Modal=false;  
+    }
+
+
+    let new_tcp_master=[
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    },
+    {
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    }
+    ];
+
+    let new_tcp_master_modal=false;
+    let new_tcp_master_index;
+
+    function new_tcp_master_trigger(index)
+    {
+        new_tcp_master[index].enable=false;
+        new_tcp_master[index].lanProfile="";
+        new_tcp_master[index].aliasName="";
+        new_tcp_master[index].remoteServerIP="";
+        new_tcp_master[index].remotePort=0;
+        new_tcp_master[index].connectionTimeout=3000;
+
+        new_tcp_master_index=index;
+        new_tcp_master_modal=true;
+
+    }
+
+    function add_new_tcp_master(index)
+    {
+        new_tcp_master_modal=false;
+
+        changed_modbus_data.config.fieldManagement_modbus_tcp.master=[...changed_modbus_data.config.fieldManagement_modbus_tcp.master,new_tcp_master[index]];
+    }
+
+
+    let backup_tcp_master={
+        enable: false,
+        lanProfile: "",
+        aliasName: "",
+        remoteServerIp: "",
+        remotePort: 12345,
+        connectionTimeout: 3000
+
+    };
+
+    let Modify_TCP_Master_Modal=false;
+    let Modify_TCP_Master_index;
+
+
+    function TriggerModifyTCPMaster(index)
+    {
+        Modify_TCP_Master_Modal=true;
+        Modify_TCP_Master_index=index;
+        backup_tcp_master.enable=changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].enable;
+        backup_tcp_master.aliasName=changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].aliasName;
+        backup_tcp_master.lanProfile=changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].lanProfile;
+        backup_tcp_master.remoteServerIp=changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].remoteServerIp;
+        backup_tcp_master.remotePort=changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].remotePort;
+        backup_tcp_master.connectionTimeout=changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].connectionTimeout;
+    }
+
+    function NoModifyTCPMaster(index)
+    {
+        Modify_TCP_Master_Modal=false;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].enable=backup_tcp_master.enable;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].aliasName=backup_tcp_master.aliasName;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].lanProfile=backup_tcp_master.lanProfile;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].remoteServerIp=backup_tcp_master.remoteServerIp;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].remotePort=backup_tcp_master.remotePort;
+        changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].connectionTimeout=backup_tcp_master.connectionTimeout;
+    }
+
+    function ModifyTCPMaster()
+    {
+        Modify_TCP_Master_Modal=false;  
+    }
+
+
     let backup_rtu_master={
         enable:false,
         aliasName:"",
@@ -130,43 +406,1477 @@
     };
 
 
-  let Modify_RTU_Master_Modal=false;
-  let Modify_RTU_Master_index;
+    let Modify_RTU_Master_Modal=false;
+    let Modify_RTU_Master_index;
 
-  let rtu_master_new=[
+
+    function TriggerModifyRtuMaster(index)
     {
+        Modify_RTU_Master_Modal=true;
+        Modify_RTU_Master_index=index;
+        backup_rtu_master.enable=changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].enable;
+        backup_rtu_master.aliasName=changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].aliasName;
+        backup_rtu_master.serialProfile=changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].serialProfile;
+    }
+
+    function NoModifyRTUMaster(index)
+    {
+        Modify_RTU_Master_Modal=false;
+        changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].enable=backup_rtu_master.enable;
+        changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].aliasName=backup_rtu_master.aliasName;
+        changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].serialProfile= backup_rtu_master.serialProfile;
+    }
+
+    function ModifyRTUMaster()
+    {
+        Modify_RTU_Master_Modal=false;  
+    }
+
+
+    let Modify_RTU_Slave_Modal=false;
+    let Modify_RTU_Slave_index;
+
+    let backup_rtu_slave={
         enable:false,
         aliasName:"",
         serialProfile:""
+    };
+
+    function TriggerModifyRtuSlave(index)
+    {
+        Modify_RTU_Slave_Modal=true;
+        Modify_RTU_Slave_index=index;
+        backup_rtu_slave.enable=changed_modbus_data.config.fieldManagement_modbus_rtu.slave[index].enable;
+        backup_rtu_slave.aliasName=changed_modbus_data.config.fieldManagement_modbus_rtu.slave[index].aliasName;
+        backup_rtu_slave.serialProfile=changed_modbus_data.config.fieldManagement_modbus_rtu.slave[index].serialProfile;
+    }
+
+    function NoModifyRTUSlave(index)
+    {
+        Modify_RTU_Slave_Modal=false;
+        changed_modbus_data.config.fieldManagement_modbus_rtu.slave[index].enable=backup_rtu_slave.enable;
+        changed_modbus_data.config.fieldManagement_modbus_rtu.slave[index].aliasName=backup_rtu_slave.aliasName;
+        changed_modbus_data.config.fieldManagement_modbus_rtu.slave[index].serialProfile= backup_rtu_slave.serialProfile;
+    }
+
+    function ModifyRTUSlave()
+    {
+        Modify_RTU_Slave_Modal=false;  
+    }
+
+
+    let backup_variable_master={
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    };
+
+    let new_variable_master=[
+    {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    }
+
+    ];
+
+
+    let new_variable_master_modal=false;
+    let new_variable_master_index;
+
+    function new_variable_master_trigger(index)
+    {
+        new_variable_master[index].enable=false;
+        new_variable_master[index].variableName="";
+        new_variable_master[index].profile="";
+        new_variable_master[index].slaveId=0;
+        new_variable_master[index].pointType=0;
+        new_variable_master[index].address=0;
+        new_variable_master[index].quantity=1;
+        new_variable_master[index].byteOrder= 0;
+        new_variable_master[index].responseTimeout=1000;
+        new_variable_master[index].pollingRate=1000;
+        new_variable_master[index].delayBetweenPolls=20;
+
+        new_variable_master_index=index;
+        new_variable_master_modal=true;
+
+    }
+
+    function add_new_variable_master(index)
+    {
+        new_variable_master_modal=false;
+
+        changed_modbus_data.config.fieldManagement_modbus_variable.master=[...changed_modbus_data.config.fieldManagement_modbus_variable.master,new_variable_master[index]];
+    }
+
+
+    let Modify_Variable_Master_Modal=false;
+    let Modify_Variable_Master_index;
+
+
+    function TriggerModifyVariableMaster(index)
+    {
+        Modify_Variable_Master_Modal=true;
+        Modify_Variable_Master_index=index;
+        backup_variable_master.enable=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].enable;
+        backup_variable_master.variableName=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].variableName;
+        backup_variable_master.profile=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].profile;
+        backup_variable_master.slaveId=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].slaveId;        
+        backup_variable_master.pointType=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].pointType;      
+        backup_variable_master.address=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].address; 
+        backup_variable_master.quantity=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].quantity;
+        backup_variable_master.byteOrder=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].byteOrder;
+        backup_variable_master.responseTimeout=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].responseTimeout;
+        backup_variable_master.pollingRate=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].pollingRate;
+        backup_variable_master.delayBetweenPolls=changed_modbus_data.config.fieldManagement_modbus_variable.master[index].delayBetweenPolls;
+
+    }
+
+    function NoModifyVariableMaster(index)
+    {
+        Modify_Variable_Master_Modal=false;
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].enable=backup_variable_master.enable;
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].variableName=backup_variable_master.variableName;
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].profile=backup_variable_master.profile;
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].slaveId=backup_variable_master.slaveId;        
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].pointType=backup_variable_master.pointType;      
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].address=backup_variable_master.address; 
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].quantity=backup_variable_master.quantity;
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].byteOrder=backup_variable_master.byteOrder;
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].responseTimeout=backup_variable_master.responseTimeout;
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].pollingRate=backup_variable_master.pollingRate;
+        changed_modbus_data.config.fieldManagement_modbus_variable.master[index].delayBetweenPolls=backup_variable_master.delayBetweenPolls;
+
+    }
+
+    function ModifyVariableMaster()
+    {
+        Modify_Variable_Master_Modal=false;  
+    }
+
+
+    let new_variable_slave=[
+    {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+    }
+
+    ];
+
+
+    let new_variable_slave_modal=false;
+    let new_variable_slave_index;
+
+    function new_variable_slave_trigger(index)
+    {
+        new_variable_slave[index].enable=false;
+        new_variable_slave[index].variableName="";
+        new_variable_slave[index].profile="";
+        new_variable_slave[index].slaveId=0;
+        new_variable_slave[index].pointType=0;
+        new_variable_slave[index].address=0;
+        new_variable_slave[index].quantity=1;
+        new_variable_slave[index].byteOrder= 0;
+
+
+        new_variable_slave_index=index;
+        new_variable_slave_modal=true;
+
+    }
+
+    function add_new_variable_slave(index)
+    {
+        new_variable_slave_modal=false;
+
+        changed_modbus_data.config.fieldManagement_modbus_variable.slave=[...changed_modbus_data.config.fieldManagement_modbus_variable.slave,new_variable_slave[index]];
+    }
+
+
+
+
+   let backup_variable_slave={
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 0,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0
+
+    };
+
+    let Modify_Variable_Slave_Modal=false;
+    let Modify_Variable_Slave_index;
+
+
+    function TriggerModifyVariableSlave(index)
+    {
+        Modify_Variable_Slave_Modal=true;
+        Modify_Variable_Slave_index=index;
+        backup_variable_slave.enable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].enable;
+        backup_variable_slave.variableName=changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].variableName;
+        backup_variable_slave.profile=changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].profile;
+        backup_variable_slave.slaveId=changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].slaveId;        
+        backup_variable_slave.pointType=changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].pointType;      
+        backup_variable_slave.address=changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].address; 
+        backup_variable_slave.quantity=changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].quantity;
+        backup_variable_slave.byteOrder=changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].byteOrder;
+
+
+    }
+
+    function NoModifyVariableSlave(index)
+    {
+        Modify_Variable_Slave_Modal=false;
+        changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].enable=backup_variable_slave.enable;
+        changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].variableName=backup_variable_slave.variableName;
+        changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].profile=backup_variable_slave.profile;
+        changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].slaveId=backup_variable_slave.slaveId;        
+        changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].pointType=backup_variable_slave.pointType;      
+        changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].address=backup_variable_slave.address; 
+        changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].quantity=backup_variable_slave.quantity;
+        changed_modbus_data.config.fieldManagement_modbus_variable.slave[index].byteOrder=backup_variable_slave.byteOrder;
+
+    }
+
+    function ModifyVariableSlave()
+    {
+        Modify_Variable_Slave_Modal=false;  
+    }
+
+
+
+    let new_gateway_t2r=[
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
     },
     {
-        enable:false,
-        aliasName:"",
-        serialProfile:""
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
     }
-  ];
+    ];
 
- function TriggerModifyRtuMaster(index)
-  {
-    Modify_RTU_Master_Modal=true;
-    Modify_RTU_Master_index=index;
-    backup_rtu_master.enable=changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].enable;
-    backup_rtu_master.aliasName=changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].aliasName;
-    backup_rtu_master.serialProfile=changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].serialProfile;
-  }
+    let new_gateway_t2r_modal=false;
+    let new_gateway_t2r_index;
 
-  function NoModifyRTUMaster(index)
-  {
-    Modify_RTU_Master_Modal=false;
-    changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].enable=backup_rtu_master.enable;
-    changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].aliasName=backup_rtu_master.aliasName;
-    changed_modbus_data.config.fieldManagement_modbus_rtu.master[index].serialProfile= backup_rtu_master.serialProfile;
-  }
+    function new_gateway_t2r_trigger(index)
+    {
+        new_gateway_t2r[index].enable=false;
+        new_gateway_t2r[index].aliasName="";
+        new_gateway_t2r[index].tcpProfileSlave="";
+        new_gateway_t2r[index].rtuProfileMaster="";
+        new_gateway_t2r[index].responseTimeout=1000;
+        new_gateway_t2r_index=index;
+        new_gateway_t2r_modal=true;
 
-  function ModifyRTUMaster()
-  {
-    Modify_RTU_Master_Modal=false;  
-  }
+    }
+
+    function add_new_gateway_t2r(index)
+    {
+        new_gateway_t2r_modal=false;
+
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu=[...changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu,new_gateway_t2r[index]];
+    }
+
+    let backup_gateway_t2r={
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    };
+
+
+    let Modify_Gateway_T2R_Modal=false;
+    let Modify_Gateway_T2R_index;
+
+
+    function TriggerModifyGateway_T2R(index)
+    {
+        Modify_Gateway_T2R_Modal=true;
+        Modify_Gateway_T2R_index=index;
+        backup_gateway_t2r.enable=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[index].enable;
+        backup_gateway_t2r.aliasName=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[index].aliasName;
+        backup_gateway_t2r.tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[index].tcpProfileSlave;
+        backup_gateway_t2r.rtuProfileMaster=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[index].rtuProfileMaster;
+        backup_gateway_t2r.responseTimeout=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[index].responseTimeout;
+    }
+
+    function NoModifyGateway_T2R(index)
+    {
+        Modify_Gateway_T2R_Modal=false;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[index].enable=backup_gateway_t2r.enable;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[index].aliasName=backup_gateway_t2r.aliasName;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[index].tcpProfileSlave=backup_gateway_t2r.tcpProfileSlave;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[index].rtuProfileMaster=backup_gateway_t2r.rtuProfileMaster;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[index].responseTimeout=backup_gateway_t2r.responseTimeout;
+
+    }
+
+    function ModifyGateway_T2R()
+    {
+        Modify_Gateway_T2R_Modal=false;  
+    }
+
+    let new_gateway_r2t=[
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    }
+
+    ];
+
+    let new_gateway_r2t_modal=false;
+    let new_gateway_r2t_index;
+
+    function new_gateway_r2t_trigger(index)
+    {
+        new_gateway_r2t[index].enable=false;
+        new_gateway_r2t[index].aliasName="";
+        new_gateway_r2t[index].rtuProfileSlave="";
+        new_gateway_r2t[index].tcpProfileMaster="";
+        new_gateway_r2t[index].responseTimeout=1000;
+        new_gateway_r2t_index=index;
+        new_gateway_r2t_modal=true;
+
+    }
+
+    function add_new_gateway_r2t(index)
+    {
+        new_gateway_r2t_modal=false;
+
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp=[...changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp,new_gateway_r2t[index]];
+    }
+
+
+    let backup_gateway_r2t={
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    };
+
+
+    let Modify_Gateway_R2T_Modal=false;
+    let Modify_Gateway_R2T_index;
+
+
+    function TriggerModifyGateway_R2T(index)
+    {
+        Modify_Gateway_R2T_Modal=true;
+        Modify_Gateway_R2T_index=index;
+        backup_gateway_r2t.enable=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].enable;
+        backup_gateway_r2t.aliasName=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].aliasName;
+        backup_gateway_r2t.rtuProfileSlave=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].rtuProfileSlave;
+        backup_gateway_r2t.tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].tcpProfileMaster;
+        backup_gateway_r2t.responseTimeout=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].responseTimeout;
+    }
+
+    function NoModifyGateway_R2T(index)
+    {
+        Modify_Gateway_R2T_Modal=false;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].enable=backup_gateway_r2t.enable;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].aliasName=backup_gateway_r2t.aliasName;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].rtuProfileSlave=backup_gateway_r2t.rtuProfileSlave;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].tcpProfileMaster=backup_gateway_r2t.tcpProfileMaster;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].responseTimeout=backup_gateway_r2t.responseTimeout;
+
+    }
+
+    function ModifyGateway_R2T()
+    {
+        Modify_Gateway_R2T_Modal=false;  
+    }
+
+
+
+    let new_gateway_r2r=[
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    }
+
+    ];
+
+
+
+    let new_gateway_r2r_modal=false;
+    let new_gateway_r2r_index;
+
+    function new_gateway_r2r_trigger(index)
+    {
+        new_gateway_r2r[index].enable=false;
+        new_gateway_r2r[index].aliasName="";
+        new_gateway_r2r[index].rtuProfileSlave="";
+        new_gateway_r2r[index].rtuProfileMaster="";
+        new_gateway_r2r[index].responseTimeout=1000;
+        new_gateway_r2r_index=index;
+        new_gateway_r2r_modal=true;
+
+    }
+
+    function add_new_gateway_r2r(index)
+    {
+        new_gateway_r2r_modal=false;
+
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu=[...changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu,new_gateway_r2r[index]];
+    }
+
+
+    let backup_gateway_r2r={
+        enable: false,
+        aliasName: "",
+        rtuProfileSlave: "",
+        rtuProfileMaster: "",
+        responseTimeout: 1000
+    };
+
+
+    let Modify_Gateway_R2R_Modal=false;
+    let Modify_Gateway_R2R_index;
+
+
+    function TriggerModifyGateway_R2R(index)
+    {
+        Modify_Gateway_R2R_Modal=true;
+        Modify_Gateway_R2R_index=index;
+        backup_gateway_r2r.enable=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[index].enable;
+        backup_gateway_r2r.aliasName=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[index].aliasName;
+        backup_gateway_r2r.rtuProfileSlave=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[index].rtuProfileSlave;
+        backup_gateway_r2r.rtuProfileMaster=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[index].rtuProfileMaster;
+        backup_gateway_r2r.responseTimeout=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[index].responseTimeout;
+    }
+
+    function NoModifyGateway_R2R(index)
+    {
+        Modify_Gateway_R2R_Modal=false;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[index].enable=backup_gateway_r2r.enable;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[index].aliasName=backup_gateway_r2r.aliasName;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[index].rtuProfileSlave=backup_gateway_r2r.rtuProfileSlave;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[index].rtuProfileMaster=backup_gateway_r2r.rtuProfileMaster;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[index].responseTimeout=backup_gateway_r2r.responseTimeout;
+
+    }
+
+    function ModifyGateway_R2R()
+    {
+        Modify_Gateway_R2R_Modal=false;  
+    }
+
+
+   let new_gateway_t2t=[
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    },
+    {
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    }
+
+    ];
+
+    let new_gateway_t2t_modal=false;
+    let new_gateway_t2t_index;
+
+    function new_gateway_t2t_trigger(index)
+    {
+        new_gateway_t2t[index].enable=false;
+        new_gateway_t2t[index].aliasName="";
+        new_gateway_t2t[index].tcpProfileSlave="";
+        new_gateway_t2t[index].tcpProfileMaster="";
+        new_gateway_t2t[index].responseTimeout=1000;
+        new_gateway_t2t_index=index;
+        new_gateway_t2t_modal=true;
+
+    }
+
+    function add_new_gateway_t2t(index)
+    {
+        new_gateway_t2t_modal=false;
+
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp=[...changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp,new_gateway_t2t[index]];
+    }
+
+
+    let backup_gateway_t2t={
+        enable: false,
+        aliasName: "",
+        tcpProfileSlave: "",
+        tcpProfileMaster: "",
+        responseTimeout: 1000
+    };
+
+
+    let Modify_Gateway_T2T_Modal=false;
+    let Modify_Gateway_T2T_index;
+
+
+    function TriggerModifyGateway_T2T(index)
+    {
+        Modify_Gateway_T2T_Modal=true;
+        Modify_Gateway_T2T_index=index;
+        backup_gateway_t2t.enable=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[index].enable;
+        backup_gateway_t2t.aliasName=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[index].aliasName;
+        backup_gateway_t2t.tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[index].tcpProfileSlave;
+        backup_gateway_t2t.tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[index].tcpProfileMaster;
+        backup_gateway_t2t.responseTimeout=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[index].responseTimeout;
+    }
+
+    function NoModifyGateway_T2T(index)
+    {
+        Modify_Gateway_T2T_Modal=false;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[index].enable=backup_gateway_t2t.enable;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[index].aliasName=backup_gateway_t2t.aliasName;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[index].tcpProfileSlave=backup_gateway_t2t.tcpProfileSlave;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[index].tcpProfileMaster=backup_gateway_t2t.tcpProfileMaster;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[index].responseTimeout=backup_gateway_t2t.responseTimeout;
+
+    }
+
+    function ModifyGateway_T2T()
+    {
+        Modify_Gateway_T2T_Modal=false;  
+    }
+
+
+    function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
+    {
+      for (const key in obj1) 
+      {
+        if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+        {
+          if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) 
+          {
+            for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+            {
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+            }
+
+            if (obj1[key].length > obj2[key].length) 
+            {
+              let addedCount=obj1[key].length-obj2[key].length;
+              let changedstr="Add "+addedCount+" item(s) to "+ key;
+              if (type == 0)
+              {
+                modbus_gateway_TtT_changedValues=[...modbus_gateway_TtT_changedValues, changedstr];
+              }
+              else if (type == 1)
+              {
+                modbus_gateway_RtR_changedValues=[...modbus_gateway_RtR_changedValues, changedstr];          
+              }
+              else if (type == 2)
+              {
+                modbus_gateway_RtT_changedValues=[...modbus_gateway_RtT_changedValues, changedstr];          
+              }   
+              else if (type == 3)
+              {
+                modbus_gateway_TtR_changedValues=[...modbus_gateway_TtR_changedValues, changedstr];          
+              }
+              else if (type == 4)
+              {
+               modbus_variable_master_changedValues=[...modbus_variable_master_changedValues, changedstr];          
+              }
+              else if (type == 5)
+              {
+                modbus_variable_slave_changedValues=[...modbus_variable_slave_changedValues, changedstr];
+              }
+              else if (type == 6)
+              {
+                modbus_tcp_slave_changedValues=[...modbus_tcp_slave_changedValues, changedstr];
+              }  
+              else if (type == 7)
+              {
+                modbus_tcp_master_changedValues=[...modbus_tcp_master_changedValues, changedstr];
+              }                                    
+            }
+            else if (obj1[key].length < obj2[key].length)
+            {
+              let deletedCount=obj2[key].length-obj1[key].length;
+              let changedstr="Delete "+deletedCount+" item(s) from "+ key;
+              if (type == 0)
+              {
+                modbus_gateway_TtT_changedValues=[...modbus_gateway_TtT_changedValues, changedstr];
+              }
+              else if (type == 1)
+              {
+                modbus_gateway_RtR_changedValues=[...modbus_gateway_RtR_changedValues, changedstr];          
+              }
+              else if (type == 2)
+              {
+                modbus_gateway_RtT_changedValues=[...modbus_gateway_RtT_changedValues, changedstr];          
+              }
+              else if (type == 3)
+              {
+                modbus_gateway_TtR_changedValues=[...modbus_gateway_TtR_changedValues, changedstr];          
+              }
+              else if (type == 4)
+              {
+               modbus_variable_master_changedValues=[...modbus_variable_master_changedValues, changedstr];          
+              }
+              else if (type == 5)
+              {
+                modbus_variable_slave_changedValues=[...modbus_variable_slave_changedValues, changedstr];
+              }
+              else if (type == 6)
+              {
+                modbus_tcp_slave_changedValues=[...modbus_tcp_slave_changedValues, changedstr];
+              }  
+              else if (type == 7)
+              {
+                modbus_tcp_master_changedValues=[...modbus_tcp_master_changedValues, changedstr];
+              }                        
+            }
+          }
+          else
+          {
+            compareObjects(obj1[key], obj2[key], type, 0,0);
+          }
+        } 
+        else if (obj1[key] != obj2[key]) 
+        {
+          let changedstr="";
+          if (isArrayItem == 0)
+          {
+            changedstr="Value of "+key+" has changed to "+obj1[key];
+          }
+          else
+          {
+            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+          }
+
+          if (type == 0)
+          {
+            modbus_gateway_TtT_changedValues=[...modbus_gateway_TtT_changedValues, changedstr];
+          }
+          else if (type == 1)
+          {
+            modbus_gateway_RtR_changedValues=[...modbus_gateway_RtR_changedValues, changedstr];          
+          }
+          else if (type == 2)
+          {
+            modbus_gateway_RtT_changedValues=[...modbus_gateway_RtT_changedValues, changedstr];          
+          }          
+          else if (type == 3)
+          {
+            modbus_gateway_TtR_changedValues=[...modbus_gateway_TtR_changedValues, changedstr];          
+          }    
+          else if (type == 4)
+          {
+            modbus_variable_master_changedValues=[...modbus_variable_master_changedValues, changedstr];          
+          }
+          else if (type == 5)
+          {
+            modbus_variable_slave_changedValues=[...modbus_variable_slave_changedValues, changedstr];
+          }
+          else if (type == 6)
+          {
+            modbus_tcp_slave_changedValues=[...modbus_tcp_slave_changedValues, changedstr];
+          }  
+          else if (type == 7)
+          {
+            modbus_tcp_master_changedValues=[...modbus_tcp_master_changedValues, changedstr];
+          }
+          else if (type == 8)
+          {
+            modbus_rtu_slave_changedValues=[...modbus_rtu_slave_changedValues, changedstr];
+          }  
+          else if (type == 9)
+          {
+            modbus_rtu_master_changedValues=[...modbus_rtu_master_changedValues, changedstr];
+          }            
+        }
+      }
+    }
+
+    function saveRTUSlave()
+    {
+        console.log("save rtu Slave");
+        if (modbus_rtu_slave_changedValues.length !=0)
+        {
+            modbus_rtu_slave_changedValues=[];
+        }
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length, modbus_data.config.fieldManagement_modbus_rtu.slave.length); i++) 
+        {
+          compareObjects(changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i], modbus_data.config.fieldManagement_modbus_rtu.slave[i], 8, 1,i+1);
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length > modbus_data.config.fieldManagement_modbus_rtu.slave.length)
+        {
+          let addedCount=changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length-modbus_data.config.fieldManagement_modbus_rtu.slave.length;
+          let changedstr="Add "+addedCount+" item(s) to Modbus RTU Slave List";
+          modbus_rtu_slave_changedValues=[...modbus_rtu_slave_changedValues, changedstr];
+        }
+
+
+        ModbusRTU_Slave_ConfigChangedLog.set(modbus_rtu_slave_changedValues);
+        saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_rtu.slave));
+
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+        console.log(modbus_rtu_slave_changedValues);    
+    }
+
+    function saveRTUMaster()
+    {
+        console.log("save rtu Master");
+        if (modbus_rtu_master_changedValues.length !=0)
+        {
+            modbus_rtu_master_changedValues=[];
+        }
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_rtu.master.length, modbus_data.config.fieldManagement_modbus_rtu.master.length); i++) 
+        {
+          compareObjects(changed_modbus_data.config.fieldManagement_modbus_rtu.master[i], modbus_data.config.fieldManagement_modbus_rtu.master[i], 9, 1,i+1);
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_rtu.master.length > modbus_data.config.fieldManagement_modbus_rtu.master.length)
+        {
+          let addedCount=changed_modbus_data.config.fieldManagement_modbus_rtu.master.length-modbus_data.config.fieldManagement_modbus_rtu.master.length;
+          let changedstr="Add "+addedCount+" item(s) to Modbus RTU Master List";
+          modbus_rtu_master_changedValues=[...modbus_rtu_master_changedValues, changedstr];
+        }
+
+
+        ModbusRTU_Master_ConfigChangedLog.set(modbus_rtu_master_changedValues);
+        saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_rtu.master));
+
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+        console.log(modbus_rtu_master_changedValues);     
+    } 
+
+  
+
+    function saveTCPSlave()
+    {
+        console.log("save tcp Slave");
+        if (modbus_tcp_slave_changedValues.length !=0)
+        {
+            modbus_tcp_slave_changedValues=[];
+        }
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length, modbus_data.config.fieldManagement_modbus_tcp.slave.length); i++) 
+        {
+          compareObjects(changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i], modbus_data.config.fieldManagement_modbus_tcp.slave[i], 6, 1,i+1);
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length > modbus_data.config.fieldManagement_modbus_tcp.slave.length)
+        {
+          let addedCount=changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length-modbus_data.config.fieldManagement_modbus_tcp.slave.length;
+          let changedstr="Add "+addedCount+" item(s) to Modbus TCP Slave List";
+          modbus_tcp_slave_changedValues=[...modbus_tcp_slave_changedValues, changedstr];
+        }
+
+
+        ModbusTCP_Slave_ConfigChangedLog.set(modbus_tcp_slave_changedValues);
+        saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_tcp.slave));
+
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+        console.log(modbus_tcp_slave_changedValues);    
+    }
+
+    function saveTCPMaster()
+    {
+        console.log("save tcp Master");
+        if (modbus_tcp_master_changedValues.length !=0)
+        {
+            modbus_tcp_master_changedValues=[];
+        }
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_tcp.master.length, modbus_data.config.fieldManagement_modbus_tcp.master.length); i++) 
+        {
+          compareObjects(changed_modbus_data.config.fieldManagement_modbus_tcp.master[i], modbus_data.config.fieldManagement_modbus_tcp.master[i], 7, 1,i+1);
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_tcp.master.length > modbus_data.config.fieldManagement_modbus_tcp.master.length)
+        {
+          let addedCount=changed_modbus_data.config.fieldManagement_modbus_tcp.master.length-modbus_data.config.fieldManagement_modbus_tcp.master.length;
+          let changedstr="Add "+addedCount+" item(s) to Modbus TCP Master List";
+          modbus_tcp_master_changedValues=[...modbus_tcp_master_changedValues, changedstr];
+        }
+
+
+        ModbusTCP_Master_ConfigChangedLog.set(modbus_tcp_master_changedValues);
+        saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_tcp.master));
+
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+        console.log(modbus_tcp_master_changedValues);     
+    }    
+
+    function saveVariableSlave()
+    {
+        console.log("save v Slave");
+        if (modbus_variable_slave_changedValues.length !=0)
+        {
+            modbus_variable_slave_changedValues=[];
+        }
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_variable.slave.length, modbus_data.config.fieldManagement_modbus_variable.slave.length); i++) 
+        {
+          compareObjects(changed_modbus_data.config.fieldManagement_modbus_variable.slave[i], modbus_data.config.fieldManagement_modbus_variable.slave[i], 5, 1,i+1);
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_variable.slave.length > modbus_data.config.fieldManagement_modbus_variable.slave.length)
+        {
+          let addedCount=changed_modbus_data.config.fieldManagement_modbus_variable.slave.length-modbus_data.config.fieldManagement_modbus_variable.slave.length;
+          let changedstr="Add "+addedCount+" item(s) to Modbus Variable Slave List";
+          modbus_variable_slave_changedValues=[...modbus_variable_slave_changedValues, changedstr];
+        }
+
+
+        ModbusVariable_Slave_ConfigChangedLog.set(modbus_variable_slave_changedValues);
+        saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_variable.slave));
+
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+        console.log(modbus_variable_slave_changedValues);    
+    }
+
+    function saveVariableMaster()
+    {
+        console.log("save v Master");
+        if (modbus_variable_master_changedValues.length !=0)
+        {
+            modbus_variable_master_changedValues=[];
+        }
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_variable.master.length, modbus_data.config.fieldManagement_modbus_variable.master.length); i++) 
+        {
+          compareObjects(changed_modbus_data.config.fieldManagement_modbus_variable.master[i], modbus_data.config.fieldManagement_modbus_variable.master[i], 4, 1,i+1);
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_variable.master.length > modbus_data.config.fieldManagement_modbus_variable.master.length)
+        {
+          let addedCount=changed_modbus_data.config.fieldManagement_modbus_variable.master.length-modbus_data.config.fieldManagement_modbus_variable.master.length;
+          let changedstr="Add "+addedCount+" item(s) to Modbus Variable Master List";
+          modbus_variable_master_changedValues=[...modbus_variable_master_changedValues, changedstr];
+        }
+
+
+        ModbusVariable_Master_ConfigChangedLog.set(modbus_variable_master_changedValues);
+        saved_changed_modbus_data.config.fieldManagement_modbus_variable.master=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_variable.master));
+
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+        console.log(modbus_variable_master_changedValues);    
+    }
+
+    function saveGatewayT2R()
+    {
+        console.log("save G T2R");
+        if (modbus_gateway_TtR_changedValues.length != 0)
+        {
+          modbus_gateway_TtR_changedValues=[];
+        }
+
+
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length, modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length); i++) 
+        {
+          compareObjects(changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[i], modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[i], 3, 1,i+1);
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length > modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length)
+        {
+          let addedCount=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length-modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length;
+          let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From TCP to RTU List";
+          modbus_gateway_TtR_changedValues=[...modbus_gateway_TtR_changedValues, changedstr];
+        }
+
+
+        ModbusGateway_TtR_ConfigChangedLog.set(modbus_gateway_TtR_changedValues);
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu));
+
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+        console.log(modbus_gateway_TtR_changedValues);
+
+    }
+
+
+    function saveGatewayR2T()
+    {
+        console.log("save G R2T");
+        if (modbus_gateway_RtT_changedValues.length != 0)
+        {
+          modbus_gateway_RtT_changedValues=[];
+        }
+
+
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length, modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length); i++) 
+        {
+          compareObjects(changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[i], modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[i], 2, 1,i+1);
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length > modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length)
+        {
+          let addedCount=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length-modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length;
+          let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From RTU to Tcp List";
+          modbus_gateway_RtT_changedValues=[...modbus_gateway_RtT_changedValues, changedstr];
+        }
+
+
+        ModbusGateway_RtT_ConfigChangedLog.set(modbus_gateway_RtT_changedValues);
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp));
+
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+        console.log(modbus_gateway_RtT_changedValues);
+
+    }    
+
+
+    function saveGatewayR2R()
+    {
+        console.log("save G R2R");
+        if (modbus_gateway_RtR_changedValues.length != 0)
+        {
+          modbus_gateway_RtR_changedValues=[];
+        }
+
+
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length, modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length); i++) 
+        {
+          compareObjects(changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[i], modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[i], 1, 1,i+1);
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length > modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length)
+        {
+          let addedCount=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length-modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length;
+          let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From RTU to RTU List";
+          modbus_gateway_RtR_changedValues=[...modbus_gateway_RtR_changedValues, changedstr];
+        }
+
+
+        ModbusGateway_RtR_ConfigChangedLog.set(modbus_gateway_RtR_changedValues);
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu));
+
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+        console.log(modbus_gateway_RtR_changedValues);
+
+    }
+
+
+    function saveGatewayT2T()
+    {
+        console.log("save G T2T");
+        if (modbus_gateway_TtT_changedValues.length != 0)
+        {
+          modbus_gateway_TtT_changedValues=[];
+        }
+
+
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length, modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length); i++) 
+        {
+          compareObjects(changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[i], modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[i], 0, 1,i+1);
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length > modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length)
+        {
+          let addedCount=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length-modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length;
+          let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From TCP to TCP List";
+          modbus_gateway_TtT_changedValues=[...modbus_gateway_TtT_changedValues, changedstr];
+        }
+
+
+        ModbusGateway_TtT_ConfigChangedLog.set(modbus_gateway_TtT_changedValues);
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp));
+
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+        console.log(modbus_gateway_TtT_changedValues);
+
+    }
+
+
+
 
 
    async function getModbusData() {
@@ -395,7 +2105,7 @@
 
     </tr>
 </table>
-
+</form>
 </Modal>
 
 
@@ -426,7 +2136,7 @@
    
  <TableBodyRow>
    <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalsm = true}>
+<button on:click={() => TriggerModifyRtuSlave(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -475,31 +2185,31 @@
   </TableBody>
 
 
-   
-<Modal bind:open={formModalsm} autoclose={false} size="md" class="w-full">
+   <Modal bind:open={Modify_RTU_Slave_Modal} permanent={true}>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={smenable}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_rtu.slave[Modify_RTU_Slave_index].enable}>
+{/if}
   Enable
 </label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyRTUSlave(Modify_RTU_Slave_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
 
-<p class="mt-4"></p>
 <table>
 
 <tr>
-      <td><p class="pl-10 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={RM_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_rtu.slave[Modify_RTU_Slave_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
 
+
 <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
       <td class="pl-5 pt-5">
-      <select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={MM_SerialProfile}>
-<option disabled="" value="">None</option>
-<option value="1" >ComPort1</option>
-<option value="1" >ComPort2</option>
-
+{changed_modbus_data.config.fieldManagement_modbus_rtu.slave[Modify_RTU_Slave_index].serialProfile}
       </td>
 
 
@@ -507,17 +2217,19 @@
   </tr>
 
 
+
+
       <tr>
     <td></td>
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-20"><Button color="dark" pill={true}>Submit</Button></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyRTUSlave}>Modify</Button></td>
 
 
     </tr>
 </table>
-
+</form>
 </Modal>
 
 
@@ -566,7 +2278,7 @@
     <TableBodyRow>
     <TableBodyCell class="!p-1"></TableBodyCell>
        <TableBodyCell class="!p-1">
-<button on:click={() => formModaltm = true}>
+<button on:click={() => TriggerModifyTCPMaster(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -593,11 +2305,15 @@
 
  <TableBodyRow>
      <TableBodyCell class="!p-1">
-            <button>
+
+{#if changed_modbus_data.config.fieldManagement_modbus_tcp.master.length < 10}
+            <button on:click={()=>new_tcp_master_trigger(changed_modbus_data.config.fieldManagement_modbus_tcp.master.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
+</button>
+{/if}
 
      </TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
@@ -629,7 +2345,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveTCPMaster}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -637,6 +2353,149 @@
     </tr>
 
   </TableBody>
+
+
+   <Modal bind:open={new_tcp_master_modal} size="lg" class="w-full" autoclose>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_tcp_master[new_tcp_master_index].enable}>
+{/if}
+  Enable
+</label>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_tcp_master[new_tcp_master_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">LAN Profile</p></td>
+      <td class="pl-5 pt-5">
+{new_tcp_master[new_tcp_master_index].lanProfile}
+      </td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Remote Server IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_tcp_master[new_tcp_master_index].remoteServerIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_tcp_master[new_tcp_master_index].remotePort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Connection Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_tcp_master[new_tcp_master_index].connectionTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"> </td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+
+
+
+  </tr>
+
+      <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+            <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={add_new_tcp_master(new_tcp_master_index)}>Add</Button></td>
+
+
+    </tr>
+</table>
+</form>
+</Modal>
+
+
+
+   <Modal bind:open={Modify_TCP_Master_Modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_tcp.master[Modify_TCP_Master_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTCPMaster(Modify_TCP_Master_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_tcp.master[Modify_TCP_Master_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">LAN Profile</p></td>
+      <td class="pl-5 pt-5">
+{changed_modbus_data.config.fieldManagement_modbus_tcp.master[Modify_TCP_Master_index].lanProfile}
+      </td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Remote Server IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_tcp.master[Modify_TCP_Master_index].remoteServerIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_tcp.master[Modify_TCP_Master_index].remotePort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Connection Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_tcp.master[Modify_TCP_Master_index].connectionTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"> </td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+
+
+
+  </tr>
+
+      <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+            <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyTCPMaster}>Modify</Button></td>
+
+
+    </tr>
+</table>
+</form>
+</Modal>
+
+
 </Table>
 
 
@@ -676,7 +2535,7 @@
  <TableBodyRow>
      <TableBodyCell class="!p-1"></TableBodyCell>
        <TableBodyCell class="!p-1">
-<button on:click={() => formModaltm = true}>
+<button on:click={() => TriggerModifyTCPSlave(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -685,11 +2544,7 @@
 
        </TableBodyCell>
        <TableBodyCell class="!p-1">            
-       <button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-      </button></TableBodyCell>
+</TableBodyCell>
 {#if TCPSlaveItem.enable}
       <TableBodyCell>1</TableBodyCell>
 {:else}
@@ -707,12 +2562,14 @@
 
  <TableBodyRow>
      <TableBodyCell class="!p-1">
-            <button>
+{#if changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length <10}
+            <button on:click={()=>new_tcp_slave_trigger(changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
-
+</button>
+{/if}
      </TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
@@ -743,7 +2600,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveTCPSlave}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -751,6 +2608,139 @@
     </tr>
 
   </TableBody>
+
+
+  <Modal bind:open={new_tcp_slave_modal}  size="lg" class="w-full" autoclose>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_tcp_slave[new_tcp_slave_index].enable}>
+{/if}
+  Enable
+</label>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_tcp_slave[new_tcp_slave_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">LAN Profile</p></td>
+      <td class="pl-5 pt-5">
+{new_tcp_slave[new_tcp_slave_index].lanProfile}
+      </td>
+
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_tcp_slave[new_tcp_slave_index].listenPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Max Connection Count</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_tcp_slave[new_tcp_slave_index].maxConnectionCount} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"> </td>
+
+
+
+  </tr>
+
+      <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+            <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={add_new_tcp_slave(new_tcp_slave_index)}>Add</Button></td>
+
+
+    </tr>
+</table>
+</form>
+</Modal>
+
+
+
+   <Modal bind:open={Modify_TCP_Slave_Modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_tcp.slave[Modify_TCP_Slave_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTCPSlave(Modify_TCP_Slave_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_tcp.slave[Modify_TCP_Slave_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">LAN Profile</p></td>
+      <td class="pl-5 pt-5">
+{changed_modbus_data.config.fieldManagement_modbus_tcp.slave[Modify_TCP_Slave_index].lanProfile}
+      </td>
+
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_tcp.slave[Modify_TCP_Slave_index].listenPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Max Connection Count</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_tcp.slave[Modify_TCP_Slave_index].maxConnectionCount} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"> </td>
+
+
+
+  </tr>
+
+      <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+            <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyTCPSlave}>Modify</Button></td>
+
+
+    </tr>
+</table>
+</form>
+</Modal>
+
+
 </Table>
 
 </AccordionItem>
@@ -802,7 +2792,7 @@
  <TableBodyRow>
    <TableBodyCell class="!p-1"></TableBodyCell>
   <TableBodyCell class="!p-1 w-4">
-<button on:click={() => formModalmvar = true}>
+<button on:click={() => TriggerModifyVariableMaster(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -857,12 +2847,15 @@
 
      <TableBodyRow>
      <TableBodyCell class="!p-1">
-            <button>
+{#if changed_modbus_data.config.fieldManagement_modbus_variable.master.length < 10}     
+            <button on:click={() =>new_variable_master_trigger(changed_modbus_data.config.fieldManagement_modbus_variable.master.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
+
+{/if}
      </TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
@@ -894,7 +2887,7 @@
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-4 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-4 pt-4"><Button color="blue" pill={true} on:click={saveVariableMaster}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -903,20 +2896,22 @@
     
   </TableBody>
 
-<Modal bind:open={formModalmvar} autoclose={false} size="lg" class="w-full">
-
+  <Modal bind:open={new_variable_master_modal}  size="lg" class="w-full" autoclose>
+  <form action="#">
 <label>
-  <input class="center" type=checkbox checked={mvarenable}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_variable_master[new_variable_master_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
 
 <table>
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Variable Name</p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={M_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={new_variable_master[new_variable_master_index].variableName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -927,16 +2922,14 @@
 
 
   <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={MPList} placeholder="None" /></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Master Profile</p></td>
+    <td class= "pl-4 pt-4">{new_variable_master[new_variable_master_index].profile}</td>
 
 </tr>
 
 
-
-
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={SlaveID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_variable_master[new_variable_master_index].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 <td></td>
 <td></td>
 <td></td>
@@ -950,16 +2943,18 @@
   </td>
 
     <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
-  <Radio bind:group={PointType} value='Coil' >Coil</Radio>
-  <Radio bind:group={PointType} value='DI' >Discrete Input</Radio>
-  <Radio bind:group={PointType} value='IR' >Input Register</Radio>
-  <Radio bind:group={PointType} value='HR' >Holding Register</Radio>
+  <Radio bind:group={new_variable_master[new_variable_master_index].pointType} value={0} >Coil</Radio>
+  <Radio bind:group={new_variable_master[new_variable_master_index].pointType} value={1} >Discrete Input</Radio>
+  <Radio bind:group={new_variable_master[new_variable_master_index].pointType} value={2} >Input Register</Radio>
+  <Radio bind:group={new_variable_master[new_variable_master_index].pointType} value={3} >Holding Register</Radio>
 </div></td>
 </tr>
 
 
+
+
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={MAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_variable_master[new_variable_master_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 <td></td>
 <td></td>
@@ -969,7 +2964,7 @@
 
 
   <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={MQ} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_variable_master[new_variable_master_index].quantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 <td></td>
 <td></td>
@@ -977,6 +2972,7 @@
 
 
   </tr>
+
 
 
   <tr>
@@ -985,16 +2981,16 @@
   </td>
 
     <td class="pl-4 pt-5" colspan="5"><div class="flex gap-2">
-  <Radio bind:group={MDisplay} value='BE' >Big Endian</Radio>
-  <Radio bind:group={MDisplay} value='LE' >Little Endian</Radio>
-  <Radio bind:group={MDisplay} value='BEBS' >Big Endian Byte Swap</Radio>
-  <Radio bind:group={MDisplay} value='LEBS' >Little Endian Byte Swap</Radio>
+  <Radio bind:group={new_variable_master[new_variable_master_index].byteOrder} value={0} >Big Endian</Radio>
+  <Radio bind:group={new_variable_master[new_variable_master_index].byteOrder} value={1} >Little Endian</Radio>
+  <Radio bind:group={new_variable_master[new_variable_master_index].byteOrder} value={2} >Big Endian Byte Swap</Radio>
+  <Radio bind:group={new_variable_master[new_variable_master_index].byteOrder} value={3} >Little Endian Byte Swap</Radio>
 </div></td>
 </tr>
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
-      <input type="text" bind:value={RMRTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
+      <input type="text" bind:value={new_variable_master[new_variable_master_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
 
 <td></td>
 <td></td>
@@ -1004,7 +3000,7 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
-      <input type="text" bind:value={PRate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
+      <input type="text" bind:value={new_variable_master[new_variable_master_index].pollingRate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
 
 <td></td>
 <td></td>
@@ -1014,7 +3010,7 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Delay Between Polls</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
-      <input type="text" bind:value={RMIntervalP} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
+      <input type="text" bind:value={new_variable_master[new_variable_master_index].delayBetweenPolls} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
 
 <td></td>
 <td></td>
@@ -1037,13 +3033,161 @@
     <td></td>
     <td></td>
     <td>
-<Button color="dark" pill={true}>Submit</Button></td>
+<Button color="dark" pill={true} on:click={add_new_variable_master(new_variable_master_index)}>Add</Button></td>
 
 
     </tr>
 
 </table>
 
+
+</form>
+</Modal>
+
+
+<Modal bind:open={Modify_Variable_Master_Modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyVariableMaster(Modify_Variable_Master_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Variable Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].variableName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Master Profile</p></td>
+    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].profile}</td>
+
+</tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+<tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Point Type</p>
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].pointType} value={0} >Coil</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].pointType} value={1} >Discrete Input</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].pointType} value={2} >Input Register</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].pointType} value={3} >Holding Register</Radio>
+</div></td>
+</tr>
+
+
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].quantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+
+
+  <tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Byte Order</p>
+
+  </td>
+
+    <td class="pl-4 pt-5" colspan="5"><div class="flex gap-2">
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].byteOrder} value={0} >Big Endian</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].byteOrder} value={1} >Little Endian</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].byteOrder} value={2} >Big Endian Byte Swap</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].byteOrder} value={3} >Little Endian Byte Swap</Radio>
+</div></td>
+</tr>
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
+      <input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
+      <input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].pollingRate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Delay Between Polls</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
+      <input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].delayBetweenPolls} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={ModifyVariableMaster}>Modify</Button></td>
+
+
+    </tr>
+
+</table>
+</form>
 </Modal>
 
 
@@ -1085,7 +3229,7 @@
  <TableBodyRow>
    <TableBodyCell class="!p-1 w-10"></TableBodyCell>
   <TableBodyCell class="!p-1 w-10">
-<button on:click={() => formModalmvar = true}>
+<button on:click={() => TriggerModifyVariableSlave(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1142,12 +3286,14 @@
 
      <TableBodyRow>
      <TableBodyCell class="!p-1">
-            <button>
+{#if changed_modbus_data.config.fieldManagement_modbus_variable.slave.length <10}
+            <button on:click={()=>new_variable_slave_trigger(changed_modbus_data.config.fieldManagement_modbus_variable.slave.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
+{/if}
      </TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
@@ -1184,7 +3330,7 @@
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveVariableSlave}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -1193,20 +3339,23 @@
     
   </TableBody>
 
-<Modal bind:open={formModalmvar} autoclose={false} size="lg" class="w-full">
 
+  <Modal bind:open={new_variable_slave_modal}  size="lg" class="w-full" autoclose>
+  <form action="#">
 <label>
-  <input class="center" type=checkbox checked={mvarenable}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_variable_slave[new_variable_slave_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
 
 <table>
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Variable Name</p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={M_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={new_variable_slave[new_variable_slave_index].variableName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -1215,17 +3364,16 @@
 
 
 
+
   <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={MPList} placeholder="None" /></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave Profile</p></td>
+    <td class= "pl-4 pt-4">{new_variable_slave[new_variable_slave_index].profile}</td>
 
 </tr>
 
 
-
-
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={SlaveID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_variable_slave[new_variable_slave_index].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 <td></td>
 <td></td>
 <td></td>
@@ -1239,16 +3387,18 @@
   </td>
 
     <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
-  <Radio bind:group={PointType} value='Coil' >Coil</Radio>
-  <Radio bind:group={PointType} value='DI' >Discrete Input</Radio>
-  <Radio bind:group={PointType} value='IR' >Input Register</Radio>
-  <Radio bind:group={PointType} value='HR' >Holding Register</Radio>
+  <Radio bind:group={new_variable_slave[new_variable_slave_index].pointType} value={0} >Coil</Radio>
+  <Radio bind:group={new_variable_slave[new_variable_slave_index].pointType} value={1} >Discrete Input</Radio>
+  <Radio bind:group={new_variable_slave[new_variable_slave_index].pointType} value={2} >Input Register</Radio>
+  <Radio bind:group={new_variable_slave[new_variable_slave_index].pointType} value={3} >Holding Register</Radio>
 </div></td>
 </tr>
 
 
+
+
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={MAddr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_variable_slave[new_variable_slave_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 <td></td>
 <td></td>
@@ -1258,7 +3408,7 @@
 
 
   <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={MQ} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_variable_slave[new_variable_slave_index].quantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 <td></td>
 <td></td>
@@ -1266,6 +3416,7 @@
 
 
   </tr>
+
 
 
   <tr>
@@ -1274,12 +3425,130 @@
   </td>
 
     <td class="pl-4 pt-5" colspan="5"><div class="flex gap-2">
-  <Radio bind:group={MDisplay} value='BE' >Big Endian</Radio>
-  <Radio bind:group={MDisplay} value='LE' >Little Endian</Radio>
-  <Radio bind:group={MDisplay} value='BEBS' >Big Endian Byte Swap</Radio>
-  <Radio bind:group={MDisplay} value='LEBS' >Little Endian Byte Swap</Radio>
+  <Radio bind:group={new_variable_slave[new_variable_slave_index].byteOrder} value={0} >Big Endian</Radio>
+  <Radio bind:group={new_variable_slave[new_variable_slave_index].byteOrder} value={1} >Little Endian</Radio>
+  <Radio bind:group={new_variable_slave[new_variable_slave_index].byteOrder} value={2} >Big Endian Byte Swap</Radio>
+  <Radio bind:group={new_variable_slave[new_variable_slave_index].byteOrder} value={3} >Little Endian Byte Swap</Radio>
 </div></td>
 </tr>
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_variable_slave(new_variable_slave_index)}>Add</Button></td>
+
+
+    </tr>
+
+</table>
+
+
+</form>
+</Modal>
+
+
+<Modal bind:open={Modify_Variable_Slave_Modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyVariableSlave(Modify_Variable_Slave_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Variable Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].variableName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave Profile</p></td>
+    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].profile}</td>
+
+</tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+<tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Point Type</p>
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].pointType} value={0} >Coil</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].pointType} value={1} >Discrete Input</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].pointType} value={2} >Input Register</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].pointType} value={3} >Holding Register</Radio>
+</div></td>
+</tr>
+
+
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].quantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+
+
+  <tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Byte Order</p>
+
+  </td>
+
+    <td class="pl-4 pt-5" colspan="5"><div class="flex gap-2">
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].byteOrder} value={0} >Big Endian</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].byteOrder} value={1} >Little Endian</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].byteOrder} value={2} >Big Endian Byte Swap</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].byteOrder} value={3} >Little Endian Byte Swap</Radio>
+</div></td>
+</tr>
+
 
 
 
@@ -1297,14 +3566,15 @@
     <td></td>
     <td></td>
     <td>
-<Button color="dark" pill={true}>Submit</Button></td>
+<Button color="dark" pill={true} on:click={ModifyVariableSlave}>Modify</Button></td>
 
 
     </tr>
 
 </table>
-
+</form>
 </Modal>
+
 
 
 </Table>   
@@ -1336,8 +3606,8 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell>Alias Name</TableHeadCell>
-    <TableHeadCell>TCP Profile</TableHeadCell>
-    <TableHeadCell>RTU Profile</TableHeadCell>
+    <TableHeadCell>TCP Slave Profile</TableHeadCell>
+    <TableHeadCell>RTU Master Profile</TableHeadCell>
     <TableHeadCell>Response Timeout</TableHeadCell>
   </TableHead>
   <TableBody>
@@ -1349,7 +3619,7 @@
    <TableBodyRow>
      <TableBodyCell class="!p-1"></TableBodyCell>
   <TableBodyCell class="!p-1 w-10">
-<button on:click={() => formModalmvar = true}>
+<button on:click={() => TriggerModifyGateway_T2R(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1367,8 +3637,8 @@
 
      <TableBodyCell class="!p-6 w-4">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{Tcp2RtuItem.aliasName}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18">{Tcp2RtuItem.tcpProfileSlave}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">{Tcp2RtuItem.rtuProfileMaster}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-36">{Tcp2RtuItem.tcpProfileSlave}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-36">{Tcp2RtuItem.rtuProfileMaster}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{Tcp2RtuItem.responseTimeout} ms</TableBodyCell>
 
     </TableBodyRow>
@@ -1378,19 +3648,21 @@
 
    <TableBodyRow>
      <TableBodyCell class="!p-1">
-            <button>
+{#if changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length < 10}
+            <button on:click={() => new_gateway_t2r_trigger(changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
+{/if}
      </TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
       <TableBodyCell></TableBodyCell>
       <TableBodyCell class="!p-6 w-10"></TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> </TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-6 w-36"> </TableBodyCell>
+      <TableBodyCell class="!p-6 w-36"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
 
 
@@ -1413,7 +3685,7 @@
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveGatewayT2R}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -1421,6 +3693,156 @@
     </tr>
     
   </TableBody>
+
+
+
+
+  <Modal bind:open={new_gateway_t2r_modal}  size="lg" class="w-full" autoclose>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_gateway_t2r[new_gateway_t2r_index].enable}>
+{/if}
+  Enable
+</label>
+<p class="mt-10"></p>
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_t2r[new_gateway_t2r_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
+    <td class= "pl-4 pt-4">{new_gateway_t2r[new_gateway_t2r_index].tcpProfileSlave}</td>
+
+</tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Master Profile</p></td>
+    <td class= "pl-4 pt-4">{new_gateway_t2r[new_gateway_t2r_index].rtuProfileMaster}</td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_t2r[new_gateway_t2r_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_gateway_t2r(new_gateway_t2r_index)}>Add</Button></td>
+
+
+    </tr>
+
+</table>
+</form>
+</Modal>
+
+
+<Modal bind:open={Modify_Gateway_T2R_Modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyGateway_T2R(Modify_Gateway_T2R_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
+    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].tcpProfileSlave}</td>
+
+</tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Master Profile</p></td>
+    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].rtuProfileMaster}</td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={ModifyGateway_T2R}>Modify</Button></td>
+
+
+    </tr>
+
+</table>
+</form>
+</Modal>
+
   </Table>
 
     </AccordionItem>
@@ -1444,8 +3866,8 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell>Alias Name</TableHeadCell>
-    <TableHeadCell>RTU Profile</TableHeadCell>
-    <TableHeadCell>TCP Profile</TableHeadCell>
+    <TableHeadCell>RTU Slave Profile</TableHeadCell>
+    <TableHeadCell>TCP Master Profile</TableHeadCell>
     <TableHeadCell>Response Timeout</TableHeadCell>
   </TableHead>
   <TableBody>
@@ -1456,7 +3878,7 @@
    <TableBodyRow>
      <TableBodyCell class="!p-1"></TableBodyCell>
   <TableBodyCell class="!p-1 w-10">
-<button on:click={() => formModalmvar = true}>
+<button on:click={() => TriggerModifyGateway_R2T(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1484,12 +3906,14 @@
 
    <TableBodyRow>
      <TableBodyCell class="!p-1">
-            <button>
+{#if changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length < 10}
+            <button on:click={()=>new_gateway_r2t_trigger(changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
+{/if}
      </TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
@@ -1519,7 +3943,7 @@
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveGatewayR2T}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -1527,6 +3951,152 @@
     </tr>
     
   </TableBody>
+
+  <Modal bind:open={new_gateway_r2t_modal}  size="lg" class="w-full" autoclose>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_gateway_r2t[new_gateway_r2t_index].enable}>
+{/if}
+  Enable
+</label>
+<p class="mt-10"></p>
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_r2t[new_gateway_r2t_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave Profile</p></td>
+    <td class= "pl-4 pt-4">{new_gateway_r2t[new_gateway_r2t_index].rtuProfileSlave}</td>
+
+</tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
+    <td class= "pl-4 pt-4">{new_gateway_r2t[new_gateway_r2t_index].tcpProfileMaster}</td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_r2t[new_gateway_r2t_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_gateway_r2t(new_gateway_r2t_index)}>Add</Button></td>
+
+
+    </tr>
+
+</table>
+</form>
+</Modal>
+
+
+<Modal bind:open={Modify_Gateway_R2T_Modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyGateway_R2T(Modify_Gateway_R2T_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave Profile</p></td>
+    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].rtuProfileSlave}</td>
+
+</tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
+    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].tcpProfileMaster}</td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={ModifyGateway_R2T}>Modify</Button></td>
+
+
+    </tr>
+
+</table>
+</form>
+</Modal>
   </Table>
       </AccordionItem>
 
@@ -1550,8 +4120,8 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell>Alias Name</TableHeadCell>
-    <TableHeadCell>RTU Profile</TableHeadCell>
-    <TableHeadCell>RTU Profile</TableHeadCell>
+    <TableHeadCell>RTU Slave Profile</TableHeadCell>
+    <TableHeadCell>RTU Master Profile</TableHeadCell>
     <TableHeadCell>Response Timeout</TableHeadCell>
   </TableHead>
   <TableBody>
@@ -1563,7 +4133,7 @@
    <TableBodyRow>
      <TableBodyCell class="!p-1"></TableBodyCell>
   <TableBodyCell class="!p-1 w-10">
-<button on:click={() => formModalmvar = true}>
+<button on:click={() => TriggerModifyGateway_R2R(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1591,12 +4161,14 @@
 
    <TableBodyRow>
      <TableBodyCell class="!p-1">
-            <button>
+{#if changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length < 10}
+            <button on:click={()=>new_gateway_r2r_trigger(changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
+{/if}
      </TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
@@ -1626,7 +4198,7 @@
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveGatewayR2R}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -1634,6 +4206,156 @@
     </tr>
     
   </TableBody>
+
+
+  <Modal bind:open={new_gateway_r2r_modal}  size="lg" class="w-full" autoclose>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_gateway_r2r[new_gateway_r2r_index].enable}>
+{/if}
+  Enable
+</label>
+<p class="mt-10"></p>
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_r2r[new_gateway_r2r_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave Profile</p></td>
+    <td class= "pl-4 pt-4">{new_gateway_r2r[new_gateway_r2r_index].rtuProfileSlave}</td>
+
+</tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Master Profile</p></td>
+    <td class= "pl-4 pt-4">{new_gateway_r2r[new_gateway_r2r_index].rtuProfileMaster}</td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_r2r[new_gateway_r2r_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_gateway_r2r(new_gateway_r2r_index)}>Add</Button></td>
+
+
+    </tr>
+
+</table>
+</form>
+</Modal>
+
+
+<Modal bind:open={Modify_Gateway_R2R_Modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[Modify_Gateway_R2R_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyGateway_R2R(Modify_Gateway_R2R_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[Modify_Gateway_R2R_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave Profile</p></td>
+    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[Modify_Gateway_R2R_index].rtuProfileSlave}</td>
+
+</tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Master Profile</p></td>
+    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[Modify_Gateway_R2R_index].rtuProfileMaster}</td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[Modify_Gateway_R2R_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={ModifyGateway_R2R}>Modify</Button></td>
+
+
+    </tr>
+
+</table>
+</form>
+</Modal>
+
+
+
   </Table>
       </AccordionItem>
 
@@ -1657,8 +4379,8 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell>Alias Name</TableHeadCell>
-    <TableHeadCell>TCP Profile</TableHeadCell>
-    <TableHeadCell>TCP Profile</TableHeadCell>
+    <TableHeadCell>TCP Slave Profile</TableHeadCell>
+    <TableHeadCell>TCP Master Profile</TableHeadCell>
     <TableHeadCell>Response Timeout</TableHeadCell>
   </TableHead>
   <TableBody>
@@ -1670,7 +4392,7 @@
    <TableBodyRow>
      <TableBodyCell class="!p-1"></TableBodyCell>
   <TableBodyCell class="!p-1 w-10">
-<button on:click={() => formModalmvar = true}>
+<button on:click={() => TriggerModifyGateway_T2T(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1700,12 +4422,14 @@
 
    <TableBodyRow>
      <TableBodyCell class="!p-1">
-            <button>
+{#if changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length < 10}
+            <button on:click={()=>new_gateway_t2t_trigger(changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
+{/if}
      </TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
@@ -1735,7 +4459,7 @@
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveGatewayT2T}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -1743,6 +4467,152 @@
     </tr>
     
   </TableBody>
+  <Modal bind:open={new_gateway_t2t_modal}  size="lg" class="w-full" autoclose>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_gateway_t2t[new_gateway_t2t_index].enable}>
+{/if}
+  Enable
+</label>
+<p class="mt-10"></p>
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_t2t[new_gateway_t2t_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
+    <td class= "pl-4 pt-4">{new_gateway_t2t[new_gateway_t2t_index].tcpProfileSlave}</td>
+
+</tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
+    <td class= "pl-4 pt-4">{new_gateway_t2t[new_gateway_t2t_index].tcpProfileMaster}</td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_t2t[new_gateway_t2t_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_gateway_t2t(new_gateway_t2t_index)}>Add</Button></td>
+
+
+    </tr>
+
+</table>
+</form>
+</Modal>
+
+
+<Modal bind:open={Modify_Gateway_T2T_Modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[Modify_Gateway_T2T_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyGateway_T2T(Modify_Gateway_T2T_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[Modify_Gateway_T2T_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
+    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[Modify_Gateway_T2T_index].tcpProfileSlave}</td>
+
+</tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
+    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[Modify_Gateway_T2T_index].tcpProfileMaster}</td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[Modify_Gateway_T2T_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={ModifyGateway_T2T}>Modify</Button></td>
+
+
+    </tr>
+
+</table>
+</form>
+</Modal>
+
   </Table>
       </AccordionItem>
 

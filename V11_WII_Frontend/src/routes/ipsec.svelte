@@ -1359,6 +1359,37 @@ let RemoteCAList = [
     }
   }
 
+  let getIpsecStatusReady=0;
+  let StringIpsecStatus="";
+  let binaryData;
+
+async function getIpsecStatus() {
+    const res = await fetch(window.location.origin+"/geTIpsecStatus", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      console.log("getIPsecStatus");
+
+      let data =await res.text();
+      console.log(data);
+     // console.log(res);
+     // const arrayBuffer = await res.arrayBuffer();
+      //binaryData = new Uint8Array(arrayBuffer);
+     // console.log(binaryData);
+
+      StringIpsecStatus=data.replace(/\r\n|\n/g, '<br>');
+      console.log(StringIpsecStatus);
+      getIpsecStatusReady=1;
+    
+    }
+    else
+    {
+      console.log("error get status")
+    }
+  }
 
 
 
@@ -1398,14 +1429,20 @@ let RemoteCAList = [
         getMachineCertificate();
         getCACertificate();
         getRemoteCertificate();
+        getIpsecStatus();
     }
     else if (sessionid && ipsec_data != "")
     {
-      console.log("ipsec_data is not null");
+        console.log("ipsec_data is not null");
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
         getMachineCertificate();
         getCACertificate();
         getRemoteCertificate();
-      getDataReady=1;
+        getIpsecStatus();
+        console.log(StringIpsecStatus);
+        getDataReady=1;
 
       if (basic_changedValues.length==0)
       {
@@ -1491,77 +1528,17 @@ let RemoteCAList = [
 {#if getDataReady == 1}
 {#if changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1}
 
-{#if changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 1}  
+ 
 <Table>
-  <caption
-    class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
-  >
-    Initiator
-    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-    List all Initiators' information
-    </p>
-  </caption>
-  <TableHead>
-    <TableHeadCell class="w-10">Index</TableHeadCell>
-    <TableHeadCell class="w-10">Name</TableHeadCell>
-    <TableHeadCell class="w-10">VPN State</TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-  </TableHead>
-  
-    <TableBodyRow>
-      <TableBodyCell>1</TableBodyCell>
-            <TableBodyCell>
-test1
-      </TableBodyCell>
-      <TableBodyCell>Connection Established</TableBodyCell>
-
-    </TableBodyRow>
-    <TableBodyRow>
-      <TableBodyCell>2</TableBodyCell>
-            <TableBodyCell>
-test2
-      </TableBodyCell>
-      <TableBodyCell>Connection Established</TableBodyCell>
-    </TableBodyRow>
-
-</Table>
-
-{:else if changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 0}  
-<Table>
-  <caption
-    class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
-  >
-    Responder
-
-   </caption>
-  <TableHead>
-        <TableHeadCell class="w-10">Name</TableHeadCell>
-    <TableHeadCell class="w-10">VPN State</TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-        <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-
-  </TableHead>  
-
-
-
-    <TableBodyRow>
-<TableHeadCell>ResponderTest</TableHeadCell>
-      <TableBodyCell>Connection Established</TableBodyCell>
-
-    </TableBodyRow>
-</Table>
+{#if getIpsecStatusReady == 1}
+{StringIpsecStatus}
 
 {/if}
+
+</Table>
+
+
+
 {:else}
 <Table>
   <caption

@@ -463,6 +463,9 @@
     }
     else if(sessionid && generic_mqtt_data!="")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
         getMachineCertificate();
         getCACertificate();
         getRemoteCertificate();

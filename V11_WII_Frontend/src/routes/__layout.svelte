@@ -49,6 +49,16 @@
 	    PortConnection_LAN_ConfigChangedLog,
     	PortConnection_COM_ConfigChangedLog,
     	Certificate_Settings_ConfigChangedLog,
+	    ModbusGateway_TtR_ConfigChangedLog,
+	    ModbusGateway_RtT_ConfigChangedLog,
+	    ModbusGateway_RtR_ConfigChangedLog,
+	    ModbusGateway_TtT_ConfigChangedLog,
+	    ModbusVariable_Slave_ConfigChangedLog,
+	    ModbusVariable_Master_ConfigChangedLog,
+	    ModbusTCP_Slave_ConfigChangedLog,
+	    ModbusTCP_Master_ConfigChangedLog,
+	    ModbusRTU_Slave_ConfigChangedLog,
+	    ModbusRTU_Master_ConfigChangedLog,
     	dashboadData
   	} from "./configG.js"
 
@@ -175,6 +185,18 @@
     let port_connection_lan_changedValues = [];
     let port_connection_com_changedValues = [];
     let certificate_settings_changedValues = [];
+    let modbus_gateway_TtR_changedValues=[];
+    let modbus_gateway_RtT_changedValues=[];
+    let modbus_gateway_RtR_changedValues=[];
+    let modbus_gateway_TtT_changedValues=[];
+
+    let modbus_variable_master_changedValues=[];
+    let modbus_variable_slave_changedValues=[];
+    let modbus_tcp_master_changedValues=[];
+    let modbus_tcp_slave_changedValues=[];
+    let modbus_rtu_master_changedValues=[];
+    let modbus_rtu_slave_changedValues=[];
+
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -191,9 +213,21 @@
     	interval = setInterval(BlinkApply, 500); 
   	};
 
+
   	function JudgeChangedOrNot()
   	{
-  		if (certificate_settings_changedValues.length !=0 ||
+  		if (
+  			modbus_gateway_TtR_changedValues.length !=0 ||
+		    modbus_gateway_RtT_changedValues.length !=0 ||
+		    modbus_gateway_RtR_changedValues.length !=0 ||
+		    modbus_gateway_TtT_changedValues.length !=0 ||
+		    modbus_variable_master_changedValues.length !=0 ||
+		    modbus_variable_slave_changedValues.length !=0 ||
+		    modbus_tcp_master_changedValues.length !=0 ||
+		    modbus_tcp_slave_changedValues.length !=0 ||
+		    modbus_rtu_master_changedValues.length !=0 ||
+		    modbus_rtu_slave_changedValues.length !=0 ||
+  			certificate_settings_changedValues.length !=0 ||
   			port_connection_lan_changedValues.length !=0 ||
   			port_connection_com_changedValues.length !=0 ||
   			remote_service_changedValues.length !=0 ||
@@ -485,6 +519,58 @@
       JudgeChangedOrNot();
     });
 
+    ModbusGateway_TtR_ConfigChangedLog.subscribe(val => {
+    	modbus_gateway_TtR_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    ModbusGateway_RtT_ConfigChangedLog.subscribe(val => {
+    	modbus_gateway_RtT_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    ModbusGateway_RtR_ConfigChangedLog.subscribe(val => {
+        modbus_gateway_RtR_changedValues = val;
+    	JudgeChangedOrNot();    
+    });
+
+
+    ModbusGateway_TtT_ConfigChangedLog.subscribe(val => {
+        modbus_gateway_TtT_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+
+    ModbusVariable_Slave_ConfigChangedLog.subscribe(val => {
+        modbus_variable_slave_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
+    ModbusVariable_Master_ConfigChangedLog.subscribe(val => {
+        modbus_variable_master_changedValues = val;
+       	JudgeChangedOrNot();
+    });
+
+    ModbusTCP_Slave_ConfigChangedLog.subscribe(val => {
+        modbus_tcp_slave_changedValues = val;
+       	JudgeChangedOrNot();
+    });
+
+
+    ModbusTCP_Master_ConfigChangedLog.subscribe(val => {
+        modbus_tcp_master_changedValues = val;
+       	JudgeChangedOrNot();
+    });
+
+    ModbusRTU_Slave_ConfigChangedLog.subscribe(val => {
+        modbus_rtu_slave_changedValues = val;
+        JudgeChangedOrNot();
+    });
+
+    ModbusRTU_Master_ConfigChangedLog.subscribe(val => {
+        modbus_rtu_master_changedValues = val;
+       	JudgeChangedOrNot();
+    });
 
 
   	sessionidG.subscribe(val => {

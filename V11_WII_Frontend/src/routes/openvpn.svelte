@@ -2476,6 +2476,10 @@ let RemoteCAList = [
     {
       console.log("openvpn_data is not null");
       getDataReady=1;
+      const hexArray = sessionid.match(/.{1,2}/g); 
+      const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      sessionBinary = new Uint8Array(byteValues);
+
       getMachineCertificate();
       getCACertificate();
       getRemoteCertificate();

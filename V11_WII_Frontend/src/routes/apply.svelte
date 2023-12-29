@@ -1141,10 +1141,172 @@
 
 
 
-
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+
+{#if modbus_gateway_TtR_changedValues.length !=0 ||
+										    modbus_gateway_RtT_changedValues.length !=0 ||
+										    modbus_gateway_RtR_changedValues.length !=0 ||
+										    modbus_gateway_TtT_changedValues.length !=0 ||
+										    modbus_variable_master_changedValues.length !=0 ||
+										    modbus_variable_slave_changedValues.length !=0 ||
+										    modbus_tcp_master_changedValues.length !=0 ||
+										    modbus_tcp_slave_changedValues.length !=0 ||
+										    modbus_rtu_master_changedValues.length !=0 ||
+										    modbus_rtu_slave_changedValues.length !=0}
+	<Li>Modbus
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+
+{#if modbus_rtu_master_changedValues.length !=0 || modbus_rtu_slave_changedValues.length !=0}
+			<Li>RTU
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+{#if modbus_rtu_master_changedValues.length !=0}
+			<Li>RTU Master
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_rtu_master_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+{#if modbus_rtu_slave_changedValues.length !=0}
+			<Li>RTU Slave
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_rtu_slave_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+
+  </List>
+  </Li>
+{/if}
+
+
+{#if modbus_tcp_master_changedValues.length !=0 || modbus_tcp_slave_changedValues.length !=0}
+			<Li>TCP
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+{#if modbus_tcp_master_changedValues.length !=0}
+			<Li>TCP Master
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_tcp_master_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+{#if modbus_tcp_slave_changedValues.length !=0}
+			<Li>TCP Slave
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_tcp_slave_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+
+  </List>
+  </Li>
+{/if}
+
+
+{#if modbus_variable_master_changedValues.length !=0 || modbus_variable_slave_changedValues.length !=0}
+			<Li>Variable
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+{#if modbus_variable_master_changedValues.length !=0}
+			<Li>Master
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_variable_master_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+{#if modbus_variable_slave_changedValues.length !=0}
+			<Li>Slave
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_variable_slave_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+
+  </List>
+  </Li>
+{/if}
+
+
+{#if modbus_gateway_TtR_changedValues.length !=0 ||
+										    modbus_gateway_RtT_changedValues.length !=0 ||
+										    modbus_gateway_RtR_changedValues.length !=0 ||
+										    modbus_gateway_TtT_changedValues.length !=0}
+			<Li>Gateway
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+{#if modbus_gateway_TtR_changedValues.length !=0}
+			<Li>From TCP To RTU
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_gateway_TtR_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+
+
+{#if modbus_gateway_RtT_changedValues.length !=0}
+			<Li>From RTU To TCP
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_gateway_RtT_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+
+
+{#if modbus_gateway_RtR_changedValues.length !=0}
+			<Li>From RTU To RTU
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_gateway_RtR_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+
+
+{#if modbus_gateway_TtT_changedValues.length !=0}
+			<Li>From TCP To TCP
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_gateway_TtT_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+
+  </List>
+  </Li>
+{/if}
+
+
+
+ </List>
+	</Li>
+{/if}
 
 {#if certificate_settings_changedValues.length !=0}
 	<Li>Certificate 

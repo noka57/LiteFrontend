@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 
 export const dashboadData= writable("");
 
+export const sdataLoggerConfig=writable("");
 export const certificateConfig=writable("");
 export const modbusConfig= writable("");
 export const portConnectionConfig=writable("");
@@ -18,6 +19,14 @@ export const firewallConfig = writable("");
 export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
+
+
+export const SDatalogger_MonitorMode_Cloud_ConfigChangedLog=writable("");
+export const SDatalogger_MonitorMode_Edge_ConfigChangedLog=writable("");
+export const SDatalogger_ProxyMode_Cloud_ConfigChangedLog=writable("");
+export const SDatalogger_ProxyMode_Edge_ConfigChangedLog=writable("");
+export const SDatalogger_General_ConfigChangedLog=writable("");
+export const ChangedSDataLoggerConfig=writable("");
 
 export const Certificate_Settings_ConfigChangedLog=writable("");
 export const Certificate_CRL_ConfigChangedLog=writable("");

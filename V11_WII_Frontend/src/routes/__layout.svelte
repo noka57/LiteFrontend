@@ -59,6 +59,11 @@
 	    ModbusTCP_Master_ConfigChangedLog,
 	    ModbusRTU_Slave_ConfigChangedLog,
 	    ModbusRTU_Master_ConfigChangedLog,
+	    SDatalogger_MonitorMode_Cloud_ConfigChangedLog,
+    	SDatalogger_MonitorMode_Edge_ConfigChangedLog,
+    	SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
+    	SDatalogger_ProxyMode_Edge_ConfigChangedLog,
+    	SDatalogger_General_ConfigChangedLog,
     	dashboadData
   	} from "./configG.js"
 
@@ -197,6 +202,11 @@
     let modbus_rtu_master_changedValues=[];
     let modbus_rtu_slave_changedValues=[];
 
+  	let sdata_logger_general_changedValues = [];
+  	let sdata_logger_proxy_edge_changedValues = [];
+  	let sdata_logger_proxy_cloud_changedValues = [];
+  	let sdata_logger_monitor_edge_changedValues = [];
+  	let sdata_logger_monitor_cloud_changedValues = [];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -217,6 +227,11 @@
   	function JudgeChangedOrNot()
   	{
   		if (
+  			sdata_logger_general_changedValues.length !=0 ||
+  			sdata_logger_proxy_edge_changedValues.length !=0 ||
+  			sdata_logger_proxy_cloud_changedValues.length !=0 ||
+  			sdata_logger_monitor_edge_changedValues.length !=0 ||
+  			sdata_logger_monitor_cloud_changedValues.length !=0 ||
   			modbus_gateway_TtR_changedValues.length !=0 ||
 		    modbus_gateway_RtT_changedValues.length !=0 ||
 		    modbus_gateway_RtR_changedValues.length !=0 ||
@@ -571,6 +586,33 @@
         modbus_rtu_master_changedValues = val;
        	JudgeChangedOrNot();
     });
+
+
+	  SDatalogger_General_ConfigChangedLog.subscribe(val => {
+	      	sdata_logger_general_changedValues = val;
+       		JudgeChangedOrNot();
+	  });
+
+	  SDatalogger_ProxyMode_Edge_ConfigChangedLog.subscribe(val => {
+	      	sdata_logger_proxy_edge_changedValues = val;
+	        JudgeChangedOrNot();
+	  });
+
+	  SDatalogger_ProxyMode_Cloud_ConfigChangedLog.subscribe(val => {
+	      	sdata_logger_proxy_cloud_changedValues = val;
+	        JudgeChangedOrNot();
+	  });
+
+
+	  SDatalogger_MonitorMode_Edge_ConfigChangedLog.subscribe(val => {
+	      	sdata_logger_monitor_edge_changedValues = val;
+	        JudgeChangedOrNot();
+	  });
+
+	  SDatalogger_MonitorMode_Cloud_ConfigChangedLog.subscribe(val => {
+	      	sdata_logger_monitor_cloud_changedValues = val;
+	  	    JudgeChangedOrNot();
+	  });
 
 
   	sessionidG.subscribe(val => {

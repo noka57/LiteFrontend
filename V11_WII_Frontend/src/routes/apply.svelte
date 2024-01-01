@@ -71,7 +71,13 @@
 	    ModbusTCP_Master_ConfigChangedLog,
 	    ModbusRTU_Slave_ConfigChangedLog,
 	    ModbusRTU_Master_ConfigChangedLog,
-	    ChangedModbusConfig
+	    ChangedModbusConfig,
+      SDatalogger_MonitorMode_Cloud_ConfigChangedLog,
+      SDatalogger_MonitorMode_Edge_ConfigChangedLog,
+      SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
+      SDatalogger_ProxyMode_Edge_ConfigChangedLog,
+      SDatalogger_General_ConfigChangedLog,
+      ChangedSDataLoggerConfig
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -94,6 +100,7 @@
   let port_connection_data="";
   let certificate_data="";
   let modbus_data="";
+  let sdata_logger_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -208,6 +215,15 @@
   let modbus_rtu_slave_changedValues=[];
 
 
+
+  let ContentSDataLogger;
+  let SDataLoggerBinary=null;
+  let sdata_logger_general_changedValues = [];
+  let sdata_logger_proxy_edge_changedValues = [];
+  let sdata_logger_proxy_cloud_changedValues = [];
+  let sdata_logger_monitor_edge_changedValues = [];
+  let sdata_logger_monitor_cloud_changedValues = [];
+
   let SetCount=0;
   let SetCountOK=0;
 
@@ -289,10 +305,35 @@
   });
 
 
+  ChangedSDataLoggerConfig.subscribe(val => {
+      sdata_logger_data = val;
+  });
+
+  SDatalogger_General_ConfigChangedLog.subscribe(val => {
+      sdata_logger_general_changedValues = val;
+  });
+
+  SDatalogger_ProxyMode_Edge_ConfigChangedLog.subscribe(val => {
+      sdata_logger_proxy_edge_changedValues = val;
+  });
+
+  SDatalogger_ProxyMode_Cloud_ConfigChangedLog.subscribe(val => {
+      sdata_logger_proxy_cloud_changedValues = val;
+  });
+
+
+  SDatalogger_MonitorMode_Edge_ConfigChangedLog.subscribe(val => {
+      sdata_logger_monitor_edge_changedValues = val;
+  });
+
+  SDatalogger_MonitorMode_Cloud_ConfigChangedLog.subscribe(val => {
+      sdata_logger_monitor_cloud_changedValues = val;
+  });
+
+
   Certificate_Settings_ConfigChangedLog.subscribe(val => {
       certificate_settings_changedValues = val;
   });
-
 
 
   ModbusGateway_TtR_ConfigChangedLog.subscribe(val => {
@@ -796,7 +837,28 @@
 	  		SetThenPostReboot();
 	  	}
 	  }		
-	}  				
+	}
+
+
+  async function SetSmartDataLoggerData()
+  {
+    const res = await fetch(window.location.origin+"/SetSmartDaTalogger", {
+      method: 'POST',
+      body: ContentSDataLogger
+     })
+
+    if (res.status == 200)
+    {
+      console.log("set smart data logger OK\r\n");
+      SetCountOK++;
+      if (SetCountOK == SetCount)
+      {
+        SetThenPostReboot();
+      }
+    }   
+
+
+  }  				
 
 
 
@@ -915,7 +977,17 @@
   		SetCount++;	
   	}
 
+    if (sdata_logger_data != "" && sdata_logger_general_changedValues.length !=0 ||
+        sdata_logger_proxy_edge_changedValues.length !=0 ||
+        sdata_logger_proxy_cloud_changedValues.length !=0 ||
+        sdata_logger_monitor_edge_changedValues.length !=0 ||
+        sdata_logger_monitor_cloud_changedValues.length !=0)
+    {
+      SetCount++;   
+    }
+
 	}
+
 
 	function modalTrigger()
 	{
@@ -1133,6 +1205,23 @@
 
   			}
 
+        if (sdata_logger_data != "" && sdata_logger_general_changedValues.length !=0 ||
+                        sdata_logger_proxy_edge_changedValues.length !=0 ||
+                        sdata_logger_proxy_cloud_changedValues.length !=0 ||
+                        sdata_logger_monitor_edge_changedValues.length !=0 ||
+                        sdata_logger_monitor_cloud_changedValues.length !=0)
+        {
+
+          let SDataLoggerString = JSON.stringify(sdata_logger_data, null, 0);
+          const bytesArray = Array.from(SDataLoggerString).map(char => char.charCodeAt(0));
+          SDataLoggerBinary = new Uint8Array(bytesArray);
+          ContentSDataLogger=new Uint8Array(SDataLoggerBinary.length+sessionBinary.length);
+          ContentSDataLogger.set(sessionBinary,0);
+          ContentSDataLogger.set(SDataLoggerBinary, sessionBinary.length);
+          SetSmartDataLoggerData();
+      
+        }
+
       }
 	};
 
@@ -1144,6 +1233,105 @@
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+
+{#if        sdata_logger_general_changedValues.length !=0 ||
+        sdata_logger_proxy_edge_changedValues.length !=0 ||
+        sdata_logger_proxy_cloud_changedValues.length !=0 ||
+        sdata_logger_monitor_edge_changedValues.length !=0 ||
+        sdata_logger_monitor_cloud_changedValues.length !=0}
+
+  <Li>Smart Data Logger
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+{#if sdata_logger_general_changedValues.length !=0}
+<Li>General
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each sdata_logger_general_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+</Li>
+{/if}
+
+{#if  sdata_logger_proxy_edge_changedValues.length !=0 ||
+        sdata_logger_proxy_cloud_changedValues.length !=0}
+<Li>Proxy Mode
+{#if  sdata_logger_proxy_edge_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Edge Data
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each sdata_logger_proxy_edge_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+{#if  sdata_logger_proxy_cloud_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Cloud Settings
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each sdata_logger_proxy_cloud_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+
+</Li>
+{/if}
+
+
+
+
+{#if  sdata_logger_monitor_edge_changedValues.length !=0 ||
+        sdata_logger_monitor_cloud_changedValues.length !=0}
+<Li>Monitor Mode
+
+{#if  sdata_logger_monitor_edge_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Edge Data
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each sdata_logger_monitor_edge_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+{#if  sdata_logger_monitor_cloud_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Cloud Settings
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each sdata_logger_monitor_cloud_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+
+</Li>
+{/if}
+
+  </List>
+  </Li>
+
+{/if}
+
+
 
 {#if modbus_gateway_TtR_changedValues.length !=0 ||
 										    modbus_gateway_RtT_changedValues.length !=0 ||
@@ -1931,6 +2119,11 @@
 <div class="pt-10 pl-10 text-center">
 
 {#if 		
+        sdata_logger_general_changedValues.length !=0 ||
+        sdata_logger_proxy_edge_changedValues.length !=0 ||
+        sdata_logger_proxy_cloud_changedValues.length !=0 ||
+        sdata_logger_monitor_edge_changedValues.length !=0 ||
+        sdata_logger_monitor_cloud_changedValues.length !=0 ||
   			modbus_gateway_TtR_changedValues.length !=0 ||
 		    modbus_gateway_RtT_changedValues.length !=0 ||
 		    modbus_gateway_RtR_changedValues.length !=0 ||

@@ -77,7 +77,11 @@
       SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
       SDatalogger_ProxyMode_Edge_ConfigChangedLog,
       SDatalogger_General_ConfigChangedLog,
-      ChangedSDataLoggerConfig
+      ChangedSDataLoggerConfig,
+
+      EventEngine_TriggerSMS_ConfigChangedLog,
+      EventEngine_General_ConfigChangedLog,
+      ChangedEventEngineConfig
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -101,6 +105,7 @@
   let certificate_data="";
   let modbus_data="";
   let sdata_logger_data="";
+  let event_engine_data="";
 
 	let sessionid;
   let sessionBinary;
@@ -224,6 +229,12 @@
   let sdata_logger_monitor_edge_changedValues = [];
   let sdata_logger_monitor_cloud_changedValues = [];
 
+
+  let ContentEventEngine;
+  let EventEngineBinary=null;
+  let event_engine_general_changedValues = [];
+  let event_engine_trigger_sms_changeValues=[];
+
   let SetCount=0;
   let SetCountOK=0;
 
@@ -307,6 +318,18 @@
 
   ChangedSDataLoggerConfig.subscribe(val => {
       sdata_logger_data = val;
+  });
+
+  ChangedEventEngineConfig.subscribe(val => {
+      event_engine_data = val;
+  });
+
+  EventEngine_General_ConfigChangedLog.subscribe(val => {
+      event_engine_general_changedValues = val;
+  });
+
+  EventEngine_TriggerSMS_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_sms_changeValues = val;
   });
 
   SDatalogger_General_ConfigChangedLog.subscribe(val => {
@@ -857,8 +880,27 @@
       }
     }   
 
-
   }  				
+
+
+  async function SetEventEngineData()
+  {
+    const res = await fetch(window.location.origin+"/SEtEventengine", {
+      method: 'POST',
+      body: ContentEventEngine
+     })
+
+    if (res.status == 200)
+    {
+      console.log("set event engine logger OK\r\n");
+      SetCountOK++;
+      if (SetCountOK == SetCount)
+      {
+        SetThenPostReboot();
+      }
+    }   
+
+  }     
 
 
 
@@ -977,11 +1019,17 @@
   		SetCount++;	
   	}
 
-    if (sdata_logger_data != "" && sdata_logger_general_changedValues.length !=0 ||
+    if (sdata_logger_data != "" && (sdata_logger_general_changedValues.length !=0 ||
         sdata_logger_proxy_edge_changedValues.length !=0 ||
         sdata_logger_proxy_cloud_changedValues.length !=0 ||
         sdata_logger_monitor_edge_changedValues.length !=0 ||
-        sdata_logger_monitor_cloud_changedValues.length !=0)
+        sdata_logger_monitor_cloud_changedValues.length !=0))
+    {
+      SetCount++;   
+    }
+
+    if (event_engine_data != "" && (event_engine_trigger_sms_changeValues.length !=0 ||
+        event_engine_general_changedValues.length !=0 ))
     {
       SetCount++;   
     }
@@ -1205,11 +1253,11 @@
 
   			}
 
-        if (sdata_logger_data != "" && sdata_logger_general_changedValues.length !=0 ||
+        if (sdata_logger_data != "" && (sdata_logger_general_changedValues.length !=0 ||
                         sdata_logger_proxy_edge_changedValues.length !=0 ||
                         sdata_logger_proxy_cloud_changedValues.length !=0 ||
                         sdata_logger_monitor_edge_changedValues.length !=0 ||
-                        sdata_logger_monitor_cloud_changedValues.length !=0)
+                        sdata_logger_monitor_cloud_changedValues.length !=0))
         {
 
           let SDataLoggerString = JSON.stringify(sdata_logger_data, null, 0);
@@ -1220,6 +1268,19 @@
           ContentSDataLogger.set(SDataLoggerBinary, sessionBinary.length);
           SetSmartDataLoggerData();
       
+        }
+
+
+        if (event_engine_data != "" && (event_engine_trigger_sms_changeValues.length !=0 ||
+                      event_engine_general_changedValues.length !=0 ))
+        {
+          let EventEngineString = JSON.stringify(event_engine_data, null, 0);
+          const bytesArray = Array.from(EventEngineString).map(char => char.charCodeAt(0));
+          EventEngineBinary = new Uint8Array(bytesArray);
+          ContentEventEngine=new Uint8Array(EventEngineBinary.length+sessionBinary.length);
+          ContentEventEngine.set(sessionBinary,0);
+          ContentEventEngine.set(EventEngineBinary, sessionBinary.length);
+          SetEventEngineData();
         }
 
       }
@@ -1233,6 +1294,55 @@
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+
+{#if  event_engine_trigger_sms_changeValues.length !=0 ||
+      event_engine_general_changedValues.length !=0 }
+<Li>Event Engine
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+{#if event_engine_general_changedValues.length !=0}
+<Li>General
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each event_engine_general_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+</Li>
+{/if}
+
+
+{#if  event_engine_trigger_sms_changeValues.length !=0 ||
+        event_engine_trigger_sms_changeValues.length !=0}
+<Li>Trigger Profile
+{#if  event_engine_trigger_sms_changeValues.length.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> SMS
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_trigger_sms_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+
+
+
+</Li>
+{/if}
+
+
+
+</List>
+</Li>
+
+{/if}
+
+
+
 
 {#if        sdata_logger_general_changedValues.length !=0 ||
         sdata_logger_proxy_edge_changedValues.length !=0 ||
@@ -2118,7 +2228,9 @@
 </div>
 <div class="pt-10 pl-10 text-center">
 
-{#if 		
+{#if
+        event_engine_trigger_sms_changeValues.length !=0 ||
+        event_engine_general_changedValues.length !=0 || 		
         sdata_logger_general_changedValues.length !=0 ||
         sdata_logger_proxy_edge_changedValues.length !=0 ||
         sdata_logger_proxy_cloud_changedValues.length !=0 ||

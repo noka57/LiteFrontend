@@ -1360,7 +1360,7 @@ let RemoteCAList = [
   }
 
   let getIpsecStatusReady=0;
-  let StringIpsecStatus=[];
+  let StringIpsecStatus='';
   let binaryData;
 
 async function getIpsecStatus() {
@@ -1373,14 +1373,10 @@ async function getIpsecStatus() {
     {
       console.log("getIPsecStatus");
 
-      let status_data =await res.json();
+      let status_data =await res.text();
       console.log(status_data);
-     // console.log(res);
-     // const arrayBuffer = await res.arrayBuffer();
-      //binaryData = new Uint8Array(arrayBuffer);
-     // console.log(binaryData);
 
-      //StringIpsecStatus=data.replace(/\r\n|\n/g, '<br>');
+     // StringIpsecStatus=status_data.replace(/\r\n|\n/g, '<br>');
       StringIpsecStatus=status_data;
       console.log(StringIpsecStatus);
       getIpsecStatusReady=1;
@@ -1528,9 +1524,9 @@ async function getIpsecStatus() {
  
 <Table>
 {#if getIpsecStatusReady == 1}
-{#each StringIpsecStatus as Status, index}
-{Status}
-{/each}
+ 
+<pre style="white-space: pre-wrap;">{StringIpsecStatus}</pre>
+
 {/if}
 
 </Table>

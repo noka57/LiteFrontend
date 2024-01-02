@@ -64,6 +64,8 @@
     	SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
     	SDatalogger_ProxyMode_Edge_ConfigChangedLog,
     	SDatalogger_General_ConfigChangedLog,
+    	EventEngine_TriggerSMS_ConfigChangedLog,
+    	EventEngine_General_ConfigChangedLog,
     	dashboadData
   	} from "./configG.js"
 
@@ -208,6 +210,9 @@
   	let sdata_logger_monitor_edge_changedValues = [];
   	let sdata_logger_monitor_cloud_changedValues = [];
 
+  	let event_engine_general_changedValues = [];
+  	let event_engine_trigger_sms_changeValues=[];
+
 	const BlinkApply = () => {
 		if (svg0background=="")
 		{
@@ -227,6 +232,8 @@
   	function JudgeChangedOrNot()
   	{
   		if (
+  			event_engine_trigger_sms_changeValues.length !=0 ||
+  			event_engine_general_changedValues.length !=0 ||
   			sdata_logger_general_changedValues.length !=0 ||
   			sdata_logger_proxy_edge_changedValues.length !=0 ||
   			sdata_logger_proxy_cloud_changedValues.length !=0 ||
@@ -613,6 +620,16 @@
 	      	sdata_logger_monitor_cloud_changedValues = val;
 	  	    JudgeChangedOrNot();
 	  });
+
+  		EventEngine_General_ConfigChangedLog.subscribe(val => {
+      		event_engine_general_changedValues = val;
+      		JudgeChangedOrNot();
+  		});
+
+  		EventEngine_TriggerSMS_ConfigChangedLog.subscribe(val => {
+      		event_engine_trigger_sms_changeValues = val;
+      		JudgeChangedOrNot();
+  		});
 
 
   	sessionidG.subscribe(val => {

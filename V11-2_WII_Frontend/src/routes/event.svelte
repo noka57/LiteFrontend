@@ -8,6 +8,7 @@
   import { sessionidG } from "./sessionG.js";
   import { 
     eventEngineConfig,
+    EventEngine_TriggerSMS_ConfigChangedLog,
     EventEngine_General_ConfigChangedLog,
     ChangedEventEngineConfig
   } from "./configG.js"
@@ -26,6 +27,10 @@
 
   EventEngine_General_ConfigChangedLog.subscribe(val => {
       event_engine_general_changedValues = val;
+  });
+
+  EventEngine_TriggerSMS_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_sms_changeValues = val;
   });
 
 
@@ -59,6 +64,101 @@
       getDataReady=1;
     }
   }
+  
+  function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
+  {
+      for (const key in obj1) 
+      {
+        if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+        {
+          if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) 
+          {
+            for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+            {
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+            }
+
+            if (obj1[key].length > obj2[key].length) 
+            {
+              let addedCount=obj1[key].length-obj2[key].length;
+              let changedstr="Add "+addedCount+" item(s) to "+ key;
+
+              if (type == 0)
+              {
+                event_engine_trigger_sms_changeValues=[...event_engine_trigger_sms_changeValues, changedstr];
+              }
+              else if (type == 1)
+              {
+
+              }
+              else if (type == 2)
+              {
+      
+              }
+              else if (type == 3)
+              {
+          
+              }
+            }
+            else if (obj1[key].length < obj2[key].length)
+            {
+              let deletedCount=obj2[key].length-obj1[key].length;
+              let changedstr="Delete "+deletedCount+" item(s) from "+ key;
+              if (type == 0)
+              {
+                event_engine_trigger_sms_changeValues=[...event_engine_trigger_sms_changeValues, changedstr];
+              }
+              else if (type == 1)
+              {
+
+              }
+              else if (type == 2)
+              {
+      
+              }
+              else if (type == 3)
+              {
+          
+              }
+            }
+          }
+          else
+          {
+            compareObjects(obj1[key], obj2[key], type, 0,0);
+          }
+        } 
+        else if (obj1[key] != obj2[key]) 
+        {
+          let changedstr="";
+          if (isArrayItem == 0)
+          {
+            changedstr="Value of "+key+" has changed to "+obj1[key];
+          }
+          else
+          {
+            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+          }
+          
+          if (type == 0)
+          {
+            event_engine_trigger_sms_changeValues=[...event_engine_trigger_sms_changeValues, changedstr];
+          }
+          else if (type == 1)
+          {
+
+          }
+          else if (type == 2)
+          {
+  
+          }
+          else if (type == 3)
+          {
+      
+          }
+
+        }
+      }
+  }
 
 
   function saveGeneral()
@@ -80,6 +180,35 @@
       EventEngine_General_ConfigChangedLog.set(event_engine_general_changedValues);
       ChangedEventEngineConfig.set(saved_changed_event_engine_data);
       console.log(event_engine_general_changedValues);
+  }
+
+  function saveTriggerSMS()
+  {
+      console.log("save Trigger SMS");
+      if (event_engine_trigger_sms_changeValues.length !=0)
+      {
+          event_engine_trigger_sms_changeValues=[];
+      }
+
+
+      for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length, event_engine_data.config.service_eventEngine_triggerProfile.sms.length); i++) 
+      {
+        compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[i], event_engine_data.config.service_eventEngine_triggerProfile.sms[i], 0, 1,i+1);
+      }
+
+      if (changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length > event_engine_data.config.service_eventEngine_triggerProfile.sms.length)
+      {
+        let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length-event_engine_data.config.service_eventEngine_triggerProfile.sms.length;
+        let changedstr="Add "+addedCount+" item(s) to SMS Trigger List";
+        event_engine_trigger_sms_changeValues=[...event_engine_trigger_sms_changeValues, changedstr];
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.sms));
+
+      EventEngine_TriggerSMS_ConfigChangedLog.set(event_engine_trigger_sms_changeValues);
+      ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+      console.log(event_engine_trigger_sms_changeValues);
+
   }
 
 
@@ -117,6 +246,146 @@
     }
 
   });
+
+
+  let modify_trigger_sms_modal=false;
+  let modify_trigger_sms_index;
+  let BackupTriggerSMS=
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  };
+
+
+
+  function TriggerModifySMS(index)
+  {
+    modify_trigger_sms_modal=true;
+    modify_trigger_sms_index=index;
+    BackupTriggerSMS.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].enable;
+    BackupTriggerSMS.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].aliasName;
+    BackupTriggerSMS.smsPhoneNumber=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsPhoneNumber;
+    BackupTriggerSMS.smsPhoneNumberSpecified=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsPhoneNumberSpecified;
+    BackupTriggerSMS.smsContent=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsContent;
+
+  }
+
+
+  function NoModifyTriggerSMS(index)
+  {
+    modify_trigger_sms_modal=false;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].enable=BackupTriggerSMS.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].aliasName=BackupTriggerSMS.aliasName;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsPhoneNumber=BackupTriggerSMS.smsPhoneNumber;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsPhoneNumberSpecified=BackupTriggerSMS.smsPhoneNumberSpecified;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsContent=BackupTriggerSMS.smsContent;
+  }
+
+
+  function ModifyTriggerSMS()
+  {
+    modify_trigger_sms_modal=false;
+  }
+
+  let new_trigger_sms_modal=false;
+  let new_trigger_sms_index;
+  let NewTriggerSMS=[
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber: 0,
+      smsPhoneNumberSpecified: "0912345678",
+      smsContent: ""
+  }
+  ];
+
+  function new_trigger_sms_trigger(index)
+  {
+      NewTriggerSMS[index].enable=false;
+      NewTriggerSMS[index].aliasName="";
+      NewTriggerSMS[index].smsPhoneNumber=0;
+      NewTriggerSMS[index].smsPhoneNumberSpecified="";
+      NewTriggerSMS[index].smsContent="";
+
+      new_trigger_sms_index=index;
+      new_trigger_sms_modal=true;
+
+  }
+
+
+  function add_new_trigger_sms(index)
+  {
+      new_trigger_sms_modal=false;
+      changed_event_engine_data.config.service_eventEngine_triggerProfile.sms=[...changed_event_engine_data.config.service_eventEngine_triggerProfile.sms,NewTriggerSMS[index]];
+  }  
+
+
 
 
   let isActive = false;
@@ -550,7 +819,7 @@ let OpList = [
     <TableBodyRow>
           <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalsmsT = true}>
+<button on:click={() => TriggerModifySMS(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -580,13 +849,15 @@ let OpList = [
 {/if}    
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalsmsT = true}>
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length < 10}
+<button on:click={() => new_trigger_sms_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length)}>
+
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
+{/if}
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -608,28 +879,29 @@ let OpList = [
         <td></td>
                 <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveTriggerSMS}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
 
     </tr>
 
-    <Modal bind:open={formModalsmsT} autoclose={false} size="lg" class="w-full">
+<Modal bind:open={new_trigger_sms_modal} size="lg" class="w-full" autoclose>
   <form action="#">
-
 <label>
-  <input class="center" type=checkbox checked={smsitemT}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewTriggerSMS[new_trigger_sms_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
 
 <table>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">T_sms_</p><input type="text" bind:value={T_SMS_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewTriggerSMS[new_trigger_sms_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -642,14 +914,14 @@ let OpList = [
       <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Phone Number</p></td>
 
   <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
-  <Radio bind:group={TSMSP} value='any' >Any</Radio>
-  <Radio bind:group={TSMSP} value='specified'>Specified:</Radio>
+  <Radio bind:group={NewTriggerSMS[new_trigger_sms_index].smsPhoneNumber} value={0} >Any</Radio>
+  <Radio bind:group={NewTriggerSMS[new_trigger_sms_index].smsPhoneNumber} value={1}>Specified:</Radio>
 
-{#if TSMSP == 'any'}
-  <input type="text" bind:value={T_SMS_PhoneN} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+{#if NewTriggerSMS[new_trigger_sms_index].smsPhoneNumber == 0}
+  <input type="text" bind:value={NewTriggerSMS[new_trigger_sms_index].smsPhoneNumberSpecified} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
 
 {:else}
-  <input type="text" bind:value={T_SMS_PhoneN} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="text" bind:value={NewTriggerSMS[new_trigger_sms_index].smsPhoneNumberSpecified} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
 
 </div></td>
@@ -662,7 +934,7 @@ let OpList = [
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={T_SMS_Content} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewTriggerSMS[new_trigger_sms_index].smsContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -680,7 +952,84 @@ let OpList = [
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_trigger_sms(new_trigger_sms_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+
+<Modal bind:open={modify_trigger_sms_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[modify_trigger_sms_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTriggerSMS(modify_trigger_sms_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[modify_trigger_sms_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Phone Number</p></td>
+
+  <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[modify_trigger_sms_index].smsPhoneNumber} value={0} >Any</Radio>
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[modify_trigger_sms_index].smsPhoneNumber} value={1}>Specified:</Radio>
+
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[modify_trigger_sms_index].smsPhoneNumber == 0}
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[modify_trigger_sms_index].smsPhoneNumberSpecified} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+
+{:else}
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[modify_trigger_sms_index].smsPhoneNumberSpecified} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+
+</div></td>
+
+
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[modify_trigger_sms_index].smsContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyTriggerSMS}>Modify</Button></td>
 
 
     </tr>

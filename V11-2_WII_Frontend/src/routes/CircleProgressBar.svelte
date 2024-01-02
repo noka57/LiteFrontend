@@ -1,5 +1,5 @@
 <script>
-  export let value = 0;
+  export let value = 10;
   export let max = 105;
   export let color = "currentColor";
   let x=50;

@@ -23,6 +23,8 @@ export const lanConfig=writable("");
 export const wanConfig=writable("");
 
 
+export const EventEngine_TriggerDI_ConfigChangedLog=writable("");
+export const EventEngine_TriggerSMS_ConfigChangedLog=writable("");
 export const EventEngine_General_ConfigChangedLog=writable("");
 export const ChangedEventEngineConfig=writable("");
 

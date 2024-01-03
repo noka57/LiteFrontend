@@ -17,13 +17,6 @@
     	MaintenanceConfigChangedLog,
     	OperationConfigChangedLog,
     	DockerConfigChangedLog,
-    	Dreams_Serial_ConfigChangedLog,
-        Dreams_Modbus_S0_ConfigChangedLog,
-        Dreams_Modbus_S1_ConfigChangedLog,
-        Dreams_Modbus_Option_ConfigChangedLog,
-        Dreams_DNP3_ConfigChangedLog,
-        Dreams_Restful_ConfigChangedLog,
-        Dreams_General_ConfigChangedLog,
         WAN_CWAN1_BASIC_ConfigChangedLog,
     	WAN_CWAN1_Advanced_ConfigChangedLog,
     	WAN_CWAN1_SimPolicy_ConfigChangedLog,
@@ -64,6 +57,9 @@
     	SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
     	SDatalogger_ProxyMode_Edge_ConfigChangedLog,
     	SDatalogger_General_ConfigChangedLog,
+    	EventEngine_TriggerTCPMsg_ConfigChangedLog,
+    	EventEngine_TriggerModbus_ConfigChangedLog,
+    	EventEngine_TriggerDI_ConfigChangedLog,
     	EventEngine_TriggerSMS_ConfigChangedLog,
     	EventEngine_General_ConfigChangedLog,
     	dashboadData
@@ -160,13 +156,6 @@
   	let maintenance_changedValues = [];
     let operation_changedValues = [];
     let docker_changedValues = [];
-    let serial_changedValues = [];
-    let modbus_s0_changedValues = [];
-    let modbus_s1_changedValues = [];
-    let modbus_option_changedValues = [];
-    let dnp3_changedValues = [];
-    let restful_changedValues = [];
-    let dreams_general_changedValues=[];
     let cwan1_basic_changedValues = [];
   	let cwan1_advanced_changedValues = [];
   	let cwan1_simpolicy_changedValues = [];
@@ -212,7 +201,10 @@
 
   	let event_engine_general_changedValues = [];
   	let event_engine_trigger_sms_changeValues=[];
-
+  	let event_engine_trigger_di_changeValues=[];
+  	let event_engine_trigger_modbus_changeValues=[];
+  	let event_engine_trigger_tcpmsg_changeValues=[];
+  	
 	const BlinkApply = () => {
 		if (svg0background=="")
 		{
@@ -231,7 +223,9 @@
 
   	function JudgeChangedOrNot()
   	{
-  		if (
+  		if (event_engine_trigger_tcpmsg_changeValues.length !=0 ||
+  			event_engine_trigger_modbus_changeValues.length !=0 ||
+  			event_engine_trigger_di_changeValues.length !=0 ||
   			event_engine_trigger_sms_changeValues.length !=0 ||
   			event_engine_general_changedValues.length !=0 ||
   			sdata_logger_general_changedValues.length !=0 ||
@@ -274,13 +268,6 @@
   			maintenance_changedValues.length != 0 ||
   			operation_changedValues.length != 0 ||
   			docker_changedValues.length != 0 ||
-  			serial_changedValues.length != 0 ||
-  			modbus_s0_changedValues.length != 0 ||
-  			modbus_s1_changedValues.length != 0 ||
-  			modbus_option_changedValues.length != 0 ||
-  			dnp3_changedValues.length != 0 ||
-  			restful_changedValues.length != 0 ||
-  			dreams_general_changedValues.length != 0 ||
   			cwan1_basic_changedValues.length !=0 ||
   			cwan1_advanced_changedValues.length != 0 ||
   			cwan1_simpolicy_changedValues.length != 0 ||
@@ -380,40 +367,6 @@
     });
 
 
- 	Dreams_Serial_ConfigChangedLog.subscribe(val => {
-        serial_changedValues = val;
-        JudgeChangedOrNot();
-    });
-
-    Dreams_Modbus_S0_ConfigChangedLog.subscribe(val => {
-        modbus_s0_changedValues = val;
-        JudgeChangedOrNot();
-    });
-
-    Dreams_Modbus_S1_ConfigChangedLog.subscribe(val => {
-        modbus_s1_changedValues = val;
-    	JudgeChangedOrNot();
-    });
-
-    Dreams_Modbus_Option_ConfigChangedLog.subscribe(val => {
-        modbus_option_changedValues = val;
-    	JudgeChangedOrNot();
-    });
-
-    Dreams_DNP3_ConfigChangedLog.subscribe(val => {
-        dnp3_changedValues = val;
-    	JudgeChangedOrNot();
-    });
-
-    Dreams_Restful_ConfigChangedLog.subscribe(val => {
-        restful_changedValues = val;
-    	JudgeChangedOrNot();
-    });
-
-    Dreams_General_ConfigChangedLog.subscribe(val => {
-        dreams_general_changedValues = val;
-    	JudgeChangedOrNot();
-    });
 
 	WAN_CWAN1_BASIC_ConfigChangedLog.subscribe(val => {
 	    cwan1_basic_changedValues = val;
@@ -595,42 +548,56 @@
     });
 
 
-	  SDatalogger_General_ConfigChangedLog.subscribe(val => {
-	      	sdata_logger_general_changedValues = val;
-       		JudgeChangedOrNot();
-	  });
+	SDatalogger_General_ConfigChangedLog.subscribe(val => {
+		sdata_logger_general_changedValues = val;
+		JudgeChangedOrNot();
+	});
 
-	  SDatalogger_ProxyMode_Edge_ConfigChangedLog.subscribe(val => {
-	      	sdata_logger_proxy_edge_changedValues = val;
-	        JudgeChangedOrNot();
-	  });
+	SDatalogger_ProxyMode_Edge_ConfigChangedLog.subscribe(val => {
+		sdata_logger_proxy_edge_changedValues = val;
+		JudgeChangedOrNot();
+	});
 
-	  SDatalogger_ProxyMode_Cloud_ConfigChangedLog.subscribe(val => {
-	      	sdata_logger_proxy_cloud_changedValues = val;
-	        JudgeChangedOrNot();
-	  });
+	SDatalogger_ProxyMode_Cloud_ConfigChangedLog.subscribe(val => {
+		sdata_logger_proxy_cloud_changedValues = val;
+		JudgeChangedOrNot();
+	});
 
 
-	  SDatalogger_MonitorMode_Edge_ConfigChangedLog.subscribe(val => {
-	      	sdata_logger_monitor_edge_changedValues = val;
-	        JudgeChangedOrNot();
-	  });
+	SDatalogger_MonitorMode_Edge_ConfigChangedLog.subscribe(val => {
+		sdata_logger_monitor_edge_changedValues = val;
+		JudgeChangedOrNot();
+	});
 
-	  SDatalogger_MonitorMode_Cloud_ConfigChangedLog.subscribe(val => {
-	      	sdata_logger_monitor_cloud_changedValues = val;
-	  	    JudgeChangedOrNot();
-	  });
+	SDatalogger_MonitorMode_Cloud_ConfigChangedLog.subscribe(val => {
+		sdata_logger_monitor_cloud_changedValues = val;
+	    JudgeChangedOrNot();
+	});
 
-  		EventEngine_General_ConfigChangedLog.subscribe(val => {
-      		event_engine_general_changedValues = val;
-      		JudgeChangedOrNot();
-  		});
+	EventEngine_General_ConfigChangedLog.subscribe(val => {
+		event_engine_general_changedValues = val;
+		JudgeChangedOrNot();
+	});
 
-  		EventEngine_TriggerSMS_ConfigChangedLog.subscribe(val => {
-      		event_engine_trigger_sms_changeValues = val;
-      		JudgeChangedOrNot();
-  		});
+	EventEngine_TriggerSMS_ConfigChangedLog.subscribe(val => {
+		event_engine_trigger_sms_changeValues = val;
+		JudgeChangedOrNot();
+	});
 
+	EventEngine_TriggerDI_ConfigChangedLog.subscribe(val => {
+		event_engine_trigger_di_changeValues = val;
+		JudgeChangedOrNot();
+	});
+
+  	EventEngine_TriggerModbus_ConfigChangedLog.subscribe(val => {
+      	event_engine_trigger_modbus_changeValues = val;
+      	JudgeChangedOrNot();
+  	});	
+
+  	EventEngine_TriggerTCPMsg_ConfigChangedLog.subscribe(val => {
+      	event_engine_trigger_tcpmsg_changeValues = val;
+        JudgeChangedOrNot();
+  	});
 
   	sessionidG.subscribe(val => {
     	sessionid = val;

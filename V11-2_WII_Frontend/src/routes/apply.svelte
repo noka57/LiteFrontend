@@ -21,14 +21,6 @@
   		ChangedOperationConfig,
   		DockerConfigChangedLog,
       ChangedDockerConfig,
-      Dreams_Serial_ConfigChangedLog,
-      Dreams_Modbus_S0_ConfigChangedLog,
-      Dreams_Modbus_S1_ConfigChangedLog,
-      Dreams_Modbus_Option_ConfigChangedLog,
-      Dreams_DNP3_ConfigChangedLog,
-      Dreams_Restful_ConfigChangedLog,
-      Dreams_General_ConfigChangedLog,
-      ChangedDreamsConfig,
       WAN_CWAN1_BASIC_ConfigChangedLog,
     	WAN_CWAN1_Advanced_ConfigChangedLog,
     	WAN_CWAN1_SimPolicy_ConfigChangedLog,
@@ -78,7 +70,9 @@
       SDatalogger_ProxyMode_Edge_ConfigChangedLog,
       SDatalogger_General_ConfigChangedLog,
       ChangedSDataLoggerConfig,
-
+      EventEngine_TriggerTCPMsg_ConfigChangedLog,
+      EventEngine_TriggerModbus_ConfigChangedLog,
+      EventEngine_TriggerDI_ConfigChangedLog,
       EventEngine_TriggerSMS_ConfigChangedLog,
       EventEngine_General_ConfigChangedLog,
       ChangedEventEngineConfig
@@ -95,7 +89,6 @@
   let maintenance_data="";
   let operation_data="";
   let docker_data="";
-  let dreams_data="";
   let wan_data="";
   let ipsec_data="";
   let openvpn_data="";
@@ -144,16 +137,6 @@
   let DockerBinary=null;
   let docker_changedValues = [];
 
-
-  let ContentDreams;
-  let DreamsBinary=null;
-  let serial_changedValues = [];
-  let modbus_s0_changedValues = [];
-  let modbus_s1_changedValues = [];
-  let modbus_option_changedValues = [];
-  let dnp3_changedValues = [];
-  let restful_changedValues = [];
-  let dreams_general_changedValues=[];
 
   let ContentWan;
   let WanBinary=null;
@@ -234,7 +217,9 @@
   let EventEngineBinary=null;
   let event_engine_general_changedValues = [];
   let event_engine_trigger_sms_changeValues=[];
-
+  let event_engine_trigger_di_changeValues=[];
+  let event_engine_trigger_modbus_changeValues=[];
+  let event_engine_trigger_tcpmsg_changeValues=[];
   let SetCount=0;
   let SetCountOK=0;
 
@@ -279,9 +264,6 @@
       docker_data = val;
   });
 
-  ChangedDreamsConfig.subscribe(val => {
-      dreams_data = val;
-  });
 
   ChangedWANConfig.subscribe(val => {
       wan_data = val;
@@ -331,6 +313,19 @@
   EventEngine_TriggerSMS_ConfigChangedLog.subscribe(val => {
       event_engine_trigger_sms_changeValues = val;
   });
+
+  EventEngine_TriggerDI_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_di_changeValues = val;
+  });
+
+  EventEngine_TriggerModbus_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_modbus_changeValues = val;
+  });
+
+  EventEngine_TriggerTCPMsg_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_tcpmsg_changeValues = val;
+  });
+  
 
   SDatalogger_General_ConfigChangedLog.subscribe(val => {
       sdata_logger_general_changedValues = val;
@@ -549,34 +544,6 @@
       docker_changedValues = val;
   });
 
-
-  Dreams_Serial_ConfigChangedLog.subscribe(val => {
-      serial_changedValues = val;
-  });
-
-  Dreams_Modbus_S0_ConfigChangedLog.subscribe(val => {
-      modbus_s0_changedValues = val;
-  });
-
-  Dreams_Modbus_S1_ConfigChangedLog.subscribe(val => {
-      modbus_s1_changedValues = val;
-  });
-
-  Dreams_Modbus_Option_ConfigChangedLog.subscribe(val => {
-      modbus_option_changedValues = val;
-  });
-
-  Dreams_DNP3_ConfigChangedLog.subscribe(val => {
-      dnp3_changedValues = val;
-  });
-
-  Dreams_Restful_ConfigChangedLog.subscribe(val => {
-      restful_changedValues = val;
-  });
-
-  Dreams_General_ConfigChangedLog.subscribe(val => {
-      dreams_general_changedValues = val;
-  });
 
  	async function SetThenPostReboot () {
     
@@ -1028,7 +995,8 @@
       SetCount++;   
     }
 
-    if (event_engine_data != "" && (event_engine_trigger_sms_changeValues.length !=0 ||
+    if (event_engine_data != "" && (event_engine_trigger_di_changeValues.length !=0 || 
+        event_engine_trigger_sms_changeValues.length !=0 ||
         event_engine_general_changedValues.length !=0 ))
     {
       SetCount++;   
@@ -1271,7 +1239,10 @@
         }
 
 
-        if (event_engine_data != "" && (event_engine_trigger_sms_changeValues.length !=0 ||
+        if (event_engine_data != "" && (event_engine_trigger_tcpmsg_changeValues.length !=0||
+                      event_engine_trigger_modbus_changeValues.length !=0 ||
+                      event_engine_trigger_di_changeValues.length !=0 ||
+                      event_engine_trigger_sms_changeValues.length !=0 ||
                       event_engine_general_changedValues.length !=0 ))
         {
           let EventEngineString = JSON.stringify(event_engine_data, null, 0);
@@ -1295,7 +1266,10 @@
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
 
-{#if  event_engine_trigger_sms_changeValues.length !=0 ||
+{#if  event_engine_trigger_tcpmsg_changeValues.length !=0 ||
+      event_engine_trigger_modbus_changeValues.length !=0 ||
+      event_engine_trigger_di_changeValues.length !=0 ||
+      event_engine_trigger_sms_changeValues.length !=0 ||
       event_engine_general_changedValues.length !=0 }
 <Li>Event Engine
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
@@ -1311,10 +1285,12 @@
 {/if}
 
 
-{#if  event_engine_trigger_sms_changeValues.length !=0 ||
+{#if    event_engine_trigger_tcpmsg_changeValues.length !=0||
+        event_engine_trigger_modbus_changeValues.length !=0||
+        event_engine_trigger_di_changeValues.length !=0 ||
         event_engine_trigger_sms_changeValues.length !=0}
 <Li>Trigger Profile
-{#if  event_engine_trigger_sms_changeValues.length.length !=0}
+{#if  event_engine_trigger_sms_changeValues.length !=0}
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
  <Li> SMS
 <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
@@ -1328,7 +1304,47 @@
  </List>
 {/if}
 
+{#if  event_engine_trigger_di_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> DI
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_trigger_di_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
 
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+{#if  event_engine_trigger_modbus_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Modbus
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_trigger_modbus_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+{#if  event_engine_trigger_tcpmsg_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> TCP Message
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_trigger_tcpmsg_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
 
 
 </Li>
@@ -1344,7 +1360,7 @@
 
 
 
-{#if        sdata_logger_general_changedValues.length !=0 ||
+{#if    sdata_logger_general_changedValues.length !=0 ||
         sdata_logger_proxy_edge_changedValues.length !=0 ||
         sdata_logger_proxy_cloud_changedValues.length !=0 ||
         sdata_logger_monitor_edge_changedValues.length !=0 ||
@@ -2115,108 +2131,6 @@
 
 
 
-{#if dreams_general_changedValues.length !=0 || 
-		serial_changedValues.length !=0 ||
-		modbus_s0_changedValues.length != 0 ||
-		modbus_s1_changedValues.length != 0 ||
-		modbus_option_changedValues.length != 0 ||
-		dnp3_changedValues.length != 0 ||
-		restful_changedValues.length != 0 
-		}
-  <Li>DREAMS
- {#if dreams_general_changedValues.length !=0}
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
-  <Li>
-  	General
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-  {#each dreams_general_changedValues as item}
-      <Li>{item}</Li>
-   {/each}
-  </List>
-  </Li> 
-  </List>
-	{/if}
-
-	{#if serial_changedValues.length !=0}
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
-  <Li>
-  	Serial
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-  {#each serial_changedValues as item}
-      <Li>{item}</Li>
-   {/each}
-  </List>
-  </Li> 
-  </List>
-	{/if}
-
-	{#if modbus_s0_changedValues.length !=0}
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
-  <Li>
-  	Modbus Item (Serial 0)
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-  {#each modbus_s0_changedValues as item}
-      <Li>{item}</Li>
-   {/each}
-  </List>
-  </Li> 
-  </List>
-	{/if}
-
-	{#if modbus_s1_changedValues.length !=0}
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
-  <Li>
-  	Modbus Item (Serial 1)
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-  {#each modbus_s1_changedValues as item}
-      <Li>{item}</Li>
-   {/each}
-  </List>
-  </Li> 
-  </List>
-	{/if}
-
-	{#if modbus_option_changedValues.length !=0}
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
-  <Li>
-  	Modbus Item (Option)
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-  {#each modbus_option_changedValues as item}
-      <Li>{item}</Li>
-   {/each}
-  </List>
-  </Li> 
-  </List>
-	{/if}
-
-	{#if dnp3_changedValues.length !=0}
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
-  <Li>
-  	DNP3
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-  {#each dnp3_changedValues as item}
-      <Li>{item}</Li>
-   {/each}
-  </List>
-  </Li> 
-  </List>
-	{/if}
-
-	{#if restful_changedValues.length !=0}
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
-  <Li>
-  	Restful
-  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-  {#each restful_changedValues as item}
-      <Li>{item}</Li>
-   {/each}
-  </List>
-  </Li> 
-  </List>
-	{/if}
-
-  </Li>	
-{/if}
 
 
 
@@ -2228,7 +2142,9 @@
 </div>
 <div class="pt-10 pl-10 text-center">
 
-{#if
+{#if    event_engine_trigger_tcpmsg_changeValues.length !=0 ||
+        event_engine_trigger_modbus_changeValues.length !=0||
+        event_engine_trigger_di_changeValues.length !=0 ||
         event_engine_trigger_sms_changeValues.length !=0 ||
         event_engine_general_changedValues.length !=0 || 		
         sdata_logger_general_changedValues.length !=0 ||
@@ -2258,13 +2174,6 @@
   			maintenance_changedValues.length != 0 ||
   			operation_changedValues.length != 0 ||
   			docker_changedValues.length != 0 ||
-  			serial_changedValues.length != 0 ||
-  			modbus_s0_changedValues.length != 0 ||
-  			modbus_s1_changedValues.length != 0 ||
-  			modbus_option_changedValues.length != 0 ||
-  			dnp3_changedValues.length != 0 ||
-  			restful_changedValues.length != 0 ||
-  			dreams_general_changedValues.length != 0 ||
   			cwan1_basic_changedValues !=0 ||
   			cwan1_advanced_changedValues != 0 ||
   			cwan1_simpolicy_changedValues != 0 ||
@@ -2292,7 +2201,6 @@
   			certificate_settings_changedValues.length !=0
 
 		}
-
 <Button on:click={() => modalTrigger()}>Apply and Reboot</Button>
 {/if}
 </div>

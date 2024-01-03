@@ -15,14 +15,14 @@ export const ipsecConfig= writable("");
 export const maintenanceConfig = writable("");
 export const operationConfig = writable("");
 export const dockerConfig = writable("");
-export const dreamsConfig = writable("");
 export const staticrouteConfig = writable("");
 export const firewallConfig = writable("");
 export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
 
-
+export const EventEngine_TriggerTCPMsg_ConfigChangedLog=writable("");
+export const EventEngine_TriggerModbus_ConfigChangedLog=writable("");
 export const EventEngine_TriggerDI_ConfigChangedLog=writable("");
 export const EventEngine_TriggerSMS_ConfigChangedLog=writable("");
 export const EventEngine_General_ConfigChangedLog=writable("");
@@ -105,15 +105,6 @@ export const ChangedOperationConfig=writable("");
 
 export const DockerConfigChangedLog=writable("");
 export const ChangedDockerConfig=writable("");
-
-export const Dreams_Serial_ConfigChangedLog=writable("");
-export const Dreams_Modbus_S0_ConfigChangedLog=writable("");
-export const Dreams_Modbus_S1_ConfigChangedLog=writable("");
-export const Dreams_Modbus_Option_ConfigChangedLog=writable("");
-export const Dreams_DNP3_ConfigChangedLog=writable("");
-export const Dreams_Restful_ConfigChangedLog=writable("");
-export const Dreams_General_ConfigChangedLog=writable("");
-export const ChangedDreamsConfig=writable("");
 
 
 export const WAN_CWAN1_BASIC_ConfigChangedLog=writable("");

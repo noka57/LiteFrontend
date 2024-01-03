@@ -1522,7 +1522,7 @@ async function getIpsecStatus() {
 {#if changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1}
 
  
-<Table>
+<Table class="text-gray-900">
 {#if getIpsecStatusReady == 1}
  
 <pre style="white-space: pre-wrap;">{StringIpsecStatus}</pre>

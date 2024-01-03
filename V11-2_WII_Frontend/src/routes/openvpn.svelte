@@ -2584,75 +2584,13 @@ let RemoteCAList = [
 
 {#if changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}  
 <Table>
-  <caption
-    class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
-  >
-    Client
-    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-    List all clients' information
-    </p>
-  </caption>
-  <TableHead>
-    <TableHeadCell class="w-10">Index</TableHeadCell>
-    <TableHeadCell class="w-10">VPN Name</TableHeadCell>
-    <TableHeadCell class="w-10">State</TableHeadCell>
-    <TableHeadCell class="w-10">VPN State</TableHeadCell>
-    <TableHeadCell class="w-10">IP</TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-  </TableHead>
   
-    <TableBodyRow>
-      <TableBodyCell>1</TableBodyCell>
-            <TableBodyCell>
-test1
-      </TableBodyCell>
-      <TableBodyCell>Started</TableBodyCell>
-      <TableBodyCell>Connection Established</TableBodyCell>
-      <TableBodyCell>10.123.12.3</TableBodyCell>
-
-    </TableBodyRow>
-    <TableBodyRow>
-      <TableBodyCell>2</TableBodyCell>
-            <TableBodyCell>
-test2
-      </TableBodyCell>
-      <TableBodyCell>Started</TableBodyCell>
-      <TableBodyCell>Connection Established</TableBodyCell>
-      <TableBodyCell>10.123.12.4</TableBodyCell>
-    </TableBodyRow>
 
 </Table>
 
 {:else if changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}  
 <Table>
-  <caption
-    class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
-  >
-    Server
-
-   </caption>
-  <TableHead>
-    <TableHeadCell class="w-10">Listen Port</TableHeadCell>
-    <TableHeadCell class="w-10">Protocol</TableHeadCell>  
-    <TableHeadCell class="w-10">State</TableHeadCell>
-    <TableHeadCell class="w-10">Client Authentication</TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-
-  </TableHead>  
-
-
-
-    <TableBodyRow>
-      <TableBodyCell>1194</TableBodyCell>
-      <TableBodyCell>UDP</TableBodyCell>
-      <TableBodyCell>Started</TableBodyCell>
-      <TableBodyCell>X509 Certificate</TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-    </TableBodyRow>
+ 
 </Table>
 
 {/if}

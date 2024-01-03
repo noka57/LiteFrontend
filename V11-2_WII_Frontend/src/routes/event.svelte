@@ -8,6 +8,9 @@
   import { sessionidG } from "./sessionG.js";
   import { 
     eventEngineConfig,
+    EventEngine_TriggerTCPMsg_ConfigChangedLog,
+    EventEngine_TriggerModbus_ConfigChangedLog,
+    EventEngine_TriggerDI_ConfigChangedLog,
     EventEngine_TriggerSMS_ConfigChangedLog,
     EventEngine_General_ConfigChangedLog,
     ChangedEventEngineConfig
@@ -20,7 +23,9 @@
 
   let event_engine_general_changedValues = [];
   let event_engine_trigger_sms_changeValues=[];
-
+  let event_engine_trigger_di_changeValues=[];
+  let event_engine_trigger_modbus_changeValues=[];
+  let event_engine_trigger_tcpmsg_changeValues=[];
   eventEngineConfig.subscribe(val => {
       event_engine_data = val;
   });
@@ -33,11 +38,22 @@
       event_engine_trigger_sms_changeValues = val;
   });
 
+  EventEngine_TriggerDI_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_di_changeValues = val;
+  });
 
+  EventEngine_TriggerModbus_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_modbus_changeValues = val;
+  });
+
+  EventEngine_TriggerTCPMsg_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_tcpmsg_changeValues = val;
+  });
 
   ChangedEventEngineConfig.subscribe(val => {
       saved_changed_event_engine_data = val;
   });
+
   let getDataReady=0;  
   let sessionid;
   let sessionBinary;
@@ -89,15 +105,15 @@
               }
               else if (type == 1)
               {
-
+                event_engine_trigger_di_changeValues=[...event_engine_trigger_di_changeValues, changedstr];
               }
               else if (type == 2)
               {
-      
+                event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];   
               }
               else if (type == 3)
               {
-          
+                event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];
               }
             }
             else if (obj1[key].length < obj2[key].length)
@@ -110,15 +126,15 @@
               }
               else if (type == 1)
               {
-
+                event_engine_trigger_di_changeValues=[...event_engine_trigger_di_changeValues, changedstr];
               }
               else if (type == 2)
               {
-      
+                event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];         
               }
               else if (type == 3)
               {
-          
+                event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];          
               }
             }
           }
@@ -145,15 +161,15 @@
           }
           else if (type == 1)
           {
-
+            event_engine_trigger_di_changeValues=[...event_engine_trigger_di_changeValues, changedstr];
           }
           else if (type == 2)
           {
-  
+            event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];     
           }
           else if (type == 3)
           {
-      
+            event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];     
           }
 
         }
@@ -211,6 +227,65 @@
 
   }
 
+  function saveTriggerDI()
+  {
+    console.log("save Trigger DI");
+    if (event_engine_trigger_di_changeValues.length !=0)
+    {
+        event_engine_trigger_di_changeValues=[];
+    }
+
+
+    for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length, event_engine_data.config.service_eventEngine_triggerProfile.di.length); i++) 
+    {
+      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.di[i], event_engine_data.config.service_eventEngine_triggerProfile.di[i], 1, 1,i+1);
+    }
+
+    if (changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length > event_engine_data.config.service_eventEngine_triggerProfile.di.length)
+    {
+      let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length-event_engine_data.config.service_eventEngine_triggerProfile.di.length;
+      let changedstr="Add "+addedCount+" item(s) to DI Trigger List";
+      event_engine_trigger_di_changeValues=[...event_engine_trigger_di_changeValues, changedstr];
+    }
+
+    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.di));
+
+    EventEngine_TriggerDI_ConfigChangedLog.set(event_engine_trigger_di_changeValues);
+    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+    console.log(event_engine_trigger_di_changeValues);    
+
+  }
+
+
+  function saveTriggerModbus()
+  {
+    console.log("save Trigger Modbus");
+    if (event_engine_trigger_modbus_changeValues.length !=0)
+    {
+        event_engine_trigger_modbus_changeValues=[];
+    }
+
+
+    for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length, event_engine_data.config.service_eventEngine_triggerProfile.modbus.length); i++) 
+    {
+      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[i], event_engine_data.config.service_eventEngine_triggerProfile.modbus[i], 2, 1,i+1);
+    }
+
+    if (changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length > event_engine_data.config.service_eventEngine_triggerProfile.modbus.length)
+    {
+      let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length-event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;
+      let changedstr="Add "+addedCount+" item(s) to Modbus Trigger List";
+      event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];
+    }
+
+    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus));
+
+    EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
+    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+    console.log(event_engine_trigger_modbus_changeValues);    
+
+  }
+
 
   onMount(() => {
 
@@ -235,17 +310,365 @@
 
       }
 
-    //  if ()
-    //  {
+      if (event_engine_trigger_sms_changeValues.length == 0)
+      {
+          changed_event_engine_data.config.service_eventEngine_triggerProfile.sms=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_triggerProfile.sms));
+      }
 
-    //  }
-     // event_engine_data.config.service_eventEngine_general.enable
-     // service_eventEngine_triggerProfile
+      if (event_engine_trigger_di_changeValues.length == 0)
+      {
+          changed_event_engine_data.config.service_eventEngine_triggerProfile.di=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_triggerProfile.di));
+      }
+
+      if (event_engine_trigger_modbus_changeValues.length == 0)
+      {
+          changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_triggerProfile.modbus));
+      }
+
+      if (event_engine_trigger_tcpmsg_changeValues.length == 0)
+      {
+          changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage));        
+      }
 
 
     }
 
   });
+
+  let modify_trigger_modbus_modal=false;
+  let modify_trigger_modbus_index;
+  let BackupTriggerModbus=
+  {
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  };
+
+  function TriggerModifyModbus(index)
+  {
+    BackupTriggerModbus.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].enable;
+    BackupTriggerModbus.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].aliasName;
+ 
+    BackupTriggerModbus.modbusVariable=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].modbusVariable;
+    BackupTriggerModbus.variableType=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].variableType;
+
+    BackupTriggerModbus.comparison=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].comparison;
+    BackupTriggerModbus.comparisonValue=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].comparisonValue;
+
+    modify_trigger_modbus_index=index;
+    modify_trigger_modbus_modal=true;
+  }
+
+  function NoModifyTriggerModbus(index)
+  {
+    modify_trigger_modbus_modal=false;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].enable=BackupTriggerModbus.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].aliasName=BackupTriggerModbus.aliasName;
+ 
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].modbusVariable=BackupTriggerModbus.modbusVariable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].variableType=BackupTriggerModbus.variableType;
+
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].comparison=BackupTriggerModbus.comparison;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].comparisonValue=BackupTriggerModbus.comparisonValue;
+  }
+
+  function ModifyTriggerModbus()
+  {
+    modify_trigger_modbus_modal=false;
+
+  }
+
+  let new_trigger_modbus_modal=false;
+  let new_trigger_modbus_index;
+  let NewTriggerModbus=[
+  {
+
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  },
+  {
+
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  },
+  {
+
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  },
+  {
+
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  },
+  {
+
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  },
+  {
+
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  },
+  {
+
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  },
+  {
+
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  },
+  {
+
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  },
+  {
+
+      enable: false,
+      aliasName: "",
+      modbusVariable: "",
+      variableType: 0, 
+      comparison: 1,
+      comparisonValue: 1
+  }
+  ];
+
+  function new_trigger_modbus_trigger(index)
+  {
+      NewTriggerModbus[index].enable=false;
+      NewTriggerModbus[index].aliasName="";
+      NewTriggerModbus[index].modbusVariable="";
+      NewTriggerModbus[index].variableType=1;
+      NewTriggerModbus[index].comparison=1;
+      NewTriggerModbus[index].comparisonValue=1;
+      new_trigger_modbus_index=index;
+      new_trigger_modbus_modal=true;
+
+  }
+
+
+  function add_new_trigger_modbus(index)
+  {
+      new_trigger_modbus_modal=false;
+      changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus=[...changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus,NewTriggerModbus[index]];
+  }  
+
+
+  let modify_trigger_di_modal=false;
+  let modify_trigger_di_index;
+  let BackupTriggerDI=
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  };
+
+  function TriggerModifyDI(index)
+  {
+    BackupTriggerDI.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].enable;
+    BackupTriggerDI.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].aliasName;
+    BackupTriggerDI.type=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].type;
+    BackupTriggerDI.debouncing.rateCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].debouncing.rateCount;   
+    BackupTriggerDI.debouncing.interval=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].debouncing.interval;   
+    BackupTriggerDI.duration=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].duration;    
+    modify_trigger_di_index=index;
+    modify_trigger_di_modal=true;
+
+  }
+
+  function NoModifyTriggerDI(index)
+  {
+    modify_trigger_di_modal=false;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].enable=BackupTriggerDI.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].aliasName=BackupTriggerDI.aliasName;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].type=BackupTriggerDI.type;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].debouncing.rateCount=BackupTriggerDI.debouncing.rateCount;   
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].debouncing.interval=BackupTriggerDI.debouncing.interval;   
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].duration=BackupTriggerDI.duration;    
+
+  }
+
+  function ModifyTriggerDI()
+  {
+    modify_trigger_di_modal=false;
+  }
+
+    
+
+  let new_trigger_di_modal=false;
+  let new_trigger_di_index;
+  let NewTriggerDI=[
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  },
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  },
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  },
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  },
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  },
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  },
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  },
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  },
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  },
+  {
+      enable: false,
+      aliasName: "",
+      type:0,
+      debouncing:{
+        rateCount:3,
+        interval:3
+      },
+      duration: 2
+  }
+
+  ];
+
+
+  function new_trigger_di_trigger(index)
+  {
+      NewTriggerDI[index].enable=false;
+      NewTriggerDI[index].aliasName="";
+      NewTriggerDI[index].type=0;
+      NewTriggerDI[index].debouncing.rateCount=1;
+      NewTriggerDI[index].debouncing.interval=1;
+      NewTriggerDI[index].debouncing.duration=1;
+      new_trigger_di_index=index;
+      new_trigger_di_modal=true;
+
+  }
+
+
+  function add_new_trigger_di(index)
+  {
+      new_trigger_di_modal=false;
+      changed_event_engine_data.config.service_eventEngine_triggerProfile.di=[...changed_event_engine_data.config.service_eventEngine_triggerProfile.di,NewTriggerDI[index]];
+  }  
 
 
   let modify_trigger_sms_modal=false;
@@ -263,14 +686,14 @@
 
   function TriggerModifySMS(index)
   {
-    modify_trigger_sms_modal=true;
-    modify_trigger_sms_index=index;
+
     BackupTriggerSMS.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].enable;
     BackupTriggerSMS.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].aliasName;
     BackupTriggerSMS.smsPhoneNumber=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsPhoneNumber;
     BackupTriggerSMS.smsPhoneNumberSpecified=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsPhoneNumberSpecified;
     BackupTriggerSMS.smsContent=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsContent;
-
+    modify_trigger_sms_index=index;
+    modify_trigger_sms_modal=true;
   }
 
 
@@ -1065,16 +1488,21 @@ let OpList = [
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-18">Type</TableHeadCell>
+    <TableHeadCell class="w-36">Type</TableHeadCell>
     <TableHeadCell class="w-18">Debouncing</TableHeadCell>
     <TableHeadCell class="w-18">Duration</TableHeadCell>
 
   </TableHead>
   <TableBody>
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_triggerProfile.di as TriggerDI, index}
+
+
+
     <TableBodyRow>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalDIT = true}>
+<button on:click={() => TriggerModifyDI(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1084,27 +1512,42 @@ let OpList = [
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
 
-
+{#if TriggerDI.enable}
+    <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
     <TableBodyCell class="w-10">0</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">T_DI_</TableBodyCell>
-      <TableBodyCell class="w-18">Level Trigger : High</TableBodyCell>
-      <TableBodyCell class="w-18">3 X 3</TableBodyCell>
-      <TableBodyCell class="w-18">2 second(s)</TableBodyCell>
-
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{TriggerDI.aliasName}</TableBodyCell>
+{#if TriggerDI.type == 0}      
+      <TableBodyCell class="w-36">Level Trigger : High</TableBodyCell>
+{:else if TriggerDI.type == 1}
+      <TableBodyCell class="w-36">Level Trigger : Low</TableBodyCell>
+{:else if TriggerDI.type == 2}
+      <TableBodyCell class="w-36">Edge Trigger : High to Low</TableBodyCell>
+{:else if TriggerDI.type == 3}
+      <TableBodyCell class="w-36">Edge Trigger : Low to High</TableBodyCell>
+{:else if TriggerDI.type == 4}
+      <TableBodyCell class="w-36">Edge Trigger : Toggle</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-18">{TriggerDI.debouncing.rateCount} X {TriggerDI.debouncing.interval}</TableBodyCell>
+      <TableBodyCell class="w-18">{TriggerDI.duration} second(s)</TableBodyCell>
     </TableBodyRow>
+{/each}
+{/if}
 
 <TableBodyRow>
 
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalDIT = true}>
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length <10}
+<button on:click={() => new_trigger_di_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
-
+{/if}
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -1112,7 +1555,7 @@ let OpList = [
     <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-36"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
 
@@ -1130,29 +1573,31 @@ let OpList = [
         <td></td>
                 <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveTriggerDI}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
 
     </tr>
 
-    <Modal bind:open={formModalDIT} autoclose={false} size="lg" class="w-full">
-  <form action="#">
 
+<Modal bind:open={new_trigger_di_modal}  size="lg" class="w-full" autoclose>
+  <form action="#">
 <label>
-  <input class="center" type=checkbox checked={diitemT}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewTriggerDI[new_trigger_di_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
 
 <table>
 
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">T_DI_</p><input type="text" bind:value={T_DI_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewTriggerDI[new_trigger_di_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -1164,7 +1609,7 @@ let OpList = [
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={TDIT} value='levelH' >Level Trigger : High</Radio>
+  <Radio bind:group={NewTriggerDI[new_trigger_di_index].type} value={0} >Level Trigger : High</Radio>
   </td>
 </tr>
 
@@ -1172,16 +1617,7 @@ let OpList = [
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={TDIT} value='levelL' >Level Trigger : Low</Radio>
-  </td>
-</tr>
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
-
-  <td class="pl-5 pt-4">
-  <Radio bind:group={TDIT} value='edgeH2L' >Edge Trigger : High to Low</Radio>
+  <Radio bind:group={NewTriggerDI[new_trigger_di_index].type} value={1} >Level Trigger : Low</Radio>
   </td>
 </tr>
 
@@ -1190,7 +1626,16 @@ let OpList = [
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={TDIT} value='edgeL2H' >Edge Trigger : Low to High</Radio>
+  <Radio bind:group={NewTriggerDI[new_trigger_di_index].type} value={2} >Edge Trigger : High to Low</Radio>
+  </td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={NewTriggerDI[new_trigger_di_index].type} value={3} >Edge Trigger : Low to High</Radio>
   </td>
 </tr>
 
@@ -1198,20 +1643,20 @@ let OpList = [
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={TDIT} value='edgeT' >Edge Trigger : Toggle</Radio>
+  <Radio bind:group={NewTriggerDI[new_trigger_di_index].type} value={4} >Edge Trigger : Toggle</Radio>
   </td>
 </tr>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Debouncing</p></td>
       <td class="pl-5 pt-4">
- <FloatingLabelInput style="outlined" id="sampling_rate_count" name="sampling_rate_count" type="number" label="sampling_rate_count">
+ <FloatingLabelInput style="outlined" id="sampling_rate_count" name="sampling_rate_count" type="number" label="sampling_rate_count" bind:value={NewTriggerDI[new_trigger_di_index].debouncing.rateCount}>
     sampling_rate_count
   </FloatingLabelInput> 
   </td>
   <td class="pt-4" colspan="2"> <div class="flex gap-4"><p class="pl-2 pt-4">X</p> 
    
- <FloatingLabelInput style="outlined" id="interval" name="interval" type="number" label="interval(ms)">
+ <FloatingLabelInput style="outlined" id="interval" name="interval" type="number" label="interval(ms)" bind:value={NewTriggerDI[new_trigger_di_index].debouncing.interval}>
     interval(ms)
   </FloatingLabelInput> 
   </div>
@@ -1222,10 +1667,10 @@ let OpList = [
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Duration</p></td>
 <td class="pl-5 pt-5">
-{#if TDIT != 'edgeT' && TDIT != 'edgeL2H' && TDIT != 'edgeH2L'}
-<input type="number" bind:value={T_DI_Duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{#if NewTriggerDI[new_trigger_di_index].type != 2 && NewTriggerDI[new_trigger_di_index].type != 3 && NewTriggerDI[new_trigger_di_index].type != 4}
+<input type="number" bind:value={NewTriggerDI[new_trigger_di_index].duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else}
-<input type="number" bind:value={T_DI_Duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+<input type="number" bind:value={NewTriggerDI[new_trigger_di_index].duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
 {/if}
 </td>
 <td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
@@ -1246,7 +1691,128 @@ let OpList = [
     <td></td>
             <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_trigger_di(new_trigger_di_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+
+<Modal bind:open={modify_trigger_di_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTriggerDI(modify_trigger_di_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].type} value={0} >Level Trigger : High</Radio>
+  </td>
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].type} value={1} >Level Trigger : Low</Radio>
+  </td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].type} value={2} >Edge Trigger : High to Low</Radio>
+  </td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].type} value={3} >Edge Trigger : Low to High</Radio>
+  </td>
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].type} value={4} >Edge Trigger : Toggle</Radio>
+  </td>
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Debouncing</p></td>
+      <td class="pl-5 pt-4">
+ <FloatingLabelInput style="outlined" id="sampling_rate_count" name="sampling_rate_count" type="number" label="sampling_rate_count" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].debouncing.rateCount}>
+    sampling_rate_count
+  </FloatingLabelInput> 
+  </td>
+  <td class="pt-4" colspan="2"> <div class="flex gap-4"><p class="pl-2 pt-4">X</p> 
+   
+ <FloatingLabelInput style="outlined" id="interval" name="interval" type="number" label="interval(ms)" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].debouncing.interval}>
+    interval(ms)
+  </FloatingLabelInput> 
+  </div>
+  </td>
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Duration</p></td>
+<td class="pl-5 pt-5">
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].type != 2 && changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].type != 3 && changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].type != 4}
+<input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+<input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.di[modify_trigger_di_index].duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+{/if}
+</td>
+<td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
+
+
+  </tr>
+
+
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+            <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyTriggerDI}>Modify</Button></td>
 
 
     </tr>
@@ -1292,10 +1858,14 @@ let OpList = [
 
   </TableHead>
   <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus as TriggerModbus, index}
+
     <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalMT = true}>
+<button on:click={() => TriggerModifyModbus(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1305,25 +1875,70 @@ let OpList = [
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
 
+{#if TriggerModbus.enable}
 
     <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">T_Modbus_</TableBodyCell>
-      <TableBodyCell class="w-18">Line Current Phase A</TableBodyCell>
-      <TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
-      <TableBodyCell class="w-18"> > 1000</TableBodyCell>
+{:else}
+    <TableBodyCell class="w-10">0</TableBodyCell>
+
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{TriggerModbus.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{TriggerModbus.modbusVariable}</TableBodyCell>
+{#if TriggerModbus.variableType==1}
+<TableBodyCell class="w-18">Boolean</TableBodyCell>
+{:else if TriggerModbus.variableType ==2}
+<TableBodyCell class="w-18">Unsigned Short</TableBodyCell>
+{:else if TriggerModbus.variableType ==3}
+<TableBodyCell class="w-18">Signed
+Short</TableBodyCell>
+{:else if TriggerModbus.variableType ==4}
+<TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
+{:else if TriggerModbus.variableType ==5}
+<TableBodyCell class="w-18">Signed Integer</TableBodyCell>
+{:else if TriggerModbus.variableType ==6}
+<TableBodyCell class="w-18">Float</TableBodyCell>
+{:else if TriggerModbus.variableType ==7}
+<TableBodyCell class="w-18">Double</TableBodyCell>
+{:else}
+<TableBodyCell class="w-18"></TableBodyCell>
+
+{/if}
+
+      <TableBodyCell class="w-18">
+{#if TriggerModbus.comparison==1}
+>
+{:else if TriggerModbus.comparison==2}
+{'<'}
+
+{:else if TriggerModbus.comparison==3}
+>=
+
+{:else if TriggerModbus.comparison==4}
+{'<'}=
+{:else if TriggerModbus.comparison==5}
+==
+{:else if TriggerModbus.comparison==6}
+!=
+{/if}
+
+      {TriggerModbus.comparisonValue}</TableBodyCell>
 
     </TableBodyRow>
+{/each}
+{/if}
 
   <TableBodyRow>
  <TableBodyCell class="!p-4">
-<button on:click={() => formModalMT = true}>
+
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length < 10}
+<button on:click={() => new_trigger_modbus_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
+{/if}
  </TableBodyCell>
       <TableBodyCell class="!p-4">
 
@@ -1341,28 +1956,44 @@ let OpList = [
 
     </TableBodyRow>
 
+     <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+                <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveTriggerModbus}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
 
+
+    </tr>
 
   </TableBody>
 </Table>
 
 
-    <Modal bind:open={formModalMT} autoclose={false} size="lg" class="w-full">
+    <Modal bind:open={new_trigger_modbus_modal} size="lg" class="w-full" autoclose>
   <form action="#">
-
 <label>
-  <input class="center" type=checkbox checked={mitemT}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewTriggerModbus[new_trigger_modbus_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
 
 <table>
 
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">T_Modbus_</p><input type="text" bind:value={T_Modbus_name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewTriggerModbus[new_trigger_modbus_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -1370,7 +2001,7 @@ let OpList = [
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={MVList} placeholder="None" /></td>
+    <td class= "pl-4 pt-4">{NewTriggerModbus[new_trigger_modbus_index].modbusVariable}</td>
 
 
 </tr>
@@ -1381,13 +2012,13 @@ let OpList = [
   </td>
 
     <td class="pl-4 pt-4"><div>
-  <Radio class="pb-2" bind:group={T_VType} value='bool' >Boolean</Radio>
-  <Radio class="pb-2" bind:group={T_VType} value='uns' >Unsigned Short</Radio>
-  <Radio class="pb-2" bind:group={T_VType} value='ss' >Signed Short</Radio>
-  <Radio class="pb-2" bind:group={T_VType} value='uni' >Unsigned Integer</Radio>
-  <Radio class="pb-2" bind:group={T_VType} value='si' >Signed Integer</Radio>
-  <Radio class="pb-2" bind:group={T_VType} value='float' >Float</Radio>
-  <Radio class="pb-2" bind:group={T_VType} value='double' >Double</Radio>
+  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].variableType} value={1} >Boolean</Radio>
+  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].variableType} value={2} >Unsigned Short</Radio>
+  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].variableType} value={3} >Signed Short</Radio>
+  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].variableType} value={4} >Unsigned Integer</Radio>
+  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].variableType} value={5} >Signed Integer</Radio>
+  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].variableType} value={6} >Float</Radio>
+  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].variableType} value={7} >Double</Radio>
 </div></td>
 </tr>
 
@@ -1396,11 +2027,20 @@ let OpList = [
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Comparison</p></td>
 
  <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
-<Select class="mt-2 " items={OpList} placeholder="None" SNWfull={true}/>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewTriggerModbus[new_trigger_modbus_index].comparison}>
+<option disabled="" value="none">Choose ...</option>
+
+<option value={1}>></option>
+<option value={2}>{'<'}</option>
+<option value={3}>>=</option>
+<option value={4}>{'<'}=</option>
+<option value={5}>=</option>
+<option value={6}>!=</option>
+</select>
 
    
- <FloatingLabelInput style="outlined" id="compared_value" name="compared_value" type="number" label="compared_value">
-    compared_value
+ <FloatingLabelInput style="outlined" id="compared_value" name="compared_value" type="number" label="compared_value" bind:value={NewTriggerModbus[new_trigger_modbus_index].comparisonValue}>
+    
   </FloatingLabelInput> 
   </div>
   </td>
@@ -1417,7 +2057,96 @@ let OpList = [
     <td></td>
             <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_trigger_modbus(new_trigger_modbus_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+    <Modal bind:open={modify_trigger_modbus_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTriggerModbus(modify_trigger_modbus_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
+    <td class= "pl-4 pt-4">{changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].modbusVariable}</td>
+
+
+</tr>
+
+<tr>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Type</p>
+
+  </td>
+
+    <td class="pl-4 pt-4"><div>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].variableType} value={1} >Boolean</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].variableType} value={2} >Unsigned Short</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].variableType} value={3} >Signed Short</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].variableType} value={4} >Unsigned Integer</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].variableType} value={5} >Signed Integer</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].variableType} value={6} >Float</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].variableType} value={7} >Double</Radio>
+</div></td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Comparison</p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].comparison}>
+<option disabled="" value="none">Choose ...</option>
+
+<option value={1}>></option>
+<option value={2}>{'<'}</option>
+<option value={3}>>=</option>
+<option value={4}>{'<'}=</option>
+<option value={5}>=</option>
+<option value={6}>!=</option>
+</select>
+
+   
+ <FloatingLabelInput style="outlined" id="compared_value" name="compared_value" type="number" label="compared_value" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].comparisonValue}>
+    
+  </FloatingLabelInput> 
+  </div>
+  </td>
+  </tr>
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+            <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyTriggerModbus}>Modify</Button></td>
 
 
     </tr>
@@ -1428,7 +2157,7 @@ let OpList = [
 
 <p class="mt-8">
 
-<Table shadow striped={true}>
+<Table shadow striped={true} tableNoWFull={true}>
 
 
 <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
@@ -1449,17 +2178,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell class="w-18">Polling Rate</TableHeadCell>
   </TableHead>
   <TableBody>
- <TableBodyRow>
-       <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-  <TableBodyCell class="w-10">Line Current Phase A</TableBodyCell>
-  <TableBodyCell class="w-10">Modbus_Master_T0</TableBodyCell>
-  <TableBodyCell class="w-18">2</TableBodyCell>
-  <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
-  <TableBodyCell class="w-18">0</TableBodyCell>
-  <TableBodyCell class="w-10">1</TableBodyCell>
-  <TableBodyCell class="w-18">1000 ms</TableBodyCell>
-    </TableBodyRow>
+
 
   </TableBody>
       {/if}
@@ -1492,34 +2211,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell>Delay Between Polls</TableHeadCell>
   </TableHead>
   <TableBody>
-    <TableBodyRow>
-      <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> Modbus_Master_S0</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> Serial Port 0</TableBodyCell>
-      <TableBodyCell class="w-10">RS 485</TableBodyCell>
-      <TableBodyCell class="w-10">9600</TableBodyCell>
-      <TableBodyCell class="w-10">None</TableBodyCell>
-      <TableBodyCell class="w-18">8</TableBodyCell>
-      <TableBodyCell class="w-18">1</TableBodyCell>
-      <TableBodyCell class="w-18">1000 ms</TableBodyCell>
-      <TableBodyCell class="w-18">20 ms</TableBodyCell>
-    </TableBodyRow>
 
-
- <TableBodyRow>
-      <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">2</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> Modbus_Master_S1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> Serial Port 1</TableBodyCell>
-      <TableBodyCell class="w-10">RS 485</TableBodyCell>
-      <TableBodyCell class="w-10">115200</TableBodyCell>
-      <TableBodyCell class="w-10">None</TableBodyCell>
-      <TableBodyCell class="w-18">8</TableBodyCell>
-      <TableBodyCell class="w-18">1</TableBodyCell>
-      <TableBodyCell class="w-18">1000 ms</TableBodyCell>
-      <TableBodyCell class="w-18">20 ms</TableBodyCell>
-    </TableBodyRow>
 
 
 
@@ -1551,28 +2243,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
   </TableHead>
   <TableBody>
-    <TableBodyRow>
-      <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> Modbus_Master_T0</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> 127.0.0.1</TableBodyCell>
-      <TableBodyCell class="w-10">502</TableBodyCell>
-      <TableBodyCell class="w-10">3000 ms</TableBodyCell>
-      <TableBodyCell class="w-10">1000</TableBodyCell>
-      <TableBodyCell class="w-18">20</TableBodyCell>
-    </TableBodyRow>
 
-
- <TableBodyRow>
-      <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">2</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> Modbus_Master_T1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> 192.168.127.254</TableBodyCell>
-      <TableBodyCell class="w-10">502</TableBodyCell>
-      <TableBodyCell class="w-10">3000 ms</TableBodyCell>
-      <TableBodyCell class="w-10">1000</TableBodyCell>
-      <TableBodyCell class="w-18">20</TableBodyCell>
-    </TableBodyRow>
 
 
   </TableBody>

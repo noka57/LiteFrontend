@@ -70,6 +70,7 @@
       SDatalogger_ProxyMode_Edge_ConfigChangedLog,
       SDatalogger_General_ConfigChangedLog,
       ChangedSDataLoggerConfig,
+      EventEngine_TriggerMQTT_ConfigChangedLog,
       EventEngine_TriggerTCPMsg_ConfigChangedLog,
       EventEngine_TriggerModbus_ConfigChangedLog,
       EventEngine_TriggerDI_ConfigChangedLog,
@@ -220,6 +221,7 @@
   let event_engine_trigger_di_changeValues=[];
   let event_engine_trigger_modbus_changeValues=[];
   let event_engine_trigger_tcpmsg_changeValues=[];
+  let event_engine_trigger_mqtt_changeValues=[];
   let SetCount=0;
   let SetCountOK=0;
 
@@ -326,6 +328,9 @@
       event_engine_trigger_tcpmsg_changeValues = val;
   });
   
+  EventEngine_TriggerMQTT_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_mqtt_changeValues = val;
+  });
 
   SDatalogger_General_ConfigChangedLog.subscribe(val => {
       sdata_logger_general_changedValues = val;
@@ -995,7 +1000,11 @@
       SetCount++;   
     }
 
-    if (event_engine_data != "" && (event_engine_trigger_di_changeValues.length !=0 || 
+    if (event_engine_data != "" && (
+        event_engine_trigger_mqtt_changeValues.length != 0 ||
+        event_engine_trigger_tcpmsg_changeValues.length !=0 ||
+        event_engine_trigger_modbus_changeValues.length != 0 ||
+        event_engine_trigger_di_changeValues.length !=0 || 
         event_engine_trigger_sms_changeValues.length !=0 ||
         event_engine_general_changedValues.length !=0 ))
     {
@@ -1239,7 +1248,9 @@
         }
 
 
-        if (event_engine_data != "" && (event_engine_trigger_tcpmsg_changeValues.length !=0||
+        if (event_engine_data != "" && (
+                      event_engine_trigger_mqtt_changeValues.length !=0 ||
+                      event_engine_trigger_tcpmsg_changeValues.length !=0||
                       event_engine_trigger_modbus_changeValues.length !=0 ||
                       event_engine_trigger_di_changeValues.length !=0 ||
                       event_engine_trigger_sms_changeValues.length !=0 ||
@@ -1266,7 +1277,8 @@
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
 
-{#if  event_engine_trigger_tcpmsg_changeValues.length !=0 ||
+{#if  event_engine_trigger_mqtt_changeValues.length !=0 ||
+      event_engine_trigger_tcpmsg_changeValues.length !=0 ||
       event_engine_trigger_modbus_changeValues.length !=0 ||
       event_engine_trigger_di_changeValues.length !=0 ||
       event_engine_trigger_sms_changeValues.length !=0 ||
@@ -1285,7 +1297,8 @@
 {/if}
 
 
-{#if    event_engine_trigger_tcpmsg_changeValues.length !=0||
+{#if    event_engine_trigger_mqtt_changeValues.length !=0||
+        event_engine_trigger_tcpmsg_changeValues.length !=0||
         event_engine_trigger_modbus_changeValues.length !=0||
         event_engine_trigger_di_changeValues.length !=0 ||
         event_engine_trigger_sms_changeValues.length !=0}
@@ -1345,6 +1358,22 @@
  </Li>
  </List>
 {/if}
+
+
+{#if  event_engine_trigger_mqtt_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> MQTT Notification
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_trigger_mqtt_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
 
 
 </Li>
@@ -2142,7 +2171,8 @@
 </div>
 <div class="pt-10 pl-10 text-center">
 
-{#if    event_engine_trigger_tcpmsg_changeValues.length !=0 ||
+{#if    event_engine_trigger_mqtt_changeValues.length !=0 ||
+        event_engine_trigger_tcpmsg_changeValues.length !=0 ||
         event_engine_trigger_modbus_changeValues.length !=0||
         event_engine_trigger_di_changeValues.length !=0 ||
         event_engine_trigger_sms_changeValues.length !=0 ||

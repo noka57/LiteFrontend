@@ -8,6 +8,8 @@
   let fileContent; 
   let sessionBinary;
 
+  let hidden=1;
+
   let defaultModal = false;
   let uploadconfigIsValid =0;
   let CheckedConfigInvalid=0;
@@ -118,12 +120,13 @@
 
 
 <table>
+{#if hidden == 0}
     <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Backup Current Configuration</p></td>
 
 <td class="pl-5 pt-5"><Button on:click={downloadFile}>Download</Button></td>
   </tr>
-
+{/if}
 
 <tr>
 

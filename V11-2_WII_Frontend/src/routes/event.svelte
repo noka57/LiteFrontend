@@ -8,6 +8,7 @@
   import { sessionidG } from "./sessionG.js";
   import { 
     eventEngineConfig,
+    EventEngine_TriggerMQTT_ConfigChangedLog,
     EventEngine_TriggerTCPMsg_ConfigChangedLog,
     EventEngine_TriggerModbus_ConfigChangedLog,
     EventEngine_TriggerDI_ConfigChangedLog,
@@ -26,6 +27,7 @@
   let event_engine_trigger_di_changeValues=[];
   let event_engine_trigger_modbus_changeValues=[];
   let event_engine_trigger_tcpmsg_changeValues=[];
+  let event_engine_trigger_mqtt_changeValues=[];
   eventEngineConfig.subscribe(val => {
       event_engine_data = val;
   });
@@ -48,6 +50,10 @@
 
   EventEngine_TriggerTCPMsg_ConfigChangedLog.subscribe(val => {
       event_engine_trigger_tcpmsg_changeValues = val;
+  });
+
+  EventEngine_TriggerMQTT_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_mqtt_changeValues = val;
   });
 
   ChangedEventEngineConfig.subscribe(val => {
@@ -115,6 +121,10 @@
               {
                 event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];
               }
+              else if (type == 4)
+              {
+                event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
+              }
             }
             else if (obj1[key].length < obj2[key].length)
             {
@@ -135,6 +145,10 @@
               else if (type == 3)
               {
                 event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];          
+              }
+              else if (type == 4)
+              {
+                event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
               }
             }
           }
@@ -170,6 +184,10 @@
           else if (type == 3)
           {
             event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];     
+          }
+          else if (type == 4)
+          {
+            event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
           }
 
         }
@@ -287,6 +305,64 @@
   }
 
 
+  function saveTriggerTCPMsg()
+  {
+    console.log("save Trigger TCP Message");
+    if (event_engine_trigger_tcpmsg_changeValues.length !=0)
+    {
+        event_engine_trigger_tcpmsg_changeValues=[];
+    }
+
+
+    for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length, event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length); i++) 
+    {
+      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[i], event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[i], 3, 1,i+1);
+    }
+
+    if (changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length > event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length)
+    {
+      let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length-event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length;
+      let changedstr="Add "+addedCount+" item(s) to TCP Message Trigger List";
+      event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];
+    }
+
+    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage));
+
+    EventEngine_TriggerTCPMsg_ConfigChangedLog.set(event_engine_trigger_tcpmsg_changeValues);
+    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+    console.log(event_engine_trigger_tcpmsg_changeValues);    
+  }
+
+
+  function saveTriggerMQTT()
+  {
+    console.log("save Trigger MQTT");
+    if (event_engine_trigger_mqtt_changeValues.length !=0)
+    {
+        event_engine_trigger_mqtt_changeValues=[];
+    }
+
+
+    for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length, event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length); i++) 
+    {
+      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[i], event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[i], 4, 1,i+1);
+    }
+
+    if (changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length > event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length)
+    {
+      let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length-event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length;
+      let changedstr="Add "+addedCount+" item(s) to MQTT Trigger List";
+      event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
+    }
+
+    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification));
+
+    EventEngine_TriggerMQTT_ConfigChangedLog.set(event_engine_trigger_mqtt_changeValues);
+    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+    console.log(event_engine_trigger_mqtt_changeValues);    
+
+  }
+
   onMount(() => {
 
     console.log("event engine sessionid: ");
@@ -330,10 +406,292 @@
           changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage));        
       }
 
+      if (event_engine_trigger_mqtt_changeValues.length == 0)
+      {
+          changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification));        
+      }
 
     }
 
   });
+
+
+  let modify_trigger_mqtt_modal=false;
+  let modify_trigger_mqtt_index;
+  let BackupTriggerMQTT=
+  {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  };
+
+  function TriggerModifyMQTTN(index)
+  {
+    BackupTriggerMQTT.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].enable;
+    BackupTriggerMQTT.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].aliasName;
+    BackupTriggerMQTT.mqttProfile=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].mqttProfile;
+    BackupTriggerMQTT.subscribedTopic=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].subscribedTopic;
+    BackupTriggerMQTT.receivedContent=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].receivedContent;
+    
+
+    modify_trigger_mqtt_index=index;
+    modify_trigger_mqtt_modal=true;
+  }
+
+  function NoModifyTriggerMQTTN(index)
+  {
+    modify_trigger_mqtt_modal=false;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].enable=BackupTriggerMQTT.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].aliasName=BackupTriggerMQTT.aliasName;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].mqttProfile=BackupTriggerMQTT.mqttProfile;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].subscribedTopic= BackupTriggerMQTT.subscribedTopic;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].receivedContent=BackupTriggerMQTT.receivedContent;
+  }
+
+  function ModifyTriggerMQTTN()
+  {
+    modify_trigger_mqtt_modal=false;
+
+  }
+
+  let new_trigger_mqtt_modal=false;
+  let new_trigger_mqtt_index;
+  let NewTriggerMQTT=[
+  {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  }
+,
+  {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      mqttProfile: "",
+      subscribedTopic: "", 
+      receivedContent: ""
+  }
+  ];
+
+
+  function new_trigger_mqtt_trigger(index)
+  {
+      NewTriggerMQTT[index].enable=false;
+      NewTriggerMQTT[index].aliasName="";
+      NewTriggerMQTT[index].mqttProfile="";
+      NewTriggerMQTT[index].subscribedTopic="";
+      NewTriggerMQTT[index].receivedContent="";
+
+      new_trigger_mqtt_index=index;
+      new_trigger_mqtt_modal=true;
+
+  }
+
+
+  function add_new_trigger_mqtt(index)
+  {
+      new_trigger_mqtt_modal=false;
+      changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification=[...changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification,NewTriggerMQTT[index]];
+  } 
+
+
+  let modify_trigger_tcpMsg_modal=false;
+  let modify_trigger_tcpMsg_index;
+  let BackupTriggerTCPMsg=
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  };
+
+  function TriggerModifyTCPMsg(index)
+  {
+    BackupTriggerTCPMsg.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].enable;
+    BackupTriggerTCPMsg.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].aliasName;
+    BackupTriggerTCPMsg.remoteHost=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].remoteHost;
+    BackupTriggerTCPMsg.remotePort=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].remotePort;
+    BackupTriggerTCPMsg.receivedMessage=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].receivedMessage;
+    
+
+    modify_trigger_tcpMsg_index=index;
+    modify_trigger_tcpMsg_modal=true;
+  }
+
+  function NoModifyTriggerTCPMsg(index)
+  {
+    modify_trigger_tcpMsg_modal=false;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].enable=BackupTriggerTCPMsg.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].aliasName=BackupTriggerTCPMsg.aliasName;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].remoteHost=BackupTriggerTCPMsg.remoteHost;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].remotePort=BackupTriggerTCPMsg.remotePort;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].receivedMessage=BackupTriggerTCPMsg.receivedMessage;
+    
+  }
+
+  function ModifyTriggerTCPMsg()
+  {
+    modify_trigger_tcpMsg_modal=false;
+
+  }
+
+
+  let new_trigger_tcpMsg_modal=false;
+  let new_trigger_tcpMsg_index;
+  let NewTriggerTCPMsg=[
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost: "",
+      remotePort: 8000, 
+      receivedMessage: ""
+  }
+  ];
+
+
+  function new_trigger_tcpmsg_trigger(index)
+  {
+      NewTriggerTCPMsg[index].enable=false;
+      NewTriggerTCPMsg[index].aliasName="";
+      NewTriggerTCPMsg[index].remoteHost="";
+      NewTriggerTCPMsg[index].remotePort=8000;
+      NewTriggerTCPMsg[index].receivedMessage=1;
+
+      new_trigger_tcpMsg_index=index;
+      new_trigger_tcpMsg_modal=true;
+
+  }
+
+
+  function add_new_trigger_tcpmsg(index)
+  {
+      new_trigger_tcpMsg_modal=false;
+      changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage=[...changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage,NewTriggerTCPMsg[index]];
+  } 
+
 
   let modify_trigger_modbus_modal=false;
   let modify_trigger_modbus_index;
@@ -2284,10 +2642,15 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
    <TableBody>
+   
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage as TriggerTCPMsg, index}
+
     <TableBodyRow>
           <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModaltcpmT = true}>
+<button on:click={() => TriggerModifyTCPMsg(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -2296,25 +2659,32 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-
+{#if TriggerTCPMsg.enable}
+    <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
     <TableBodyCell class="w-10">0</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">T_TCPMessage_</TableBodyCell>
-      <TableBodyCell class="w-18">192.168.1.127</TableBodyCell>
-      <TableBodyCell class="w-18">8000</TableBodyCell>
-      <TableBodyCell class="w-18">Alarm!</TableBodyCell>
-
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{TriggerTCPMsg.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{TriggerTCPMsg.remoteHost}</TableBodyCell>
+      <TableBodyCell class="w-18">{TriggerTCPMsg.remotePort}</TableBodyCell>
+      <TableBodyCell class="w-18">{TriggerTCPMsg.receivedMessage}</TableBodyCell>
 
     </TableBodyRow>
+{/each}
+{/if}
+
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModaltcpmT = true}>
+
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length < 10}
+<button on:click={() => new_trigger_tcpmsg_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
+{/if}
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -2336,30 +2706,30 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
                 <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveTriggerTCPMsg}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
 
     </tr>
 
-
-
-    <Modal bind:open={formModaltcpmT} autoclose={false} size="lg" class="w-full">
-  <form action="#">
-
+<Modal bind:open={new_trigger_tcpMsg_modal}  size="lg" class="w-full" autoclose>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={tcpMitemT}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewTriggerTCPMsg[new_trigger_tcpMsg_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
+
 
 <table>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">T_TCPMessage_</p><input type="text" bind:value={T_TCPMessage_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewTriggerTCPMsg[new_trigger_tcpMsg_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -2372,7 +2742,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="text" bind:value={T_TCPMessage_RemoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="text" bind:value={NewTriggerTCPMsg[new_trigger_tcpMsg_index].remoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </td>
 
 
@@ -2384,14 +2754,14 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="number" bind:value={T_TCPMessage_RemotePort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="number" bind:value={NewTriggerTCPMsg[new_trigger_tcpMsg_index].remotePort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </td>
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Received Message</p></td><td class="pl-5 pt-5"><input type="text" bind:value={T_TCPMessage_RecvMsg} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Received Message</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewTriggerTCPMsg[new_trigger_tcpMsg_index].receivedMessage} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -2411,7 +2781,84 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_trigger_tcpmsg(new_trigger_tcpMsg_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+<Modal bind:open={modify_trigger_tcpMsg_modal}  size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[modify_trigger_tcpMsg_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTriggerTCPMsg(modify_trigger_tcpMsg_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[modify_trigger_tcpMsg_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[modify_trigger_tcpMsg_index].remoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[modify_trigger_tcpMsg_index].remotePort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Received Message</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[modify_trigger_tcpMsg_index].receivedMessage} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyTriggerTCPMsg}>Modify</Button></td>
 
 
     </tr>
@@ -2458,37 +2905,49 @@ on:click={handleClickMV} on:keydown={() => {}}>
   </TableHead>
 
    <TableBody>
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification as MQTT, index}
+
+
     <TableBodyRow>
           <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalMQTTT = true}>
+<button on:click={() => TriggerModifyMQTTN(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
-
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-
+{#if MQTT.enable}
+    <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
     <TableBodyCell class="w-10">0</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">T_MQTT_</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{MQTT.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{MQTT.mqttProfile}</TableBodyCell>
+      <TableBodyCell class="w-18">{MQTT.subscribedTopic}</TableBodyCell>
+      <TableBodyCell class="w-18">{MQTT.receivedContent}</TableBodyCell>
 
 
     </TableBodyRow>
+{/each}
+{/if}
+
+
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalMQTTT = true}>
+
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length < 10 }
+<button on:click={() => new_trigger_mqtt_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
+{/if}
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -2510,30 +2969,29 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
                 <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveTriggerMQTT}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
 
     </tr>
 
-
-
-    <Modal bind:open={formModalMQTTT} autoclose={false} size="lg" class="w-full">
-
-
+<Modal bind:open={new_trigger_mqtt_modal}  size="lg" class="w-full" autoclose>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={MQTTitemT}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewTriggerMQTT[new_trigger_mqtt_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
 
 <table>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">T_MQTT_</p><input type="text" bind:value={T_MQTT_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewTriggerMQTT[new_trigger_mqtt_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -2546,9 +3004,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">MQTT Profile</p></td>
 
   <td class="pl-5 pt-4">
-<select class="block w-36 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2">
-<option disabled="" value="">None</option>
-</select>
+{NewTriggerMQTT[new_trigger_mqtt_index].mqttProfile}
 </td>
 
 
@@ -2560,7 +3016,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Subscribed Topic</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="text" bind:value={T_MQTT_subscribed_Topic} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="text" bind:value={NewTriggerMQTT[new_trigger_mqtt_index].subscribedTopic} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </td>
 
 
@@ -2568,7 +3024,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Received Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={T_MQTT_content} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Received Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewTriggerMQTT[new_trigger_mqtt_index].receivedContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -2588,12 +3044,93 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_trigger_mqtt(new_trigger_mqtt_index)}>Add</Button></td>
 
 
     </tr>
 
   </table>
+</form>
+</Modal>
+
+
+
+
+<Modal bind:open={modify_trigger_mqtt_modal}  size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[modify_trigger_mqtt_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTriggerMQTTN(modify_trigger_mqtt_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[modify_trigger_mqtt_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">MQTT Profile</p></td>
+
+  <td class="pl-5 pt-4">
+{changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[modify_trigger_mqtt_index].mqttProfile}
+</td>
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Subscribed Topic</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[modify_trigger_mqtt_index].subscribedTopic} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Received Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[modify_trigger_mqtt_index].receivedContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyTriggerMQTTN}>Modify</Button></td>
+
+
+    </tr>
+
+  </table>
+</form>
 </Modal>
 
 

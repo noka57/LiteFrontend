@@ -9,7 +9,7 @@
   } from "./configG.js"
 
 
-
+  let hidden=1;
   let maintenance_data="";
   let changed_maintenance_data = {};
   let saved_changed_maintenance_data = {};
@@ -227,6 +227,8 @@
       changed_maintenance_data= JSON.parse(JSON.stringify(maintenance_data));
       saved_changed_maintenance_data = JSON.parse(JSON.stringify(maintenance_data))
       ChangedMaintenanceConfig.set(saved_changed_maintenance_data);
+
+      console.log(changed_maintenance_data.config.system_maintenance.fotaEn);
 
       getDataReady=1;
     }

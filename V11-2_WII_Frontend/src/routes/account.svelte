@@ -15,6 +15,7 @@
     let newPWG="";
     let confmPWG="";
 
+    let hidden=1;
 
 
     let account_data="";
@@ -67,6 +68,8 @@
 
 
 <Tabs style="underline">
+{#if hidden == 0}
+
   <TabItem open title="admin">
 <table>
     <tr>
@@ -148,4 +151,5 @@
 </table>
 
    </TabItem>
+   {/if}
  </Tabs>

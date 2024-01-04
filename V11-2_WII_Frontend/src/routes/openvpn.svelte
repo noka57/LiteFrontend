@@ -22,6 +22,8 @@
     let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
 
+    let hidden=0;
+
     let sessionid;
     let sessionBinary;
     let openvpn_data="";
@@ -2671,6 +2673,7 @@ let RemoteCAList = [
 {/if}
 
     </TabItem>
+{#if hidden == 0}
 {#if getDataReady == 1}
 {#if changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}
 
@@ -4228,5 +4231,6 @@ let RemoteCAList = [
 </TabItem>
     {/if}
    {/if}
+    {/if}
     {/if}
 </Tabs>

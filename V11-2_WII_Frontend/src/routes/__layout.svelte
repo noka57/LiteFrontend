@@ -57,6 +57,7 @@
     	SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
     	SDatalogger_ProxyMode_Edge_ConfigChangedLog,
     	SDatalogger_General_ConfigChangedLog,
+		EventEngine_TriggerMQTT_ConfigChangedLog,
     	EventEngine_TriggerTCPMsg_ConfigChangedLog,
     	EventEngine_TriggerModbus_ConfigChangedLog,
     	EventEngine_TriggerDI_ConfigChangedLog,
@@ -204,7 +205,8 @@
   	let event_engine_trigger_di_changeValues=[];
   	let event_engine_trigger_modbus_changeValues=[];
   	let event_engine_trigger_tcpmsg_changeValues=[];
-  	
+  	let event_engine_trigger_mqtt_changeValues=[];
+
 	const BlinkApply = () => {
 		if (svg0background=="")
 		{
@@ -223,7 +225,8 @@
 
   	function JudgeChangedOrNot()
   	{
-  		if (event_engine_trigger_tcpmsg_changeValues.length !=0 ||
+  		if (event_engine_trigger_mqtt_changeValues.length != 0 ||
+  			event_engine_trigger_tcpmsg_changeValues.length !=0 ||
   			event_engine_trigger_modbus_changeValues.length !=0 ||
   			event_engine_trigger_di_changeValues.length !=0 ||
   			event_engine_trigger_sms_changeValues.length !=0 ||
@@ -599,6 +602,11 @@
         JudgeChangedOrNot();
   	});
 
+  	EventEngine_TriggerMQTT_ConfigChangedLog.subscribe(val => {
+      	event_engine_trigger_mqtt_changeValues = val;
+      	JudgeChangedOrNot();
+  	});
+
   	sessionidG.subscribe(val => {
     	sessionid = val;
   	});
@@ -843,7 +851,6 @@ const topMenuList = [{ href: '/apply', id: 0 },
   <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
         </svelte:fragment>
-						<SidebarDropdownItem label="Account" href='/account' active={activeUrl === '/account'}/>
 						<SidebarDropdownItem label="Configuration" href='/configuration' active={activeUrl === '/configuration'}/>
 						<SidebarDropdownItem label="Operation" href='/operation' active={activeUrl === '/operation'}/>
 						<SidebarDropdownItem label="Maintenance" href='/maintenance' active={activeUrl === '/maintenance'}/>

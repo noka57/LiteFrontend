@@ -27,7 +27,7 @@
     openDetailStatus=!openDetailStatus;
   };
 
-
+  let hidden=1;
 
 
   let wan_data="";
@@ -1104,6 +1104,8 @@
 
     </table>
   </AccordionItem>
+{#if hidden ==0}
+
   <AccordionItem {defaultClass}>
     <span slot="header" class="pl-4">Advanced Settings</span>
 <table>
@@ -1175,6 +1177,7 @@
     </tr>
     </table>
   </AccordionItem>
+{/if}
 
    <AccordionItem {defaultClass}>
     <span slot="header" class="pl-4">SIM Policy</span>
@@ -1593,7 +1596,7 @@ System Reboot</label>
     </table>
   </AccordionItem>
 
-
+{#if hidden ==0}
   <AccordionItem {defaultClass}>
     <span slot="header" class="pl-4">AT Debug</span>
 <div class='mb-6'>
@@ -1609,6 +1612,7 @@ System Reboot</label>
 </div>
 
   </AccordionItem>
+ {/if} 
 </Accordion>
   </TabItem>
 
@@ -1714,7 +1718,7 @@ System Reboot</label>
   </table>
 
   </AccordionItem>
-
+{#if hidden ==0}
   <AccordionItem {defaultClass}>
     <div slot="header" class="pl-4">EWLAP-Ethernet WAN</div>
 
@@ -1828,11 +1832,12 @@ System Reboot</label>
     </table>
 
   </AccordionItem>
+{/if}
 </Accordion>
   </TabItem>
 
 
-
+{#if hidden ==0}
   <TabItem title="WAN Redundancy Policy">
  <table>
   <tr>
@@ -2293,7 +2298,7 @@ Once Rx of Modbus and Disconnect lasting time
   </Accordion>
 
   </TabItem>
-
+{/if}
   
 </Tabs>
 

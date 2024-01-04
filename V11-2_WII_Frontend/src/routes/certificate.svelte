@@ -195,51 +195,75 @@
           const certBag = bags[forge.pki.oids.certBag][0];
           console.log("certBag");
           console.log(certBag);
-
-          let msg = {
-                type: 'CERTIFICATE',
-                body: forge.asn1.toDer(certBag.asn1).getBytes()
-          };
-          let CertPem = forge.pem.encode(msg);
-
-          console.log(CertPem);
-          console.log(CertPem.length);
-
-
-
           const bags2 = p12.getBags({ bagType: forge.pki.oids.pkcs8ShroudedKeyBag });
 
           console.log("bags2");
           console.log(bags2);
+
           const keyBag = bags2[forge.pki.oids.pkcs8ShroudedKeyBag][0];
           console.log("keyBag");
           console.log(keyBag);
 
-          // convert to ASN.1, then DER, then PEM-encode
-          let msg2 = {
-              type: 'PRIVATE KEY',
-              body: forge.asn1.toDer(keyBag.asn1).getBytes()
-          };
-          let KeyPem = forge.pem.encode(msg2);
-
-          console.log("KeyPem");
-          console.log(KeyPem);
-          console.log(KeyPem.length);
-
-
-          let privatekeyOid="";
+          let CertPem = "";
+          let KeyPem = "";
           let eckey=0;
-          privatekeyOid=forge.pki.getPrivateKeyOid(keyBag.asn1);
-          console.log(privatekeyOid);
-          if (privatekeyOid == "1.2.840.10045.2.1")
+          if (certBag.cert == null)
           {
-            console.log("EC private key");
-            eckey=1;
+            let msg = {
+                  type: 'CERTIFICATE',
+                  body: forge.asn1.toDer(certBag.asn1).getBytes()
+            };
+            CertPem=forge.pem.encode(msg);
+
+            console.log(CertPem);
+            console.log(CertPem.length);
+
           }
-          else if (privatekeyOid == "1.2.840.113549.1.1.1")
+          else
           {
-            console.log("RSA Private key");
+
+            CertPem=forge.pki.certificateToPem(certBag.cert);
+
+            console.log(CertPem);
+            console.log(CertPem.length);
           }
+
+
+            if (keyBag.key == null)
+            {
+              // convert to ASN.1, then DER, then PEM-encode
+              let msg2 = {
+                  type: 'PRIVATE KEY',
+                  body: forge.asn1.toDer(keyBag.asn1).getBytes()
+              };
+              KeyPem = forge.pem.encode(msg2);
+
+              let privatekeyOid="";
+              privatekeyOid=forge.pki.getPrivateKeyOid(keyBag.asn1);
+              console.log(privatekeyOid);
+              if (privatekeyOid == "1.2.840.10045.2.1")
+              {
+                console.log("EC private key");
+                eckey=1;
+              }
+              else if (privatekeyOid == "1.2.840.113549.1.1.1")
+              {
+                console.log("RSA Private key");
+              }
+            }
+            else
+            {
+              KeyPem=forge.pki.privateKeyToPem(keyBag.key);
+            }
+
+            console.log("KeyPem");
+            console.log(KeyPem);
+            console.log(KeyPem.length);
+
+
+
+
+
 
 
           const textEncoder = new TextEncoder();
@@ -298,6 +322,27 @@
             {
               console.log("error Upload machineEcPrivateKeyContent");
             }
+          }
+          else
+          {
+            const res2 = await fetch(window.location.origin+"/UploadrsaMachinePrivate", {
+            method: 'POST',
+            body: machinePrivateKeyContent,
+                headers: {
+                'Content-Type': 'application/octet-stream',
+                },
+              }
+            )
+
+            if (res2.status == 200)
+            {
+              console.log("200 Upload machineRSAPrivateKeyContent");
+
+            }
+            else
+            {
+              console.log("error Upload machineRSAPrivateKeyContent");
+            }          
           }
           getMachineCertificate();       
         }

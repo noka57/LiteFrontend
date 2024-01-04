@@ -23,6 +23,8 @@
     let formModal = false;
     let WaitToReboot=false;
 
+    let hidden=1;
+
     let timestamp = 0;
     let dateString="";
     $: {
@@ -248,8 +250,10 @@
     <Button on:click={() => formModal = true}>Manually Set Date & Time</Button>
 
 {:else}
-<Radio bind:group={changed_operation_data.config.system_operation_time.autoSyncTimeParam.type} value='GPS'><p class="text-lg pt-1">GPS</p></Radio>
 
+{#if hidden == 0}
+<Radio bind:group={changed_operation_data.config.system_operation_time.autoSyncTimeParam.type} value='GPS'><p class="text-lg pt-1">GPS</p></Radio>
+{/if}
 
 <Radio bind:group={changed_operation_data.config.system_operation_time.autoSyncTimeParam.type} value='NTP'><p class="text-lg pt-1">NTP</p>
 
@@ -265,11 +269,13 @@
 
     </td>
     </tr>
-
+{#if hidden == 0}
 <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Time Zone</p></td>
     <td class="w-85 pt-5 pl-5"><TimezonePicker on:update="{update}" /></td>
     </tr>
+
+
 
     <tr>
 
@@ -277,7 +283,7 @@
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Day Light Saving</p></td><td class="pl-5 pt-5"><Toggle bind:checked={changed_operation_data.config.system_operation_time.autoSyncTimeParam.dstEn} on:change={CheckDLS}></Toggle></td>
 {/if}
     </tr>
-
+{/if}
 <tr class="pt-5">
     <td></td>
     <td></td>
@@ -367,7 +373,7 @@
 
 </table>
       </TabItem>
- 
+{#if hidden ==0}
    <TabItem title="Reset">
 
 <table>
@@ -377,4 +383,5 @@
 </table>
 
       </TabItem>
+{/if}
  </Tabs>

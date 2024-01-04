@@ -557,19 +557,104 @@
 
 
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10"><p class="text-black text-lg"></p>
-        <p class="text-black text-lg"></p>
-</div>
-<div class="px-40"><p class="text-lg font-light"></p>
-<p class="text-lg font-light"></p>
-</div>
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
+<div class="flex">
+        <div class="px-10">
+{#if dashboard_data!=""}
+{#each dashboard_data.config.dashboard.cloudStatus as CloudStatus, index}
+        <p class="text-black text-lg">{CloudStatus.name}</p>
+{/each}
+{/if}
+        </div>
+
+        <div class="px-40">
+{#if dashboard_data!=""}
+{#each dashboard_data.config.dashboard.cloudStatus as CloudStatus, index}
+        <p class="text-lg font-light">{CloudStatus.status}</p>
+{/each}
+{/if}
+        </div>
+
 </div>
                       </TableBodyCell>
 
    
         <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
+{#if dashboard_data!=""}
+
+<div class="flex">
+<div class="px-10">
+        <p class="text-black text-lg">{dashboard_data.config.dashboard.vpnStatus.type}</p>
+</div>
+<div class="px-40">
+        <p class="text-lg font-light">{dashboard_data.config.dashboard.vpnStatus.role}</p>
+</div>
+</div>
+
+<div class="pt-5 px-10" colspan="2">
+{#each dashboard_data.config.dashboard.vpnStatus.tunnelStatus as connection, index}
+{#if connection.status}
+<Badge large color="green">{index+1}</Badge>
+{:else}
+<Badge large color="red">{index+1}</Badge>
+{/if}
+
+{/each}
+</div>                      
+
+
+{/if}
+
+
                       </TableBodyCell>
         </TableBodyRow>
+
+
+ <TableBodyRow>      
+        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Edge Data</p>
+
+
+              </TableBodyCell>
+                      <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg"></p>
+              </TableBodyCell>
+
+            </TableBodyRow>
+
+
+             <TableBodyRow>      
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
+<div class="flex">
+        <div class="px-10">
+
+{#if dashboard_data!=""}
+{#each dashboard_data.config.dashboard.edgeData as EdgeData, index}
+        <p class="text-black text-lg">{EdgeData.name}</p>
+{/each}
+{/if}
+
+
+
+        </div>
+        
+        <div class="px-40">
+{#if dashboard_data!=""}
+{#each dashboard_data.config.dashboard.edgeData as EdgeData, index}
+        <p class="text-lg font-light">{EdgeData.value}</p>
+{/each}
+{/if}
+        </div>
+</div>
+                      </TableBodyCell>
+
+   
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
+
+
+        
+                      </TableBodyCell>
+        </TableBodyRow>
+
+
 
   </TableBody>
 </Table>

@@ -8,6 +8,8 @@
   import { sessionidG } from "./sessionG.js";
   import { 
     eventEngineConfig,
+    EventEngine_ActionEmail_ConfigChangedLog,
+    EventEngine_ActionSMS_ConfigChangedLog,
     EventEngine_TriggerMQTT_ConfigChangedLog,
     EventEngine_TriggerTCPMsg_ConfigChangedLog,
     EventEngine_TriggerModbus_ConfigChangedLog,
@@ -28,6 +30,9 @@
   let event_engine_trigger_modbus_changeValues=[];
   let event_engine_trigger_tcpmsg_changeValues=[];
   let event_engine_trigger_mqtt_changeValues=[];
+  let event_engine_action_sms_changeValues=[];
+  let event_engine_action_email_changeValues=[];
+
   eventEngineConfig.subscribe(val => {
       event_engine_data = val;
   });
@@ -55,6 +60,15 @@
   EventEngine_TriggerMQTT_ConfigChangedLog.subscribe(val => {
       event_engine_trigger_mqtt_changeValues = val;
   });
+
+  EventEngine_ActionSMS_ConfigChangedLog.subscribe(val => {
+      event_engine_action_sms_changeValues = val;
+  });
+
+  EventEngine_ActionEmail_ConfigChangedLog.subscribe(val => {
+      event_engine_action_email_changeValues = val;
+  });
+
 
   ChangedEventEngineConfig.subscribe(val => {
       saved_changed_event_engine_data = val;
@@ -87,7 +101,7 @@
     }
   }
   
-  function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
+  function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex, ArrayName) 
   {
       for (const key in obj1) 
       {
@@ -97,7 +111,7 @@
           {
             for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
             {
-              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1, ArrayName);
             }
 
             if (obj1[key].length > obj2[key].length) 
@@ -125,6 +139,14 @@
               {
                 event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
               }
+              else if (type == 5)
+              {
+                event_engine_action_sms_changeValues=[...event_engine_action_sms_changeValues, changedstr];
+              }
+              else if (type == 6)
+              {
+                event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+              }
             }
             else if (obj1[key].length < obj2[key].length)
             {
@@ -150,11 +172,19 @@
               {
                 event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
               }
+              else if (type == 5)
+              {
+                event_engine_action_sms_changeValues=[...event_engine_action_sms_changeValues, changedstr];
+              }
+              else if (type == 6)
+              {
+                event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+              }
             }
           }
           else
           {
-            compareObjects(obj1[key], obj2[key], type, 0,0);
+            compareObjects(obj1[key], obj2[key], type, 0,0, "");
           }
         } 
         else if (obj1[key] != obj2[key]) 
@@ -166,7 +196,10 @@
           }
           else
           {
-            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+            if (type==6)
+              changedstr=ArrayName + "List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+            else
+              changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
           }
           
           if (type == 0)
@@ -189,7 +222,14 @@
           {
             event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
           }
-
+          else if (type == 5)
+          {
+            event_engine_action_sms_changeValues=[...event_engine_action_sms_changeValues, changedstr];
+          }
+          else if (type == 6)
+          {
+            event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+          }
         }
       }
   }
@@ -227,7 +267,7 @@
 
       for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length, event_engine_data.config.service_eventEngine_triggerProfile.sms.length); i++) 
       {
-        compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[i], event_engine_data.config.service_eventEngine_triggerProfile.sms[i], 0, 1,i+1);
+        compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[i], event_engine_data.config.service_eventEngine_triggerProfile.sms[i], 0, 1,i+1, "SMS");
       }
 
       if (changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length > event_engine_data.config.service_eventEngine_triggerProfile.sms.length)
@@ -256,7 +296,7 @@
 
     for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length, event_engine_data.config.service_eventEngine_triggerProfile.di.length); i++) 
     {
-      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.di[i], event_engine_data.config.service_eventEngine_triggerProfile.di[i], 1, 1,i+1);
+      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.di[i], event_engine_data.config.service_eventEngine_triggerProfile.di[i], 1, 1,i+1,"DI");
     }
 
     if (changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length > event_engine_data.config.service_eventEngine_triggerProfile.di.length)
@@ -286,7 +326,7 @@
 
     for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length, event_engine_data.config.service_eventEngine_triggerProfile.modbus.length); i++) 
     {
-      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[i], event_engine_data.config.service_eventEngine_triggerProfile.modbus[i], 2, 1,i+1);
+      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[i], event_engine_data.config.service_eventEngine_triggerProfile.modbus[i], 2, 1,i+1,"Modbus");
     }
 
     if (changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length > event_engine_data.config.service_eventEngine_triggerProfile.modbus.length)
@@ -316,7 +356,7 @@
 
     for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length, event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length); i++) 
     {
-      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[i], event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[i], 3, 1,i+1);
+      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[i], event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[i], 3, 1,i+1,"TCP Message");
     }
 
     if (changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length > event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length)
@@ -345,7 +385,7 @@
 
     for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length, event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length); i++) 
     {
-      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[i], event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[i], 4, 1,i+1);
+      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[i], event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[i], 4, 1,i+1, "MQTT");
     }
 
     if (changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length > event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length)
@@ -362,6 +402,83 @@
     console.log(event_engine_trigger_mqtt_changeValues);    
 
   }
+
+
+  function saveActionSMS()
+  {
+      console.log("save Action SMS");
+      if (event_engine_action_sms_changeValues.length !=0)
+      {
+          event_engine_action_sms_changeValues=[];
+      }
+
+
+      for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length, event_engine_data.config.service_eventEngine_actionProfile.sms.length); i++) 
+      {
+        compareObjects(changed_event_engine_data.config.service_eventEngine_actionProfile.sms[i], event_engine_data.config.service_eventEngine_actionProfile.sms[i], 5, 1,i+1, "SMS");
+      }
+
+      if (changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length > event_engine_data.config.service_eventEngine_actionProfile.sms.length)
+      {
+        let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length-event_engine_data.config.service_eventEngine_actionProfile.sms.length;
+        let changedstr="Add "+addedCount+" item(s) to SMS Action List";
+        event_engine_action_sms_changeValues=[...event_engine_action_sms_changeValues, changedstr];
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.sms=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.sms));
+
+      EventEngine_ActionSMS_ConfigChangedLog.set(event_engine_action_sms_changeValues);
+      ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+      console.log(event_engine_action_sms_changeValues);
+
+  }
+
+  function saveActionEmail()
+  {
+      console.log("save Action Email");
+      if (event_engine_action_email_changeValues.length !=0)
+      {
+          event_engine_action_email_changeValues=[];
+      }
+
+
+      for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length, event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length); i++) 
+      {
+        compareObjects(changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[i], event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[i], 6, 1,i+1, "smtpServer");
+      }
+
+
+      if (changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length > event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length)
+      {
+        let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length-event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length;
+        let changedstr="Add "+addedCount+" item(s) to Action Email SMTP List";
+        event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+      }
+
+
+
+      for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length, event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length); i++) 
+      {
+        compareObjects(changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[i], event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[i], 6, 1,i+1, "Remote Email");
+      }
+
+
+      if (changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length > event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length)
+      {
+        let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length-event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length;
+        let changedstr="Add "+addedCount+" item(s) to Action Remote Email List";
+        event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+      }
+
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.email=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.email));
+
+      EventEngine_ActionEmail_ConfigChangedLog.set(event_engine_action_email_changeValues);
+      ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+      console.log(event_engine_action_email_changeValues);
+
+  }
+
 
   onMount(() => {
 
@@ -411,9 +528,210 @@
           changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification));        
       }
 
+      if (event_engine_action_sms_changeValues.length == 0)
+      {
+         changed_event_engine_data.config.service_eventEngine_actionProfile.sms=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_actionProfile.sms));
+
+      }
+
+      if (event_engine_action_email_changeValues.length == 0)
+      {
+         changed_event_engine_data.config.service_eventEngine_actionProfile.email=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_actionProfile.email));
+
+      }
+
     }
 
   });
+
+  let modify_action_email_smtp_modal=false;
+  let modify_action_email_smtp_index;
+
+  let BackupActionEmailSMTP=
+  {
+      aliasName: "",
+      smtpServerIp:"",
+      port:1,
+      tls:false,
+      serverCaCert:"",
+      clientCert:"",
+      account:"",
+      password:""
+  };
+
+
+
+  function TriggerModifyActionEmailSMTP(index)
+  {
+    BackupActionEmailSMTP.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].aliasName;
+    BackupActionEmailSMTP.smtpServerIp=changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].smtpServerIp;
+    BackupActionEmailSMTP.port=changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].port;
+    BackupActionEmailSMTP.tls=changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].tls;
+    BackupActionEmailSMTP.serverCaCert=changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].serverCaCert;
+    BackupActionEmailSMTP.clientCert=changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].clientCert;
+    BackupActionEmailSMTP.account=changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].account;
+    BackupActionEmailSMTP.password=changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].password;
+        
+    modify_action_email_smtp_index=index;
+    modify_action_email_smtp_modal=true;
+
+  }
+
+  function NoModifyActionEmailSMTP(index)
+  {
+    modify_action_email_smtp_modal=false;
+
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].aliasName=BackupActionEmailSMTP.aliasName;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].smtpServerIp=BackupActionEmailSMTP.smtpServerIp;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].port=BackupActionEmailSMTP.port;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].tls=BackupActionEmailSMTP.tls;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].serverCaCert=BackupActionEmailSMTP.serverCaCert;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].clientCert=BackupActionEmailSMTP.clientCert;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].account=BackupActionEmailSMTP.account;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[index].password=BackupActionEmailSMTP.password;
+
+  }
+
+  function ModifyActionEmailSMTP()
+  {
+    modify_action_email_smtp_modal=false;
+
+  }
+
+
+
+
+  let modify_action_email_remote_modal=false;
+  let modify_action_email_remote_index;
+
+
+
+
+  let modify_action_sms_modal=false;
+  let modify_action_sms_index;
+  let BackupActionSMS=
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  };
+
+
+  function TriggerModifyActionSMS(index)
+  {
+    BackupActionSMS.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].enable;
+    BackupActionSMS.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].aliasName
+    BackupActionSMS.smsPhoneNumber=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsPhoneNumber;
+    BackupActionSMS.smsContent=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsContent;
+    
+    modify_action_sms_index=index;
+    modify_action_sms_modal=true;
+
+  }
+
+  function NoModifyActionSMS(index)
+  {
+    modify_action_sms_modal=false;
+
+
+    changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].enable=BackupActionSMS.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].aliasName=BackupActionSMS.aliasName;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsPhoneNumber=BackupActionSMS.smsPhoneNumber;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsContent=BackupActionSMS.smsContent;
+
+  }
+
+  function ModifyActionSMS()
+  {
+    modify_action_sms_modal=false;
+
+  }
+
+  let new_action_sms_modal=false;
+  let new_action_sms_index;
+  let NewActionSMS=[
+  {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  },
+    {
+      enable: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContent:""
+  }
+
+  ];
+
+  function new_action_sms_trigger(index)
+  {
+      NewActionSMS[index].enable=false;
+      NewActionSMS[index].aliasName="";
+      NewActionSMS[index].smsPhoneNumber="";
+      NewActionSMS[index].smsContent="";
+
+      new_action_sms_index=index;
+      new_action_sms_modal=true;
+
+  }
+
+
+  function add_new_action_sms(index)
+  {
+      new_action_sms_modal=false;
+      changed_event_engine_data.config.service_eventEngine_actionProfile.sms=[...changed_event_engine_data.config.service_eventEngine_actionProfile.sms,NewActionSMS[index]];
+  } 
 
 
   let modify_trigger_mqtt_modal=false;
@@ -2515,7 +2833,7 @@ Short</TableBodyCell>
 
 <p class="mt-8">
 
-<Table shadow striped={true} tableNoWFull={true}>
+<Table shadow striped={true}>
 
 
 <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
@@ -3175,10 +3493,14 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
   </TableHead>
   <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_actionProfile.sms as ActionSMS, index}
+
     <TableBodyRow>
           <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalsmsA = true}>
+<button on:click={() => TriggerModifyActionSMS(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -3187,23 +3509,31 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-
+{#if ActionSMS.enable}
+    <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
     <TableBodyCell class="w-10">0</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">A_sms_</TableBodyCell>
-      <TableBodyCell class="w-18">12345657</TableBodyCell>
-      <TableBodyCell class="w-18">Action</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{ActionSMS.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{ActionSMS.smsPhoneNumber}</TableBodyCell>
+      <TableBodyCell class="w-18">{ActionSMS.smsContent}</TableBodyCell>
 
     </TableBodyRow>
+{/each}
+{/if}
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalsmsA = true}>
+
+
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length < 10}
+<button on:click={() => new_action_sms_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
+{/if}
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -3225,28 +3555,29 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
                 <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveActionSMS}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
 
     </tr>
 
-    <Modal bind:open={formModalsmsA} autoclose={false} size="lg" class="w-full">
-  <form action="#">
 
+<Modal bind:open={new_action_sms_modal} size="lg" class="w-full" autoclose>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={smsitemA}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewActionSMS[new_action_sms_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
-
+<p class="mt-10"></p>
 <table>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">A_sms_</p><input type="text" bind:value={A_SMS_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewActionSMS[new_action_sms_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -3259,7 +3590,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Phone Number</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="text" bind:value={A_SMS_PhoneN} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="text" bind:value={NewActionSMS[new_action_sms_index].smsPhoneNumber} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </td>
 
 
@@ -3270,7 +3601,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={A_SMS_Content} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewActionSMS[new_action_sms_index].smsContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -3290,7 +3621,76 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_action_sms(new_action_sms_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+<Modal bind:open={modify_action_sms_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyActionSMS(modify_action_sms_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Phone Number</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsPhoneNumber} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
+
+
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyActionSMS}>Modify</Button></td>
 
 
     </tr>
@@ -3328,14 +3728,18 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell class="w-18">Port</TableHeadCell>
         <TableHeadCell class="w-18">TLS</TableHeadCell>
     <TableHeadCell class="w-18">Account</TableHeadCell>
-    <TableHeadCell class="w-18">Password</TableHeadCell>
+
 
   </TableHead>
  <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer as ActionEmailSMTP, index}
+
     <TableBodyRow>
 
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalemailSMTPA = true}>
+<button on:click={() => TriggerModifyActionEmailSMTP(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -3343,14 +3747,20 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
 
-    <TableBodyCell class="w-10">Gmail SMTP</TableBodyCell>
-      <TableBodyCell class="w-18">168.102.1.1</TableBodyCell>
-      <TableBodyCell class="w-18">123</TableBodyCell>
+    <TableBodyCell class="w-10">{ActionEmailSMTP.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{ActionEmailSMTP.smtpServerIp}</TableBodyCell>
+      <TableBodyCell class="w-18">{ActionEmailSMTP.port}</TableBodyCell>
+{#if ActionEmailSMTP.tls}
+      <TableBodyCell class="w-18">Yes</TableBodyCell>
+{:else}
       <TableBodyCell class="w-18">No</TableBodyCell>
-      <TableBodyCell class="w-18">WII</TableBodyCell>
-      <TableBodyCell class="w-18" style="-webkit-text-security: disc">12345</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-18">{ActionEmailSMTP.account}</TableBodyCell>
 
     </TableBodyRow>
+
+{/each}
+{/if}
 
     </TableBody>
 </Table>
@@ -3426,7 +3836,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
                 <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveActionEmail}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -3434,15 +3844,18 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </tr>
 
 
-  <Modal bind:open={formModalemailSMTPA} autoclose={false} size="lg" class="w-full">
-  <form action="#">
+  <Modal bind:open={modify_action_email_smtp_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyActionEmailSMTP(modify_action_email_smtp_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
 
+<table>
 
 <table>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={A_SMTP_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -3453,7 +3866,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">SMTP Server IP</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="text" bind:value={A_SMTP_SIP} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].smtpServerIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </td>
 
 
@@ -3464,7 +3877,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={A_SMTP_Port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
 
@@ -3473,8 +3886,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
   <td class="pl-5 pt-4">
   <div class="flex gap-4">
-  <Radio bind:group={A_SMTP_TLS} value='Yes' >Yes</Radio>
-  <Radio bind:group={A_SMTP_TLS} value='No'>No</Radio>
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].tls} value={1}>Yes</Radio>
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].tls} value={0}>No</Radio>
 
   </div>
 
@@ -3485,12 +3898,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Server CA Certificate</p></td>
     <td class= "pl-4 pt-4">
+{changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].serverCaCert}
 
-{#if A_SMTP_TLS == 'No'}    
-  <Select class="mt-2 disabled:cursor-not-allowed disabled:opacity-50" items={localList} placeholder="None" disabled/>
-{:else}
-  <Select class="mt-2" items={localList} placeholder="None" />
-{/if}
 
     </td>
 
@@ -3501,11 +3910,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Client Certificate</p></td>
     <td class= "pl-4 pt-4">
-{#if A_SMTP_TLS == 'No'}   
-  <Select class="mt-2 disabled:cursor-not-allowed disabled:opacity-50" items={localList} placeholder="None" disabled/>
-{:else}
-  <Select class="mt-2" items={localList} placeholder="None" />
-{/if}
+{changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].clientCert}
+
 
     </td>
 
@@ -3518,7 +3924,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Account</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="text" bind:value={A_SMTP_Account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
   </td>
 </tr>
 
@@ -3526,7 +3932,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Password</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="text" bind:value={A_SMTP_Pwd} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
   </td>
 </tr>
 
@@ -3546,7 +3952,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
     <td></td>
     <td></td>
-    <td class="pl-20"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyActionEmailSMTP}>Modify</Button></td>
 
 
     </tr>
@@ -3999,7 +4405,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 
-<Table shadow striped={true} tableNoWFull={true}>
+<Table shadow striped={true}>
 
 
 <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
@@ -4038,7 +4444,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <p class="mt-4">
 
-<Table shadow striped={true} tableNoWFull={true}>
+<Table shadow striped={true} >
 
 
   <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMS} on:keydown={() => {}}>
@@ -4102,7 +4508,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <p class="mt-4">
 
-<Table shadow striped={true} tableNoWFull={true}>
+<Table shadow striped={true} >
 
   <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMT} on:keydown={() => {}}>
     Modbus TCP Master Profile

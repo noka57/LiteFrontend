@@ -57,6 +57,8 @@
     	SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
     	SDatalogger_ProxyMode_Edge_ConfigChangedLog,
     	SDatalogger_General_ConfigChangedLog,
+    	EventEngine_ActionEmail_ConfigChangedLog,
+    	EventEngine_ActionSMS_ConfigChangedLog,
 		EventEngine_TriggerMQTT_ConfigChangedLog,
     	EventEngine_TriggerTCPMsg_ConfigChangedLog,
     	EventEngine_TriggerModbus_ConfigChangedLog,
@@ -206,6 +208,8 @@
   	let event_engine_trigger_modbus_changeValues=[];
   	let event_engine_trigger_tcpmsg_changeValues=[];
   	let event_engine_trigger_mqtt_changeValues=[];
+  	let event_engine_action_sms_changeValues=[];
+  	let event_engine_action_email_changeValues=[];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -225,7 +229,9 @@
 
   	function JudgeChangedOrNot()
   	{
-  		if (event_engine_trigger_mqtt_changeValues.length != 0 ||
+  		if (event_engine_action_email_changeValues.length !=0 ||
+  			event_engine_action_sms_changeValues.length !=0 ||
+  			event_engine_trigger_mqtt_changeValues.length != 0 ||
   			event_engine_trigger_tcpmsg_changeValues.length !=0 ||
   			event_engine_trigger_modbus_changeValues.length !=0 ||
   			event_engine_trigger_di_changeValues.length !=0 ||
@@ -605,6 +611,16 @@
   	EventEngine_TriggerMQTT_ConfigChangedLog.subscribe(val => {
       	event_engine_trigger_mqtt_changeValues = val;
       	JudgeChangedOrNot();
+  	});
+
+  	EventEngine_ActionSMS_ConfigChangedLog.subscribe(val => {
+      	event_engine_action_sms_changeValues = val;
+        JudgeChangedOrNot();
+  	});
+
+  	EventEngine_ActionEmail_ConfigChangedLog.subscribe(val => {
+      	event_engine_action_email_changeValues = val;
+        JudgeChangedOrNot();
   	});
 
   	sessionidG.subscribe(val => {

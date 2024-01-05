@@ -70,6 +70,7 @@
       SDatalogger_ProxyMode_Edge_ConfigChangedLog,
       SDatalogger_General_ConfigChangedLog,
       ChangedSDataLoggerConfig,
+      EventEngine_ActionDO_ConfigChangedLog,
       EventEngine_ActionEmail_ConfigChangedLog,
       EventEngine_ActionSMS_ConfigChangedLog,
       EventEngine_TriggerMQTT_ConfigChangedLog,
@@ -226,6 +227,7 @@
   let event_engine_trigger_mqtt_changeValues=[];
   let event_engine_action_sms_changeValues=[];
   let event_engine_action_email_changeValues=[];
+  let event_engine_action_do_changeValues=[];
   let SetCount=0;
   let SetCountOK=0;
 
@@ -343,6 +345,10 @@
   EventEngine_ActionEmail_ConfigChangedLog.subscribe(val => {
       event_engine_action_email_changeValues = val;
   });
+
+  EventEngine_ActionDO_ConfigChangedLog.subscribe(val => {
+      event_engine_action_do_changeValues = val;
+  }); 
 
 
   SDatalogger_General_ConfigChangedLog.subscribe(val => {
@@ -1014,6 +1020,7 @@
     }
 
     if (event_engine_data != "" && (
+        event_engine_action_do_changeValues.length != 0 ||
         event_engine_action_email_changeValues.length !=0 ||
         event_engine_action_sms_changeValues.length !=0 ||
         event_engine_trigger_mqtt_changeValues.length != 0 ||
@@ -1264,6 +1271,7 @@
 
 
         if (event_engine_data != "" && (
+                      event_engine_action_do_changeValues.length != 0 ||
                       event_engine_action_email_changeValues.length != 0 ||
                       event_engine_action_sms_changeValues.length != 0 ||
                       event_engine_trigger_mqtt_changeValues.length !=0 ||
@@ -1294,7 +1302,8 @@
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
 
-{#if  event_engine_action_email_changeValues.length !=0 ||
+{#if  event_engine_action_do_changeValues.length != 0 ||
+      event_engine_action_email_changeValues.length !=0 ||
       event_engine_action_sms_changeValues.length != 0 ||
       event_engine_trigger_mqtt_changeValues.length !=0 ||
       event_engine_trigger_tcpmsg_changeValues.length !=0 ||
@@ -1400,7 +1409,9 @@
 
 
 
-{#if event_engine_action_sms_changeValues.length != 0 ||
+{#if
+event_engine_action_do_changeValues.length != 0 || 
+    event_engine_action_sms_changeValues.length != 0 ||
     event_engine_action_email_changeValues.length !=0}
 <Li>Action Profile
 
@@ -1420,7 +1431,7 @@
 
 {#if  event_engine_action_email_changeValues.length !=0}
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
- <Li> SMS
+ <Li> Email
 <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
   {#each event_engine_action_email_changeValues as item}
       <Li>{item}</Li>
@@ -1432,6 +1443,19 @@
  </List>
 {/if}
 
+{#if  event_engine_action_do_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> DO
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_action_do_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
 
 </Li>
 {/if}
@@ -2226,7 +2250,8 @@
 </div>
 <div class="pt-10 pl-10 text-center">
 
-{#if    event_engine_action_email_changeValues.length != 0||
+{#if    event_engine_action_do_changeValues.length != 0 ||
+        event_engine_action_email_changeValues.length != 0||
         event_engine_action_sms_changeValues.length != 0 ||
         event_engine_trigger_mqtt_changeValues.length !=0 ||
         event_engine_trigger_tcpmsg_changeValues.length !=0 ||

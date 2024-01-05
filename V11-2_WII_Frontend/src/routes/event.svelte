@@ -8,6 +8,7 @@
   import { sessionidG } from "./sessionG.js";
   import { 
     eventEngineConfig,
+    EventEngine_ActionDO_ConfigChangedLog,
     EventEngine_ActionEmail_ConfigChangedLog,
     EventEngine_ActionSMS_ConfigChangedLog,
     EventEngine_TriggerMQTT_ConfigChangedLog,
@@ -32,6 +33,7 @@
   let event_engine_trigger_mqtt_changeValues=[];
   let event_engine_action_sms_changeValues=[];
   let event_engine_action_email_changeValues=[];
+  let event_engine_action_do_changeValues=[];
 
   eventEngineConfig.subscribe(val => {
       event_engine_data = val;
@@ -69,6 +71,10 @@
       event_engine_action_email_changeValues = val;
   });
 
+
+  EventEngine_ActionDO_ConfigChangedLog.subscribe(val => {
+      event_engine_action_do_changeValues = val;
+  });
 
   ChangedEventEngineConfig.subscribe(val => {
       saved_changed_event_engine_data = val;
@@ -147,6 +153,10 @@
               {
                 event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
               }
+              else if (type == 7)
+              {
+                event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
+              }
             }
             else if (obj1[key].length < obj2[key].length)
             {
@@ -179,6 +189,10 @@
               else if (type == 6)
               {
                 event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+              }
+              else if (type == 7)
+              {
+                event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
               }
             }
           }
@@ -229,6 +243,10 @@
           else if (type == 6)
           {
             event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+          }
+          else if (type == 7)
+          {
+            event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
           }
         }
       }
@@ -479,6 +497,36 @@
 
   }
 
+  function saveActionDO()
+  {
+      console.log("save Action DO");
+      if (event_engine_action_do_changeValues.length !=0)
+      {
+          event_engine_action_do_changeValues=[];
+      }
+
+
+      for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_actionProfile.do.length, event_engine_data.config.service_eventEngine_actionProfile.do.length); i++) 
+      {
+        compareObjects(changed_event_engine_data.config.service_eventEngine_actionProfile.do[i], event_engine_data.config.service_eventEngine_actionProfile.do[i], 7, 1,i+1, "DO");
+      }
+
+      if (changed_event_engine_data.config.service_eventEngine_actionProfile.do.length > event_engine_data.config.service_eventEngine_actionProfile.do.length)
+      {
+        let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.do.length-event_engine_data.config.service_eventEngine_actionProfile.do.length;
+        let changedstr="Add "+addedCount+" item(s) to DO Action List";
+        event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.do=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.do));
+
+      EventEngine_ActionDO_ConfigChangedLog.set(event_engine_action_do_changeValues);
+      ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+      console.log(event_engine_action_do_changeValues);
+
+  }
+
+
 
   onMount(() => {
 
@@ -540,9 +588,138 @@
 
       }
 
+      if (event_engine_action_do_changeValues.length == 0)
+      {
+         changed_event_engine_data.config.service_eventEngine_actionProfile.do=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_actionProfile.do));      
+
+      }
+
     }
 
   });
+
+  let modify_action_do_modal=false;
+  let modify_action_do_index;
+
+  let BackupActionDO=
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  };
+
+  function TriggerModifyActionDO(index)
+  {
+    BackupActionDO.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].enable;
+    BackupActionDO.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].aliasName;  
+    BackupActionDO.type=changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].type;
+    BackupActionDO.duration=changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].duration;
+    modify_action_do_index=index;
+    modify_action_do_modal=true;
+  }
+
+  function NoModifyActionDO(index)
+  {
+    modify_action_do_modal=false;
+
+    changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].enable=BackupActionDO.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].aliasName=BackupActionDO.aliasName;  
+    changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].type=BackupActionDO.type;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].duration=BackupActionDO.duration;
+  }
+
+  function ModifyActionDO()
+  {
+    modify_action_do_modal=false;  
+  }
+
+  let new_action_do_modal=false;
+  let new_action_do_index;
+
+  let NewActionDO=[
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  },
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  },
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  },
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  },
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  },
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  },
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  },
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  },
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  },
+  {
+    enable: false,
+    aliasName: "",
+    type: 0,
+    duration: 2
+  }
+  ];
+
+
+  function new_action_do_trigger(index)
+  {
+    NewActionDO[index].enable=false;
+    NewActionDO[index].aliasName="";
+    NewActionDO[index].type=0;
+    NewActionDO[index].duration=2;
+
+    new_action_do_index=index;
+    new_action_do_modal=true;
+
+  }
+
+
+  function add_new_action_do(index)
+  {
+      new_action_do_modal=false;
+      changed_event_engine_data.config.service_eventEngine_actionProfile.do=[...changed_event_engine_data.config.service_eventEngine_actionProfile.do,NewActionDO[index]];
+  } 
+
 
   let modify_action_email_smtp_modal=false;
   let modify_action_email_smtp_index;
@@ -599,11 +776,135 @@
   }
 
 
-
-
   let modify_action_email_remote_modal=false;
   let modify_action_email_remote_index;
 
+  let BackupActionEmailRemote=
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  };  
+
+
+  function TriggerModifyActionEmailRemote(index)
+  {
+    BackupActionEmailRemote.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].enable;
+    BackupActionEmailRemote.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].aliasName;
+    BackupActionEmailRemote.remoteEmail=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].remoteEmail;
+    BackupActionEmailRemote.emailContent=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].emailContent;
+
+    modify_action_email_remote_index=index;
+    modify_action_email_remote_modal=true;
+
+  }
+
+  function NoModifyActionEmailRemote(index)
+  {
+    modify_action_email_remote_modal=false;
+
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].enable=BackupActionEmailRemote.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].aliasName=BackupActionEmailRemote.aliasName;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].remoteEmail=BackupActionEmailRemote.remoteEmail;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].emailContent=BackupActionEmailRemote.emailContent;
+
+  }
+
+  function ModifyActionEmailRemote()
+  {
+    modify_action_email_remote_modal=false;
+
+  }
+
+
+  let new_action_email_remote_modal=false;
+  let new_action_email_remote_index;
+
+
+  let NewActionEmailRemote=[
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  },
+  {
+      enable: false,
+      aliasName: "",
+      remoteEmail:"",
+      emailContent:""
+  }
+
+  ];  
+
+
+  function new_action_email_remote_trigger(index)
+  {
+    NewActionEmailRemote[index].enable=false;
+    NewActionEmailRemote[index].aliasName="";
+    NewActionEmailRemote[index].remoteEmail="";
+    NewActionEmailRemote[index].emailContent="";
+
+    new_action_email_remote_index=index;
+    new_action_email_remote_modal=true;
+
+  }
+
+
+  function add_new_action_email_remote(index)
+  {
+      new_action_email_remote_modal=false;
+      changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile=[...changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile,NewActionEmailRemote[index]];
+  } 
 
 
 
@@ -3525,7 +3826,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
 
-
+{#if getDataReady == 1}
 {#if changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length < 10}
 <button on:click={() => new_action_sms_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
@@ -3534,7 +3835,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 </svg>
       </button>
 {/if}
-
+{/if}
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -3790,10 +4091,15 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
   </TableHead>
  <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile as ActionEmailRemote, index}
+
+
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-4">
-<button on:click={() => formModalemailA = true}>
+<button on:click={() => TriggerModifyActionEmailRemote(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -3801,20 +4107,35 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
+{#if ActionEmailRemote.enable}
     <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">1</TableBodyCell>
-      <TableBodyCell class="w-18">A_Email_</TableBodyCell>
-      <TableBodyCell class="w-18">a@b.c</TableBodyCell>
-      <TableBodyCell class="w-18">test</TableBodyCell>
+{:else}
+    <TableBodyCell class="w-10">0</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-18">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{ActionEmailRemote.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{ActionEmailRemote.remoteEmail}</TableBodyCell>
+      <TableBodyCell class="w-18">{ActionEmailRemote.emailContent}</TableBodyCell>
 
     </TableBodyRow>
+{/each}
+{/if}
+
+
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-4"><button on:click={() => formModalemailA = true}>
+      <TableBodyCell class="!p-4 w-4">
+
+{#if getDataReady == 1}      
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length < 10}
+      <button on:click={() => new_action_email_remote_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length)}>
       <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
-      </button></TableBodyCell>
+      </button>
+{/if}
+{/if}
+      </TableBodyCell>
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -3843,8 +4164,146 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
     </tr>
 
+<Modal bind:open={new_action_email_remote_modal} size="lg" class="w-full" autoclose>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewActionEmailRemote[new_action_email_remote_index].enable}>
+{/if}
+  Enable
+</label>
 
-  <Modal bind:open={modify_action_email_smtp_modal} size="lg" class="w-full" permanent={true}>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewActionEmailRemote[new_action_email_remote_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Email</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="text" bind:value={NewActionEmailRemote[new_action_email_remote_index].remoteEmail} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
+
+
+
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Email Content</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="text" bind:value={NewActionEmailRemote[new_action_email_remote_index].emailContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  </td>
+</tr>
+
+
+
+    <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={add_new_action_email_remote(new_action_email_remote_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+<Modal bind:open={modify_action_email_remote_modal}  size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[modify_action_email_remote_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyActionEmailRemote(modify_action_email_remote_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[modify_action_email_remote_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Email</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[modify_action_email_remote_index].remoteEmail} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
+
+
+
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Email Content</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[modify_action_email_remote_index].emailContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  </td>
+</tr>
+
+
+
+    <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyActionEmailRemote}>Modify</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+
+<Modal bind:open={modify_action_email_smtp_modal} size="lg" class="w-full" permanent={true}>
 <form action="#">
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyActionEmailSMTP(modify_action_email_smtp_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 <p class="mt-10"></p>
@@ -3963,74 +4422,6 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 
-  <Modal bind:open={formModalemailA} autoclose={false} size="lg" class="w-full">
-  <form action="#">
-
-<label>
-  <input class="center" type=checkbox checked={emailitemA}>
-  Enable
-</label>
-
-<p class="mt-4"></p>
-
-<table>
-
-
-<tr>
-<td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">A_Email_</p><input type="text" bind:value={A_Email_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
-
-
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Email</p></td>
-
-  <td class="pl-5 pt-4">
-  <input type="text" bind:value={A_Email_addr} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-</td>
-
-
-
-
-
-  </tr>
-
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Email Content</p></td>
-
-  <td class="pl-5 pt-4">
-  <input type="text" bind:value={A_Email_content} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  </td>
-</tr>
-
-
-
-    <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-
-    <td></td>
-    <td></td>
-    <td class="pl-20"><Button color="dark" pill={true}>Add</Button></td>
-
-
-    </tr>
-
-  </table>
-  </form>
-</Modal>
-
-
 
     </TableBody>
 </Table>
@@ -4055,18 +4446,21 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell class="!p-4">
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell>DO Profile</TableHeadCell> 
+    <TableHeadCell>No</TableHeadCell> 
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
     <TableHeadCell class="w-18">Type</TableHeadCell>
     <TableHeadCell class="w-18">Duration</TableHeadCell>
 
   </TableHead>
   <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_actionProfile.do as DO, index}
+  
     <TableBodyRow>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalDOA = true}>
+<button on:click={() => TriggerModifyActionDO(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -4076,26 +4470,45 @@ on:click={handleClickMV} on:keydown={() => {}}>
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
 
-
+{#if DO.enable}
+    <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
     <TableBodyCell class="w-10">0</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-10">DO-1</TableBodyCell>
-      <TableBodyCell class="w-18">A_DO_</TableBodyCell>
-      <TableBodyCell class="w-18">Pulse : High</TableBodyCell>
-      <TableBodyCell class="w-18">2 second(s)</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{DO.aliasName}</TableBodyCell>
+{#if DO.type == 0}
+      <TableBodyCell class="w-18">Pulse : Start</TableBodyCell>
+{:else if DO.type == 1}
+      <TableBodyCell class="w-18">Pulse : Stop</TableBodyCell>
+{:else if DO.type == 2}
+      <TableBodyCell class="w-18">DO : On</TableBodyCell>
+{:else if DO.type == 3}
+      <TableBodyCell class="w-18">DO : Off</TableBodyCell>
+{:else}
+      <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
+      <TableBodyCell class="w-18">{DO.duration} second(s)</TableBodyCell>
 
     </TableBodyRow>
+{/each}
+{/if}
+
 
 <TableBodyRow>
 
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalDOA = true}>
+
+{#if getDataReady == 1} 
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.do.length < 10}    
+<button on:click={() => new_action_do_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.do.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
+{/if}
+{/if}
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -4121,7 +4534,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
                 <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveActionDO}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -4129,29 +4542,24 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </tr>
 
 
-    <Modal bind:open={formModalDOA} autoclose={false} size="lg" class="w-full">
-  <form action="#">
-
+<Modal bind:open={new_action_do_modal} size="lg" class="w-full" autoclose>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={doitemA}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewActionDO[new_action_do_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
+
 
 <table>
 
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">DO Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={DOList} placeholder="None" /></td>
-
-
-</tr>
-
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">A_DO_</p><input type="text" bind:value={A_DO_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewActionDO[new_action_do_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -4163,7 +4571,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={ADOT} value='Pstart' >Pulse : High</Radio>
+  <Radio bind:group={NewActionDO[new_action_do_index].type} value={0} >Pulse : Start</Radio>
   </td>
 </tr>
 
@@ -4171,16 +4579,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={ADOT} value='Pstop' >Pulse : Low</Radio>
-  </td>
-</tr>
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
-
-  <td class="pl-5 pt-4">
-  <Radio bind:group={ADOT} value='DOon' >Edge : High to Low</Radio>
+  <Radio bind:group={NewActionDO[new_action_do_index].type} value={1} >Pulse : Stop</Radio>
   </td>
 </tr>
 
@@ -4189,15 +4588,16 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={ADOT} value='DOoff' >Edge : Low to High</Radio>
+  <Radio bind:group={NewActionDO[new_action_do_index].type} value={2} >DO : On</Radio>
   </td>
 </tr>
+
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={ADOT} value='DOoff' >Edge : Changed</Radio>
+  <Radio bind:group={NewActionDO[new_action_do_index].type} value={3} >DO : Off</Radio>
   </td>
 </tr>
 
@@ -4206,11 +4606,9 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Duration</p></td>
 <td class="pl-5 pt-5">
-{#if ADOT == 'Pstart'}
-<input type="number" bind:value={A_DO_Duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-{:else}
-<input type="number" bind:value={A_DO_Duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
-{/if}
+
+<input type="number" bind:value={NewActionDO[new_action_do_index].duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
 </td>
 <td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
 
@@ -4230,7 +4628,103 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td></td>
             <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_action_do(new_action_do_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+
+<Modal bind:open={modify_action_do_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyActionDO(modify_action_do_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].type} value={0} >Pulse : Start</Radio>
+  </td>
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].type} value={1} >Pulse : Stop</Radio>
+  </td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].type} value={2} >DO : On</Radio>
+  </td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+  <td class="pl-5 pt-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].type} value={3} >DO : Off</Radio>
+  </td>
+</tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Duration</p></td>
+<td class="pl-5 pt-5">
+
+<input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+</td>
+<td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
+
+
+  </tr>
+
+
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+            <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyActionDO}>Modify</Button></td>
 
 
     </tr>

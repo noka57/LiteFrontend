@@ -21,7 +21,7 @@ export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
 
-
+export const EventEngine_ActionDO_ConfigChangedLog=writable("");
 export const EventEngine_ActionEmail_ConfigChangedLog=writable("");
 export const EventEngine_ActionSMS_ConfigChangedLog=writable("");
 export const EventEngine_TriggerMQTT_ConfigChangedLog=writable("");

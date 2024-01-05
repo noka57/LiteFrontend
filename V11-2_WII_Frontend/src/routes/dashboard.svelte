@@ -296,93 +296,14 @@
 </div>
               </TableBodyCell>
 
-              <TableBodyCell class="border-l-8 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class=""><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.lan[0].name}{/if}</p>
+              <TableBodyCell class="border-l-8 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex">
+              <div class="">
+              <p class="text-black text-lg text-center">
+              {#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.lan[0].name}{/if}
+              </p>
 
 {#if dashboard_data!=""}              
 {#if dashboard_data.config.dashboard.ethernet.lan[0].status}
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
-<path fill=blue d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
-     M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
-
-</svg>
-{:else}
-<svg xmlns="http://www.w3.org/2000/svg"  viewBox="-5 -5 24 24" class="w-16 h-16">
-  <path fill="none" d="M10.6,3.4V2.6V2.1h-0.3H9.5V1.4V0.8H4v0.6v0.8H3.2H2.9v0.4v0.8H2.1H0.8v6.1h11.9V3.4h-1.4H10.6z M3,8.3H2.2
-    V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8
-    V6.4h0.8V8.3z"/>
-  <path fill="#D0D0D0" d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M12.7,9.4H0.8V3.4h1.4h0.8V2.6V2.2h0.3H4V1.4V0.8
-    h5.5v0.6v0.8h0.8h0.3v0.4v0.8h0.8h1.4L12.7,9.4L12.7,9.4z"/>
- 
-    <rect x="2.2" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
-    <rect x="3.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="5.5" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
-    <rect x="7.2" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="8.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="10.5" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-
-</svg>
-{/if}
-{/if}
-</div>
-<div class="pl-20"><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.lan[1].name}{/if}</p>
-{#if dashboard_data!=""}              
-{#if dashboard_data.config.dashboard.ethernet.lan[1].status}
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
-<path fill=blue d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
-     M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
-
-</svg>
-{:else}
-<svg xmlns="http://www.w3.org/2000/svg"  viewBox="-5 -5 24 24" class="w-16 h-16">
-  <path fill="none" d="M10.6,3.4V2.6V2.1h-0.3H9.5V1.4V0.8H4v0.6v0.8H3.2H2.9v0.4v0.8H2.1H0.8v6.1h11.9V3.4h-1.4H10.6z M3,8.3H2.2
-    V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8
-    V6.4h0.8V8.3z"/>
-  <path fill="#D0D0D0" d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M12.7,9.4H0.8V3.4h1.4h0.8V2.6V2.2h0.3H4V1.4V0.8
-    h5.5v0.6v0.8h0.8h0.3v0.4v0.8h0.8h1.4L12.7,9.4L12.7,9.4z"/>
- 
-    <rect x="2.2" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
-    <rect x="3.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="5.5" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
-    <rect x="7.2" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="8.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="10.5" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-
-</svg>
-{/if}
-{/if}
-</div>
-
-<div class="pl-20"><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.lan[2].name}{/if}</p>
-{#if dashboard_data!=""}              
-{#if dashboard_data.config.dashboard.ethernet.lan[2].status}
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
-<path fill=blue d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
-     M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
-
-</svg>
-{:else}
-<svg xmlns="http://www.w3.org/2000/svg"  viewBox="-5 -5 24 24" class="w-16 h-16">
-  <path fill="none" d="M10.6,3.4V2.6V2.1h-0.3H9.5V1.4V0.8H4v0.6v0.8H3.2H2.9v0.4v0.8H2.1H0.8v6.1h11.9V3.4h-1.4H10.6z M3,8.3H2.2
-    V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8
-    V6.4h0.8V8.3z"/>
-  <path fill="#D0D0D0" d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M12.7,9.4H0.8V3.4h1.4h0.8V2.6V2.2h0.3H4V1.4V0.8
-    h5.5v0.6v0.8h0.8h0.3v0.4v0.8h0.8h1.4L12.7,9.4L12.7,9.4z"/>
- 
-    <rect x="2.2" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
-    <rect x="3.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="5.5" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
-    <rect x="7.2" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="8.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="10.5" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-
-</svg>
-{/if}
-{/if}
-</div>
-
-<div class="pl-20"><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.lan[3].name}{/if}</p>
-{#if dashboard_data!=""}              
-{#if dashboard_data.config.dashboard.ethernet.lan[3].status}
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
 <path fill=blue d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
      M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>

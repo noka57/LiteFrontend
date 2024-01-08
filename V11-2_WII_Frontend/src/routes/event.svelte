@@ -8,6 +8,10 @@
   import { sessionidG } from "./sessionG.js";
   import { 
     eventEngineConfig,
+    EventEngine_ActionLINE_ConfigChangedLog,
+    EventEngine_ActionMQTT_ConfigChangedLog,
+    EventEngine_ActionTCPMsg_ConfigChangedLog,
+    EventEngine_ActionModbus_ConfigChangedLog,
     EventEngine_ActionDO_ConfigChangedLog,
     EventEngine_ActionEmail_ConfigChangedLog,
     EventEngine_ActionSMS_ConfigChangedLog,
@@ -34,6 +38,10 @@
   let event_engine_action_sms_changeValues=[];
   let event_engine_action_email_changeValues=[];
   let event_engine_action_do_changeValues=[];
+  let event_engine_action_modbus_changeValues=[];
+  let event_engine_action_tcpmsg_changeValues=[];
+  let event_engine_action_mqtt_changeValues=[];
+  let event_engine_action_line_changeValues=[];
 
   eventEngineConfig.subscribe(val => {
       event_engine_data = val;
@@ -75,6 +83,24 @@
   EventEngine_ActionDO_ConfigChangedLog.subscribe(val => {
       event_engine_action_do_changeValues = val;
   });
+
+  EventEngine_ActionModbus_ConfigChangedLog.subscribe(val => {
+      event_engine_action_modbus_changeValues = val;
+  });
+
+
+  EventEngine_ActionTCPMsg_ConfigChangedLog.subscribe(val => {
+      event_engine_action_tcpmsg_changeValues = val;
+  });
+
+  EventEngine_ActionMQTT_ConfigChangedLog.subscribe(val => {
+      event_engine_action_mqtt_changeValues = val;
+  });
+
+  EventEngine_ActionLINE_ConfigChangedLog.subscribe(val => {
+      event_engine_action_line_changeValues = val;
+  });
+
 
   ChangedEventEngineConfig.subscribe(val => {
       saved_changed_event_engine_data = val;
@@ -157,6 +183,23 @@
               {
                 event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
               }
+              else if (type == 8)
+              {
+                 event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues,changedstr];
+              }
+              else if (type == 9)
+              {
+                 event_engine_action_tcpmsg_changeValues=[...event_engine_action_tcpmsg_changeValues,changedstr];
+              }
+              else if (type == 10)
+              {
+                 event_engine_action_mqtt_changeValues=[...event_engine_action_mqtt_changeValues,changedstr];
+              }
+              else if (type == 11)
+              {
+                 event_engine_action_line_changeValues=[...event_engine_action_line_changeValues,changedstr];
+              }
+
             }
             else if (obj1[key].length < obj2[key].length)
             {
@@ -194,6 +237,23 @@
               {
                 event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
               }
+              else if (type == 8)
+              {
+                 event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues,changedstr];
+              }    
+              else if (type == 9)
+              {
+                 event_engine_action_tcpmsg_changeValues=[...event_engine_action_tcpmsg_changeValues,changedstr];
+              }
+              else if (type == 10)
+              {
+                 event_engine_action_mqtt_changeValues=[...event_engine_action_mqtt_changeValues,changedstr];
+              }
+              else if (type == 11)
+              {
+                 event_engine_action_line_changeValues=[...event_engine_action_line_changeValues,changedstr];
+              }
+
             }
           }
           else
@@ -248,6 +308,22 @@
           {
             event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
           }
+          else if (type == 8)
+          {
+            event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues,changedstr];
+          }
+          else if (type == 9)
+          {
+            event_engine_action_tcpmsg_changeValues=[...event_engine_action_tcpmsg_changeValues,changedstr];
+          }
+          else if (type == 10)
+          {
+            event_engine_action_mqtt_changeValues=[...event_engine_action_mqtt_changeValues,changedstr];
+          }
+          else if (type == 11)
+          {
+            event_engine_action_line_changeValues=[...event_engine_action_line_changeValues,changedstr];
+          }          
         }
       }
   }
@@ -526,6 +602,124 @@
 
   }
 
+  function saveActionModbus()
+  {
+      console.log("save Action Modbus");
+      if (event_engine_action_modbus_changeValues.length !=0)
+      {
+          event_engine_action_modbus_changeValues=[];
+      }
+
+
+      for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length, event_engine_data.config.service_eventEngine_actionProfile.modbus.length); i++) 
+      {
+        compareObjects(changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[i], event_engine_data.config.service_eventEngine_actionProfile.modbus[i], 8, 1,i+1, "Modbus");
+      }
+
+      if (changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length > event_engine_data.config.service_eventEngine_actionProfile.modbus.length)
+      {
+        let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length-event_engine_data.config.service_eventEngine_actionProfile.modbus.length;
+        let changedstr="Add "+addedCount+" item(s) to Modbus Action List";
+        event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues, changedstr];
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.modbus));
+
+      EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
+      ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+      console.log(event_engine_action_modbus_changeValues);
+
+  }
+
+
+  function saveActionTCPMsg()
+  {
+      console.log("save Action TCP message");
+      if (event_engine_action_tcpmsg_changeValues.length !=0)
+      {
+          event_engine_action_tcpmsg_changeValues=[];
+      }
+
+
+      for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length, event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length); i++) 
+      {
+        compareObjects(changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[i], event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[i], 9, 1,i+1, "TCP Message");
+      }
+
+      if (changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length > event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length)
+      {
+        let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length-event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length;
+        let changedstr="Add "+addedCount+" item(s) to TCP Message Action List";
+        event_engine_action_tcpmsg_changeValues=[...event_engine_action_tcpmsg_changeValues, changedstr];
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage));
+
+      EventEngine_ActionTCPMsg_ConfigChangedLog.set(event_engine_action_tcpmsg_changeValues);
+      ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+      console.log(event_engine_action_tcpmsg_changeValues);
+
+  }
+
+
+  function saveActionMQTT()
+  {
+      console.log("save Action MQTT message");
+      if (event_engine_action_mqtt_changeValues.length !=0)
+      {
+          event_engine_action_mqtt_changeValues=[];
+      }
+
+
+      for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length, event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length); i++) 
+      {
+        compareObjects(changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[i], event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[i], 10, 1,i+1, "MQTT");
+      }
+
+      if (changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length > event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length)
+      {
+        let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length-event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length;
+        let changedstr="Add "+addedCount+" item(s) to MQTT Action List";
+        event_engine_action_mqtt_changeValues=[...event_engine_action_mqtt_changeValues, changedstr];
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish));
+
+      EventEngine_ActionMQTT_ConfigChangedLog.set(event_engine_action_mqtt_changeValues);
+      ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+      console.log(event_engine_action_mqtt_changeValues);
+
+  }
+
+
+  function saveActionLINE()
+  {
+      console.log("save Action LINE message");
+      if (event_engine_action_line_changeValues.length !=0)
+      {
+          event_engine_action_line_changeValues=[];
+      }
+
+
+      for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length, event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length); i++) 
+      {
+        compareObjects(changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[i], event_engine_data.config.service_eventEngine_actionProfile.lineNotification[i], 11, 1,i+1, "LINE");
+      }
+
+      if (changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length > event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length)
+      {
+        let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length-event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length;
+        let changedstr="Add "+addedCount+" item(s) to LINE Action List";
+        event_engine_action_line_changeValues=[...event_engine_action_line_changeValues, changedstr];
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification));
+
+      EventEngine_ActionLINE_ConfigChangedLog.set(event_engine_action_line_changeValues);
+      ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+      console.log(event_engine_action_line_changeValues);
+
+  }
 
 
   onMount(() => {
@@ -594,9 +788,591 @@
 
       }
 
+
+      if (event_engine_action_modbus_changeValues.length == 0)
+      {
+         changed_event_engine_data.config.service_eventEngine_actionProfile.modbus=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_actionProfile.modbus));      
+      }
+
+      if (event_engine_action_tcpmsg_changeValues.length == 0)
+      {
+         changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_actionProfile.tcpMessage));      
+      }
+
+
+      if (event_engine_action_mqtt_changeValues.length == 0)
+      {
+         changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_actionProfile.mqttPublish));      
+      }
+
+
+      if (event_engine_action_line_changeValues.length == 0)
+      {
+         changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification=JSON.parse(JSON.stringify(event_engine_data.config.service_eventEngine_actionProfile.lineNotification));      
+      }
+
     }
 
   });
+
+  let modify_action_line_modal=false;
+  let modify_action_line_index;
+
+
+  let BackupActionLINE=
+  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  };
+
+  function TriggerModifyActionLINE(index)
+  {
+    BackupActionLINE.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].enable;
+    BackupActionLINE.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].aliasName;  
+    BackupActionLINE.token=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].token; 
+    BackupActionLINE.sendingContent=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].sendingContent;  
+
+    modify_action_line_index=index;
+    modify_action_line_modal=true;
+  }
+
+  function NoModifyActionLINE(index)
+  {
+    modify_action_line_modal=false;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].enable=BackupActionLINE.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].aliasName=BackupActionLINE.aliasName;  
+    changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].token=BackupActionLINE.token; 
+    changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].sendingContent=BackupActionLINE.sendingContent;
+  }
+
+  function ModifyActionLINE()
+  {
+    modify_action_line_modal=false;  
+  }
+
+
+  let new_action_line_modal=false;
+  let new_action_line_index;
+
+
+  let NewActionLINE=
+  [
+  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    token: "",
+    sendingContent:""
+  }
+
+  ];
+
+  function new_action_line_trigger(index)
+  {
+    NewActionLINE[index].enable=false;
+    NewActionLINE[index].aliasName="";
+    NewActionLINE[index].token="";
+    NewActionLINE[index].sendingContent="";
+
+    new_action_line_index=index;
+    new_action_line_modal=true;
+
+  }
+
+
+  function add_new_action_line(index)
+  {
+      new_action_line_modal=false;
+      changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification=[...changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification,NewActionLINE[index]];
+  } 
+
+
+
+  let modify_action_mqtt_modal=false;
+  let modify_action_mqtt_index;
+
+  let BackupActionMQTT=
+  {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  };
+
+  function TriggerModifyActionMQTT(index)
+  {
+    BackupActionMQTT.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].enable;
+    BackupActionMQTT.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].aliasName;  
+    BackupActionMQTT.mqttProfile=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].mqttProfile;  
+    BackupActionMQTT.publishTopic=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].publishTopic;  
+    BackupActionMQTT.sendingContent=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].sendingContent;  
+
+    modify_action_mqtt_index=index;
+    modify_action_mqtt_modal=true;
+  }
+
+  function NoModifyActionMQTT(index)
+  {
+    modify_action_mqtt_modal=false;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].enable=BackupActionMQTT.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].aliasName=BackupActionMQTT.aliasName; 
+    changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].mqttProfile=BackupActionMQTT.mqttProfile;  
+    changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].publishTopic=BackupActionMQTT.publishTopic; 
+    changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].sendingContent=BackupActionMQTT.sendingContent;
+
+  }
+
+  function ModifyActionMQTT()
+  {
+    modify_action_mqtt_modal=false;  
+  }
+
+
+  let new_action_mqtt_modal=false;
+  let new_action_mqtt_index;
+
+  let NewActionMQTT=[
+  {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  }
+  ,
+    {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  }
+  ,  {
+    enable: false,
+    aliasName: "",
+    mqttProfile: "",
+    publishTopic: "",
+    sendingContent:""
+  }
+  ];
+
+
+  function new_action_mqtt_trigger(index)
+  {
+    NewActionMQTT[index].enable=false;
+    NewActionMQTT[index].aliasName="";
+    NewActionMQTT[index].mqttProfile="";
+    NewActionMQTT[index].publishTopic="";
+    NewActionMQTT[index].sendingContent="";
+
+    new_action_mqtt_index=index;
+    new_action_mqtt_modal=true;
+
+  }
+
+
+  function add_new_action_mqtt(index)
+  {
+      new_action_mqtt_modal=false;
+      changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish=[...changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish,NewActionMQTT[index]];
+  } 
+
+
+  let modify_action_tcpmsg_modal=false;
+  let modify_action_tcpmsg_index;
+
+  let BackupActionTCPMsg=
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  };
+
+
+  function TriggerModifyActionTCPMsg(index)
+  {
+    BackupActionTCPMsg.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].enable;
+    BackupActionTCPMsg.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].aliasName;  
+    BackupActionTCPMsg.remoteHost=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].remoteHost;  
+    BackupActionTCPMsg.remotePort=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].remotePort;  
+    BackupActionTCPMsg.sendingMessage=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].sendingMessage;  
+
+    modify_action_tcpmsg_index=index;
+    modify_action_tcpmsg_modal=true;
+  }
+
+  function NoModifyActionTCPMsg(index)
+  {
+    modify_action_tcpmsg_modal=false;
+
+    changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].enable=BackupActionTCPMsg.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].aliasName=BackupActionTCPMsg.aliasName;  
+    changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].remoteHost=BackupActionTCPMsg.remoteHost;  
+    changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].remotePort=BackupActionTCPMsg.remotePort;  
+    changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].sendingMessage=BackupActionTCPMsg.sendingMessage;  
+  }
+
+  function ModifyActionTCPMsg()
+  {
+    modify_action_tcpmsg_modal=false;  
+  }
+
+  let new_action_tcpmsg_modal=false;
+  let new_action_tcpmsg_index;
+
+  let NewActionTCPMsg=[
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  }
+,
+  {
+    enable: false,
+    aliasName: "",
+    remoteHost: "",
+    remotePort: 0,
+    sendingMessage:""
+  }
+  ];
+
+
+  function new_action_tcpmsg_trigger(index)
+  {
+    NewActionTCPMsg[index].enable=false;
+    NewActionTCPMsg[index].aliasName="";
+    NewActionTCPMsg[index].modbusVariable="";
+    NewActionTCPMsg[index].variableType;
+    NewActionTCPMsg[index].assignment;  
+
+    new_action_tcpmsg_index=index;
+    new_action_tcpmsg_modal=true;
+
+  }
+
+
+  function add_new_action_tcpmsg(index)
+  {
+      new_action_tcpmsg_modal=false;
+      changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage=[...changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage,NewActionTCPMsg[index]];
+  } 
+
+
+  let modify_action_modbus_modal=false;
+  let modify_action_modbus_index;
+
+  let BackupActionModbus=
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  };
+
+
+  function TriggerModifyActionModbus(index)
+  {
+    BackupActionModbus.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].enable;
+    BackupActionModbus.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].aliasName;  
+    BackupActionModbus.modbusVariable=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].modbusVariable;
+    BackupActionModbus.variableType=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].variableType;
+    BackupActionModbus.assignment=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].assignment;
+
+
+    modify_action_modbus_index=index;
+    modify_action_modbus_modal=true;
+  }
+
+  function NoModifyActionModbus(index)
+  {
+    modify_action_modbus_modal=false;
+
+    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].enable=BackupActionModbus.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].aliasName=BackupActionModbus.aliasName;  
+    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].modbusVariable=BackupActionModbus.modbusVariable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].variableType=BackupActionModbus.variableType;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].assignment=BackupActionModbus.assignment;
+  }
+
+  function ModifyActionModbus()
+  {
+    modify_action_modbus_modal=false;  
+  }
+
+  let new_action_modbus_modal=false;
+  let new_action_modbus_index;
+  let NewActionModbus=[
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  },
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  },
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  },
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  },
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  },
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  },
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  },
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  },
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  },
+  {
+    enable: false,
+    aliasName: "",
+    modbusVariable: "",
+    variableType: 0,
+    assignment: 2000
+  }
+
+  ];
+
+
+  function new_action_modbus_trigger(index)
+  {
+    NewActionModbus[index].enable=false;
+    NewActionModbus[index].aliasName="";
+    NewActionModbus[index].modbusVariable="";
+    NewActionModbus[index].variableType;
+    NewActionModbus[index].assignment;  
+
+    new_action_modbus_index=index;
+    new_action_modbus_modal=true;
+
+  }
+
+
+  function add_new_action_modbus(index)
+  {
+      new_action_modbus_modal=false;
+      changed_event_engine_data.config.service_eventEngine_actionProfile.modbus=[...changed_event_engine_data.config.service_eventEngine_actionProfile.modbus,NewActionModbus[index]];
+  } 
+
+
 
   let modify_action_do_modal=false;
   let modify_action_do_index;
@@ -1788,20 +2564,6 @@
 
 
 
-  let isActive = false;
-  let formModalsmsT = false;
-  let T_SMS_Name;
-  let TSMSP='any';
-  let T_SMS_PhoneN;
-  let T_SMS_Content;
-  let smsitemT=false;
-
-
-  let formModalDIT = false;
-  let diitemT=false;
-  let T_DI_Name;
-  let TDIT='levelH';
-  let T_DI_Duration;
 
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
   let tdClass = 'px-6 py-4 whitespace-nowrap font-light text-center';
@@ -1809,40 +2571,7 @@
   let trClass= 'noborder text-center bg-white dark:bg-gray-800 dark:border-gray-700';
 
 
-  let formModalMT=false;
-  let mitemT=true;
-  let T_Modbus_name;
-  let T_VType;
-  let T_MV_name;
-  let T_Comparison;
 
-  let formModalPINGT = false;
-  let pingitemT=false;
-  let T_PING_Name;
-  let T_PING_Period;
-  let T_PING_RetryCount;
-  let T_PING_RetryInterval;
-  let T_PING_Host;
-
-  let formModaltcpmT = false;
-  let tcpMitemT=false
-  let T_TCPMessage_Name;
-  let T_TCPMessage_RemoteHost="192.168.1.127";
-  let T_TCPMessage_RemotePort=8000;
-  let T_TCPMessage_RecvMsg="Alarm!";
-
-
-  let formModalMQTTT=false;
-  let MQTTitemT=false
-  let T_MQTT_Name;
-  let T_MQTT_subscribed_Topic;
-  let T_MQTT_content;
-
-  let formModalMQTTA=false;
-  let MQTTitemA=false
-  let A_MQTT_Name;
-  let A_MQTT_Publish_Topic;
-  let A_MQTT_content;
 
 
   let formModalLineA=false;
@@ -1852,47 +2581,6 @@
   let A_Line_content;
 
 
-  let formModaltcpmA = false;
-  let tcpMitemA=false
-  let A_TCPMessage_Name;
-  let A_TCPMessage_RemoteHost="192.168.1.127";
-  let A_TCPMessage_RemotePort=8000;
-  let A_TCPMessage_SndMsg="Alarm!";
-
-
-  let A_Modbus_assign;
-  let formModalMA=false;
-  let mitemA=true;
-  let A_Modbus_name;
-  let A_MV_name;
-  let A_VType;
-
-  let formModalsmsA = false;
-  let A_SMS_Name;
-  let A_SMS_PhoneN;
-  let A_SMS_Content;
-  let smsitemA=false;
-
-
-
-  let A_SMTP_Name;
-  let A_SMTP_SIP;
-  let A_SMTP_Port;
-  let A_SMTP_Account;
-  let A_SMTP_Pwd;
-  let A_SMTP_TLS='No';
-  let formModalemailSMTPA = false;
-  let formModalemailA = false;
-  let emailitemA=false;
-  let A_Email_Name;
-  let A_Email_addr;
-  let A_Email_content;
-
-  let formModalDOA=false;
-  let doitemA=false;
-  let A_DO_Name;
-  let ADOT;
-  let A_DO_Duration;
 
   let formModalRule=false;
   let ruleitem=false;
@@ -1996,24 +2684,6 @@
 
 
 
-
-let MVList = [
-    {value:"Test1", name: "Line Current Phase A"},
-
-  ];
-
-let DOList=[
-    {value:"Test1", name: "DO-1"},
-];
-
-let OpList = [
-    {value:"GT", name: ">"},
-    {value:"LT", name: "<"},
-    {value:"GE", name: ">="},
-    {value:"LE", name: "<="},
-    {value:"EQ", name: "="},
-    {value:"NEQ", name: "!="},
-  ];
 
 
 
@@ -4766,10 +5436,15 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
   </TableHead>
   <TableBody>
-    <TableBodyRow>
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_actionProfile.modbus as Modbus, index}
+  
+
+<TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalMA = true}>
+<button on:click={() => TriggerModifyActionModbus(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -4779,25 +5454,57 @@ on:click={handleClickMV} on:keydown={() => {}}>
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
 
-
+{#if Modbus.enable}
     <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">A_Modbus_</TableBodyCell>
-      <TableBodyCell class="w-18">Line Current Phase A</TableBodyCell>
-      <TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
-      <TableBodyCell class="w-18">2000</TableBodyCell>
+{:else}
+    <TableBodyCell class="w-10">0</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
 
-    </TableBodyRow>
+      <TableBodyCell class="w-18">{Modbus.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{Modbus.modbusVariable}</TableBodyCell>
+{#if Modbus.variableType==1}
+<TableBodyCell class="w-18">Boolean</TableBodyCell>
+{:else if Modbus.variableType ==2}
+<TableBodyCell class="w-18">Unsigned Short</TableBodyCell>
+{:else if Modbus.variableType ==3}
+<TableBodyCell class="w-18">Signed
+Short</TableBodyCell>
+{:else if Modbus.variableType ==4}
+<TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
+{:else if Modbus.variableType ==5}
+<TableBodyCell class="w-18">Signed Integer</TableBodyCell>
+{:else if Modbus.variableType ==6}
+<TableBodyCell class="w-18">Float</TableBodyCell>
+{:else if Modbus.variableType ==7}
+<TableBodyCell class="w-18">Double</TableBodyCell>
+{:else}
+<TableBodyCell class="w-18"></TableBodyCell>
+
+{/if}
+
+
+      <TableBodyCell class="w-18">{Modbus.assignment}</TableBodyCell>
+
+</TableBodyRow>
+
+{/each}
+{/if}
+
+
 
   <TableBodyRow>
  <TableBodyCell class="!p-4">
-<button on:click={() => formModalMA = true}>
+{#if getDataReady == 1}
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length < 10}
+<button on:click={() => new_action_modbus_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
-  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
+    <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+    </svg>
+</button>
+{/if}
+{/if}
  </TableBodyCell>
       <TableBodyCell class="!p-4">
 
@@ -4816,27 +5523,47 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </TableBodyRow>
 
 
+     <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+                <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveActionModbus}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+
+
 
   </TableBody>
 </Table>
 
 
-    <Modal bind:open={formModalMA} autoclose={false} size="lg" class="w-full">
-  <form action="#">
-
+    <Modal bind:open={new_action_modbus_modal} size="lg" class="w-full" autoclose>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={mitemA}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewActionModbus[new_action_modbus_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
 
 <table>
 
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">A_Modbus_</p><input type="text" bind:value={A_Modbus_name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewActionModbus[new_action_modbus_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -4844,7 +5571,10 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={MVList} placeholder="None" /></td>
+    <td class= "pl-4 pt-4">
+    {NewActionModbus[new_action_modbus_index].modbusVariable}
+
+    </td>
 
 
 </tr>
@@ -4856,13 +5586,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
   </td>
 
     <td class="pl-4 pt-4" colspan=""><div>
-  <Radio class="pb-2" bind:group={A_VType} value='bool' >Boolean</Radio>
-  <Radio class="pb-2" bind:group={A_VType} value='uns' >Unsigned Short</Radio>
-  <Radio class="pb-2" bind:group={A_VType} value='ss' >Signed Short</Radio>
-  <Radio class="pb-2" bind:group={A_VType} value='uni' >Unsigned Integer</Radio>
-  <Radio class="pb-2" bind:group={A_VType} value='si' >Signed Integer</Radio>
-  <Radio class="pb-2" bind:group={A_VType} value='float' >Float</Radio>
-  <Radio class="pb-2" bind:group={A_VType} value='double' >Double</Radio>
+  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].variableType} value={1} >Boolean</Radio>
+  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].variableType} value={2} >Unsigned Short</Radio>
+  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].variableType} value={3} >Signed Short</Radio>
+  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].variableType} value={4} >Unsigned Integer</Radio>
+  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].variableType} value={5} >Signed Integer</Radio>
+  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].variableType} value={6} >Float</Radio>
+  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].variableType} value={7} >Double</Radio>
 </div></td>
 </tr>
 
@@ -4870,7 +5600,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Assignment</p></td>
 <td class="pl-5 pt-5">
-<input type="number" bind:value={A_Modbus_assign} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+<input type="number" bind:value={NewActionModbus[new_action_modbus_index].assignment} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4885,7 +5615,85 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td></td>
             <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_action_modbus(new_action_modbus_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+    <Modal bind:open={modify_action_modbus_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyActionModbus(modify_action_modbus_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
+    <td class= "pl-4 pt-4">
+    {changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].modbusVariable}
+
+    </td>
+
+
+</tr>
+
+<tr>
+
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Type</p>
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan=""><div>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].variableType} value={1} >Boolean</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].variableType} value={2} >Unsigned Short</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].variableType} value={3} >Signed Short</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].variableType} value={4} >Unsigned Integer</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].variableType} value={5} >Signed Integer</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].variableType} value={6} >Float</Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].variableType} value={7} >Double</Radio>
+</div></td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Assignment</p></td>
+<td class="pl-5 pt-5">
+<input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].assignment} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+            <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyActionModbus}>Modify</Button></td>
 
 
     </tr>
@@ -4963,34 +5771,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell>Delay Between Polls</TableHeadCell>
   </TableHead>
   <TableBody>
-    <TableBodyRow>
-      <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> Modbus_Master_S0</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> Serial Port 0</TableBodyCell>
-      <TableBodyCell class="w-10">RS 485</TableBodyCell>
-      <TableBodyCell class="w-10">9600</TableBodyCell>
-      <TableBodyCell class="w-10">None</TableBodyCell>
-      <TableBodyCell class="w-18">8</TableBodyCell>
-      <TableBodyCell class="w-18">1</TableBodyCell>
-      <TableBodyCell class="w-18">1000 ms</TableBodyCell>
-      <TableBodyCell class="w-18">20 ms</TableBodyCell>
-    </TableBodyRow>
 
-
- <TableBodyRow>
-      <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">2</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> Modbus_Master_S1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> Serial Port 1</TableBodyCell>
-      <TableBodyCell class="w-10">RS 485</TableBodyCell>
-      <TableBodyCell class="w-10">115200</TableBodyCell>
-      <TableBodyCell class="w-10">None</TableBodyCell>
-      <TableBodyCell class="w-18">8</TableBodyCell>
-      <TableBodyCell class="w-18">1</TableBodyCell>
-      <TableBodyCell class="w-18">1000 ms</TableBodyCell>
-      <TableBodyCell class="w-18">20 ms</TableBodyCell>
-    </TableBodyRow>
 
 
 
@@ -5022,28 +5803,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
   </TableHead>
   <TableBody>
-    <TableBodyRow>
-      <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> Modbus_Master_T0</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> 127.0.0.1</TableBodyCell>
-      <TableBodyCell class="w-10">502</TableBodyCell>
-      <TableBodyCell class="w-10">3000 ms</TableBodyCell>
-      <TableBodyCell class="w-10">1000</TableBodyCell>
-      <TableBodyCell class="w-18">20</TableBodyCell>
-    </TableBodyRow>
 
-
- <TableBodyRow>
-      <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">2</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> Modbus_Master_T1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> 192.168.127.254</TableBodyCell>
-      <TableBodyCell class="w-10">502</TableBodyCell>
-      <TableBodyCell class="w-10">3000 ms</TableBodyCell>
-      <TableBodyCell class="w-10">1000</TableBodyCell>
-      <TableBodyCell class="w-18">20</TableBodyCell>
-    </TableBodyRow>
 
 
   </TableBody>
@@ -5084,10 +5844,15 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
    <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage as TCPMsg, index}
+  
+
     <TableBodyRow>
           <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModaltcpmA = true}>
+<button on:click={() => TriggerModifyActionTCPMsg(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -5096,25 +5861,35 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-
+{#if TCPMsg.enable}
+    <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
     <TableBodyCell class="w-10">0</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">A_TCPMessage_</TableBodyCell>
-      <TableBodyCell class="w-18">192.168.1.127</TableBodyCell>
-      <TableBodyCell class="w-18">8000</TableBodyCell>
-      <TableBodyCell class="w-18">Alarm!</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{TCPMsg.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{TCPMsg.remoteHost}</TableBodyCell>
+      <TableBodyCell class="w-18">{TCPMsg.remotePort}</TableBodyCell>
+      <TableBodyCell class="w-18">{TCPMsg.sendingMessage}</TableBodyCell>
 
 
     </TableBodyRow>
+{/each}
+{/if}
+
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModaltcpmA = true}>
+{#if getDataReady == 1}
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length < 10}
+<button on:click={() => new_action_tcpmsg_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
+{/if}
+{/if}
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -5136,7 +5911,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
                 <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveActionTCPMsg}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -5144,22 +5919,22 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </tr>
 
 
-
-    <Modal bind:open={formModaltcpmA} autoclose={false} size="lg" class="w-full">
-  <form action="#">
-
+<Modal bind:open={new_action_tcpmsg_modal} size="lg" class="w-full" autoclose>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={tcpMitemA}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewActionTCPMsg[new_action_tcpmsg_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
 
 <table>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">A_TCPMessage_</p><input type="text" bind:value={A_TCPMessage_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewActionTCPMsg[new_action_tcpmsg_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -5172,7 +5947,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="text" bind:value={A_TCPMessage_RemoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="text" bind:value={NewActionTCPMsg[new_action_tcpmsg_index].remoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </td>
 
 
@@ -5184,14 +5959,14 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="number" bind:value={A_TCPMessage_RemotePort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="number" bind:value={NewActionTCPMsg[new_action_tcpmsg_index].remotePort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </td>
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Sending Message</p></td><td class="pl-5 pt-5"><input type="text" bind:value={A_TCPMessage_SndMsg} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Sending Message</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewActionTCPMsg[new_action_tcpmsg_index].sendingMessage} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -5211,7 +5986,85 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_action_tcpmsg(new_action_tcpmsg_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+  </form>
+</Modal>
+
+
+
+<Modal bind:open={modify_action_tcpmsg_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[modify_action_tcpmsg_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyActionTCPMsg(modify_action_tcpmsg_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[modify_action_tcpmsg_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[modify_action_tcpmsg_index].remoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[modify_action_tcpmsg_index].remotePort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Sending Message</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[modify_action_tcpmsg_index].sendingMessage} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyActionTCPMsg}>Modify</Button></td>
 
 
     </tr>
@@ -5257,10 +6110,16 @@ on:click={handleClickMV} on:keydown={() => {}}>
   </TableHead>
 
    <TableBody>
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish as MQTT, index}
+  
+
+
     <TableBodyRow>
           <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalMQTTA = true}>
+<button on:click={() => TriggerModifyActionMQTT(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -5269,26 +6128,34 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-
-    <TableBodyCell class="w-10">0</TableBodyCell>
+{#if MQTT.enable}
       <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">A_MQTT_</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+{:else}
+    <TableBodyCell class="w-10">0</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{MQTT.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{MQTT.mqttProfile}</TableBodyCell>
+      <TableBodyCell class="w-18">{MQTT.publishTopic}</TableBodyCell>
+      <TableBodyCell class="w-18">{MQTT.sendingContent}</TableBodyCell>
 
 
     </TableBodyRow>
+{/each}
+{/if}
+
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalMQTTA = true}>
+{#if getDataReady == 1}
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length < 10}
+<button on:click={() => new_action_mqtt_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
-
+{/if}
+{/if}
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -5309,7 +6176,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
                 <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveActionMQTT}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -5317,22 +6184,22 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </tr>
 
 
-
-    <Modal bind:open={formModalMQTTA} autoclose={false} size="lg" class="w-full">
-
-
+<Modal bind:open={new_action_mqtt_modal} size="lg" class="w-full" autoclose>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={MQTTitemA}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewActionMQTT[new_action_mqtt_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
 
 <table>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">A_MQTT_</p><input type="text" bind:value={A_MQTT_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewActionMQTT[new_action_mqtt_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -5345,7 +6212,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">MQTT Profile</p></td>
 
   <td class="pl-5 pt-4">
-<select class="block w-36 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2">
+<select class="block w-36 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewActionMQTT[new_action_mqtt_index].mqttProfile}>
 <option disabled="" value="">None</option>
 </select>
 </td>
@@ -5359,7 +6226,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Publish Topic</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="text" bind:value={A_MQTT_Publish_Topic} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="text" bind:value={NewActionMQTT[new_action_mqtt_index].publishTopic} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </td>
 
 
@@ -5367,7 +6234,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Sending Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={A_MQTT_content} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Sending Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewActionMQTT[new_action_mqtt_index].sendingContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -5387,7 +6254,88 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_action_mqtt(new_action_mqtt_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+</Modal>
+
+
+
+
+<Modal bind:open={modify_action_mqtt_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[modify_action_mqtt_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyActionMQTT(modify_action_mqtt_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[modify_action_mqtt_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">MQTT Profile</p></td>
+
+  <td class="pl-5 pt-4">
+<select class="block w-36 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[modify_action_mqtt_index].mqttProfile}>
+<option disabled="" value="">None</option>
+</select>
+</td>
+
+
+  </tr>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Publish Topic</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[modify_action_mqtt_index].publishTopic} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Sending Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[modify_action_mqtt_index].sendingContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyActionMQTT}>Modify</Button></td>
 
 
     </tr>
@@ -5429,10 +6377,18 @@ on:click={handleClickMV} on:keydown={() => {}}>
   </TableHead>
 
    <TableBody>
+
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification as LINE, index}
+  
+
+
     <TableBodyRow>
           <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalLineA = true}>
+
+<button on:click={() => TriggerModifyActionLINE(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -5441,25 +6397,34 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-
+{#if LINE.enable}
+    <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
     <TableBodyCell class="w-10">0</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">A_Line_</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{LINE.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{LINE.token}</TableBodyCell>
+      <TableBodyCell class="w-18">{LINE.sendingContent}</TableBodyCell>
 
 
     </TableBodyRow>
+
+{/each}
+{/if}
+
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => formModalLineA = true}>
+{#if getDataReady == 1}
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length < 10}
+<button on:click={() => new_action_line_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
-
+{/if}
+{/if}
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -5480,7 +6445,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
                 <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveActionLINE}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -5488,22 +6453,22 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </tr>
 
 
-
-    <Modal bind:open={formModalLineA} autoclose={false} size="lg" class="w-full">
-
-
+<Modal bind:open={new_action_line_modal}  size="lg" class="w-full" autoclose>
+<form action="#">
 <label>
-  <input class="center" type=checkbox checked={lineitemA}>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewActionLINE[new_action_line_index].enable}>
+{/if}
   Enable
 </label>
 
-<p class="mt-4"></p>
+<p class="mt-10"></p>
 
 <table>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">A_Line_</p><input type="text" bind:value={A_Line_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewActionLINE[new_action_line_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -5516,7 +6481,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Token</p></td>
 
   <td class="pl-5 pt-4">
-  <input type="text" bind:value={A_Line_Token} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <input type="text" bind:value={NewActionLINE[new_action_line_index].token} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </td>
 
 
@@ -5524,7 +6489,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Sending Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={A_Line_content} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Sending Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewActionLINE[new_action_line_index].sendingContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -5544,7 +6509,73 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td></td>
         <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_action_line(new_action_line_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+</Modal>
+
+
+
+<Modal bind:open={modify_action_line_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[modify_action_line_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyActionLINE(modify_action_line_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[modify_action_line_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Token</p></td>
+
+  <td class="pl-5 pt-4">
+  <input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[modify_action_line_index].token} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Sending Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[modify_action_line_index].sendingContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyActionLINE}>Modify</Button></td>
 
 
     </tr>
@@ -5583,6 +6614,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
     <TableHeadCell class="w-18">Trigger Catalog</TableHeadCell>
+    <TableHeadCell class="w-18">Delay Second</TableHeadCell>
+    <TableHeadCell class="w-18">Action Option</TableHeadCell>
     <TableHeadCell class="w-18">Action Catalog</TableHeadCell>
   </TableHead>
   <TableBody>
@@ -5603,36 +6636,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-10">1</TableBodyCell>
       <TableBodyCell class="w-18">R_sms_or_modbus_trigger_do</TableBodyCell>
       <TableBodyCell class="w-18">SMS or MODBUS</TableBodyCell>
+      <TableBodyCell class="w-18">3</TableBodyCell>
+      <TableBodyCell class="w-18">Once</TableBodyCell>
       <TableBodyCell class="w-18">DO</TableBodyCell>
 
     </TableBodyRow>
 
-{#if openDetailStatusRule}
-
-
- <TableBodyRow {trClass}>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-            <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="text-right" colspan="3">Delay Second</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2"  {tdClass}>3</TableBodyCell>
-      </TableBodyRow>
-
-      <TableBodyRow {trClass}>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-            <TableBodyCell class="w-10"></TableBodyCell>
-                  <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="text-right" colspan="3">Action Option</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2"  {tdClass}>Once</TableBodyCell>
-      </TableBodyRow>
-
-
-
-{/if}
 
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">

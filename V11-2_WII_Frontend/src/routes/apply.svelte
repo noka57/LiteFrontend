@@ -70,6 +70,10 @@
       SDatalogger_ProxyMode_Edge_ConfigChangedLog,
       SDatalogger_General_ConfigChangedLog,
       ChangedSDataLoggerConfig,
+      EventEngine_ActionLINE_ConfigChangedLog,
+      EventEngine_ActionMQTT_ConfigChangedLog,
+      EventEngine_ActionTCPMsg_ConfigChangedLog,
+      EventEngine_ActionModbus_ConfigChangedLog,
       EventEngine_ActionDO_ConfigChangedLog,
       EventEngine_ActionEmail_ConfigChangedLog,
       EventEngine_ActionSMS_ConfigChangedLog,
@@ -228,6 +232,10 @@
   let event_engine_action_sms_changeValues=[];
   let event_engine_action_email_changeValues=[];
   let event_engine_action_do_changeValues=[];
+  let event_engine_action_modbus_changeValues=[];
+  let event_engine_action_tcpmsg_changeValues=[];
+  let event_engine_action_mqtt_changeValues=[];
+  let event_engine_action_line_changeValues=[];
   let SetCount=0;
   let SetCountOK=0;
 
@@ -350,6 +358,22 @@
       event_engine_action_do_changeValues = val;
   }); 
 
+
+  EventEngine_ActionModbus_ConfigChangedLog.subscribe(val => {
+      event_engine_action_modbus_changeValues = val;
+  });
+
+  EventEngine_ActionTCPMsg_ConfigChangedLog.subscribe(val => {
+      event_engine_action_tcpmsg_changeValues = val;
+  });
+
+  EventEngine_ActionMQTT_ConfigChangedLog.subscribe(val => {
+      event_engine_action_mqtt_changeValues = val;
+  });
+
+  EventEngine_ActionLINE_ConfigChangedLog.subscribe(val => {
+      event_engine_action_line_changeValues = val;
+  });
 
   SDatalogger_General_ConfigChangedLog.subscribe(val => {
       sdata_logger_general_changedValues = val;
@@ -1020,6 +1044,10 @@
     }
 
     if (event_engine_data != "" && (
+        event_engine_action_line_changeValues.length != 0 ||
+        event_engine_action_mqtt_changeValues.length != 0 ||
+        event_engine_action_tcpmsg_changeValues.length != 0 ||
+        event_engine_action_modbus_changeValues.length !=0 ||
         event_engine_action_do_changeValues.length != 0 ||
         event_engine_action_email_changeValues.length !=0 ||
         event_engine_action_sms_changeValues.length !=0 ||
@@ -1271,6 +1299,10 @@
 
 
         if (event_engine_data != "" && (
+                      event_engine_action_line_changeValues.length !=0 ||
+                      event_engine_action_mqtt_changeValues.length !=0 ||
+                      event_engine_action_tcpmsg_changeValues.length !=0 ||
+                      event_engine_action_modbus_changeValues.length !=0 ||
                       event_engine_action_do_changeValues.length != 0 ||
                       event_engine_action_email_changeValues.length != 0 ||
                       event_engine_action_sms_changeValues.length != 0 ||
@@ -1302,7 +1334,11 @@
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
 
-{#if  event_engine_action_do_changeValues.length != 0 ||
+{#if  event_engine_action_line_changeValues.length != 0 ||
+      event_engine_action_mqtt_changeValues.length != 0 || 
+      event_engine_action_tcpmsg_changeValues.length != 0 ||
+      event_engine_action_modbus_changeValues.length != 0 ||
+      event_engine_action_do_changeValues.length != 0 ||
       event_engine_action_email_changeValues.length !=0 ||
       event_engine_action_sms_changeValues.length != 0 ||
       event_engine_trigger_mqtt_changeValues.length !=0 ||
@@ -1410,6 +1446,10 @@
 
 
 {#if
+event_engine_action_line_changeValues.length != 0 ||
+event_engine_action_mqtt_changeValues.length != 0 ||
+event_engine_action_tcpmsg_changeValues.length != 0 ||
+event_engine_action_modbus_changeValues.length != 0 ||
 event_engine_action_do_changeValues.length != 0 || 
     event_engine_action_sms_changeValues.length != 0 ||
     event_engine_action_email_changeValues.length !=0}
@@ -1448,6 +1488,64 @@ event_engine_action_do_changeValues.length != 0 ||
  <Li> DO
 <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
   {#each event_engine_action_do_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+{#if  event_engine_action_modbus_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Modbus
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_action_modbus_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+
+{#if  event_engine_action_tcpmsg_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> TCP Message
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_action_tcpmsg_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+{#if  event_engine_action_mqtt_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> MQTT
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_action_mqtt_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+
+{#if  event_engine_action_line_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Line Notification
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_action_line_changeValues as item}
       <Li>{item}</Li>
    {/each}
 
@@ -2250,7 +2348,11 @@ event_engine_action_do_changeValues.length != 0 ||
 </div>
 <div class="pt-10 pl-10 text-center">
 
-{#if    event_engine_action_do_changeValues.length != 0 ||
+{#if    event_engine_action_line_changeValues.length != 0 ||
+        event_engine_action_mqtt_changeValues.length != 0 ||
+        event_engine_action_tcpmsg_changeValues.length !=0 ||
+        event_engine_action_modbus_changeValues.length !=0 ||
+        event_engine_action_do_changeValues.length != 0 ||
         event_engine_action_email_changeValues.length != 0||
         event_engine_action_sms_changeValues.length != 0 ||
         event_engine_trigger_mqtt_changeValues.length !=0 ||

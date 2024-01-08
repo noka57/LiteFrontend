@@ -57,6 +57,10 @@
     	SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
     	SDatalogger_ProxyMode_Edge_ConfigChangedLog,
     	SDatalogger_General_ConfigChangedLog,
+    	EventEngine_ActionLINE_ConfigChangedLog,
+    	EventEngine_ActionMQTT_ConfigChangedLog,
+		EventEngine_ActionTCPMsg_ConfigChangedLog,
+    	EventEngine_ActionModbus_ConfigChangedLog,
     	EventEngine_ActionDO_ConfigChangedLog,
     	EventEngine_ActionEmail_ConfigChangedLog,
     	EventEngine_ActionSMS_ConfigChangedLog,
@@ -212,6 +216,10 @@
   	let event_engine_action_sms_changeValues=[];
   	let event_engine_action_email_changeValues=[];
   	let event_engine_action_do_changeValues=[];
+  	let event_engine_action_modbus_changeValues=[];
+  	let event_engine_action_tcpmsg_changeValues=[];
+  	let event_engine_action_mqtt_changeValues=[];
+  	let event_engine_action_line_changeValues=[];
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -231,7 +239,11 @@
 
   	function JudgeChangedOrNot()
   	{
-  		if (event_engine_action_do_changeValues.length != 0 ||
+  		if (event_engine_action_line_changeValues.length !=0 ||
+  			event_engine_action_mqtt_changeValues.length !=0 ||
+  			event_engine_action_tcpmsg_changeValues.length !=0 ||
+  			event_engine_action_modbus_changeValues.length != 0 ||
+  			event_engine_action_do_changeValues.length != 0 ||
   			event_engine_action_email_changeValues.length !=0 ||
   			event_engine_action_sms_changeValues.length !=0 ||
   			event_engine_trigger_mqtt_changeValues.length != 0 ||
@@ -629,7 +641,30 @@
   	EventEngine_ActionDO_ConfigChangedLog.subscribe(val => {
       	event_engine_action_do_changeValues = val;
         JudgeChangedOrNot();
-  	});  	
+  	});
+
+
+  	EventEngine_ActionModbus_ConfigChangedLog.subscribe(val => {
+      	event_engine_action_modbus_changeValues = val;
+        JudgeChangedOrNot();
+ 	});  	  	
+
+  	EventEngine_ActionTCPMsg_ConfigChangedLog.subscribe(val => {
+      	event_engine_action_tcpmsg_changeValues = val;
+      	JudgeChangedOrNot();
+  	});
+
+	EventEngine_ActionMQTT_ConfigChangedLog.subscribe(val => {
+	    event_engine_action_mqtt_changeValues = val;
+		JudgeChangedOrNot();
+	});
+
+  	EventEngine_ActionLINE_ConfigChangedLog.subscribe(val => {
+      	event_engine_action_line_changeValues = val;
+    	JudgeChangedOrNot();
+  	});
+
+
 
   	sessionidG.subscribe(val => {
     	sessionid = val;

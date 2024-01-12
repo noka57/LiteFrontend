@@ -851,6 +851,15 @@
           {
             getGenericMQTTData();
           }
+          else
+          {
+            for (let i=0; i< saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length;i++)
+            {
+              let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+              let clouditem={"value":item, "name":item};
+              CloudProfile=[...CloudProfile, clouditem];
+            }
+          }
         }
     }
 
@@ -910,6 +919,16 @@
       if (saved_changed_generic_mqtt_data == "")
       {
         getGenericMQTTData();
+      }
+      else
+      {
+
+        for (let i=0; i< saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length;i++)
+        {
+          let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+        }
       }
 
 

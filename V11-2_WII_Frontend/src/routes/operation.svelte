@@ -47,6 +47,7 @@
     let MMin=10;
 
 
+
     let operation_data="";
     let changed_operation_data = {};
     let saved_changed_operation_data = {};
@@ -226,7 +227,7 @@
 <table>
     <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Current Local Date & Time</p></td>
-    <td class="pl-5 pt-5">{dateString}</td>
+    <td class="pl-5 pt-5">{#if hidden == 0}{dateString}{/if}</td>
 
 
     </tr>
@@ -247,7 +248,13 @@
 
 {#if getDataReady==1}
 {#if !changed_operation_data.config.system_operation_time.autoSyncTime}
+
+{#if hidden == 0}
+
     <Button on:click={() => formModal = true}>Manually Set Date & Time</Button>
+{:else}
+    <p></p>
+{/if}
 
 {:else}
 

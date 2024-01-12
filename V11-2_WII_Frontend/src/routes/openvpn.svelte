@@ -86,34 +86,6 @@
     });
 
 
-let vpnnameList = [
-    {value:"test1", name: "test1"},
-    {value:"test2", name: "test2"},
-    {value:"test3", name: "test3"},
-  ];
-let localList = [
-    {value:"aws", name: "AWS"},
-    {value:"azure", name: "Azure"},
-    {value:"self", name: "selfSign"},
-  ];
-
-let mc="aws";
-
-let MachineCList = [
-    {value:"aws", name: "AWS"},
-    {value:"azure", name: "Azure"},
-    {value:"ss", name: "Self-sign"},
-  ];
-
-
-  let rcac="azure";
-
-let RemoteCAList = [
-    {value:"aws", name: "AWS"},
-    {value:"azure", name: "Azure"},
-    {value:"ss", name: "Self-sign"},
-  ];
-
 
 
 
@@ -2435,6 +2407,55 @@ let RemoteCAList = [
     }
   }
 
+let status_data="";
+ async function getOpenVPNServerStatus() {
+    const res = await fetch(window.location.origin+"/GetOpenVpnServerstatus", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+
+        status_data =await res.text();
+        console.log(status_data);
+
+    
+    }
+  }
+
+async function getOpenVPNClientStatus() {
+    const res = await fetch(window.location.origin+"/GetOpenVpnclientstatus", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+
+        status_data =await res.text();
+        console.log(status_data);
+
+        status_data = status_data.replace(/======(\d+)/g, (_, match) => {
+
+            const index = parseInt(match, 10) - 1;
+            if (index >= 0 && index < openvpn_data.config.vpn_openvpn_client_connection.length) 
+            {
+        
+                return openvpn_data.config.vpn_openvpn_client_connection[index].name;
+            } 
+            else 
+            {
+                console.log("error index: " + index);
+                // If index is out of bounds, return the original match
+                return _;
+            }
+        });
+
+    
+    }
+  }
+
 
 
     async function getOpenVPNData () {
@@ -2454,8 +2475,18 @@ let RemoteCAList = [
       ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
       getDataReady=1;
     
+      if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
+      {
+        getOpenVPNServerStatus();
+      }
+      else if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
+      {
+        getOpenVPNClientStatus();
+      }
     }
   }
+
+
 
 
     onMount(() => {
@@ -2485,6 +2516,15 @@ let RemoteCAList = [
       getMachineCertificate();
       getCACertificate();
       getRemoteCertificate();
+      if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
+      {
+        getOpenVPNServerStatus();
+      }
+      else if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
+      {
+        getOpenVPNClientStatus();
+      }
+
       changed_openvpn_data=JSON.parse(JSON.stringify(saved_changed_openvpn_data));
       if (openvpn_basic_changedValues.length==0)
       {
@@ -2583,20 +2623,25 @@ let RemoteCAList = [
 {#if getDataReady == 1}
 
 {#if changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}
+<Table class="text-gray-900">
 
-{#if changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}  
-<Table>
-  
+  <caption class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+{#if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0} 
+    Server
+{:else if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+    Client
+{/if}
+   </caption>
 
-</Table>
-
-{:else if changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}  
-<Table>
- 
-</Table>
+{#if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
+<pre style="white-space: pre-wrap;">{status_data}</pre>
+{:else if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+<pre style="white-space: pre-wrap;">{status_data}</pre>
 
 {/if}
 
+
+</Table>
 
 {:else}
 <Table>
@@ -2673,7 +2718,7 @@ let RemoteCAList = [
 {/if}
 
     </TabItem>
-{#if hidden == 0}
+
 {#if getDataReady == 1}
 {#if changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}
 
@@ -2696,8 +2741,9 @@ let RemoteCAList = [
     <TableHeadCell class="w-18">Remote Protocol</TableHeadCell>
     <TableHeadCell class="w-18">Remote CA certificate</TableHeadCell>
     <TableHeadCell class="w-18">Local certificate</TableHeadCell>
+{#if hidden == 0}
     <TableHeadCell class="w-16">Authentication</TableHeadCell>
-
+{/if}
         <TableHeadCell class="w-10"></TableHeadCell>
 
     <TableHeadCell class="w-10"></TableHeadCell>
@@ -2736,10 +2782,12 @@ let RemoteCAList = [
 
                     <TableBodyCell class="w-18">{clientConn.remote_ca_certificate}</TableBodyCell>
                     <TableBodyCell class="w-18">{clientConn.local_certificate}</TableBodyCell>
+{#if hidden == 0}
 {#if clientConn.auth == 0}
                     <TableBodyCell class="w-18">X509 Certificate</TableBodyCell>
 {:else if clientConn.auth ==1}
                     <TableBodyCell class="w-18">Account/Password</TableBodyCell>
+{/if}
 {/if}
 
                     <TableBodyCell class="w-16"></TableBodyCell>
@@ -2883,7 +2931,7 @@ let RemoteCAList = [
 
 
   </tr>
-
+{#if hidden == 0}
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Authentication</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
       <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].auth} value={0}>X509 Certificate</Radio>
@@ -2914,6 +2962,7 @@ let RemoteCAList = [
 
 
 
+{/if}
 {/if}
 
 
@@ -3011,7 +3060,7 @@ let RemoteCAList = [
 
 
   </tr>
-
+{#if hidden == 0}
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Authentication</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
       <Radio bind:group={NewClientConn[new_client_conn_index].auth} value={0}>X509 Certificate</Radio>
@@ -3041,7 +3090,7 @@ let RemoteCAList = [
   </tr>
 
 
-
+{/if}
 {/if}
 
 
@@ -3050,7 +3099,8 @@ let RemoteCAList = [
             <tr>
     <td></td>
     <td></td>
-
+    <td></td>
+    <td></td>
     <td></td>
     <td></td>
     <td class="pl-10"><Button color="dark" pill={true} on:click={AddClientConn(new_client_conn_index)}>Add</Button></td>
@@ -3127,7 +3177,7 @@ let RemoteCAList = [
 
 
 
-
+{#if hidden == 0}
 
 
 <tr>
@@ -3140,7 +3190,11 @@ let RemoteCAList = [
 
   </tr>
 
+{/if}
+
 </table>
+
+{#if hidden == 0}
 <p class="pt-10"></p>
 <Accordion>
 
@@ -3449,7 +3503,7 @@ let RemoteCAList = [
 
 </AccordionItem>
 </Accordion>
-
+{/if}
 <p class="pt-10">
 <table>
      <tr>
@@ -3475,7 +3529,7 @@ let RemoteCAList = [
     {/if}
 {/if}
 
-
+{#if hidden == 0}
 {#if getDataReady == 1}
 {#if changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}
 {#if changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}

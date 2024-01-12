@@ -841,6 +841,8 @@
 </script>
 
 <Tabs style="underline">
+{#if hidden == 0}
+
   <TabItem open title="General Status">
   <Table striped={true}>
   <TableHead>
@@ -931,8 +933,17 @@
   </TableBody>
 </Table>
   </TabItem>
-  <TabItem title="Cellular WAN-1">
+  {/if}
+
+  <TabItem open title="Cellular WAN-1">
+
+
+
+
 <Accordion>
+
+{#if hidden == 0}
+
   <AccordionItem {defaultClass}>
     <div slot="header" class="pl-4">General Status</div>
 <Table>
@@ -1032,6 +1043,7 @@
 
 </Table>
   </AccordionItem>
+  {/if}
   <AccordionItem {defaultClass}>
     <span slot="header" class="pl-4">Basic Settings</span>
     <table>
@@ -1619,6 +1631,9 @@ System Reboot</label>
 
 <TabItem title="Ethernet WAN">
   <Accordion>
+
+{#if hidden == 0}
+
   <AccordionItem {defaultClass}>
     <div slot="header" class="pl-4">General Status</div>
 
@@ -1652,7 +1667,7 @@ System Reboot</label>
 </Table>
 
   </AccordionItem>
-
+{/if}
 
   <AccordionItem {defaultClass}>
     <div slot="header" class="pl-4">Basic Settings</div>

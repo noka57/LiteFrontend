@@ -17,6 +17,7 @@
   let sessionid='';
   let interval;
   let sessionBinary;
+  let hidden=1;
 
   const options = {
     year: 'numeric',
@@ -181,7 +182,11 @@
 </div>
 <div class="w-full">
 <p class="text-sm font-light">Internet Uptime</p>
-<p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.internetUptime} s{/if}</p>
+<p class="text-xl font-bold">{#if hidden == 0}{#if dashboard_data!=""}{dashboard_data.config.dashboard.internetUptime} s{/if}{/if}
+{#if hidden == 1}
+NA
+{/if}
+</p>
 </div>
 </div></TableBodyCell>
       <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class="">
@@ -209,7 +214,15 @@
 </svg></div>
 <div class="w-full">
 <p class="text-sm font-light">GPS</p>
-<p class="text-xl font-bold">{#if dashboard_data!=""}{parseFloat(dashboard_data.config.dashboard.gpsInfo.lat).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.long).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.alt).toFixed(2)}{/if}</p>
+
+<p class="text-xl font-bold">
+{#if hidden == 0}
+{#if dashboard_data!=""}{parseFloat(dashboard_data.config.dashboard.gpsInfo.lat).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.long).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.alt).toFixed(2)}{/if}
+{/if}
+{#if hidden ==1}
+NA
+{/if}
+</p>
 </div>
 </div>
 
@@ -227,7 +240,10 @@
 
 
                     <TableBodyRow>      
-        <TableBodyCell class="border-l-8 border-r-0 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex"><div class=""><p class="text-black text-lg">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].name}{/if}</p>
+        <TableBodyCell class="border-l-8 border-r-0 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex">
+{#if hidden ==0}
+
+        <div class=""><p class="text-black text-lg">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].name}{/if}</p>
 
 {#if dashboard_data!=""}    
 <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 mr-2 dark:text-pink-500 w-12 h-12">
@@ -252,15 +268,21 @@
 {/if}
 
 </div>
+
 <div class="w-full pt-4 px-10">
 <p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].type}{/if}</p>
 <p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].band}{/if}</p>
 <p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].operator}{/if}</p>
 </div>
+
+{/if}
 </div>
 
               </TableBodyCell>
-                      <TableBodyCell class="border-l-0 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex"><div class=""><p class="text-black text-lg">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].name}{/if}</p>
+                      <TableBodyCell class="border-l-0 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex">
+{#if hidden == 0}
+
+                      <div class=""><p class="text-black text-lg">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].name}{/if}</p>
                       
 
 {#if dashboard_data!=""}    
@@ -293,6 +315,7 @@
 <p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].band}{/if}</p>
 <p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].operator}{/if}</p>
 </div>
+{/if}
 </div>
               </TableBodyCell>
 
@@ -376,13 +399,17 @@
              <TableBodyRow>      
         <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10"><p class="text-black text-lg">Active Link</p>
         <p class="text-black text-lg">IP Address</p>
+        {#if hidden == 0}
         <p class="text-black text-lg">Gateway</p>
         <p class="text-black text-lg">DNS</p>
+        {/if}
 </div>
 <div class="px-40"><p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.active_link}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.ip}{/if}</p>
+        {#if hidden == 0}
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.gateway}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.dns[0]}/{dashboard_data.config.dashboard.wanStatus.ipv4.dns[1]}{/if}</p>
+        {/if}
 </div>
 </div>
                       </TableBodyCell>
@@ -390,13 +417,17 @@
    
         <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10">
         <p class="text-black text-lg">IP Address(IPv4)</p>
+                {#if hidden == 0}
         <p class="text-black text-lg">Default Gateway</p>
         <p class="text-black text-lg">DNS</p>
+        {/if}
 </div>
 <div class="px-40">
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.ip}{/if}</p>
+                {#if hidden == 0}
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.gateway}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.dns[0]}/{dashboard_data.config.dashboard.lanStatus.ipv4.dns[1]}{/if}</p>
+        {/if}
 </div>
 </div>
                       </TableBodyCell>
@@ -414,7 +445,9 @@
 
 
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="pb-20"> <p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.cpuRemaining}{/if}</p>
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex">
+{#if hidden == 0}
+        <div class="pb-20"> <p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.cpuRemaining}{/if}</p>
         {#if dashboard_data!=""}<ProgressCircle max="100" value="{value1}" color="blue"/>{/if}
 <p class="text-black text-lg text-center">CPU</p>
 </div>
@@ -433,7 +466,7 @@
 {#if dashboard_data!=""}<ProgressCircle max="100" value="{value4}" color="orange"/>{/if}
 <p class="text-black text-lg text-center">SD Card</p>
 </div>
-
+{/if}
 </div>
                       </TableBodyCell>
 
@@ -481,18 +514,22 @@
         <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
 <div class="flex">
         <div class="px-10">
+{#if hidden == 0}       
 {#if dashboard_data!=""}
 {#each dashboard_data.config.dashboard.cloudStatus as CloudStatus, index}
         <p class="text-black text-lg">{CloudStatus.name}</p>
 {/each}
 {/if}
+{/if}
         </div>
 
         <div class="px-40">
+{#if hidden == 0}         
 {#if dashboard_data!=""}
 {#each dashboard_data.config.dashboard.cloudStatus as CloudStatus, index}
         <p class="text-lg font-light">{CloudStatus.status}</p>
 {/each}
+{/if}
 {/if}
         </div>
 
@@ -502,7 +539,7 @@
    
         <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
 {#if dashboard_data!=""}
-
+{#if hidden == 0}
 <div class="flex">
 <div class="px-10">
         <p class="text-black text-lg">{dashboard_data.config.dashboard.vpnStatus.type}</p>
@@ -525,7 +562,7 @@
 
 
 {/if}
-
+{/if}
 
                       </TableBodyCell>
         </TableBodyRow>

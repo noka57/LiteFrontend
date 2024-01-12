@@ -16,14 +16,24 @@
     ModbusTCP_Master_ConfigChangedLog,
     ModbusRTU_Slave_ConfigChangedLog,
     ModbusRTU_Master_ConfigChangedLog,
-    ChangedModbusConfig
+    ChangedModbusConfig,
+    ChangedPortConnectionConfig,
+    portConnectionConfig,
+    ChangedSDataLoggerConfig,
+    sdataLoggerConfig,
+    SDatalogger_MonitorMode_Edge_ConfigChangedLog,
+    SDatalogger_ProxyMode_Edge_ConfigChangedLog,   
   } from "./configG.js"
 
-  let modbus_data="";
-  let changed_modbus_data = {};
-  let saved_changed_modbus_data = {};
-  let getDataReady=0;
+    let modbus_data="";
+    let changed_modbus_data = {};
+    let saved_changed_modbus_data = {};
+    let getDataReady=0;
+    let port_connection_data="";
+    let saved_changed_port_connection_data="";
 
+    let sdata_logger_data="";
+    let saved_changed_sdata_logger_data="";
 
 
     let sessionid;
@@ -43,6 +53,21 @@
     let modbus_tcp_slave_changedValues=[];
     let modbus_rtu_master_changedValues=[];
     let modbus_rtu_slave_changedValues=[];
+
+
+    let sdata_logger_proxy_edge_changedValues = [];
+    let sdata_logger_monitor_edge_changedValues = [];
+
+
+    sdataLoggerConfig.subscribe(val => {
+      sdata_logger_data = val;
+    });
+
+    ChangedSDataLoggerConfig.subscribe(val => {
+      saved_changed_sdata_logger_data = val;
+    });
+
+
 
     ModbusGateway_TtR_ConfigChangedLog.subscribe(val => {
           modbus_gateway_TtR_changedValues = val;
@@ -81,15 +106,34 @@
         modbus_rtu_master_changedValues = val;
     });
 
-  let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+    SDatalogger_ProxyMode_Edge_ConfigChangedLog.subscribe(val => {
+      sdata_logger_proxy_edge_changedValues = val;
+    });
 
-  modbusConfig.subscribe(val => {
+    SDatalogger_MonitorMode_Edge_ConfigChangedLog.subscribe(val => {
+      sdata_logger_monitor_edge_changedValues = val;
+    });
+
+
+    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+
+    modbusConfig.subscribe(val => {
       modbus_data = val;
-  });
+    });
 
-  ChangedModbusConfig.subscribe(val => {
+    ChangedModbusConfig.subscribe(val => {
       saved_changed_modbus_data = val;
-  });
+    });
+
+
+    ChangedPortConnectionConfig.subscribe(val => {
+        saved_changed_port_connection_data = val;
+    });
+
+    portConnectionConfig.subscribe(val => {
+      port_connection_data = val;
+    });
+
 
   let new_tcp_slave=[
     {
@@ -1595,9 +1639,49 @@
         {
             modbus_rtu_slave_changedValues=[];
         }
+        let needSaveVariableSlave=0;
+        let needSaveGatewayR2T=0;
+        let needSaveGatewayR2R=0;
         for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length, modbus_data.config.fieldManagement_modbus_rtu.slave.length); i++) 
         {
           compareObjects(changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i], modbus_data.config.fieldManagement_modbus_rtu.slave[i], 8, 1,i+1);
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName != "")
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_variable.slave[j].profile= changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName;
+                    needSaveVariableSlave=1;
+                }
+
+            }
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].rtuProfileSlave == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].rtuProfileSlave=changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName;
+                    needSaveGatewayR2T=1;
+                }
+            }
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[j].rtuProfileSlave == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[j].rtuProfileSlave=changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName;
+                    needSaveGatewayR2R=1;
+                }
+            }
+
         }
 
         if (changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length > modbus_data.config.fieldManagement_modbus_rtu.slave.length)
@@ -1612,7 +1696,23 @@
         saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_rtu.slave));
 
         ChangedModbusConfig.set(saved_changed_modbus_data);
-        console.log(modbus_rtu_slave_changedValues);    
+        console.log(modbus_rtu_slave_changedValues);   
+
+        if (needSaveVariableSlave != 0)
+        {
+            saveVariableSlave();
+        } 
+
+        if (needSaveGatewayR2T != 0)
+        {
+            saveGatewayR2T();
+        }
+
+        if (needSaveGatewayR2R != 0)
+        {
+            saveGatewayR2R();
+        }
+
     }
 
     function saveRTUMaster()
@@ -1622,9 +1722,56 @@
         {
             modbus_rtu_master_changedValues=[];
         }
+        let needSaveVariableMaster=0;
+        let needSaveGatewayR2R=0;
+        let needSaveGatewayT2R=0;
+
         for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_rtu.master.length, modbus_data.config.fieldManagement_modbus_rtu.master.length); i++) 
         {
           compareObjects(changed_modbus_data.config.fieldManagement_modbus_rtu.master[i], modbus_data.config.fieldManagement_modbus_rtu.master[i], 9, 1,i+1);
+
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_variable.master.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName != "")
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_variable.master[j].profile= changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName;
+                    needSaveVariableMaster=1;
+                }
+
+            }
+
+
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[j].rtuProfileMaster == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[j].rtuProfileMaster=changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName;
+                    needSaveGatewayR2R=1;
+                }
+            }
+
+
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].rtuProfileMaster == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].rtuProfileMaster=changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName;
+                    needSaveGatewayT2R=1;
+                }
+            }
+            
+
         }
 
         if (changed_modbus_data.config.fieldManagement_modbus_rtu.master.length > modbus_data.config.fieldManagement_modbus_rtu.master.length)
@@ -1638,8 +1785,28 @@
         ModbusRTU_Master_ConfigChangedLog.set(modbus_rtu_master_changedValues);
         saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_rtu.master));
 
+
+
+
         ChangedModbusConfig.set(saved_changed_modbus_data);
-        console.log(modbus_rtu_master_changedValues);     
+        console.log(modbus_rtu_master_changedValues);  
+
+        if (needSaveVariableMaster!=0)
+        {
+            saveVariableMaster();
+        }
+
+        if (needSaveGatewayR2R != 0)
+        {
+            saveGatewayR2R();
+        }
+
+
+        if (needSaveGatewayT2R != 0)
+        {
+            saveGatewayT2R();
+        }
+
     } 
 
   
@@ -1651,9 +1818,89 @@
         {
             modbus_tcp_slave_changedValues=[];
         }
+
+        let needSaveVariableSlave=0;
+        let needSaveGatewayT2R=0;
+        let needSaveGatewayT2T=0;
         for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length, modbus_data.config.fieldManagement_modbus_tcp.slave.length); i++) 
         {
-          compareObjects(changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i], modbus_data.config.fieldManagement_modbus_tcp.slave[i], 6, 1,i+1);
+            compareObjects(changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i], modbus_data.config.fieldManagement_modbus_tcp.slave[i], 6, 1,i+1);
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != "")
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_variable.slave[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    needSaveVariableSlave=1;
+                }
+
+            }
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].tcpProfileSlave == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    needSaveGatewayT2R=1;
+                }
+            }
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileSlave == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    needSaveGatewayT2T=1;
+                }
+            }
+        }
+
+
+        for (let i=modbus_data.config.fieldManagement_modbus_tcp.slave.length; i< saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length; i++ )
+        {
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != "")
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_variable.slave[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    needSaveVariableSlave=1;
+                }
+
+            }
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].tcpProfileSlave == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    needSaveGatewayT2R=1;
+                }
+            }
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileSlave == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    needSaveGatewayT2T=1;
+                }
+            }
         }
 
         if (changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length > modbus_data.config.fieldManagement_modbus_tcp.slave.length)
@@ -1668,7 +1915,24 @@
         saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_tcp.slave));
 
         ChangedModbusConfig.set(saved_changed_modbus_data);
-        console.log(modbus_tcp_slave_changedValues);    
+        console.log(modbus_tcp_slave_changedValues);  
+
+
+        if (needSaveVariableSlave != 0)
+        {
+            saveVariableSlave();
+        } 
+
+        if (needSaveGatewayT2R != 0)
+        {
+            saveGatewayT2R();
+        } 
+
+        if (needSaveGatewayT2T != 0)
+        {
+            saveGatewayT2T();
+        } 
+
     }
 
     function saveTCPMaster()
@@ -1678,10 +1942,98 @@
         {
             modbus_tcp_master_changedValues=[];
         }
+
+        let needSaveVariableMaster=0;
+        let needSaveGatewayT2T=0;
+        let needSaveGatewayR2T=0;
+
         for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_tcp.master.length, modbus_data.config.fieldManagement_modbus_tcp.master.length); i++) 
         {
-          compareObjects(changed_modbus_data.config.fieldManagement_modbus_tcp.master[i], modbus_data.config.fieldManagement_modbus_tcp.master[i], 7, 1,i+1);
+            compareObjects(changed_modbus_data.config.fieldManagement_modbus_tcp.master[i], modbus_data.config.fieldManagement_modbus_tcp.master[i], 7, 1,i+1);
+
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_variable.master.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != "")
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_variable.master[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    needSaveVariableMaster=1;
+                }
+
+            }
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].tcpProfileMaster == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    needSaveGatewayR2T=1;
+                }
+            }
+
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileMaster == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    needSaveGatewayT2T=1;
+                }
+            }
+
         }
+
+
+        for (let i=modbus_data.config.fieldManagement_modbus_tcp.master.length; i < saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master.length; i++)
+        {
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_variable.master.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != "")
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_variable.master[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    needSaveVariableMaster=1;
+                }
+
+            }
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].tcpProfileMaster == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    needSaveGatewayR2T=1;
+                }
+            }
+
+
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length; j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileMaster == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName 
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != ""
+                )
+                {
+                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    needSaveGatewayT2T=1;
+                }
+            }
+
+        }
+
 
         if (changed_modbus_data.config.fieldManagement_modbus_tcp.master.length > modbus_data.config.fieldManagement_modbus_tcp.master.length)
         {
@@ -1695,8 +2047,98 @@
         saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_tcp.master));
 
         ChangedModbusConfig.set(saved_changed_modbus_data);
-        console.log(modbus_tcp_master_changedValues);     
-    }    
+        console.log(modbus_tcp_master_changedValues);  
+
+
+
+        if (needSaveVariableMaster!=0)
+        {
+            saveVariableMaster();
+        }
+
+        if (needSaveGatewayR2T != 0)
+        {
+            saveGatewayR2T();
+        } 
+
+
+        if (needSaveGatewayT2T != 0)
+        {
+            saveGatewayT2T();
+        } 
+
+    }
+
+    function compareSDLObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
+    {
+      for (const key in obj1) 
+      {
+        if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+        {
+          if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) 
+          {
+            for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+            {
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+            }
+
+            if (obj1[key].length > obj2[key].length) 
+            {
+              let addedCount=obj1[key].length-obj2[key].length;
+              let changedstr="Add "+addedCount+" item(s) to "+ key;
+              if (type == 2)
+              {
+                sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+              }
+              else if (type == 0)
+              {
+                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+              }
+            }
+            else if (obj1[key].length < obj2[key].length)
+            {
+              let deletedCount=obj2[key].length-obj1[key].length;
+              let changedstr="Delete "+deletedCount+" item(s) from "+ key;
+              if (type == 2)
+              {
+                sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+              }
+              else if (type == 0)
+              {
+                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+              }
+            }
+          }
+          else
+          {
+            compareObjects(obj1[key], obj2[key], type, 0,0);
+          }
+        } 
+        else if (obj1[key] != obj2[key]) 
+        {
+          let changedstr="";
+          if (isArrayItem == 0)
+          {
+            changedstr="Value of "+key+" has changed to "+obj1[key];
+          }
+          else
+          {
+            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+          }
+          
+          if (type == 2)
+          {
+            sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+          }
+          else if (type == 0)
+          {
+            sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+          }
+
+        }
+      }
+    }
+
 
     function saveVariableSlave()
     {
@@ -1708,7 +2150,158 @@
         for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_variable.slave.length, modbus_data.config.fieldManagement_modbus_variable.slave.length); i++) 
         {
           compareObjects(changed_modbus_data.config.fieldManagement_modbus_variable.slave[i], modbus_data.config.fieldManagement_modbus_variable.slave[i], 5, 1,i+1);
+          if (changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName != saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName)
+          {
+  
+            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+
+                    if (sdata_logger_proxy_edge_changedValues.length !=0)
+                    {
+                        sdata_logger_proxy_edge_changedValues=[];
+                    }
+
+
+                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
+
+                    SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
+
+                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+                }
+
+            }
+
+            for (let j=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+                }
+            }
+
+
+            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+
+                    if (sdata_logger_monitor_edge_changedValues.length !=0)
+                    {
+                        sdata_logger_monitor_edge_changedValues=[];
+                    }
+
+
+                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], 2, 1,j+1);
+
+                    SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
+
+                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+                }
+
+            }
+
+            for (let j=sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+                }
+            }
+          }
         }
+
+
+        for (let i=modbus_data.config.fieldManagement_modbus_variable.slave.length; i < saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave.length; i++)
+        {
+
+          if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName != changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName)
+          {
+  
+            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+
+                    if (sdata_logger_proxy_edge_changedValues.length !=0)
+                    {
+                        sdata_logger_proxy_edge_changedValues=[];
+                    }
+
+
+                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
+
+                    SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
+
+                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+                }
+
+            }
+
+            for (let j=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+                }
+            }
+
+
+            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+
+                    if (sdata_logger_monitor_edge_changedValues.length !=0)
+                    {
+                        sdata_logger_monitor_edge_changedValues=[];
+                    }
+
+
+                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], 2, 1,j+1);
+
+                    SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
+
+                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+                }
+
+            }
+
+            for (let j=sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+                }
+            }
+          }
+        }
+
 
         if (changed_modbus_data.config.fieldManagement_modbus_variable.slave.length > modbus_data.config.fieldManagement_modbus_variable.slave.length)
         {
@@ -1735,6 +2328,153 @@
         for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_variable.master.length, modbus_data.config.fieldManagement_modbus_variable.master.length); i++) 
         {
           compareObjects(changed_modbus_data.config.fieldManagement_modbus_variable.master[i], modbus_data.config.fieldManagement_modbus_variable.master[i], 4, 1,i+1);
+
+          if (changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName != saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName)
+          {
+  
+            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+
+                    if (sdata_logger_proxy_edge_changedValues.length !=0)
+                    {
+                        sdata_logger_proxy_edge_changedValues=[];
+                    }
+
+
+                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
+
+                    SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
+
+                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+                }
+            }
+
+            for (let j=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+                }
+            }
+
+
+            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+
+                    if (sdata_logger_monitor_edge_changedValues.length !=0)
+                    {
+                        sdata_logger_monitor_edge_changedValues=[];
+                    }
+
+
+                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], 2, 1,j+1);
+
+                    SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
+
+                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+                }
+            }
+
+            for (let j=sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+                }
+            }
+          }
+        }
+
+        for (let i=modbus_data.config.fieldManagement_modbus_variable.master.length; i< saved_changed_modbus_data.config.fieldManagement_modbus_variable.master.length;i++)
+        {
+
+          if (changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName != saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName)
+          {
+  
+            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+
+                    if (sdata_logger_proxy_edge_changedValues.length !=0)
+                    {
+                        sdata_logger_proxy_edge_changedValues=[];
+                    }
+
+
+                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
+
+                    SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
+
+                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+                }
+            }
+
+            for (let j=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+                }
+            }
+
+
+            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+
+                    if (sdata_logger_monitor_edge_changedValues.length !=0)
+                    {
+                        sdata_logger_monitor_edge_changedValues=[];
+                    }
+
+
+                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], 2, 1,j+1);
+
+                    SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
+
+                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+                }
+            }
+
+            for (let j=sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
+            {
+                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable ==saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName
+                &&
+                saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+                }
+            }
+          }
+
         }
 
         if (changed_modbus_data.config.fieldManagement_modbus_variable.master.length > modbus_data.config.fieldManagement_modbus_variable.master.length)
@@ -1875,9 +2615,40 @@
 
     }
 
+  async function getPortConnectionData() {
+    const res = await fetch(window.location.origin+"/GeTPortConnection", {
+      method: 'POST',
+      body: sessionBinary
+    })
 
+    if (res.status == 200)
+    {
+        console.log("get port connection");
+        port_connection_data= await res.json();
+        console.log(port_connection_data);
+        saved_changed_port_connection_data=JSON.parse(JSON.stringify(port_connection_data));
+        ChangedPortConnectionConfig.set(saved_changed_port_connection_data);
 
+    }
+  }
 
+    async function getSmartDataLoggerData() {
+        const res = await fetch(window.location.origin+"/GETSmartDataLogger", {
+            method: 'POST',
+            body: sessionBinary
+        })
+
+        if (res.status == 200)
+        {
+            console.log("get smart data logger");
+            sdata_logger_data =await res.json();
+            console.log(sdata_logger_data);
+            sdataLoggerConfig.set(sdata_logger_data);
+            saved_changed_sdata_logger_data= JSON.parse(JSON.stringify(sdata_logger_data));
+            ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+        }
+    }
 
    async function getModbusData() {
     const res = await fetch(window.location.origin+"/GeTModbuS", {
@@ -1895,6 +2666,16 @@
       saved_changed_modbus_data= JSON.parse(JSON.stringify(modbus_data));
       ChangedModbusConfig.set(saved_changed_modbus_data);
       getDataReady=1;
+
+      if (saved_changed_port_connection_data == "")
+      {
+        getPortConnectionData();
+      }
+
+      if (saved_changed_sdata_logger_data == "")
+      {
+        getSmartDataLoggerData();
+      }
     
     }
   }
@@ -1916,6 +2697,7 @@
     else if(sessionid && modbus_data!="")
     {
         getDataReady=1;
+        console.log("modbus data exist");
         changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
 
         if (modbus_gateway_TtR_changedValues.length ==0)
@@ -1966,6 +2748,16 @@
         if(modbus_rtu_slave_changedValues.length ==0)
         {
             changed_modbus_data.config.fieldManagement_modbus_rtu.slave=JSON.parse(JSON.stringify(modbus_data.config.fieldManagement_modbus_rtu.slave)); 
+        }
+
+        if (saved_changed_port_connection_data == "")
+        {
+            getPortConnectionData();
+        }
+
+        if (saved_changed_sdata_logger_data == "")
+        {
+            getSmartDataLoggerData();
         }
 
 
@@ -2075,7 +2867,17 @@
 <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
       <td class="pl-5 pt-5">
-{changed_modbus_data.config.fieldManagement_modbus_rtu.master[Modify_RTU_Master_index].serialProfile}
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_rtu.master[Modify_RTU_Master_index].serialProfile}>
+<option disabled="" value="">Choose Profile ...</option>
+{#if saved_changed_port_connection_data != ""}
+{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_com as Serial, index}
+<option value={Serial.serialProfile}>{Serial.serialProfile}</option>
+{/each}
+{/if}
+</select>
+
+
       </td>
 
 
@@ -2199,7 +3001,17 @@
 <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
       <td class="pl-5 pt-5">
-{changed_modbus_data.config.fieldManagement_modbus_rtu.slave[Modify_RTU_Slave_index].serialProfile}
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_rtu.slave[Modify_RTU_Slave_index].serialProfile}>
+<option disabled="" value="">Choose Profile ...</option>
+{#if saved_changed_port_connection_data != ""}
+{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_com as Serial, index}
+<option value={Serial.serialProfile}>{Serial.serialProfile}</option>
+{/each}
+{/if}
+</select>
+
+
       </td>
 
 
@@ -2308,7 +3120,7 @@
      </TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
      <TableBodyCell class="!p-1"></TableBodyCell>
- <TableBodyCell></TableBodyCell>
+        <TableBodyCell></TableBodyCell>
       <TableBodyCell class="!p-6 w-10"></TableBodyCell>
       <TableBodyCell class="!p-6 w-18"> </TableBodyCell>
       <TableBodyCell class="!p-6 w-10"></TableBodyCell>
@@ -2369,7 +3181,17 @@
 <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">LAN Profile</p></td>
       <td class="pl-5 pt-5">
-{new_tcp_master[new_tcp_master_index].lanProfile}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_tcp_master[new_tcp_master_index].lanProfile}>
+<option disabled="" value="">Choose Profile ...</option>
+{#if saved_changed_port_connection_data != ""}
+{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_lan as Lan, index}
+<option value={Lan.profileName}>{Lan.profileName}</option>
+{/each}
+{/if}
+</select>
+
+
+
       </td>
 
 
@@ -2440,7 +3262,17 @@
 <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">LAN Profile</p></td>
       <td class="pl-5 pt-5">
-{changed_modbus_data.config.fieldManagement_modbus_tcp.master[Modify_TCP_Master_index].lanProfile}
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_tcp.master[Modify_TCP_Master_index].lanProfile}>
+<option disabled="" value="">Choose Profile ...</option>
+{#if saved_changed_port_connection_data != ""}
+{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_lan as Lan, index}
+<option value={Lan.profileName}>{Lan.profileName}</option>
+{/each}
+{/if}
+</select>
+
+
       </td>
 
 
@@ -2624,7 +3456,18 @@
 <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">LAN Profile</p></td>
       <td class="pl-5 pt-5">
-{new_tcp_slave[new_tcp_slave_index].lanProfile}
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_tcp_slave[new_tcp_slave_index].lanProfile}>
+<option disabled="" value="">Choose Profile ...</option>
+{#if saved_changed_port_connection_data != ""}
+{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_lan as Lan, index}
+<option value={Lan.profileName}>{Lan.profileName}</option>
+{/each}
+{/if}
+</select>
+
+
+
       </td>
 
 
@@ -2690,7 +3533,16 @@
 <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">LAN Profile</p></td>
       <td class="pl-5 pt-5">
-{changed_modbus_data.config.fieldManagement_modbus_tcp.slave[Modify_TCP_Slave_index].lanProfile}
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_tcp.slave[Modify_TCP_Slave_index].lanProfile}>
+<option disabled="" value="">Choose Profile ...</option>
+{#if saved_changed_port_connection_data != ""}
+{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_lan as Lan, index}
+<option value={Lan.profileName}>{Lan.profileName}</option>
+{/each}
+{/if}
+</select>
+
       </td>
 
 
@@ -2776,7 +3628,7 @@
   <TableBody>
 
 {#if getDataReady == 1}
-{#each changed_modbus_data.config.fieldManagement_modbus_variable.master as TCPVariableMasterItem, index}
+{#each changed_modbus_data.config.fieldManagement_modbus_variable.master as VariableMasterItem, index}
    
 
  <TableBodyRow>
@@ -2791,39 +3643,39 @@
 
        </TableBodyCell>
         <TableBodyCell class="!p-1">        </TableBodyCell>
-{#if TCPVariableMasterItem.enable}
+{#if VariableMasterItem.enable}
        <TableBodyCell class='w-4'>1</TableBodyCell>
 {:else}
        <TableBodyCell class='w-4'>0</TableBodyCell>
 {/if}
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
-  <TableBodyCell class="!p-1 w-18">{TCPVariableMasterItem.variableName}</TableBodyCell>
-  <TableBodyCell class="w-10">{TCPVariableMasterItem.profile}</TableBodyCell>
-  <TableBodyCell class="w-18">{TCPVariableMasterItem.slaveId}</TableBodyCell>
-{#if TCPVariableMasterItem.pointType == 0}
+  <TableBodyCell class="!p-1 w-18">{VariableMasterItem.variableName}</TableBodyCell>
+  <TableBodyCell class="w-10">{VariableMasterItem.profile}</TableBodyCell>
+  <TableBodyCell class="w-18">{VariableMasterItem.slaveId}</TableBodyCell>
+{#if VariableMasterItem.pointType == 0}
     <TableBodyCell class="w-10">Coil</TableBodyCell>
-{:else if TCPVariableMasterItem.pointType == 1}
+{:else if VariableMasterItem.pointType == 1}
     <TableBodyCell class="w-10">Discrete Input</TableBodyCell>
-{:else if TCPVariableMasterItem.pointType == 2}
+{:else if VariableMasterItem.pointType == 2}
     <TableBodyCell class="w-10">Input Registers</TableBodyCell>
-{:else if TCPVariableMasterItem.pointType == 3}
+{:else if VariableMasterItem.pointType == 3}
     <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
 {:else}
   <TableBodyCell class="w-10"></TableBodyCell>
 {/if}
-  <TableBodyCell class="w-18">{TCPVariableMasterItem.address}</TableBodyCell>
-  <TableBodyCell class="w-10">{TCPVariableMasterItem.quantity}</TableBodyCell>
-  <TableBodyCell class="w-18">{TCPVariableMasterItem.responseTimeout} ms</TableBodyCell>
-<TableBodyCell class="w-18">{TCPVariableMasterItem.pollingRate} ms</TableBodyCell>
-    <TableBodyCell class="w-18">{TCPVariableMasterItem.delayBetweenPolls} ms</TableBodyCell>
+  <TableBodyCell class="w-18">{VariableMasterItem.address}</TableBodyCell>
+  <TableBodyCell class="w-10">{VariableMasterItem.quantity}</TableBodyCell>
+  <TableBodyCell class="w-18">{VariableMasterItem.responseTimeout} ms</TableBodyCell>
+<TableBodyCell class="w-18">{VariableMasterItem.pollingRate} ms</TableBodyCell>
+    <TableBodyCell class="w-18">{VariableMasterItem.delayBetweenPolls} ms</TableBodyCell>
 
-{#if TCPVariableMasterItem.byteOrder==0} 
+{#if VariableMasterItem.byteOrder==0} 
     <TableBodyCell class="w-18">Big Endian</TableBodyCell>
-{:else if TCPVariableMasterItem.byteOrder==1}   
+{:else if VariableMasterItem.byteOrder==1}   
         <TableBodyCell class="w-18">Little Endian</TableBodyCell>
-{:else if TCPVariableMasterItem.byteOrder==2}
+{:else if VariableMasterItem.byteOrder==2}
     <TableBodyCell class="w-18">Big Endian Byte Swap</TableBodyCell>
-{:else if TCPVariableMasterItem.byteOrder==3}
+{:else if VariableMasterItem.byteOrder==3}
         <TableBodyCell class="w-18">Little Endian Byte Swap</TableBodyCell>
 {:else}
     <TableBodyCell class="w-18"></TableBodyCell>
@@ -2913,7 +3765,26 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Master Profile</p></td>
-    <td class= "pl-4 pt-4">{new_variable_master[new_variable_master_index].profile}</td>
+    <td class= "pl-4 pt-4">
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_variable_master[new_variable_master_index].profile}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RMaster, index}
+<option value={RMaster.aliasName}>{RMaster.aliasName}</option>
+{/each}
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TMaster, index}
+<option value={TMaster.aliasName}>{TMaster.aliasName}</option>
+{/each}
+
+</select>
+
+
+
+
+    </td>
 
 </tr>
 
@@ -3061,7 +3932,23 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Master Profile</p></td>
-    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].profile}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.master[Modify_Variable_Master_index].profile}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RMaster, index}
+<option value={RMaster.aliasName}>{RMaster.aliasName}</option>
+{/each}
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TMaster, index}
+<option value={TMaster.aliasName}>{TMaster.aliasName}</option>
+{/each}
+
+</select>
+
+
+    </td>
 
 </tr>
 
@@ -3357,7 +4244,23 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave Profile</p></td>
-    <td class= "pl-4 pt-4">{new_variable_slave[new_variable_slave_index].profile}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_variable_slave[new_variable_slave_index].profile}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave as RSlave, index}
+<option value={RSlave.aliasName}>{RSlave.aliasName}</option>
+{/each}
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TSlave, index}
+<option value={TSlave.aliasName}>{TSlave.aliasName}</option>
+{/each}
+
+</select>
+
+
+
+    </td>
 
 </tr>
 
@@ -3474,7 +4377,24 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave Profile</p></td>
-    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].profile}</td>
+    <td class= "pl-4 pt-4">
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_variable.slave[Modify_Variable_Slave_index].profile}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave as RSlave, index}
+<option value={RSlave.aliasName}>{RSlave.aliasName}</option>
+{/each}
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TSlave, index}
+<option value={TSlave.aliasName}>{TSlave.aliasName}</option>
+{/each}
+
+</select>
+
+ 
+    </td>
 
 </tr>
 
@@ -3712,14 +4632,40 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
-    <td class= "pl-4 pt-4">{new_gateway_t2r[new_gateway_t2r_index].tcpProfileSlave}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_t2r[new_gateway_t2r_index].tcpProfileSlave}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TSlave, index}
+<option value={TSlave.aliasName}>{TSlave.aliasName}</option>
+{/each}
+
+</select>
+
+
+
+    </td>
 
 </tr>
 
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Master Profile</p></td>
-    <td class= "pl-4 pt-4">{new_gateway_t2r[new_gateway_t2r_index].rtuProfileMaster}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_t2r[new_gateway_t2r_index].rtuProfileMaster}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RMaster, index}
+<option value={RMaster.aliasName}>{RMaster.aliasName}</option>
+{/each}
+
+</select>
+
+    
+
+    </td>
 
 </tr>
 
@@ -3786,14 +4732,39 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
-    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].tcpProfileSlave}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].tcpProfileSlave}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TSlave, index}
+<option value={TSlave.aliasName}>{TSlave.aliasName}</option>
+{/each}
+
+</select>
+
+  
+
+    </td>
 
 </tr>
 
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Master Profile</p></td>
-    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].rtuProfileMaster}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].rtuProfileMaster}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RMaster, index}
+<option value={RMaster.aliasName}>{RMaster.aliasName}</option>
+{/each}
+
+</select>
+
+    
+    </td>
 
 </tr>
 
@@ -3967,14 +4938,39 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave Profile</p></td>
-    <td class= "pl-4 pt-4">{new_gateway_r2t[new_gateway_r2t_index].rtuProfileSlave}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_r2t[new_gateway_r2t_index].rtuProfileSlave}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave as RSlave, index}
+<option value={RSlave.aliasName}>{RSlave.aliasName}</option>
+{/each}
+
+</select>
+
+    
+
+    </td>
 
 </tr>
 
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
-    <td class= "pl-4 pt-4">{new_gateway_r2t[new_gateway_r2t_index].tcpProfileMaster}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_r2t[new_gateway_r2t_index].tcpProfileMaster}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TMaster, index}
+<option value={TMaster.aliasName}>{TMaster.aliasName}</option>
+{/each}
+
+</select>
+
+
+    </td>
 
 </tr>
 
@@ -4041,14 +5037,38 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave Profile</p></td>
-    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].rtuProfileSlave}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].rtuProfileSlave}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave as RSlave, index}
+<option value={RSlave.aliasName}>{RSlave.aliasName}</option>
+{/each}
+
+</select>
+
+
+    
+    </td>
 
 </tr>
 
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
-    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].tcpProfileMaster}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].tcpProfileMaster}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TMaster, index}
+<option value={TMaster.aliasName}>{TMaster.aliasName}</option>
+{/each}
+
+</select>
+
+
+    </td>
 
 </tr>
 
@@ -4223,14 +5243,34 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave Profile</p></td>
-    <td class= "pl-4 pt-4">{new_gateway_r2r[new_gateway_r2r_index].rtuProfileSlave}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_r2r[new_gateway_r2r_index].rtuProfileSlave}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave as RSlave, index}
+<option value={RSlave.aliasName}>{RSlave.aliasName}</option>
+{/each}
+
+</select>    
+    
+    </td>
 
 </tr>
 
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Master Profile</p></td>
-    <td class= "pl-4 pt-4">{new_gateway_r2r[new_gateway_r2r_index].rtuProfileMaster}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_r2r[new_gateway_r2r_index].rtuProfileMaster}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RMaster, index}
+<option value={RMaster.aliasName}>{RMaster.aliasName}</option>
+{/each}
+
+</select>       
+    
+    </td>
 
 </tr>
 
@@ -4297,14 +5337,38 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave Profile</p></td>
-    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[Modify_Gateway_R2R_index].rtuProfileSlave}</td>
+    <td class= "pl-4 pt-4">
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[Modify_Gateway_R2R_index].rtuProfileSlave}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave as RSlave, index}
+<option value={RSlave.aliasName}>{RSlave.aliasName}</option>
+{/each}
+
+</select>  
+
+    
+    </td>
 
 </tr>
 
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Master Profile</p></td>
-    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[Modify_Gateway_R2R_index].rtuProfileMaster}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[Modify_Gateway_R2R_index].rtuProfileMaster}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RMaster, index}
+<option value={RMaster.aliasName}>{RMaster.aliasName}</option>
+{/each}
+
+</select>  
+
+    </td>
 
 </tr>
 
@@ -4482,14 +5546,37 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
-    <td class= "pl-4 pt-4">{new_gateway_t2t[new_gateway_t2t_index].tcpProfileSlave}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_t2t[new_gateway_t2t_index].tcpProfileSlave}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TSlave, index}
+<option value={TSlave.aliasName}>{TSlave.aliasName}</option>
+{/each}
+
+</select>
+
+    
+    </td>
 
 </tr>
 
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
-    <td class= "pl-4 pt-4">{new_gateway_t2t[new_gateway_t2t_index].tcpProfileMaster}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_t2t[new_gateway_t2t_index].tcpProfileMaster}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TMaster, index}
+<option value={TMaster.aliasName}>{TMaster.aliasName}</option>
+{/each}
+
+</select>
+
+    
+
+    </td>
 
 </tr>
 
@@ -4556,14 +5643,37 @@
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
-    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[Modify_Gateway_T2T_index].tcpProfileSlave}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[Modify_Gateway_T2T_index].tcpProfileSlave}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TSlave, index}
+<option value={TSlave.aliasName}>{TSlave.aliasName}</option>
+{/each}
+
+</select>
+
+
+    </td>
 
 </tr>
 
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
-    <td class= "pl-4 pt-4">{changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[Modify_Gateway_T2T_index].tcpProfileMaster}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[Modify_Gateway_T2T_index].tcpProfileMaster}>
+<option disabled="" value="">Choose Profile ...</option>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TMaster, index}
+<option value={TMaster.aliasName}>{TMaster.aliasName}</option>
+{/each}
+
+</select>
+
+    
+    </td>
 
 </tr>
 

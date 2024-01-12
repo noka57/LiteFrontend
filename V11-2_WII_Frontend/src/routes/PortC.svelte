@@ -9,7 +9,13 @@
     portConnectionConfig,
     PortConnection_LAN_ConfigChangedLog,
     PortConnection_COM_ConfigChangedLog,
-    ChangedPortConnectionConfig
+    ChangedPortConnectionConfig,
+    ChangedModbusConfig,
+    modbusConfig,
+    ModbusRTU_Slave_ConfigChangedLog,
+    ModbusRTU_Master_ConfigChangedLog,
+    ModbusTCP_Slave_ConfigChangedLog,
+    ModbusTCP_Master_ConfigChangedLog
   } from "./configG.js"
 
 
@@ -20,6 +26,12 @@
     let port_connection_lan_changedValues = [];
     let port_connection_com_changedValues = [];
 
+    let modbus_rtu_master_changedValues=[];
+    let modbus_rtu_slave_changedValues=[];
+    let modbus_tcp_master_changedValues=[];
+    let modbus_tcp_slave_changedValues=[];
+    let saved_changed_modbus_data ="";
+    let modbus_data="";
 
     let sessionid;
     let sessionBinary;
@@ -27,6 +39,28 @@
         sessionid = val;
     });
 
+    ModbusTCP_Slave_ConfigChangedLog.subscribe(val => {
+        modbus_tcp_slave_changedValues = val;
+    });
+    ModbusTCP_Master_ConfigChangedLog.subscribe(val => {
+        modbus_tcp_master_changedValues = val;
+    });
+
+    ModbusRTU_Slave_ConfigChangedLog.subscribe(val => {
+        modbus_rtu_slave_changedValues = val;
+    });
+
+    ModbusRTU_Master_ConfigChangedLog.subscribe(val => {
+        modbus_rtu_master_changedValues = val;
+    });
+
+    ChangedModbusConfig.subscribe(val => {
+      saved_changed_modbus_data = val;
+    });
+
+    modbusConfig.subscribe(val => {
+      modbus_data = val;
+    });
 
     portConnectionConfig.subscribe(val => {
       port_connection_data = val;
@@ -50,6 +84,102 @@
    let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
    let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+
+
+
+    function compareModbusObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
+    {
+      for (const key in obj1) 
+      {
+        if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+        {
+          if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) 
+          {
+            for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+            {
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+            }
+
+            if (obj1[key].length > obj2[key].length) 
+            {
+              let addedCount=obj1[key].length-obj2[key].length;
+              let changedstr="Add "+addedCount+" item(s) to "+ key;
+
+              if (type == 6)
+              {
+                modbus_tcp_slave_changedValues=[...modbus_tcp_slave_changedValues, changedstr];
+              }  
+              else if (type == 7)
+              {
+                modbus_tcp_master_changedValues=[...modbus_tcp_master_changedValues, changedstr];
+              }
+              else if (type == 8)
+              {
+                modbus_rtu_slave_changedValues=[...modbus_rtu_slave_changedValues, changedstr];
+              }  
+              else if (type == 9)
+              {
+                modbus_rtu_master_changedValues=[...modbus_rtu_master_changedValues, changedstr];
+              }            
+            }
+            else if (obj1[key].length < obj2[key].length)
+            {
+              let deletedCount=obj2[key].length-obj1[key].length;
+              let changedstr="Delete "+deletedCount+" item(s) from "+ key;
+              if (type == 6)
+              {
+                modbus_tcp_slave_changedValues=[...modbus_tcp_slave_changedValues, changedstr];
+              }  
+              else if (type == 7)
+              {
+                modbus_tcp_master_changedValues=[...modbus_tcp_master_changedValues, changedstr];
+              }
+              else if (type == 8)
+              {
+                modbus_rtu_slave_changedValues=[...modbus_rtu_slave_changedValues, changedstr];
+              }  
+              else if (type == 9)
+              {
+                modbus_rtu_master_changedValues=[...modbus_rtu_master_changedValues, changedstr];
+              }    
+            }
+          }
+          else
+          {
+            compareObjects(obj1[key], obj2[key], type, 0,0);
+          }
+        }
+        else if (obj1[key] != obj2[key])
+        {
+          let changedstr="";
+          if (isArrayItem == 0)
+          {
+            changedstr="Value of "+key+" has changed to "+obj1[key];
+          }
+          else
+          {
+            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+          }
+
+          if (type == 6)
+          {
+            modbus_tcp_slave_changedValues=[...modbus_tcp_slave_changedValues, changedstr];
+          }  
+          else if (type == 7)
+          {
+            modbus_tcp_master_changedValues=[...modbus_tcp_master_changedValues, changedstr];
+          }
+          else if (type == 8)
+          {
+            modbus_rtu_slave_changedValues=[...modbus_rtu_slave_changedValues, changedstr];
+          }  
+          else if (type == 9)
+          {
+            modbus_rtu_master_changedValues=[...modbus_rtu_master_changedValues, changedstr];
+          }    
+        } 
+      }
+    }
 
 
 
@@ -119,7 +249,7 @@
 
     for (let i=0;i<changed_port_connection_data.config.fieldManagement_portConnection_com.length;i++)
     {
-        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable != changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable)
+        if (port_connection_data.config.fieldManagement_portConnection_com[i].enable != changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable)
         {
             saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable=changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable;
             let changedstr="COM List No."+(i+1)+" Enable is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable;
@@ -128,16 +258,83 @@
         }
 
 
-        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile)
+        if (port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile)
         {
+
+            for (let j=0; j < modbus_data.config.fieldManagement_modbus_rtu.master.length; j++)
+            {
+                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile 
+                &&
+                saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != "")
+                {
+                    saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+
+  
+                    if (modbus_rtu_master_changedValues.length !=0)
+                    {
+                        modbus_rtu_master_changedValues=[];
+                    }
+
+                    compareModbusObjects(saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j], modbus_data.config.fieldManagement_modbus_rtu.master[j], 9, 1,j+1);
+
+                    ModbusRTU_Master_ConfigChangedLog.set(modbus_rtu_master_changedValues);
+                    ChangedModbusConfig.set(saved_changed_modbus_data);
+                }
+            }
+
+            for (let j=modbus_data.config.fieldManagement_modbus_rtu.master.length; j< saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master.length;j++)
+            {
+                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile 
+                &&
+                saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != "")
+                {
+                   saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+                }
+
+            }
+
+            for (let j=0; j < modbus_data.config.fieldManagement_modbus_rtu.slave.length; j++)
+            {
+                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile
+                &&
+                saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != "")
+                {
+                    saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+
+
+                    if (modbus_rtu_slave_changedValues.length !=0)
+                    {
+                        modbus_rtu_slave_changedValues=[];
+                    }
+
+                    compareModbusObjects(saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j], modbus_data.config.fieldManagement_modbus_rtu.slave[j], 8, 1,j+1);
+
+
+                    ModbusRTU_Slave_ConfigChangedLog.set(modbus_rtu_slave_changedValues);
+                    ChangedModbusConfig.set(saved_changed_modbus_data);
+                }
+            }
+
+            for (let j=modbus_data.config.fieldManagement_modbus_rtu.slave.length; j< saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length;j++)
+            {
+                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile 
+                &&
+                saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != "")
+                {
+                   saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+                }
+
+            }  
+
             saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
             let changedstr="COM List No."+(i+1)+" Serial Profile is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
 
-            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
+            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];
+
         }
 
 
-        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface != changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface)
+        if (port_connection_data.config.fieldManagement_portConnection_com[i].interface != changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface)
         {
             saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface=changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface;
             let changedstr="COM List No."+(i+1)+" interface is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface;
@@ -145,7 +342,7 @@
             port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
         }
 
-        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate != changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate)
+        if (port_connection_data.config.fieldManagement_portConnection_com[i].baudrate != changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate)
         {
             saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate=changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate;
             let changedstr="COM List No."+(i+1)+" baudrate is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate;
@@ -154,7 +351,7 @@
         }
 
 
-        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity != changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity)
+        if (port_connection_data.config.fieldManagement_portConnection_com[i].parity != changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity)
         {
             saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity=changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity;
             let changedstr="COM List No."+(i+1)+" parity is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity;
@@ -163,7 +360,7 @@
         }
 
 
-        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits != changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits)
+        if (port_connection_data.config.fieldManagement_portConnection_com[i].dataBits != changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits)
         {
             saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits=changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits;
             let changedstr="COM List No."+(i+1)+" dataBits is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits;
@@ -172,7 +369,7 @@
         }
 
 
-        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits != changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits)
+        if (port_connection_data.config.fieldManagement_portConnection_com[i].stopBits != changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits)
         {
             saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits=changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits;
             let changedstr="COM List No."+(i+1)+" stopBits is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits;
@@ -220,12 +417,83 @@
 
     for (let i=0;i<changed_port_connection_data.config.fieldManagement_portConnection_lan.length;i++)
     {
-        if (saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName != changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName)
+        if (port_connection_data.config.fieldManagement_portConnection_lan[i].profileName != changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName)
         {
+
+
+            for (let j=0; j < modbus_data.config.fieldManagement_modbus_tcp.master.length; j++)
+            {
+                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[j].lanProfile 
+                &&
+                saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName != ""
+                )
+                {
+                    saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[j].lanProfile=changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName;
+
+                    if (modbus_tcp_master_changedValues.length !=0)
+                    {
+                        modbus_tcp_master_changedValues=[];
+                    }
+
+                    compareModbusObjects(saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[j], modbus_data.config.fieldManagement_modbus_tcp.master[j], 7, 1,j+1);
+
+                    ModbusTCP_Master_ConfigChangedLog.set(modbus_tcp_master_changedValues);
+                    ChangedModbusConfig.set(saved_changed_modbus_data);
+                }
+
+            }
+
+            for (let j=modbus_data.config.fieldManagement_modbus_tcp.master.length; j< saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master.length;j++)
+            {
+                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[j].lanProfile 
+                &&
+                saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName != "")
+                {
+                   saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[j].lanProfile=changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName;
+                }
+
+            }
+
+
+            for (let j=0; j < modbus_data.config.fieldManagement_modbus_tcp.slave.length; j++)
+            {
+                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[j].lanProfile 
+                &&
+                saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName != "")
+                {
+                    saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[j].lanProfile=changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName;
+
+
+                    if (modbus_tcp_slave_changedValues.length !=0)
+                    {
+                        modbus_tcp_slave_changedValues=[];
+                    }
+
+                    compareModbusObjects(saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[j], modbus_data.config.fieldManagement_modbus_tcp.slave[j], 6, 1,j+1);
+
+
+                    ModbusTCP_Slave_ConfigChangedLog.set(modbus_tcp_slave_changedValues);
+                    ChangedModbusConfig.set(saved_changed_modbus_data);
+                }
+            }
+
+            for (let j=modbus_data.config.fieldManagement_modbus_tcp.slave.length; j< saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length;j++)
+            {
+                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[j].lanProfile 
+                &&
+                saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName != "")
+                {
+                   saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[j].lanProfile=changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName;
+                }
+
+            }
+
+
             saved_changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName=changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName;
             let changedstr="LAN List No."+(i+1)+" Profile Name is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_lan[i].profileName;
 
-            port_connection_lan_changedValues=[...port_connection_lan_changedValues, changedstr];            
+            port_connection_lan_changedValues=[...port_connection_lan_changedValues, changedstr]; 
+
         }
     }
 
@@ -233,6 +501,26 @@
     ChangedPortConnectionConfig.set(saved_changed_port_connection_data);
     console.log(port_connection_lan_changedValues);
     console.log("end save");
+  }
+
+
+  async function getModbusData() {
+    const res = await fetch(window.location.origin+"/GeTModbuS", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+        console.log("get modbus data");
+        modbus_data =await res.json();
+        console.log(modbus_data);
+        modbusConfig.set(modbus_data);
+
+        saved_changed_modbus_data=JSON.parse(JSON.stringify(modbus_data));
+        ChangedModbusConfig.set(saved_changed_modbus_data);
+
+    }
   }
 
 
@@ -252,6 +540,11 @@
       saved_changed_port_connection_data= JSON.parse(JSON.stringify(port_connection_data));
       ChangedPortConnectionConfig.set(saved_changed_port_connection_data);
       getDataReady=1;
+
+      if (saved_changed_modbus_data == "")
+      {
+        getModbusData();
+      }
     
     }
   }
@@ -273,6 +566,7 @@
     else if(sessionid && port_connection_data!="")
     {
         getDataReady=1;
+        console.log("port connection data exists");
         changed_port_connection_data=JSON.parse(JSON.stringify(saved_changed_port_connection_data));
         if (port_connection_lan_changedValues.length==0)
         {

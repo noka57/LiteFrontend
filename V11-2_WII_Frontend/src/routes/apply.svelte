@@ -1862,7 +1862,7 @@ event_engine_action_do_changeValues.length != 0 ||
     {#if port_connection_com_changedValues.length !=0}			
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
   <Li>
-  	LAN
+  	COM
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
    {#each port_connection_com_changedValues as item}
   	<Li>{item}</Li>

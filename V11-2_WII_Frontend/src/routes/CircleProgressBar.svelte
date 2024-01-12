@@ -47,20 +47,9 @@
   path:last-child {
     stroke-width: var(--progress-width, 20px);
   }
-  div {
-    height: 100%;
-    position: relative;
-    width: 100%;
-  }
-  span {
-    left: 50%;
-    position: absolute;
-    top: -57%;
-    transform: translate(-50%, -50%);
-    color:blue;
-  }
+
 </style>
-<div>
+<div style="height: 100%;position:relative;weight:100%">
   <svg viewBox="0 0 100 100">
     <path d="M50,5A35 35 0 1 1 49.9999 5" />
     <path stroke-width=20px stroke={color} d="{progressPath()}" />
@@ -68,11 +57,9 @@
     <path d="M{x},{y}A35 35 0 0 0 15.810308878413977 32.51234208777258" stroke="red"/>
 {/if}
   </svg>
-  <div>
+  <div style="height: 100%;position:relative;weight:100%">
     <slot>
-      <span>{value}%</span>
+      <span style="left: 50%;position: absolute;top: -57%;transform: translate(-50%, -50%);color: blue">{value}%</span>
     </slot>
   </div>
 </div>
-
-

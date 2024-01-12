@@ -2572,16 +2572,6 @@
 
 
 
-
-
-  let formModalLineA=false;
-  let lineitemA=false
-  let A_Line_Name;
-  let A_Line_Token;
-  let A_Line_content;
-
-
-
   let formModalRule=false;
   let ruleitem=false;
 

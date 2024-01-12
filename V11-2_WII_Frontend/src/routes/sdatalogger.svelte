@@ -11,13 +11,27 @@
     SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
     SDatalogger_ProxyMode_Edge_ConfigChangedLog,
     SDatalogger_General_ConfigChangedLog,
-    ChangedSDataLoggerConfig
+    ChangedSDataLoggerConfig,
+    modbusConfig,
+    ChangedModbusConfig,
+    genericMQTTConfig,
+    ChangedGenericMQTTConfig
   } from "./configG.js"
 
 
   let sdata_logger_data="";
   let changed_sdata_logger_data = {};
   let saved_changed_sdata_logger_data ={};
+
+
+
+  let modbus_data="";
+  let saved_changed_modbus_data="";
+
+
+  let generic_mqtt_data="";
+  let saved_changed_generic_mqtt_data ="";
+
 
   let sdata_logger_general_changedValues = [];
   let sdata_logger_proxy_edge_changedValues = [];
@@ -61,6 +75,26 @@
   ChangedSDataLoggerConfig.subscribe(val => {
       saved_changed_sdata_logger_data = val;
   });
+
+
+  modbusConfig.subscribe(val => {
+    modbus_data = val;
+  });
+
+  ChangedModbusConfig.subscribe(val => {
+    saved_changed_modbus_data = val;
+  });
+
+
+  genericMQTTConfig.subscribe(val => {
+      generic_mqtt_data = val;
+  });
+
+  ChangedGenericMQTTConfig.subscribe(val => {
+      saved_changed_generic_mqtt_data = val;
+  });
+
+
 
 
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
@@ -126,14 +160,10 @@
     PFormatUDefine+="$Keyword4$";
  };
 
-  let selected = [];
-  let countries = [
-    { value: "Azure1", name: 'Azure Profile 1' },
-    { value: "Azure2", name: 'Azure Profile 2' },
-    { value: "MQTT1", name: 'MQTT Profile 1' },
-    { value: "MQTT2", name: 'MQTT Profile 2' },
-    { value: "Avnet", name: 'Avnet Profile 1' }
-  ];
+
+
+
+  let CloudProfile=[];
 
 
     let new_proxy_edge=[
@@ -727,6 +757,71 @@
         console.log(sdata_logger_monitor_cloud_changedValues);    
     }
 
+   async function getModbusData() {
+    const res = await fetch(window.location.origin+"/GeTModbuS", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+
+      console.log("get modbus data");
+      modbus_data =await res.json();
+      console.log(modbus_data);
+      modbusConfig.set(modbus_data);
+
+      saved_changed_modbus_data= JSON.parse(JSON.stringify(modbus_data));
+      ChangedModbusConfig.set(saved_changed_modbus_data);
+
+    }
+  }
+
+
+
+
+
+
+
+  function constructDataArray() {
+    return originalArray.map((item, index) => ({
+      value: index,
+      name: item
+    }));
+  }
+
+
+
+
+  async function getGenericMQTTData () {
+    const res = await fetch(window.location.origin+"/getGenericMQTTData", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      console.log("get gMQTT data");
+      generic_mqtt_data =await res.json();
+      console.log(generic_mqtt_data);
+      genericMQTTConfig.set(generic_mqtt_data);
+
+
+      saved_changed_generic_mqtt_data= JSON.parse(JSON.stringify(generic_mqtt_data));
+      ChangedGenericMQTTConfig.set(saved_changed_generic_mqtt_data);
+
+
+      for (let i=0; i< saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length;i++)
+      {
+        let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+      }
+
+    }
+  }
+
+
 
 
     async function getSmartDataLoggerData() {
@@ -745,6 +840,17 @@
             saved_changed_sdata_logger_data= JSON.parse(JSON.stringify(sdata_logger_data));
             ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
             getDataReady=1;
+
+
+          if (saved_changed_modbus_data == "")
+          {
+            getModbusData();
+          }
+
+          if (saved_changed_generic_mqtt_data == "")
+          {
+            getGenericMQTTData();
+          }
         }
     }
 
@@ -795,6 +901,17 @@
           changed_sdata_logger_data=JSON.parse(JSON.stringify(saved_changed_sdata_logger_data));
           changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings=JSON.parse(JSON.stringify(sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings)); 
       }
+
+      if (saved_changed_modbus_data == "")
+      {
+        getModbusData();
+      }
+
+      if (saved_changed_generic_mqtt_data == "")
+      {
+        getGenericMQTTData();
+      }
+
 
     }
 
@@ -1027,7 +1144,24 @@
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
-    <td class= "pl-4 pt-4">{new_proxy_edge[new_proxy_edge_index].modbusVariable}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_proxy_edge[new_proxy_edge_index].modbusVariable}>
+<option disabled="" value="">Choose Variable ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
+<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{/each}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave as SlaveVariable, index}
+<option value={SlaveVariable.variableName}>{SlaveVariable.variableName}</option>
+{/each}
+{/if}
+</select>
+
+
+
+
+    
+    </td>
 
 
 </tr>
@@ -1220,7 +1354,22 @@
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
-    <td class= "pl-4 pt-4">{changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusVariable}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusVariable}>
+<option disabled="" value="">Choose Variable ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
+<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{/each}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave as SlaveVariable, index}
+<option value={SlaveVariable.variableName}>{SlaveVariable.variableName}</option>
+{/each}
+{/if}
+</select>
+
+
+    </td>
 
 
 </tr>
@@ -1454,7 +1603,7 @@
 
 <td><p class="pl-20 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
 <td class= "pl-4 pt-4">
-<MultiSelect items={countries} bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile} />
+<MultiSelect items={CloudProfile} bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile} />
 
     </td>
 
@@ -1667,7 +1816,23 @@
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
-    <td class= "pl-4 pt-4">{new_monitor_edge[new_monitor_edge_index].modbusVariable}</td>
+    <td class= "pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_monitor_edge[new_monitor_edge_index].modbusVariable}>
+<option disabled="" value="">Choose Variable ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
+<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{/each}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave as SlaveVariable, index}
+<option value={SlaveVariable.variableName}>{SlaveVariable.variableName}</option>
+{/each}
+{/if}
+</select>
+
+    
+
+    </td>
 
 
 </tr>
@@ -1838,7 +2003,20 @@
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
-    <td class= "pl-4 pt-4">{changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].modbusVariable}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].modbusVariable}>
+<option disabled="" value="">Choose Variable ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
+<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{/each}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave as SlaveVariable, index}
+<option value={SlaveVariable.variableName}>{SlaveVariable.variableName}</option>
+{/each}
+{/if}
+</select>
+
+    </td>
 
 
 </tr>
@@ -2052,7 +2230,7 @@
 
 <td><p class="pl-20 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
 <td class= "pl-4 pt-4">
-<MultiSelect items={countries} bind:value={selected} />
+<MultiSelect items={CloudProfile} bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile} />
 
     </td>
 
@@ -2113,7 +2291,7 @@
     <Checkbox bind:group={ViewerSelect} value="CProfile">Cloud Profile</Checkbox>
     </td>
 
-    <td class="pl-4 pt-3"><Select class="mt-2" items={countries} placeholder="None" /></td>
+    <td class="pl-4 pt-3"><Select class="mt-2" items={CloudProfile} placeholder="None" /></td>
 
 </tr>
 

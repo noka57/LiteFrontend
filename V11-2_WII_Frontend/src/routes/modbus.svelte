@@ -530,7 +530,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0,
@@ -543,21 +543,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-
-    },
-        {
-        enable: false,
-        variableName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0,
@@ -571,7 +557,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0,
@@ -585,7 +571,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0,
@@ -599,7 +585,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0,
@@ -613,7 +599,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0,
@@ -627,7 +613,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0,
@@ -641,7 +627,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0,
@@ -655,7 +641,21 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
+        address: 0,
+        quantity: 1,
+        byteOrder: 0,
+        responseTimeout: 1000,
+        pollingRate: 1000,
+        delayBetweenPolls: 20
+
+    },
+        {
+        enable: false,
+        variableName: "",
+        profile: "",
+        slaveId: 2,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0,
@@ -677,7 +677,7 @@
         new_variable_master[index].variableName="";
         new_variable_master[index].profile="";
         new_variable_master[index].slaveId=0;
-        new_variable_master[index].pointType=0;
+        new_variable_master[index].pointType=3;
         new_variable_master[index].address=0;
         new_variable_master[index].quantity=1;
         new_variable_master[index].byteOrder= 0;
@@ -749,7 +749,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0
@@ -759,7 +759,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0
@@ -769,7 +769,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0
@@ -779,7 +779,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0
@@ -789,7 +789,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0
@@ -799,7 +799,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0
@@ -809,7 +809,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0
@@ -819,7 +819,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0
@@ -829,7 +829,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0
@@ -839,7 +839,7 @@
         variableName: "",
         profile: "",
         slaveId: 2,
-        pointType: 0,
+        pointType: 3,
         address: 0,
         quantity: 1,
         byteOrder: 0
@@ -857,7 +857,7 @@
         new_variable_slave[index].variableName="";
         new_variable_slave[index].profile="";
         new_variable_slave[index].slaveId=0;
-        new_variable_slave[index].pointType=0;
+        new_variable_slave[index].pointType=3;
         new_variable_slave[index].address=0;
         new_variable_slave[index].quantity=1;
         new_variable_slave[index].byteOrder= 0;

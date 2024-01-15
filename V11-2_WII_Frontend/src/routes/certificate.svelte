@@ -160,7 +160,7 @@
   {
     if (MachineCertAliasName == "" || MachineCertP12Password == "" || certificateData == "")
     {
-        alert('Alias Name is null or P12 password is null or machineCertData is null');
+        alert('Alias Name is null or PKCS#12 password is null or machineCertData is null');
         console.log(MachineCertAliasName);
         console.log(MachineCertP12Password);
         console.log(certificateData);
@@ -677,7 +677,7 @@
       </TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-64"><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alias Name" bind:value={MachineCertAliasName}/></TableBodyCell>
-      <TableBodyCell class="w-64"><FloatingLabelInput style="filled" id="floating_filled2" name="floating_filled2" type="text" label="P12 Password" bind:value={MachineCertP12Password}/></TableBodyCell>
+      <TableBodyCell class="w-64"><FloatingLabelInput style="filled" id="floating_filled2" name="floating_filled2" type="text" label="PKCS#12 Password" bind:value={MachineCertP12Password}/></TableBodyCell>
       <TableBodyCell class="w-96"><input type="file" id="RemoteCertUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleMachineCertUpload}></TableBodyCell>
       <TableBodyCell class="w-36"><Button color="dark" on:click={uploadMachineCert}>Upload</Button></TableBodyCell>
       <TableBodyCell></TableBodyCell>

@@ -289,10 +289,10 @@
         new_proxy_edge[index].enable=false;
         new_proxy_edge[index].aliasName="";
         new_proxy_edge[index].modbusVariable="";
-        new_proxy_edge[index].variableType=1;
-        new_proxy_edge[index].variablePostprocessing=1;
+        new_proxy_edge[index].variableType=2;
+        new_proxy_edge[index].variablePostprocessing=0;
         new_proxy_edge[index].variablePostprocessingValue=1;
-        new_proxy_edge[index].postprocessedDisplay;
+        new_proxy_edge[index].postprocessedDisplay=1;
         new_proxy_edge[index].dataFormat=0;
         new_proxy_edge[index].userDefinedData="";
 
@@ -381,7 +381,7 @@
       enable: false,
       aliasName: "",
       modbusVariable:"",
-      variableType:1,
+      variableType:2,
       variableDisplay:0,
       dataFormat:0,
       userDefinedData:""
@@ -390,7 +390,7 @@
       enable: false,
       aliasName: "",
       modbusVariable:"",
-      variableType:1,
+      variableType:2,
       variableDisplay:0,
       dataFormat:0,
       userDefinedData:""
@@ -399,7 +399,7 @@
       enable: false,
       aliasName: "",
       modbusVariable:"",
-      variableType:1,
+      variableType:2,
       variableDisplay:0,
       dataFormat:0,
       userDefinedData:""
@@ -408,7 +408,7 @@
       enable: false,
       aliasName: "",
       modbusVariable:"",
-      variableType:1,
+      variableType:2,
       variableDisplay:0,
       dataFormat:0,
       userDefinedData:""
@@ -417,7 +417,7 @@
       enable: false,
       aliasName: "",
       modbusVariable:"",
-      variableType:1,
+      variableType:2,
       variableDisplay:0,
       dataFormat:0,
       userDefinedData:""
@@ -426,7 +426,7 @@
       enable: false,
       aliasName: "",
       modbusVariable:"",
-      variableType:1,
+      variableType:2,
       variableDisplay:0,
       dataFormat:0,
       userDefinedData:""
@@ -435,7 +435,7 @@
       enable: false,
       aliasName: "",
       modbusVariable:"",
-      variableType:1,
+      variableType:2,
       variableDisplay:0,
       dataFormat:0,
       userDefinedData:""
@@ -444,7 +444,7 @@
       enable: false,
       aliasName: "",
       modbusVariable:"",
-      variableType:1,
+      variableType:2,
       variableDisplay:0,
       dataFormat:0,
       userDefinedData:""
@@ -453,7 +453,7 @@
       enable: false,
       aliasName: "",
       modbusVariable:"",
-      variableType:1,
+      variableType:2,
       variableDisplay:0,
       dataFormat:0,
       userDefinedData:""
@@ -462,7 +462,7 @@
       enable: false,
       aliasName: "",
       modbusVariable:"",
-      variableType:1,
+      variableType:2,
       variableDisplay:0,
       dataFormat:0,
       userDefinedData:""
@@ -475,8 +475,8 @@
         new_monitor_edge[index].enable=false;
         new_monitor_edge[index].aliasName="";
         new_monitor_edge[index].modbusVariable="";
-        new_monitor_edge[index].variableType=1;
-        new_monitor_edge[index].variableDisplay;
+        new_monitor_edge[index].variableType=2;
+        new_monitor_edge[index].variableDisplay=1;
         new_monitor_edge[index].dataFormat=0;
         new_monitor_edge[index].userDefinedData="";
 

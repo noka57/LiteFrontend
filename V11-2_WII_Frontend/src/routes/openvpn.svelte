@@ -22,7 +22,7 @@
     let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
 
-    let hidden=1;
+    let hidden=0;
 
     let sessionid;
     let sessionBinary;

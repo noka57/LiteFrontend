@@ -2741,9 +2741,9 @@ async function getOpenVPNClientStatus() {
     <TableHeadCell class="w-18">Remote Protocol</TableHeadCell>
     <TableHeadCell class="w-18">Remote CA certificate</TableHeadCell>
     <TableHeadCell class="w-18">Local certificate</TableHeadCell>
-{#if hidden == 0}
+
     <TableHeadCell class="w-16">Authentication</TableHeadCell>
-{/if}
+
         <TableHeadCell class="w-10"></TableHeadCell>
 
     <TableHeadCell class="w-10"></TableHeadCell>
@@ -2782,13 +2782,13 @@ async function getOpenVPNClientStatus() {
 
                     <TableBodyCell class="w-18">{clientConn.remote_ca_certificate}</TableBodyCell>
                     <TableBodyCell class="w-18">{clientConn.local_certificate}</TableBodyCell>
-{#if hidden == 0}
+
 {#if clientConn.auth == 0}
                     <TableBodyCell class="w-18">X509 Certificate</TableBodyCell>
 {:else if clientConn.auth ==1}
                     <TableBodyCell class="w-18">Account/Password</TableBodyCell>
 {/if}
-{/if}
+
 
                     <TableBodyCell class="w-16"></TableBodyCell>
                     <TableBodyCell class="w-10"></TableBodyCell>
@@ -2931,7 +2931,7 @@ async function getOpenVPNClientStatus() {
 
 
   </tr>
-{#if hidden == 0}
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Authentication</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
       <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].auth} value={0}>X509 Certificate</Radio>
@@ -2963,7 +2963,7 @@ async function getOpenVPNClientStatus() {
 
 
 {/if}
-{/if}
+
 
 
 
@@ -3060,7 +3060,7 @@ async function getOpenVPNClientStatus() {
 
 
   </tr>
-{#if hidden == 0}
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Authentication</p></td> <td class="pl-5 pt-5"><div class="flex gap-4">
       <Radio bind:group={NewClientConn[new_client_conn_index].auth} value={0}>X509 Certificate</Radio>
@@ -3091,7 +3091,7 @@ async function getOpenVPNClientStatus() {
 
 
 {/if}
-{/if}
+
 
 
 
@@ -3177,7 +3177,7 @@ async function getOpenVPNClientStatus() {
 
 
 
-{#if hidden == 0}
+
 
 
 <tr>
@@ -3190,11 +3190,10 @@ async function getOpenVPNClientStatus() {
 
   </tr>
 
-{/if}
 
 </table>
 
-{#if hidden == 0}
+
 <p class="pt-10"></p>
 <Accordion>
 
@@ -3503,7 +3502,7 @@ async function getOpenVPNClientStatus() {
 
 </AccordionItem>
 </Accordion>
-{/if}
+
 <p class="pt-10">
 <table>
      <tr>
@@ -3725,7 +3724,13 @@ async function getOpenVPNClientStatus() {
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-96">Command
       </p></td>
-      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[Modify_CCD_Index].ccd_client_command} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+      <td class="pl-5 pt-5 w-96">
+        <Textarea id="textarea-id-ccd-modify" placeholder="ccd command" rows="12" name="ccd" bind:value={changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[Modify_CCD_Index].ccd_client_command} />
+
+
+      </td>
 
   </tr>
 
@@ -3761,7 +3766,13 @@ async function getOpenVPNClientStatus() {
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-96">Command
       </p></td>
-      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={NewCCD_Item[NewCCD_index].ccd_client_command} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5 w-96">
+
+
+        <Textarea id="textarea-id-ccd-new" placeholder="new ccd command" rows="12" name="new ccd" bind:value={NewCCD_Item[NewCCD_index].ccd_client_command} />
+
+
+      </td>
 
   </tr>
 

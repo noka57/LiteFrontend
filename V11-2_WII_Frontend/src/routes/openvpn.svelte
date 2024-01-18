@@ -85,90 +85,70 @@
       saved_changed_openvpn_data = val;
     });
 
+    
 
-  async function HandleClientPresharedKeyChange(event) 
-  {
-    const ClientPresharedKey = event.target.files[0];
-    if (ClientPresharedKey) 
-    {
-    // if (magicValid == 0) magicValid=1;
-    //  selectedFwr = fwr;
-      if (sessionid) 
-      {
-        const hexArray = sessionid.match(/.{1,2}/g); 
-        const byteValues = hexArray.map(hex => parseInt(hex, 16));
-        sessionBinary = new Uint8Array(byteValues);
-      }
-
-
-    const reader = new FileReader();
-      reader.onload = event => {
-         // const fwrBinary= new Uint8Array(event.target.result);
-         // fwrContent=new Uint8Array(fwrBinary.length+sessionBinary.length);
-         // fwrContent.set(sessionBinary,0);
-          //fwrContent.set(fwrBinary, sessionBinary.length);
-      };
-
-     // reader.readAsArrayBuffer(fwr);
-
-    }
-  }
-
-  let ServerPresharedKeyContent;
-
-
-
-  async function HandleServerPresharedKeyChange(event) 
-  {
-    const ServerPresharedKey = event.target.files[0];
-    if (ServerPresharedKey) 
-    {
-        console.log("ServerPresharedKey:");
-        console.log(ServerPresharedKey);
-        console.log("name");
-        console.log(ServerPresharedKey.name);
-        changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyFileName=ServerPresharedKey.name;
-
-        if (sessionid) 
+        async function HandleClientPresharedKeyChange(event) 
         {
-            const hexArray = sessionid.match(/.{1,2}/g); 
-            const byteValues = hexArray.map(hex => parseInt(hex, 16));
-            sessionBinary = new Uint8Array(byteValues);
+            const ClientPresharedKey = event.target.files[0];
+            if (ClientPresharedKey) 
+            {
+                changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName=ClientPresharedKey.name;
+                if (sessionid) 
+                {
+                    const hexArray = sessionid.match(/.{1,2}/g); 
+                    const byteValues = hexArray.map(hex => parseInt(hex, 16));
+                    sessionBinary = new Uint8Array(byteValues);
+                }
+
+
+                const reader = new FileReader();
+                    reader.onload = event => {
+                     changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyContent=event.target.result;
+                };
+
+                reader.readAsText(ClientPresharedKey);
+            }
+        }
+
+        let ServerPresharedKeyContent;
+
+
+
+        async function HandleServerPresharedKeyChange(event) 
+        {
+            const ServerPresharedKey = event.target.files[0];
+            if (ServerPresharedKey) 
+            {
+                changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyFileName=ServerPresharedKey.name;
+
+                if (sessionid) 
+                {
+                    const hexArray = sessionid.match(/.{1,2}/g); 
+                    const byteValues = hexArray.map(hex => parseInt(hex, 16));
+                    sessionBinary = new Uint8Array(byteValues);
+                }
+
+
+                const reader = new FileReader();
+                    reader.onload = event => {
+                    changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyContent=event.target.result;
+
+                };
+
+                reader.readAsText(ServerPresharedKey);
+            }
         }
 
 
-    const reader = new FileReader();
-      reader.onload = event => {
-        console.log("read");
-        console.log(event.target.result);
-        changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyContent=event.target.result;
-      //  const KeyBinary= new Uint8Array(event.target.result);
-       // ServerPresharedKeyContent=new Uint8Array(KeyBinary.length+sessionBinary.length);
-      //  ServerPresharedKeyContent.set(sessionBinary,0);
-     //   ServerPresharedKeyContent.set(KeyBinary, sessionBinary.length);
-      };
-
-      reader.readAsText(ServerPresharedKey);
-
-    }
-  }
 
 
-
-
-  let name="";
-
- let value = [];
 
 
     let fileinput;
-    function taClick(){
+
+    function PSK_Click(){
         fileinput.click();
     }
-
-
-
-    let openvpntakd="None";
 
 
     let ClientConnModal = false;
@@ -1772,7 +1752,19 @@
 
                     openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
                     saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName;
+
                 }
+
+
+                if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyContent != openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyContent)
+                {
+                    let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" PSK KeyContent has changed."
+
+                    openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr];
+                    saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyContent=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyContent;
+
+                }
+
             }
             else
             {
@@ -1787,6 +1779,12 @@
 
                 openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr2];
                 saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName;
+
+
+                let changedstr3=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" PSK KeyContent has changed.";
+
+                openvpn_client_advanced_psk_changedValues=[...openvpn_client_advanced_psk_changedValues, changedstr3];
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyContent=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyContent;
             }
         
             
@@ -2633,6 +2631,9 @@ async function getOpenVPNClientStatus() {
           changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage=openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyUsage;
 
           changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName=openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyFileName;        
+
+
+          changed_openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyContent=openvpn_data.config.vpn_openvpn_client_connection[i].presharedKey.keyContent; 
 
         }
 
@@ -3721,14 +3722,14 @@ async function getOpenVPNClientStatus() {
     <TableBodyRow>
  <TableBodyCell class="w-18">
 <div class="flex gap-4">
-<svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" on:click={taClick} ><path d="M3.75002 9.77602C3.86206 9.7589 3.97701 9.75 4.0943 9.75H19.9058C20.023 9.75 20.138 9.7589 20.25 9.77602M3.75002 9.77602C2.55402 9.9588 1.68986 11.0788 1.86691 12.3182L2.72405 18.3182C2.8824 19.4267 3.83173 20.25 4.95144 20.25H19.0486C20.1683 20.25 21.1176 19.4267 21.276 18.3182L22.1331 12.3182C22.3102 11.0788 21.446 9.9588 20.25 9.77602M3.75002 9.77602V6C3.75002 4.75736 4.75738 3.75 6.00002 3.75H9.8787C10.2765 3.75 10.6581 3.90804 10.9394 4.18934L13.0607 6.31066C13.342 6.59197 13.7235 6.75 14.1213 6.75H18C19.2427 6.75 20.25 7.75736 20.25 9V9.77602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+<svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" on:click={PSK_Click} ><path d="M3.75002 9.77602C3.86206 9.7589 3.97701 9.75 4.0943 9.75H19.9058C20.023 9.75 20.138 9.7589 20.25 9.77602M3.75002 9.77602C2.55402 9.9588 1.68986 11.0788 1.86691 12.3182L2.72405 18.3182C2.8824 19.4267 3.83173 20.25 4.95144 20.25H19.0486C20.1683 20.25 21.1176 19.4267 21.276 18.3182L22.1331 12.3182C22.3102 11.0788 21.446 9.9588 20.25 9.77602M3.75002 9.77602V6C3.75002 4.75736 4.75738 3.75 6.00002 3.75H9.8787C10.2765 3.75 10.6581 3.90804 10.9394 4.18934L13.0607 6.31066C13.342 6.59197 13.7235 6.75 14.1213 6.75H18C19.2427 6.75 20.25 7.75736 20.25 9V9.77602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 {#if changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyFileName==""}
 <p class="pt-2">None</p>
 {:else}
 <p class="pt-2">{changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyFileName}</p> 
 {/if}
-<input id="ta" type="file" class="hidden" bind:this={fileinput} on:change={HandleServerPresharedKeyChange}/>
+<input id="PSKServer" type="file" class="hidden" bind:this={fileinput} on:change={HandleServerPresharedKeyChange}/>
 </div>
 </TableBodyCell>
 
@@ -3904,14 +3905,14 @@ async function getOpenVPNClientStatus() {
     <TableBodyRow>
  <TableBodyCell class="w-18">
 <div class="flex gap-4">
-<svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" on:click={taClick} ><path d="M3.75002 9.77602C3.86206 9.7589 3.97701 9.75 4.0943 9.75H19.9058C20.023 9.75 20.138 9.7589 20.25 9.77602M3.75002 9.77602C2.55402 9.9588 1.68986 11.0788 1.86691 12.3182L2.72405 18.3182C2.8824 19.4267 3.83173 20.25 4.95144 20.25H19.0486C20.1683 20.25 21.1176 19.4267 21.276 18.3182L22.1331 12.3182C22.3102 11.0788 21.446 9.9588 20.25 9.77602M3.75002 9.77602V6C3.75002 4.75736 4.75738 3.75 6.00002 3.75H9.8787C10.2765 3.75 10.6581 3.90804 10.9394 4.18934L13.0607 6.31066C13.342 6.59197 13.7235 6.75 14.1213 6.75H18C19.2427 6.75 20.25 7.75736 20.25 9V9.77602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+<svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" on:click={PSK_Click} ><path d="M3.75002 9.77602C3.86206 9.7589 3.97701 9.75 4.0943 9.75H19.9058C20.023 9.75 20.138 9.7589 20.25 9.77602M3.75002 9.77602C2.55402 9.9588 1.68986 11.0788 1.86691 12.3182L2.72405 18.3182C2.8824 19.4267 3.83173 20.25 4.95144 20.25H19.0486C20.1683 20.25 21.1176 19.4267 21.276 18.3182L22.1331 12.3182C22.3102 11.0788 21.446 9.9588 20.25 9.77602M3.75002 9.77602V6C3.75002 4.75736 4.75738 3.75 6.00002 3.75H9.8787C10.2765 3.75 10.6581 3.90804 10.9394 4.18934L13.0607 6.31066C13.342 6.59197 13.7235 6.75 14.1213 6.75H18C19.2427 6.75 20.25 7.75736 20.25 9V9.77602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 {#if changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName==""}
 <p class="pt-2">None</p>
 {:else}
 <p class="pt-2">{changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName}</p> 
 {/if}
-<input id="taclient" type="file" class="hidden" bind:this={fileinput} on:change={HandleClientPresharedKeyChange}/>
+<input id="PSKclient" type="file" class="hidden" bind:this={fileinput} on:change={HandleClientPresharedKeyChange}/>
 </div>
 </TableBodyCell>
 

@@ -86,6 +86,72 @@
     });
 
 
+  async function HandleClientPresharedKeyChange(event) 
+  {
+    const ClientPresharedKey = event.target.files[0];
+    if (ClientPresharedKey) 
+    {
+    // if (magicValid == 0) magicValid=1;
+    //  selectedFwr = fwr;
+      if (sessionid) 
+      {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+      }
+
+
+    const reader = new FileReader();
+      reader.onload = event => {
+         // const fwrBinary= new Uint8Array(event.target.result);
+         // fwrContent=new Uint8Array(fwrBinary.length+sessionBinary.length);
+         // fwrContent.set(sessionBinary,0);
+          //fwrContent.set(fwrBinary, sessionBinary.length);
+      };
+
+     // reader.readAsArrayBuffer(fwr);
+
+    }
+  }
+
+  let ServerPresharedKeyContent;
+
+
+
+  async function HandleServerPresharedKeyChange(event) 
+  {
+    const ServerPresharedKey = event.target.files[0];
+    if (ServerPresharedKey) 
+    {
+        console.log("ServerPresharedKey:");
+        console.log(ServerPresharedKey);
+        console.log("name");
+        console.log(ServerPresharedKey.name);
+        changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyFileName=ServerPresharedKey.name;
+
+        if (sessionid) 
+        {
+            const hexArray = sessionid.match(/.{1,2}/g); 
+            const byteValues = hexArray.map(hex => parseInt(hex, 16));
+            sessionBinary = new Uint8Array(byteValues);
+        }
+
+
+    const reader = new FileReader();
+      reader.onload = event => {
+        console.log("read");
+        console.log(event.target.result);
+        changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyContent=event.target.result;
+      //  const KeyBinary= new Uint8Array(event.target.result);
+       // ServerPresharedKeyContent=new Uint8Array(KeyBinary.length+sessionBinary.length);
+      //  ServerPresharedKeyContent.set(sessionBinary,0);
+     //   ServerPresharedKeyContent.set(KeyBinary, sessionBinary.length);
+      };
+
+      reader.readAsText(ServerPresharedKey);
+
+    }
+  }
 
 
 
@@ -95,35 +161,10 @@
  let value = [];
 
 
- let fileinput;
-
-  const handleChange = (event) => {
-    value=[];
-    const files = event.target.files;
-    if (files.length > 0) {
-      value.push(files[0].name);
-      value = value;
+    let fileinput;
+    function taClick(){
+        fileinput.click();
     }
-  };
-
-  const showFiles = (files) => {
-    if (files.length === 1) return files[0];
-    let concat = '';
-    files.map((file) => {
-      concat += file;
-      concat += ',';
-      concat += ' ';
-    });
-
-    if (concat.length > 40) concat = concat.slice(0, 40);
-    concat += '...';
-    return concat;
-  };
-
- function taClick(){
-
-    fileinput.click();
- }
 
 
 
@@ -210,7 +251,8 @@
         "password": ""},
       "presharedKey": {
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -229,7 +271,8 @@
         "password": ""},
       "presharedKey": { 
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -247,7 +290,8 @@
         "password": ""},
       "presharedKey": {
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -265,7 +309,8 @@
         "password": ""},
       "presharedKey": {
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -283,7 +328,8 @@
         "password": ""},
       "presharedKey": {
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -301,7 +347,8 @@
         "password": ""},
       "presharedKey": {
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -319,7 +366,8 @@
         "password": ""},
       "presharedKey": {
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -337,7 +385,8 @@
         "password": ""},
       "presharedKey": {
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -355,7 +404,8 @@
         "password": ""},
       "presharedKey": {
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -373,7 +423,8 @@
         "password": ""},
       "presharedKey": {
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -391,7 +442,8 @@
         "password": ""},
       "presharedKey": {
         "keyUsage":0,
-        "keyFileName": ""
+        "keyFileName": "",
+        "keyContent":""
         },
       "remoteNetworkAccess": [],
       "failOver": []
@@ -2348,6 +2400,13 @@
 
         }
 
+        if (changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyContent !=
+        openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyContent)
+        {
+            let changedstr="PSK KeyFileContent has changed";
+
+            saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyContent=changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyContent;
+        }
         ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
         OpenVPN_Server_Advanced_PSK_ConfigChangedLog.set(openvpn_server_advanced_psk_changedValues);
         console.log(openvpn_server_advanced_psk_changedValues);
@@ -3644,7 +3703,7 @@ async function getOpenVPNClientStatus() {
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
       <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage} value={0}>TLS auth key</Radio>
-  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage} value={1} >TLS crypt-v2 key</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage} value={1} >TLS crypt key</Radio>
 
 </div></td>
       </tr>
@@ -3669,7 +3728,7 @@ async function getOpenVPNClientStatus() {
 {:else}
 <p class="pt-2">{changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyFileName}</p> 
 {/if}
-<input id="ta" type="file" class="hidden" bind:this={fileinput} on:change={handleChange}/>
+<input id="ta" type="file" class="hidden" bind:this={fileinput} on:change={HandleServerPresharedKeyChange}/>
 </div>
 </TableBodyCell>
 
@@ -3827,7 +3886,7 @@ async function getOpenVPNClientStatus() {
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
       <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={0}>TLS auth key</Radio>
-  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={1} >TLS crypt-v2 key</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={1} >TLS crypt key</Radio>
 
 </div></td>
       </tr>
@@ -3852,7 +3911,7 @@ async function getOpenVPNClientStatus() {
 {:else}
 <p class="pt-2">{changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName}</p> 
 {/if}
-<input id="ta" type="file" class="hidden" bind:this={fileinput} on:change={handleChange}/>
+<input id="taclient" type="file" class="hidden" bind:this={fileinput} on:change={HandleClientPresharedKeyChange}/>
 </div>
 </TableBodyCell>
 

@@ -238,6 +238,7 @@
   let event_engine_action_line_changeValues=[];
   let SetCount=0;
   let SetCountOK=0;
+  let AllRestartFinished=0;
 
 
 
@@ -593,6 +594,7 @@
   });
 
 
+
  	async function SetThenPostReboot () {
     
     const res = await fetch(window.location.origin+"/PostReboot", {
@@ -616,9 +618,13 @@
 	  {
 	  	console.log("set lan data OK\r\n");
 	  	SetCountOK++;
+      let applied_new_lan_data= JSON.parse(JSON.stringify(lan_data));
+      lanConfig.set(applied_new_lan_data);
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
+        //AllRestartFinished=1;
 	  	}
 	  }
 	};
@@ -633,9 +639,12 @@
 	  {
 	  	console.log("set nat data OK\r\n");
 	  	SetCountOK++;
+
+      let applied_new_nat_data= JSON.parse(JSON.stringify(nat_data));
+      natConfig.set(applied_new_nat_data);
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }
 	};
@@ -650,9 +659,13 @@
 	  {
 	  	console.log("set firewall data OK\r\n");
 	  	SetCountOK++;
+
+      let applied_new_firewall_data= JSON.parse(JSON.stringify(firewall_data));
+      firewallConfig.set(applied_new_firewall_data);
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }
 	};
@@ -668,9 +681,14 @@
 	  {
 	  	console.log("set static route data OK\r\n");
 	  	SetCountOK++;
+
+
+      let applied_new_staticR_data= JSON.parse(JSON.stringify(static_route_data));
+      staticrouteConfig.set(applied_new_staticR_data);
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }
 	};
@@ -686,9 +704,14 @@
 	  {
 	  	console.log("set maintenance data OK\r\n");
 	  	SetCountOK++;
+
+
+      let applied_new_maintenance_data= JSON.parse(JSON.stringify(maintenance_data));
+      maintenanceConfig.set(applied_new_maintenance_data);
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }
 	}  
@@ -704,9 +727,15 @@
 	  {
 	  	console.log("set operation data OK\r\n");
 	  	SetCountOK++;
+
+
+      let applied_new_operation_data= JSON.parse(JSON.stringify(operation_data));
+      operationConfig.set(applied_new_operation_data);
+
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }
 	} 
@@ -722,9 +751,14 @@
 	  {
 	  	console.log("set docker data OK\r\n");
 	  	SetCountOK++;
+
+      let applied_new_docker_data= JSON.parse(JSON.stringify(docker_data));
+      dockerConfig.set(applied_new_docker_data);
+
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }
 	} 
@@ -741,9 +775,15 @@
 	  {
 	  	console.log("set wan data OK\r\n");
 	  	SetCountOK++;
+
+
+      let applied_new_wan_data= JSON.parse(JSON.stringify(wan_data));
+      wanConfig.set(applied_new_wan_data);
+
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }
 	} 
@@ -759,9 +799,14 @@
 	  {
 	  	console.log("set ipsec data OK\r\n");
 	  	SetCountOK++;
+
+      let applied_new_ipsec_data= JSON.parse(JSON.stringify(ipsec_data));
+      ipsecConfig.set(applied_new_ipsec_data);
+
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }
 	} 
@@ -777,9 +822,14 @@
 	  {
 	  	console.log("set openvpn data OK\r\n");
 	  	SetCountOK++;
+
+      let applied_new_openvpn_data= JSON.parse(JSON.stringify(openvpn_data));
+      openvpnConfig.set(applied_new_openvpn_data);
+
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }	
 	}
@@ -795,9 +845,14 @@
 	  {
 	  	console.log("set generic mqtt data OK\r\n");
 	  	SetCountOK++;
+
+
+      let applied_new_generic_mqtt_data= JSON.parse(JSON.stringify(generic_mqtt_data));
+      genericMQTTConfig.set(applied_new_generic_mqtt_data);
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }	
 	}
@@ -813,9 +868,14 @@
 	  {
 	  	console.log("set remote service data OK\r\n");
 	  	SetCountOK++;
+
+      let applied_new_remoteS_data= JSON.parse(JSON.stringify(remote_service_data));
+      remoteServiceConfig.set(applied_new_remoteS_data);
+
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }		
 	}
@@ -832,9 +892,14 @@
 	  {
 	  	console.log("set port connection data OK\r\n");
 	  	SetCountOK++;
+
+
+      let applied_new_portC_data= JSON.parse(JSON.stringify(port_connection_data));
+      portConnectionConfig.set(applied_new_portC_data);
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }		
 	}
@@ -851,9 +916,14 @@
 	  {
 	  	console.log("set certificate data OK\r\n");
 	  	SetCountOK++;
+
+
+      let applied_new_certificate_data= JSON.parse(JSON.stringify(certificate_data));
+      certificateConfig.set(applied_new_certificate_data);
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }		
 	}
@@ -870,9 +940,16 @@
 	  {
 	  	console.log("set modbus data OK\r\n");
 	  	SetCountOK++;
+
+
+      let applied_new_modbus_data= JSON.parse(JSON.stringify(modbus_data));
+      modbusConfig.set(applied_new_modbus_data);
+
+
+
 	  	if (SetCountOK == SetCount)
 	  	{
-	  		SetThenPostReboot();
+	  		//SetThenPostReboot();
 	  	}
 	  }		
 	}
@@ -889,9 +966,16 @@
     {
       console.log("set smart data logger OK\r\n");
       SetCountOK++;
+
+
+      let applied_new_sdata_logger_data= JSON.parse(JSON.stringify(sdata_logger_data));
+      sdataLoggerConfig.set(applied_new_sdata_logger_data);
+
+
+
       if (SetCountOK == SetCount)
       {
-        SetThenPostReboot();
+        //SetThenPostReboot();
       }
     }   
 
@@ -909,9 +993,14 @@
     {
       console.log("set event engine logger OK\r\n");
       SetCountOK++;
+
+
+      let applied_new_event_engine_data= JSON.parse(JSON.stringify(event_engine_data));
+      eventEngineConfig.set(applied_new_event_engine_data);
+
       if (SetCountOK == SetCount)
       {
-        SetThenPostReboot();
+        //SetThenPostReboot();
       }
     }   
 
@@ -2415,11 +2504,12 @@ event_engine_action_do_changeValues.length != 0 ||
   			certificate_settings_changedValues.length !=0
 
 		}
-<Button on:click={() => modalTrigger()}>Apply and Reboot</Button>
+<Button on:click={() => modalTrigger()}>Apply and Restart</Button>
 {/if}
 </div>
 
 <Modal bind:open={defaultModal} size="md" class="w-full" permanent={true}>
+
 {#if CheckedConfigInvalid == 1}
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={closeModal}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 {/if}
@@ -2452,14 +2542,43 @@ event_engine_action_do_changeValues.length != 0 ||
 </td>
 </tr>
 <tr>
+{#if AllRestartFinished == 0}
 <td class="pt-5">
 <Spinner size={16} /></td> 
 <td class="pt-5">
 <p class="pl-5" style="color:red; font-size:18px">Applying configuration and restart ....
 </p>
 </td>
+{:else}
+<td>
+<svg class="w-16 h-16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td>
+<p class="pl-5" style="color:red; font-size:18px">All changed configurations are applied and restart.
+</td>
+
+{/if}
+
 </tr>
 {/if}
+
+
+{#if AllRestartFinished == 1}
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td class="w-16">
+</td>
+<td>
+          <Button on:click={() => closeModal()}>OK</Button>
+</td>
+</tr>
+{/if}
+
 
 </table>
 </Modal>

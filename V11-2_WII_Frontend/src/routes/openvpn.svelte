@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Breadcrumb, BreadcrumbItem, Radio,Fileupload,  FloatingLabelInput, Input, Dropdown, DropdownItem, Chevron, Select, Modal, Label, Textarea} from 'flowbite-svelte';
+  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Breadcrumb, BreadcrumbItem, Radio,Fileupload,  FloatingLabelInput, Input, Dropdown, DropdownItem, Chevron, Select, Modal, Label, Textarea, Helper} from 'flowbite-svelte';
 
 
   import { onMount } from 'svelte';
@@ -85,7 +85,11 @@
       saved_changed_openvpn_data = val;
     });
 
-    
+    const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
+    const cidrRegex = /^(\d{1,3}\.){3}\d{1,3}\/\d{1,2}$/;
+    let isValidRemotePort = true;
+    let isValidRemoteSubnet= true;
+    let isValidListenPort=true;
 
         async function HandleClientPresharedKeyChange(event) 
         {
@@ -1426,6 +1430,7 @@
       BackupRemoteNetworkAccess.comment=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].comment;
       ModifyRemoteNetworkAccess_Index=index
       ModifyRemoteNetworkAccess_Modal=true;
+      isValidRemoteSubnet=true;
 
     }
 
@@ -1440,7 +1445,12 @@
 
     function ModifyRemoteNetworkAccess(index)
     {
-      ModifyRemoteNetworkAccess_Modal=false;
+        isValidRemoteSubnet = cidrRegex.test(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].remoteSubnet)
+
+        if (isValidRemoteSubnet)
+        {
+            ModifyRemoteNetworkAccess_Modal=false;
+        }
     }
 
     function NewRemoteNetworkAccess_Item_Invoker(index)
@@ -1450,15 +1460,28 @@
 
       NewRemoteNetworkAccess_index=index;
       NewRemoteNetworkAccess_Modal=true;
+      isValidRemoteSubnet=true;
     }
 
     function AddRemoteNetworkAccess_Item(index)
     {
-      console.log("client :"+Advanced_Client_Index_Selected+ ", rna: "+ index);
-      NewRemoteNetworkAccess_Modal=false;
-      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess,NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index]];
+        console.log("client :"+Advanced_Client_Index_Selected+ ", rna: "+ index);
+
+        isValidRemoteSubnet = cidrRegex.test(NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index].remoteSubnet)
+
+        if (isValidRemoteSubnet)
+        {
+            NewRemoteNetworkAccess_Modal=false;
+            changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess,NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index]];
+        }
 
     }
+
+    function NoAddRemoteNetworkAccess(index)
+    {
+        NewRemoteNetworkAccess_Modal=false;
+    }
+
 
     function modalTriggerFailover(index)
     {
@@ -1470,6 +1493,7 @@
 
       ModifyFailOver_Index=index;
       ModifyFailOver_Modal=true;
+      isValidRemotePort=true;
 
     }
 
@@ -1485,23 +1509,40 @@
 
     function ModifyFailover(index)
     {
-      ModifyFailOver_Modal=false;
+        isValidRemotePort=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_port != null && Number.isInteger(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_port)&& changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_port >= 0 && changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_port <= 65535;
+      
+        if (isValidRemotePort)
+        {
+            ModifyFailOver_Modal=false;
+        }
+
     }
 
     function NewFailover_Item_Invoker(index)
     {
-      NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_host="";
-      NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_port=0;
-      NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_protocol=0;
+        NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_host="";
+        NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_port=0;
+        NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_protocol=0;
 
-      NewFailOver_Index=index;
-      NewFailOver_Modal=true;
+        NewFailOver_Index=index;
+        NewFailOver_Modal=true;
+        isValidRemotePort=true;
     }
 
     function AddFailover_Item(index)
     {
-      NewFailOver_Modal=false;
-      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver,NewFailOver_Item[Advanced_Client_Index_Selected][index]];
+        isValidRemotePort=NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_port != null && Number.isInteger(NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_port)&& NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_port >= 0 && NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_port <= 65535;
+
+        if (isValidRemotePort)
+        {
+            NewFailOver_Modal=false;
+            changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver,NewFailOver_Item[Advanced_Client_Index_Selected][index]];
+        }
+    }
+
+    function NoAddFailover(index)
+    {
+        NewFailOver_Modal=false;
     }
 
 
@@ -1560,6 +1601,7 @@
       BackupClientConn.auth=changed_openvpn_data.config.vpn_openvpn_client_connection[index].auth;
       BackupClientConn.client_account_password.account=changed_openvpn_data.config.vpn_openvpn_client_connection[index].client_account_password.account;
       BackupClientConn.client_account_password.password=changed_openvpn_data.config.vpn_openvpn_client_connection[index].client_account_password.password;
+      isValidRemotePort=true;
   
     }
 
@@ -1581,7 +1623,11 @@
 
     function ModifyClientConn(index)
     {
-        ClientConnModal = false;
+        isValidRemotePort=changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_port != null && Number.isInteger(changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_port)&& changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_port >= 0 && changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_port <= 65535;
+        if (isValidRemotePort)
+        {
+            ClientConnModal = false;
+        }
     }
 
 
@@ -1589,7 +1635,7 @@
     {
       NewClientConn[index].name="";
       NewClientConn[index].remote_host="";
-      NewClientConn[index].remote_port="";
+      NewClientConn[index].remote_port=0;
       NewClientConn[index].remote_protocol;
       NewClientConn[index].remote_ca_certificate="";
       NewClientConn[index].local_certificate="";
@@ -1598,14 +1644,26 @@
       NewClientConn[index].client_account_password.password="";
       new_client_conn_index=index;
       NewClientConnModal=true;
+      isValidRemotePort=true;
 
     }
 
     function AddClientConn(index)
     {
-      NewClientConnModal=false;
-      changed_openvpn_data.config.vpn_openvpn_client_connection=[...changed_openvpn_data.config.vpn_openvpn_client_connection,NewClientConn[index]];
+        isValidRemotePort=NewClientConn[index].remote_port != null && Number.isInteger(NewClientConn[index].remote_port)&& NewClientConn[index].remote_port >= 0 && NewClientConn[index].remote_port <= 65535;
+      
+        if (isValidRemotePort)
+        {
+            NewClientConnModal=false;
+            changed_openvpn_data.config.vpn_openvpn_client_connection=[...changed_openvpn_data.config.vpn_openvpn_client_connection,NewClientConn[index]];
+        }
     }
+
+    function NoAddClientConn(index)
+    {
+        NewClientConnModal=false;
+    }
+
 
     function modalTriggerServer_ClientAccountPassword(index)
     {
@@ -2143,143 +2201,151 @@
 
     function saveServerConn()
     {
-      console.log("save server conn");
-
-      if (openvpn_server_conn_changedValues.length !=0)
-      {
-        openvpn_server_conn_changedValues=[];
-      }
-
-
-      console.log(changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
-      console.log(saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
-
-      if (0==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole &&   1==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
-      {
-
-            console.log("Please save basic page first.");
-            alert("Please save basic page first.");
-
-      }
-      else
-      {
-        console.log("start to save serverConn");
-        if (changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port != openvpn_data.config.vpn_openvpn_server_connection.listen_port)
+        console.log("save server conn");
+        isValidListenPort=changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port != null && Number.isInteger(changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port)&& changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port >= 0 && changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port <= 65535;
+      
+        if (isValidListenPort)
         {
-          let changedstr="listen port is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port;
-          openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
-          saved_changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port=changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port;
 
-        }
-
-        if (changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol != openvpn_data.config.vpn_openvpn_server_connection.local_protocol)
-        {
-          let changedstr="local protocol is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol;
-          openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
-
-          saved_hanged_openvpn_data.config.vpn_openvpn_server_connection.local_protocol=changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol;
-
-        }
-
-        if (changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate != openvpn_data.config.vpn_openvpn_server_connection.local_certificate)
-        {
-          let changedstr="local certificate is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate;
-          openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
-
-          saved_changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate=changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate;
-
-        }
-
-        if (changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate != openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate)
-        {
-          let changedstr="remote certificate is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate;
-          openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
-
-          saved_changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate=changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate;
-
-        }
-
-
-        if (changed_openvpn_data.config.vpn_openvpn_server_connection.auth != openvpn_data.config.vpn_openvpn_server_connection.auth)
-        {
-          let changedstr="client authentication is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.auth;
-          openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
-
-          saved_changed_openvpn_data.config.vpn_openvpn_server_connection.auth=changed_openvpn_data.config.vpn_openvpn_server_connection.auth;
-
-        }
-
-        if (changed_openvpn_data.config.vpn_openvpn_server_connection.auth==0)
-        {
-          for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length,
-          openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length);i++)
+          if (openvpn_server_conn_changedValues.length !=0)
           {
-            if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i] !=
-            openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i])
+            openvpn_server_conn_changedValues=[];
+          }
+
+
+          console.log(changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
+          console.log(saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
+
+          if (0==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole &&   1==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
+          {
+
+                console.log("Please save basic page first.");
+                alert("Please save basic page first.");
+
+          }
+          else
+          {
+            console.log("start to save serverConn");
+            if (changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port != openvpn_data.config.vpn_openvpn_server_connection.listen_port)
             {
-             let changedstr="Client Certificate Common Name List No. "+(i+1)+" item is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i];
-
+              let changedstr="listen port is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port;
               openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
-
-              saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i]=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i];
+              saved_changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port=changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port;
 
             }
-          }
 
-          if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length > openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length) 
-          {
-            let addedCount=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length-openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length;
-            let changedstr="Add "+addedCount+" item(s) to Client Certificate Common Name";
-            openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
-
-
-            saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name))
-
-          }
-        }
-        else if (changed_openvpn_data.config.vpn_openvpn_server_connection.auth==1)
-        {
-          for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length,
-          openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length);i++)
-          {
-            if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account !=
-            openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account)
+            if (changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol != openvpn_data.config.vpn_openvpn_server_connection.local_protocol)
             {
-             let changedstr="Client Account/Password List No. "+(i+1)+" item is changed: Account has changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account;
-
+              let changedstr="local protocol is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol;
               openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
 
-              saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account;
+              saved_hanged_openvpn_data.config.vpn_openvpn_server_connection.local_protocol=changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol;
+
+            }
+
+            if (changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate != openvpn_data.config.vpn_openvpn_server_connection.local_certificate)
+            {
+              let changedstr="local certificate is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate;
+              openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+              saved_changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate=changed_openvpn_data.config.vpn_openvpn_server_connection.local_certificate;
+
+            }
+
+            if (changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate != openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate)
+            {
+              let changedstr="remote certificate is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate;
+              openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+              saved_changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate=changed_openvpn_data.config.vpn_openvpn_server_connection.remote_ca_certificate;
+
             }
 
 
-            if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].password !=
-            openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].password)
+            if (changed_openvpn_data.config.vpn_openvpn_server_connection.auth != openvpn_data.config.vpn_openvpn_server_connection.auth)
             {
-             let changedstr="Client Account/Password List No. "+(i+1)+" item is changed: Password has changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].password;
-
+              let changedstr="client authentication is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.auth;
               openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
 
-              saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].password=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].password;
+              saved_changed_openvpn_data.config.vpn_openvpn_server_connection.auth=changed_openvpn_data.config.vpn_openvpn_server_connection.auth;
+
             }
+
+            if (changed_openvpn_data.config.vpn_openvpn_server_connection.auth==0)
+            {
+              for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length,
+              openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length);i++)
+              {
+                if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i] !=
+                openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i])
+                {
+                 let changedstr="Client Certificate Common Name List No. "+(i+1)+" item is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i];
+
+                  openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+                  saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i]=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i];
+
+                }
+              }
+
+              if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length > openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length) 
+              {
+                let addedCount=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length-openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length;
+                let changedstr="Add "+addedCount+" item(s) to Client Certificate Common Name";
+                openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+
+                saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name))
+
+              }
+            }
+            else if (changed_openvpn_data.config.vpn_openvpn_server_connection.auth==1)
+            {
+              for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length,
+              openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length);i++)
+              {
+                if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account !=
+                openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account)
+                {
+                 let changedstr="Client Account/Password List No. "+(i+1)+" item is changed: Account has changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account;
+
+                  openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+                  saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account;
+                }
+
+
+                if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].password !=
+                openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].password)
+                {
+                 let changedstr="Client Account/Password List No. "+(i+1)+" item is changed: Password has changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].password;
+
+                  openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+                  saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].password=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].password;
+                }
+              }
+
+              if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length > openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length) 
+              {
+                let addedCount=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length-openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length;
+                let changedstr="Add "+addedCount+" item(s) to Client Account/Password";
+                openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+              
+
+                saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password));
+
+              }
+            }
+
+            ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
+            OpenVPN_Server_Conn_ConfigChangedLog.set(openvpn_server_conn_changedValues);        
+            console.log(openvpn_server_conn_changedValues);
           }
 
-          if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length > openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length) 
-          {
-            let addedCount=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length-openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length;
-            let changedstr="Add "+addedCount+" item(s) to Client Account/Password";
-            openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
-          
-
-            saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password));
-
-          }
         }
+    
 
-        ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
-        OpenVPN_Server_Conn_ConfigChangedLog.set(openvpn_server_conn_changedValues);        
-        console.log(openvpn_server_conn_changedValues);
-      }
     }
 
 
@@ -2300,7 +2366,6 @@
       {
           console.log("Please save basic page first.");
           alert("Please save basic page first.");
-
       }
       else
       {
@@ -2350,7 +2415,6 @@
         ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
         OpenVPN_Server_Advanced_CCD_ConfigChangedLog.set(openvpn_server_advanced_ccd_changedValues);
         console.log(openvpn_server_advanced_ccd_changedValues);
-
 
       }
 
@@ -2932,7 +2996,11 @@ async function getOpenVPNClientStatus() {
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_host} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5">
+      <input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_host} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+      </td>
 
 
 
@@ -2940,9 +3008,27 @@ async function getOpenVPNClientStatus() {
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5">
+
+{#if isValidRemotePort}
+      <input type="number" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" min="0" max="65535">
+
+{:else}
+      <input type="number" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].remote_port} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5" min="0" max="65535">
+
+{/if}
+
+      </td>
 
 
+
+{#if !isValidRemotePort}
+<td>
+ <Helper class="pl-4 mt-2" color="red">
+    <span class="font-medium">Invalid Port</span>
+  </Helper>
+</td>
+{/if}
 
   </tr>
 
@@ -3044,8 +3130,10 @@ async function getOpenVPNClientStatus() {
 
 
 
-<Modal bind:open={NewClientConnModal} size="lg" class="w-full" autoclose>
+<Modal bind:open={NewClientConnModal} size="lg" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddClientConn(new_client_conn_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
+<p class="mt-10"></p>
 <table>
 
 
@@ -3067,9 +3155,26 @@ async function getOpenVPNClientStatus() {
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewClientConn[new_client_conn_index].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5">
+
+{#if isValidRemotePort}
+      <input type="number" bind:value={NewClientConn[new_client_conn_index].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" min="0" max="65535">
+{:else}
+      <input type="number" bind:value={NewClientConn[new_client_conn_index].remote_port} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5" min="0" max="65535">
+
+{/if}
 
 
+
+      </td>
+
+{#if !isValidRemotePort}
+<td>
+ <Helper class="pl-4 mt-2" color="red">
+    <span class="font-medium">Invalid Port</span>
+  </Helper>
+</td>
+{/if}
 
   </tr>
 
@@ -3182,7 +3287,7 @@ async function getOpenVPNClientStatus() {
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_openvpn_data.config.vpn_openvpn_server_connection.listen_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -4055,7 +4160,27 @@ async function getOpenVPNClientStatus() {
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Subnet</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[ModifyRemoteNetworkAccess_Index].remoteSubnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Subnet</p></td><td class="pl-5 pt-5">
+      
+{#if isValidRemoteSubnet}
+
+      <input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[ModifyRemoteNetworkAccess_Index].remoteSubnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+      <input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[ModifyRemoteNetworkAccess_Index].remoteSubnet} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+{/if}
+
+
+      </td>
+
+{#if !isValidRemoteSubnet}
+<td>
+ <Helper class="pl-4 mt-2" color="red">
+    <span class="font-medium">Invalid CIDR Format</span>
+  </Helper>
+</td>
+
+{/if}
 
 
 
@@ -4087,14 +4212,33 @@ async function getOpenVPNClientStatus() {
   </table>
 </Modal>
 
-<Modal bind:open={NewRemoteNetworkAccess_Modal} size="lg" class="w-full" autoclose>
+<Modal bind:open={NewRemoteNetworkAccess_Modal} size="lg" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddRemoteNetworkAccess(NewRemoteNetworkAccess_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
 <table>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Subnet</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][NewRemoteNetworkAccess_index].remoteSubnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Subnet</p></td><td class="pl-5 pt-5">
+{#if isValidRemoteSubnet}     
+      <input type="text" bind:value={NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][NewRemoteNetworkAccess_index].remoteSubnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+      <input type="text" bind:value={NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][NewRemoteNetworkAccess_index].remoteSubnet} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
 
+{/if}
 
+      </td>
+
+{#if !isValidRemoteSubnet}
+<td>
+ <Helper class="pl-4 mt-2" color="red">
+    <span class="font-medium">Invalid CIDR Format</span>
+  </Helper>
+</td>
+
+{/if}
 
   </tr>
 
@@ -4255,9 +4399,23 @@ async function getOpenVPNClientStatus() {
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[ModifyFailOver_Index].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5">
+{#if isValidRemotePort}
+      <input type="number" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[ModifyFailOver_Index].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 
+{:else}
+      <input type="number" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[ModifyFailOver_Index].remote_port} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+{/if}
 
+      </td>
+
+{#if !isValidRemotePort}
+<td>
+ <Helper class="pl-4 mt-2" color="red">
+    <span class="font-medium">Invalid Port</span>
+  </Helper>
+</td>
+{/if}
 
   </tr>
 
@@ -4285,7 +4443,10 @@ async function getOpenVPNClientStatus() {
 
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyFailover(ModifyFailOver_Index)}>Modify</Button></td>
+    <td></td>
+    <td></td>
+
+    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyFailover(ModifyFailOver_Index)}>Modify</Button></td>
 
 
     </tr>
@@ -4294,7 +4455,10 @@ async function getOpenVPNClientStatus() {
 </Modal>
 
 
-<Modal bind:open={NewFailOver_Modal}  size="lg" class="w-full" autoclose>
+<Modal bind:open={NewFailOver_Modal}  size="lg" class="w-full"  permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddFailover(NewFailOver_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
 
 <table>
 
@@ -4307,8 +4471,27 @@ async function getOpenVPNClientStatus() {
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewFailOver_Item[Advanced_Client_Index_Selected][NewFailOver_Index].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5">
 
+{#if isValidRemotePort}      
+      <input type="number" bind:value={NewFailOver_Item[Advanced_Client_Index_Selected][NewFailOver_Index].remote_port} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+{:else}
+      <input type="number" bind:value={NewFailOver_Item[Advanced_Client_Index_Selected][NewFailOver_Index].remote_port} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+{/if}
+
+      </td>
+
+
+
+{#if !isValidRemotePort}
+<td>
+ <Helper class="pl-4 mt-2" color="red">
+    <span class="font-medium">Invalid Port</span>
+  </Helper>
+</td>
+{/if}
 
 
   </tr>

@@ -2,25 +2,33 @@
 	import { List, Li, Heading,Button, Modal, Spinner} from 'flowbite-svelte';
 	import { sessionidG } from "./sessionG.js";
 	import { 
+      lanConfig,
 			LanConfigChangedLog, 
 			ChangedLANConfig,
+      natConfig,
 			NAT_LoopBack_ConfigChangedLog, 
   		NAT_VS_ConfigChangedLog, 
   		NAT_VC_ConfigChangedLog, 
   		NAT_Dmz_ConfigChangedLog,
   		ChangedNATConfig,
+      firewallConfig,
   		Firewall_General_ConfigChangedLog,
     	Firewall_IPFilter_ConfigChangedLog,
     	Firewall_MACFilter_ConfigChangedLog,
     	ChangedFirewallConfig,
+      staticrouteConfig,
     	StaticRouteConfigChangedLog,
       ChangedStaticRouteConfig,
+      maintenanceConfig,
       ChangedMaintenanceConfig,
   		MaintenanceConfigChangedLog,
+      operationConfig,
   		OperationConfigChangedLog,
   		ChangedOperationConfig,
+      dockerConfig,
   		DockerConfigChangedLog,
       ChangedDockerConfig,
+      wanConfig, 
       WAN_CWAN1_BASIC_ConfigChangedLog,
     	WAN_CWAN1_Advanced_ConfigChangedLog,
     	WAN_CWAN1_SimPolicy_ConfigChangedLog,
@@ -30,11 +38,13 @@
     	WAN_RedundancyPolicy_ConfigChangedLog,
     	WAN_FareSavingPolicy_ConfigChangedLog,
     	ChangedWANConfig,
+      ipsecConfig,
     	IPsec_Responder_Conn_ConfigChangedLog,
     	IPsec_Initiator_Conn_General_ConfigChangedLog,
     	IPsec_Initiator_Conn_Subnet_ConfigChangedLog,
     	IPsec_Basic_ConfigChangedLog,
     	ChangedIPsecConfig,
+      openvpnConfig,
 	    OpenVPN_Client_Advanced_FO_ConfigChangedLog,
 	    OpenVPN_Client_Advanced_RNA_ConfigChangedLog,
 	    OpenVPN_Client_Advanced_PSK_ConfigChangedLog,
@@ -44,15 +54,20 @@
 	    OpenVPN_Server_Conn_ConfigChangedLog,
 	    OpenVPN_Basic_ConfigChangedLog,
 	    ChangedOpenVPNConfig,
+      genericMQTTConfig,
 	    GenericMQTTConfigChangedLog,
     	ChangedGenericMQTTConfig,
+      remoteServiceConfig,
     	RemoteServiceConfigChangedLog,
     	ChangedRemoteServiceConfig,
+      portConnectionConfig,
     	PortConnection_LAN_ConfigChangedLog,
     	PortConnection_COM_ConfigChangedLog,
     	ChangedPortConnectionConfig,
+      certificateConfig,
     	Certificate_Settings_ConfigChangedLog,
     	ChangedCertificateConfig,
+      modbusConfig,
     	ModbusGateway_TtR_ConfigChangedLog,
 	    ModbusGateway_RtT_ConfigChangedLog,
 	    ModbusGateway_RtR_ConfigChangedLog,
@@ -64,12 +79,14 @@
 	    ModbusRTU_Slave_ConfigChangedLog,
 	    ModbusRTU_Master_ConfigChangedLog,
 	    ChangedModbusConfig,
+      sdataLoggerConfig,
       SDatalogger_MonitorMode_Cloud_ConfigChangedLog,
       SDatalogger_MonitorMode_Edge_ConfigChangedLog,
       SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
       SDatalogger_ProxyMode_Edge_ConfigChangedLog,
       SDatalogger_General_ConfigChangedLog,
       ChangedSDataLoggerConfig,
+      eventEngineConfig,
       EventEngine_ActionLINE_ConfigChangedLog,
       EventEngine_ActionMQTT_ConfigChangedLog,
       EventEngine_ActionTCPMsg_ConfigChangedLog,
@@ -239,6 +256,8 @@
   let SetCount=0;
   let SetCountOK=0;
   let AllRestartFinished=0;
+  let RestartCount=0;
+  let RestartCountOK=0;
 
 
 
@@ -608,6 +627,26 @@
     	}
    }
 
+  async function RestartLAN()
+  {
+    const res = await fetch(window.location.origin+"/RestArtLAn", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart lan OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  }
+
+
 	async function SetLANData() {
 	    const res = await fetch(window.location.origin+"/SetLanData", {
 	      method: 'POST',
@@ -621,13 +660,35 @@
       let applied_new_lan_data= JSON.parse(JSON.stringify(lan_data));
       lanConfig.set(applied_new_lan_data);
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-        //AllRestartFinished=1;
-	  	}
+      LANchangedValues=[];
+      LanConfigChangedLog.set(LANchangedValues);
+
+      RestartLAN();
+
 	  }
 	};
+
+
+  async function RestartNAT()
+  {
+    const res = await fetch(window.location.origin+"/ResTartNAT", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart nat OK\r\n");
+      RestartCountOK++;
+
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
 
 	async function SetNATData() {
 	    const res = await fetch(window.location.origin+"/SetNATData", {
@@ -642,12 +703,46 @@
 
       let applied_new_nat_data= JSON.parse(JSON.stringify(nat_data));
       natConfig.set(applied_new_nat_data);
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+
+      NAT_loopback_changedValues=[];
+      NAT_LoopBack_ConfigChangedLog.set(NAT_loopback_changedValues);
+      NAT_virtualComputer_changedValues=[];
+      NAT_VC_ConfigChangedLog.set(NAT_virtualComputer_changedValues);
+      NAT_virtualServer_changedValues=[];
+      NAT_VS_ConfigChangedLog.set(NAT_virtualServer_changedValues);
+      NAT_dmz_changedValues=[];
+      NAT_Dmz_ConfigChangedLog.set(NAT_dmz_changedValues);
+
+      RestartNAT();
+
 	  }
 	};
+
+
+
+  async function RestartFireWall()
+  {
+    const res = await fetch(window.location.origin+"/reStartFirewAll", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart firewall OK\r\n");
+      RestartCountOK++;
+
+
+
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
+
 
 	async function SetFirewallData() {
 	    const res = await fetch(window.location.origin+"/SetFirewallData", {
@@ -663,12 +758,40 @@
       let applied_new_firewall_data= JSON.parse(JSON.stringify(firewall_data));
       firewallConfig.set(applied_new_firewall_data);
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+      Firewall_general_changedValues = [];
+      Firewall_ipfilter_changedValues = [];
+      Firewall_macfilter_changedValues = [];
+
+      Firewall_General_ConfigChangedLog.set(Firewall_general_changedValues);
+      Firewall_IPFilter_ConfigChangedLog.set(Firewall_ipfilter_changedValues);
+      Firewall_MACFilter_ConfigChangedLog.set(Firewall_macfilter_changedValues);
+
+      RestartFireWall();
+
 	  }
 	};
+
+
+  async function RestartStaticRoute()
+  {
+    const res = await fetch(window.location.origin+"/rEstarTStaticR", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart static route OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
+
 
 	async function SetStaticRData() 
 	{
@@ -686,12 +809,35 @@
       let applied_new_staticR_data= JSON.parse(JSON.stringify(static_route_data));
       staticrouteConfig.set(applied_new_staticR_data);
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+      staticR_changedValues = [];
+      StaticRouteConfigChangedLog.set(staticR_changedValues);
+
+      RestartStaticRoute();
+
 	  }
 	};
+
+
+  async function RestartMaintainance()
+  {
+    const res = await fetch(window.location.origin+"/ReStartMaintainance", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart maintainance OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
+
 
 	async function SetMaintenanceData()
 	{
@@ -708,13 +854,33 @@
 
       let applied_new_maintenance_data= JSON.parse(JSON.stringify(maintenance_data));
       maintenanceConfig.set(applied_new_maintenance_data);
+      maintenance_changedValues = [];
+      MaintenanceConfigChangedLog.set(maintenance_changedValues);
+      RestartMaintainance();
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
 	  }
 	}  
+
+
+  async function RestartOperation()
+  {
+    const res = await fetch(window.location.origin+"/restaRTOperation", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart operation OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
 
 	async function SetOperationData()
 	{
@@ -732,13 +898,33 @@
       let applied_new_operation_data= JSON.parse(JSON.stringify(operation_data));
       operationConfig.set(applied_new_operation_data);
 
+      operation_changedValues = [];
+      OperationConfigChangedLog.set(operation_changedValues);
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+      RestartOperation();
 	  }
 	} 
+
+
+  async function RestartDocker()
+  {
+    const res = await fetch(window.location.origin+"/REStartDocker", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart Docker OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
 
 	async function SetDockerData()
 	{
@@ -755,13 +941,33 @@
       let applied_new_docker_data= JSON.parse(JSON.stringify(docker_data));
       dockerConfig.set(applied_new_docker_data);
 
+      docker_changedValues = [];
+      DockerConfigChangedLog.set(docker_changedValues);
+      RestartDocker();
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
 	  }
 	} 
+
+
+
+  async function RestartWAN()
+  {
+    const res = await fetch(window.location.origin+"/resTarTWAn", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart wan OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
 
 
 	async function SetWanData()
@@ -780,13 +986,51 @@
       let applied_new_wan_data= JSON.parse(JSON.stringify(wan_data));
       wanConfig.set(applied_new_wan_data);
 
+      cwan1_basic_changedValues = [];
+      cwan1_advanced_changedValues = [];
+      cwan1_simpolicy_changedValues = [];
+      cwan1_glink_changedValues = [];
+      ewan1_basic_changedValues = [];
+      ewan1_ewlap_changedValues = [];
+      redundancy_policy_changedValues = [];
+      faresaving_policy_changedValues = [];  
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+
+      WAN_CWAN1_BASIC_ConfigChangedLog.set(cwan1_basic_changedValues);
+      WAN_CWAN1_Advanced_ConfigChangedLog.set(cwan1_advanced_changedValues);
+      WAN_CWAN1_SimPolicy_ConfigChangedLog.set(cwan1_simpolicy_changedValues);
+      WAN_CWAN1_GLink_ConfigChangedLog.set(cwan1_glink_changedValues);
+      WAN_EWAN1_Basic_ConfigChangedLog.set(ewan1_basic_changedValues);
+      WAN_EWAN1_EWLAP_ConfigChangedLog.set(ewan1_ewlap_changedValues);
+      WAN_RedundancyPolicy_ConfigChangedLog.set(redundancy_policy_changedValues);
+      WAN_FareSavingPolicy_ConfigChangedLog.set(faresaving_policy_changedValues);
+
+      RestartWAN();
+
 	  }
 	} 
+
+
+  async function RestartIPSec()
+  {
+    const res = await fetch(window.location.origin+"/reStArtiPSec", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart ipsec OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
+
 
 	async function SetIPsecData()
 	{
@@ -803,13 +1047,44 @@
       let applied_new_ipsec_data= JSON.parse(JSON.stringify(ipsec_data));
       ipsecConfig.set(applied_new_ipsec_data);
 
+      basic_changedValues = [];
+      responder_conn_changedValues=[];
+      initiator_conn_general_changedValues=[];
+      initiator_conn_subnet_changedValues=[];
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+
+      IPsec_Responder_Conn_ConfigChangedLog.set(responder_conn_changedValues);
+      IPsec_Initiator_Conn_General_ConfigChangedLog.set(initiator_conn_general_changedValues);
+      IPsec_Initiator_Conn_Subnet_ConfigChangedLog.set(initiator_conn_subnet_changedValues);
+      IPsec_Basic_ConfigChangedLog.set(basic_changedValues);
+
+      RestartIPSec();
+
 	  }
 	} 
+
+
+
+  async function RestartOpenVpn()
+  {
+    const res = await fetch(window.location.origin+"/ResTaRtOpenvPn", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart openvpn OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
+
 
 	async function SetOpenVPNData()
 	{
@@ -826,13 +1101,50 @@
       let applied_new_openvpn_data= JSON.parse(JSON.stringify(openvpn_data));
       openvpnConfig.set(applied_new_openvpn_data);
 
+      openvpn_basic_changedValues = [];
+      openvpn_server_conn_changedValues=[];
+      openvpn_client_conn_changedValues=[];
+      openvpn_server_advanced_ccd_changedValues=[];
+      openvpn_server_advanced_psk_changedValues=[];
+      openvpn_client_advanced_psk_changedValues=[];
+      openvpn_client_advanced_rna_changedValues=[];
+      openvpn_client_advanced_fo_changedValues=[];
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+
+      OpenVPN_Client_Advanced_PSK_ConfigChangedLog.set(openvpn_client_advanced_psk_changedValues);
+      OpenVPN_Client_Advanced_RNA_ConfigChangedLog.set(openvpn_client_advanced_rna_changedValues)
+      OpenVPN_Client_Advanced_FO_ConfigChangedLog.set(openvpn_client_advanced_fo_changedValues);
+      OpenVPN_Client_Conn_ConfigChangedLog.set(openvpn_client_conn_changedValues);
+      OpenVPN_Server_Advanced_CCD_ConfigChangedLog.set(openvpn_server_advanced_ccd_changedValues);
+      OpenVPN_Server_Advanced_PSK_ConfigChangedLog.set(openvpn_server_advanced_psk_changedValues);
+      OpenVPN_Server_Conn_ConfigChangedLog.set(openvpn_server_conn_changedValues);
+      OpenVPN_Basic_ConfigChangedLog.set(openvpn_basic_changedValues)
+
+      RestartOpenVpn();
+
 	  }	
 	}
+
+
+  async function RestartGenericMQTT()
+  {
+    const res = await fetch(window.location.origin+"/restartGenerIcMqtt", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart generic MQTT OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
 
 	async function SetGenericMQTTData()
 	{
@@ -849,13 +1161,33 @@
 
       let applied_new_generic_mqtt_data= JSON.parse(JSON.stringify(generic_mqtt_data));
       genericMQTTConfig.set(applied_new_generic_mqtt_data);
-
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+      generic_mqtt_changedValues=[];
+      GenericMQTTConfigChangedLog.set(generic_mqtt_changedValues);
+      RestartGenericMQTT();
 	  }	
 	}
+
+
+
+  async function RestartRemoteService()
+  {
+    const res = await fetch(window.location.origin+"/RESTARTreMoteService", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart remote service OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
 
 	async function SetRemoteServiceData()
 	{
@@ -871,14 +1203,34 @@
 
       let applied_new_remoteS_data= JSON.parse(JSON.stringify(remote_service_data));
       remoteServiceConfig.set(applied_new_remoteS_data);
+      remote_service_changedValues=[];
+      RemoteServiceConfigChangedLog.set(remote_service_changedValues);
+      RestartRemoteService();
 
-
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
 	  }		
 	}
+
+
+
+  async function RestartPortConnection()
+  {
+    const res = await fetch(window.location.origin+"/rEstartPortCONnection", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart port connection OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
 
 
 	async function SetPortConnectionData()
@@ -893,16 +1245,40 @@
 	  	console.log("set port connection data OK\r\n");
 	  	SetCountOK++;
 
-
       let applied_new_portC_data= JSON.parse(JSON.stringify(port_connection_data));
       portConnectionConfig.set(applied_new_portC_data);
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+      port_connection_lan_changedValues = [];
+      port_connection_com_changedValues = [];
+
+
+      PortConnection_LAN_ConfigChangedLog.set(port_connection_lan_changedValues);
+      PortConnection_COM_ConfigChangedLog.set(port_connection_com_changedValues);
+      RestartPortConnection();
+
 	  }		
 	}
+
+
+  async function RestartCertificate()
+  {
+    const res = await fetch(window.location.origin+"/restartCertificATE", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart certificate OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  }   
+
 
 
 	async function SetCertificateData()
@@ -921,12 +1297,33 @@
       let applied_new_certificate_data= JSON.parse(JSON.stringify(certificate_data));
       certificateConfig.set(applied_new_certificate_data);
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+      certificate_settings_changedValues = [];
+      Certificate_Settings_ConfigChangedLog.set(certificate_settings_changedValues);
+      RestartCertificate();
+
 	  }		
 	}
+
+
+  async function RestartModbus()
+  {
+    const res = await fetch(window.location.origin+"/ReStArTModBUS", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart modbus OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  }   
+
 
 
 	async function SetModbusData()
@@ -944,15 +1341,52 @@
 
       let applied_new_modbus_data= JSON.parse(JSON.stringify(modbus_data));
       modbusConfig.set(applied_new_modbus_data);
+      modbus_gateway_TtR_changedValues=[];
+      modbus_gateway_RtT_changedValues=[];
+      modbus_gateway_RtR_changedValues=[];
+      modbus_gateway_TtT_changedValues=[];
 
+      modbus_variable_master_changedValues=[];
+      modbus_variable_slave_changedValues=[];
+      modbus_tcp_master_changedValues=[];
+      modbus_tcp_slave_changedValues=[];
+      modbus_rtu_master_changedValues=[];
+      modbus_rtu_slave_changedValues=[];
 
+      ModbusGateway_TtR_ConfigChangedLog.set(modbus_gateway_TtR_changedValues);
+      ModbusGateway_RtT_ConfigChangedLog.set(modbus_gateway_RtT_changedValues);
+      ModbusGateway_RtR_ConfigChangedLog.set(modbus_gateway_RtR_changedValues);
+      ModbusGateway_TtT_ConfigChangedLog.set(modbus_gateway_TtT_changedValues);
+      ModbusVariable_Slave_ConfigChangedLog.set(modbus_variable_slave_changedValues);
+      ModbusVariable_Master_ConfigChangedLog.set(modbus_variable_master_changedValues);
+      ModbusTCP_Slave_ConfigChangedLog.set(modbus_tcp_slave_changedValues);
+      ModbusTCP_Master_ConfigChangedLog.set(modbus_tcp_master_changedValues);
+      ModbusRTU_Slave_ConfigChangedLog.set(modbus_rtu_slave_changedValues);
+      ModbusRTU_Master_ConfigChangedLog.set(modbus_rtu_master_changedValues);
 
-	  	if (SetCountOK == SetCount)
-	  	{
-	  		//SetThenPostReboot();
-	  	}
+      RestartModbus();
 	  }		
 	}
+
+  async function RestartSmartDataLogger()
+  {
+    const res = await fetch(window.location.origin+"/restaRTsmaRTDatalOgger", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart smart data logger OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  }   
+
 
 
   async function SetSmartDataLoggerData()
@@ -971,15 +1405,46 @@
       let applied_new_sdata_logger_data= JSON.parse(JSON.stringify(sdata_logger_data));
       sdataLoggerConfig.set(applied_new_sdata_logger_data);
 
+      sdata_logger_general_changedValues = [];
+      sdata_logger_proxy_edge_changedValues = [];
+      sdata_logger_proxy_cloud_changedValues = [];
+      sdata_logger_monitor_edge_changedValues = [];
+      sdata_logger_monitor_cloud_changedValues = [];
 
+      SDatalogger_General_ConfigChangedLog.set(sdata_logger_general_changedValues);
+      SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
+      SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
+      SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
+      SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
 
-      if (SetCountOK == SetCount)
-      {
-        //SetThenPostReboot();
-      }
+      RestartSmartDataLogger();
+
     }   
 
-  }  				
+  }  
+
+
+
+
+
+  async function RestartEventEngine()
+  {
+    const res = await fetch(window.location.origin+"/REStarTEventENGine", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart event engine OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  }				
 
 
   async function SetEventEngineData()
@@ -998,14 +1463,42 @@
       let applied_new_event_engine_data= JSON.parse(JSON.stringify(event_engine_data));
       eventEngineConfig.set(applied_new_event_engine_data);
 
-      if (SetCountOK == SetCount)
-      {
-        //SetThenPostReboot();
-      }
+
+      event_engine_general_changedValues = [];
+      event_engine_trigger_sms_changeValues=[];
+      event_engine_trigger_di_changeValues=[];
+      event_engine_trigger_modbus_changeValues=[];
+      event_engine_trigger_tcpmsg_changeValues=[];
+      event_engine_trigger_mqtt_changeValues=[];
+      event_engine_action_sms_changeValues=[];
+      event_engine_action_email_changeValues=[];
+      event_engine_action_do_changeValues=[];
+      event_engine_action_modbus_changeValues=[];
+      event_engine_action_tcpmsg_changeValues=[];
+      event_engine_action_mqtt_changeValues=[];
+      event_engine_action_line_changeValues=[];
+
+
+      EventEngine_General_ConfigChangedLog.set(event_engine_general_changedValues);
+      EventEngine_TriggerSMS_ConfigChangedLog.set(event_engine_trigger_sms_changeValues);
+      EventEngine_TriggerDI_ConfigChangedLog.set(event_engine_trigger_di_changeValues);
+      EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
+      EventEngine_TriggerTCPMsg_ConfigChangedLog.set(event_engine_trigger_tcpmsg_changeValues);
+      EventEngine_TriggerMQTT_ConfigChangedLog.set(event_engine_trigger_mqtt_changeValues);
+      EventEngine_ActionSMS_ConfigChangedLog.set(event_engine_action_sms_changeValues);
+      EventEngine_ActionEmail_ConfigChangedLog.set(event_engine_action_email_changeValues);
+      EventEngine_ActionDO_ConfigChangedLog.set(event_engine_action_do_changeValues);
+      EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
+      EventEngine_ActionTCPMsg_ConfigChangedLog.set(event_engine_action_tcpmsg_changeValues);
+      EventEngine_ActionMQTT_ConfigChangedLog.set(event_engine_action_mqtt_changeValues);
+      EventEngine_ActionLINE_ConfigChangedLog.set(event_engine_action_line_changeValues);
+
+
+      RestartEventEngine();
+
     }   
 
   }     
-
 
 
 	function CalculateTotalSetCount()
@@ -1013,6 +1506,7 @@
 	  if  (lan_data != "" && LANchangedValues.length!=0)
     {
     	SetCount++;
+      RestartCount++;
     }
 
     if (nat_data != "" && (NAT_loopback_changedValues.length !=0 || 
@@ -1020,7 +1514,8 @@
 															NAT_virtualComputer_changedValues.length !=0 ||
 															NAT_dmz_changedValues.length !=0))
     {
-    	SetCount++;    
+    	SetCount++;
+      RestartCount++;    
     }
 
 
@@ -1028,30 +1523,35 @@
 																		Firewall_ipfilter_changedValues.length !=0 ||
 																		Firewall_macfilter_changedValues.length !=0))
    	{
-    	SetCount++; 
+    	SetCount++;
+      RestartCount++; 
     }
 
     if (static_route_data !="" && staticR_changedValues.length !=0)
     {
     	SetCount++; 
+      RestartCount++;
     }
     
 
     if (maintenance_data != "" && maintenance_changedValues.length!=0)
     {
-    	SetCount++;     
+    	SetCount++;
+      RestartCount++;     
     }
 
 
     if (operation_data != "" && operation_changedValues.length!=0)
     {
-    	SetCount++; 
+    	SetCount++;
+      RestartCount++; 
     }
 
 
     if (docker_data != "" && docker_changedValues.length!=0)
     {
-    	SetCount++;     
+    	SetCount++;  
+      RestartCount++;   
     }
 
 
@@ -1065,6 +1565,7 @@
   															faresaving_policy_changedValues != 0))
   	{
   	  SetCount++; 
+      RestartCount++;
   	}
 
 		if (ipsec_data != "" && (basic_changedValues.length !=0 ||
@@ -1073,6 +1574,7 @@
 							initiator_conn_subnet_changedValues.length !=0))
 		{
 			SetCount++;
+      RestartCount++;
 		}
 
 		if (openvpn_data != "" &&(openvpn_basic_changedValues.length !=0 ||
@@ -1086,27 +1588,32 @@
 		)
 		{
 			SetCount++;
+      RestartCount++;
 		}
 
 		if (generic_mqtt_data != "" && generic_mqtt_changedValues.length != 0)
 		{
 			SetCount++;	
+      RestartCount++;
 		}
 
 		if (remote_service_data != "" && remote_service_changedValues.length!=0)
 		{
-			SetCount++;			
+			SetCount++;	
+      RestartCount++;		
 		}
 
 		if (port_connection_data != ""  && (port_connection_lan_changedValues.length !=0 ||
   			port_connection_com_changedValues.length !=0 ))
   	{
 			SetCount++;	
+      RestartCount++;
   	}
 
   	if (certificate_data !="" && certificate_settings_changedValues.length !=0)
   	{
   		SetCount++;	
+      RestartCount++;
   	}
 
   	if (modbus_data !="" && (modbus_gateway_TtR_changedValues.length !=0 ||
@@ -1121,6 +1628,7 @@
 		    modbus_rtu_slave_changedValues.length !=0 ))
   	{
   		SetCount++;	
+      RestartCount++;
   	}
 
     if (sdata_logger_data != "" && (sdata_logger_general_changedValues.length !=0 ||
@@ -1130,6 +1638,7 @@
         sdata_logger_monitor_cloud_changedValues.length !=0))
     {
       SetCount++;   
+      RestartCount++;
     }
 
     if (event_engine_data != "" && (
@@ -1147,7 +1656,8 @@
         event_engine_trigger_sms_changeValues.length !=0 ||
         event_engine_general_changedValues.length !=0 ))
     {
-      SetCount++;   
+      SetCount++;
+      RestartCount++;   
     }
 
 	}

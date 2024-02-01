@@ -1376,7 +1376,7 @@ async function getIpsecStatus() {
       let status_data =await res.text();
       console.log(status_data);
 
-     // StringIpsecStatus=status_data.replace(/\r\n|\n/g, '<br>');
+
       StringIpsecStatus=status_data;
       console.log(StringIpsecStatus);
       getIpsecStatusReady=1;

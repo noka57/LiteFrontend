@@ -1,5 +1,5 @@
 <script>
-  import { Button, Label, Toggle, Checkbox, Radio, Modal, Spinner } from 'flowbite-svelte';
+  import { Tabs, TabItem, Table, AccordionItem, Accordion,Button, Label, Toggle, Checkbox, Radio, Modal, Spinner } from 'flowbite-svelte';
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
@@ -27,6 +27,16 @@
   let RestartIntervalId;
   let RestartReady=0;
 
+
+  let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+
+  let PingType=0;
+  let PingHost="";
+  let TracerouteType=0;
+  let TracerouteHost="";
+  let NSLookupHost="";
+
+
   let sessionid;
   let sessionBinary;
   sessionidG.subscribe(val => {
@@ -53,6 +63,164 @@
   ChangedMaintenanceConfig.subscribe(val => {
       saved_changed_maintenance_data = val;
   });
+
+
+  let PingContent;
+  let PingResult="";
+  let TracerouteContent;
+  let TraceResult="";
+  let NslookupContent;
+  let NslookupResult="";
+
+  let StartPing=0;
+  let FinishPing=0;
+
+  let StartNsLookup=0;
+  let FinishNsLookup=0;
+
+  let StartTraceroute=0;
+  let FinishTraceroute=0;
+
+
+  async function NsLookup() {
+    const res = await fetch(window.location.origin+"/nsLoOkup", {
+      method: 'POST',
+      body: NslookupContent
+    })
+
+    if (res.status == 200)
+    {
+      NslookupResult =await res.text();
+      console.log(NslookupResult);
+      StartNsLookup=0;
+      FinishNsLookup=1;
+
+    }
+    else
+    {
+      console.log("error nslookup");
+    }
+  }
+
+
+
+  function executeNslookup()
+  {
+    StartNsLookup=1;
+    FinishNsLookup=0;
+    let NslookupCmd="nslookup "+NSLookupHost;
+    const bytesArray = Array.from(NslookupCmd).map(char => char.charCodeAt(0));
+    let nslookupBinary = new Uint8Array(bytesArray);
+    NslookupContent=new Uint8Array(nslookupBinary.length+sessionBinary.length);
+    NslookupContent.set(sessionBinary,0);
+    NslookupContent.set(nslookupBinary, sessionBinary.length);
+
+    NsLookup();
+  }
+
+
+  async function Traceroute() {
+    const res = await fetch(window.location.origin+"/TraceroutehoST", {
+      method: 'POST',
+      body: TracerouteContent
+    })
+
+    if (res.status == 200)
+    {
+      TraceResult =await res.text();
+      console.log(TraceResult);
+      StartTraceroute=0;
+      FinishTraceroute=1;
+
+    }
+    else
+    {
+      console.log("error traceroute");
+    }
+  }
+
+
+
+
+  function executeTraceroute()
+  {
+    StartTraceroute=1;
+    FinishTraceroute=0;
+
+    let TracerouteCmd="traceroute -q 1";
+    if (TracerouteType==0)
+    {
+      TracerouteCmd +=" -w 1 -n -4 "+ TracerouteHost;
+    }
+    else if (TracerouteType == 1)
+    {
+      TracerouteCmd +="-w 3 -n -6 "+TracerouteHost;
+    }
+    else
+    {
+      console.log("error input of traceroute");
+    }
+
+
+    const bytesArray = Array.from(TracerouteCmd).map(char => char.charCodeAt(0));
+    let tracerouteBinary = new Uint8Array(bytesArray);
+    TracerouteContent=new Uint8Array(tracerouteBinary.length+sessionBinary.length);
+    TracerouteContent.set(sessionBinary,0);
+    TracerouteContent.set(tracerouteBinary, sessionBinary.length);
+
+    Traceroute();
+  }
+
+
+  async function Ping() {
+    const res = await fetch(window.location.origin+"/pingHoSt", {
+      method: 'POST',
+      body: PingContent
+    })
+
+    if (res.status == 200)
+    {
+      PingResult =await res.text();
+      console.log(PingResult);
+      StartPing=0;
+      FinishPing=1;
+    }
+    else
+    {
+      console.log("error ping");
+      StartPing=0;
+      FinishPing=1;
+    }
+  }
+
+
+  function executePing()
+  {
+    StartPing=1;
+    FinishPing=0;
+    let pingCmd="ping -c 5";
+    if (PingType==0)
+    {
+      pingCmd +=" -W 1 -4 "+ PingHost;
+    }
+    else if (PingType == 1)
+    {
+      pingCmd +="-6 "+PingHost;
+    }
+    else
+    {
+      console.log("error input of ping");
+    }
+
+
+    const bytesArray = Array.from(pingCmd).map(char => char.charCodeAt(0));
+    let pingBinary = new Uint8Array(bytesArray);
+    PingContent=new Uint8Array(pingBinary.length+sessionBinary.length);
+    PingContent.set(sessionBinary,0);
+    PingContent.set(pingBinary, sessionBinary.length);
+
+    Ping();
+  }
 
 
   async function handleFwrUpload(event) 
@@ -265,7 +433,8 @@
   });
  </script>
 
-
+<Tabs style="underline">
+  <TabItem open title="Firmware">
 <table>
 
 
@@ -378,3 +547,173 @@
 
 </table>
 </Modal>
+</TabItem>
+
+ <TabItem title="Diagnostic">
+
+<Accordion>
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Ping
+    </span>
+
+
+<table>
+
+
+ <tr>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p>
+
+  </td>
+
+    <td class="pl-5 pt-4"><div class="flex gap-4">
+
+      <Radio bind:group={PingType} value={0} >IPv4</Radio>
+      <Radio bind:group={PingType} value={1} >IPv6</Radio>
+
+</div></td>
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={PingHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+</tr>
+
+<tr>
+
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+    <td class="pl-10"><Button color="blue" pill={true} on:click={executePing}>Execute</Button></td>
+</tr>
+
+
+</table>
+
+<p class="pt-10"></p>
+<Table class="text-gray-900">
+
+{#if StartPing == 0 && FinishPing == 1}
+ 
+<pre style="white-space: pre-wrap;">{PingResult}</pre>
+
+{:else if StartPing == 1  && FinishPing == 0}
+<Spinner />
+
+{/if}
+
+
+</Table>
+
+
+
+
+  </AccordionItem>  
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Traceroute
+    </span>
+
+<table>
+
+
+ <tr>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p>
+
+  </td>
+
+    <td class="pl-5 pt-4"><div class="flex gap-4">
+
+      <Radio bind:group={TracerouteType} value={0} >IPv4</Radio>
+      <Radio bind:group={TracerouteType} value={1} >IPv6</Radio>
+
+</div></td>
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={TracerouteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+</tr>
+
+<tr>
+
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+    <td class="pl-10"><Button color="blue" pill={true} on:click={executeTraceroute}>Execute</Button></td>
+</tr>
+
+
+</table>
+
+<p class="pt-10"></p>
+
+<Table class="text-gray-900">
+
+{#if StartTraceroute==0 && FinishTraceroute==1}
+<pre style="white-space: pre-wrap;">{TraceResult}</pre>
+
+{:else if StartTraceroute==1 && FinishTraceroute ==0}
+<Spinner />
+
+{/if}
+
+
+</Table>
+
+
+  </AccordionItem>  
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Nslookup
+    </span>
+<table>
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NSLookupHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+</tr>
+
+<tr>
+
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+    <td class="pl-10"><Button color="blue" pill={true} on:click={executeNslookup}>Execute</Button></td>
+</tr>
+</table>
+
+<p class="pt-10"></p>
+
+<Table class="text-gray-900">
+
+{#if StartNsLookup==0 && FinishNsLookup ==1}
+<pre style="white-space: pre-wrap;">{NslookupResult}</pre>
+{:else if StartNsLookup==1 && FinishNsLookup==0}
+
+<Spinner />
+{/if}
+
+
+</Table>
+
+
+  </AccordionItem> 
+
+</Accordion>
+ </TabItem>
+</Tabs>

@@ -1707,6 +1707,16 @@ System Reboot</label>
             <td><p class="pl-40 pt-1 text-lg font-light text-right">Gateway</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.gateway} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
   </tr>
 
+  <tr>
+        <td><p class="pl-40 pt-4 text-lg font-light text-right">DNS 1</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+  </tr>
+
+
+  <tr>
+        <td><p class="pl-40 pt-4 text-lg font-light text-right">DNS 2</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+  </tr>
+  
+
 {:else if changed_wan_data.config.networking_wan_ewan[0].basicSetting.connectionType==2}
   <tr>
         <td><p class="pl-40 pt-1 text-lg font-light text-right">Account</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.pppoe.account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>

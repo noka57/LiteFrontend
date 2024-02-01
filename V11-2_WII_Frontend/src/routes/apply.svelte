@@ -627,6 +627,21 @@
     	}
    }
 
+  async function RestartLiteWeb()
+  {
+    const res = await fetch(window.location.origin+"/RestartLITEweb", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart liteWeb OK\r\n");
+    }
+  }
+
+
+
   async function RestartLAN()
   {
     const res = await fetch(window.location.origin+"/RestArtLAn", {
@@ -643,8 +658,11 @@
         AllRestartFinished=1;
       }
 
+      RestartLiteWeb();
+
     }
   }
+
 
 
 	async function SetLANData() {

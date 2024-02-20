@@ -7,7 +7,9 @@
 
   import {
     sdataLoggerConfig,
-    ChangedSDataLoggerConfig, 
+    ChangedSDataLoggerConfig,
+    SDatalogger_MonitorMode_Cloud_ConfigChangedLog,
+    SDatalogger_ProxyMode_Cloud_ConfigChangedLog, 
     genericMQTTConfig,
     GenericMQTTConfigChangedLog,
     ChangedGenericMQTTConfig
@@ -30,6 +32,10 @@
   let new_generic_mqtt_index;
 
 
+
+  let sdata_logger_proxy_cloud_changedValues = [];
+  let sdata_logger_monitor_cloud_changedValues = [];
+
   let sdata_logger_data="";
   let saved_changed_sdata_logger_data="";  
 
@@ -43,6 +49,14 @@
   });
 
 
+  sdataLoggerConfig.subscribe(val => {
+      sdata_logger_data = val;
+  });
+
+  ChangedSDataLoggerConfig.subscribe(val => {
+      saved_changed_sdata_logger_data = val;
+  });
+
   genericMQTTConfig.subscribe(val => {
       generic_mqtt_data = val;
   });
@@ -54,6 +68,15 @@
 
   ChangedGenericMQTTConfig.subscribe(val => {
       saved_changed_generic_mqtt_data = val;
+  });
+
+
+  SDatalogger_ProxyMode_Cloud_ConfigChangedLog.subscribe(val => {
+      sdata_logger_proxy_cloud_changedValues = val;
+  });
+
+  SDatalogger_MonitorMode_Cloud_ConfigChangedLog.subscribe(val => {
+      sdata_logger_monitor_cloud_changedValues = val;
   });
 
 
@@ -345,6 +368,9 @@
   }
 
 
+
+
+
   function saveMQTT()
   {
     console.log("save MQTT");
@@ -364,18 +390,51 @@
     for (let i=0; i < Math.min(changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length, saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length); i++) 
     {
 
-      if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost)
-      {
+      let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
 
+      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length;j++)
+      {
+        console.log(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]);
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j] == item)
+        {
+          if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
+          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort)
+          {
+            let new_item= changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+
+            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]=new_item;
+
+            let changedstr="CloudProfile No. "+ (j+1)+ " is changed to "+ new_item;
+            sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+            console.log(changedstr);
+            SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
+            ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data); 
+          }
+        }
       }
 
-
-
-      if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort)
+      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length;j++)
       {
 
-      }
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j] == item)
+        {
+          if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
+          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort)
+          {
+            let new_item= changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
 
+            saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j]=new_item;
+
+            let changedstr="CloudProfile No. "+ (j+1)+ " is changed to "+ new_item;
+            sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+
+            console.log(changedstr);
+            SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
+            ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data); 
+
+          }
+        }
+      }
 
     }
 

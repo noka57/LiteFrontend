@@ -97,7 +97,7 @@
           {
             for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
             {
-              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+              compareModbusObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
             }
 
             if (obj1[key].length > obj2[key].length) 
@@ -146,7 +146,7 @@
           }
           else
           {
-            compareObjects(obj1[key], obj2[key], type, 0,0);
+            compareModbusObjects(obj1[key], obj2[key], type, 0,0);
           }
         }
         else if (obj1[key] != obj2[key])

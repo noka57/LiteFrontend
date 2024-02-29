@@ -100,18 +100,6 @@
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
 
-  let MaxStorage="Full";
-  let CloudPInterval="Now";
-  let CloudPIntervalValue;
-  let CloudLostDelayP=0;
-  let CloudPDataP='Latest';
-  let CloudPDataC='No';
-  let CloudAzureProfile;
-  let CloudMQTTProfile;
-  let CloudAvnetProfile;
-  let EnableAzureProfile;
-  let EnableMQTTProfile;
-  let EnableAvnetProfile;
   let ViewerSelect;
 
 
@@ -120,16 +108,7 @@
 
   let PFormatUDefine="Hello";
 
-  function AppendUserDefine(string)
-  {
-    if (PFormat =='UserDefined')
-    {
-        console.log("append");
-        console.log(string);
-        PFormatUDefine+=string;
-    }
 
-  }
  const btn1 = () => 
  {
     PFormatUDefine+="$TimeStamp$";

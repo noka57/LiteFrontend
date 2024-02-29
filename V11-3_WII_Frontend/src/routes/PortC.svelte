@@ -727,7 +727,7 @@
 {:else}
       <TableBodyCell>0</TableBodyCell>
 {/if}
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{ComItem.serialProfile}</TableBodyCell>
 {#if ComItem.interface == 0}
       <TableBodyCell class="w-10">RS 485</TableBodyCell>

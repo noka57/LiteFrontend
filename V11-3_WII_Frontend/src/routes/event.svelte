@@ -6,7 +6,8 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { 
+  import {
+    modbusConfig, 
     ChangedModbusConfig,
     eventEngineConfig,
     EventEngine_ActionLINE_ConfigChangedLog,
@@ -3916,7 +3917,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <p class="mt-4">
 
-<Table shadow striped={true} >
+<Table shadow striped={true}>
 
 
   <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMS} on:keydown={() => {}}>
@@ -3928,22 +3929,49 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if openDetailStatusMMS}
 
   <TableHead>
-    <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-10">Serial Port</TableHeadCell>
-    <TableHeadCell>Interface</TableHeadCell>
-    <TableHeadCell>Baudrate</TableHeadCell>
-    <TableHeadCell>Parity</TableHeadCell>
-    <TableHeadCell class="w-18">Data Bits</TableHeadCell>
-    <TableHeadCell class="w-18">Stop Bits</TableHeadCell>
-    <TableHeadCell>Response Timeout</TableHeadCell>
-    <TableHeadCell>Delay Between Polls</TableHeadCell>
+    <TableHeadCell class="w-10">Enable</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-10">Alias Name</TableHeadCell>
+    <TableHeadCell class="w-10">Serial Profile</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>     
   </TableHead>
   <TableBody>
 
 
 
+
+{#if getDataReady == 1}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RTUMasterItem, index}
+
+    <TableBodyRow>
+
+{#if RTUMasterItem.enable}
+      <TableBodyCell>1</TableBodyCell>
+{:else}
+      <TableBodyCell>0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{RTUMasterItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{RTUMasterItem.serialProfile}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>      
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell> 
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>      
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>       
+    </TableBodyRow>
+
+{/each}
+{/if}
 
   
 
@@ -3953,7 +3981,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <p class="mt-4">
 
-<Table shadow striped={true}>
+<Table shadow striped={true} >
 
   <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMT} on:keydown={() => {}}>
     Modbus TCP Master Profile
@@ -3962,17 +3990,43 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if openDetailStatusMMT}
   <TableHead>
-    <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
+     <TableHeadCell class="w-10">Enable</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-10">LAN Profile</TableHeadCell>   
+    <TableHeadCell class="w-10">Alias Name</TableHeadCell>
     <TableHeadCell class="w-10">Remote Server IP</TableHeadCell>
-    <TableHeadCell>Remote Port</TableHeadCell>
-    <TableHeadCell>Connection Timeout</TableHeadCell>
-    <TableHeadCell>Response Timeout</TableHeadCell>
-    <TableHeadCell>Delay Between Polls</TableHeadCell>
-
+    <TableHeadCell class="w-10">Remote Port</TableHeadCell>
+    <TableHeadCell class="w-10">Connection Timeout</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>  
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell> 
   </TableHead>
   <TableBody>
+
+
+{#if getDataReady == 1}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TCPMasterItem, index}
+   
+    <TableBodyRow>
+{#if TCPMasterItem.enable}
+      <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
+      <TableBodyCell class="w-10">0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.lanProfile}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.remoteServerIp}</TableBodyCell>
+      <TableBodyCell class="w-10">{TCPMasterItem.remotePort}</TableBodyCell>
+      <TableBodyCell class="w-10">{TCPMasterItem.connectionTimeout} ms</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>       
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell> 
+    </TableBodyRow>
+{/each}
+{/if}
 
 
 

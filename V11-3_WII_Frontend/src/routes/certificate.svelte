@@ -519,10 +519,10 @@
     {
       certificate_settings_changedValues=[];
     }
-    if (changed_certificate_data.config.certificateSettings.checkCert != certificate_data.config.certificateSettings.checkCert)
+    if (changed_certificate_data.config.authentication_certificate_certificateSettings.checkCert != certificate_data.config.authentication_certificate_certificateSettings.checkCert)
     {
-      saved_changed_certificate_data.config.certificateSettings.checkCert=changed_certificate_data.config.certificateSettings.checkCert;
-      let changedstr="Check the validity period of certificates and CRLs is changed to "+changed_certificate_data.config.certificateSettings.checkCert;
+      saved_changed_certificate_data.config.authentication_certificate_certificateSettings.checkCert=changed_certificate_data.config.authentication_certificate_certificateSettings.checkCert;
+      let changedstr="Check the validity period of certificates and CRLs is changed to "+changed_certificate_data.config.authentication_certificate_certificateSettings.checkCert;
 
       certificate_settings_changedValues=[...certificate_settings_changedValues, changedstr];    
     }
@@ -599,7 +599,7 @@
         if (certificate_settings_changedValues.length==0)
         {
             changed_certificate_data=JSON.parse(JSON.stringify(saved_changed_certificate_data));
-            changed_certificate_data.config.certificateSettings=JSON.parse(JSON.stringify(certificate_data.config.certificateSettings)); 
+            changed_certificate_data.config.authentication_certificate_certificateSettings=JSON.parse(JSON.stringify(certificate_data.config.authentication_certificate_certificateSettings)); 
         }
       
 
@@ -617,9 +617,9 @@
 
 <p class="mb-4 font-semibold text-gray-900 dark:text-white">Check the validity period of certificates and CRLs</p>
 {#if getDataReady == 1}
-<Radio bind:group={changed_certificate_data.config.certificateSettings.checkCert} class='p-3' value={0}>No</Radio>
-<Radio bind:group={changed_certificate_data.config.certificateSettings.checkCert} class='p-3' value={1}>Always</Radio>
-<Radio bind:group={changed_certificate_data.config.certificateSettings.checkCert} class='p-3' value={2}>Wait for synchronization of the system time</Radio>
+<Radio bind:group={changed_certificate_data.config.authentication_certificate_certificateSettings.checkCert} class='p-3' value={0}>No</Radio>
+<Radio bind:group={changed_certificate_data.config.authentication_certificate_certificateSettings.checkCert} class='p-3' value={1}>Always</Radio>
+<Radio bind:group={changed_certificate_data.config.authentication_certificate_certificateSettings.checkCert} class='p-3' value={2}>Wait for synchronization of the system time</Radio>
 
 
 <p class="pt-10"></p>

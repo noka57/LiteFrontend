@@ -83,23 +83,58 @@
 
 
     function formatDate(date) 
-    {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
+    {   
+        console.log(date);
+        const utcDate=new Date(date);
+        const year = utcDate.getUTCFullYear();
+        const month = String(utcDate.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(utcDate.getUTCDate()).padStart(2, '0');
+        const hours = String(utcDate.getUTCHours()).padStart(2, '0');
+        const minutes = String(utcDate.getUTCMinutes()).padStart(2, '0');
+        const seconds = String(utcDate.getUTCSeconds()).padStart(2, '0');
        
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
 
+    let DateTimeContent="";
+
+
+
+    async function PostSetDateTime () {
+    const res = await fetch(window.location.origin+"/sETDatetime",  {
+        method: 'POST',
+        body: DateTimeContent,
+            headers: {
+              'Content-Type': 'application/octet-stream',
+            },
+          }
+        )
+
+        if (res.status == 200)
+        {
+            console.log("Set Date Time OK\r\n");
+        }
+    }
+
 
     function SyncWithBrowser()
     {
-        let currentTime = formatDate(new Date());
+        let currentTime = formatDate(new Date().toUTCString());
         console.log(currentTime);
+
+        const encoder = new TextEncoder();
+
+        const DateTimeBinary= encoder.encode(currentTime);
+
+        console.log("sessionBinary.length:");
+        console.log(sessionBinary.length);
+        DateTimeContent=new Uint8Array(DateTimeBinary.length+sessionBinary.length);
+        DateTimeContent.set(sessionBinary,0);
+        DateTimeContent.set(DateTimeBinary, sessionBinary.length);
+
+        PostSetDateTime();
+        console.log("adter set date time");
     }
 
 
@@ -143,13 +178,11 @@
         body: sessionBinary
     })
 
-    if (res.status == 200)
-    {
-
-        console.log("reboot command sent\r\n");
-        WaitToReboot=true;
-
-    }
+        if (res.status == 200)
+        {
+            console.log("reboot command sent\r\n");
+            WaitToReboot=true;
+        }
     }
 
 
@@ -227,6 +260,10 @@
     }
     else if (sessionid && operation_data !="")
     {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+
         if (operation_changedValues.length == 0)
         {
             changed_operation_data = JSON.parse(JSON.stringify(operation_data));

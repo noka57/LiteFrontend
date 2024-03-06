@@ -27,6 +27,8 @@
 
 	onMount(() => {
 		accountInput.focus();
+		console.log(window.screen.width);
+		console.log(window.screen.height);
 	});
 
 	async function getNextPage(){
@@ -109,35 +111,42 @@
 
 <style>
 	main {
-		width: 75%;
+		width: 100%;
 		height: 100%;
-		margin:auto;
 		background-repeat:no-repeat;
 		background-image: url("../Login_2.png");
-
+		background-size: contain;
+		background-position: center;
 	}
 
 	.login{
-		padding-left:885px;
-		padding-top:300px;
 		color:#1762BC;
 		font-family:Calibri-Bold;
-		font-size:32px;
+		font-size:1.5vw;
+		text-align:center;
+		position:relative;
+		top:30%;
+		left:14%;
 	}
 
 	.login2{
-		padding-left:700px;
 		color:#1762BC;
 		font-family:Calibri-Bold;
-		font-size:32px;
+		font-size:1.8vw;
+		text-align:center;
+		position:relative;
+		top:30%;
+		left:16%;
 	}
 
 	.buttonC{
 		background-color:#1762BC;
-		margin-top: 30px;
 		color: white;
 		border-radius: 15px;
-		width:500px;
+		font-size:1.8vw;
+		position:relative;
+		top:30%;
+		width:25%
 	}
 
 	.AFail{

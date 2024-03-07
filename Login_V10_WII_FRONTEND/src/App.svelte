@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 
-	export let active_step='Acct'
+	export let active_step='Acct';
 	let style;
 
 	let account = "";
@@ -12,7 +12,20 @@
 	let passwordInput = null;
 	let password_Fail=0;
 
+	let NewPWInput=null;
+	let NewPassword="";
+	let ConfirmPWInput=null;
+	let ConfirmPW="";
+
+	let ChangePWMismatch=0;
+
 	let sessionid="test";
+	let pw_status=0;
+	let lock_status=0;
+	let currentTime ="";
+	let showPassword = false;
+	let expiredPWopration=0;
+	let PWRuleFailed=0;
 
 
   $: {
@@ -26,7 +39,10 @@
 
 
 	onMount(() => {
-		accountInput.focus();
+		if (accountInput && active_step=='Acct')
+		{
+			accountInput.focus();
+		}
 		console.log(window.screen.width);
 		console.log(window.screen.height);
 	});
@@ -35,7 +51,168 @@
 		window.location = '/EDashboard.html?'+encodeURIComponent(sessionid);
 	}
 
-	async function doPost () {
+
+	async function doPostRemainAPW() {
+		const res = await fetch(window.location.href+"PremainAdminPW", {
+			method: 'POST',
+			body: JSON.stringify({
+				sessionid,
+				currentTime: parseInt(currentTime)
+			})
+		})
+
+		if (res.status == 200)
+		{
+			console.log("remain password OK");
+			getNextPage();
+		}
+		else
+		{
+			console.log("errorRA");
+		}
+	};
+
+
+	async function doPostRemainGPW() {
+		const res = await fetch(window.location.href+"PremainGuestPW", {
+			method: 'POST',
+			body: JSON.stringify({
+				sessionid,
+				currentTime: parseInt(currentTime)
+			})
+		})
+
+		if (res.status == 200)
+		{
+			console.log("remain password OK");
+			getNextPage();
+		}
+		else
+		{
+			console.log("errorRG");
+		}
+	};
+
+
+
+  function handleExpired(event) 
+  {
+    const buttonClicked = event.target.className;
+    if (buttonClicked.includes('buttonExpiredChange')) 
+    {
+      console.log('Change button clicked');
+      active_step='ChangeExpiredPW';
+
+    } 
+    else if (buttonClicked.includes('buttonExpiredRemain')) 
+    {
+      console.log('Remain button clicked');
+
+      if (account=="admin")
+			{
+				console.log("change admin password");
+        currentTime= Math.floor((new Date().getTime())/1000);
+        console.log(currentTime);
+				doPostRemainAPW();
+			}
+			else if (account=="guest")
+			{
+				console.log("change guest password");
+				currentTime= Math.floor((new Date().getTime())/1000);
+        console.log(currentTime);
+				doPostRemainGPW();
+			}
+
+
+    }
+  }
+
+
+	async function doPostChangeAPW() {
+		console.log("ChangePW");
+		const res = await fetch(window.location.href+"PchangeAdminPW", {
+			method: 'POST',
+			body: JSON.stringify({
+				sessionid,
+				NewPassword,
+				currentTime: parseInt(currentTime)
+			})
+		})
+
+		if (res.status == 200)
+		{
+			console.log("change password OK");
+			alert("Successful change! Please login again.");
+			window.location = '/';
+		}
+		else
+		{
+			console.log("errorA");
+		}
+	};
+
+	async function doPostChangeGPW() {
+		console.log("ChangePW");
+		const res = await fetch(window.location.href+"PchangeGuestPW", {
+			method: 'POST',
+			body: JSON.stringify({
+				sessionid,
+				NewPassword,
+				currentTime: parseInt(currentTime)
+			})
+		})
+
+		if (res.status == 200)
+		{
+			console.log("change password OK");
+			alert("Successful change! Please login again.");
+			window.location = '/';
+		}
+		else
+		{
+			console.log("errorG");
+		}
+	};
+
+	async function doPostLockAdmin() {
+		const res = await fetch(window.location.href+"LockAdmIn", {
+			method: 'POST',
+			body: JSON.stringify({
+				sessionid,
+				currentTime: parseInt(currentTime)
+			})
+		})
+
+		if (res.status == 200)
+		{
+			console.log("lock admin OK");
+		}
+		else
+		{
+			console.log("errorLA");
+		}
+	};
+
+	async function doPostLockGuest() {
+		const res = await fetch(window.location.href+"LockGuEst", {
+			method: 'POST',
+			body: JSON.stringify({
+				sessionid,
+				currentTime: parseInt(currentTime)
+			})
+		})
+
+		if (res.status == 200)
+		{
+			console.log("lock guest OK");
+		}
+		else
+		{
+			console.log("errorLG");
+		}
+	};
+
+	async function doPostLogin () {
 		console.log("Plogin");
 		const res = await fetch(window.location.href+"Plogin", {
 			method: 'POST',
@@ -45,38 +222,145 @@
 			})
 		})
 
-		//alert(res.status)
 		if (res.status == 200)
 		{
-			getNextPage();
+			pw_status=await res.text();
+			console.log(pw_status);
+
+			if (pw_status==1)
+			{
+				console.log("initial password");
+				active_step='ChangeInitPW';
+			}
+			else if (pw_status==2)
+			{
+				console.log("expired password");
+				active_step='ExpiredPW';
+			}
+			else
+			{
+				getNextPage();
+			}
 		}
 		else
 		{
+
 			password = "";
 			password_Fail++;
+			if (password_Fail >3)
+			{
+					if (account=="admin")
+					{
+						currentTime= Math.floor((new Date().getTime())/1000);
+	        	console.log(currentTime);
+						doPostLockAdmin();
+					}
+					else if (account=="guest")
+					{
+						currentTime= Math.floor((new Date().getTime())/1000);
+	        	console.log(currentTime);
+						doPostLockGuest();
+					}
+			}					
+						
 		}
 
 	};
 	
+ function CheckPasswordRule(str) {
+    const lowerCaseRegex = /[a-z]/;
+    const upperCaseRegex = /[A-Z]/;
+    const numberRegex = /[0-9]/;
+    const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+
+    return lowerCaseRegex.test(str) && upperCaseRegex.test(str) && numberRegex.test(str) && specialCharRegex.test(str) && str.length >=16;
+  }
+
+
 	const handleOnSubmit = (evt) => {
 
 		if (active_step=='Acct')
 		{
 			checkAccount();
 		}
-		else
+		else if (active_step=='pwd')
 		{
-			doPost();
+			doPostLogin();
+		}
+		else if (active_step=='ChangeInitPW')
+		{
+			if (NewPassword != ConfirmPW)
+			{
+				PWRuleFailed=0;
+				ChangePWMismatch=1;
+			}
+			else
+			{
+				ChangePWMismatch=0;
+
+				if (CheckPasswordRule(NewPassword))
+				{
+					PWRuleFailed=0;
+					if (account=="admin")
+					{
+						console.log("change admin password");
+	        	currentTime= Math.floor((new Date().getTime())/1000);
+	        	console.log(currentTime);
+						doPostChangeAPW();
+					}
+					else if (account=="guest")
+					{
+						console.log("change guest password");
+						currentTime= Math.floor((new Date().getTime())/1000);
+	        	console.log(currentTime);
+						doPostChangeGPW();
+					}
+				}
+				else
+				{
+					PWRuleFailed=1;
+				}
+
+			}
+
+		}
+		else if (active_step=='ChangeExpiredPW')
+		{
+			if (NewPassword != ConfirmPW)
+			{
+				PWRuleFailed=0;
+				ChangePWMismatch=1;
+			}
+			else
+			{
+				ChangePWMismatch=0;
+				if (CheckPasswordRule(NewPassword))
+				{
+					PWRuleFailed=0;
+					if (account=="admin")
+					{
+						console.log("change admin password");
+	        	currentTime= Math.floor((new Date().getTime())/1000);
+	        	console.log(currentTime);
+						doPostChangeAPW();
+					}
+					else if (account=="guest")
+					{
+						console.log("change guest password");
+						currentTime= Math.floor((new Date().getTime())/1000);
+	        	console.log(currentTime);
+						doPostChangeGPW();
+					}
+				}
+				else
+				{
+					PWRuleFailed=1;
+				}
+			}
 		}
 		
 	};
 	
-	const handleOnChange = (evt) => {
-		// Cannot dynamically update the `type` attribute via a two-way binding to the `type` attribtue.
-		// Error: 'type' attribute cannot be dynamic if input uses two-way binding.
-		passwordInput.setAttribute('type', evt.target.checked ? 'text' : 'password' );
-	};
-
 
 	async function checkAccount(id){
 			
@@ -87,6 +371,7 @@
 					})
 				})
 
+
 		if (res.status == 200)
 		{
 			sessionid=await res.text();
@@ -94,10 +379,24 @@
 		}
 		else
 		{
-			account = "";
-			account_Fail++;
-			accountInput.focus();
+			if (res.status == 403)
+			{
+				console.log("403");
+			  lock_status=await res.text();
+			  console.log (lock_status);
+			  if (lock_status ==1)
+			  {
+
+				}
+				else
+				{
+					account = "";
+					account_Fail++;
+				}
+			}
 		}
+		
+
 
 
 		};
@@ -139,14 +438,69 @@
 		left:16%;
 	}
 
-	.buttonC{
+	.buttonAccount{
 		background-color:#1762BC;
 		color: white;
 		border-radius: 15px;
 		font-size:1.8vw;
 		position:relative;
+		margin-top: 25px;
 		top:30%;
 		width:25%
+	}
+
+	.buttonPassWord{
+		background-color:#1762BC;
+		color: white;
+		border-radius: 15px;
+		font-size:1.8vw;
+		position:relative;
+		margin-top: 6px;
+		top:30%;
+		width:25%
+	}
+
+	.checkPassword{
+		font-size:1vw;
+		position:relative;
+		text-align:center;
+		top:30%;
+		left:30%;
+		width:25%;
+	}
+
+
+
+	.buttonChange{
+		background-color:#1762BC;
+		color: white;
+		border-radius: 15px;
+		font-size:1.8vw;
+		position:relative;
+		margin-top: 6px;
+		top:30%;
+		width:25%
+	}
+
+
+	.buttonExpiredRemain{
+		background-color:#1762BC;
+		color: white;
+		border-radius: 15px;
+		font-size:1.8vw;
+		position:relative;
+		margin-top: 32px;
+	}
+
+
+	.buttonExpiredChange{
+		background-color:#1762BC;
+		color: white;
+		border-radius: 15px;
+		font-size:1.8vw;
+		position:relative;
+		margin-top: 32px;
+
 	}
 
 	.AFail{
@@ -155,6 +509,29 @@
 	}
 
 	.PFail{
+		color:red;
+		font-size:12px;
+	}
+
+	.defaultPW
+	{
+		color:red;
+		font-size:12px;
+	}
+
+	.expiredPW
+	{
+		color:red;
+		font-size:12px;
+	}
+
+	.MismatchFail{
+		color:red;
+		font-size:12px;
+	}
+
+	.PWRuleFail{
+
 		color:red;
 		font-size:12px;
 	}
@@ -184,22 +561,102 @@
 
 	</div>
 
-	<button class="buttonC" type="submit">Continue</button>
-	{#if account_Fail != 0}
-	
-<p class="AFail">Please enter a valid account</p>
+	<button class="buttonAccount" type="submit">Continue</button>
+	{#if lock_status == 1}
+			<p class="PFail">This account will be locked. Please login again after 30 minutes</p>
+	{:else if account_Fail != 0}
+		<p class="AFail">Please enter a valid account</p>
 	{/if}	
 
-	{:else if active_step == 'pwd'}
-	<div >
+{:else if active_step == 'pwd'}
+
+	{#if showPassword}
+	<div>
+		<input type="text" id="password" bind:this={passwordInput} bind:value={password} required placeholder="Password"/>
+	</div>
+	{:else}
+	<div>
 		<input type="password" id="password" bind:this={passwordInput} bind:value={password} required placeholder="Password"/>
 	</div>
-	<button class="buttonC" type="submit">Login</button>
-
-	{#if password_Fail != 0}
-	
-<p class="PFail">Please enter a valid password</p>
 	{/if}
+
+	<div class="checkPassword">
+		<label>
+  		<input type="checkbox" bind:checked={showPassword}/>
+  		Show Password
+		</label>
+	</div>
+	<button class="buttonPassWord" type="submit">Login</button>
+	{#if password_Fail != 0}
+		{#if password_Fail >3}
+			<p class="PFail">This account will be locked. Please login again after 30 minutes</p>
+		{:else}
+			<p class="PFail">Please enter a valid password</p>
+		{/if}
+	{/if}
+
+{:else if active_step == 'ChangeInitPW'}
+
+<div class="defaultPW">
+This is default password. Now change password for security considerations.
+</div>
+
+<p class="pt-10"></p>
+
+<div>
+		<input type="text" id="newPassword" bind:this={NewPWInput} bind:value={NewPassword} required placeholder="New Password"/>
+</div>
+
+		<input type="text" id="ConfirmPassword" bind:this={ConfirmPWInput} bind:value={ConfirmPW} required placeholder="Confirm Password"/>
+<div>
+		<button class="buttonChange" type="submit">Change</button>
+</div>
+
+{#if ChangePWMismatch !=0}
+		<p class="MismatchFail">Mismatch. Please enter password again.</p>
+{:else if PWRuleFailed ==1}
+		<p class="PWRuleFail">Password must contain at least one lowercase letter, one uppercase letter,</p> 
+		<p class="PWRuleFail">one number, and one special character.</p>
+    <p class="PWRuleFail">and has a minimum length of 16 characters. Please enter password again.</p>	
+{/if}
+
+
+{:else if active_step == 'ExpiredPW'}
+
+<div class="expiredPW">
+Your password has been expired. To change the password or remain the password.
+</div>
+
+	<div class="flex">
+
+		<button class="buttonExpiredChange" type="submit" on:click={handleExpired}>Change</button>
+		<button class="buttonExpiredRemain" type="submit" on:click={handleExpired}>Remain</button>
+
+
+	</div>
+
+
+{:else if active_step == 'ChangeExpiredPW'}
+
+	<div>
+		<input type="text" id="newPassword" bind:this={NewPWInput} bind:value={NewPassword} required placeholder="New Password"/>		
+	</div>
+
+		<input type="text" id="ConfirmPassword" bind:this={ConfirmPWInput} bind:value={ConfirmPW} required placeholder="Confirm Password"/>
+
+
+	<div>
+		<button class="buttonChange" type="submit">Change</button>
+	</div>
+
+{#if ChangePWMismatch !=0}
+		<p class="MismatchFail">Mismatch. Please enter password again.</p>
+{:else if PWRuleFailed ==1}
+		<p class="PWRuleFail">Password must contain at least one lowercase letter, one uppercase letter,</p> 
+		<p class="PWRuleFail">one number, and one special character.</p>
+    <p class="PWRuleFail">and has a minimum length of 16 characters. Please enter password again.</p>
+{/if}
+
 
 {/if}
 </form>

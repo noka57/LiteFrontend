@@ -1986,10 +1986,118 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <TabItem title="Observation">
+
+<Accordion>
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Port Status
+    </span>
+
+  </AccordionItem>
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Tag Log
+    </span>
+
+  </AccordionItem>
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    UL Log
+    </span>
+
+  </AccordionItem>
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    DL Log
+    </span>
+
+  </AccordionItem>
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Log Export
+    </span>
+
+  </AccordionItem>
+
+</Accordion>
+
+
+
 </TabItem>
 
 
 <TabItem title="Simulator">
+
+
+
+<Accordion>
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Down Link
+    </span>
+
+
+<p>Select Tag: </p><select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" >
+<option disabled="" value="">None</option>
+<option value="1" >modbusTest</option>
+
+</select>
+
+
+<p class="pt-5">Value: </p><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500">
+
+
+
+<p class="pt-5"></p>
+<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full" >Simulate</button>
+
+  </AccordionItem>
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Up Link
+    </span>
+
+<p>Select Tag: </p><select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2">
+<option disabled="" value="">None</option>
+<option value="1" >modbusTest</option>
+
+</select>
+
+
+<p class="pt-5">Value: </p><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500">
+
+<p class="pt-5"></p>
+<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full" >Simulate</button>
+
+  </AccordionItem>
+</Accordion>
+
+
+
  </TabItem>
 
 

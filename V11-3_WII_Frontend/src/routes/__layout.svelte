@@ -821,7 +821,7 @@ const topMenuList = [{ href: '/apply', id: 0 },
         </svelte:fragment>
 						<SidebarDropdownItem label="WAN" href='/wan' active={activeUrl === '/wan'}/>
 						<SidebarDropdownItem label="LAN" href='/lan' active={activeUrl === '/lan'}/>
-						<SidebarDropdownItem label="NAT" href='/nat' active={activeUrl === '/nat'}/>
+						<SidebarDropdownItem label="Port Forwarding" href='/nat' active={activeUrl === '/nat'}/>
 						<SidebarDropdownItem label="Firewall" href='/firewall'  active={activeUrl === '/firewall'}/>
 						<SidebarDropdownItem label="Static Route" href='/staticR' active={activeUrl === '/staticR'}/>
 					</SidebarDropdownWrapper>

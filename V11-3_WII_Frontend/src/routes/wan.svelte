@@ -27,7 +27,7 @@
     openDetailStatus=!openDetailStatus;
   };
 
-  let hidden=1;
+  let hidden=0;
 
 
   let wan_data="";
@@ -935,7 +935,7 @@
   </TabItem>
   {/if}
 
-  <TabItem open title="Cellular WAN-1">
+  <TabItem open title="Cellular WAN">
 
 
 
@@ -1122,15 +1122,14 @@
     <span slot="header" class="pl-4">Advanced Settings</span>
 <table>
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td>  
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Mode</p></td>  
     <td class="pl-5">
 <div class="flex gap-4">
 {#if getdataAlready}  
   <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.auth} value='AUTO' >AUTO</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.auth} value='3G' >3G</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.auth} value='4G' >4G</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.auth} value='5G' >5G</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.auth} value='5GNR-SA' >5GNR-SA</Radio>
+
 {/if}
 </div>
 </td>
@@ -1195,7 +1194,7 @@
     <span slot="header" class="pl-4">SIM Policy</span>
 <table>
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Authentication</p></td>
+    <td><p class="pl-40 pt-1 text-lg font-light text-right">Mode</p></td>
  <td class="pl-5">
 <div class="flex gap-4">
 {#if getdataAlready} 

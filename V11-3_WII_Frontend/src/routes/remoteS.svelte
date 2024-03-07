@@ -308,7 +308,7 @@
   <table>
 {#if getDataReady == 1}
     <tr>
-    <td class="w-36"><p class="pl-5 pt-5 text-lg font-light text-left">Restful API</p></td>
+    <td class="w-36"><p class="pl-5 pt-5 text-lg font-light text-left">REST API</p></td>
 <td class="pl-5 pt-5"><Toggle bind:checked={changed_remote_service_data.config.service_remoteService.restful_api_en}></Toggle></td>
 <td></td>
 

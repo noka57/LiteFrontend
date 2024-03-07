@@ -2745,7 +2745,7 @@
     {value:"Modbus", name: "Modbus"},
     {value:"Email", name: "Email"},
     {value:"MQTTP", name: "MQTT Publish"},
-    {value:"Line", name: "Line Notification"},
+    {value:"Line", name: "LINE Notification"},
     {value:"TCPM", name: "TCP Message"},
     {value:"System", name: "System"},
   ];
@@ -5839,10 +5839,8 @@ Short</TableBodyCell>
   </form>
 </Modal>
 
+
 <p class="mt-8">
-
-
-
 
 <Table shadow striped={true}>
 
@@ -5853,29 +5851,68 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus variable. Please go to modbus page for detailed setting.</p>
   </caption>
 {#if openDetailStatusMV}
-  <TableHead>
+<TableHead>
     <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell>Variable Name</TableHeadCell>
-    <TableHeadCell>Master Profile</TableHeadCell>
+    <TableHeadCell class="!p-2">No</TableHeadCell>
+    <TableHeadCell class="">Variable Name</TableHeadCell>
+    <TableHeadCell class="w-18">Master Profile</TableHeadCell>
     <TableHeadCell class="w-18">Slave ID</TableHeadCell>
     <TableHeadCell class="w-18">Point Type</TableHeadCell>
     <TableHeadCell class="w-18">Address (DEC)</TableHeadCell>
     <TableHeadCell>Quantity</TableHeadCell>
+    <TableHeadCell>Response Timeout</TableHeadCell>
     <TableHeadCell class="w-18">Polling Rate</TableHeadCell>
+    <TableHeadCell>Delay Between Polls</TableHeadCell>
+    <TableHeadCell>Byte Order</TableHeadCell>
   </TableHead>
   <TableBody>
+
+{#if getDataReady == 1}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as VariableMasterItem, index}
+   
+
  <TableBodyRow>
-       <TableBodyCell>1</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">1</TableBodyCell>
-  <TableBodyCell class="w-10">Line Current Phase A</TableBodyCell>
-  <TableBodyCell class="w-10">Modbus_Master_T0</TableBodyCell>
-  <TableBodyCell class="w-18">2</TableBodyCell>
-  <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
-  <TableBodyCell class="w-18">0</TableBodyCell>
-  <TableBodyCell class="w-10">1</TableBodyCell>
-  <TableBodyCell class="w-18">1000 ms</TableBodyCell>
+{#if VariableMasterItem.enable}
+       <TableBodyCell class='w-2'>1</TableBodyCell>
+{:else}
+       <TableBodyCell class='w-2'>0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
+  <TableBodyCell class="w-18">{VariableMasterItem.variableName}</TableBodyCell>
+  <TableBodyCell class="w-10">{VariableMasterItem.profile}</TableBodyCell>
+  <TableBodyCell class="w-18">{VariableMasterItem.slaveId}</TableBodyCell>
+{#if VariableMasterItem.pointType == 0}
+    <TableBodyCell class="w-10">Coil</TableBodyCell>
+{:else if VariableMasterItem.pointType == 1}
+    <TableBodyCell class="w-10">Discrete Input</TableBodyCell>
+{:else if VariableMasterItem.pointType == 2}
+    <TableBodyCell class="w-10">Input Registers</TableBodyCell>
+{:else if VariableMasterItem.pointType == 3}
+    <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
+{:else}
+  <TableBodyCell class="w-10"></TableBodyCell>
+{/if}
+  <TableBodyCell class="w-18">{VariableMasterItem.address}</TableBodyCell>
+  <TableBodyCell class="w-10">{VariableMasterItem.quantity}</TableBodyCell>
+  <TableBodyCell class="w-18">{VariableMasterItem.responseTimeout} ms</TableBodyCell>
+<TableBodyCell class="w-18">{VariableMasterItem.pollingRate} ms</TableBodyCell>
+    <TableBodyCell class="w-18">{VariableMasterItem.delayBetweenPolls} ms</TableBodyCell>
+
+{#if VariableMasterItem.byteOrder==0} 
+    <TableBodyCell class="w-18">Big Endian</TableBodyCell>
+{:else if VariableMasterItem.byteOrder==1}   
+        <TableBodyCell class="w-18">Little Endian</TableBodyCell>
+{:else if VariableMasterItem.byteOrder==2}
+    <TableBodyCell class="w-18">Big Endian Byte Swap</TableBodyCell>
+{:else if VariableMasterItem.byteOrder==3}
+        <TableBodyCell class="w-18">Little Endian Byte Swap</TableBodyCell>
+{:else}
+    <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
+
     </TableBodyRow>
+{/each}
+{/if}
 
   </TableBody>
       {/if}
@@ -5883,7 +5920,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <p class="mt-4">
 
-<Table shadow striped={true} >
+<Table shadow striped={true}>
 
 
   <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMS} on:keydown={() => {}}>
@@ -5895,22 +5932,49 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if openDetailStatusMMS}
 
   <TableHead>
-    <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-10">Serial Port</TableHeadCell>
-    <TableHeadCell>Interface</TableHeadCell>
-    <TableHeadCell>Baudrate</TableHeadCell>
-    <TableHeadCell>Parity</TableHeadCell>
-    <TableHeadCell class="w-18">Data Bits</TableHeadCell>
-    <TableHeadCell class="w-18">Stop Bits</TableHeadCell>
-    <TableHeadCell>Response Timeout</TableHeadCell>
-    <TableHeadCell>Delay Between Polls</TableHeadCell>
+    <TableHeadCell class="w-10">Enable</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-10">Alias Name</TableHeadCell>
+    <TableHeadCell class="w-10">Serial Profile</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>     
   </TableHead>
   <TableBody>
 
 
 
+
+{#if getDataReady == 1}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RTUMasterItem, index}
+
+    <TableBodyRow>
+
+{#if RTUMasterItem.enable}
+      <TableBodyCell>1</TableBodyCell>
+{:else}
+      <TableBodyCell>0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{RTUMasterItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{RTUMasterItem.serialProfile}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>      
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell> 
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>      
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>       
+    </TableBodyRow>
+
+{/each}
+{/if}
 
   
 
@@ -5929,17 +5993,43 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if openDetailStatusMMT}
   <TableHead>
-    <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
+     <TableHeadCell class="w-10">Enable</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-10">LAN Profile</TableHeadCell>   
+    <TableHeadCell class="w-10">Alias Name</TableHeadCell>
     <TableHeadCell class="w-10">Remote Server IP</TableHeadCell>
-    <TableHeadCell>Remote Port</TableHeadCell>
-    <TableHeadCell>Connection Timeout</TableHeadCell>
-    <TableHeadCell>Response Timeout</TableHeadCell>
-    <TableHeadCell>Delay Between Polls</TableHeadCell>
-
+    <TableHeadCell class="w-10">Remote Port</TableHeadCell>
+    <TableHeadCell class="w-10">Connection Timeout</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>  
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell> 
   </TableHead>
   <TableBody>
+
+
+{#if getDataReady == 1}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TCPMasterItem, index}
+   
+    <TableBodyRow>
+{#if TCPMasterItem.enable}
+      <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
+      <TableBodyCell class="w-10">0</TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.lanProfile}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.remoteServerIp}</TableBodyCell>
+      <TableBodyCell class="w-10">{TCPMasterItem.remotePort}</TableBodyCell>
+      <TableBodyCell class="w-10">{TCPMasterItem.connectionTimeout} ms</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>       
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell> 
+    </TableBodyRow>
+{/each}
+{/if}
 
 
 
@@ -6493,7 +6583,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
     <span slot="header" class="pl-4">
-    Line Notification
+    LINE Notification
     </span>
 
  <Table shadow striped={true} tableNoWFull={true}>

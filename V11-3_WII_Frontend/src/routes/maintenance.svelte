@@ -441,7 +441,7 @@
 <tr>
 
 <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Update Local Firmware</p></td>
-<td class="pl-5 pt-5">
+<td class="pl-5 pt-5" colspan="2">
 
 <input type="file" id="FwrUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleFwrUpload}>
 
@@ -476,11 +476,144 @@
   </tr>
 
 
-<tr class="pt-5">
-    <td></td>
-    <td></td>
+ <tr>
+    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">EW-FOTA Time Configuration</p></td>
+<td class="pl-5 pt-5 w-10">
+Weekday
+</td>
+
+<td class="pl-5 pt-5" colspan="2">
+{#if getDataReady==1}
+{#if changed_maintenance_data.config.system_maintenance.fotaEn}
+<div class="flex gap-3">
+<label class="font-medium">
+ <input type="checkbox">
+Mon
+</label>
+
+<label class="font-medium">
+<input type="checkbox">
+Tue
+</label>
 
 
+<label class="font-medium">
+<input type="checkbox">
+Wed
+</label>
+
+
+<label class="font-medium">
+<input type="checkbox">
+Thu
+</label>
+
+
+<label class="font-medium">
+<input type="checkbox">
+Fri
+</label>
+
+
+<label class="font-medium">
+<input type="checkbox">
+Sat
+</label>
+
+
+<label class="font-medium">
+<input type="checkbox">
+Sun
+</label>
+
+</div>
+{:else}
+
+<div class="flex gap-3">
+<label class="font-medium text-gray-400 dark:text-gray-500 ">
+ <input type="checkbox" class="disabled:cursor-not-allowed bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-700 dark:border-gray-600 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" disabled>
+Mon
+</label>
+
+<label class="font-medium text-gray-400 dark:text-gray-500 ">
+ <input type="checkbox" class="disabled:cursor-not-allowed bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-700 dark:border-gray-600 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" disabled>
+Tue
+</label>
+
+
+<label class="font-medium text-gray-400 dark:text-gray-500 ">
+ <input type="checkbox" class="disabled:cursor-not-allowed bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-700 dark:border-gray-600 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" disabled>
+Wed
+</label>
+
+
+<label class="font-medium text-gray-400 dark:text-gray-500 ">
+ <input type="checkbox" class="disabled:cursor-not-allowed bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-700 dark:border-gray-600 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" disabled>
+Thu
+</label>
+
+
+<label class="font-medium text-gray-400 dark:text-gray-500 ">
+ <input type="checkbox" class="disabled:cursor-not-allowed bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-700 dark:border-gray-600 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" disabled>
+Fri
+</label>
+
+
+<label class="font-medium text-gray-400 dark:text-gray-500 ">
+ <input type="checkbox" class="disabled:cursor-not-allowed bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-700 dark:border-gray-600 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" disabled>
+Sat
+</label>
+
+
+<label class="font-medium text-gray-400 dark:text-gray-500 ">
+ <input type="checkbox" class="disabled:cursor-not-allowed bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-700 dark:border-gray-600 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" disabled>
+Sun
+</label>
+
+</div>
+
+{/if}
+{/if}
+</td>
+
+  </tr>
+
+
+
+ <tr>
+    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right"></p></td>
+<td class="pl-5 pt-5 w-10">
+Hour
+</td>
+
+<td class="pl-5 pt-5" colspan="2">
+{#if getDataReady==1}
+{#if changed_maintenance_data.config.system_maintenance.fotaEn}
+<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"  min="0" max="23">
+
+{:else}
+
+
+<input type="number" class="disabled:cursor-not-allowed bg-gray-100 border-gray-300 border text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"  min="0" max="23" disabled>
+
+{/if}
+{/if}
+</td>
+
+  </tr>
+
+<tr class="pt-10">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+      <td></td>
+    <td></td>
     <td><Button color="blue" pill={true} on:click={SaveMaintenanceSettings}><svg class="mr-2 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>

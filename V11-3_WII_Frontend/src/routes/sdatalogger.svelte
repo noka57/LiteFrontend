@@ -109,6 +109,13 @@
   let PFormatUDefine="Hello";
 
 
+  
+
+
+
+
+
+
  const btn1 = () => 
  {
     PFormatUDefine+="$TimeStamp$";
@@ -155,7 +162,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -166,7 +173,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -177,7 +184,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -188,7 +195,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -199,7 +206,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -210,7 +217,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -221,7 +228,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -232,7 +239,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -243,7 +250,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -254,7 +261,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     }
 
 
@@ -273,7 +280,7 @@
         new_proxy_edge[index].variablePostprocessingValue=1;
         new_proxy_edge[index].postprocessedDisplay=1;
         new_proxy_edge[index].dataFormat=0;
-        new_proxy_edge[index].userDefinedData="";
+        new_proxy_edge[index].userDefineedData="";
 
         new_proxy_edge_index=index;
         new_proxy_edge_modal=true;
@@ -299,7 +306,7 @@
       variablePostprocessingValue:1,
       postprocessedDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     };
 
 
@@ -316,7 +323,7 @@
         BackupProxyEdge.variablePostprocessingValue=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].variablePostprocessingValue;
         BackupProxyEdge.postprocessedDisplay=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessedDisplay;
         BackupProxyEdge.dataFormat=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataFormat;
-        BackupProxyEdge.userDefinedData=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].userDefinedData;
+        BackupProxyEdge.userDefineedData=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].userDefineedData;
 
     }
 
@@ -341,7 +348,7 @@
 
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataFormat=BackupProxyEdge.dataFormat;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].userDefinedData=BackupProxyEdge.userDefinedData;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].userDefineedData=BackupProxyEdge.userDefineedData;
 
     }
 
@@ -363,7 +370,7 @@
       variableType:2,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -372,7 +379,7 @@
       variableType:2,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -381,7 +388,7 @@
       variableType:2,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -390,7 +397,7 @@
       variableType:2,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },    
     {
       enable: false,
@@ -399,7 +406,7 @@
       variableType:2,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -408,7 +415,7 @@
       variableType:2,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -417,7 +424,7 @@
       variableType:2,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -426,7 +433,7 @@
       variableType:2,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -435,7 +442,7 @@
       variableType:2,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     },
     {
       enable: false,
@@ -444,7 +451,7 @@
       variableType:2,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     }
 
     ];
@@ -457,12 +464,19 @@
         new_monitor_edge[index].variableType=2;
         new_monitor_edge[index].variableDisplay=1;
         new_monitor_edge[index].dataFormat=0;
-        new_monitor_edge[index].userDefinedData="";
+        new_monitor_edge[index].userDefineedData="";
 
         new_monitor_edge_index=index;
         new_monitor_edge_modal=true;
 
     }
+
+
+    function NoAddProxyEdge(index)
+    {
+      new_monitor_edge_modal=false;
+    }
+
 
     function add_new_monitor_edge(index)
     {
@@ -482,8 +496,14 @@
       variableType:1,
       variableDisplay:0,
       dataFormat:0,
-      userDefinedData:""
+      userDefineedData:""
     };
+
+
+    function NoAddMonitorEdge(index)
+    {
+      modify_monitor_edge_modal=false;
+    }
 
 
 
@@ -497,7 +517,7 @@
         BackupMonitorEdge.variableType=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].variableType;
         BackupMonitorEdge.variableDisplay=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].variableDisplay;
         BackupMonitorEdge.dataFormat=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataFormat;
-        BackupMonitorEdge.userDefinedData=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].userDefinedData;
+        BackupMonitorEdge.userDefineedData=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].userDefineedData;
 
     }
 
@@ -518,7 +538,7 @@
 
         changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataFormat=BackupMonitorEdge.dataFormat;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].userDefinedData=BackupMonitorEdge.userDefinedData;
+        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].userDefineedData=BackupMonitorEdge.userDefineedData;
 
     }
 
@@ -527,6 +547,135 @@
     {
         modify_monitor_edge_modal=false;
     }
+
+
+
+  const NMbtn1=() =>
+  {
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$TimeStamp$";
+  }
+
+
+
+  const NMbtn2=() =>
+  {
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$Keyword1$";
+  }
+
+
+
+  const NMbtn3=() =>
+  {
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$Keyword2$";
+  }
+
+  const NMbtn4=() =>
+  {
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$Keyword3$";
+  }
+
+
+  const NMbtn5=() =>
+  {
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$Keyword4$";
+  }
+
+
+  const NPbtn1=() =>
+  {
+    console.log("NPbtn1");
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$TimeStamp$";
+  }
+
+
+  const NPbtn2=() =>
+  {
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$Keyword1$";
+  }
+
+
+
+  const NPbtn3=() =>
+  {
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$Keyword2$";
+  }
+
+  const NPbtn4=() =>
+  {
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$Keyword3$";
+  }
+
+
+  const NPbtn5=() =>
+  {
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$Keyword4$";
+  }
+
+
+
+  const CPbtn1=() =>
+  {
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$TimeStamp$";
+  }
+
+
+
+  const CPbtn2=() =>
+  {
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$Keyword1$";
+  }
+
+
+
+  const CPbtn3=() =>
+  {
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$Keyword2$";
+  }
+
+  const CPbtn4=() =>
+  {
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$Keyword3$";
+  }
+
+
+  const CPbtn5=() =>
+  {
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$Keyword4$";
+  }
+
+
+  const CMbtn1=() =>
+  {
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$TimeStamp$";
+  }
+
+
+
+  const CMbtn2=() =>
+  {
+   changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$Keyword1$";
+  }
+
+
+
+  const CMbtn3=() =>
+  {
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$Keyword2$";
+  }
+
+  const CMbtn4=() =>
+  {
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$Keyword3$";
+  }
+
+
+  const CMbtn5=() =>
+  {
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$Keyword4$";
+  }
+
+
+
 
 
 
@@ -1120,7 +1269,7 @@
 
 
 
-<Modal bind:open={new_proxy_edge_modal}  size="lg" class="w-full" autoclose>
+<Modal bind:open={new_proxy_edge_modal}  size="lg" class="w-full" permanent={true}>
   <form action="#">
 <label>
 {#if getDataReady == 1}
@@ -1128,6 +1277,7 @@
 {/if}
   Enable
 </label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddProxyEdge(new_proxy_edge_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
 
@@ -1247,7 +1397,7 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
-    <Button size="xs" on:click={btn1}>TimeStamp</Button>
+    <Button size="xs" on:click={NPbtn1(new_proxy_edge_index)}>TimeStamp</Button>
 {:else}
     <Button size="xs" disabled>TimeStamp</Button>
 {/if}
@@ -1255,7 +1405,7 @@
 
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn2}>Keyword1</Button>
+<Button size="xs" on:click={NPbtn2}>Keyword1</Button>
 {:else}
 <Button size="xs" disabled>Keyword1</Button>
 {/if}
@@ -1263,7 +1413,7 @@
 
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn3}>Keyword2</Button>
+<Button size="xs" on:click={NPbtn3}>Keyword2</Button>
 {:else}
 <Button size="xs" disabled>Keyword2</Button>
 {/if}
@@ -1271,7 +1421,7 @@
 
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn4}>Keyword3</Button>
+<Button size="xs" on:click={NPbtn4}>Keyword3</Button>
 {:else}
 <Button size="xs" disabled>Keyword3</Button>
 {/if}
@@ -1280,7 +1430,7 @@
 
 <li class='pt-4'>
 {#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn5}>Keyword4</Button>
+<Button size="xs" on:click={NPbtn5}>Keyword4</Button>
 {:else}
 <Button size="xs" disabled>Keyword4</Button>
 {/if}
@@ -1293,7 +1443,7 @@
     <td class="pl-4 pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
 
-<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={PFormatUDefine} />
+<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={new_proxy_edge[new_proxy_edge_index].userDefineedData} />
 
 
 
@@ -1455,7 +1605,7 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
-    <Button size="xs" on:click={btn1}>TimeStamp</Button>
+    <Button size="xs" on:click={CPbtn1}>TimeStamp</Button>
 {:else}
     <Button size="xs" disabled>TimeStamp</Button>
 {/if}
@@ -1463,7 +1613,7 @@
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn2}>Keyword1</Button>
+<Button size="xs" on:click={CPbtn2}>Keyword1</Button>
 {:else}
 <Button size="xs" disabled>Keyword1</Button>
 {/if}
@@ -1471,7 +1621,7 @@
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn3}>Keyword2</Button>
+<Button size="xs" on:click={CPbtn3}>Keyword2</Button>
 {:else}
 <Button size="xs" disabled>Keyword2</Button>
 {/if}
@@ -1479,7 +1629,7 @@
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn4}>Keyword3</Button>
+<Button size="xs" on:click={CPbtn4}>Keyword3</Button>
 {:else}
 <Button size="xs" disabled>Keyword3</Button>
 {/if}
@@ -1488,7 +1638,7 @@
 
 <li class='pt-4'>
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn5}>Keyword4</Button>
+<Button size="xs" on:click={CPbtn5}>Keyword4</Button>
 {:else}
 <Button size="xs" disabled>Keyword4</Button>
 {/if}
@@ -1501,7 +1651,7 @@
     <td class="pl-4 pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
 
-<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={PFormatUDefine} />
+<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData} />
 
 
 
@@ -1792,7 +1942,7 @@
 
   </TableBody>
 
-<Modal bind:open={new_monitor_edge_modal}  size="lg" class="w-full" autoclose>
+<Modal bind:open={new_monitor_edge_modal}  size="lg" class="w-full" permanent={true}>
   <form action="#">
 <label>
 {#if getDataReady == 1}
@@ -1800,6 +1950,7 @@
 {/if}
   Enable
 </label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddMonitorEdge(new_monitor_edge_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
 
@@ -1898,7 +2049,7 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
-    <Button size="xs" on:click={btn1}>TimeStamp</Button>
+    <Button size="xs" on:click={NMbtn1}>TimeStamp</Button>
 {:else}
     <Button size="xs" disabled>TimeStamp</Button>
 {/if}
@@ -1906,7 +2057,7 @@
 
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn2}>Keyword1</Button>
+<Button size="xs" on:click={NMbtn2}>Keyword1</Button>
 {:else}
 <Button size="xs" disabled>Keyword1</Button>
 {/if}
@@ -1914,7 +2065,7 @@
 
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn3}>Keyword2</Button>
+<Button size="xs" on:click={NMbtn3}>Keyword2</Button>
 {:else}
 <Button size="xs" disabled>Keyword2</Button>
 {/if}
@@ -1922,7 +2073,7 @@
 
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn4}>Keyword3</Button>
+<Button size="xs" on:click={NMbtn4}>Keyword3</Button>
 {:else}
 <Button size="xs" disabled>Keyword3</Button>
 {/if}
@@ -1931,7 +2082,7 @@
 
 <li class='pt-4'>
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn5}>Keyword4</Button>
+<Button size="xs" on:click={NMbtn5}>Keyword4</Button>
 {:else}
 <Button size="xs" disabled>Keyword4</Button>
 {/if}
@@ -1944,7 +2095,7 @@
     <td class="pl-4 pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
 
-<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={PFormatUDefine} />
+<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={new_monitor_edge[new_monitor_edge_index].userDefineedData} />
 
 
 
@@ -2082,7 +2233,7 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
-    <Button size="xs" on:click={btn1}>TimeStamp</Button>
+    <Button size="xs" on:click={CMbtn1}>TimeStamp</Button>
 {:else}
     <Button size="xs" disabled>TimeStamp</Button>
 {/if}
@@ -2090,7 +2241,7 @@
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn2}>Keyword1</Button>
+<Button size="xs" on:click={CMbtn2}>Keyword1</Button>
 {:else}
 <Button size="xs" disabled>Keyword1</Button>
 {/if}
@@ -2098,7 +2249,7 @@
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn3}>Keyword2</Button>
+<Button size="xs" on:click={CMbtn3}>Keyword2</Button>
 {:else}
 <Button size="xs" disabled>Keyword2</Button>
 {/if}
@@ -2106,7 +2257,7 @@
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn4}>Keyword3</Button>
+<Button size="xs" on:click={CMbtn4}>Keyword3</Button>
 {:else}
 <Button size="xs" disabled>Keyword3</Button>
 {/if}
@@ -2115,7 +2266,7 @@
 
 <li class='pt-4'>
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={btn5}>Keyword4</Button>
+<Button size="xs" on:click={CMbtn5}>Keyword4</Button>
 {:else}
 <Button size="xs" disabled>Keyword4</Button>
 {/if}
@@ -2128,7 +2279,7 @@
     <td class="pl-4 pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
 
-<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={PFormatUDefine} />
+<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData} />
 
 
 

@@ -1061,6 +1061,27 @@
 <Tooltip trigger="click" triggeredBy="#click">Pin Code</Tooltip>
     </td>
     </tr>
+
+ <tr>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">DNS</p></td>
+    <td class="pl-5 pt-5">
+{#if getdataAlready}    
+    <input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].basicSetting.dns[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+    </td>
+
+    </tr>
+
+ <tr>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right"></p></td>
+    <td class="pl-5 pt-5">
+{#if getdataAlready}    
+    <input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].basicSetting.dns[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+    </td>
+
+    </tr>
+
     <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-center">Automatic APN Selection</p></td><td class="pl-5 pt-5">
 {#if getdataAlready}   

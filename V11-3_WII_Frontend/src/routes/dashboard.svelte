@@ -17,7 +17,7 @@
   let sessionid='';
   let interval;
   let sessionBinary;
-  let hidden=1;
+  let hidden=0;
 
   const options = {
     year: 'numeric',

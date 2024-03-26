@@ -129,20 +129,11 @@
 
 </script>
 
-
+ <Tabs style="underline">
+  <TabItem open title="General">
 
 <table>
-  <tr>
-  <td><p class="pl-40 pt-1 text-lg font-light text-right">IP Mode</p>
 
-  </td>
-{#if getDataReady==1}
-    <td class="pl-5"><div class="flex gap-4">
-  <Radio bind:group={changed_lan_data.config.networking_lan.ipMode} value={0} >Static</Radio>
-  <Radio bind:group={changed_lan_data.config.networking_lan.ipMode} value={1} >DHCP</Radio>
-</div></td>
-{/if}
-</tr>
 {#if getDataReady==1}
 {#if changed_lan_data.config.networking_lan.ipMode==0}
 <tr>
@@ -179,6 +170,9 @@
 
   </table>
 
+</TabItem>
+  <TabItem title="DHCP Server">
 
 
-
+</TabItem>
+</Tabs>

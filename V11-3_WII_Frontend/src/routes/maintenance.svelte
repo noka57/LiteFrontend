@@ -26,6 +26,7 @@
 
   let RestartIntervalId;
   let RestartReady=0;
+  let localUpdateKeepConfig=1;
 
 
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
@@ -299,26 +300,54 @@
 
       if (magicValid == 1)
       {
-        defaultModal=true;
-        const res = await fetch(window.location.origin+"/updateFwr", {
-        method: 'POST',
-        body: fwrContent,
-            headers: {
-              'Content-Type': 'application/octet-stream',
-            },
-          }
-        )
 
-        if (res.status == 200)
+        defaultModal=true;
+
+        if (localUpdateKeepConfig ==1)
         {
-          uploadfwrIsValid=1;
-          console.log("200 Valid Fwr, updating...");
-          RestartIntervalId = setInterval(sendPing, 5000);
+          const res = await fetch(window.location.origin+"/updateFwr", {
+          method: 'POST',
+          body: fwrContent,
+              headers: {
+                'Content-Type': 'application/octet-stream',
+              },
+            }
+          )
+
+          if (res.status == 200)
+          {
+            uploadfwrIsValid=1;
+            console.log("200 Valid Fwr, updating...");
+            RestartIntervalId = setInterval(sendPing, 5000);
+          }
+          else
+          {
+            magicValid=0;
+            CheckedFwrInvalid=1;
+          }
         }
         else
         {
-          magicValid=0;
-          CheckedFwrInvalid=1;
+          const res = await fetch(window.location.origin+"/UpdateFwrNokeepC", {
+          method: 'POST',
+          body: fwrContent,
+              headers: {
+                'Content-Type': 'application/octet-stream',
+              },
+            }
+          )
+
+          if (res.status == 200)
+          {
+            uploadfwrIsValid=1;
+            console.log("200 Valid Fwr, updating...");
+            RestartIntervalId = setInterval(sendPing, 5000);
+          }
+          else
+          {
+            magicValid=0;
+            CheckedFwrInvalid=1;
+          }        
         }
 
       }
@@ -435,6 +464,14 @@
 
 <Tabs style="underline">
   <TabItem open title="Firmware">
+
+<Accordion>
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Local
+    </span>  
 <table>
 
 
@@ -464,6 +501,27 @@
 
 </tr>
 
+<tr>
+    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Keep Current Configuration</p></td>
+    <td class="pl-5 pt-5">
+<Toggle bind:checked={localUpdateKeepConfig}></Toggle>
+</td>
+</tr>
+
+</table>
+
+</AccordionItem>
+
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    EW-FOTA
+    </span>  
+
+<table>
 
     <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Enable EW-FOTA</p></td>
@@ -474,6 +532,13 @@
 </td>
 
   </tr>
+
+<tr>
+    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Keep Current Configuration</p></td>
+    <td class="pl-5 pt-5">
+<Toggle></Toggle>
+</td>
+</tr>
 
 
  <tr>
@@ -623,6 +688,8 @@ Hour
     </tr>
 
 </table>
+</AccordionItem>
+</Accordion>
 
 
 <Modal bind:open={defaultModal} size="md" class="w-full" permanent={true}>

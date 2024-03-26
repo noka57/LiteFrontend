@@ -1420,6 +1420,29 @@
 
     ];
 
+    let Modify_PortForwarding_Modal=false;
+    let New_PortForwarding_Modal=false;
+
+    function NewPortFW_Item_Invoker()
+    {
+        New_PortForwarding_Modal=true;
+    }
+
+    function modalTriggerPortFW()
+    {
+
+        Modify_PortForwarding_Modal=true;
+    }
+
+    function NoModifyPortFW()
+    {
+        Modify_PortForwarding_Modal=false;
+    }
+
+    function ModifyPortFW()
+    {
+         Modify_PortForwarding_Modal=false;   
+    }
     
 
     function modalTriggerRemoteNetworkAccess(index)
@@ -3738,8 +3761,8 @@ async function getOpenVPNClientStatus() {
 
        </TableBodyCell>
 
-   <TableHeadCell class="!p-4">
-    </TableHeadCell>
+   <TableBodyCell class="!p-4">
+    </TableBodyCell>
 
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-96">{ccd.ccd_client_certificate_common_name}</TableBodyCell>
@@ -3865,9 +3888,221 @@ async function getOpenVPNClientStatus() {
 
  </AccordionItem>
 
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">Port Forwarding</span>
+
+
+ <Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4 w-4">
+    </TableHeadCell>
+    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="w-36">Incoming Protocol</TableHeadCell>
+    <TableHeadCell class="w-48">Incoming Destination Port</TableHeadCell>
+    <TableHeadCell class="w-36">Redirected Port</TableHeadCell>
+
+</TableHead>
+
+
+<TableBody>
+
+
+  <TableBodyRow>
+          <TableBodyCell class="!p-4">
+
+      </TableBodyCell>
+      <TableBodyCell class="!p-4 w-8">
+<button on:click={() => modalTriggerPortFW()}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </TableBodyCell>
+
+   <TableBodyCell class="!p-4">
+    </TableBodyCell>
+
+                    <TableBodyCell class="w-8">1</TableBodyCell>
+                    <TableBodyCell class="w-36"></TableBodyCell>
+                    <TableBodyCell class="w-48"></TableBodyCell>                    
+                    <TableBodyCell class="w-36"></TableBodyCell>
+
+                    <TableBodyCell class="w-10"></TableBodyCell>
+                    <TableBodyCell class="w-10"></TableBodyCell>
+
+    </TableBodyRow>
+
+<TableBodyRow>
+      <TableBodyCell class="!p-4 w-8">
+
+
+{#if 1 < 10}    
+<button on:click={() => NewPortFW_Item_Invoker(1)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+{/if}  
+
+ </TableBodyCell>
+      
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="w-36"></TableBodyCell>
+      <TableBodyCell class="w-48"></TableBodyCell>                    
+      <TableBodyCell class="w-36"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+    </TableBodyRow>
+ <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true} ><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+</TableBody>
+</Table>    
+
+ </AccordionItem>
+
 </Accordion>
 
 </TabItem>
+
+
+<Modal bind:open={Modify_PortForwarding_Modal} size="md" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyPortFW}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+<table>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Protocol
+      </p></td>
+<td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio  >UDP</Radio>
+  <Radio  >TCP</Radio>
+
+</div></td>
+
+  </tr>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Destination Port
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Redirected Port
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyPortFW}>Modify</Button></td>
+
+
+    </tr>
+
+</table>
+</Modal>
+
+
+
+<Modal bind:open={New_PortForwarding_Modal} size="md" class="w-full" autoclose>
+
+<table>
+
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Protocol
+      </p></td>
+<td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio  >UDP</Radio>
+  <Radio  >TCP</Radio>
+
+</div></td>
+
+  </tr>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Destination Port
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Redirected Port
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+  <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true}}>Add</Button></td>
+
+
+    </tr>
+
+
+</table>
+</Modal>
+
 
 
 
@@ -4530,6 +4765,221 @@ async function getOpenVPNClientStatus() {
 
 
  </AccordionItem>
+
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">Port Forwarding</span>
+
+
+ <Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4 w-4">
+    </TableHeadCell>
+    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="w-36">Incoming Protocol</TableHeadCell>
+    <TableHeadCell class="w-48">Incoming Destination Port</TableHeadCell>
+    <TableHeadCell class="w-36">Redirected Port</TableHeadCell>
+
+</TableHead>
+
+
+<TableBody>
+
+
+  <TableBodyRow>
+          <TableBodyCell class="!p-4">
+
+      </TableBodyCell>
+      <TableBodyCell class="!p-4 w-8">
+<button on:click={() => modalTriggerPortFW()}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </TableBodyCell>
+
+   <TableBodyCell class="!p-4">
+    </TableBodyCell>
+
+                    <TableBodyCell class="w-8">1</TableBodyCell>
+                    <TableBodyCell class="w-36"></TableBodyCell>
+                    <TableBodyCell class="w-48"></TableBodyCell>                    
+                    <TableBodyCell class="w-36"></TableBodyCell>
+
+                    <TableBodyCell class="w-10"></TableBodyCell>
+                    <TableBodyCell class="w-10"></TableBodyCell>
+
+    </TableBodyRow>
+
+<TableBodyRow>
+      <TableBodyCell class="!p-4 w-8">
+
+
+{#if 1 < 10}    
+<button on:click={() => NewPortFW_Item_Invoker(1)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+{/if}  
+
+ </TableBodyCell>
+      
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="w-36"></TableBodyCell>
+      <TableBodyCell class="w-48"></TableBodyCell>                    
+      <TableBodyCell class="w-36"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+    </TableBodyRow>
+ <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true} ><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+</TableBody>
+</Table>    
+
+ </AccordionItem>
+
+
+
+
+<Modal bind:open={Modify_PortForwarding_Modal} size="md" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyPortFW}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+<table>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Protocol
+      </p></td>
+<td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio  >UDP</Radio>
+  <Radio  >TCP</Radio>
+
+</div></td>
+
+  </tr>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Destination Port
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Redirected Port
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyPortFW}>Modify</Button></td>
+
+
+    </tr>
+
+</table>
+</Modal>
+
+
+
+<Modal bind:open={New_PortForwarding_Modal} size="md" class="w-full" autoclose>
+
+<table>
+
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Protocol
+      </p></td>
+<td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio  >UDP</Radio>
+  <Radio  >TCP</Radio>
+
+</div></td>
+
+  </tr>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Destination Port
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+
+<tr>
+      <td>
+      <p class="pl-1 pt-4 text-lg font-light text-right w-36">Redirected Port
+      </p></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+  </tr>
+
+  <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true}}>Add</Button></td>
+
+
+    </tr>
+
+
+</table>
+</Modal>
+
+
 
 
 

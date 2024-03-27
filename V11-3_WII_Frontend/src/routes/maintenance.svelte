@@ -408,6 +408,115 @@
   }
 
 
+  function EW_FOTA_KeepConfig()
+  {
+    console.log("EW FOTA KeepConfig");
+    console.log(changed_maintenance_data.config.system_maintenance.fotaKeepConfig);
+    if (changed_maintenance_data.config.system_maintenance.fotaKeepConfig)
+    {
+      changed_maintenance_data.config.system_maintenance.fotaKeepConfig=1;
+    }
+    else
+    {
+      changed_maintenance_data.config.system_maintenance.fotaKeepConfig=0;
+    }
+
+  }
+
+  function MonCheck()
+  {
+
+    if (changed_maintenance_data.config.system_maintenance.weekDayMon)
+    {
+      changed_maintenance_data.config.system_maintenance.weekDayMon=0;
+    }
+    else
+    {
+      changed_maintenance_data.config.system_maintenance.weekDayMon=1;
+    }
+  }
+
+  function TueCheck()
+  {
+  
+    if (changed_maintenance_data.config.system_maintenance.weekDayTue)
+    {
+      changed_maintenance_data.config.system_maintenance.weekDayTue=0;
+    }
+    else
+    {
+      changed_maintenance_data.config.system_maintenance.weekDayTue=1;
+    }
+  }
+
+  function WedCheck()
+  {
+  
+    if (changed_maintenance_data.config.system_maintenance.weekDayWed)
+    {
+      changed_maintenance_data.config.system_maintenance.weekDayWed=0;
+    }
+    else
+    {
+      changed_maintenance_data.config.system_maintenance.weekDayWed=1;
+    }
+  }
+
+  function ThuCheck()
+  {
+  
+    if (changed_maintenance_data.config.system_maintenance.weekDayThu)
+    {
+      changed_maintenance_data.config.system_maintenance.weekDayThu=0;
+    }
+    else
+    {
+      changed_maintenance_data.config.system_maintenance.weekDayThu=1;
+    }
+  }
+
+
+  function FriCheck()
+  {
+  
+    if (changed_maintenance_data.config.system_maintenance.weekDayFri)
+    {
+      changed_maintenance_data.config.system_maintenance.weekDayFri=0;
+    }
+    else
+    {
+      changed_maintenance_data.config.system_maintenance.weekDayFri=1;
+    }
+  }
+
+
+  function SatCheck()
+  {
+  
+    if (changed_maintenance_data.config.system_maintenance.weekDaySat)
+    {
+      changed_maintenance_data.config.system_maintenance.weekDaySat=0;
+    }
+    else
+    {
+      changed_maintenance_data.config.system_maintenance.weekDaySat=1;
+    }
+  }
+
+
+  function SunCheck()
+  {
+  
+    if (changed_maintenance_data.config.system_maintenance.weekDaySun)
+    {
+      changed_maintenance_data.config.system_maintenance.weekDaySun=0;
+    }
+    else
+    {
+      changed_maintenance_data.config.system_maintenance.weekDaySun=1;
+    }
+  }
+
    async function getMaintenanceData () 
    {
     const res = await fetch(window.location.origin+"/getMaintenanceData", {
@@ -536,7 +645,7 @@
 <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Keep Current Configuration</p></td>
     <td class="pl-5 pt-5">
-<Toggle></Toggle>
+<Toggle bind:checked={changed_maintenance_data.config.system_maintenance.fotaKeepConfig} on:change={EW_FOTA_KeepConfig}></Toggle>
 </td>
 </tr>
 
@@ -552,42 +661,42 @@ Weekday
 {#if changed_maintenance_data.config.system_maintenance.fotaEn}
 <div class="flex gap-3">
 <label class="font-medium">
- <input type="checkbox">
+ <input type="checkbox" checked={!!changed_maintenance_data.config.system_maintenance.weekDayMon} on:click={MonCheck}>
 Mon
 </label>
 
 <label class="font-medium">
-<input type="checkbox">
+<input type="checkbox" checked={!!changed_maintenance_data.config.system_maintenance.weekDayTue} on:click={TueCheck}>
 Tue
 </label>
 
 
 <label class="font-medium">
-<input type="checkbox">
+<input type="checkbox" checked={!!changed_maintenance_data.config.system_maintenance.weekDayWed} on:click={WedCheck}>
 Wed
 </label>
 
 
 <label class="font-medium">
-<input type="checkbox">
+<input type="checkbox" checked={!!changed_maintenance_data.config.system_maintenance.weekDayThu} on:click={ThuCheck}>
 Thu
 </label>
 
 
 <label class="font-medium">
-<input type="checkbox">
+<input type="checkbox" checked={!!changed_maintenance_data.config.system_maintenance.weekDayFri} on:click={FriCheck}>
 Fri
 </label>
 
 
 <label class="font-medium">
-<input type="checkbox">
+<input type="checkbox" checked={!!changed_maintenance_data.config.system_maintenance.weekDaySat} on:click={SatCheck}>
 Sat
 </label>
 
 
 <label class="font-medium">
-<input type="checkbox">
+<input type="checkbox" checked={!!changed_maintenance_data.config.system_maintenance.weekDaySun} on:click={SunCheck}>
 Sun
 </label>
 
@@ -654,7 +763,7 @@ Hour
 <td class="pl-5 pt-5" colspan="2">
 {#if getDataReady==1}
 {#if changed_maintenance_data.config.system_maintenance.fotaEn}
-<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"  min="0" max="23">
+<input type="number" bind:value={changed_maintenance_data.config.system_maintenance.hour} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"  min="0" max="23" >
 
 {:else}
 

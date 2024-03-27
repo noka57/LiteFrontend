@@ -91,57 +91,57 @@
     let isValidRemoteSubnet= true;
     let isValidListenPort=true;
 
-        async function HandleClientPresharedKeyChange(event) 
+    async function HandleClientPresharedKeyChange(event) 
+    {
+        const ClientPresharedKey = event.target.files[0];
+        if (ClientPresharedKey) 
         {
-            const ClientPresharedKey = event.target.files[0];
-            if (ClientPresharedKey) 
+            changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName=ClientPresharedKey.name;
+            if (sessionid) 
             {
-                changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyFileName=ClientPresharedKey.name;
-                if (sessionid) 
-                {
-                    const hexArray = sessionid.match(/.{1,2}/g); 
-                    const byteValues = hexArray.map(hex => parseInt(hex, 16));
-                    sessionBinary = new Uint8Array(byteValues);
-                }
-
-
-                const reader = new FileReader();
-                    reader.onload = event => {
-                     changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyContent=event.target.result;
-                };
-
-                reader.readAsText(ClientPresharedKey);
+                const hexArray = sessionid.match(/.{1,2}/g); 
+                const byteValues = hexArray.map(hex => parseInt(hex, 16));
+                sessionBinary = new Uint8Array(byteValues);
             }
+
+
+            const reader = new FileReader();
+                reader.onload = event => {
+                 changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyContent=event.target.result;
+            };
+
+            reader.readAsText(ClientPresharedKey);
         }
+    }
 
-        let ServerPresharedKeyContent;
+    let ServerPresharedKeyContent;
 
 
 
-        async function HandleServerPresharedKeyChange(event) 
+    async function HandleServerPresharedKeyChange(event) 
+    {
+        const ServerPresharedKey = event.target.files[0];
+        if (ServerPresharedKey) 
         {
-            const ServerPresharedKey = event.target.files[0];
-            if (ServerPresharedKey) 
+            changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyFileName=ServerPresharedKey.name;
+
+            if (sessionid) 
             {
-                changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyFileName=ServerPresharedKey.name;
-
-                if (sessionid) 
-                {
-                    const hexArray = sessionid.match(/.{1,2}/g); 
-                    const byteValues = hexArray.map(hex => parseInt(hex, 16));
-                    sessionBinary = new Uint8Array(byteValues);
-                }
-
-
-                const reader = new FileReader();
-                    reader.onload = event => {
-                    changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyContent=event.target.result;
-
-                };
-
-                reader.readAsText(ServerPresharedKey);
+                const hexArray = sessionid.match(/.{1,2}/g); 
+                const byteValues = hexArray.map(hex => parseInt(hex, 16));
+                sessionBinary = new Uint8Array(byteValues);
             }
+
+
+            const reader = new FileReader();
+                reader.onload = event => {
+                changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyContent=event.target.result;
+
+            };
+
+            reader.readAsText(ServerPresharedKey);
         }
+    }
 
 
 
@@ -239,7 +239,8 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     };
 
     let NewClientConn=[{
@@ -259,7 +260,8 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     },
     {
       "name": "",
@@ -278,7 +280,8 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     },
     {
       "name": "",
@@ -297,7 +300,8 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     },
     {
       "name": "",
@@ -316,7 +320,8 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     },
     {
       "name": "",
@@ -335,7 +340,8 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     },
     {
       "name": "",
@@ -354,7 +360,8 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     },
     {
       "name": "",
@@ -373,7 +380,8 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     },
     {
       "name": "",
@@ -392,7 +400,8 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     },
     {
       "name": "",
@@ -411,7 +420,8 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     },
     {
       "name": "",
@@ -430,12 +440,82 @@
         "keyContent":""
         },
       "remoteNetworkAccess": [],
-      "failOver": []
+      "failOver": [],
+      "portForwarding":[]
     }
     ];
 
 
     let Advanced_Client_Index_Selected="none";
+
+
+    let BackupServerPFW={"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2};
+    let NewServerPFW=[
+{"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+{"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+{"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+{"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+{"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+{"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+{"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+{"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+{"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+{"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2}
+    ];
+
+    let New_PFW_Server_Modal=false;
+    let New_PFW_Server_Index=0;
+
+    let Modify_PFW_Server_Modal=false;
+    let Modify_PFW_Server_Index=0;
+
+    function modalTriggerServerPortFW(index)
+    {
+        BackupServerPFW.server_pfw_incomingProtocol=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_incomingProtocol;
+        BackupServerPFW.server_pfw_incomingDport=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_incomingDport;
+
+        BackupServerPFW.server_pfw_redirectedPort=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_redirectedPort;
+
+        Modify_PFW_Server_Index=index;
+        Modify_PFW_Server_Modal=true;
+    }
+
+    function NoModifyServerPortFW(index)
+    {
+        changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_incomingProtocol=BackupServerPFW.server_pfw_incomingProtocol;
+        changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_incomingDport=BackupServerPFW.server_pfw_incomingDport;
+
+        changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_redirectedPort=        BackupServerPFW.server_pfw_redirectedPort;
+
+        Modify_PFW_Server_Modal=false;
+    }
+
+    function ModifyServerPortFW()
+    {
+        Modify_PFW_Server_Modal=false;   
+    }
+
+    function NewServer_PFW_Item_Invoker(index)
+    {
+        NewServerPFW[index].server_pfw_incomingProtocol=0;
+        NewServerPFW[index].server_pfw_incomingDport='';
+        NewServerPFW[index].server_pfw_redirectedPort='';
+
+        New_PFW_Server_Index=index;
+        New_PFW_Server_Modal=true;
+
+    }
+
+    function AddServer_PFW_Item(index)
+    {
+        New_PFW_Server_Modal=false;
+
+        changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding=[... changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding, NewServerPFW[index]];
+
+    }
+
+
+
     let Modify_CCD_Modal=false;
     let Modify_CCD_Index;
 
@@ -896,6 +976,506 @@
 
     let NewRemoteNetworkAccess_index;
     let NewRemoteNetworkAccess_Modal;
+
+
+
+    let Modify_PortForwarding_Modal=false;
+    let New_PortForwarding_Modal=false;
+
+    function NewPortFW_Item_Invoker()
+    {
+        New_PortForwarding_Modal=true;
+    }
+
+    function modalTriggerPortFW(index)
+    {
+
+        Modify_PortForwarding_Modal=true;
+    }
+
+    function NoModifyPortFW()
+    {
+        Modify_PortForwarding_Modal=false;
+    }
+
+    function ModifyPortFW()
+    {
+         Modify_PortForwarding_Modal=false;   
+    }
+
+    let ModifyClient_PFW_Modal=false
+    let ModifyClient_PFW_Index;
+    let BackupClient_PFW={
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    };
+
+
+    function modalTriggerClientPFW(index)
+    {
+        BackupClient_PFW.client_pfw_incomingProtocol=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_incomingProtocol;
+        BackupClient_PFW.client_pfw_incomingDport=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_incomingDport;
+        BackupClient_PFW.client_pfw_redirectedPort=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_redirectedPort;
+
+
+        ModifyClient_PFW_Index=index;
+        ModifyClient_PFW_Modal=true;
+    }
+
+
+    function NoModifyClientPFW(index)
+    {
+        changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_incomingProtocol=BackupClient_PFW.client_pfw_incomingProtocol;
+        changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_incomingDport=BackupClient_PFW.client_pfw_incomingDport;
+        changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_redirectedPort=BackupClient_PFW.client_pfw_redirectedPort;
+        ModifyClient_PFW_Modal=false;
+    }
+
+    function ModifyClientPFW()
+    {
+        ModifyClient_PFW_Modal=false;
+    }
+
+    let NewClientPFW_Modal=false;
+    let NewClientPFW_Index;
+    let NewClientPFW_Item=[
+    [{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+        [{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+        [{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+        [{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+        [{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+        [{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+        [{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+        [{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+        [{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+        [{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }]
+
+    ];
+
+
+    function NewClientPFW_Item_Invoker(index)
+    {
+      NewClientPFW_Item[Advanced_Client_Index_Selected][index].client_pfw_incomingProtocol=0;
+      NewClientPFW_Item[Advanced_Client_Index_Selected][index].client_pfw_incomingDport='';
+      NewClientPFW_Item[Advanced_Client_Index_Selected][index].client_pfw_redirectedPort='';
+
+      NewClientPFW_Index=index;
+      NewClientPFW_Modal=true;
+
+    }
+
+    function AddClientPFW_Item(index)
+    {
+      NewClientPFW_Modal=false;
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding=[...changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding,NewClientPFW_Item[Advanced_Client_Index_Selected][index]];
+    }
+
+    function NoAddClientPFW()
+    {
+      NewClientPFW_Modal=false;
+    }
+
 
     let ModifyFailOver_Modal;
     let ModifyFailOver_Index;
@@ -1420,29 +2000,6 @@
 
     ];
 
-    let Modify_PortForwarding_Modal=false;
-    let New_PortForwarding_Modal=false;
-
-    function NewPortFW_Item_Invoker()
-    {
-        New_PortForwarding_Modal=true;
-    }
-
-    function modalTriggerPortFW()
-    {
-
-        Modify_PortForwarding_Modal=true;
-    }
-
-    function NoModifyPortFW()
-    {
-        Modify_PortForwarding_Modal=false;
-    }
-
-    function ModifyPortFW()
-    {
-         Modify_PortForwarding_Modal=false;   
-    }
     
 
     function modalTriggerRemoteNetworkAccess(index)
@@ -3914,40 +4471,44 @@ async function getOpenVPNClientStatus() {
 
 <TableBody>
 
-
+{#each changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding as serverPFW, index}
   <TableBodyRow>
           <TableBodyCell class="!p-4">
 
       </TableBodyCell>
       <TableBodyCell class="!p-4 w-8">
-<button on:click={() => modalTriggerPortFW()}>
+<button on:click={() => modalTriggerServerPortFW(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
 
        </TableBodyCell>
 
    <TableBodyCell class="!p-4">
     </TableBodyCell>
 
-                    <TableBodyCell class="w-8">1</TableBodyCell>
-                    <TableBodyCell class="w-36"></TableBodyCell>
-                    <TableBodyCell class="w-48"></TableBodyCell>                    
-                    <TableBodyCell class="w-36"></TableBodyCell>
+                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+{#if serverPFW.server_pfw_incomingProtocol == 0}
+                    <TableBodyCell class="w-36">UDP</TableBodyCell>
+{:else if serverPFW.server_pfw_incomingProtocol == 1}
+                    <TableBodyCell class="w-36">TCP</TableBodyCell>
+{/if}
+                    <TableBodyCell class="w-48">{serverPFW.server_pfw_incomingDport}</TableBodyCell>                    
+                    <TableBodyCell class="w-36">{serverPFW.server_pfw_redirectedPort}</TableBodyCell>
 
                     <TableBodyCell class="w-10"></TableBodyCell>
                     <TableBodyCell class="w-10"></TableBodyCell>
 
     </TableBodyRow>
+{/each}
 
 <TableBodyRow>
       <TableBodyCell class="!p-4 w-8">
 
 
-{#if 1 < 10}    
-<button on:click={() => NewPortFW_Item_Invoker(1)}>
+{#if changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length < 10}    
+<button on:click={() => NewServer_PFW_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -3997,8 +4558,8 @@ async function getOpenVPNClientStatus() {
 </TabItem>
 
 
-<Modal bind:open={Modify_PortForwarding_Modal} size="md" class="w-full" permanent={true}>
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyPortFW}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<Modal bind:open={Modify_PFW_Server_Modal} size="md" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyServerPortFW(Modify_PFW_Server_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
 <table>
@@ -4009,8 +4570,8 @@ async function getOpenVPNClientStatus() {
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Protocol
       </p></td>
 <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio  >UDP</Radio>
-  <Radio  >TCP</Radio>
+<Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[Modify_PFW_Server_Index].server_pfw_incomingProtocol} value={0}>UDP</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[Modify_PFW_Server_Index].server_pfw_incomingProtocol} value={1}>TCP</Radio>
 
 </div></td>
 
@@ -4021,7 +4582,7 @@ async function getOpenVPNClientStatus() {
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Destination Port
       </p></td>
-      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[Modify_PFW_Server_Index].server_pfw_incomingDport} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4030,7 +4591,7 @@ async function getOpenVPNClientStatus() {
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Redirected Port
       </p></td>
-      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[Modify_PFW_Server_Index].server_pfw_redirectedPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4042,7 +4603,7 @@ async function getOpenVPNClientStatus() {
 
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyPortFW}>Modify</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyServerPortFW}>Modify</Button></td>
 
 
     </tr>
@@ -4052,19 +4613,17 @@ async function getOpenVPNClientStatus() {
 
 
 
-<Modal bind:open={New_PortForwarding_Modal} size="md" class="w-full" autoclose>
+<Modal bind:open={New_PFW_Server_Modal} size="md" class="w-full" autoclose>
 
 <table>
-
-
 
 <tr>
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Protocol
       </p></td>
 <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio  >UDP</Radio>
-  <Radio  >TCP</Radio>
+      <Radio bind:group={NewServerPFW[New_PFW_Server_Index].server_pfw_incomingProtocol} value={0}>UDP</Radio>
+  <Radio bind:group={NewServerPFW[New_PFW_Server_Index].server_pfw_incomingProtocol} value={1}>TCP</Radio>
 
 </div></td>
 
@@ -4075,7 +4634,7 @@ async function getOpenVPNClientStatus() {
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Destination Port
       </p></td>
-      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={NewServerPFW[New_PFW_Server_Index].server_pfw_incomingDport} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4084,7 +4643,7 @@ async function getOpenVPNClientStatus() {
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Redirected Port
       </p></td>
-      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={NewServerPFW[New_PFW_Server_Index].server_pfw_redirectedPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4094,7 +4653,7 @@ async function getOpenVPNClientStatus() {
 
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddServer_PFW_Item(New_PFW_Server_Index)}>Add</Button></td>
 
 
     </tr>
@@ -4690,7 +5249,7 @@ async function getOpenVPNClientStatus() {
 </Modal>
 
 
-<Modal bind:open={NewFailOver_Modal}  size="lg" class="w-full"  permanent={true}>
+<Modal bind:open={NewFailOver_Modal}  size="lg" class="w-full" permanent={true}>
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddFailover(NewFailOver_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -4792,13 +5351,14 @@ async function getOpenVPNClientStatus() {
 
 <TableBody>
 
+{#each changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding as clientPFW, index}
 
   <TableBodyRow>
           <TableBodyCell class="!p-4">
 
       </TableBodyCell>
       <TableBodyCell class="!p-4 w-8">
-<button on:click={() => modalTriggerPortFW()}>
+<button on:click={() => modalTriggerClientPFW(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -4807,25 +5367,28 @@ async function getOpenVPNClientStatus() {
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4">
-    </TableBodyCell>
+   <TableBodyCell class="!p-4"></TableBodyCell>
 
-                    <TableBodyCell class="w-8">1</TableBodyCell>
-                    <TableBodyCell class="w-36"></TableBodyCell>
-                    <TableBodyCell class="w-48"></TableBodyCell>                    
-                    <TableBodyCell class="w-36"></TableBodyCell>
+                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+{#if clientPFW.client_pfw_incomingProtocol== 0}
+                    <TableBodyCell class="w-36">UDP</TableBodyCell>
+{:else if clientPFW.client_pfw_incomingProtocol == 1}
+                    <TableBodyCell class="w-36">TCP</TableBodyCell>
+{/if}
+                    <TableBodyCell class="w-48">{clientPFW.client_pfw_incomingDport}</TableBodyCell>                    
+                    <TableBodyCell class="w-36">{clientPFW.client_pfw_redirectedPort}</TableBodyCell>
 
                     <TableBodyCell class="w-10"></TableBodyCell>
                     <TableBodyCell class="w-10"></TableBodyCell>
 
     </TableBodyRow>
-
+{/each}
 <TableBodyRow>
       <TableBodyCell class="!p-4 w-8">
 
 
-{#if 1 < 10}    
-<button on:click={() => NewPortFW_Item_Invoker(1)}>
+{#if changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length < 10}    
+<button on:click={() => NewClientPFW_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -4873,8 +5436,8 @@ async function getOpenVPNClientStatus() {
 
 
 
-<Modal bind:open={Modify_PortForwarding_Modal} size="md" class="w-full" permanent={true}>
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyPortFW}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<Modal bind:open={ModifyClient_PFW_Modal} size="md" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyClientPFW(ModifyClient_PFW_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
 <table>
@@ -4885,8 +5448,8 @@ async function getOpenVPNClientStatus() {
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Protocol
       </p></td>
 <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio  >UDP</Radio>
-  <Radio  >TCP</Radio>
+      <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[ModifyClient_PFW_Index].client_pfw_incomingProtocol} value={0}>UDP</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[ModifyClient_PFW_Index].client_pfw_incomingProtocol} value={1} >TCP</Radio>
 
 </div></td>
 
@@ -4897,7 +5460,7 @@ async function getOpenVPNClientStatus() {
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Destination Port
       </p></td>
-      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[ModifyClient_PFW_Index].client_pfw_incomingDport} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4906,7 +5469,7 @@ async function getOpenVPNClientStatus() {
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Redirected Port
       </p></td>
-      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[ModifyClient_PFW_Index].client_pfw_redirectedPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4918,7 +5481,7 @@ async function getOpenVPNClientStatus() {
 
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyPortFW}>Modify</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyClientPFW}>Modify</Button></td>
 
 
     </tr>
@@ -4928,7 +5491,10 @@ async function getOpenVPNClientStatus() {
 
 
 
-<Modal bind:open={New_PortForwarding_Modal} size="md" class="w-full" autoclose>
+<Modal bind:open={NewClientPFW_Modal} size="md" class="w-full" permanent={true}>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddClientPFW}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
 
 <table>
 
@@ -4939,8 +5505,8 @@ async function getOpenVPNClientStatus() {
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Protocol
       </p></td>
 <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio  >UDP</Radio>
-  <Radio  >TCP</Radio>
+      <Radio bind:group={NewClientPFW_Item[Advanced_Client_Index_Selected][NewClientPFW_Index].client_pfw_incomingProtocol} value={0}>UDP</Radio>
+  <Radio bind:group={NewClientPFW_Item[Advanced_Client_Index_Selected][NewClientPFW_Index].client_pfw_incomingProtocol} value={1}>TCP</Radio>
 
 </div></td>
 
@@ -4951,7 +5517,7 @@ async function getOpenVPNClientStatus() {
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Incoming Destination Port
       </p></td>
-      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={NewClientPFW_Item[Advanced_Client_Index_Selected][NewClientPFW_Index].client_pfw_incomingDport} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4960,7 +5526,7 @@ async function getOpenVPNClientStatus() {
       <td>
       <p class="pl-1 pt-4 text-lg font-light text-right w-36">Redirected Port
       </p></td>
-      <td class="pl-5 pt-5 w-36"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5 w-36"><input type="text" bind:value={NewClientPFW_Item[Advanced_Client_Index_Selected][NewClientPFW_Index].client_pfw_redirectedPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4970,7 +5536,7 @@ async function getOpenVPNClientStatus() {
 
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddClientPFW_Item(NewClientPFW_Index)}>Add</Button></td>
 
 
     </tr>

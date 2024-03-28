@@ -539,7 +539,7 @@ NA
    
         <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
 {#if dashboard_data!=""}
-{#if hidden == 0}
+{#if 0}
 <div class="flex">
 <div class="px-10">
         <p class="text-black text-lg">{dashboard_data.config.dashboard.vpnStatus.type}</p>

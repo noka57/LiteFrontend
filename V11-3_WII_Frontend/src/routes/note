@@ -9,6 +9,13 @@ config redirect
         option dest_port '3389'
 
 
+uci show firewall | grep -e "name='C1P2'" | grep -oE '\[\d+\]' | sed 's/\[//;s/\]//'
+
+
+uci delete firewall.@redirect[0]
+
+
+
       <TableBodyCell class="w-10" style="-webkit-text-security: disc"></TableBodyCell>
 
 <script>

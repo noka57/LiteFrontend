@@ -32,9 +32,11 @@
     	OpenVPN_Client_Advanced_FO_ConfigChangedLog,
 	    OpenVPN_Client_Advanced_RNA_ConfigChangedLog,
 	    OpenVPN_Client_Advanced_PSK_ConfigChangedLog,
+	   	OpenVPN_Client_Advanced_PFW_ConfigChangedLog,
 	    OpenVPN_Client_Conn_ConfigChangedLog,
 	    OpenVPN_Server_Advanced_CCD_ConfigChangedLog,
 	    OpenVPN_Server_Advanced_PSK_ConfigChangedLog,
+	   	OpenVPN_Server_Advanced_PFW_ConfigChangedLog,
 	    OpenVPN_Server_Conn_ConfigChangedLog,
 	    OpenVPN_Basic_ConfigChangedLog,
 	    GenericMQTTConfigChangedLog,
@@ -181,6 +183,8 @@
     let openvpn_client_conn_changedValues=[];
     let openvpn_server_advanced_ccd_changedValues=[];
     let openvpn_server_advanced_psk_changedValues=[];
+    let openvpn_server_advanced_pfw_changedValues=[];
+    let openvpn_client_advanced_pfw_changedValues=[];    
     let openvpn_client_advanced_psk_changedValues=[];
     let openvpn_client_advanced_rna_changedValues=[];
     let openvpn_client_advanced_fo_changedValues=[];
@@ -278,6 +282,8 @@
   			openvpn_server_advanced_ccd_changedValues.length !=0 ||
   			openvpn_server_advanced_psk_changedValues.length !=0 ||
   			openvpn_client_advanced_psk_changedValues.length !=0 ||
+  			openvpn_server_advanced_pfw_changedValues.length !=0 ||
+  			openvpn_client_advanced_pfw_changedValues.length !=0 ||
   			openvpn_client_advanced_rna_changedValues.length !=0 ||
   			openvpn_client_advanced_fo_changedValues.length !=0 ||
   			LANchangedValues.length != 0 ||
@@ -458,6 +464,11 @@
     	JudgeChangedOrNot();
     });
 
+    OpenVPN_Client_Advanced_PFW_ConfigChangedLog.subscribe(val => {
+        openvpn_client_advanced_pfw_changedValues = val;
+    	JudgeChangedOrNot();
+    });
+
     OpenVPN_Client_Advanced_RNA_ConfigChangedLog.subscribe(val => {
         openvpn_client_advanced_rna_changedValues = val;
     	JudgeChangedOrNot();
@@ -480,6 +491,11 @@
 
     OpenVPN_Server_Advanced_PSK_ConfigChangedLog.subscribe(val => {
         openvpn_server_advanced_psk_changedValues= val;
+    	JudgeChangedOrNot();
+    });
+
+    OpenVPN_Server_Advanced_PFW_ConfigChangedLog.subscribe(val => {
+        openvpn_server_advanced_pfw_changedValues= val;
     	JudgeChangedOrNot();
     });
 

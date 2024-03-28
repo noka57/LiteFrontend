@@ -48,9 +48,11 @@
 	    OpenVPN_Client_Advanced_FO_ConfigChangedLog,
 	    OpenVPN_Client_Advanced_RNA_ConfigChangedLog,
 	    OpenVPN_Client_Advanced_PSK_ConfigChangedLog,
+      OpenVPN_Client_Advanced_PFW_ConfigChangedLog,
 	    OpenVPN_Client_Conn_ConfigChangedLog,
 	    OpenVPN_Server_Advanced_CCD_ConfigChangedLog,
 	    OpenVPN_Server_Advanced_PSK_ConfigChangedLog,
+      OpenVPN_Server_Advanced_PFW_ConfigChangedLog,
 	    OpenVPN_Server_Conn_ConfigChangedLog,
 	    OpenVPN_Basic_ConfigChangedLog,
 	    ChangedOpenVPNConfig,
@@ -190,6 +192,8 @@
   let openvpn_client_conn_changedValues=[];
   let openvpn_server_advanced_ccd_changedValues=[];
   let openvpn_server_advanced_psk_changedValues=[];
+  let openvpn_server_advanced_pfw_changedValues=[];
+  let openvpn_client_advanced_pfw_changedValues=[];
   let openvpn_client_advanced_psk_changedValues=[];
   let openvpn_client_advanced_rna_changedValues=[];
   let openvpn_client_advanced_fo_changedValues=[];
@@ -477,6 +481,10 @@
   });
 
 
+  OpenVPN_Client_Advanced_PFW_ConfigChangedLog.subscribe(val => {
+      openvpn_client_advanced_pfw_changedValues = val;
+  });
+
   OpenVPN_Client_Advanced_PSK_ConfigChangedLog.subscribe(val => {
       openvpn_client_advanced_psk_changedValues = val;
   });
@@ -499,6 +507,10 @@
 
   OpenVPN_Server_Advanced_PSK_ConfigChangedLog.subscribe(val => {
       openvpn_server_advanced_psk_changedValues= val;
+  });
+
+  OpenVPN_Server_Advanced_PFW_ConfigChangedLog.subscribe(val => {
+      openvpn_server_advanced_pfw_changedValues= val;
   });
 
   OpenVPN_Server_Conn_ConfigChangedLog.subscribe(val => {
@@ -616,16 +628,16 @@
 
  	async function SetThenPostReboot () {
     
-    const res = await fetch(window.location.origin+"/PostReboot", {
-        method: 'POST',
-        body: sessionBinary
-    })
+  const res = await fetch(window.location.origin+"/PostReboot", {
+      method: 'POST',
+      body: sessionBinary
+  })
 
-    	if (res.status == 200)
-    	{
-        console.log("reboot command sent\r\n");
-    	}
-   }
+  	if (res.status == 200)
+  	{
+      console.log("reboot command sent\r\n");
+  	}
+ }
 
   async function RestartLiteWeb()
   {
@@ -1124,17 +1136,21 @@
       openvpn_client_conn_changedValues=[];
       openvpn_server_advanced_ccd_changedValues=[];
       openvpn_server_advanced_psk_changedValues=[];
+      openvpn_server_advanced_pfw_changedValues=[];
+      openvpn_client_advanced_pfw_changedValues=[];
       openvpn_client_advanced_psk_changedValues=[];
       openvpn_client_advanced_rna_changedValues=[];
       openvpn_client_advanced_fo_changedValues=[];
 
 
+      OpenVPN_Client_Advanced_PFW_ConfigChangedLog.set(openvpn_client_advanced_pfw_changedValues);
       OpenVPN_Client_Advanced_PSK_ConfigChangedLog.set(openvpn_client_advanced_psk_changedValues);
       OpenVPN_Client_Advanced_RNA_ConfigChangedLog.set(openvpn_client_advanced_rna_changedValues)
       OpenVPN_Client_Advanced_FO_ConfigChangedLog.set(openvpn_client_advanced_fo_changedValues);
       OpenVPN_Client_Conn_ConfigChangedLog.set(openvpn_client_conn_changedValues);
       OpenVPN_Server_Advanced_CCD_ConfigChangedLog.set(openvpn_server_advanced_ccd_changedValues);
       OpenVPN_Server_Advanced_PSK_ConfigChangedLog.set(openvpn_server_advanced_psk_changedValues);
+      OpenVPN_Server_Advanced_PFW_ConfigChangedLog.set(openvpn_server_advanced_pfw_changedValues);      
       OpenVPN_Server_Conn_ConfigChangedLog.set(openvpn_server_conn_changedValues);
       OpenVPN_Basic_ConfigChangedLog.set(openvpn_basic_changedValues)
 
@@ -1600,6 +1616,8 @@
   			openvpn_client_conn_changedValues.length !=0 ||
   			openvpn_server_advanced_ccd_changedValues.length !=0 ||
   			openvpn_server_advanced_psk_changedValues.length !=0 ||
+        openvpn_server_advanced_pfw_changedValues.length !=0 ||
+        openvpn_client_advanced_pfw_changedValues.length !=0 ||
   			openvpn_client_advanced_psk_changedValues.length !=0 ||
   			openvpn_client_advanced_rna_changedValues.length !=0 ||
   			openvpn_client_advanced_fo_changedValues.length !=0)
@@ -1817,6 +1835,8 @@
 	  			openvpn_client_conn_changedValues.length !=0 ||
 	  			openvpn_server_advanced_ccd_changedValues.length !=0 ||
 	  			openvpn_server_advanced_psk_changedValues.length !=0 ||
+          openvpn_server_advanced_pfw_changedValues.length !=0 ||
+          openvpn_client_advanced_pfw_changedValues.length !=0 ||
 	  			openvpn_client_advanced_psk_changedValues.length !=0 ||
 	  			openvpn_client_advanced_rna_changedValues.length !=0 ||
 	  			openvpn_client_advanced_fo_changedValues.length !=0)
@@ -2519,6 +2539,8 @@ event_engine_action_do_changeValues.length != 0 ||
   	openvpn_client_conn_changedValues.length !=0 ||
   	openvpn_server_advanced_ccd_changedValues.length !=0 ||
   	openvpn_server_advanced_psk_changedValues.length !=0 ||
+    openvpn_server_advanced_pfw_changedValues.length !=0 ||
+    openvpn_client_advanced_pfw_changedValues.length !=0 ||
   	openvpn_client_advanced_psk_changedValues.length !=0 ||
   	openvpn_client_advanced_rna_changedValues.length !=0 ||
   	openvpn_client_advanced_fo_changedValues.length !=0 }
@@ -2563,7 +2585,7 @@ event_engine_action_do_changeValues.length != 0 ||
 	{/if}
 
 
-	{#if openvpn_server_advanced_ccd_changedValues.length !=0 || openvpn_server_advanced_psk_changedValues.length !=0}
+	{#if openvpn_server_advanced_ccd_changedValues.length !=0 || openvpn_server_advanced_psk_changedValues.length !=0 || openvpn_server_advanced_pfw_changedValues.length !=0}
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
   <Li>
   	Server Advanced
@@ -2582,11 +2604,22 @@ event_engine_action_do_changeValues.length != 0 ||
    			{/each}
   		</List>
   	{/if}
+
+
+
+    {#if openvpn_server_advanced_pfw_changedValues.length !=0}
+      <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+        {#each openvpn_server_advanced_pfw_changedValues as item}
+        <Li>{item}</Li>
+        {/each}
+      </List>
+    {/if}
+
   </Li> 
   </List>
 	{/if}
 
-	{#if openvpn_client_advanced_psk_changedValues.length !=0 || openvpn_client_advanced_rna_changedValues.length !=0 || openvpn_client_advanced_fo_changedValues.length !=0}
+	{#if openvpn_client_advanced_psk_changedValues.length !=0 || openvpn_client_advanced_rna_changedValues.length !=0 || openvpn_client_advanced_fo_changedValues.length !=0 || openvpn_client_advanced_pfw_changedValues.length !=0 }
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
   <Li>
   	Client Advanced
@@ -2613,6 +2646,15 @@ event_engine_action_do_changeValues.length != 0 ||
    			{/each}
   		</List>
   	{/if}
+
+
+    {#if openvpn_client_advanced_pfw_changedValues.length !=0}
+      <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+        {#each openvpn_client_advanced_pfw_changedValues as item}
+        <Li>{item}</Li>
+        {/each}
+      </List>
+    {/if}
 
   </Li> 
   </List>
@@ -3022,6 +3064,8 @@ event_engine_action_do_changeValues.length != 0 ||
   			openvpn_client_conn_changedValues.length !=0 ||
   			openvpn_server_advanced_ccd_changedValues.length !=0 ||
   			openvpn_server_advanced_psk_changedValues.length !=0 ||
+        openvpn_server_advanced_pfw_changedValues.length !=0 ||
+        openvpn_client_advanced_pfw_changedValues.length !=0 ||
   			openvpn_client_advanced_psk_changedValues.length !=0 ||
   			openvpn_client_advanced_rna_changedValues.length !=0 ||
   			openvpn_client_advanced_fo_changedValues.length !=0 ||

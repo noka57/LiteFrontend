@@ -36,8 +36,11 @@ export const EventEngine_TriggerSMS_ConfigChangedLog=writable("");
 export const EventEngine_General_ConfigChangedLog=writable("");
 export const ChangedEventEngineConfig=writable("");
 
+
+export const SDatalogger_MonitorMode_Topic_ConfigChangedLog=writable("");
 export const SDatalogger_MonitorMode_Cloud_ConfigChangedLog=writable("");
 export const SDatalogger_MonitorMode_Edge_ConfigChangedLog=writable("");
+export const SDatalogger_ProxyMode_Topic_ConfigChangedLog=writable("");
 export const SDatalogger_ProxyMode_Cloud_ConfigChangedLog=writable("");
 export const SDatalogger_ProxyMode_Edge_ConfigChangedLog=writable("");
 export const SDatalogger_General_ConfigChangedLog=writable("");

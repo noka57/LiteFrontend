@@ -82,8 +82,10 @@
 	    ModbusRTU_Master_ConfigChangedLog,
 	    ChangedModbusConfig,
       sdataLoggerConfig,
+      SDatalogger_MonitorMode_Topic_ConfigChangedLog,      
       SDatalogger_MonitorMode_Cloud_ConfigChangedLog,
       SDatalogger_MonitorMode_Edge_ConfigChangedLog,
+      SDatalogger_ProxyMode_Topic_ConfigChangedLog,      
       SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
       SDatalogger_ProxyMode_Edge_ConfigChangedLog,
       SDatalogger_General_ConfigChangedLog,
@@ -238,8 +240,10 @@
   let sdata_logger_general_changedValues = [];
   let sdata_logger_proxy_edge_changedValues = [];
   let sdata_logger_proxy_cloud_changedValues = [];
+  let sdata_logger_proxy_topic_changedValues = [];  
   let sdata_logger_monitor_edge_changedValues = [];
   let sdata_logger_monitor_cloud_changedValues = [];
+  let sdata_logger_monitor_topic_changedValues = [];
 
 
   let ContentEventEngine;
@@ -411,6 +415,10 @@
       sdata_logger_proxy_cloud_changedValues = val;
   });
 
+  SDatalogger_ProxyMode_Topic_ConfigChangedLog.subscribe(val => {
+      sdata_logger_proxy_topic_changedValues = val;
+  });
+
 
   SDatalogger_MonitorMode_Edge_ConfigChangedLog.subscribe(val => {
       sdata_logger_monitor_edge_changedValues = val;
@@ -420,6 +428,9 @@
       sdata_logger_monitor_cloud_changedValues = val;
   });
 
+  SDatalogger_MonitorMode_Topic_ConfigChangedLog.subscribe(val => {
+      sdata_logger_monitor_topic_changedValues = val;
+  });
 
   Certificate_Settings_ConfigChangedLog.subscribe(val => {
       certificate_settings_changedValues = val;
@@ -1443,14 +1454,18 @@
       sdata_logger_general_changedValues = [];
       sdata_logger_proxy_edge_changedValues = [];
       sdata_logger_proxy_cloud_changedValues = [];
+      sdata_logger_proxy_topic_changedValues = [];      
       sdata_logger_monitor_edge_changedValues = [];
       sdata_logger_monitor_cloud_changedValues = [];
+      sdata_logger_monitor_topic_changedValues = [];
 
       SDatalogger_General_ConfigChangedLog.set(sdata_logger_general_changedValues);
       SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
       SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
+      SDatalogger_ProxyMode_Topic_ConfigChangedLog.set(sdata_logger_proxy_topic_changedValues);      
       SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
       SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
+      SDatalogger_MonitorMode_Topic_ConfigChangedLog.set(sdata_logger_monitor_topic_changedValues);
 
       RestartSmartDataLogger();
 
@@ -1671,8 +1686,10 @@
     if (sdata_logger_data != "" && (sdata_logger_general_changedValues.length !=0 ||
         sdata_logger_proxy_edge_changedValues.length !=0 ||
         sdata_logger_proxy_cloud_changedValues.length !=0 ||
+        sdata_logger_proxy_topic_changedValues.length !=0 ||
         sdata_logger_monitor_edge_changedValues.length !=0 ||
-        sdata_logger_monitor_cloud_changedValues.length !=0))
+        sdata_logger_monitor_cloud_changedValues.length !=0 ||
+        sdata_logger_monitor_topic_changedValues.length !=0 ))
     {
       SetCount++;   
       RestartCount++;
@@ -1922,8 +1939,10 @@
         if (sdata_logger_data != "" && (sdata_logger_general_changedValues.length !=0 ||
                         sdata_logger_proxy_edge_changedValues.length !=0 ||
                         sdata_logger_proxy_cloud_changedValues.length !=0 ||
+                        sdata_logger_proxy_topic_changedValues.length !=0 ||
                         sdata_logger_monitor_edge_changedValues.length !=0 ||
-                        sdata_logger_monitor_cloud_changedValues.length !=0))
+                        sdata_logger_monitor_cloud_changedValues.length !=0 ||
+                        sdata_logger_monitor_topic_changedValues.length !=0 ))
         {
 
           let SDataLoggerString = JSON.stringify(sdata_logger_data, null, 0);
@@ -2208,8 +2227,10 @@ event_engine_action_do_changeValues.length != 0 ||
 {#if    sdata_logger_general_changedValues.length !=0 ||
         sdata_logger_proxy_edge_changedValues.length !=0 ||
         sdata_logger_proxy_cloud_changedValues.length !=0 ||
+        sdata_logger_proxy_topic_changedValues.length !=0 ||        
         sdata_logger_monitor_edge_changedValues.length !=0 ||
-        sdata_logger_monitor_cloud_changedValues.length !=0}
+        sdata_logger_monitor_cloud_changedValues.length !=0 ||
+        sdata_logger_monitor_topic_changedValues.length !=0}
 
   <Li>Smart Data Logger
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
@@ -2226,7 +2247,8 @@ event_engine_action_do_changeValues.length != 0 ||
 {/if}
 
 {#if  sdata_logger_proxy_edge_changedValues.length !=0 ||
-        sdata_logger_proxy_cloud_changedValues.length !=0}
+        sdata_logger_proxy_cloud_changedValues.length !=0 ||
+        sdata_logger_proxy_topic_changedValues.length !=0 }
 <Li>Proxy Mode
 {#if  sdata_logger_proxy_edge_changedValues.length !=0}
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
@@ -2255,6 +2277,20 @@ event_engine_action_do_changeValues.length != 0 ||
  </List>
 {/if}
 
+{#if  sdata_logger_proxy_topic_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Topic Settings
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each sdata_logger_proxy_topic_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
 
 </Li>
 {/if}
@@ -2263,7 +2299,9 @@ event_engine_action_do_changeValues.length != 0 ||
 
 
 {#if  sdata_logger_monitor_edge_changedValues.length !=0 ||
-        sdata_logger_monitor_cloud_changedValues.length !=0}
+        sdata_logger_monitor_cloud_changedValues.length !=0 ||
+        sdata_logger_monitor_topic_changedValues.length !=0
+        }
 <Li>Monitor Mode
 
 {#if  sdata_logger_monitor_edge_changedValues.length !=0}
@@ -2293,6 +2331,19 @@ event_engine_action_do_changeValues.length != 0 ||
  </List>
 {/if}
 
+{#if  sdata_logger_monitor_topic_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Topic Settings
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each sdata_logger_monitor_topic_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
 
 </Li>
 {/if}
@@ -3025,8 +3076,10 @@ event_engine_action_do_changeValues.length != 0 ||
         sdata_logger_general_changedValues.length !=0 ||
         sdata_logger_proxy_edge_changedValues.length !=0 ||
         sdata_logger_proxy_cloud_changedValues.length !=0 ||
+        sdata_logger_proxy_topic_changedValues.length !=0 ||
         sdata_logger_monitor_edge_changedValues.length !=0 ||
         sdata_logger_monitor_cloud_changedValues.length !=0 ||
+        sdata_logger_monitor_topic_changedValues.length !=0 ||
   			modbus_gateway_TtR_changedValues.length !=0 ||
 		    modbus_gateway_RtT_changedValues.length !=0 ||
 		    modbus_gateway_RtR_changedValues.length !=0 ||

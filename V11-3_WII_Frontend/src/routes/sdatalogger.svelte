@@ -6,8 +6,10 @@
   import { sessionidG } from "./sessionG.js";
   import { 
     sdataLoggerConfig,
+    SDatalogger_MonitorMode_Topic_ConfigChangedLog,
     SDatalogger_MonitorMode_Cloud_ConfigChangedLog,
-    SDatalogger_MonitorMode_Edge_ConfigChangedLog,
+    SDatalogger_MonitorMode_Edge_ConfigChangedLog,    
+    SDatalogger_ProxyMode_Topic_ConfigChangedLog,
     SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
     SDatalogger_ProxyMode_Edge_ConfigChangedLog,
     SDatalogger_General_ConfigChangedLog,
@@ -36,8 +38,11 @@
   let sdata_logger_general_changedValues = [];
   let sdata_logger_proxy_edge_changedValues = [];
   let sdata_logger_proxy_cloud_changedValues = [];
+  let sdata_logger_proxy_topic_changedValues = [];  
   let sdata_logger_monitor_edge_changedValues = [];
   let sdata_logger_monitor_cloud_changedValues = [];
+  let sdata_logger_monitor_topic_changedValues = [];
+
 
   let getDataReady=0;    
   
@@ -63,6 +68,9 @@
       sdata_logger_proxy_cloud_changedValues = val;
   });
 
+  SDatalogger_ProxyMode_Topic_ConfigChangedLog.subscribe(val => {
+      sdata_logger_proxy_topic_changedValues = val;
+  });
 
   SDatalogger_MonitorMode_Edge_ConfigChangedLog.subscribe(val => {
       sdata_logger_monitor_edge_changedValues = val;
@@ -71,6 +79,11 @@
   SDatalogger_MonitorMode_Cloud_ConfigChangedLog.subscribe(val => {
       sdata_logger_monitor_cloud_changedValues = val;
   });
+
+  SDatalogger_MonitorMode_Topic_ConfigChangedLog.subscribe(val => {
+      sdata_logger_monitor_topic_changedValues = val;
+  });
+
 
   ChangedSDataLoggerConfig.subscribe(val => {
       saved_changed_sdata_logger_data = val;
@@ -94,33 +107,17 @@
       saved_changed_generic_mqtt_data = val;
   });
 
-
-
-
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
-
-
   let ViewerSelect;
-
-
-
-
-
   let PFormatUDefine="Hello";
+  let Monitor_CloudTopic_Target_Index="none";
+  let Proxy_CloudTopic_Target_Index="none";
 
-
-  
-
-
-
-
-
-
- const btn1 = () => 
- {
+  const btn1 = () => 
+  {
     PFormatUDefine+="$TimeStamp$";
 
-};
+  };
 
  const btn2 = () => 
  {
@@ -687,51 +684,54 @@
         {
           if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) 
           {
-            for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+            if (key != 'cloudTopic')
             {
-              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
-            }
+              for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+              {
+                compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+              }
 
-            if (obj1[key].length > obj2[key].length) 
-            {
-              let addedCount=obj1[key].length-obj2[key].length;
-              let changedstr="Add "+addedCount+" item(s) to "+ key;
-              if (type == 3)
+              if (obj1[key].length > obj2[key].length) 
               {
-                sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                let addedCount=obj1[key].length-obj2[key].length;
+                let changedstr="Add "+addedCount+" item(s) to "+ key;
+                if (type == 3)
+                {
+                  sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                }
+                else if (type == 2)
+                {
+                  sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+                }
+                else if (type == 1)
+                {
+                  sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+                }
+                else if (type == 0)
+                {
+                  sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                }
               }
-              else if (type == 2)
+              else if (obj1[key].length < obj2[key].length)
               {
-                sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-              }
-              else if (type == 1)
-              {
-                sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-              }
-              else if (type == 0)
-              {
-                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
-              }
-            }
-            else if (obj1[key].length < obj2[key].length)
-            {
-              let deletedCount=obj2[key].length-obj1[key].length;
-              let changedstr="Delete "+deletedCount+" item(s) from "+ key;
-              if (type == 3)
-              {
-                sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-              }
-              else if (type == 2)
-              {
-                sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-              }
-              else if (type == 1)
-              {
-                sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-              }
-              else if (type == 0)
-              {
-                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                let deletedCount=obj2[key].length-obj1[key].length;
+                let changedstr="Delete "+deletedCount+" item(s) from "+ key;
+                if (type == 3)
+                {
+                  sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                }
+                else if (type == 2)
+                {
+                  sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+                }
+                else if (type == 1)
+                {
+                  sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+                }
+                else if (type == 0)
+                {
+                  sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                }
               }
             }
           }
@@ -768,7 +768,6 @@
           {
             sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
           }
-
         }
       }
     }
@@ -834,11 +833,62 @@
         compareObjects(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings, sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings, 1, 0,0);       
 
         SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings));
+
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushInterval=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushInterval;
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushIntervalValue=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushIntervalValue;
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.linkLostRetransmit=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.linkLostRetransmit;
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPriority=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPriority;
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile));
+
 
         ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
         console.log(sdata_logger_proxy_cloud_changedValues);    
     }
+
+
+    function saveProxyTopic()
+    {
+        console.log("save proxy topic");
+        if (sdata_logger_proxy_topic_changedValues.length !=0)
+        {
+            sdata_logger_proxy_topic_changedValues=[];
+        }
+
+
+
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length != changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length)
+        {
+          let changedstr="Topic is changed.";
+          sdata_logger_proxy_topic_changedValues=[...sdata_logger_proxy_topic_changedValues, changedstr];
+        }
+        else
+        {
+          for (let i=0; i< changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length; i++)
+          {
+            if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[i] != saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[i])
+            {
+              let changedstr="Topic is changed.";
+              sdata_logger_proxy_topic_changedValues=[...sdata_logger_proxy_topic_changedValues, changedstr];
+            }
+
+          }
+
+        }
+
+    
+        SDatalogger_ProxyMode_Topic_ConfigChangedLog.set(sdata_logger_proxy_topic_changedValues);
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic));
+
+        ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+        console.log(sdata_logger_proxy_topic_changedValues);    
+    }
+
 
     function saveMonitorEdgeData()
     {
@@ -879,11 +929,61 @@
         compareObjects(changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings, sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings, 3, 0,0);       
 
         SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings));
+       // saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings));
+
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.dataPushInterval=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.dataPushInterval;
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.dataPushIntervalValue=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.dataPushIntervalValue;
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.linkLostRetransmit=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.linkLostRetransmit;
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.dataPriority=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.dataPriority;
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile));
 
         ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
         console.log(sdata_logger_monitor_cloud_changedValues);    
     }
+
+    function saveMonitorTopic()
+    {
+      console.log("save monitor topic");
+      if (sdata_logger_monitor_topic_changedValues.length !=0)
+      {
+          sdata_logger_monitor_topic_changedValues=[];
+      }
+
+
+
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length != changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length)
+        {
+          let changedstr="Topic is changed.";
+          sdata_logger_monitor_topic_changedValues=[...sdata_logger_monitor_topic_changedValues, changedstr];
+        }
+        else
+        {
+          for (let i=0; i< changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length; i++)
+          {
+            if (changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[i] != saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[i])
+            {
+              let changedstr="Topic is changed.";
+              sdata_logger_monitor_topic_changedValues=[...sdata_logger_monitor_topic_changedValues, changedstr];
+            }
+
+          }
+
+        }
+
+    
+        SDatalogger_MonitorMode_Topic_ConfigChangedLog.set(sdata_logger_monitor_topic_changedValues);
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic));
+
+        ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+        console.log(sdata_logger_monitor_topic_changedValues);    
+    }
+
 
    async function getModbusData() {
     const res = await fetch(window.location.origin+"/GeTModbuS", {
@@ -1797,6 +1897,52 @@
     </span>
 
 
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={Proxy_CloudTopic_Target_Index}>
+<option disabled="" value="none">Choose Cloud Profile ...</option>
+
+{#each saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile as TargetProfile,index}
+<option value={index}>{TargetProfile}</option>
+{/each}
+</select>
+
+<p class="pt-4"></p>
+
+{#if Proxy_CloudTopic_Target_Index != "none"}
+
+<table>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Topic</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[Proxy_CloudTopic_Target_Index]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+  <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveProxyTopic}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+
+</table>
+
+
+{/if}
+
+
 </AccordionItem>
 
 
@@ -2436,6 +2582,54 @@
     <span slot="header" class="pl-4">
     Topic Settings
     </span>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={Monitor_CloudTopic_Target_Index}>
+<option disabled="" value="none">Choose Cloud Profile ...</option>
+
+{#each saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile as TargetProfile,index}
+<option value={index}>{TargetProfile}</option>
+{/each}
+</select>
+
+
+
+<p class="pt-4"></p>
+
+{#if Monitor_CloudTopic_Target_Index != "none"}
+
+<table>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Topic</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[Monitor_CloudTopic_Target_Index]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+  <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveMonitorTopic}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+
+</table>
+
+
+{/if}
+
 
 
 </AccordionItem>

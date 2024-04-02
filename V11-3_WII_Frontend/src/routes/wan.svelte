@@ -107,7 +107,30 @@
         {
           for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
           {
-            compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+            if (key == 'dns')
+            {
+              console.log("dns");
+              console.log(obj1[key][i]);
+              console.log(obj2[key][i]);
+              console.log(type)
+              if (obj1[key][i] != obj2[key][i])
+              {
+                let changedstr="DNS List No."+(i+1)+": changed to " + obj1[key][i];
+                if (type == 4)
+                {
+                  ewan1_basic_changedValues=[...ewan1_basic_changedValues, changedstr]; 
+                }
+                else if (type ==0)
+                {
+                 cwan1_basic_changedValues=[...cwan1_basic_changedValues, changedstr];
+                }
+              }
+
+            }
+            else
+            {
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+            }
           }
 
           if (obj1[key].length > obj2[key].length) 
@@ -187,6 +210,8 @@
         }
         else
         {
+          console.log(key);
+          console.log(type);
           compareObjects(obj1[key], obj2[key], type, 0,0);
         }
       } 

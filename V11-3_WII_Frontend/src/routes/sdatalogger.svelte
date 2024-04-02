@@ -1788,6 +1788,18 @@
 {/if}
 </AccordionItem>
 
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Topic Settings
+    </span>
+
+
+</AccordionItem>
+
+
 </Accordion>
 
   </TabItem>
@@ -2414,6 +2426,17 @@
 
 
 {/if}
+
+</AccordionItem>
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Topic Settings
+    </span>
+
 
 </AccordionItem>
 

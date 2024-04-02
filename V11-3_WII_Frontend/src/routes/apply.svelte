@@ -1035,6 +1035,7 @@
       WAN_RedundancyPolicy_ConfigChangedLog.set(redundancy_policy_changedValues);
       WAN_FareSavingPolicy_ConfigChangedLog.set(faresaving_policy_changedValues);
 
+      console.log("reset wan");
       RestartWAN();
 
 	  }
@@ -1810,6 +1811,7 @@
 	      	ContentWan=new Uint8Array(WanBinary.length+sessionBinary.length);
 	        ContentWan.set(sessionBinary,0);
 	        ContentWan.set(WanBinary, sessionBinary.length);
+          console.log("set wan");
   				SetWanData();
   			}
 
@@ -2728,7 +2730,7 @@ event_engine_action_do_changeValues.length != 0 ||
   <Li>
   	Cellular-WAN-1 Basic Settings
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-  {#each cwan1_basic_changedValues.length as item}
+  {#each cwan1_basic_changedValues as item}
       <Li>{item}</Li>
    {/each}
   </List>

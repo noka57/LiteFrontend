@@ -420,7 +420,7 @@
 {:else if StaticRoute.interface==2}
   <TableBodyCell class="w-10">Ethernet WAN</TableBodyCell>
 {:else if StaticRoute.interface==3}
-  <TableBodyCell class="w-10">Cellular WAN-1</TableBodyCell>
+  <TableBodyCell class="w-10">Cellular WAN</TableBodyCell>
 {/if}
     <TableBodyCell class="w-10">{StaticRoute.metric}</TableBodyCell>
     </TableBodyRow>
@@ -528,7 +528,7 @@
   <Radio bind:group={changed_staticR_data.config.networking_staticRoute.list[static_route_current_index].interface} value={0} >Auto</Radio>
   <Radio bind:group={changed_staticR_data.config.networking_staticRoute.list[static_route_current_index].interface} value={1} >LAN</Radio>
   <Radio bind:group={changed_staticR_data.config.networking_staticRoute.list[static_route_current_index].interface} value={2} >Ethernet WAN</Radio>
-  <Radio bind:group={changed_staticR_data.config.networking_staticRoute.list[static_route_current_index].interface} value={3} >Cellular WAN-1</Radio>
+  <Radio bind:group={changed_staticR_data.config.networking_staticRoute.list[static_route_current_index].interface} value={3} >Cellular WAN</Radio>
 
 
 </div></td>
@@ -603,7 +603,7 @@
   <Radio bind:group={newStaticR_Item[new_static_route_index].interface} value={0} >Auto</Radio>
   <Radio bind:group={newStaticR_Item[new_static_route_index].interface} value={1} >LAN</Radio>
   <Radio bind:group={newStaticR_Item[new_static_route_index].interface} value={2} >Ethernet WAN</Radio>
-  <Radio bind:group={newStaticR_Item[new_static_route_index].interface} value={3} >Cellular WAN-1</Radio>
+  <Radio bind:group={newStaticR_Item[new_static_route_index].interface} value={3} >Cellular WAN</Radio>
 
 
 </div></td>

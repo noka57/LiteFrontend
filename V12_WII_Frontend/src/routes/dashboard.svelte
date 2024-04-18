@@ -2,7 +2,7 @@
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge } from 'flowbite-svelte';
   import { onMount} from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { dashboadData} from "./configG.js";
+  import { dashboadData,VPNdashboad} from "./configG.js";
   let tdStyle="width:25%";
   let tableBodyClass="";
   let tdClass="border-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium";
@@ -11,10 +11,12 @@
   let value3=0;
   let value4=0;
   let dashboard_data="";
+  let vpn_dashboard="";
   let currentUri = '';
   let currentOrigin = '';
   let sessionid='';
   let interval;
+  let interval_vpn;
   let sessionBinary;
   let hidden=0;
 
@@ -36,6 +38,11 @@
   dashboadData.subscribe(val => {
         dashboard_data = val;
     });
+
+  VPNdashboad.subscribe(val => {
+        vpn_dashboard = val;
+  });
+
 
 
    function GPSClick() {
@@ -149,8 +156,40 @@
   }
 
 
+  async function getVPNDashboard() {
 
-  async function getDashboardData () {
+    try
+    {
+      const res = await fetch(window.location.origin+"/GetVPNdashboard", {
+        method: 'POST',
+        body: sessionBinary
+      })
+
+      if (res.status == 200)
+      {
+        vpn_dashboard =await res.json();
+        console.log("get vpn_dashboard 200 OK\r\n");
+        console.log(vpn_dashboard);
+        VPNdashboad.set(vpn_dashboard);
+      }
+      else
+      {
+          console.log("get vpn_dashboard error\r\n");
+          //stopInterval();
+          //RestartIntervalId = setInterval(sendPing, 1000);
+      }
+    }
+    catch (error) 
+    {
+      console.error('Error fetching vpn data:', error);
+      //stopInterval();
+      //RestartIntervalId = setInterval(sendPing, 1000);
+    }
+  }
+
+
+
+  async function getDashboardData() {
 
     try
     {
@@ -201,6 +240,15 @@
   };
 
 
+  const startIntervalVPN = () => {
+    interval_vpn = setInterval(getVPNDashboard, 60000); // Send POST request every minute (60,000 milliseconds)
+  };
+
+  const stopIntervalVPN = () => {
+    clearInterval(interval_vpn);
+  };
+
+
   onMount(() => {
 
     if (!sessionid)
@@ -212,6 +260,7 @@
       console.log("dashboard sessionid:")
       console.log(sessionid);
     }
+
 
 
     if (sessionid && dashboard_data=="")
@@ -241,6 +290,26 @@
       sessionBinary = new Uint8Array(byteValues);
       console.log("onMount get dashboard\r\n");
       getDashboardData();
+    }
+
+    if (sessionid && vpn_dashboard=="")
+    {
+      const hexArray = sessionid.match(/.{1,2}/g); 
+      const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      sessionBinary = new Uint8Array(byteValues);
+      getVPNDashboard();
+      startIntervalVPN();
+    }
+    else if (sessionid && vpn_dashboard!="")
+    {
+
+      const hexArray = sessionid.match(/.{1,2}/g); 
+      const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      sessionBinary = new Uint8Array(byteValues);
+
+      console.log("onMount get vpn dashboard\r\n");
+      getVPNDashboard();
+
     }
 
   });
@@ -318,7 +387,7 @@ NA
       </TableBodyCell>
     </TableBodyRow>
         <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Modem</p>
+        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Cellular Information</p>
 
 
               </TableBodyCell>
@@ -508,14 +577,14 @@ NA
         <p class="text-black text-lg">IP Address(IPv4)</p>
                 {#if hidden == 0}
         <p class="text-black text-lg">Default Gateway</p>
-        <p class="text-black text-lg">DNS</p>
+
         {/if}
 </div>
 <div class="px-40">
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.ip}{/if}</p>
                 {#if hidden == 0}
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.gateway}{/if}</p>
-        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.dns[0]}/{dashboard_data.config.dashboard.lanStatus.ipv4.dns[1]}{/if}</p>
+
         {/if}
 </div>
 </div>
@@ -662,7 +731,7 @@ NA
 
 
 </div>
-<div class="px-40">
+<div class="px-1">
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.modelName}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.serialNumber}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.firmwareVersion}{/if}</p>
@@ -717,6 +786,49 @@ NA
 
    
         <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
+
+{#if vpn_dashboard != ""}
+<div class="flex">
+<div class="px-10">
+{#if vpn_dashboard.openvpn[0] == 0}
+      <p class="text-black text-lg">OpenVPN Disable</p>
+{/if}
+{#if vpn_dashboard.openvpn[0] == 1}
+  <p class="text-black text-lg">OpenVPN
+
+{#if vpn_dashboard.openvpn[1] == 0} Server
+
+{:else if vpn_dashboard.openvpn[1] == 1} Client
+
+{/if}
+  </p>
+{/if}
+</div>
+<div class="px-1 pt-1">
+{#if vpn_dashboard.openvpn[1] == 0}
+
+  {#if vpn_dashboard.openvpn[2] == 0}
+    <Badge large color="red">Failed</Badge>
+  {:else if vpn_dashboard.openvpn[2] == 1}
+    <Badge large color="green">Listening</Badge>
+  {/if}
+
+{:else if vpn_dashboard.openvpn[1] == 1}
+  {#each vpn_dashboard.openvpn[2] as openvpnS, index}
+    {#if openvpnS}
+    <Badge large color="green">{index+1}</Badge>
+    {:else}
+    <Badge large color="red">{index+1}</Badge>
+    {/if}
+  {/each}
+{/if}
+
+</div>
+</div>
+{/if}
+
+
+
 {#if dashboard_data!=""}
 {#if 0}
 <div class="flex">
@@ -745,52 +857,6 @@ NA
 
                       </TableBodyCell>
         </TableBodyRow>
-
-
- <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Edge Data</p>
-
-
-              </TableBodyCell>
-                      <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg"></p>
-              </TableBodyCell>
-
-            </TableBodyRow>
-
-
-             <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
-<div class="flex">
-        <div class="px-10">
-
-{#if dashboard_data!=""}
-{#each dashboard_data.config.dashboard.edgeData as EdgeData, index}
-        <p class="text-black text-lg">{EdgeData.name}</p>
-{/each}
-{/if}
-
-
-
-        </div>
-        
-        <div class="px-40">
-{#if dashboard_data!=""}
-{#each dashboard_data.config.dashboard.edgeData as EdgeData, index}
-        <p class="text-lg font-light">{EdgeData.value}</p>
-{/each}
-{/if}
-        </div>
-</div>
-                      </TableBodyCell>
-
-   
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
-
-
-        
-                      </TableBodyCell>
-        </TableBodyRow>
-
 
 
   </TableBody>

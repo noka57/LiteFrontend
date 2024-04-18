@@ -22,7 +22,7 @@
 
     let formModal = false;
     let WaitToReboot=false;
-
+    let WaitToReset=false;
     let hidden=1;
 
     let timestamp = 0;
@@ -187,6 +187,20 @@
 
 
 
+    async function PostReset () {
+    const res = await fetch(window.location.origin+"/PostReset", {
+        method: 'POST',
+        body: sessionBinary
+    })
+
+        if (res.status == 200)
+        {
+            console.log("reset command sent\r\n");
+            WaitToReset=true;
+        }
+    }
+
+
   function StartReboot()
   {
     if (sessionid)
@@ -195,6 +209,17 @@
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
         PostReboot();
+    }
+  }
+
+  function StartReset()
+  {
+    if (sessionid)
+    {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+        PostReset();
     }
   }
 
@@ -402,7 +427,7 @@
     <td class="pt-10">
 
 
-    <Button color="dark" pill>Apply</Button>
+    <Button color="dark" pill={true}>Apply</Button>
 
     </td>
 
@@ -420,7 +445,7 @@
    <TabItem title="Reboot">
 <table>
 <tr>
-    <td class="w-65">Reboot Device</td><td class="pl-5">    <Button color="dark" pill on:click={StartReboot}>Reboot</Button></td>
+    <td class="w-65">Reboot Device</td><td class="pl-5">    <Button color="dark" pill={true} on:click={StartReboot}>Reboot</Button></td>
 </tr>
 
 <Modal bind:open={WaitToReboot} size="md" class="w-full" permanent={true}>
@@ -440,15 +465,30 @@
 
 </table>
       </TabItem>
-{#if hidden ==0}
+
    <TabItem title="Reset">
 
 <table>
 <tr>
-    <td class="w-65">Reset to default</td><td class="pl-5">    <Button color="dark" pill>Reset</Button></td>
+    <td class="w-65">Reset to default</td><td class="pl-5">    <Button color="dark" pill={true} on:click={StartReset}>Reset</Button></td>
 </tr>
+
+<Modal bind:open={WaitToReset} size="md" class="w-full" permanent={true}>
+<table>
+<tr>
+<td class="pt-5">
+<Spinner size={16} /></td> 
+<td class="pt-5">
+<p class="pl-5" style="color:red; font-size:18px">Reset to default ....
+</p>
+</td>
+
+</tr>
+</table>
+</Modal>
+
 </table>
 
       </TabItem>
-{/if}
+
  </Tabs>

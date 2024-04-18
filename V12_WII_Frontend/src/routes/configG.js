@@ -1,7 +1,8 @@
 import { writable } from 'svelte/store';
 
 export const dashboadData= writable("");
-
+export const VPNdashboad= writable("");
+export const wanInputFlag=writable("");
 
 export const eventEngineConfig=writable("");
 export const sdataLoggerConfig=writable("");
@@ -120,6 +121,7 @@ export const DockerConfigChangedLog=writable("");
 export const ChangedDockerConfig=writable("");
 
 
+export const WAN_PORT_SWITCH_ConfigChangedLog=writable("");
 export const WAN_CWAN1_BASIC_ConfigChangedLog=writable("");
 export const WAN_CWAN1_Advanced_ConfigChangedLog=writable("");
 export const WAN_CWAN1_SimPolicy_ConfigChangedLog=writable("");

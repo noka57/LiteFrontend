@@ -122,7 +122,7 @@
  const btn2 = () => 
  {
 
-    PFormatUDefine+="$Keyword1$";
+    PFormatUDefine+="$ARRAY$";
  };
 
  const btn3 = () => 
@@ -556,7 +556,7 @@
 
   const NMbtn2=() =>
   {
-    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$Keyword1$";
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$ARRAY$";
   }
 
 
@@ -587,7 +587,7 @@
 
   const NPbtn2=() =>
   {
-    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$Keyword1$";
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$ARRAY$";
   }
 
 
@@ -619,7 +619,7 @@
 
   const CPbtn2=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$Keyword1$";
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$ARRAY$";
   }
 
 
@@ -650,7 +650,7 @@
 
   const CMbtn2=() =>
   {
-   changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$Keyword1$";
+   changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$ARRAY$";
   }
 
 
@@ -872,7 +872,7 @@
           {
             if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[i] != saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[i])
             {
-              let changedstr="Topic is changed.";
+              let changedstr="Topic is changed to " + changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[i];
               sdata_logger_proxy_topic_changedValues=[...sdata_logger_proxy_topic_changedValues, changedstr];
             }
 
@@ -967,7 +967,7 @@
           {
             if (changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[i] != saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[i])
             {
-              let changedstr="Topic is changed.";
+              let changedstr="Topic is changed to "+ changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[i];
               sdata_logger_monitor_topic_changedValues=[...sdata_logger_monitor_topic_changedValues, changedstr];
             }
 
@@ -1186,8 +1186,31 @@
 
 </table>
 
-<p class="pt-5"></p>
 
+{#if getDataReady == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_general.enable}
+<p class="pt-5"></p>
+<table>
+
+ <tr>
+  <td><p class="pl-5 pt-4 text-lg font-light text-right">Storage</p>
+
+  </td>
+
+    <td class="pl-5 pt-4"><div class="flex gap-4">
+    {#if getDataReady == 1}
+      <Radio bind:group={changed_sdata_logger_data.config.service_smartDataLogger_general.storage} value={0} >Internal (100MB)</Radio>
+      <Radio bind:group={changed_sdata_logger_data.config.service_smartDataLogger_general.storage} value={1} >External SD Card</Radio>
+    {/if}
+</div></td>
+</tr>
+
+</table>
+
+{/if}
+{/if}
+
+<p class="pt-5"></p>
 
 <table>
 <tr class="pt-5">
@@ -1505,9 +1528,9 @@
 
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={NPbtn2}>Keyword1</Button>
+<Button size="xs" on:click={NPbtn2}>ARRAY</Button>
 {:else}
-<Button size="xs" disabled>Keyword1</Button>
+<Button size="xs" disabled>ARRAY</Button>
 {/if}
 </li>
 
@@ -1713,9 +1736,9 @@
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={CPbtn2}>Keyword1</Button>
+<Button size="xs" on:click={CPbtn2}>ARRAY</Button>
 {:else}
-<Button size="xs" disabled>Keyword1</Button>
+<Button size="xs" disabled>ARRAY</Button>
 {/if}
 </li>
 
@@ -2215,9 +2238,9 @@
 
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={NMbtn2}>Keyword1</Button>
+<Button size="xs" on:click={NMbtn2}>ARRAY</Button>
 {:else}
-<Button size="xs" disabled>Keyword1</Button>
+<Button size="xs" disabled>ARRAY</Button>
 {/if}
 </li>
 
@@ -2399,9 +2422,9 @@
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={CMbtn2}>Keyword1</Button>
+<Button size="xs" on:click={CMbtn2}>ARRAY</Button>
 {:else}
-<Button size="xs" disabled>Keyword1</Button>
+<Button size="xs" disabled>ARRAY</Button>
 {/if}
 </li>
 

@@ -169,8 +169,8 @@
   let NewClientCNameModal=false;
   let new_client_cname_index;
 
-  let BackupCName;
-  let NewClientCName=["","","","","","","","","",""];
+  let BackupCName={"enable":1, "cname":""};
+  let NewClientCName=[{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""}];
 
 
   let ServerConn_ClientAccountPasswordModal=false;
@@ -182,42 +182,52 @@
       "password": ""};
   let ServerConn_NewClientAccountPassword=[
       {
+        "enable":1,
         "account": "",
         "password": ""
       },
       {
+        "enable":1,
         "account": "",
         "password": ""
       },
       {
+        "enable":1,
         "account": "",
         "password": ""
       },
       {
+        "enable":1,
         "account": "",
         "password": ""
       },
       {
+        "enable":1,
         "account": "",
         "password": ""
       },
       {
+        "enable":1,
         "account": "",
         "password": ""
       },
       {
+        "enable":1,
         "account": "",
         "password": ""
       },
       {
+        "enable":1,
         "account": "",
         "password": ""
       },
       {
+        "enable":1,
         "account": "",
         "password": ""
       },
       {
+        "enable":1,
         "account": "",
         "password": ""
       }
@@ -247,6 +257,7 @@
   };
 
   let NewClientConn=[{
+    "enable":1,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -267,6 +278,7 @@
     "portForwarding":[]
   },
   {
+    "enable":1,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -287,6 +299,7 @@
     "portForwarding":[]
   },
   {
+    "enable":1,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -307,6 +320,7 @@
     "portForwarding":[]
   },
   {
+    "enable":1,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -327,6 +341,7 @@
     "portForwarding":[]
   },
   {
+    "enable":1,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -347,6 +362,7 @@
     "portForwarding":[]
   },
   {
+    "enable":1,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -367,6 +383,7 @@
     "portForwarding":[]
   },
   {
+    "enable":1,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -387,6 +404,7 @@
     "portForwarding":[]
   },
   {
+    "enable":1,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -407,6 +425,7 @@
     "portForwarding":[]
   },
   {
+    "enable":1,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -427,6 +446,7 @@
     "portForwarding":[]
   },
   {
+    "enable":1,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -454,16 +474,16 @@
 
   let BackupServerPFW={"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2};
   let NewServerPFW=[
-    {"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2}
+    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2}
   ];
 
   let New_PFW_Server_Modal=false;
@@ -529,25 +549,36 @@
   let BackupCCD={"ccd_client_certificate_common_name": "",
       "ccd_client_command": ""};
   let NewCCD_Item=[
-      {"ccd_client_certificate_common_name": "",
+      {
+      "enable":1,
+      "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"ccd_client_certificate_common_name": "",
+      {"enable":1,
+      "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"ccd_client_certificate_common_name": "",
+      {"enable":1,
+      "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"ccd_client_certificate_common_name": "",
+      {"enable":1,
+      "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"ccd_client_certificate_common_name": "",
+      {"enable":1,
+      "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"ccd_client_certificate_common_name": "",
+      {"enable":1,
+      "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"ccd_client_certificate_common_name": "",
+      {"enable":1,
+      "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"ccd_client_certificate_common_name": "",
+      {"enable":1,
+      "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"ccd_client_certificate_common_name": "",
+      {"enable":1,
+      "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"ccd_client_certificate_common_name": "",
+      {"enable":1,
+      "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""}
   ];
 
@@ -559,421 +590,505 @@
   };
 
   let NewRemoteNetworkAccess_Item=[[{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "remoteSubnet": "",
-      "comment": ""
-  }],
-  [{
-      "remoteSubnet": "",
-      "comment": ""
-  },
-  {
-      "remoteSubnet": "",
-      "comment": ""
-  },
-  {
-      "remoteSubnet": "",
-      "comment": ""
-  },
-  {
-      "remoteSubnet": "",
-      "comment": ""
-  },
-  {
-      "remoteSubnet": "",
-      "comment": ""
-  },
-  {
-      "remoteSubnet": "",
-      "comment": ""
-  },
-  {
-      "remoteSubnet": "",
-      "comment": ""
-  },
-  {
-      "remoteSubnet": "",
-      "comment": ""
-  },
-  {
-      "remoteSubnet": "",
-      "comment": ""
-  },
-  {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   }],
   [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
-  }
-
-  ],
+  }],
+ [{
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  },
+  {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  },
+  {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  },
+  {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  },
+  {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  },
+  {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  },
+  {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  },
+  {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  },
+  {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  },
+  {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  }],
   [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
-  }
-
-  ],
-  [{
-      "remoteSubnet": "",
-      "comment": ""
-  },
-  {
+  }],
+[{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "remoteSubnet": "",
-      "comment": ""
-  }
-
-  ],
-  [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  }],
+ [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "remoteSubnet": "",
-      "comment": ""
-  }
-
-  ],
-  [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  }],
+ [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "remoteSubnet": "",
-      "comment": ""
-  }
-
-  ],
-  [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  }],
+ [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "remoteSubnet": "",
-      "comment": ""
-  }
-
-  ],
-  [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  }],
+ [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "remoteSubnet": "",
-      "comment": ""
-  }
-
-  ],
-  [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  }],
+ [{
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   },
   {
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
-  }
-
-  ]
+  },
+  {
+      "enable":1,
+      "remoteSubnet": "",
+      "comment": ""
+  }]
 
   ];
 
@@ -984,6 +1099,7 @@
   let ModifyClient_PFW_Modal=false
   let ModifyClient_PFW_Index;
   let BackupClient_PFW={
+      "enable":1,
       "client_pfw_incomingProtocol":0,
       "client_pfw_incomingDport":0,
       "client_pfw_redirectedPort":0
@@ -1019,411 +1135,511 @@
     let NewClientPFW_Index;
     let NewClientPFW_Item=[
     [{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    }],
-        [{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    }],
-        [{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+    [{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+    [{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+        "enable":1,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
@@ -1458,6 +1674,7 @@
     let ModifyFailOver_Modal;
     let ModifyFailOver_Index;
     let BackupFailOver={
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
@@ -1466,510 +1683,610 @@
     let NewFailOver_Index;
     let NewFailOver_Modal;
     let NewFailOver_Item=[[{
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    }
+    ],
+ [{
+        "enable":1,
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "enable":1,
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "enable":1,
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "enable":1,
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "enable":1,
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "enable":1,
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "enable":1,
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "enable":1,
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "enable":1,
+        "remote_host": "",
+        "remote_port": 12345,
+        "remote_protocol": 0
+    },
+    {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
     [{
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-    }
-    ],
-    [{
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-    },
-    {
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-    },
-    {
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-    },
-    {
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-    },
-    {
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-    },
-    {
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-    },
-    {
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-    },
-    {
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-    },
-    {
-        "remote_host": "",
-        "remote_port": 12345,
-        "remote_protocol": 0
-    },
-    {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
     [{
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
-    [{
+  [{
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
-    [{
+   [{
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
-    [{
+  [{
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
-    [{
+  [{
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
-    [{
+  [{
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
-    [{
+  [{
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
+        "enable":1,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
@@ -2253,13 +2570,13 @@
     {
         ClientCNameModal=true;
         ClientCNameIndex=index;
-        BackupCName=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index];
+        BackupCName.cname=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].cname;
     }
 
     function NoModifyCName(index)
     {
       ClientCNameModal=false;
-      changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index]=BackupCName;
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].cname=BackupCName.cname;
     }
 
     function ModifyCName(index)
@@ -2270,7 +2587,8 @@
 
     function NewClientCName_Item_Invoker(index)
     {
-      NewClientCName[index]="";
+      NewClientCName[index].enable=1;
+      NewClientCName[index].cname="";
       new_client_cname_index=index;
       NewClientCNameModal=true;
     }
@@ -2951,7 +3269,7 @@
             let changedstr="local protocol is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol;
             openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
 
-            saved_hanged_openvpn_data.config.vpn_openvpn_server_connection.local_protocol=changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol;
+            saved_changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol=changed_openvpn_data.config.vpn_openvpn_server_connection.local_protocol;
 
           }
 
@@ -4209,7 +4527,7 @@
     </TableHeadCell>
 
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
-                    <TableBodyCell class="w-18">{clientCN}</TableBodyCell>
+                    <TableBodyCell class="w-18">{clientCN.cname}</TableBodyCell>
 
 
                     <TableBodyCell class="w-10"></TableBodyCell>
@@ -4393,7 +4711,7 @@
       <p class="pl-1 pt-4 text-lg font-light text-right w-64">
     Certificate Common Name
       </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={NewClientCName[new_client_cname_index]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={NewClientCName[new_client_cname_index].cname} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4594,22 +4912,27 @@
           <td></td><td><p class="pl-5 pt-5 text-lg font-bold text-left">Key Usage</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage} value={0}>TLS auth key</Radio>
-  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage} value={1} >TLS crypt key</Radio>
-
+      <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage} value={0} >None</Radio>
+      <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage} value={1}>TLS auth key</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage} value={2} >TLS crypt key</Radio>
 </div></td>
       </tr>
       </table>
 
+
 <p class="pt-10"></p>
 
 <Table shadow striped={true} tableNoWFull={true}>
+
+{#if changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage !=0}
   <TableHead>
 
       <TableHeadCell class="w-18">Key File</TableHeadCell>
 
   </TableHead>
+{/if}
   <TableBody>
+{#if changed_openvpn_data.config.vpn_openvpn_server_advanced.presharedKey.keyUsage !=0}
     <TableBodyRow>
  <TableBodyCell class="w-18">
 <div class="flex gap-4">
@@ -4625,6 +4948,7 @@
 </TableBodyCell>
 
    </TableBodyRow>
+{/if}
      <tr>
         <td></td>
         <td></td>
@@ -4991,8 +5315,9 @@
           <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Key Usage</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
-      <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={0}>TLS auth key</Radio>
-  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={1} >TLS crypt key</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={0}>None</Radio>    
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={1}>TLS auth key</Radio>
+  <Radio bind:group={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage} value={2} >TLS crypt key</Radio>
 
 </div></td>
       </tr>
@@ -5001,12 +5326,16 @@
 <p class="pt-10"></p>
 
 <Table shadow striped={true} tableNoWFull={true}>
+
+{#if changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage !=0}
   <TableHead>
 
       <TableHeadCell class="w-18">Key File</TableHeadCell>
 
   </TableHead>
+{/if}
   <TableBody>
+{#if changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].presharedKey.keyUsage !=0}  
     <TableBodyRow>
  <TableBodyCell class="w-18">
 <div class="flex gap-4">
@@ -5022,6 +5351,7 @@
 </TableBodyCell>
 
    </TableBodyRow>
+{/if}
      <tr>
         <td></td>
         <td></td>

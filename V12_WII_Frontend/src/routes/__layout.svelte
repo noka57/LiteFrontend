@@ -25,6 +25,7 @@
     	WAN_EWAN1_EWLAP_ConfigChangedLog,
     	WAN_RedundancyPolicy_ConfigChangedLog,
     	WAN_FareSavingPolicy_ConfigChangedLog,
+    	WAN_PORT_SWITCH_ConfigChangedLog,
     	IPsec_Responder_Conn_ConfigChangedLog,
     	IPsec_Initiator_Conn_General_ConfigChangedLog,
     	IPsec_Initiator_Conn_Subnet_ConfigChangedLog,
@@ -74,6 +75,7 @@
     	EventEngine_TriggerDI_ConfigChangedLog,
     	EventEngine_TriggerSMS_ConfigChangedLog,
     	EventEngine_General_ConfigChangedLog,
+    	VPNdashboad,
     	dashboadData
   	} from "./configG.js"
 
@@ -152,6 +154,7 @@
 	let currentUri = '';
 	let sessionid='';
   	let dashboard_data="";
+  	let vpn_dashboard="";
 
 
   	let interval;
@@ -176,6 +179,7 @@
   	let ewan1_ewlap_changedValues = [];
   	let redundancy_policy_changedValues = [];
   	let faresaving_policy_changedValues = [];
+  	let port_switch_changedValues=[];
   	let basic_changedValues = [];
   	let responder_conn_changedValues=[];
   	let initiator_conn_general_changedValues=[];
@@ -312,6 +316,7 @@
   			ewan1_ewlap_changedValues.length != 0 ||
   			redundancy_policy_changedValues.length != 0 ||
   			faresaving_policy_changedValues.length != 0 ||
+  			port_switch_changedValues.length != 0 ||
 			basic_changedValues.length !=0 ||
 			responder_conn_changedValues.length !=0 ||
 			initiator_conn_general_changedValues.length !=0 ||
@@ -402,6 +407,11 @@
         JudgeChangedOrNot();
     });
 
+
+  	WAN_PORT_SWITCH_ConfigChangedLog.subscribe(val => {
+      port_switch_changedValues = val;
+      JudgeChangedOrNot();
+  	});
 
 
 	WAN_CWAN1_BASIC_ConfigChangedLog.subscribe(val => {
@@ -705,6 +715,11 @@
         dashboard_data = val;
     });
 
+    VPNdashboad.subscribe(val => {
+        vpn_dashboard = val;
+    });
+
+
 	async function getUserType () {
 		const res = await fetch(window.location.origin+"/getUserType", {
 			method: 'POST',
@@ -747,7 +762,24 @@ const topMenuList = [{ href: '/apply', id: 0 },
 
 
 
-  async function getDashboardData () {
+
+  async function getVPNDashboard() {
+    const res = await fetch(window.location.origin+"/GetVPNdashboard", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      vpn_dashboard =await res.json();
+      console.log("New VPN Dashboard");
+      console.log(vpn_dashboard);
+      VPNdashboad.set(vpn_dashboard);
+    }
+  }
+
+
+  async function getDashboardData() {
     const res = await fetch(window.location.origin+"/getDashboardData", {
       method: 'POST',
       body: sessionBinary
@@ -781,6 +813,7 @@ const topMenuList = [{ href: '/apply', id: 0 },
       		sessionBinary = new Uint8Array(byteValues);
 
       		getDashboardData();
+      		getVPNDashboard();
 
 		}
 
@@ -924,7 +957,9 @@ const topMenuList = [{ href: '/apply', id: 0 },
         				<SidebarDropdownItem label="Remote Service" href='/remoteS' active={activeUrl === '/remoteS'}/>
 
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
+{#if 0}
         			    <SidebarDropdownItem label="Data Tag Pro" href='/datatagpro' active={activeUrl === '/datatagpro'}/>
+{/if}
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
 						<SidebarDropdownItem label="Docker Engine" href='/docker' active={activeUrl === '/docker'}/>
 

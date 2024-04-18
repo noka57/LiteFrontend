@@ -3683,7 +3683,16 @@ Short</TableBodyCell>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
-    <td class= "pl-4 pt-4">{NewTriggerModbus[new_trigger_modbus_index].modbusVariable}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewTriggerModbus[new_trigger_modbus_index].modbusVariable}>
+<option disabled="" value="">Choose Variable ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
+<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{/each}
+{/if}
+</select>
+    </td>
 
 
 </tr>
@@ -3772,7 +3781,20 @@ Short</TableBodyCell>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
-    <td class= "pl-4 pt-4">{changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].modbusVariable}</td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].modbusVariable}>
+<option disabled="" value="">Choose Variable ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
+<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{/each}
+{/if}
+</select>
+
+
+    
+
+    </td>
 
 
 </tr>
@@ -5709,7 +5731,17 @@ Short</TableBodyCell>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
     <td class= "pl-4 pt-4">
-    {NewActionModbus[new_action_modbus_index].modbusVariable}
+
+
+    <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewActionModbus[new_action_modbus_index].modbusVariable}>
+<option disabled="" value="">Choose Variable ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
+<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{/each}
+{/if}
+</select>
+    
 
     </td>
 
@@ -5787,8 +5819,14 @@ Short</TableBodyCell>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
     <td class= "pl-4 pt-4">
-    {changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].modbusVariable}
-
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].modbusVariable}>
+<option disabled="" value="">Choose Variable ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
+<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{/each}
+{/if}
+</select>
     </td>
 
 

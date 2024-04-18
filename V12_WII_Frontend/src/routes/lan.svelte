@@ -148,14 +148,6 @@
   </tr>
 
 
-  <tr>
-        <td><p class="pl-40 pt-4 text-lg font-light text-right">DNS 1</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_lan_data.config.networking_lan.ipStatic.dns[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-  </tr>
-
-
-  <tr>
-        <td><p class="pl-40 pt-4 text-lg font-light text-right">DNS 2</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_lan_data.config.networking_lan.ipStatic.dns[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-  </tr>
 {/if}
 {/if}
     <tr>

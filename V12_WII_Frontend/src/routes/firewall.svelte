@@ -733,7 +733,7 @@
 {:else if IPfilter.fromIf==2}
         <TableBodyCell class="w-10">Ethernet WAN</TableBodyCell>
 {:else if IPfilter.fromIf==3}
-        <TableBodyCell class="w-10">Cellular WAN-1</TableBodyCell>
+        <TableBodyCell class="w-10">Cellular WAN</TableBodyCell>
 {/if}
 
 {#if IPfilter.toIf == 0}
@@ -743,7 +743,7 @@
 {:else if IPfilter.toIf==2}
         <TableBodyCell class="w-10">Ethernet WAN</TableBodyCell>
 {:else if IPfilter.toIf==3}
-        <TableBodyCell class="w-10">Cellular WAN-1</TableBodyCell>
+        <TableBodyCell class="w-10">Cellular WAN</TableBodyCell>
 {/if}
         <TableBodyCell class="w-10">{IPfilter.srcIp}</TableBodyCell>
         <TableBodyCell class="w-10">{IPfilter.dstIp}</TableBodyCell>
@@ -832,7 +832,7 @@
   <Radio bind:group={newIPF_Item[new_ipfilter_index].fromIf} value={0} >Any</Radio>
   <Radio bind:group={newIPF_Item[new_ipfilter_index].fromIf} value={1} >LAN</Radio>
   <Radio bind:group={newIPF_Item[new_ipfilter_index].fromIf} value={2} >Ethernet WAN</Radio>
-  <Radio bind:group={newIPF_Item[new_ipfilter_index].fromIf} value={3} >Cellular WAN-1</Radio>
+  <Radio bind:group={newIPF_Item[new_ipfilter_index].fromIf} value={3} >Cellular WAN</Radio>
 
 </div></td>
 </tr>
@@ -849,7 +849,7 @@
   <Radio bind:group={newIPF_Item[new_ipfilter_index].toIf} value={0} >Any</Radio>
   <Radio bind:group={newIPF_Item[new_ipfilter_index].toIf} value={1} >LAN</Radio>
   <Radio bind:group={newIPF_Item[new_ipfilter_index].toIf} value={2} >Ethernet WAN</Radio>
-  <Radio bind:group={newIPF_Item[new_ipfilter_index].toIf} value={3} >Cellular WAN-1</Radio>
+  <Radio bind:group={newIPF_Item[new_ipfilter_index].toIf} value={3} >Cellular WAN</Radio>
 </div></td>
 </tr>
 
@@ -931,7 +931,7 @@
   <Radio bind:group={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].fromIf} value={0} >Any</Radio>
   <Radio bind:group={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].fromIf} value={1} >LAN</Radio>
   <Radio bind:group={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].fromIf} value={2} >Ethernet WAN</Radio>
-  <Radio bind:group={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].fromIf} value={3} >Cellular WAN-1</Radio>
+  <Radio bind:group={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].fromIf} value={3} >Cellular WAN</Radio>
 {/if}
 </div></td>
 </tr>
@@ -949,7 +949,7 @@
   <Radio bind:group={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].toIf} value={0} >Any</Radio>
   <Radio bind:group={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].toIf} value={1} >LAN</Radio>
   <Radio bind:group={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].toIf} value={2} >Ethernet WAN</Radio>
-  <Radio bind:group={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].toIf} value={3} >Cellular WAN-1</Radio>
+  <Radio bind:group={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].toIf} value={3} >Cellular WAN</Radio>
 {/if}
 </div></td>
 </tr>

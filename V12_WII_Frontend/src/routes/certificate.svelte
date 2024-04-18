@@ -4,6 +4,8 @@
   import forge from 'node-forge';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
+  import * as asn1js from 'asn1js';
+  import { CertificateRevocationList, RevokedCertificate } from 'pkijs';
 
   import { 
     certificateConfig,
@@ -349,7 +351,6 @@
 
       }
     }
-
   }
 
 
@@ -380,8 +381,8 @@
     }
   }
 
-  async function uploadCaCert() {
-
+  async function uploadCaCert() 
+  {
     if (CACertAliasName == "" || caCertContent == "")
     {
         alert('Alias Name is null or caCertContent is null');
@@ -428,6 +429,80 @@
   }
 
 
+  let crlData = ''; // Initialize variable to store CRL data
+  let decodedCRL = ''; // Initialize variable to store decoded CRL information
+
+
+  async function handleCRLUpload(event)
+  {
+    const crl = event.target.files[0];
+    if (crl) 
+    {
+
+      const reader = new FileReader(); // Create a new file reader
+    
+      reader.onload = function(event) 
+      {
+        // Once file is loaded, store its contents in crlData
+        crlData = event.target.result;
+        // Call function to decode and display CRL
+        decodeCRL();
+      };
+    
+      // Read the file as text
+      reader.readAsText(crl);
+
+
+     /* selectedRemoteCert = remoteCert;
+      if (sessionid) 
+      {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+      }
+
+
+    const reader = new FileReader();
+      reader.onload = event => {
+          const RemoteCertBinary= new Uint8Array(event.target.result);
+          remoteCertContent=new Uint8Array(RemoteCertBinary.length+sessionBinary.length+64);
+          remoteCertContent.set(sessionBinary,0);
+          remoteCertContent.set(RemoteCertBinary, sessionBinary.length+64);
+      };
+
+      reader.readAsArrayBuffer(crl);*/
+
+    }
+  }
+
+  function decodeCRL() {
+    // Regular expression to match PEM-encoded CRL data
+    const pemRegex = /-----BEGIN X509 CRL-----\r?\n?([\s\S]+)\r?\n?-----END X509 CRL-----/i;
+    const match = pemRegex.exec(crlData);
+    
+    if (match && match[1]) {
+      // Extract the CRL data between BEGIN and END markers
+      const base64CRL = match[1].replace(/[\r\n]/g, '');
+      // Decode base64 CRL to binary
+      const binaryCRL = atob(base64CRL);
+      // Display the decoded CRL
+      decodedCRL = binaryCRL;
+    } else {
+      decodedCRL = 'Invalid PEM format';
+    }
+
+    console.log("==decodedCRL");
+    console.log(decodedCRL);
+  }
+
+
+  async function uploadCRL()
+  {
+
+  }
+
+  
+
   async function handleRemoteCertUpload(event) 
   {
     const remoteCert = event.target.files[0];
@@ -454,7 +529,6 @@
 
     }
   }
-
 
 
   async function uploadRemoteCert() {
@@ -620,7 +694,6 @@
 
 <p class="mb-4 font-semibold text-gray-900 dark:text-white">Check the validity period of certificates and CRLs</p>
 {#if getDataReady == 1}
-<Radio bind:group={changed_certificate_data.config.authentication_certificate_certificateSettings.checkCert} class='p-3' value={0}>No</Radio>
 <Radio bind:group={changed_certificate_data.config.authentication_certificate_certificateSettings.checkCert} class='p-3' value={1}>Always</Radio>
 <Radio bind:group={changed_certificate_data.config.authentication_certificate_certificateSettings.checkCert} class='p-3' value={2}>Wait for synchronization of the system time</Radio>
 
@@ -787,7 +860,7 @@
   </TableBody>
 </Table>
   </TabItem>
-{#if 0}  
+{#if 1}  
     <TabItem title="CRL">
 <Accordion>
   <AccordionItem {defaultClass}>
@@ -817,7 +890,7 @@
 </svg>
       </button>
       </TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -857,11 +930,11 @@
 <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">CRL File</p></td>
 <td class="pl-5 pt-5">
 
-<input type="file" id="configUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400">
+<input type="file" id="crlUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleCRLUpload}>
 
 </td>
 <td class="pl-5 pt-5">
-  <Button>Upload</Button>
+  <Button color="dark" on:click={uploadCRL}>Upload</Button>
 
 </td>
 
@@ -910,7 +983,7 @@
 </svg>
       </button>
       </TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>

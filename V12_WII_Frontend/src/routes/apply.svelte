@@ -29,6 +29,7 @@
   		DockerConfigChangedLog,
       ChangedDockerConfig,
       wanConfig, 
+      wanInputFlag,
       WAN_CWAN1_BASIC_ConfigChangedLog,
     	WAN_CWAN1_Advanced_ConfigChangedLog,
     	WAN_CWAN1_SimPolicy_ConfigChangedLog,
@@ -37,6 +38,7 @@
     	WAN_EWAN1_EWLAP_ConfigChangedLog,
     	WAN_RedundancyPolicy_ConfigChangedLog,
     	WAN_FareSavingPolicy_ConfigChangedLog,
+      WAN_PORT_SWITCH_ConfigChangedLog,
     	ChangedWANConfig,
       ipsecConfig,
     	IPsec_Responder_Conn_ConfigChangedLog,
@@ -176,7 +178,8 @@
   let ewan1_basic_changedValues = [];
   let ewan1_ewlap_changedValues = [];
   let redundancy_policy_changedValues = [];
-  let faresaving_policy_changedValues = [];  
+  let faresaving_policy_changedValues = [];
+  let port_switch_changedValues = []; 
 
 
   let ContentIPsec;
@@ -266,7 +269,7 @@
   let AllRestartFinished=0;
   let RestartCount=0;
   let RestartCountOK=0;
-
+  let wanRemoteAccessChanged="";
 
 
   function closeModal()
@@ -311,6 +314,10 @@
 
   ChangedWANConfig.subscribe(val => {
       wan_data = val;
+  }); 
+
+  wanInputFlag.subscribe(val => {
+      wanRemoteAccessChanged = val;
   }); 
 
   ChangedIPsecConfig.subscribe(val => {
@@ -580,6 +587,10 @@
 
   WAN_FareSavingPolicy_ConfigChangedLog.subscribe(val => {
       faresaving_policy_changedValues = val;
+  });
+
+  WAN_PORT_SWITCH_ConfigChangedLog.subscribe(val => {
+      port_switch_changedValues = val;
   });
 
 
@@ -1010,6 +1021,39 @@
     }
   } 
 
+  async function PostWANInputReject() 
+  {
+    const res = await fetch(window.location.origin+"/setWanInputReject", {
+        method: 'POST',
+        body: sessionBinary
+    })
+
+      if (res.status == 200)
+      {
+        console.log("wan input reject ok\r\n");
+
+        wanRemoteAccessChanged="";
+      }
+  }
+
+
+  async function PostWANInputAccept() 
+  {
+    const res = await fetch(window.location.origin+"/SetWANinputAccept", {
+        method: 'POST',
+        body: sessionBinary
+    })
+
+      if (res.status == 200)
+      {
+        console.log("wan input accept ok\r\n");
+
+        wanRemoteAccessChanged="";
+      }
+  }
+
+
+
 
 	async function SetWanData()
 	{
@@ -1034,7 +1078,8 @@
       ewan1_basic_changedValues = [];
       ewan1_ewlap_changedValues = [];
       redundancy_policy_changedValues = [];
-      faresaving_policy_changedValues = [];  
+      faresaving_policy_changedValues = [];
+      port_switch_changedValues = [];  
 
 
       WAN_CWAN1_BASIC_ConfigChangedLog.set(cwan1_basic_changedValues);
@@ -1045,6 +1090,24 @@
       WAN_EWAN1_EWLAP_ConfigChangedLog.set(ewan1_ewlap_changedValues);
       WAN_RedundancyPolicy_ConfigChangedLog.set(redundancy_policy_changedValues);
       WAN_FareSavingPolicy_ConfigChangedLog.set(faresaving_policy_changedValues);
+      WAN_PORT_SWITCH_ConfigChangedLog.set(port_switch_changedValues);
+
+      console.log("--wanRemoteAccessChanged");
+      console.log(wanRemoteAccessChanged);
+      if (wanRemoteAccessChanged != "")
+      {
+        console.log("wanRemoteAccessChanged!!!");
+        if (wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess==0)
+        {
+            PostWANInputReject();   
+        }
+        else if (wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess==1)
+        {
+
+            PostWANInputAccept();
+        }
+
+      }
 
       console.log("reset wan");
       RestartWAN();
@@ -1605,14 +1668,15 @@
     }
 
 
-    if (wan_data != "" && ( cwan1_basic_changedValues !=0 ||
-  															cwan1_advanced_changedValues != 0 ||
-  															cwan1_simpolicy_changedValues != 0 ||
-  															cwan1_glink_changedValues != 0 ||
-  															ewan1_basic_changedValues != 0 ||
-  															ewan1_ewlap_changedValues != 0 ||
-  															redundancy_policy_changedValues != 0 ||
-  															faresaving_policy_changedValues != 0))
+    if (wan_data != "" && ( cwan1_basic_changedValues.length !=0 ||
+  															cwan1_advanced_changedValues.length != 0 ||
+  															cwan1_simpolicy_changedValues.length != 0 ||
+  															cwan1_glink_changedValues.length != 0 ||
+  															ewan1_basic_changedValues.length != 0 ||
+  															ewan1_ewlap_changedValues.length != 0 ||
+  															redundancy_policy_changedValues.length != 0 ||
+  															faresaving_policy_changedValues.length != 0 ||
+                                port_switch_changedValues.length !=0))
   	{
   	  SetCount++; 
       RestartCount++;
@@ -1820,7 +1884,8 @@
   															ewan1_basic_changedValues.length != 0 ||
   															ewan1_ewlap_changedValues.length != 0 ||
   															redundancy_policy_changedValues.length != 0 ||
-  															faresaving_policy_changedValues.length != 0))
+  															faresaving_policy_changedValues.length != 0 ||
+                                port_switch_changedValues.length !=0))
   			{
           let WanString = JSON.stringify(wan_data, null, 0);
 					const bytesArray = Array.from(WanString).map(char => char.charCodeAt(0));
@@ -2773,7 +2838,8 @@ event_engine_action_do_changeValues.length != 0 ||
   		ewan1_basic_changedValues.length != 0 ||
   		ewan1_ewlap_changedValues.length != 0 ||
   		redundancy_policy_changedValues.length != 0 ||
-  		faresaving_policy_changedValues.length != 0
+  		faresaving_policy_changedValues.length != 0 ||
+      port_switch_changedValues.length != 0
   		}
   <Li>WAN
  {#if cwan1_basic_changedValues.length !=0}
@@ -2881,6 +2947,20 @@ event_engine_action_do_changeValues.length != 0 ||
   </Li> 
   </List>
 	{/if} 
+
+
+  {#if port_switch_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+    Port Switch
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each port_switch_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li> 
+  </List>
+  {/if} 
 
   </Li>
 
@@ -3110,6 +3190,7 @@ event_engine_action_do_changeValues.length != 0 ||
   			ewan1_ewlap_changedValues.length != 0 ||
   			redundancy_policy_changedValues.length != 0 ||
   			faresaving_policy_changedValues.length != 0 ||
+        port_switch_changedValues.length !=0||
   			basic_changedValues.length !=0 ||
   			responder_conn_changedValues.length !=0 ||
   			initiator_conn_general_changedValues.length !=0 ||

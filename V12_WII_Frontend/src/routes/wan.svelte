@@ -2,7 +2,7 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, Toggle,Select, Checkbox, Input, Tooltip, Radio,FloatingLabelInput } from 'flowbite-svelte';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { wanConfig, 
+  import { wanConfig, wanInputFlag,
     LastestReadableWANConfig,
     WAN_CWAN1_BASIC_ConfigChangedLog,
     WAN_CWAN1_Advanced_ConfigChangedLog,
@@ -12,6 +12,7 @@
     WAN_EWAN1_EWLAP_ConfigChangedLog,
     WAN_RedundancyPolicy_ConfigChangedLog,
     WAN_FareSavingPolicy_ConfigChangedLog,
+    WAN_PORT_SWITCH_ConfigChangedLog,
     ChangedWANConfig
   } from "./configG.js";
 
@@ -29,6 +30,7 @@
 
   let hidden=0;
 
+  let testLANWAN=0;
 
   let wan_data="";
   let getdataAlready=0;
@@ -44,6 +46,9 @@
   let ewan1_ewlap_changedValues = [];
   let redundancy_policy_changedValues = [];
   let faresaving_policy_changedValues = [];
+  let port_switch_changedValues=[];
+
+
 
   let sessionid;
   let sessionBinary;
@@ -56,6 +61,7 @@
         wan_data = val;
   });
 
+
   ChangedWANConfig.subscribe(val => {
       saved_changed_wan_data = val;
   }); 
@@ -63,6 +69,10 @@
   LastestReadableWANConfig.subscribe(val => {
       lastest_readable_data = val;
   }); 
+
+  WAN_PORT_SWITCH_ConfigChangedLog.subscribe(val => {
+      port_switch_changedValues = val;
+  });
 
   WAN_CWAN1_BASIC_ConfigChangedLog.subscribe(val => {
       cwan1_basic_changedValues = val;
@@ -95,6 +105,55 @@
   WAN_FareSavingPolicy_ConfigChangedLog.subscribe(val => {
       faresaving_policy_changedValues = val;
   });
+
+  let ATCommand="";
+  let ATResult="";
+  let ATCommandContent;
+  let StartATCommand=0;
+  let FinishATCommand=0;
+
+
+  async function ATdebug() {
+    const res = await fetch(window.location.origin+"/ATdebug", {
+      method: 'POST',
+      body: ATCommandContent
+    })
+
+    if (res.status == 200)
+    {
+      ATResult =await res.text();
+      console.log(ATResult);
+      StartATCommand=0;
+      FinishATCommand=1;
+
+    }
+    else
+    {
+      console.log("error at debug");
+    }
+  }
+
+
+  function executeATdebug()
+  {
+    console.log(ATCommand);
+
+    if (ATCommand != "")
+    {
+      StartATCommand=1;
+      FinishATCommand=0;
+      const bytesArray = Array.from(ATCommand).map(char => char.charCodeAt(0));
+      let ATCommandBinary = new Uint8Array(bytesArray);
+      ATCommandContent=new Uint8Array(ATCommandBinary.length+sessionBinary.length);
+      ATCommandContent.set(sessionBinary,0);
+      ATCommandContent.set(ATCommandBinary, sessionBinary.length);
+
+      ATdebug();
+    }
+
+
+  }
+
 
 
   function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
@@ -264,6 +323,36 @@
     }
   }
 
+  function savePortSwitch()
+  {
+    console.log("save Port Switch\r\n");
+
+    if (port_switch_changedValues.length !=0)
+    {
+      port_switch_changedValues=[];
+    }
+
+    if (changed_wan_data.config.networking_wan_port_switch != wan_data.config.networking_port_switch)
+    {
+      if (changed_wan_data.config.networking_wan_port_switch ==1)
+      {
+        port_switch_changedValues=[...port_switch_changedValues, "lan/wan port is changed to WAN"];
+      }
+      else if (changed_wan_data.config.networking_wan_port_switch ==0)
+      {
+        port_switch_changedValues=[...port_switch_changedValues, "lan/wan port is changed to LAN"];
+      }
+
+
+    }
+
+    WAN_PORT_SWITCH_ConfigChangedLog.set(port_switch_changedValues);
+
+    saved_changed_wan_data.config.networking_wan_port_switch=changed_wan_data.config.networking_wan_port_switch;
+    ChangedWANConfig.set(saved_changed_wan_data);
+    
+    console.log(port_switch_changedValues);
+  }
 
 
   function saveCWAN1BasicSetting()
@@ -282,7 +371,7 @@
       ChangedWANConfig.set(saved_changed_wan_data);
     
       console.log(cwan1_basic_changedValues);
-  };
+  }
 
 
   function saveCWAN1AdvancedSetting()
@@ -349,6 +438,16 @@
       ewan1_basic_changedValues=[];
     }
     compareObjects(changed_wan_data.config.networking_wan_ewan[0].basicSetting, wan_data.config.networking_wan_ewan[0].basicSetting,4,0,0);
+
+   // console.log("compare remote access");
+  //  console.log(changed_wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess);
+  //  console.log(wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess);
+
+    if (wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess != changed_wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess)
+    {
+      console.log("remote access changed!!");
+      wanInputFlag.set("1");
+    }
 
 
     WAN_EWAN1_Basic_ConfigChangedLog.set(ewan1_basic_changedValues);
@@ -471,13 +570,13 @@
 
   function EnableRssiThreshold_Check()
   {
-    if (changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.rssiMonitor.enable)
+    if (changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.rssiMonitor.enable)
     {
-      changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.rssiMonitor.enable=0;
+      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.rssiMonitor.enable=0;
     }
     else
     {
-      changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.rssiMonitor.enable=1;
+      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.rssiMonitor.enable=1;
     }
 
 
@@ -485,26 +584,38 @@
 
   function EnableLossLTESignal_Check()
   {
-    if (changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.networkService.enable)
+    if (changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.networkService.enable)
     {
-      changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.networkService.enable=0;
+      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.networkService.enable=0;
     }
     else
     {
-      changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.networkService.enable=1;
+      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.networkService.enable=1;
     }
 
   }
 
   function EnableRoamingTimeout_Check()
   {
-    if (changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.roamingService.enable)
+    if (changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.roamingService.enable)
     {
-      changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.roamingService.enable=0;
+      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.roamingService.enable=0;
     }
     else
     {
-      changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.roamingService.enable=1;
+      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.roamingService.enable=1;
+    }
+  }
+
+  function EnableSIMFailover_Check()
+  {
+    if (changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.simFailover)
+    {
+      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.simFailover=0;
+    }
+    else
+    {
+      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.simFailover=1;
     }
   }
 
@@ -858,6 +969,12 @@
 
         }
 
+        if (port_switch_changedValues.length == 0)
+        {
+
+          changed_wan_data.config.networking_wan_port_switch=wan_data.config.networking_wan_port_switch;
+        }
+
     }
 
   });
@@ -992,41 +1109,41 @@
 
 
  <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Phone Number</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.phoneNumber} {/if}</TableBodyCell>
+      <TableBodyCell class="text-right" colspan="2">Phone Number</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.phoneNumber} {/if}</TableBodyCell>
       </TableBodyRow>
 
       <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Modem Status</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.status} {/if}</TableBodyCell>
-      </TableBodyRow>
-
-
-      <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">SIM Status</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.simStatus} {/if}</TableBodyCell>
+      <TableBodyCell class="text-right" colspan="2">Modem Status</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.status} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Active SIM</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.activeSim} {/if}</TableBodyCell>
-      </TableBodyRow>
-
-      <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Signal Strength</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>RSSI</TableBodyCell>
-      </TableBodyRow>
-
-      <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">RSSI</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.rssi} {/if}</TableBodyCell>
+      <TableBodyCell class="text-right" colspan="2">SIM Status</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.simStatus} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Registered Mobile Operator</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.operator} {/if}</TableBodyCell>
+      <TableBodyCell class="text-right" colspan="2">Active SIM</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.activeSim} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="2">Signal Strength</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>RSSI</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="2">RSSI</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.rssi} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="2">Registered Mobile Operator</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.operator} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
@@ -1034,33 +1151,33 @@
 
 
       <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Connect State</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.connectState} {/if}</TableBodyCell>
+      <TableBodyCell class="text-right" colspan="2">Connect State</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.connectState} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Connected Network Type</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.type} {/if}</TableBodyCell>
+      <TableBodyCell class="text-right" colspan="2">Connected Network Type</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.type} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Connected Band</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.band} {/if}</TableBodyCell>
+      <TableBodyCell class="text-right" colspan="2">Connected Band</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.band} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
       <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Modem Vendor</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.modemVendor} {/if}</TableBodyCell>
+      <TableBodyCell class="text-right" colspan="2">Modem Vendor</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.modemVendor} {/if}</TableBodyCell>
       </TableBodyRow>
 
 
 
       <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="3">Modem Firmware Version</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="2" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.modemFwVer} {/if}</TableBodyCell>
+      <TableBodyCell class="text-right" colspan="2">Modem Firmware Version</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.modemFwVer} {/if}</TableBodyCell>
       </TableBodyRow>
 
 {/if}
@@ -1200,24 +1317,8 @@
 {#if getdataAlready} 
 {#if changed_wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockEn}
 
- <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Band Scan and List</p></td><td class="pl-5 pt-5">
-    <Toggle bind:checked={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandScanEn} on:change={BandScan_Check}/></td>
-    </tr>
- 
-{#if changed_wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandScanEn}   
     <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right"></p></td><td class="pl-5 pt-5">
-    <input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandScanList} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-      </td>
-    </tr>
-{/if}
-
-
-
-
-    <tr>
-    <td><p class="pl-40 pt-1 text-lg font-light text-right">Band Select: </p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandSelect} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Band Select: </p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandSelect} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     </tr>
   
 {/if}
@@ -1255,120 +1356,9 @@
         <td />
     </tr>
 
-    <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Checking Rules</p></td>
-    <td/>
-        <td />
-            <td />
-    </tr>
-
-    <tr>
-    <td />
-        <td>
-            <table>
-              <tr>
-              <td class="border-b-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Fail Connections
-              </td>
-              <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-{#if getdataAlready} 
-<input type="number" bind:value={changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.failConnection} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-{/if}
-              </td>
-
-              <td>
-              times (1-10)
-              </td> 
-              </tr>
-
-
-              <tr>
-              <td class="border-t-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              RSSI Monitor
-              </td>
-              <td class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-{#if getdataAlready} 
- <input type="checkbox" id="simCheck1" name="simCheck1" checked={!!changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.rssiMonitor.enable} on:click={EnableRssiThreshold_Check}>
-{/if}
-  <label for="simCheck1" class="font-medium">Enable Threshold</label>
-              -
-              </td>
-
-              <td>
-
-{#if getdataAlready}               
-<input type="number" bind:value={changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.rssiMonitor.threshold} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-{/if}
-              </td> 
-              <td>
-              (-90~-113 dBm)
-              </td>
-              </tr>
 
 
 
-              <tr>
-              <td class="border-t-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Network Service
-              </td>
-              <td class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-{#if getdataAlready}    
- <input type="checkbox" id="simCheck2" name="simCheck2" checked={!!changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.networkService.enable} on:click={EnableLossLTESignal_Check}>
-{/if}
-  <label for="simCheck2" class="font-medium">Enable Loss LTE Signal</label>
-              
-              </td>
-
-              <td>
-{#if getdataAlready}               
-<input type="number" bind:value={changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.networkService.time} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-{/if}
-              </td> 
-              <td>
-              (1-30 minutes)
-              </td>
-              </tr>
-
-
-
-              <tr>
-              <td class="border-t-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Roaming Service
-              </td>
-              <td class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-{#if getdataAlready}  
- <input type="checkbox" id="simCheck3" name="simCheck3" checked={!!changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.roamingService.enable} on:click={EnableRoamingTimeout_Check}>
-{/if}
-  <label for="simCheck3" class="font-medium">Enable Timeout</label>
-              </td>
-
-              <td>
-{#if getdataAlready}              
-<input type="number" bind:value={changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.roamingService.time} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-{/if}
-              </td> 
-              <td>
-              (1-30 minutes)
-              </td>
-              </tr>
-            </table>
-        </td>
-    <tr>
-
-
-
-
-    <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">SIM failover Treatment</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-{#if getdataAlready}
-  <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.simFailover} value={0} >None</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.simFailover} value={1} >Reset Modem</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].simPolicy.checkRule.simFailover} value={2} >Power Cycle Modem</Radio>
-{/if}
-
-</div></td>
-    </tr>
 
             <tr>
     <td></td>
@@ -1383,7 +1373,7 @@
   </AccordionItem>
 
     <AccordionItem {defaultClass}>
-    <span slot="header" class="pl-4">LTE Guarantie Link</span>
+    <span slot="header" class="pl-4">Cellular Guarantie Link</span>
 <table>
     <tr>
     <td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">Guarantie Link</p></td><td class="pl-5 pt-5">
@@ -1391,6 +1381,13 @@
     <Toggle bind:checked={changed_wan_data.config.networking_wan_cwan[0].gLink.enable} on:change={GLink_enable}></Toggle>
 {/if}
     </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
     </tr>
 {#if getdataAlready}    
 {#if changed_wan_data.config.networking_wan_cwan[0].gLink.enable}
@@ -1398,7 +1395,13 @@
     <tr>
     <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Parameter</p></td>
 
-
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
 
     </tr>
 
@@ -1411,7 +1414,137 @@
     <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.cellLvChk} value={1} >Enable</Radio>
 
 </div></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
     </tr>
+
+
+
+{#if changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.cellLvChk}
+
+    <tr>
+    <td></td>
+    <td><p class="pl-5 pt-5 text-lg font-light text-right">Checking Rules</p></td>
+       <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td> 
+    <td></td>
+    <td></td> 
+    </tr>
+
+    <tr>
+
+    <td></td><td></td>
+              <td class="border-b-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
+              Fail Connections
+              </td>
+              <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
+{#if getdataAlready} 
+<input type="number" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.failConnection} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+              </td>
+
+              <td>
+              times (1-10)
+              </td> 
+              </tr>
+
+
+    <tr>
+
+    <td></td><td></td>
+              <td class="border-t-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
+              RSSI Monitor
+              </td>
+              <td class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
+{#if getdataAlready} 
+ <input type="checkbox" id="simCheck1" name="simCheck1" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.rssiMonitor.enable} on:click={EnableRssiThreshold_Check}>
+{/if}
+  <label for="simCheck1" class="font-medium">Enable Threshold</label>
+              -
+              </td>
+
+              <td>
+
+{#if getdataAlready}               
+<input type="number" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.rssiMonitor.threshold} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+              </td> 
+              <td>
+              (-90~-113 dBm)
+              </td>
+              </tr>
+
+    <tr>
+
+    <td></td><td></td>
+              <td class="border-t-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
+              Network Service
+              </td>
+              <td class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
+{#if getdataAlready}    
+ <input type="checkbox" id="simCheck2" name="simCheck2" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.networkService.enable} on:click={EnableLossLTESignal_Check}>
+{/if}
+  <label for="simCheck2" class="font-medium">Enable Loss LTE Signal</label>
+              
+              </td>
+
+              <td>
+{#if getdataAlready}               
+<input type="number" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.networkService.time} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+              </td> 
+              <td>
+              (1-30 minutes)
+              </td>
+              </tr>
+
+    <tr>
+
+    <td></td><td></td>
+              <td class="border-t-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
+              Roaming Service
+              </td>
+              <td class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
+{#if getdataAlready}  
+ <input type="checkbox" id="simCheck3" name="simCheck3" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.roamingService.enable} on:click={EnableRoamingTimeout_Check}>
+{/if}
+  <label for="simCheck3" class="font-medium">Once Roaming</label>
+              </td>
+
+              </tr>
+
+    <tr>
+
+    <td></td>
+    <td><p class="pl-5 pt-5 text-lg font-light text-right">SIM failover Treatment</p></td>
+    <td class="pl-5 pt-5">
+{#if getdataAlready}
+
+
+<input type="checkbox" id="failover" name="failover" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.simFailover} on:click={EnableSIMFailover_Check}>
+{/if}
+  <label for="failover" class="font-medium">Enable</label>
+</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td> 
+    </tr>
+
+
+{/if}
 
 
     <tr>
@@ -1422,123 +1555,74 @@
       <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.pktLvChk} value={1} >Enable</Radio>
 
 </div></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
     </tr>
 {#if changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.pktLvChk}
     <tr>
     <td></td><td><p class="pl-5 pt-5 text-lg font-light text-right">Checking Method</p></td>
-    
+        <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
 
     </tr>
 
 
     <tr>
 
-    <td></td><td></td><td class="pt-5">
+    <td></td><td></td><td class="pt-5" colspan="1">
 
   <label for="gLinkCheck1" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
  <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck1" name="gLinkCheck1" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pingEn} on:click={PingPacket_check}>Ping Packet:</label>
-    </td><td><FloatingLabelInput style="filled" id="packet_size" name="packet_size" type="number" label="Packet Size (Bytes)" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pingParam.size}/></td><td>
+    </td><td colspan="1"><FloatingLabelInput style="filled" id="packet_size" name="packet_size" type="number" label="Packet Size (Bytes)" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pingParam.size}/></td><td>
     <FloatingLabelInput style="filled" id="remote_host" name="remote_host" type="text" label="Remote Host" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pingParam.ip}/></td> 
     
 
     </tr>
 
-    <tr>
-    <td></td><td></td><td class="pt-5">
-
-  <label for="gLinkCheck2" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
- <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck2" name="gLinkCheck2" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.testIfEn} on:click={TestInterface_check}>
-Test Interface</label>
-
-    </td>
-
-    <td class="pt-5" colspan="2">
-
-    <div class="flex gap-3">
-  <label for="gLinkCheck3" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
- <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck3" name="gLinkCheck3" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.testIfParam.lan1En} on:click={LAN1_check}>
-LAN 1</label>
-
-  <label for="gLinkCheck4" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
- <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck4" name="gLinkCheck4" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.testIfParam.lan2En} on:click={LAN2_check}>
-LAN 2</label>
-
-
-
-  <label for="gLinkCheck5" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
- <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck5" name="gLinkCheck5" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.testIfParam.lan3En} on:click={LAN3_check}>
-LAN 3</label>
-
-
-  <label for="gLinkCheck6" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
- <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck6" name="gLinkCheck6" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.testIfParam.lan4En} on:click={LAN4_check}>
-LAN 4</label>
-
-
-  <label for="gLinkCheck7" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
- <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck7" name="gLinkCheck7" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.testIfParam.wanEn} on:click={EWAN_check}>
-Ethernet WAN</label>
-
-  <label for="gLinkCheck8" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
- <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck8" name="gLinkCheck8" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.testIfParam.cWanEn} on:click={CWan1_check}>
-Cellular WAN-1</label>
-
-    </div>
-
-
-    </td>
-    
-
-    </tr>
-
 
     <tr>
-    <td></td><td></td><td class="pt-5">
+    <td></td><td></td><td class="pt-5" colspan="1">
 
       <label for="gLinkCheck9" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
  <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck9" name="gLinkCheck9" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.dnsLockupEn} on:click={DNSLookup_check}>
 DNS Lookup</label>
     </td>
     
-    <td class="pt-5"><FloatingLabelInput style="filled" id="FQDN" name="FQDN" type="text" label="FQDN" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.dnsLockupParam.fqdn}/></td>
-    <td class="pt-5"><FloatingLabelInput style="filled" id="DNSer" name="DNSer" type="text" label="DNS Server" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.dnsLockupParam.dnser}/></td>
-    </tr>
-
-    <tr>
-    <td></td><td></td><td class="pt-5">
-
-          <label for="gLinkCheck10" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
- <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck10" name="gLinkCheck10" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.dnsPktSniffEn} on:click={DNSPacketSniff_check}>
-DNS Packet Sniff</label>
-
-    </td>
-    
-
+    <td class="pt-5" colspan="1"><FloatingLabelInput style="filled" id="FQDN" name="FQDN" type="text" label="FQDN" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.dnsLockupParam.fqdn}/></td>
+    <td class="pt-5" colspan="1"><FloatingLabelInput style="filled" id="DNSer" name="DNSer" type="text" label="DNS Server" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.dnsLockupParam.dnser}/></td>
     </tr>
 
 
     <tr>
-    <td></td><td></td><td class="pt-5">
+    <td></td><td></td><td class="pt-5" colspan="1">
     <label for="gLinkCheck11" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
  <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck11" name="gLinkCheck11" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.httpEn} on:click={HTTPS_check}>
 Http(s)</label>
 
     </td>
-    <td class="pt-5"><FloatingLabelInput style="filled" id="url" name="url" type="text" label="URL" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.httpUrl}/></td>
+    <td class="pt-5" colspan="1"><FloatingLabelInput style="filled" id="url" name="url" type="text" label="URL" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.httpUrl}/></td>
 
 
     </tr>
 
 
     <tr>
-    <td></td><td></td><td class="pt-5">
+    <td></td><td></td><td class="pt-5" colspan="1">
     <label for="gLinkCheck12" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
  <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck12" name="gLinkCheck12" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseEn} on:click={PacketCountInc_check}>
 Packet Count Increase</label>
 
     </td>
 
-    <td class="pt-5">
+    <td class="pt-5" colspan="1">
     <div class="flex gap-3">
     <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseMode} value={0}>RX</Radio>
     <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseMode} value={1}>RX + TX</Radio>
@@ -1658,14 +1742,14 @@ System Reboot</label>
     <span slot="header" class="pl-4">AT Debug</span>
 <div class='mb-6'>
   <Label for='default-input' class='block mb-2'>Command</Label>
-  <Input id='default-input' placeholder="Command" />
+  <Input id='default-input' placeholder="Command" bind:value={ATCommand}/>
 </div>
 
 
 <Label for="textarea-id" class="mb-2">Result</Label>
-<Textarea id="textarea-id" placeholder="Result" rows="4" name="message"/>
+<Textarea id="textarea-id" placeholder="Result" rows="4" name="message" bind:value={ATResult}/>
 <div class="flex flex-wrap gap-2">
-<Button>Send</Button>
+<Button color="blue" pill={true} on:click={executeATdebug}>Send</Button>
 </div>
 
   </AccordionItem>
@@ -1673,16 +1757,68 @@ System Reboot</label>
 </Accordion>
   </TabItem>
 
+<TabItem title="Port Switch">
+
+{#if getdataAlready == 1}
+<table>
+
+
+ <tr>
+  <td><p class="pl-5 pt-4 text-lg font-light text-right">LAN/WAN Port</p>
+
+  </td>
+
+    <td class="pl-5 pt-4"><div class="flex gap-4">
+
+      <Radio bind:group={changed_wan_data.config.networking_wan_port_switch} value={0} >LAN</Radio>
+      <Radio bind:group={changed_wan_data.config.networking_wan_port_switch} value={1} >WAN</Radio>
+    
+</div></td>
+</tr>
+
+</table>
+
+<p class="pt-5"></p>
+
+
+<table>
+<tr class="pt-5">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="blue" pill={true} on:click={savePortSwitch}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+</table>
+{/if}
+
+</TabItem>
+
 
 <TabItem title="Ethernet WAN">
+{#if saved_changed_wan_data.config.networking_wan_port_switch ==0}
+<Table>
+  <caption
+    class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
+  >
+    LAN/WAN port is LAN now. Please go to port switch page to change it.
+
+   </caption>
+</Table>
+{:else if saved_changed_wan_data.config.networking_wan_port_switch == 1}
+
+
   <Accordion>
 
 {#if hidden == 0}
 
   <AccordionItem {defaultClass}>
     <div slot="header" class="pl-4">General Status</div>
-
-
 
 <Table>
   <TableHead>
@@ -1717,13 +1853,29 @@ System Reboot</label>
   <AccordionItem {defaultClass}>
     <div slot="header" class="pl-4">Basic Settings</div>
   <table>
+
+<tr>
+  <td><p class="pl-40 pt-1 text-lg font-light text-right">Remote Access</p>
+
+  </td>
+
+  <td class="pl-5"><div class="flex gap-4">
+{#if getdataAlready}  
+  <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess} value={0} >Reject</Radio>
+  <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess} value={1} >Accept</Radio>
+{/if}
+
+</div></td>
+
+  </tr>
+
   <tr>
-  <td><p class="pl-40 pt-1 text-lg font-light text-right">Connection Type</p>
+  <td><p class="pl-40 pt-5 text-lg font-light text-right">Connection Type</p>
 
   </td>
 
 
-  <td class="pl-5"><div class="flex gap-4">
+  <td class="pl-5 pt-5"><div class="flex gap-4">
 {#if getdataAlready}  
   <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].basicSetting.connectionType} value={0} >Static IP</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].basicSetting.connectionType} value={1} >DHCP Client</Radio>
@@ -1904,11 +2056,29 @@ System Reboot</label>
   </AccordionItem>
 {/if}
 </Accordion>
+
+{/if}
+
   </TabItem>
 
 
 {#if hidden ==0}
   <TabItem title="WAN Redundancy Policy">
+
+
+{#if saved_changed_wan_data.config.networking_wan_port_switch ==0}
+<Table>
+  <caption
+    class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
+  >
+    LAN/WAN port is LAN now. Please go to port switch page to change it.
+
+   </caption>
+</Table>
+{:else if saved_changed_wan_data.config.networking_wan_port_switch == 1}
+
+
+
  <table>
   <tr>
   <td><p class="pl-40 pt-1 text-lg font-light text-right">Operation Mode</p>
@@ -1933,7 +2103,7 @@ System Reboot</label>
  <td><p class="pl-40 pt-5 text-lg font-light text-right">Primary WAN</p></td>
  <td class="pl-5 pt-5"><div class="flex gap-4">
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.alwaysOn.primaryWan} value={0} >Ethernet-WAN</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.alwaysOn.primaryWan} value={1} >Cellular-WAN-1</Radio>
+  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.alwaysOn.primaryWan} value={1} >Cellular-WAN</Radio>
 </div></td>
 
 
@@ -1944,7 +2114,7 @@ System Reboot</label>
  <td><p class="pl-40 pt-5 text-lg font-light text-right">Primary WAN</p></td>
  <td class="pl-5 pt-5"><div class="flex gap-4">
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.primaryWan} value={0} >Ethernet-WAN</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.primaryWan} value={1} >Cellular-WAN-1</Radio>
+  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.primaryWan} value={1} >Cellular-WAN</Radio>
 </div></td>
 
   </tr>
@@ -1953,7 +2123,7 @@ System Reboot</label>
  <td><p class="pl-40 pt-5 text-lg font-light text-right">Primary WAN</p></td>
  <td class="pl-5 pt-5"><div class="flex gap-4">
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.primaryWan} value={0} >Ethernet-WAN</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.primaryWan} value={1} >Cellular-WAN-1</Radio>
+  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.primaryWan} value={1} >Cellular-WAN</Radio>
 </div></td>
 
   </tr>
@@ -1974,7 +2144,7 @@ System Reboot</label>
 {:else if changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.primaryWan==0 && changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2}
 
  <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.backupWan} value={1} >Cellular-WAN-1</Radio>
+  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.backupWan} value={1} >Cellular-WAN</Radio>
 
 </div></td>
 {:else if changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.primaryWan==1 && changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
@@ -1986,7 +2156,7 @@ System Reboot</label>
 {:else if changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.primaryWan==0 && changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
 
  <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.backupWan} value={1} >Cellular-WAN-1</Radio>
+  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.backupWan} value={1} >Cellular-WAN</Radio>
 
 </div></td>
 {/if}
@@ -1995,12 +2165,13 @@ System Reboot</label>
 {/if}
 
 
+{#if getdataAlready} 
+{#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2 || changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
 
 
  <tr>
     <td><p class="pl-20 pt-5 text-lg font-light text-right">Payload Checking Rules</p></td>
   <td class="pl-5 pt-5"><div class="flex gap-4">
-{#if getdataAlready} 
 {#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2}
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkRule} value={0} >PING</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkRule} value={1} >DNS Query</Radio>
@@ -2011,15 +2182,20 @@ System Reboot</label>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkRule} value={2} >DNS Packet Check</Radio>
 
 {/if}
-{/if}
+
 </div></td>
     </tr>
+{/if}
+{/if}
 
+
+{#if getdataAlready}
+{#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2 || changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
 
     <tr>
     <td><p class="pl-10 pt-5 text-lg font-light text-right">Checking Target</p></td>
     <td class="pl-5 pt-5"><div class="flex gap-4">
-{#if getdataAlready} 
+
 {#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2}
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkTarget} value={0} >None</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkTarget} value={1} >DNS 1</Radio>
@@ -2035,34 +2211,42 @@ System Reboot</label>
 
 
 {/if}
-{/if}
+
 </div></td>
     </tr>
+{/if}
+{/if}
 
+{#if getdataAlready}
+{#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode == 2 ||
+changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
     <tr>
     <td><p class="pl-20 pt-5 text-lg font-light text-right">Checking Period</p></td>
     <td/>
         <td />
             <td />
     </tr>
+{/if}
+{/if}
 
     <tr>
     <td />
         <td>
             <table>
-
+{#if getdataAlready}
+{#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2 ||
+changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
               <tr>
               <td class="border-b-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
               Polling times
               </td>
-              <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-{#if getdataAlready} 
+              <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white"> 
 {#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2}              
 <input type="number" bind:value={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkPeriod.pollingTime} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
 <input type="number" bind:value={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkPeriod.pollingTime} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
-{/if}
+
               </td>
 
               <td>
@@ -2070,20 +2254,25 @@ System Reboot</label>
               </td> 
               </tr>
 
+{/if}
+{/if}
 
+
+{#if getdataAlready} 
+{#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2 || changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
 
               <tr>
               <td class="border-b-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
               Retry Count
               </td>
               <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-{#if getdataAlready} 
+
 {#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2}
 <input type="number" bind:value={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkPeriod.retryCnt} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
 <input type="number" bind:value={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkPeriod.retryCnt} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
-{/if}
+
               </td>
 
               <td>
@@ -2091,24 +2280,34 @@ System Reboot</label>
               </td> 
               </tr>
 
+{/if}
+{/if}
+
+{#if getdataAlready} 
+{#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode == 2 ||
+changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}  
               <tr>
               <td class="border-b-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
               Interval times
               </td>
               <td class="border-b-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
-{#if getdataAlready}               
+            
 {#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2}
 <input type="number" bind:value={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkPeriod.interval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
 <input type="number" bind:value={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkPeriod.interval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
-{/if}
+
               </td>
 
               <td>
               mini seconds
               </td> 
               </tr>
+
+{/if}
+{/if}
+
             </table>
         </td>
     <tr>
@@ -2125,6 +2324,8 @@ System Reboot</label>
     </tr>
 
   </table>
+
+{/if}
 
   </TabItem>
 

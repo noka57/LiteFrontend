@@ -808,7 +808,7 @@
 {:else if VirtualServer.wanIf==1}
       <TableBodyCell class="w-10">Ethernet WAN</TableBodyCell>
 {:else if VirtualServer.wanIf==2}
-      <TableBodyCell class="w-10">Cellular WAN-1</TableBodyCell>
+      <TableBodyCell class="w-10">Cellular WAN</TableBodyCell>
 
 {/if}
 
@@ -908,7 +908,7 @@
     <td class="pl-5 pt-4"><div class="flex gap-4">
   <Radio bind:group={newVS_Item[new_vs_index].wanIf} value={0} >All</Radio>
   <Radio bind:group={newVS_Item[new_vs_index].wanIf} value={1} >Ethernet WAN</Radio>
-  <Radio bind:group={newVS_Item[new_vs_index].wanIf} value={2} >Cellular WAN-1</Radio>
+  <Radio bind:group={newVS_Item[new_vs_index].wanIf} value={2} >Cellular WAN</Radio>
 </div></td>
 </tr>
 
@@ -1011,7 +1011,7 @@
   {#if getDataReady == 1}
   <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].wanIf} value={0} >All</Radio>
   <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].wanIf} value={1} >Ethernet WAN</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].wanIf} value={2} >Cellular WAN-1</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].wanIf} value={2} >Cellular WAN</Radio>
   {/if}
 </div></td>
 </tr>

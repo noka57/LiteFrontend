@@ -1196,12 +1196,7 @@
     <input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].basicSetting.pin} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
     </td>
-    <td class="pl-5 pt-1">
-<svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-<Tooltip trigger="click" triggeredBy="#click">Pin Code</Tooltip>
-    </td>
+
     </tr>
 
  <tr>
@@ -1942,11 +1937,12 @@ System Reboot</label>
   </AccordionItem>
 {#if hidden ==0}
   <AccordionItem {defaultClass}>
-    <div slot="header" class="pl-4">EWLAP-Ethernet WAN</div>
+    <div slot="header" class="pl-4">WAN Guarantie Link</div>
 
 <table>
     <tr>
-    <td class="w-60"><p class="pl-40 pt-5 text-lg font-light text-right">EWLAP</p></td>
+    <td class="w-60"><p class="pl-20 pt-5 text-lg font-light text-right">Guarantie Link
+</p></td>
     <td class="pl-5 pt-5">
 {#if getdataAlready} 
     <Toggle bind:checked={changed_wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapEn} on:change={EWLAP_Check}></Toggle>
@@ -1961,7 +1957,7 @@ System Reboot</label>
   <td class="pl-5 pt-5"><div class="flex gap-4">
   <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkRule} value={0} >PING</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkRule} value={1} >DNS Query</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkRule} value={2} >DNS Packet Check</Radio>
+
 
 
 </div></td>
@@ -1980,7 +1976,7 @@ System Reboot</label>
   <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkTarget} value={2} >DNS 2</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkTarget} value={3} >Gateway</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.chkTarget} value={4} >Other Host</Radio>
-
+<input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].ewlapEthernetWan.ewlapParam.otherHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
 </div></td>
 
     </tr>
@@ -2175,11 +2171,11 @@ System Reboot</label>
 {#if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==2}
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkRule} value={0} >PING</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkRule} value={1} >DNS Query</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkRule} value={2} >DNS Packet Check</Radio>
+
 {:else if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkRule} value={0} >PING</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkRule} value={1} >DNS Query</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkRule} value={2} >DNS Packet Check</Radio>
+
 
 {/if}
 

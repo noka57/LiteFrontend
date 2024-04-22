@@ -41,21 +41,9 @@
   let newCRL=false;
   let CRLURL="";
   let newCRLFileUpload=false;
-  export let crlvalue;
 
-  export let crlInterval='everyW';
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
-  const btn1 = () => {
-    alert('You clicked btn1.');
-    if (crlvalue) {
-      alert(crlvalue);
-    }
-    else
-    {
-      alert('no file');
-    }
-  };
 
   let selectedCACert = null;
   let caCertContent=""; 
@@ -67,6 +55,10 @@
   let remoteCertContent=""; 
 
   let RemoteCertAliasName="";
+
+  let selectedCRL = null;
+  let crlContent="";
+  let crlAliasName="";
 
 
   let selectedMachineCert = null;
@@ -96,6 +88,24 @@
     
     }
   }
+
+  let getCRLReady=0;
+  let crlList=[];
+  async function getcrl() {
+    const res = await fetch(window.location.origin+"/GeTCRL", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      crlList =await res.json();
+      console.log(crlList);
+      getCRLReady=1;
+    
+    }
+  }
+
   let getCaCertReady=0;
   let caCertList=[];
 
@@ -430,10 +440,10 @@
 
 
   let crlData = ''; // Initialize variable to store CRL data
-  let decodedCRL = ''; // Initialize variable to store decoded CRL information
+ let issuer = ''; // Initialize variable to store issuer information
+  let revokedCertificates = []; // Initialize variable to store revoked certificates
 
-
-  async function handleCRLUpload(event)
+  async function handleCRLUpload_2(event)
   {
     const crl = event.target.files[0];
     if (crl) 
@@ -446,7 +456,7 @@
         // Once file is loaded, store its contents in crlData
         crlData = event.target.result;
         // Call function to decode and display CRL
-        decodeCRL();
+        extractCRLInformation();
       };
     
       // Read the file as text
@@ -475,32 +485,160 @@
     }
   }
 
-  function decodeCRL() {
-    // Regular expression to match PEM-encoded CRL data
+  function extractCRLInformation() 
+  {
+
+
     const pemRegex = /-----BEGIN X509 CRL-----\r?\n?([\s\S]+)\r?\n?-----END X509 CRL-----/i;
     const match = pemRegex.exec(crlData);
     
-    if (match && match[1]) {
+    if (match && match[1]) 
+    {
       // Extract the CRL data between BEGIN and END markers
-      const base64CRL = match[1].replace(/[\r\n]/g, '');
+      const base64CRLOrigin = match[1].replace(/[\r\n]/g, '');
       // Decode base64 CRL to binary
-      const binaryCRL = atob(base64CRL);
-      // Display the decoded CRL
-      decodedCRL = binaryCRL;
-    } else {
-      decodedCRL = 'Invalid PEM format';
+     // const binaryCRL = atob(base64CRL);
+     
+
+
+    const base64CRL = atob(base64CRLOrigin);
+    const decodedCRL = new Uint8Array(base64CRL.length);
+    for (let i = 0; i < base64CRL.length; i++) {
+      decodedCRL[i] = base64CRL.charCodeAt(i);
     }
 
-    console.log("==decodedCRL");
-    console.log(decodedCRL);
+    // Parse CRL data using pkijs library
+    const asn1 = asn1js.fromBER(decodedCRL);
+    const crl = new CertificateRevocationList({ schema: asn1.result });
+
+    // Extract the "next update" date from the parsed CRL
+    const nextUpdate = crl.nextUpdate.value.toString(); // Adjust formatting as needed
+    console.log("nextUpdate");
+    console.log(nextUpdate);
+    // Update nextUpdateDate variable with extracted date
+    //nextUpdateDate = nextUpdate;
+
+    const oidToFriendlyName = {
+    '2.5.4.6': 'C',
+    '2.5.4.8': 'ST',
+    '2.5.4.7': 'L',
+    '2.5.4.10': 'O',
+    '2.5.4.11': 'OU',
+    '2.5.4.3': 'CN'
+    };
+
+
+
+    issuer = crl.issuer.typesAndValues.map(typeAndValue => {
+      const type = oidToFriendlyName[typeAndValue.type] || typeAndValue.type;
+      const value = typeAndValue.value.valueBlock.value || typeAndValue.value.valueBlock.valueHex;
+      return `${type} = ${value}`;
+    }).join(', ');
+
+    console.log(issuer);
+
+
+
+
+    // Extract revoked certificates from the parsed CRL
+    revokedCertificates = crl.revokedCertificates.map(revokedCert => {
+      return {
+        serialNumber: revokedCert.userCertificate.valueBlock.valueHex,
+        revocationDate: revokedCert.revocationDate.value.toString() // Adjust formatting as needed
+      };
+    });
+
+
+    console.log(revokedCertificates);
+      // Display the decoded CRL
+     // decodedCRL = binaryCRL;
+    } 
+    else 
+    {
+      decodedCRL = 'Invalid PEM format';
+    }
+  }
+
+
+
+
+  /*
+  let selectedCRL = null;
+  let crlContent="";
+  let crlAliasName="";
+
+  */
+
+
+  async function handleCRLFile(event)
+  {
+    const crl = event.target.files[0];
+    if (crl) 
+    {
+      selectedCRL=crl;
+      if (sessionid) 
+      {
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
+      }
+      const reader = new FileReader();
+      reader.onload = event => {
+          const crlBinary= new Uint8Array(event.target.result);
+          crlContent=new Uint8Array(crlBinary.length+sessionBinary.length+64);
+          crlContent.set(sessionBinary,0);
+          crlContent.set(crlBinary, sessionBinary.length+64);
+      };
+
+      reader.readAsArrayBuffer(crl);
+    }
+  
   }
 
 
   async function uploadCRL()
   {
+    if (crlAliasName == "" || crlContent == "")
+    {
+        alert('Alias Name is null or content is null');
+    }
+    else
+    {
+
+      if (selectedCRL) 
+      {
+        console.log(crlAliasName)
+
+        const textEncoder = new TextEncoder();
+        let uint8ArrayResult = textEncoder.encode(crlAliasName);
+        crlContent.set(uint8ArrayResult, sessionBinary.length);
+
+        const res = await fetch(window.location.origin+"/UpLoaDcrl", {
+        method: 'POST',
+        body: crlContent,
+            headers: {
+              'Content-Type': 'application/octet-stream',
+            },
+          }
+        )
+
+        if (res.status == 200)
+        {
+
+          console.log("200 Upload crl");
+          getcrl();
+
+        }
+        else
+        {
+          console.log("error Upload crl");
+        }
+
+
+      }
+    }
 
   }
-
   
 
   async function handleRemoteCertUpload(event) 
@@ -517,7 +655,7 @@
       }
 
 
-    const reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = event => {
           const RemoteCertBinary= new Uint8Array(event.target.result);
           remoteCertContent=new Uint8Array(RemoteCertBinary.length+sessionBinary.length+64);
@@ -548,8 +686,6 @@
         let uint8ArrayResult = textEncoder.encode(RemoteCertAliasName);
         remoteCertContent.set(uint8ArrayResult, sessionBinary.length);
 
-
-        console.log(RemoteCertAliasName);
         const res = await fetch(window.location.origin+"/UpLoadRemoteCert", {
         method: 'POST',
         body: remoteCertContent,
@@ -628,6 +764,12 @@
 
   } 
 
+  const RefreshCRL = () =>
+  {
+      getcrl();
+
+  } 
+
  async function getCertificateData() {
     const res = await fetch(window.location.origin+"/GetCertificateData", {
       method: 'POST',
@@ -663,6 +805,7 @@
         getRemoteCertificate();
         getCACertificate();
         getMachineCertificate();
+        getcrl();
     }
     else if(sessionid && certificate_data!="")
     {
@@ -860,185 +1003,62 @@
   </TableBody>
 </Table>
   </TabItem>
+
+
+
 {#if 1}  
-    <TabItem title="CRL">
-<Accordion>
-  <AccordionItem {defaultClass}>
-    <span slot="header" class="pl-4">Manually Uploaded File</span>
-<Table shadow striped={true}>
+    <TabItem title="CRL" on:click={RefreshCRL}>
+
+<Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
-    <TableHeadCell class="!p-4 w-10">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-    <TableHeadCell class="w-10">No</TableHeadCell>
-    <TableHeadCell class="w-10">CRL Issuer</TableHeadCell>
-    <TableHeadCell class="w-10">Next Update</TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell>No</TableHeadCell>
+    <TableHeadCell>Alias Name</TableHeadCell>
+    <TableHeadCell></TableHeadCell>
+    <TableHeadCell></TableHeadCell>
+    <TableHeadCell></TableHeadCell>
+    <TableHeadCell></TableHeadCell>
   </TableHead>
   <TableBody>
 
 
+{#if getCRLReady==1}
+{#each crlList as crl, index}
 <TableBodyRow>
-      <TableBodyCell class="w-10">
-<button on:click={NewCRLFileUploadTrigger}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+      <TableBodyCell class="!p-4">
 
-  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
       </TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-    </TableBodyRow>
-     <tr>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-        <td ></td>
-    <td ><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>Save</Button></td>
-  </TableBody>
-</Table>
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-64">{crl}</TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
 
-<Modal bind:open={newCRLFileUpload} size="md" class="w-full" autoclose>
-
-
-<table>
-
-<tr>
-
-<td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">CRL File</p></td>
-<td class="pl-5 pt-5">
-
-<input type="file" id="crlUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleCRLUpload}>
-
-</td>
-<td class="pl-5 pt-5">
-  <Button color="dark" on:click={uploadCRL}>Upload</Button>
-
-</td>
-
-</tr>
-
-  </table>
-
-</Modal>
-
-  </AccordionItem>
-
-    <AccordionItem {defaultClass}>
-    <span slot="header" class="pl-4">URL</span>
-
-
-<p class="mb-4 font-semibold text-gray-900 dark:text-white">Download URL Interval</p>
-<div class="flex gap-4">
-  <Radio bind:group={crlInterval} value='everyW' >Every Week</Radio>
-  <Radio bind:group={crlInterval} value='everyM' >Every Month</Radio>
-  <Radio bind:group={crlInterval} value='everyQ' >Every Quarter</Radio>
-</div>
-<div class="p-4"></div>
-    <Table shadow striped={true}>
-  <TableHead>
-    <TableHeadCell class="!p-4 w-10">
-
-    </TableHeadCell>
-    <TableHeadCell class="w-10">No</TableHeadCell>
-    <TableHeadCell class="w-10">CRL issuer</TableHeadCell>
-    <TableHeadCell class="w-10">Next Update</TableHeadCell>
-    <TableHeadCell class="w-10">URL</TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-  </TableHead>
-  <TableBody>
+</TableBodyRow>
+{/each}
+{/if}
 
 
 <TableBodyRow>
+      <TableBodyCell class="!p-4">
 
-
-      <TableBodyCell class="w-10">
-<button on:click={NewCRLTrigger}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-
-  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
       </TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-64"><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alias Name" bind:value={crlAliasName}/></TableBodyCell>
+      <TableBodyCell class="w-96"><input type="file" id="crlUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleCRLFile}>
+
+</TableBodyCell>
+      <TableBodyCell class="w-36"> <Button color="dark" on:click={uploadCRL}>Upload</Button></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
     </TableBodyRow>
-        <tr>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-        <td ></td>
-    <td ><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>Save</Button></td>
-
-
-    </tr>
   </TableBody>
 </Table>
 
-<Modal bind:open={newCRL} size="sm" class="w-full" autoclose>
 
 
-<table>
-
-
- <tr>
-   <td><p class="pl-20 pt-4 text-lg font-light text-right">URL</p></td><td class="pl-5 pt-5"><input type="text" bind:value={CRLURL}  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-</tr>
-
-
-      <tr>
-    <td></td>
-    <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Add</Button></td>
-
-
-    </tr>
-  </table>
-
-</Modal>
-
-
-  </AccordionItem>
-</Accordion>
  
 
   </TabItem>

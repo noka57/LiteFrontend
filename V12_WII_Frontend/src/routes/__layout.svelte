@@ -6,6 +6,7 @@
 	import { sessionidG } from "./sessionG.js";
   	import { 
   		LanConfigChangedLog,
+  		DHCPServerLANConfigLog,
   		NAT_LoopBack_ConfigChangedLog, 
   		NAT_VS_ConfigChangedLog, 
   		NAT_VC_ConfigChangedLog, 
@@ -160,6 +161,7 @@
   	let interval;
   	let sessionBinary;
   	let LANchangedValues = [];
+  	let dhcpServerChangedValues=[];
   	let NAT_loopback_changedValues =[];
   	let NAT_virtualServer_changedValues =[];  	
   	let NAT_virtualComputer_changedValues =[];
@@ -297,6 +299,7 @@
   			openvpn_client_advanced_rna_changedValues.length !=0 ||
   			openvpn_client_advanced_fo_changedValues.length !=0 ||
   			LANchangedValues.length != 0 ||
+  			dhcpServerChangedValues.length !=0 ||
   			NAT_loopback_changedValues.length != 0 ||
   			NAT_virtualServer_changedValues.length !=0 ||
   			NAT_virtualComputer_changedValues.length !=0 ||
@@ -347,6 +350,12 @@
 	LanConfigChangedLog.subscribe(val => {
     	LANchangedValues=val;
     	JudgeChangedOrNot();
+  	});
+
+
+  	DHCPServerLANConfigLog.subscribe(val => {
+        dhcpServerChangedValues = val;
+        JudgeChangedOrNot();
   	});
 
   	NAT_LoopBack_ConfigChangedLog.subscribe(val => {

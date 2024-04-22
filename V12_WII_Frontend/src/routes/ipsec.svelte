@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button,  Radio, FloatingLabelInput, Input, Dropdown, DropdownItem,  Select, Modal, Label} from 'flowbite-svelte';
+  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button,  Radio, FloatingLabelInput, Input, Dropdown, DropdownItem,  Select, Modal, Tooltip,Label} from 'flowbite-svelte';
 
 
   import { onMount } from 'svelte';
@@ -493,6 +493,7 @@ let RemoteCAList = [
     }
 
     let BackupICG={
+        "enable":1,
         "name": 0,
         "remote_host":"",
         "local_certificate": "",
@@ -501,6 +502,7 @@ let RemoteCAList = [
     };
 
     let newICG_item=[{
+            "enable":1,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -509,6 +511,7 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
+            "enable":1,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -517,6 +520,7 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
+            "enable":1,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -525,6 +529,7 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
+            "enable":1,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -533,6 +538,7 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
+            "enable":1,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -541,6 +547,7 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
+            "enable":1,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -549,6 +556,7 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
+            "enable":1,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -557,6 +565,7 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
+            "enable":1,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -565,6 +574,7 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
+            "enable":1,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -573,6 +583,7 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
+            "enable":1,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -633,58 +644,58 @@ let RemoteCAList = [
     }
 
     let BackupRCS={
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     };
 
     let newRCS_item=[{
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     }
@@ -736,522 +747,519 @@ let RemoteCAList = [
 
 
    let BackupICS={
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     };
 
     let newICS_item=[[{
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
 [{
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    }
+    ],
+   [{
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
     [{
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    }
+    ],
+   [{
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    }
+    ],
+  [{
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
+        "local_subnet": "",
+        "remote_subnet": ""
+    },
+    {
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
     [{
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
     [{
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     }
-    ],
-    [{
-
+    ],[{
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     }
-    ]
-    ,[{
-
+    ],[{
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-
+        "enable":1,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ]
-    ,[{
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    }
-    ]
-    ,[{
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    }
-    ]
-    ,[{
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    },
-    {
-
-        "local_subnet": "",
-        "remote_subnet": ""
-    }
-    ]
-
     ];
 
 
@@ -1760,7 +1768,7 @@ async function getIpsecStatus() {
     <td class= "pl-4 pt-4">
 
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={newICG_item[newICG_index].remote_certificate}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={newICG_item[newICG_index].remote_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getRemoteCertReady== 1}
 {#each remoteCertList as remoteCert, index}
@@ -1772,7 +1780,12 @@ async function getIpsecStatus() {
     
 
     </td>
-
+    <td class="pl-5 pt-1">
+<svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
+    </td>
 
 </tr>
 
@@ -1782,7 +1795,7 @@ async function getIpsecStatus() {
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={newICG_item[newICG_index].local_certificate}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={newICG_item[newICG_index].local_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getMachineCertReady== 1}
 {#each machineCertList as machineCert, index}
@@ -1795,7 +1808,12 @@ async function getIpsecStatus() {
 
 
     </td>
-
+    <td class="pl-5 pt-1">
+<svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
+    </td>
 
   </tr>
 
@@ -1858,7 +1876,7 @@ async function getIpsecStatus() {
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].remote_certificate}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].remote_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getRemoteCertReady== 1}
 {#each remoteCertList as remoteCert, index}
@@ -1869,7 +1887,12 @@ async function getIpsecStatus() {
 
 
     </td>
-
+    <td class="pl-5 pt-1">
+<svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
+    </td>
 
 </tr>
 
@@ -1879,7 +1902,7 @@ async function getIpsecStatus() {
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].local_certificate}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].local_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getMachineCertReady== 1}
 {#each machineCertList as machineCert, index}
@@ -1891,7 +1914,12 @@ async function getIpsecStatus() {
 
     </td>
 
-
+    <td class="pl-5 pt-1">
+<svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
+    </td>
   </tr>
 
 
@@ -2165,7 +2193,7 @@ Remote Subnet
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
     <td class= "pl-4 pt-4">
 
-    <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.local_certificate}>
+    <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.local_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getMachineCertReady== 1}
 {#each machineCertList as machineCert, index}
@@ -2176,14 +2204,19 @@ Remote Subnet
     
 
     </td>
-
+    <td class="pl-5 pt-1">
+<svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
+    </td>
 
 </tr>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.remote_certificate}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.remote_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getRemoteCertReady== 1}
 {#each remoteCertList as remoteCert, index}
@@ -2196,7 +2229,12 @@ Remote Subnet
 
     </td>
 
-
+    <td class="pl-5 pt-1">
+<svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
+    </td>
   </tr>
 
   <tr>

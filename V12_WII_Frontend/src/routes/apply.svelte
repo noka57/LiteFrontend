@@ -4,6 +4,7 @@
 	import { 
       lanConfig,
 			LanConfigChangedLog, 
+      DHCPServerLANConfigLog,
 			ChangedLANConfig,
       natConfig,
 			NAT_LoopBack_ConfigChangedLog, 
@@ -136,7 +137,7 @@
   let ContentLAN; 
   let lanBinary=null;
   let LANchangedValues = [];
-
+  let dhcpServerChangedValues=[];
 
   let ContentNAT; 
   let natBinary=null;
@@ -598,6 +599,11 @@
     	LANchangedValues=val;
   });
 
+  DHCPServerLANConfigLog.subscribe(val => {
+      dhcpServerChangedValues = val;
+  });
+
+
 
 	NAT_LoopBack_ConfigChangedLog.subscribe(val => {
 	  	NAT_loopback_changedValues = val;
@@ -713,8 +719,9 @@
       lanConfig.set(applied_new_lan_data);
 
       LANchangedValues=[];
+      dhcpServerChangedValues=[]
       LanConfigChangedLog.set(LANchangedValues);
-
+      DHCPServerLANConfigLog.set(dhcpServerChangedValues);
       RestartLAN();
 
 	  }
@@ -1616,7 +1623,7 @@
 
 	function CalculateTotalSetCount()
 	{
-	  if  (lan_data != "" && LANchangedValues.length!=0)
+	  if  (lan_data != "" && LANchangedValues.length!=0 || dhcpServerChangedValues.length !=0)
     {
     	SetCount++;
       RestartCount++;
@@ -1791,7 +1798,7 @@
 	      const byteValues = hexArray.map(hex => parseInt(hex, 16));
 	      sessionBinary = new Uint8Array(byteValues);
 	      CalculateTotalSetCount();
-      	if  (lan_data != "" && LANchangedValues.length!=0)
+      	if  (lan_data != "" && (LANchangedValues.length!=0 || dhcpServerChangedValues.length !=0))
       	{
 	        let LANString = JSON.stringify(lan_data, null, 0);
 					const bytesArray = Array.from(LANString).map(char => char.charCodeAt(0));
@@ -2968,14 +2975,37 @@ event_engine_action_do_changeValues.length != 0 ||
 {/if}
 
 
-{#if LANchangedValues.length!=0}
+{#if LANchangedValues.length!=0 || dhcpServerChangedValues.length !=0}
   <Li>LAN
+
+{#if LANchangedValues.length!=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li> General
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
   {#each LANchangedValues as item}
       <Li>{item}</Li>
    {/each}
   </List>
   </Li>
+  </List>
+
+{/if}
+
+{#if dhcpServerChangedValues.length!=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li> DHCP Server
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each dhcpServerChangedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+  </List>
+{/if}
+
+  </Li>
+
+
 {/if}
 
 
@@ -3171,6 +3201,7 @@ event_engine_action_do_changeValues.length != 0 ||
 		    modbus_rtu_master_changedValues.length !=0 ||
 		    modbus_rtu_slave_changedValues.length !=0 ||
 				LANchangedValues.length != 0 ||
+        dhcpServerChangedValues.length !=0 ||
   			NAT_loopback_changedValues.length != 0 ||
   			NAT_virtualServer_changedValues.length !=0 ||
   			NAT_virtualComputer_changedValues.length !=0 ||

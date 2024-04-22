@@ -92,7 +92,7 @@ export const IPsec_Initiator_Conn_Subnet_ConfigChangedLog=writable("");
 export const IPsec_Basic_ConfigChangedLog=writable("");
 export const ChangedIPsecConfig=writable("");
 
-
+export const DHCPServerLANConfigLog=writable("");
 export const LanConfigChangedLog=writable("");
 export const ChangedLANConfig=writable("");
 

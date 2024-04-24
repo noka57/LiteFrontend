@@ -2,7 +2,7 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, Toggle,Select, Checkbox, Input, Tooltip, Radio,FloatingLabelInput } from 'flowbite-svelte';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { wanConfig, wanInputFlag,
+  import { wanConfig, wanWebInputFlag,
     LastestReadableWANConfig,
     WAN_CWAN1_BASIC_ConfigChangedLog,
     WAN_CWAN1_Advanced_ConfigChangedLog,
@@ -443,10 +443,10 @@
   //  console.log(changed_wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess);
   //  console.log(wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess);
 
-    if (wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess != changed_wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess)
+    if (wan_data.config.networking_wan_ewan[0].basicSetting.webAccess != changed_wan_data.config.networking_wan_ewan[0].basicSetting.webAccess)
     {
-      console.log("remote access changed!!");
-      wanInputFlag.set("1");
+      console.log("web access changed!!");
+      wanWebInputFlag.set("1");
     }
 
 
@@ -1850,14 +1850,14 @@ System Reboot</label>
   <table>
 
 <tr>
-  <td><p class="pl-40 pt-1 text-lg font-light text-right">Remote Access</p>
+  <td><p class="pl-40 pt-1 text-lg font-light text-right">Web Access</p>
 
   </td>
 
   <td class="pl-5"><div class="flex gap-4">
 {#if getdataAlready}  
-  <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess} value={0} >Reject</Radio>
-  <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess} value={1} >Accept</Radio>
+  <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].basicSetting.webAccess} value={0} >Reject</Radio>
+  <Radio bind:group={changed_wan_data.config.networking_wan_ewan[0].basicSetting.webAccess} value={1} >Accept</Radio>
 {/if}
 
 </div></td>

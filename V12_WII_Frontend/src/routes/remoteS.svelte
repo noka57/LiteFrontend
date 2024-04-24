@@ -345,7 +345,7 @@
     <TableHeadCell>Account</TableHeadCell>
     <TableHeadCell>QoS</TableHeadCell>
     <TableHeadCell class="w-18">Keep Alive Interval (sec)</TableHeadCell>
-
+    <TableHeadCell class="w-18">ID Nick Name</TableHeadCell>
      </TableHead>
   <TableBody>
 
@@ -383,7 +383,7 @@
       <TableBodyCell class="w-10">{MQTTparam.account}</TableBodyCell>
       <TableBodyCell class="w-10">{MQTTparam.qos}</TableBodyCell>
       <TableBodyCell class="w-18">{MQTTparam.keepAliveInterval}</TableBodyCell>
-
+      <TableBodyCell class="w-18">{MQTTparam.mqtt_id_nickname}</TableBodyCell>
     </TableBodyRow>
 {/each}
 
@@ -534,7 +534,10 @@
 
 </tr>
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">MQTT_ID_Nick_Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_remote_service_data.config.service_remoteService.mqtt_api_param[modify_index].mqtt_id_nickname} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
+</tr>
 
 
   <tr>

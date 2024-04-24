@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 
 export const dashboadData= writable("");
 export const VPNdashboad= writable("");
-export const wanInputFlag=writable("");
+export const wanWebInputFlag=writable("");
 
 export const eventEngineConfig=writable("");
 export const sdataLoggerConfig=writable("");

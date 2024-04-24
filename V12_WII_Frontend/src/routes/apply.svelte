@@ -30,7 +30,7 @@
   		DockerConfigChangedLog,
       ChangedDockerConfig,
       wanConfig, 
-      wanInputFlag,
+      wanWebInputFlag,
       WAN_CWAN1_BASIC_ConfigChangedLog,
     	WAN_CWAN1_Advanced_ConfigChangedLog,
     	WAN_CWAN1_SimPolicy_ConfigChangedLog,
@@ -270,7 +270,7 @@
   let AllRestartFinished=0;
   let RestartCount=0;
   let RestartCountOK=0;
-  let wanRemoteAccessChanged="";
+  let wanWebAccessChanged="";
 
 
   function closeModal()
@@ -317,8 +317,8 @@
       wan_data = val;
   }); 
 
-  wanInputFlag.subscribe(val => {
-      wanRemoteAccessChanged = val;
+  wanWebInputFlag.subscribe(val => {
+      wanWebAccessChanged = val;
   }); 
 
   ChangedIPsecConfig.subscribe(val => {
@@ -1030,7 +1030,7 @@
 
   async function PostWANInputReject() 
   {
-    const res = await fetch(window.location.origin+"/setWanInputReject", {
+    const res = await fetch(window.location.origin+"/setWanwebInputReject", {
         method: 'POST',
         body: sessionBinary
     })
@@ -1039,14 +1039,14 @@
       {
         console.log("wan input reject ok\r\n");
 
-        wanRemoteAccessChanged="";
+        wanWebAccessChanged="";
       }
   }
 
 
   async function PostWANInputAccept() 
   {
-    const res = await fetch(window.location.origin+"/SetWANinputAccept", {
+    const res = await fetch(window.location.origin+"/SetWANwebinputAccept", {
         method: 'POST',
         body: sessionBinary
     })
@@ -1055,8 +1055,23 @@
       {
         console.log("wan input accept ok\r\n");
 
-        wanRemoteAccessChanged="";
+        wanWebAccessChanged="";
       }
+  }
+
+  async function RestartGlink()
+  {
+
+    const res = await fetch(window.location.origin+"/PostRestartGlink", {
+        method: 'POST',
+        body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      console.log("glink restart ok\r\n");
+    }
+
   }
 
 
@@ -1081,7 +1096,7 @@
       cwan1_basic_changedValues = [];
       cwan1_advanced_changedValues = [];
       cwan1_simpolicy_changedValues = [];
-      cwan1_glink_changedValues = [];
+
       ewan1_basic_changedValues = [];
       ewan1_ewlap_changedValues = [];
       redundancy_policy_changedValues = [];
@@ -1092,23 +1107,22 @@
       WAN_CWAN1_BASIC_ConfigChangedLog.set(cwan1_basic_changedValues);
       WAN_CWAN1_Advanced_ConfigChangedLog.set(cwan1_advanced_changedValues);
       WAN_CWAN1_SimPolicy_ConfigChangedLog.set(cwan1_simpolicy_changedValues);
-      WAN_CWAN1_GLink_ConfigChangedLog.set(cwan1_glink_changedValues);
+
       WAN_EWAN1_Basic_ConfigChangedLog.set(ewan1_basic_changedValues);
       WAN_EWAN1_EWLAP_ConfigChangedLog.set(ewan1_ewlap_changedValues);
       WAN_RedundancyPolicy_ConfigChangedLog.set(redundancy_policy_changedValues);
       WAN_FareSavingPolicy_ConfigChangedLog.set(faresaving_policy_changedValues);
       WAN_PORT_SWITCH_ConfigChangedLog.set(port_switch_changedValues);
 
-      console.log("--wanRemoteAccessChanged");
-      console.log(wanRemoteAccessChanged);
-      if (wanRemoteAccessChanged != "")
+
+      if (wanWebAccessChanged != "")
       {
-        console.log("wanRemoteAccessChanged!!!");
-        if (wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess==0)
+        console.log("wanWebAccessChanged!!!");
+        if (wan_data.config.networking_wan_ewan[0].basicSetting.webAccess==0)
         {
             PostWANInputReject();   
         }
-        else if (wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess==1)
+        else if (wan_data.config.networking_wan_ewan[0].basicSetting.webAccess==1)
         {
 
             PostWANInputAccept();
@@ -1118,6 +1132,16 @@
 
       console.log("reset wan");
       RestartWAN();
+
+
+      if (cwan1_glink_changedValues.length!=0)
+      {
+        RestartGlink();
+      }
+
+
+      cwan1_glink_changedValues = [];
+      WAN_CWAN1_GLink_ConfigChangedLog.set(cwan1_glink_changedValues);
 
 	  }
 	} 

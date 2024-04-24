@@ -155,7 +155,7 @@
     }
     else if (TracerouteType == 1)
     {
-      TracerouteCmd +="-w 3 -n -6 "+TracerouteHost;
+      TracerouteCmd +=" -w 3 -n -6 "+TracerouteHost;
     }
     else
     {

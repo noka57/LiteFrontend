@@ -148,6 +148,82 @@
 
   let CloudProfile=[];
 
+  let dViewerCProfile=0;
+  let dViewerDduration=0;
+  let durationDay=1;
+  let durationHour=1;
+  let durationMin=1
+  let dViewerTargetCProfile="";
+
+  function dViewerCProfile_Check()
+  {
+
+    if (dViewerCProfile)
+    {
+      dViewerCProfile=0;
+    }
+    else
+    {
+      dViewerCProfile=1;
+    }
+
+  }
+
+  function dViewerDduration_Check()
+  {
+
+    if (dViewerDduration)
+    {
+      dViewerDduration=0;
+    }
+    else
+    {
+      dViewerDduration=1;
+    }
+
+  }
+
+
+  let dViewerContent;
+  let dViewerResult;
+
+
+  async function ExecuteViewer() {
+    const res = await fetch(window.location.origin+"/PostdataLoggerViewer", {
+      method: 'POST',
+      body: dViewerContent
+    })
+
+    if (res.status == 200)
+    {
+      dViewerResult =await res.json();
+      console.log(dViewerResult);
+      //StartPing=0;
+      //FinishPing=1;
+    }
+    else
+    {
+      console.log("error data viewer");
+      //StartPing=0;
+     // FinishPing=1;
+    }
+  }
+
+
+  function dViewerExecute()
+  {
+
+    console.log("dviewer execute==");
+    let dViewerExecuteStr="{\"CloudProfileEnable\":"+ dViewerCProfile+", \"SelectedProfile\":"+ "\""+dViewerTargetCProfile+"\""+",\"DataDurationEnable\":"+ dViewerDduration+",\"DurationDay\":"+durationDay+",\"DurationHour\":"+durationHour+",\"DurationMin\":"+ durationMin +"}"
+    const bytesArray = Array.from(dViewerExecuteStr).map(char => char.charCodeAt(0));
+    let dViewerBinary = new Uint8Array(bytesArray);
+    dViewerContent=new Uint8Array(dViewerBinary.length+sessionBinary.length);
+    dViewerContent.set(sessionBinary,0);
+    dViewerContent.set(dViewerBinary, sessionBinary.length);
+    ExecuteViewer();
+
+  }
+
 
     let new_proxy_edge=[
     {
@@ -471,7 +547,7 @@
 
     function NoAddProxyEdge(index)
     {
-      new_monitor_edge_modal=false;
+      new_proxy_edge_modal=false;
     }
 
 
@@ -499,7 +575,7 @@
 
     function NoAddMonitorEdge(index)
     {
-      modify_monitor_edge_modal=false;
+      new_monitor_edge_modal=false;
     }
 
 
@@ -1044,6 +1120,8 @@
         let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
         let clouditem={"value":item, "name":item};
         CloudProfile=[...CloudProfile, clouditem];
+        console.log("CloudProfile")
+        console.log(CloudProfile);
       }
 
     }
@@ -1086,6 +1164,8 @@
               let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
               let clouditem={"value":item, "name":item};
               CloudProfile=[...CloudProfile, clouditem];
+              console.log("CloudProfile")
+              console.log(CloudProfile);
             }
           }
         }
@@ -1157,7 +1237,11 @@
           let clouditem={"value":item, "name":item};
           CloudProfile=[...CloudProfile, clouditem];
         }
+        console.log("CloudProfile")
+        console.log(CloudProfile);
       }
+
+
 
 
     }
@@ -2677,21 +2761,42 @@
 
 <tr>
     <td></td><td class="pt-5">
-    <Checkbox bind:group={ViewerSelect} value="CProfile">Cloud Profile</Checkbox>
+
+    <label for="dviewerCP" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="dviewerCP" name="dviewerCP" checked={!!dViewerCProfile} on:click={dViewerCProfile_Check}>
+Cloud Profile</label>
+
     </td>
 
-    <td class="pl-4 pt-3"><Select class="mt-2" items={CloudProfile} placeholder="None" /></td>
+    <td class="pl-4 pt-3">
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-80" bind:value={dViewerTargetCProfile}>
+<option disabled="" value="none">Choose Profile ...</option>
+{#each CloudProfile as profile, index}
+<option value={profile.value}>{profile.name}</option>
+{/each}
+</select>
+
+
+    </td>
 
 </tr>
 
 <tr>
     <td></td><td class="pt-5">
-    <Checkbox bind:group={ViewerSelect} value="DataDuration">Data Duration</Checkbox>
+
+
+    <label for="dviewerCP" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
+ <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="dviewerCP" name="dviewerCP" checked={!!dViewerDduration} on:click={dViewerDduration_Check}>
+Data Duration</label>
+
+
     </td>
 
-    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Days" name="Days" type="text" label="Days" value={1}/></td>
-    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Hours" name="Hours" type="text" label="Hours" value={2}/></td>    
-    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Mins" name="Mins" type="text" label="Mins" value={3}/></td>    
+    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Days" name="Days" type="text" label="Days" value={durationDay}/></td>
+    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Hours" name="Hours" type="text" label="Hours" value={durationHour}/></td>    
+    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Mins" name="Mins" type="text" label="Mins" value={durationMin}/></td>    
 
 
 
@@ -2701,7 +2806,7 @@
 <tr>
 
   <td></td><td class="pt-5">
-<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full">Execute</button>
+<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full" on:click={dViewerExecute}>Execute</button>
     </td>
 
 </tr>

@@ -537,6 +537,11 @@
 
   }
 
+  function saveTriggerPING()
+  {
+    console.log("save Trigger PING");
+  }
+
 
   function saveActionSMS()
   {
@@ -1991,6 +1996,126 @@
   {
       new_trigger_mqtt_modal=false;
       changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification=[...changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification,NewTriggerMQTT[index]];
+  } 
+
+
+  let new_trigger_ping_modal=false;
+  let new_trigger_ping_index;
+  let NewTriggerPING=[
+  {
+      enable: false,
+      aliasName: "",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatOption:0,
+      RepeatDelaySec:1
+  }
+,
+  {
+      enable: false,
+      aliasName: "",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatOption:0,
+      RepeatDelaySec:1
+  },
+  {
+      enable: false,
+      aliasName: "",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatOption:0,
+      RepeatDelaySec:1
+  },
+  {
+      enable: false,
+      aliasName: "",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatOption:0,
+      RepeatDelaySec:1
+  },
+  {
+      enable: false,
+      aliasName: "",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatOption:0,
+      RepeatDelaySec:1
+  },
+  {
+      enable: false,
+      aliasName: "",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatOption:0,
+      RepeatDelaySec:1
+  },
+  {
+      enable: false,
+      aliasName: "",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatOption:0,
+      RepeatDelaySec:1
+  },
+  {
+      enable: false,
+      aliasName: "",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatOption:0,
+      RepeatDelaySec:1
+  },
+  {
+      enable: false,
+      aliasName: "",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatOption:0,
+      RepeatDelaySec:1
+  },
+  {
+      enable: false,
+      aliasName: "",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatOption:0,
+      RepeatDelaySec:1
+  }
+  ];
+
+
+  function new_trigger_ping_trigger(index)
+  {
+      NewTriggerPING[index].enable=false;
+      NewTriggerPING[index].aliasName="";
+      NewTriggerPING[index].pingResult=0;
+      NewTriggerPING[index].ResultOption=0;
+      NewTriggerPING[index].ResultContinuousCount=2;
+      NewTriggerPING[index].RepeatOption=0;
+      NewTriggerPING[index].RepeatDelaySec=1;
+
+      new_trigger_ping_index=index;
+      new_trigger_ping_modal=true;
+
+  }
+
+
+  function add_new_trigger_ping(index)
+  {
+      new_trigger_ping_modal=false;
+      changed_event_engine_data.config.service_eventEngine_triggerProfile.ping=[...changed_event_engine_data.config.service_eventEngine_triggerProfile.ping,NewTriggerPING[index]];
   } 
 
 
@@ -4589,6 +4714,218 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 </AccordionItem>
 
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    PING
+    </span>
+
+
+
+
+ <Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+        <TableHeadCell class="!p-4">
+    </TableHeadCell>
+        <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell>Enable</TableHeadCell>
+    <TableHeadCell>No</TableHeadCell>
+    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Host</TableHeadCell>
+    <TableHeadCell class="w-18">Trigger Type</TableHeadCell>
+
+  </TableHead>
+
+   <TableBody>
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_triggerProfile.ping as PING, index}
+
+
+    <TableBodyRow>
+          <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4 w-10">
+<button on:click={() => TriggerModifyPING(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+{#if PING.enable}
+    <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
+    <TableBodyCell class="w-10">0</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{PING.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-18">{PING.remoteHost}</TableBodyCell>
+
+
+
+    </TableBodyRow>
+{/each}
+{/if}
+
+
+    <TableBodyRow>
+      <TableBodyCell class="!p-4 w-10">
+
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length < 10 }
+<button on:click={() => new_trigger_ping_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length)}>
+    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+{/if}
+
+       </TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+
+    </TableBodyRow>
+     <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+                <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveTriggerPING}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+
+
+
+
+<Modal bind:open={new_trigger_ping_modal}  size="lg" class="w-full" autoclose>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={NewTriggerPING[new_trigger_ping_index].enable}>
+{/if}
+  Enable
+</label>
+
+<p class="mt-5"></p>
+
+<table>
+
+
+<tr>
+      <td class="pl-5 pt-5"><p class="pl-5 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewTriggerPING[new_trigger_ping_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+
+<tr>
+      <td class="pl-5 pt-5"><p class="pl-5 pt-4 text-lg font-light text-right">Trigger Type</p></td>
+
+  <td class="pl-5 pt-5" colspan="4">
+<div class="flex gap-1">
+  <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-36" bind:value={NewTriggerPING[new_trigger_ping_index].pingResult}>
+<option disabled="" value="">Choose One ...</option>
+
+<option value={0}>Failed</option>
+<option value={1}>Successful</option>
+</select>
+
+
+
+
+  <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-40" bind:value={NewTriggerPING[new_trigger_ping_index].ResultOption}>
+<option disabled="" value="">Choose One ...</option>
+
+<option value={0}>Once</option>
+<option value={1}>Repeat</option>
+</select>
+
+
+
+{#if NewTriggerPING[new_trigger_ping_index].ResultOption ==1}
+<input type="number" bind:value={NewTriggerPING[new_trigger_ping_index].ResultContinuousCount} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 mt-2 mb-4">
+<p class="pt-5"> seconds</p>
+{/if}
+</div>
+</td>
+
+  </tr>
+
+
+
+<tr>
+      <td class="pl-5 pt-5"><p class="pl-5 pt-4 text-lg font-light text-right">Option</p></td>
+
+  <td class="pl-5 pt-8" colspan="4">
+
+<div class="flex gap-4">
+
+      <Radio bind:group={NewTriggerPING[new_trigger_ping_index].RepeatOption} value={0} >Stop pinging after trigger</Radio>
+      <Radio bind:group={NewTriggerPING[new_trigger_ping_index].RepeatOption} value={1} >Repeat pinging delay on </Radio>
+
+
+
+{#if NewTriggerPING[new_trigger_ping_index].RepeatOption ==1}
+
+<input type="number" bind:value={NewTriggerPING[new_trigger_ping_index].RepeatDelaySec} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 mt-2 mb-4"> <p class="pt-5">seconds</p>
+
+
+{/if}
+
+</div>
+</td>
+</tr>
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+            <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_trigger_mqtt(new_trigger_mqtt_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+</form>
+</Modal>
+
+
+
+</TableBody>
+
+  </Table>
+
+</AccordionItem>
 </Accordion>
 
 </TabItem>
@@ -6899,11 +7236,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
     <TableBodyCell class="w-10">0</TableBodyCell>
       <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">R_sms_or_modbus_trigger_do</TableBodyCell>
-      <TableBodyCell class="w-18">SMS or MODBUS</TableBodyCell>
-      <TableBodyCell class="w-18">3</TableBodyCell>
-      <TableBodyCell class="w-18">Once</TableBodyCell>
-      <TableBodyCell class="w-18">DO</TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
 
     </TableBodyRow>
 

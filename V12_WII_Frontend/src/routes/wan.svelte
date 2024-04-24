@@ -1199,6 +1199,8 @@
 
     </tr>
 
+{#if 0}
+
  <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-right">DNS</p></td>
     <td class="pl-5 pt-5">
@@ -1208,6 +1210,8 @@
     </td>
 
     </tr>
+
+{/if}
 
  <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-right"></p></td>
@@ -1539,6 +1543,37 @@
     </tr>
 
 
+    <tr>
+
+    <td></td>
+    <td><p class="pl-5 pt-5 text-lg font-light text-right">Packet Count Increase</p></td>
+    <td class="pl-5 pt-5">
+{#if getdataAlready}
+
+
+<input type="checkbox" id="gLinkCheck12" name="gLinkCheck12" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseEn} on:click={PacketCountInc_check}>
+{/if}
+  <label for="failover" class="font-medium">Enable</label>
+</td>
+
+
+ <td class="pt-5" colspan="1">
+    <div class="flex gap-3">
+    <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseMode} value={0}>RX</Radio>
+    <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseMode} value={1}>RX + TX</Radio>
+    </div>
+    </td>
+
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td> 
+    </tr>
+
+
 {/if}
 
 
@@ -1609,6 +1644,8 @@ Http(s)</label>
     </tr>
 
 
+{#if 0}
+
     <tr>
     <td></td><td></td><td class="pt-5" colspan="1">
     <label for="gLinkCheck12" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
@@ -1625,6 +1662,8 @@ Packet Count Increase</label>
     </td>
   
     </tr>
+
+{/if}
 
 {/if} 
 

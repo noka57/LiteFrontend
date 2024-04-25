@@ -6,6 +6,10 @@
   import { sessionidG } from "./sessionG.js";
 
   import {
+    eventEngineConfig,
+    ChangedEventEngineConfig,
+    EventEngine_TriggerMQTT_ConfigChangedLog,
+    EventEngine_ActionMQTT_ConfigChangedLog,
     sdataLoggerConfig,
     ChangedSDataLoggerConfig,
     SDatalogger_MonitorMode_Cloud_ConfigChangedLog,
@@ -39,6 +43,14 @@
   let sdata_logger_data="";
   let saved_changed_sdata_logger_data="";  
 
+
+  let event_engine_trigger_mqtt_changeValues=[];
+  let event_engine_action_mqtt_changeValues=[];
+
+
+  let event_engine_data="";
+  let saved_changed_event_engine_data ="";
+
   let getDataReady=0;
 
 
@@ -70,6 +82,14 @@
       saved_changed_generic_mqtt_data = val;
   });
 
+  eventEngineConfig.subscribe(val => {
+      event_engine_data = val;
+  });
+
+  ChangedEventEngineConfig.subscribe(val => {
+      saved_changed_event_engine_data = val;
+  });
+
 
   SDatalogger_ProxyMode_Cloud_ConfigChangedLog.subscribe(val => {
       sdata_logger_proxy_cloud_changedValues = val;
@@ -77,6 +97,15 @@
 
   SDatalogger_MonitorMode_Cloud_ConfigChangedLog.subscribe(val => {
       sdata_logger_monitor_cloud_changedValues = val;
+  });
+
+
+  EventEngine_TriggerMQTT_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_mqtt_changeValues = val;
+  });
+
+  EventEngine_ActionMQTT_ConfigChangedLog.subscribe(val => {
+      event_engine_action_mqtt_changeValues = val;
   });
 
 
@@ -436,6 +465,51 @@
         }
       }
 
+      for (let j=0; j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length;j++)
+      {
+        if (saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[j].mqttProfile == item)
+        {
+          if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
+          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort)
+          {
+            let new_item= changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+
+            saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[j].mqttProfile=new_item;
+
+            let changedstr="List No." +(j+1) +" item is changed: value of mqttProfile is changed to "+ new_item;
+            event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
+
+            console.log(changedstr);
+            EventEngine_TriggerMQTT_ConfigChangedLog.set(event_engine_trigger_mqtt_changeValues);
+            ChangedEventEngineConfig.set(saved_changed_event_engine_data); 
+
+          }
+        }
+      }
+
+
+      for (let j=0; j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length;j++)
+      {
+        if (saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[j].mqttProfile == item)
+        {
+          if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
+          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort)
+          {
+            let new_item= changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+
+            saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[j].mqttProfile=new_item;
+
+            let changedstr="List No." +(j+1) +" item is changed: value of mqttProfile is changed to "+ new_item;
+            event_engine_action_mqtt_changeValues=[...event_engine_action_mqtt_changeValues, changedstr];
+
+            console.log(changedstr);
+            EventEngine_ActionMQTT_ConfigChangedLog.set(event_engine_action_mqtt_changeValues);
+            ChangedEventEngineConfig.set(saved_changed_event_engine_data); 
+
+          }
+        }
+      }
+
     }
 
     if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length > generic_mqtt_data.config.cloud_genericMqtt_profile.length)
@@ -528,6 +602,25 @@
 
 
 
+  async function getEventEngineData() {
+        const res = await fetch(window.location.origin+"/gEtEventEngine", {
+            method: 'POST',
+            body: sessionBinary
+        })
+
+    if (res.status == 200)
+    {
+      event_engine_data =await res.json();
+      console.log(event_engine_data);
+      eventEngineConfig.set(event_engine_data);
+
+      saved_changed_event_engine_data= JSON.parse(JSON.stringify(event_engine_data));
+      ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+    }
+  }
+
+
   async function getGenericMQTTData () {
     const res = await fetch(window.location.origin+"/getGenericMQTTData", {
       method: 'POST',
@@ -548,6 +641,11 @@
       if (saved_changed_sdata_logger_data=="")
       {
         getSmartDataLoggerData();
+      }
+
+      if (saved_changed_event_engine_data =="")
+      {
+        getEventEngineData();
       }
     }
   }
@@ -594,6 +692,10 @@
         }
 
 
+        if (saved_changed_event_engine_data =="")
+        {
+          getEventEngineData();
+        }
     }
 
   });

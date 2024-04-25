@@ -22,7 +22,11 @@
     ChangedSDataLoggerConfig,
     sdataLoggerConfig,
     SDatalogger_MonitorMode_Edge_ConfigChangedLog,
-    SDatalogger_ProxyMode_Edge_ConfigChangedLog,   
+    SDatalogger_ProxyMode_Edge_ConfigChangedLog, 
+    eventEngineConfig,
+    ChangedEventEngineConfig,
+    EventEngine_TriggerModbus_ConfigChangedLog,  
+    EventEngine_ActionModbus_ConfigChangedLog,
   } from "./configG.js"
 
     let modbus_data="";
@@ -34,6 +38,10 @@
 
     let sdata_logger_data="";
     let saved_changed_sdata_logger_data="";
+
+
+    let event_engine_data="";
+    let saved_changed_event_engine_data ="";
 
 
     let sessionid;
@@ -58,6 +66,8 @@
     let sdata_logger_proxy_edge_changedValues = [];
     let sdata_logger_monitor_edge_changedValues = [];
 
+    let event_engine_trigger_modbus_changeValues=[];
+    let event_engine_action_modbus_changeValues=[];
 
     sdataLoggerConfig.subscribe(val => {
       sdata_logger_data = val;
@@ -65,6 +75,15 @@
 
     ChangedSDataLoggerConfig.subscribe(val => {
       saved_changed_sdata_logger_data = val;
+    });
+
+
+    eventEngineConfig.subscribe(val => {
+      event_engine_data = val;
+    });
+
+    ChangedEventEngineConfig.subscribe(val => {
+      saved_changed_event_engine_data = val;
     });
 
 
@@ -114,8 +133,14 @@
       sdata_logger_monitor_edge_changedValues = val;
     });
 
+    EventEngine_TriggerModbus_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_modbus_changeValues = val;
+    });
 
-    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+
+    EventEngine_ActionModbus_ConfigChangedLog.subscribe(val => {
+      event_engine_action_modbus_changeValues = val;
+    });
 
     modbusConfig.subscribe(val => {
       modbus_data = val;
@@ -134,6 +159,8 @@
       port_connection_data = val;
     });
 
+
+    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
   let new_tcp_slave=[
     {
@@ -2140,6 +2167,84 @@
     }
 
 
+  function compareEventEngineObjects(obj1, obj2, type, isArrayItem, ArrayIndex, ArrayName) 
+  {
+      for (const key in obj1) 
+      {
+        if (typeof obj1[key] == 'object' && typeof obj2[key] == 'object') 
+        {
+          if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) 
+          {
+            for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+            {
+              compareEventEngineObjects(obj1[key][i], obj2[key][i], type, 1,i+1, ArrayName);
+            }
+
+            if (obj1[key].length > obj2[key].length) 
+            {
+              let addedCount=obj1[key].length-obj2[key].length;
+              let changedstr="Add "+addedCount+" item(s) to "+ key;
+
+              if (type == 2)
+              {
+                event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];   
+              }
+              else if (type == 8)
+              {
+                 event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues,changedstr];
+              }
+
+            }
+            else if (obj1[key].length < obj2[key].length)
+            {
+              let deletedCount=obj2[key].length-obj1[key].length;
+              let changedstr="Delete "+deletedCount+" item(s) from "+ key;
+           
+              if (type == 2)
+              {
+                event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];   
+              }
+              else if (type == 8)
+              {
+                 event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues,changedstr];
+              }
+
+            }
+          }
+          else
+          {
+            compareEventEngineObjects(obj1[key], obj2[key], type, 0,0, "");
+          }
+        } 
+        else if (obj1[key] != obj2[key]) 
+        {
+          let changedstr="";
+          if (isArrayItem == 0)
+          {
+            changedstr="Value of "+key+" has changed to "+obj1[key];
+          }
+          else
+          {
+            if (type==6)
+              changedstr=ArrayName + "List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+            else
+              changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+          }
+          
+    
+            if (type == 2)
+            {
+                event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];   
+            }
+            else if (type == 8)
+            {
+                event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues,changedstr];
+            }
+        }
+      }
+  }
+
+
     function saveVariableSlave()
     {
         console.log("save v Slave");
@@ -2219,6 +2324,78 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
                 {
                     saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+
+                }
+            }
+
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+
+
+
+                    if (event_engine_trigger_modbus_changeValues.length !=0)
+                    {
+                        event_engine_trigger_modbus_changeValues=[];
+                    }
+
+                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
+                    event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
+
+                    
+
+                    EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
+                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+
+                }
+
+            }
+
+            for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+                }
+
+            }
+
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+
+
+
+                    if (event_engine_action_modbus_changeValues.length !=0)
+                    {
+                        event_engine_action_modbus_changeValues=[];
+                    }
+
+                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
+                    event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
+
+                    
+
+                    EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
+                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+
+                }
+
+            }
+
+            for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
                 }
             }
           }
@@ -2299,6 +2476,77 @@
                     saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
                 }
             }
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+
+
+
+                    if (event_engine_trigger_modbus_changeValues.length !=0)
+                    {
+                        event_engine_trigger_modbus_changeValues=[];
+                    }
+
+                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
+                    event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
+
+                    
+
+                    EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
+                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+
+                }
+
+            }
+
+            for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+                }
+
+            }
+
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+
+
+
+                    if (event_engine_action_modbus_changeValues.length !=0)
+                    {
+                        event_engine_action_modbus_changeValues=[];
+                    }
+
+                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
+                    event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
+
+                    
+
+                    EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
+                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+
+                }
+
+            }
+
+            for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.slave[i].variableName;
+                }
+            }
+
           }
         }
 
@@ -2398,6 +2646,78 @@
                     saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
                 }
             }
+
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+
+
+
+                    if (event_engine_trigger_modbus_changeValues.length !=0)
+                    {
+                        event_engine_trigger_modbus_changeValues=[];
+                    }
+
+                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
+                    event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
+
+                    
+
+                    EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
+                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+
+                }
+
+            }
+
+            for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+                }
+
+            }
+
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+
+
+
+                    if (event_engine_action_modbus_changeValues.length !=0)
+                    {
+                        event_engine_action_modbus_changeValues=[];
+                    }
+
+                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
+                    event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
+
+                    
+
+                    EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
+                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+
+                }
+
+            }
+
+            for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+                }
+            }
+
           }
         }
 
@@ -2471,6 +2791,77 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
                 {
                     saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+                }
+            }
+
+            
+            for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+
+
+
+                    if (event_engine_trigger_modbus_changeValues.length !=0)
+                    {
+                        event_engine_trigger_modbus_changeValues=[];
+                    }
+
+                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
+                    event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
+
+                    
+
+                    EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
+                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+
+                }
+
+            }
+
+            for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+                }
+
+            }
+
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
+
+
+
+                    if (event_engine_action_modbus_changeValues.length !=0)
+                    {
+                        event_engine_action_modbus_changeValues=[];
+                    }
+
+                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
+                    event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
+
+                    
+
+                    EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
+                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+
+                }
+
+            }
+
+            for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
+                {
+                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusVariable=changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName;
                 }
             }
           }

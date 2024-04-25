@@ -1120,8 +1120,7 @@
         let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
         let clouditem={"value":item, "name":item};
         CloudProfile=[...CloudProfile, clouditem];
-        console.log("CloudProfile")
-        console.log(CloudProfile);
+
       }
 
     }
@@ -1164,8 +1163,6 @@
               let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
               let clouditem={"value":item, "name":item};
               CloudProfile=[...CloudProfile, clouditem];
-              console.log("CloudProfile")
-              console.log(CloudProfile);
             }
           }
         }
@@ -1237,8 +1234,7 @@
           let clouditem={"value":item, "name":item};
           CloudProfile=[...CloudProfile, clouditem];
         }
-        console.log("CloudProfile")
-        console.log(CloudProfile);
+ 
       }
 
 

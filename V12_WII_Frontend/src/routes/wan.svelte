@@ -780,13 +780,13 @@
 
   function PacketCountInc_check()
   {
-    if (changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseEn)
+    if (changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.pktCountIncreaseEn)
     {
-      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseEn=0;
+      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.pktCountIncreaseEn=0;
     }
     else
     {
-      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseEn=1;
+      changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.pktCountIncreaseEn=1;
     }
 
   }
@@ -1211,7 +1211,7 @@
 
     </tr>
 
-{/if}
+
 
  <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-right"></p></td>
@@ -1222,6 +1222,8 @@
     </td>
 
     </tr>
+
+{/if}
 
     <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-center">Automatic APN Selection</p></td><td class="pl-5 pt-5">
@@ -1551,7 +1553,7 @@
 {#if getdataAlready}
 
 
-<input type="checkbox" id="gLinkCheck12" name="gLinkCheck12" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseEn} on:click={PacketCountInc_check}>
+<input type="checkbox" id="gLinkCheck12" name="gLinkCheck12" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.pktCountIncreaseEn} on:click={PacketCountInc_check}>
 {/if}
   <label for="failover" class="font-medium">Enable</label>
 </td>
@@ -1559,8 +1561,8 @@
 
  <td class="pt-5" colspan="1">
     <div class="flex gap-3">
-    <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseMode} value={0}>RX</Radio>
-    <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseMode} value={1}>RX + TX</Radio>
+    <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.pktCountIncreaseMode} value={0}>RX</Radio>
+    <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.pktCountIncreaseMode} value={1}>RX + TX</Radio>
     </div>
     </td>
 

@@ -9,6 +9,8 @@
   import {
     modbusConfig, 
     ChangedModbusConfig,
+    genericMQTTConfig,
+    ChangedGenericMQTTConfig,
     eventEngineConfig,
     EventEngine_ActionLINE_ConfigChangedLog,
     EventEngine_ActionMQTT_ConfigChangedLog,
@@ -37,6 +39,7 @@
   let event_engine_trigger_modbus_changeValues=[];
   let event_engine_trigger_tcpmsg_changeValues=[];
   let event_engine_trigger_mqtt_changeValues=[];
+  let event_engine_trigger_ping_changeValues=[];
   let event_engine_action_sms_changeValues=[];
   let event_engine_action_email_changeValues=[];
   let event_engine_action_do_changeValues=[];
@@ -45,9 +48,15 @@
   let event_engine_action_mqtt_changeValues=[];
   let event_engine_action_line_changeValues=[];
 
+
+
   let modbus_data="";
   let saved_changed_modbus_data ="";
 
+
+  let generic_mqtt_data="";
+  let saved_changed_generic_mqtt_data ="";
+  let CloudProfile=[];
 
   modbusConfig.subscribe(val => {
       modbus_data = val;
@@ -55,6 +64,14 @@
 
   ChangedModbusConfig.subscribe(val => {
       saved_changed_modbus_data = val;
+  });
+
+  genericMQTTConfig.subscribe(val => {
+      generic_mqtt_data = val;
+  });
+
+  ChangedGenericMQTTConfig.subscribe(val => {
+      saved_changed_generic_mqtt_data = val;
   });
 
   eventEngineConfig.subscribe(val => {
@@ -128,6 +145,39 @@
   });
 
 
+
+
+
+
+  async function getGenericMQTTData () {
+    const res = await fetch(window.location.origin+"/getGenericMQTTData", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      console.log("get gMQTT data");
+      generic_mqtt_data =await res.json();
+      console.log(generic_mqtt_data);
+      genericMQTTConfig.set(generic_mqtt_data);
+
+
+      saved_changed_generic_mqtt_data= JSON.parse(JSON.stringify(generic_mqtt_data));
+      ChangedGenericMQTTConfig.set(saved_changed_generic_mqtt_data);
+
+
+      for (let i=0; i< saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length;i++)
+      {
+        let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+      }
+
+    }
+  }
+
+
   async function getModbusData() {
     const res = await fetch(window.location.origin+"/GeTModbuS", {
       method: 'POST',
@@ -168,6 +218,21 @@
       if (saved_changed_modbus_data == "")
       {
         getModbusData();
+      }
+      if (saved_changed_generic_mqtt_data == "")
+      {
+        getGenericMQTTData();
+      }
+      else
+      {
+        for (let i=0; i< saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length;i++)
+        {
+              let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+              let clouditem={"value":item, "name":item};
+              CloudProfile=[...CloudProfile, clouditem];
+              console.log("CloudProfile")
+              console.log(CloudProfile);
+        }
       }
 
     }
@@ -858,6 +923,24 @@
       if (saved_changed_modbus_data == "")
       {
         getModbusData();
+      }
+
+
+
+      if (saved_changed_generic_mqtt_data == "")
+      {
+        getGenericMQTTData();
+      }
+      else
+      {
+
+        for (let i=0; i< saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length;i++)
+        {
+          let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+        }
+ 
       }
 
 
@@ -1999,98 +2082,150 @@
   } 
 
 
+  let modify_trigger_ping_modal=false;
+  let modify_trigger_ping_index;
+  let BackupTriggerPING=
+  {
+      enable: false,
+      aliasName: "",
+      remoteHost:"",
+      pingResult: 0,
+      ResultOption: 0, 
+      ResultContinuousCount: 2,
+      RepeatDelaySec:1
+  };
+
+  function TriggerModifyPING(index)
+  {
+    BackupTriggerPING.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].enable;
+    BackupTriggerPING.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].aliasName;
+    BackupTriggerPING.remoteHost=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].remoteHost;
+    BackupTriggerPING.pingResult=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].pingResult;
+    BackupTriggerPING.ResultOption=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].ResultOption;
+    BackupTriggerPING.ResultContinuousCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].ResultContinuousCount;
+    
+    BackupTriggerPING.RepeatDelaySec=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].RepeatDelaySec;
+
+
+    modify_trigger_ping_index=index;
+    modify_trigger_ping_modal=true;
+  }
+
+  function NoModifyTriggerPING(index)
+  {
+    modify_trigger_ping_modal=false;
+
+
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].enable=BackupTriggerPING.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].aliasName=BackupTriggerPING.aliasName;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].remoteHost=BackupTriggerPING.remoteHost;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].pingResult=BackupTriggerPING.pingResult;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].ResultOption=BackupTriggerPING.ResultOption;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].ResultContinuousCount=BackupTriggerPING.ResultContinuousCount;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].RepeatDelaySec=BackupTriggerPING.RepeatDelaySec;
+
+
+  }
+
+  function ModifyTriggerPING()
+  {
+    modify_trigger_ping_modal=false;
+
+  }
+
+
   let new_trigger_ping_modal=false;
   let new_trigger_ping_index;
   let NewTriggerPING=[
   {
       enable: false,
       aliasName: "",
+      remoteHost:"",
       pingResult: 0,
       ResultOption: 0, 
       ResultContinuousCount: 2,
-      RepeatOption:0,
       RepeatDelaySec:1
   }
 ,
   {
       enable: false,
       aliasName: "",
+      remoteHost:"",
       pingResult: 0,
       ResultOption: 0, 
       ResultContinuousCount: 2,
-      RepeatOption:0,
       RepeatDelaySec:1
   },
   {
       enable: false,
       aliasName: "",
+      remoteHost:"",
       pingResult: 0,
       ResultOption: 0, 
       ResultContinuousCount: 2,
-      RepeatOption:0,
       RepeatDelaySec:1
   },
   {
       enable: false,
       aliasName: "",
+      remoteHost:"",
       pingResult: 0,
       ResultOption: 0, 
       ResultContinuousCount: 2,
-      RepeatOption:0,
       RepeatDelaySec:1
   },
   {
       enable: false,
       aliasName: "",
+      remoteHost:"",
       pingResult: 0,
       ResultOption: 0, 
       ResultContinuousCount: 2,
-      RepeatOption:0,
       RepeatDelaySec:1
   },
   {
       enable: false,
       aliasName: "",
+      remoteHost:"",
       pingResult: 0,
       ResultOption: 0, 
       ResultContinuousCount: 2,
-      RepeatOption:0,
       RepeatDelaySec:1
   },
   {
       enable: false,
       aliasName: "",
+      remoteHost:"",
       pingResult: 0,
       ResultOption: 0, 
       ResultContinuousCount: 2,
-      RepeatOption:0,
       RepeatDelaySec:1
   },
   {
       enable: false,
       aliasName: "",
+      remoteHost:"",
       pingResult: 0,
       ResultOption: 0, 
       ResultContinuousCount: 2,
-      RepeatOption:0,
       RepeatDelaySec:1
   },
   {
       enable: false,
       aliasName: "",
+      remoteHost:"",
       pingResult: 0,
       ResultOption: 0, 
       ResultContinuousCount: 2,
-      RepeatOption:0,
       RepeatDelaySec:1
   },
   {
       enable: false,
       aliasName: "",
+      remoteHost:"",
       pingResult: 0,
       ResultOption: 0, 
       ResultContinuousCount: 2,
-      RepeatOption:0,
       RepeatDelaySec:1
   }
   ];
@@ -2100,6 +2235,7 @@
   {
       NewTriggerPING[index].enable=false;
       NewTriggerPING[index].aliasName="";
+      NewTriggerPING[index].remoteHost="";
       NewTriggerPING[index].pingResult=0;
       NewTriggerPING[index].ResultOption=0;
       NewTriggerPING[index].ResultContinuousCount=2;
@@ -4577,7 +4713,14 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">MQTT Profile</p></td>
 
   <td class="pl-5 pt-4">
-{NewTriggerMQTT[new_trigger_mqtt_index].mqttProfile}
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-80" bind:value={NewTriggerMQTT[new_trigger_mqtt_index].mqttProfile}>
+<option disabled="" value="none">Choose Profile ...</option>
+{#each CloudProfile as profile, index}
+<option value={profile.value}>{profile.name}</option>
+{/each}
+</select>
+
 </td>
 
 
@@ -4657,7 +4800,15 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">MQTT Profile</p></td>
 
   <td class="pl-5 pt-4">
-{changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[modify_trigger_mqtt_index].mqttProfile}
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-80" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[modify_trigger_mqtt_index].mqttProfile}>
+<option disabled="" value="none">Choose Profile ...</option>
+{#each CloudProfile as profile, index}
+<option value={profile.value}>{profile.name}</option>
+{/each}
+</select>
+
+
 </td>
 
 
@@ -4737,8 +4888,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
     <TableHeadCell class="w-18">Remote Host</TableHeadCell>
-    <TableHeadCell class="w-18">Trigger Type</TableHeadCell>
-
+    <TableHeadCell class="w-36">Trigger Type</TableHeadCell>
+    <TableHeadCell class="w-36">Option</TableHeadCell>
   </TableHead>
 
    <TableBody>
@@ -4766,7 +4917,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-18">{PING.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{PING.remoteHost}</TableBodyCell>
 
+<TableBodyCell class="w-36">
+{#if PING.pingResult == 0}Failed{:else if PING.pingResult == 1}Successfully{:else}Unknown{/if} {#if PING.ResultOption ==0} Once{:else if PING.ResultOption ==1} repeatedly {PING.ResultContinuousCount} times{:else} Unknown{/if}
 
+</TableBodyCell>
+
+
+      <TableBodyCell class="w-36">{PING.RepeatDelaySec}-second delay repeatedly ping after trigger</TableBodyCell>
 
     </TableBodyRow>
 {/each}
@@ -4831,16 +4988,21 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td class="pl-5 pt-5"><p class="pl-5 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewTriggerPING[new_trigger_ping_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td class="pl-5 pt-5"><p class="pl-5 pt-1 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewTriggerPING[new_trigger_ping_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
   </tr>
 
+<tr>
+      <td class="pl-5 pt-5"><p class="pl-5 pt-1 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewTriggerPING[new_trigger_ping_index].remoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
+
+
+  </tr>
 
 <tr>
-      <td class="pl-5 pt-5"><p class="pl-5 pt-4 text-lg font-light text-right">Trigger Type</p></td>
+      <td class="pl-5 pt-2"><p class="pl-5 pt-1 text-lg font-light text-right">Trigger Type</p></td>
 
   <td class="pl-5 pt-5" colspan="4">
 <div class="flex gap-1">
@@ -4848,7 +5010,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option disabled="" value="">Choose One ...</option>
 
 <option value={0}>Failed</option>
-<option value={1}>Successful</option>
+<option value={1}>Successfully</option>
 </select>
 
 
@@ -4865,7 +5027,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if NewTriggerPING[new_trigger_ping_index].ResultOption ==1}
 <input type="number" bind:value={NewTriggerPING[new_trigger_ping_index].ResultContinuousCount} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 mt-2 mb-4">
-<p class="pt-5"> seconds</p>
+<p class="pt-5"> times</p>
 {/if}
 </div>
 </td>
@@ -4875,23 +5037,14 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td class="pl-5 pt-5"><p class="pl-5 pt-4 text-lg font-light text-right">Option</p></td>
+      <td class="pl-5 pt-1"><p class="pl-5 pt-1 text-lg font-light text-right">Option</p></td>
 
-  <td class="pl-5 pt-8" colspan="4">
+  <td class="pl-5 pt-3" colspan="4">
 
-<div class="flex gap-4">
+<div class="flex gap-2">
 
-      <Radio bind:group={NewTriggerPING[new_trigger_ping_index].RepeatOption} value={0} >Stop pinging after trigger</Radio>
-      <Radio bind:group={NewTriggerPING[new_trigger_ping_index].RepeatOption} value={1} >Repeat pinging delay on </Radio>
+<input type="number" bind:value={NewTriggerPING[new_trigger_ping_index].RepeatDelaySec} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 mt-0 mb-0"> <p class="pt-3">second-delay repeatedly ping after trigger</p>
 
-
-
-{#if NewTriggerPING[new_trigger_ping_index].RepeatOption ==1}
-
-<input type="number" bind:value={NewTriggerPING[new_trigger_ping_index].RepeatDelaySec} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 mt-2 mb-4"> <p class="pt-5">seconds</p>
-
-
-{/if}
 
 </div>
 </td>
@@ -4910,12 +5063,124 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
             <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_trigger_mqtt(new_trigger_mqtt_index)}>Add</Button></td>
+            <td></td>
+    <td></td>
+
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_trigger_ping(new_trigger_ping_index)}>Add</Button></td>
 
 
     </tr>
 
   </table>
+</form>
+</Modal>
+
+
+
+
+<Modal bind:open={modify_trigger_ping_modal}  size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[modify_trigger_ping_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTriggerPING(modify_trigger_ping_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+
+
+
+<table>
+
+
+<tr>
+      <td class="pl-5 pt-5"><p class="pl-5 pt-1 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[modify_trigger_ping_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+<tr>
+      <td class="pl-5 pt-5"><p class="pl-5 pt-1 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[modify_trigger_ping_index].remoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+<tr>
+      <td class="pl-5 pt-2"><p class="pl-5 pt-1 text-lg font-light text-right">Trigger Type</p></td>
+
+  <td class="pl-5 pt-5" colspan="4">
+<div class="flex gap-1">
+  <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-36" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[modify_trigger_ping_index].pingResult}>
+<option disabled="" value="">Choose One ...</option>
+
+<option value={0}>Failed</option>
+<option value={1}>Successfully</option>
+</select>
+
+
+
+
+  <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-40" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[modify_trigger_ping_index].ResultOption}>
+<option disabled="" value="">Choose One ...</option>
+
+<option value={0}>Once</option>
+<option value={1}>Repeat</option>
+</select>
+
+
+
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[modify_trigger_ping_index].ResultOption ==1}
+<input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[modify_trigger_ping_index].ResultContinuousCount} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 mt-2 mb-4">
+<p class="pt-5"> times</p>
+{/if}
+</div>
+</td>
+
+  </tr>
+
+
+
+<tr>
+      <td class="pl-5 pt-1"><p class="pl-5 pt-1 text-lg font-light text-right">Option</p></td>
+
+  <td class="pl-5 pt-3" colspan="4">
+
+<div class="flex gap-2">
+
+<input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[modify_trigger_ping_index].RepeatDelaySec} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 mt-0 mb-0"> <p class="pt-3">second-delay repeatedly ping after trigger</p>
+
+
+</div>
+</td>
+</tr>
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+            <td></td>
+    <td></td>
+            <td></td>
+    <td></td>
+
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyTriggerPING}>Modify</Button></td>
+
+
+    </tr>
+
+  </table>
+
 </form>
 </Modal>
 
@@ -6814,9 +7079,14 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">MQTT Profile</p></td>
 
   <td class="pl-5 pt-4">
-<select class="block w-36 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewActionMQTT[new_action_mqtt_index].mqttProfile}>
-<option disabled="" value="">None</option>
+
+  <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-80" bind:value={NewActionMQTT[new_action_mqtt_index].mqttProfile}>
+<option disabled="" value="none">Choose Profile ...</option>
+{#each CloudProfile as profile, index}
+<option value={profile.value}>{profile.name}</option>
+{/each}
 </select>
+
 </td>
 
 
@@ -6895,9 +7165,14 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">MQTT Profile</p></td>
 
   <td class="pl-5 pt-4">
-<select class="block w-36 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[modify_action_mqtt_index].mqttProfile}>
-<option disabled="" value="">None</option>
+
+  <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-80" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[modify_action_mqtt_index].mqttProfile}>
+<option disabled="" value="none">Choose Profile ...</option>
+{#each CloudProfile as profile, index}
+<option value={profile.value}>{profile.name}</option>
+{/each}
 </select>
+
 </td>
 
 

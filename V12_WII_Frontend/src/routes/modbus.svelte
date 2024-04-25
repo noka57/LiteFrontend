@@ -2794,7 +2794,7 @@
                 }
             }
 
-            
+
             for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusVariable && saved_changed_modbus_data.config.fieldManagement_modbus_variable.master[i].variableName!="")
@@ -3041,6 +3041,26 @@
         }
     }
 
+
+
+  async function getEventEngineData() {
+        const res = await fetch(window.location.origin+"/gEtEventEngine", {
+            method: 'POST',
+            body: sessionBinary
+        })
+
+        if (res.status == 200)
+        {
+          event_engine_data =await res.json();
+          console.log(event_engine_data);
+          eventEngineConfig.set(event_engine_data);
+
+          saved_changed_event_engine_data= JSON.parse(JSON.stringify(event_engine_data));
+          ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+        }
+    }
+
+
    async function getModbusData() {
     const res = await fetch(window.location.origin+"/GeTModbuS", {
       method: 'POST',
@@ -3067,6 +3087,11 @@
       {
         getSmartDataLoggerData();
       }
+
+        if (saved_changed_event_engine_data == "")
+        {
+            getEventEngineData();
+        }
     
     }
   }
@@ -3088,6 +3113,10 @@
     else if(sessionid && modbus_data!="")
     {
         getDataReady=1;
+
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
         console.log("modbus data exist");
         changed_modbus_data =JSON.parse(JSON.stringify(saved_changed_modbus_data));
 
@@ -3145,10 +3174,31 @@
         {
             getPortConnectionData();
         }
+        else
+        {
+            console.log("saved_changed_port_connection_data");
+            console.log(saved_changed_port_connection_data);
+        }
 
         if (saved_changed_sdata_logger_data == "")
         {
             getSmartDataLoggerData();
+        }
+        else
+        {
+            console.log("saved_changed_sdata_logger_data");
+            console.log(saved_changed_sdata_logger_data);
+        }
+
+
+        if (saved_changed_event_engine_data == "")
+        {
+            getEventEngineData();
+        }
+        else
+        {
+            console.log("saved_changed_event_engine_data");
+            console.log(saved_changed_event_engine_data);
         }
 
 

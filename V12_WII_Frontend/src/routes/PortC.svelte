@@ -566,6 +566,10 @@
     else if(sessionid && port_connection_data!="")
     {
         getDataReady=1;
+
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
         console.log("port connection data exists");
         changed_port_connection_data=JSON.parse(JSON.stringify(saved_changed_port_connection_data));
         if (port_connection_lan_changedValues.length==0)

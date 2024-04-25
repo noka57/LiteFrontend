@@ -2367,6 +2367,8 @@ changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
   </TabItem>
 
 
+{#if 0}
+
   <TabItem title="Fare Saving Policy">
 
 <Accordion>
@@ -2606,6 +2608,8 @@ Once Rx of Modbus and Disconnect lasting time
   </Accordion>
 
   </TabItem>
+{/if}
+
 {/if}
   
 </Tabs>

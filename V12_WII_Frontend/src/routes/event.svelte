@@ -848,6 +848,9 @@
     else if (sessionid && event_engine_data != "")
     {
       getDataReady=1;
+      const hexArray = sessionid.match(/.{1,2}/g); 
+      const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      sessionBinary = new Uint8Array(byteValues);
       changed_event_engine_data=JSON.parse(JSON.stringify(saved_changed_event_engine_data));
       if (event_engine_general_changedValues.length == 0)
       {
@@ -7490,16 +7493,25 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-18">Trigger Catalog</TableHeadCell>
+    <TableHeadCell class="w-36">Trigger Condition</TableHeadCell>
     <TableHeadCell class="w-18">Delay Second</TableHeadCell>
     <TableHeadCell class="w-18">Action Option</TableHeadCell>
     <TableHeadCell class="w-18">Action Catalog</TableHeadCell>
   </TableHead>
   <TableBody>
-    <TableBodyRow class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-60" on:click={handleClickRule}>
+
+
+
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_ruleSettings as rule, index}
+  
+
+
+    <TableBodyRow>
           <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={NewRule}>
+
+<button on:click={() => TriggerModifyRule(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -7508,28 +7520,32 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-
+{#if rule.enable}
+    <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
     <TableBodyCell class="w-10">0</TableBodyCell>
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{rule.aliasName}</TableBodyCell>
+
 
     </TableBodyRow>
 
+{/each}
+{/if}
 
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={NewRule}>
+{#if getDataReady == 1}
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings.length < 10}
+<button on:click={() => new_rule_trigger(changed_event_engine_data.config.service_eventEngine_ruleSettings.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
-
+{/if}
+{/if}
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -7540,6 +7556,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-18"></TableBodyCell>
 
     </TableBodyRow>
+
 
 
 

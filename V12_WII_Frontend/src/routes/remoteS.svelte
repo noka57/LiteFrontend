@@ -286,6 +286,10 @@
     }
     else if(sessionid && remote_service_data!="")
     {
+
+        const hexArray = sessionid.match(/.{1,2}/g); 
+        const byteValues = hexArray.map(hex => parseInt(hex, 16));
+        sessionBinary = new Uint8Array(byteValues);
         getDataReady=1;
         if (remote_service_changedValues.length != 0)
         {
@@ -388,9 +392,9 @@
       <TableBodyCell class="w-10">{MQTTparam.account}</TableBodyCell>
       <TableBodyCell class="w-10">{MQTTparam.qos}</TableBodyCell>
 {#if MQTTparam.retained == 0}
-      <TableBodyCell class="w-4 !p-1">No</TableBodyCell>
+      <TableBodyCell class="w-10">No</TableBodyCell>
 {:else if MQTTparam.retained==1}
-      <TableBodyCell class="w-4 !p-1">Yes</TableBodyCell>
+      <TableBodyCell class="w-10">Yes</TableBodyCell>
 {/if}
 
       <TableBodyCell class="w-18">{MQTTparam.keepAliveInterval}</TableBodyCell>

@@ -70,12 +70,15 @@
     	EventEngine_ActionDO_ConfigChangedLog,
     	EventEngine_ActionEmail_ConfigChangedLog,
     	EventEngine_ActionSMS_ConfigChangedLog,
+    	EventEngine_TriggerRSSI_ConfigChangedLog,
+    	EventEngine_TriggerPING_ConfigChangedLog,
 		EventEngine_TriggerMQTT_ConfigChangedLog,
     	EventEngine_TriggerTCPMsg_ConfigChangedLog,
     	EventEngine_TriggerModbus_ConfigChangedLog,
     	EventEngine_TriggerDI_ConfigChangedLog,
     	EventEngine_TriggerSMS_ConfigChangedLog,
     	EventEngine_General_ConfigChangedLog,
+    	EventEngine_Rule_ConfigChangedLog,
     	VPNdashboad,
     	dashboadData
   	} from "./configG.js"
@@ -221,12 +224,17 @@
   	let sdata_logger_monitor_cloud_changedValues = [];
   	let sdata_logger_monitor_topic_changedValues = [];
 
+
+  	let event_engine_rule_changedValues = [];
   	let event_engine_general_changedValues = [];
   	let event_engine_trigger_sms_changeValues=[];
   	let event_engine_trigger_di_changeValues=[];
   	let event_engine_trigger_modbus_changeValues=[];
   	let event_engine_trigger_tcpmsg_changeValues=[];
   	let event_engine_trigger_mqtt_changeValues=[];
+  	let event_engine_trigger_ping_changeValues=[];
+  	let event_engine_trigger_rssi_changeValues=[];  
+
   	let event_engine_action_sms_changeValues=[];
   	let event_engine_action_email_changeValues=[];
   	let event_engine_action_do_changeValues=[];
@@ -260,11 +268,14 @@
   			event_engine_action_do_changeValues.length != 0 ||
   			event_engine_action_email_changeValues.length !=0 ||
   			event_engine_action_sms_changeValues.length !=0 ||
+  			event_engine_trigger_rssi_changeValues.length != 0 ||
+  			event_engine_trigger_ping_changeValues.length != 0 ||
   			event_engine_trigger_mqtt_changeValues.length != 0 ||
   			event_engine_trigger_tcpmsg_changeValues.length !=0 ||
   			event_engine_trigger_modbus_changeValues.length !=0 ||
   			event_engine_trigger_di_changeValues.length !=0 ||
   			event_engine_trigger_sms_changeValues.length !=0 ||
+  			event_engine_rule_changedValues.length !=0 ||
   			event_engine_general_changedValues.length !=0 ||
   			sdata_logger_general_changedValues.length !=0 ||
   			sdata_logger_proxy_edge_changedValues.length !=0 ||
@@ -653,6 +664,11 @@
 		JudgeChangedOrNot();
 	});
 
+	EventEngine_Rule_ConfigChangedLog.subscribe(val => {
+		event_engine_rule_changedValues = val;
+		JudgeChangedOrNot();
+	});	
+
 	EventEngine_TriggerSMS_ConfigChangedLog.subscribe(val => {
 		event_engine_trigger_sms_changeValues = val;
 		JudgeChangedOrNot();
@@ -675,6 +691,16 @@
 
   	EventEngine_TriggerMQTT_ConfigChangedLog.subscribe(val => {
       	event_engine_trigger_mqtt_changeValues = val;
+      	JudgeChangedOrNot();
+  	});
+
+  	EventEngine_TriggerPING_ConfigChangedLog.subscribe(val => {
+      	event_engine_trigger_ping_changeValues = val;
+      	JudgeChangedOrNot();
+  	});
+
+  	EventEngine_TriggerRSSI_ConfigChangedLog.subscribe(val => {
+      	event_engine_trigger_rssi_changeValues = val;
       	JudgeChangedOrNot();
   	});
 

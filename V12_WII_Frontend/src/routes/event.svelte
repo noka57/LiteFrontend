@@ -19,12 +19,15 @@
     EventEngine_ActionDO_ConfigChangedLog,
     EventEngine_ActionEmail_ConfigChangedLog,
     EventEngine_ActionSMS_ConfigChangedLog,
+    EventEngine_TriggerRSSI_ConfigChangedLog,
+    EventEngine_TriggerPING_ConfigChangedLog,
     EventEngine_TriggerMQTT_ConfigChangedLog,
     EventEngine_TriggerTCPMsg_ConfigChangedLog,
     EventEngine_TriggerModbus_ConfigChangedLog,
     EventEngine_TriggerDI_ConfigChangedLog,
     EventEngine_TriggerSMS_ConfigChangedLog,
     EventEngine_General_ConfigChangedLog,
+    EventEngine_Rule_ConfigChangedLog,
     ChangedEventEngineConfig
   } from "./configG.js"
 
@@ -33,6 +36,9 @@
   let changed_event_engine_data = {};
   let saved_changed_event_engine_data ={};
 
+
+
+  let event_engine_rule_changedValues = [];
   let event_engine_general_changedValues = [];
   let event_engine_trigger_sms_changeValues=[];
   let event_engine_trigger_di_changeValues=[];
@@ -40,6 +46,8 @@
   let event_engine_trigger_tcpmsg_changeValues=[];
   let event_engine_trigger_mqtt_changeValues=[];
   let event_engine_trigger_ping_changeValues=[];
+  let event_engine_trigger_rssi_changeValues=[];
+
   let event_engine_action_sms_changeValues=[];
   let event_engine_action_email_changeValues=[];
   let event_engine_action_do_changeValues=[];
@@ -82,6 +90,10 @@
       event_engine_general_changedValues = val;
   });
 
+  EventEngine_Rule_ConfigChangedLog.subscribe(val => {
+      event_engine_rule_changedValues = val;
+  });
+
   EventEngine_TriggerSMS_ConfigChangedLog.subscribe(val => {
       event_engine_trigger_sms_changeValues = val;
   });
@@ -101,6 +113,16 @@
   EventEngine_TriggerMQTT_ConfigChangedLog.subscribe(val => {
       event_engine_trigger_mqtt_changeValues = val;
   });
+
+  EventEngine_TriggerPING_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_ping_changeValues = val;
+  });
+
+  EventEngine_TriggerRSSI_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_rssi_changeValues = val;
+  });
+
+
 
   EventEngine_ActionSMS_ConfigChangedLog.subscribe(val => {
       event_engine_action_sms_changeValues = val;
@@ -304,6 +326,18 @@
               {
                  event_engine_action_line_changeValues=[...event_engine_action_line_changeValues,changedstr];
               }
+              else if (type == 12)
+              {
+                 event_engine_trigger_ping_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+              }
+              else if (type == 13)
+              { 
+                event_engine_rule_changedValues=[...event_engine_rule_changedValues, changedstr];
+              }
+              else if (type ==14)
+              {
+                event_engine_trigger_rssi_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+              } 
 
             }
             else if (obj1[key].length < obj2[key].length)
@@ -358,7 +392,18 @@
               {
                  event_engine_action_line_changeValues=[...event_engine_action_line_changeValues,changedstr];
               }
-
+              else if (type == 12)
+              {
+                 event_engine_trigger_ping_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+              }
+              else if (type == 13)
+              {
+                event_engine_rule_changedValues=[...event_engine_rule_changedValues, changedstr];
+              }               
+              else if (type ==14)
+              {
+                event_engine_trigger_rssi_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+              } 
             }
           }
           else
@@ -428,9 +473,51 @@
           else if (type == 11)
           {
             event_engine_action_line_changeValues=[...event_engine_action_line_changeValues,changedstr];
-          }          
+          }
+          else if (type == 12)
+          {
+            event_engine_trigger_ping_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+          } 
+          else if (type == 13)
+          {
+            event_engine_rule_changedValues=[...event_engine_rule_changedValues, changedstr];
+          } 
+          else if (type ==14)
+          {
+            event_engine_trigger_rssi_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+          } 
         }
       }
+  }
+
+  function saveRule()
+  {
+    console.log("save rule");
+      if (event_engine_rule_changedValues.length !=0)
+      {
+          event_engine_rule_changedValues=[];
+      }
+
+
+      for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_ruleSettings.length, event_engine_data.config.service_eventEngine_ruleSettings.length); i++) 
+      {
+        compareObjects(changed_event_engine_data.config.service_eventEngine_ruleSettings[i], event_engine_data.config.service_eventEngine_ruleSettings[i], 13, 1,i+1, "Rule");
+      }
+
+      if (changed_event_engine_data.config.service_eventEngine_ruleSettings.length > event_engine_data.config.service_eventEngine_ruleSettings.length)
+      {
+        let addedCount=changed_event_engine_data.config.service_eventEngine_ruleSettings.length-event_engine_data.config.service_eventEngine_ruleSettings.length;
+        let changedstr="Add "+addedCount+" item(s) to Rule List";
+        event_engine_rule_changedValues=[...event_engine_rule_changedValues, changedstr];
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_ruleSettings=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_ruleSettings));
+
+      EventEngine_Rule_ConfigChangedLog.set(event_engine_rule_changedValues);
+      ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+      console.log(event_engine_rule_changedValues);
+
+
   }
 
 
@@ -605,6 +692,61 @@
   function saveTriggerPING()
   {
     console.log("save Trigger PING");
+
+    if (event_engine_trigger_ping_changeValues.length !=0)
+    {
+        event_engine_trigger_ping_changeValues=[];
+    }
+
+
+    for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length, event_engine_data.config.service_eventEngine_triggerProfile.ping.length); i++) 
+    {
+      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[i], event_engine_data.config.service_eventEngine_triggerProfile.ping[i], 12, 1,i+1, "PING");
+    }
+
+    if (changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length > event_engine_data.config.service_eventEngine_triggerProfile.ping.length)
+    {
+      let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length-event_engine_data.config.service_eventEngine_triggerProfile.ping.length;
+      let changedstr="Add "+addedCount+" item(s) to PING Trigger List";
+      event_engine_trigger_ping_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+    }
+
+    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.ping=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.ping));
+
+    EventEngine_TriggerPING_ConfigChangedLog.set(event_engine_trigger_ping_changeValues);
+    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+    console.log(event_engine_trigger_ping_changeValues);    
+
+  }
+
+
+  function saveTriggerRSSI()
+  {
+    console.log("save Trigger RSSI");
+    if (event_engine_trigger_rssi_changeValues.length !=0)
+    {
+        event_engine_trigger_rssi_changeValues=[];
+    }
+
+
+    for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length, event_engine_data.config.service_eventEngine_triggerProfile.rssi.length); i++) 
+    {
+      compareObjects(changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[i], event_engine_data.config.service_eventEngine_triggerProfile.rssi[i], 14, 1,i+1, "RSSI");
+    }
+
+    if (changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length > event_engine_data.config.service_eventEngine_triggerProfile.rssi.length)
+    {
+      let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length-event_engine_data.config.service_eventEngine_triggerProfile.rssi.length;
+      let changedstr="Add "+addedCount+" item(s) to RSSI Trigger List";
+      event_engine_trigger_rssi_changeValues=[...event_engine_trigger_rssi_changeValues, changedstr];
+    }
+
+    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi));
+
+    EventEngine_TriggerRSSI_ConfigChangedLog.set(event_engine_trigger_rssi_changeValues);
+    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+    console.log(event_engine_trigger_rssi_changeValues);       
+
   }
 
 
@@ -1078,6 +1220,410 @@
       changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification=[...changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification,NewActionLINE[index]];
   } 
 
+
+
+  let new_rule_modal=false;
+  let new_rule_index;
+
+
+  let NewRuleItem=
+  [{
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  },
+  {
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  },
+  {
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  },
+  {
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  },
+  {
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  },
+  {
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  },
+  {
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  },
+  {
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  },
+  {
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  },
+  {
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  }
+  ]
+
+
+  function new_rule_trigger(index)
+  {
+
+    NewRuleItem[index].enable=false;
+    NewRuleItem[index].aliasName="";
+    NewRuleItem[index].triggerCount=1;
+    NewRuleItem[index].multipleTriggerRelationship=0;
+    NewRuleItem[index].firstTrigger.catalog="";
+    NewRuleItem[index].firstTrigger.profile=""; 
+    NewRuleItem[index].firstTrigger.statusType=0; 
+    NewRuleItem[index].secondTrigger.catalog="";
+    NewRuleItem[index].secondTrigger.profile=""; 
+    NewRuleItem[index].secondTrigger.statusType=0; 
+    NewRuleItem[index].thirdTrigger.catalog="";
+    NewRuleItem[index].thirdTrigger.profile=""; 
+    NewRuleItem[index].thirdTrigger.statusType=0; 
+    NewRuleItem[index].delaySecond=0;
+    NewRuleItem[index].actionOption=0;
+    NewRuleItem[index].repeatCnt=0;
+    NewRuleItem[index].repeatInterval=0;
+    NewRuleItem[index].actionCatalog=0;
+    NewRuleItem[index].actionProfile="";
+    NewRuleItem[index].actionOperation=0;
+
+
+    new_rule_index=index;
+    new_rule_modal=true;
+
+    currentStep=1;
+  }
+
+
+  function Rule_Modal_Add()
+  {
+
+    changed_event_engine_data.config.service_eventEngine_ruleSettings=[...changed_event_engine_data.config.service_eventEngine_ruleSettings, NewRuleItem[new_rule_index]];
+
+    new_rule_modal = false;
+    currentStep=1;
+  }
+
+  let modify_rule_modal=false;
+  let modify_rule_index;
+  let BackupRule=
+    {
+          enable: false,
+          aliasName: "",
+          triggerCount: 0, 
+          multipleTriggerRelationship: 0, 
+          firstTrigger: {
+            catalog: 0, 
+            profile: "",
+            statusType:0
+          },
+          secondTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          thirdTrigger: {
+            catalog: 0,
+            profile: "",
+            statusType:0
+          },
+          delaySecond: 3,
+          actionOption: 0, 
+          repeatCnt: 3,
+          repeatInterval: 3,
+          actionCatalog: 0,
+          actionProfile: "",
+          actionOperation:0
+  };
+
+
+  function TriggerModifyRule(index)
+  {
+
+    console.log("Trigger Modify Rule");
+    console.log(changed_event_engine_data.config.service_eventEngine_ruleSettings);
+
+    BackupRule.enable=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].enable;
+    BackupRule.aliasName=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].aliasName;
+    BackupRule.triggerCount=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].triggerCount;
+    BackupRule.multipleTriggerRelationship=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].multipleTriggerRelationship;
+    BackupRule.firstTrigger.catalog=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].firstTrigger.catalog;
+    BackupRule.firstTrigger.profile=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].firstTrigger.profile; 
+    BackupRule.firstTrigger.statusType=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].firstTrigger.statusType; 
+    BackupRule.secondTrigger.catalog=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].secondTrigger.catalog;
+    BackupRule.secondTrigger.profile=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].secondTrigger.profile; 
+    BackupRule.secondTrigger.statusType=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].secondTrigger.statusType; 
+    BackupRule.thirdTrigger.catalog=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].thirdTrigger.catalog;
+    BackupRule.thirdTrigger.profile=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].thirdTrigger.profile; 
+    BackupRule.thirdTrigger.statusType=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].thirdTrigger.statusType; 
+    BackupRule.delaySecond=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].delaySecond;
+    BackupRule.actionOption=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].actionOption;
+    BackupRule.repeatCnt=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].repeatCnt;
+    BackupRule.repeatInterval=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].repeatInterval;
+    BackupRule.actionCatalog=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].actionCatalog;
+    BackupRule.actionProfile=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].actionProfile;
+    BackupRule.actionOperation=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].actionOperation;
+
+
+
+    currentStep=1;
+    modify_rule_index=index;
+    modify_rule_modal=true;
+
+  }
+
+  function Rule_Modal_Modify()
+  {
+    modify_rule_modal = false;
+    currentStep=1;
+  }
 
 
   let modify_action_mqtt_modal=false;
@@ -2255,7 +2801,147 @@
   {
       new_trigger_ping_modal=false;
       changed_event_engine_data.config.service_eventEngine_triggerProfile.ping=[...changed_event_engine_data.config.service_eventEngine_triggerProfile.ping,NewTriggerPING[index]];
-  } 
+  }
+
+
+
+  let new_trigger_rssi_modal=false;
+  let new_trigger_rssi_index;
+
+  let NewTriggerRSSI=[
+  {
+    enable:false,
+    aliasName: "",
+    comparision:0,
+    comparedSelected:0,
+    comparedUserDefinedValue:10
+  },
+    {
+    enable:false,
+    aliasName: "",
+    comparision:0,
+    comparedSelected:0,
+    comparedUserDefinedValue:10
+  },
+    {
+    enable:false,
+    aliasName: "",
+    comparision:0,
+    comparedSelected:0,
+    comparedUserDefinedValue:10
+  },
+    {
+    enable:false,
+    aliasName: "",
+    comparision:0,
+    comparedSelected:0,
+    comparedUserDefinedValue:10
+  },
+    {
+    enable:false,
+    aliasName: "",
+    comparision:0,
+    comparedSelected:0,
+    comparedUserDefinedValue:10
+  },
+    {
+    enable:false,
+    aliasName: "",
+    comparision:0,
+    comparedSelected:0,
+    comparedUserDefinedValue:10
+  },
+    {
+    enable:false,
+    aliasName: "",
+    comparision:0,
+    comparedSelected:0,
+    comparedUserDefinedValue:10
+  },
+    {
+    enable:false,
+    aliasName: "",
+    comparision:0,
+    comparedSelected:0,
+    comparedUserDefinedValue:10
+  },
+    {
+    enable:false,
+    aliasName: "",
+    comparision:0,
+    comparedSelected:0,
+    comparedUserDefinedValue:10
+  },
+    {
+    enable:false,
+    aliasName: "",
+    comparision:0,
+    comparedSelected:0,
+    comparedUserDefinedValue:10
+  }
+
+  ];
+
+  function new_trigger_rssi_trigger(index)
+  {
+    NewTriggerRSSI[index].enable=false;
+    NewTriggerRSSI[index].aliasName="";
+    NewTriggerRSSI[index].comparision=0;
+    NewTriggerRSSI[index].comparedSelected=0;
+    NewTriggerRSSI[index].comparedUserDefinedValue=10;
+
+    new_trigger_rssi_modal=true;
+    new_trigger_rssi_index=index;
+  }
+
+
+  function add_new_trigger_rssi(index)
+  {
+      new_trigger_rssi_modal=false;
+      changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi=[...changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi,NewTriggerRSSI[index]];
+  }
+
+
+  let modify_trigger_rssi_modal=false;
+  let modify_trigger_rssi_index;
+  let BackupTriggerRSSI=
+  {
+      enable: false,
+      aliasName: "",
+      comparision:0,
+      comparedSelected:0,
+      comparedUserDefinedValue:10
+  };
+
+  function TriggerModifyRSSI(index)
+  {
+    BackupTriggerRSSI.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].enable;
+    BackupTriggerRSSI.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].aliasName;
+    BackupTriggerRSSI.comparision=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].comparision;
+    BackupTriggerRSSI.comparedSelected=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].comparedSelected;
+    BackupTriggerRSSI.comparedUserDefinedValue=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].comparedUserDefinedValue;
+
+
+    modify_trigger_rssi_index=index;
+    modify_trigger_rssi_modal=true;
+  }
+
+  function NoModifyTriggerRSSI(index)
+  {
+    modify_trigger_rssi_modal=false;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].enable=BackupTriggerRSSI.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].aliasName=BackupTriggerRSSI.aliasName;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].comparision=BackupTriggerRSSI.comparision;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].comparedSelected=    BackupTriggerRSSI.comparedSelected;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].comparedUserDefinedValue=    BackupTriggerRSSI.comparedUserDefinedValue;
+  }
+
+  function ModifyTriggerRSSI()
+  {
+    modify_trigger_rssi_modal=false;
+
+  }
+
 
 
   let modify_trigger_tcpMsg_modal=false;
@@ -2969,17 +3655,7 @@
     currentStep=3;
   }
 
-  function Rule_Modal_Finish()
-  {
-      formModalRule = false;
-    currentStep=1;
-  }
 
-  function NewRule()
-  {
-    currentStep=1;
-    formModalRule = true;
-  }
 
 
 
@@ -5184,6 +5860,303 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
   </table>
 
+</form>
+</Modal>
+
+
+
+</TableBody>
+
+  </Table>
+
+</AccordionItem>
+
+
+ <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    RSSI
+    </span>
+
+
+
+
+ <Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+        <TableHeadCell class="!p-4">
+    </TableHeadCell>
+        <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell>Enable</TableHeadCell>
+    <TableHeadCell>No</TableHeadCell>
+    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
+    <TableHeadCell class="w-36">Warning Scheme</TableHeadCell>
+    <TableHeadCell class="w-36"></TableHeadCell>
+  </TableHead>
+
+   <TableBody>
+{#if getDataReady == 1}
+{#each changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi as RSSI, index}
+
+
+    <TableBodyRow>
+          <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4 w-10">
+<button on:click={() => TriggerModifyRSSI(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+{#if RSSI.enable}
+    <TableBodyCell class="w-10">1</TableBodyCell>
+{:else}
+    <TableBodyCell class="w-10">0</TableBodyCell>
+{/if}
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{RSSI.aliasName}</TableBodyCell>
+
+<TableBodyCell class="w-36">
+{#if RSSI.comparision ==0}{'<'}= {:else if RSSI.comparision==1}>= {/if} {#if RSSI.comparedSelected==0}10 (L){:else if RSSI.comparedSelected==1}15 (M){:else if RSSI.comparedSelected==2}25 (H){:else if RSSI.comparedSelected==3} {RSSI.comparedUserDefinedValue}{/if}
+
+</TableBodyCell>
+
+
+
+
+    </TableBodyRow>
+{/each}
+{/if}
+
+
+    <TableBodyRow>
+      <TableBodyCell class="!p-4 w-10">
+
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length < 10 }
+<button on:click={() => new_trigger_rssi_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length)}>
+    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+{/if}
+
+       </TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+
+    </TableBodyRow>
+     <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+                <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveTriggerRSSI}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+
+
+
+
+<Modal bind:open={new_trigger_rssi_modal}  size="lg" class="w-full" autoclose>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox" bind:checked={NewTriggerRSSI[new_trigger_rssi_index].enable}>
+{/if}
+  Enable
+</label>
+
+<p class="mt-5"></p>
+
+<table>
+
+
+<tr>
+      <td class="pl-5 pt-5"><p class="pl-5 pt-1 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500" bind:value={NewTriggerRSSI[new_trigger_rssi_index].aliasName}></div></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Warning Scheme</p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-24" bind:value={NewTriggerRSSI[new_trigger_rssi_index].comparision}>
+<option disabled="" value="none">Choose...</option>
+
+<option value={0}>{'<'}=</option>
+<option value={1}>>=</option>
+
+</select>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-32" bind:value={NewTriggerRSSI[new_trigger_rssi_index].comparedSelected}>
+<option disabled="" value="none">Choose...</option>
+
+<option value={0}>L-10</option>
+<option value={1}>M-15</option>
+<option value={2}>H-25</option>
+<option value={3}>User Defined</option>
+
+</select>
+
+
+{#if NewTriggerRSSI[new_trigger_rssi_index].comparedSelected == 3}
+<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 mt-2 mb-4 dark:bg-gray-700 dark:border-green-500" bind:value={NewTriggerRSSI[new_trigger_rssi_index].comparedUserDefinedValue}>
+{/if}
+  </div>
+  </td>
+
+
+ <td class= "pl-4 pt-4">
+
+
+
+ </td>
+
+  </tr>
+
+
+
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+            <td></td>
+    <td></td>
+            <td></td>
+    <td></td>
+
+    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_trigger_rssi(new_trigger_rssi_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+</form>
+</Modal>
+
+
+
+
+<Modal bind:open={modify_trigger_rssi_modal}  size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox" bind:checked={changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[modify_trigger_rssi_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTriggerRSSI(modify_trigger_rssi_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+      <td class="pl-5 pt-5"><p class="pl-5 pt-1 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[modify_trigger_rssi_index].aliasName}></div></td>
+
+
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Warning Scheme</p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-24" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[modify_trigger_rssi_index].comparision}>
+<option disabled="" value="none">Choose...</option>
+
+<option value={0}>{'<'}=</option>
+<option value={1}>>=</option>
+
+</select>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-32" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[modify_trigger_rssi_index].comparedSelected}>
+<option disabled="" value="none">Choose...</option>
+
+<option value={0}>L-10</option>
+<option value={1}>M-15</option>
+<option value={2}>H-25</option>
+<option value={3}>User Defined</option>
+
+</select>
+
+
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[modify_trigger_rssi_index].comparedSelected == 3}
+<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 mt-2 mb-4 dark:bg-gray-700 dark:border-green-500" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[modify_trigger_rssi_index].comparedUserDefinedValue}>
+{/if}
+  </div>
+  </td>
+
+
+ <td class= "pl-4 pt-4">
+
+
+
+ </td>
+
+  </tr>
+
+
+
+
+
+    <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+            <td></td>
+    <td></td>
+            <td></td>
+    <td></td>
+
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyTriggerRSSI}>Modify</Button></td>
+
+
+    </tr>
+
+  </table>
 </form>
 </Modal>
 
@@ -7494,9 +8467,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
     <TableHeadCell class="w-36">Trigger Condition</TableHeadCell>
-    <TableHeadCell class="w-18">Delay Second</TableHeadCell>
-    <TableHeadCell class="w-18">Action Option</TableHeadCell>
-    <TableHeadCell class="w-18">Action Catalog</TableHeadCell>
+    <TableHeadCell class="w-36">Action</TableHeadCell>
   </TableHead>
   <TableBody>
 
@@ -7517,7 +8488,6 @@ on:click={handleClickMV} on:keydown={() => {}}>
 </svg>
       </button>
 
-
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
 {#if rule.enable}
@@ -7527,7 +8497,71 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {/if}
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{rule.aliasName}</TableBodyCell>
+      <TableBodyCell class="w-36">
 
+{#if rule.triggerCount == 1 || rule.triggerCount ==2 || rule.triggerCount ==3}
+
+{#if rule.firstTrigger.catalog ==0}SMS{rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==1}DI({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==2}Modbus({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==3}TCP Message({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==4}MQTT({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==5}PING({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==6}RSSI({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==7}WAN( {#if rule.firstTrigger.statusType == 0}C-WAN Link Down{:else if rule.firstTrigger.statusType == 1}C-WAN Link Up{:else if rule.firstTrigger.statusType == 2}WAN Link Down{:else if rule.firstTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.firstTrigger.statusType==4}WAN Failover{:else if rule.firstTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.firstTrigger.catalog ==8}LAN({#if rule.firstTrigger.statusType==0}Link Down{:else if rule.firstTrigger.statusType==1}Link Up{/if})
+{:else if rule.firstTrigger.catalog ==9}Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
+{:else if rule.firstTrigger.catalog ==10}System({#if rule.firstTrigger.statusType==0}Cold Start{:else if rule.firstTrigger.statusType ==1}Firmware Upgrading{:else if rule.firstTrigger.statusType==2}Password Changed{:else if rule.firstTrigger.statusType==3}Reboot with reason{/if})
+{/if}
+
+
+{#if rule.triggerCount ==2 || rule.triggerCount==3}
+{#if rule.secondTrigger.catalog ==0},SMS{rule.firstTrigger.profile})
+{:else if rule.secondTrigger.catalog ==1},DI({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==2},Modbus({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==3},TCP Message({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==4},MQTT({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==5},PING({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==6},RSSI({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==7},WAN( {#if rule.secondTrigger.statusType == 0}C-WAN Link Down{:else if rule.secondTrigger.statusType == 1}C-WAN Link Up{:else if rule.secondTrigger.statusType == 2}WAN Link Down{:else if rule.secondTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.secondTrigger.statusType==4}WAN Failover{:else if rule.secondTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.secondTrigger.catalog ==8},LAN({#if rule.secondTrigger.statusType==0}Link Down{:else if rule.secondTrigger.statusType==1}Link Up{/if})
+{:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
+{:else if rule.secondTrigger.catalog ==10},System({#if rule.secondTrigger.statusType==0}Cold Start{:else if rule.secondTrigger.statusType ==1}Firmware Upgrading{:else if rule.secondTrigger.statusType==2}Password Changed{:else if rule.secondTrigger.statusType==3}Reboot with reason{/if})
+{/if}
+{/if}
+
+
+{#if rule.triggerCount ==3}
+{#if rule.thirdTrigger.catalog ==0},SMS{rule.firstTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==1},DI({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==2},Modbus({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==3},TCP Message({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==4},MQTT({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==5},PING({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==6},RSSI({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==7},WAN( {#if rule.thirdTrigger.statusType == 0}C-WAN Link Down{:else if rule.thirdTrigger.statusType == 1}C-WAN Link Up{:else if rule.thirdTrigger.statusType == 2}WAN Link Down{:else if rule.thirdTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.thirdTrigger.statusType==4}WAN Failover{:else if rule.thirdTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.thirdTrigger.catalog ==8},LAN({#if rule.thirdTrigger.statusType==0}Link Down{:else if rule.thirdTrigger.statusType==1}Link Up{/if})
+{:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
+{:else if rule.thirdTrigger.catalog ==10},System({#if rule.thirdTrigger.statusType==0}Cold Start{:else if rule.thirdTrigger.statusType ==1}Firmware Upgrading{:else if rule.thirdTrigger.statusType==2}Password Changed{:else if rule.thirdTrigger.statusType==3}Reboot with reason{/if})
+{/if}
+{/if}
+
+
+
+{:else}
+(unknown)
+{/if}
+
+      </TableBodyCell>
+
+      <TableBodyCell class="w-36">
+      {rule.delaySecond}-second delay to execute {#if rule.actionOption==0}once {:else if rule.actionOption==1}repeatedly{/if} the action: {#if rule.actionCatalog==0}SMS({rule.actionProfile}){:else if rule.actionCatalog==1}DO({rule.actionProfile}){:else if rule.actionCatalog==2}Modbus({rule.actionProfile}){:else if rule.actionCatalog==3}({rule.actionProfile}){:else if rule.actionCatalog==4}MQTT({rule.actionProfile}){:else if rule.actionCatalog==5}LINE({rule.actionProfile}){:else if rule.actionCatalog==6}TCP Message({rule.actionProfile}){:else if rule.actionCatalog==7}System({#if rule.actionOperation==0}System Reboot{:else if rule.actionOperation==1}SysLog Server On{:else if rule.actionOperation==2}SysLog Server Off{:else if rule.actionOperation==3}SW Reset C-WAN module{:else if rule.actionOperation==4}HW Reset C-WAN module{:else if rule.actionOperation==5}WAN Backup Switch{:else if rule.actionOperation==6}C-WAN Power Cycle{:else if rule.actionOperation==7}SIM Switch{/if}){:else if rule.actionCatalog==8}MQTT API({#if rule.actionOperation==0}MQTT API Disable{:else if rule.actionOperation==1}MQTT API Enable{/if}){:else if rule.actionCatalog==9}REST API({#if rule.actionOperation==0}REST API Disable{:else if rule.actionOperation==1}REST API Enable{/if}){/if} {#if rule.actionOption==1} with a {rule.repeatInterval}-second interval.{/if}
+
+
+      </TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
 
     </TableBodyRow>
 
@@ -7554,7 +8588,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
     </TableBodyRow>
 
 
@@ -7570,16 +8605,23 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-                <td></td>
         <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <td></td>
+        <td></td>
+        <td></td>
+
+        <td></td>
+        <td></td>
+    <td class="pl-10"><Button color="blue" pill={true} on:click={saveRule}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
 
     </tr>
 
-    <Modal bind:open={formModalRule} autoclose={false} size="lg" class="w-full">
+
+
+<Modal bind:open={new_rule_modal} autoclose={false} size="lg" class="w-full">
 
 <StepIndicator {currentStep} {steps} glow />
 
@@ -7592,14 +8634,14 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if currentStep == 1}
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
-  <input class="center" type=checkbox checked={ruleitem}></td>
+  <input class="center" type=checkbox bind:checked={NewRuleItem[new_rule_index].enable}></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><p class="pt-2 text-sm text-right">R_</p><input type="text" bind:value={R_Name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={NewRuleItem[new_rule_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -7612,24 +8654,9 @@ on:click={handleClickMV} on:keydown={() => {}}>
   </td>
 
     <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
-  <Radio bind:group={R_TCount} value='1' >1</Radio>
-  <Radio bind:group={R_TCount} value='2' >2</Radio>
-  <Radio bind:group={R_TCount} value='3' >3</Radio>
-
-</div></td>
-</tr>
-
-<tr>
-  <td><p class="pl-2 pt-4 text-lg font-light text-right">Multiple Triggers Relationship</p>
-
-  </td>
-
-    <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
-{#if R_TCount == '1'}
-  <Radio bind:group={R_TMultipleRelation} value='OR' name="disabled-state" disabled>OR</Radio>
-{:else}
-  <Radio bind:group={R_TMultipleRelation} value='OR' >OR</Radio>
-{/if}
+  <Radio bind:group={NewRuleItem[new_rule_index].triggerCount} value={1} >1</Radio>
+  <Radio bind:group={NewRuleItem[new_rule_index].triggerCount} value={2} >2</Radio>
+  <Radio bind:group={NewRuleItem[new_rule_index].triggerCount} value={3} >3</Radio>
 
 </div></td>
 </tr>
@@ -7638,17 +8665,19 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">1st Trigger Catalog</p></td>
     <td class= "pl-4 pt-4">
-<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Tselected1}>
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].firstTrigger.catalog}>
 <option disabled="" value="">None</option>
-<option value="SMS">SMS</option>
-<option value="DI">DI</option>
-<option value="Modbus">Modbus</option>
-<option value="MQTT Notification">MQTT Notification</option>
-<option value="TCPM">TCP Message</option>
-<option value="WANs">WAN Status</option>
-<option value="LANs">LAN Status</option>
-<option value="Logins">Login Status</option>
-<option value="Systems">System Status</option>
+<option value={0}>SMS</option>
+<option value={1}>DI</option>
+<option value={2}>Modbus</option>
+<option value={3}>TCP Message</option>
+<option value={4}>MQTT Notification</option>
+<option value={5}>PING</option>
+<option value={6}>RSSI</option>
+<option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
+<option value={10}>System Status</option>
 
 </select>
 
@@ -7658,10 +8687,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 
+
+
 <tr>
       <td>
 
-{#if Tselected1 == "WANs" || Tselected1 == "Logins" ||Tselected1 == "LANs" || Tselected1 == "Systems"}
+{#if NewRuleItem[new_rule_index].firstTrigger.catalog == 10 || NewRuleItem[new_rule_index].firstTrigger.catalog == 7 ||NewRuleItem[new_rule_index].firstTrigger.catalog == 8 || NewRuleItem[new_rule_index].firstTrigger.catalog == 9}
       <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
 {:else}
 
@@ -7669,45 +8700,89 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {/if}
       </td>
 <td class= "pl-4 pt-4">
-    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={TselectedProfile1}><option disabled="" value="">None</option>
 
 
-{#if Tselected1 == 'SMS'}
+{#if NewRuleItem[new_rule_index].firstTrigger.catalog <=6}
+
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].firstTrigger.profile}><option disabled="" value="">None</option>
 
 
-<option value="1">T_sms_</option>
+{#if NewRuleItem[new_rule_index].firstTrigger.catalog == 0}
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms as SMS,index}
+<option value={SMS.aliasName}>{SMS.aliasName}</option>
+{/each}
 
-{:else if Tselected1 == 'DI'}
-
-
-<option value="1">T_DI_</option>
-
-{:else if Tselected1 == "Modbus"}
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 1}
 
 
-<option value="1">T_Modbus_</option>
-{:else if Tselected1 == "WANs"}
-<option value="1">C-WAN Link Down</option>
-<option value="2">C-WAN Link Up</option>
-<option value="3">WAN Link Down</option>
-<option value="4">Dial Up failed 5 times</option>
-<option value="5">WAN Failover</option>
-<option value="6">SIM Switch</option>
-{:else if Tselected1 == "LANs"}
-<option value="1">Link Down</option>
-<option value="2">Link Up</option>
-{:else if Tselected1 == "Logins"}
-<option value="1">Web Login Fail from LAN</option>
-<option value="2">Web Login Fail from WAN</option>
-<option value="3">SSH Login Fail</option>
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
+<option value={DI.aliasName}>{DI.aliasName}</option>
+{/each}
 
-{:else if Tselected1 == "Systems"}
-<option value="1">Cold Start</option>
-<option value="2">Firmware Upgrading</option>
-<option value="3">Password Changed</option>
-<option value="4">Reboot with reason</option>
+
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 2}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus as MODBUS,index}
+<option value={MODBUS.aliasName}>{MODBUS.aliasName}</option>
+{/each}
+
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 3}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage as TCPM,index}
+<option value={TCPM.aliasName}>{TCPM.aliasName}</option>
+{/each}
+
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 4}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification as MQTTN,index}
+<option value={MQTTN.aliasName}>{MQTTN.aliasName}</option>
+{/each}
+
+
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 5}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.ping as PING,index}
+<option value={PING.aliasName}>{PING.aliasName}</option>
+{/each}
+
+
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 6}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi as RSSI,index}
+<option value={RSSI.aliasName}>{RSSI.aliasName}</option>
+{/each}
+
 {/if}
 </select>
+
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog <=10}
+
+
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].firstTrigger.statusType}><option disabled="" value="">None</option>
+
+{#if NewRuleItem[new_rule_index].firstTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
+<option value={1}>C-WAN Link Up</option>
+<option value={2}>WAN Link Down</option>
+<option value={3}>Dial Up failed 5 times</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 8}
+<option value={0}>Link Down</option>
+<option value={1}>Link Up</option>
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
+<option value={1}>SSH Login Fail</option>
+
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog  == 10}
+<option value={0}>Cold Start</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={2}>Password Changed</option>
+<option value={3}>Reboot with reason</option>
+{/if}
+</select>
+
+{/if}
 </td>
 </tr>
 
@@ -7715,36 +8790,34 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">2nd Trigger Catalog</p></td>
     <td class= "pl-4 pt-4">
-{#if R_TCount=='1'}
+{#if NewRuleItem[new_rule_index].triggerCount == 1}
 
-<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled bind:value={Tselected2}>
+
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
 <option disabled="" value="">None</option>
-<option value="SMS">SMS</option>
-<option value="DI">DI</option>
-<option value="Modbus">Modbus</option>
-<option value="MQTT Notification">MQTT Notification</option>
-<option value="TCPM">TCP Message</option>
-<option value="WANs">WAN Status</option>
-<option value="LANs">LAN Status</option>
-<option value="Logins">Login Status</option>
-<option value="Systems">System Status</option>
+
 </select>
+
+
 
 {:else}
 
-
-<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Tselected2}>
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].secondTrigger.catalog}>
 <option disabled="" value="">None</option>
-<option value="SMS">SMS</option>
-<option value="DI">DI</option>
-<option value="Modbus">Modbus</option>
-<option value="MQTT Notification">MQTT Notification</option>
-<option value="TCPM">TCP Message</option>
-<option value="WANs">WAN Status</option>
-<option value="LANs">LAN Status</option>
-<option value="Logins">Login Status</option>
-<option value="Systems">System Status</option>
+<option value={0}>SMS</option>
+<option value={1}>DI</option>
+<option value={2}>Modbus</option>
+<option value={3}>TCP Message</option>
+<option value={4}>MQTT Notification</option>
+<option value={5}>PING</option>
+<option value={6}>RSSI</option>
+<option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
+<option value={10}>System Status</option>
+
 </select>
+
 {/if}
 
 
@@ -7755,79 +8828,108 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <tr>
       <td>
-{#if Tselected2 == "WANs" || Tselected2 == "Logins" || Tselected2 == "LANs" || Tselected2 == "Systems"}
+
+
+{#if NewRuleItem[new_rule_index].secondTrigger.catalog == 10 || NewRuleItem[new_rule_index].secondTrigger.catalog == 7 ||NewRuleItem[new_rule_index].secondTrigger.catalog == 8 || NewRuleItem[new_rule_index].secondTrigger.catalog == 9}
       <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
 {:else}
 
       <p class="pl-20 pt-4 text-lg font-light text-right">Profile</p>
 {/if}
 
+
       </td>
 <td class= "pl-4 pt-4">
 
-{#if R_TCount=='1'}
-    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled bind:value={TselectedProfile2}>
+{#if NewRuleItem[new_rule_index].triggerCount == 1}
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled >
     <option disabled="" value="">None</option>
-    {#if Tselected2 == 'SMS'}
-      <option value="1">T_sms_</option>
-    {:else if Tselected2 == 'DI'}
-      <option value="2">T_DI_</option>
-    {:else if Tselected2 == "Modbus"}
-    <option value="3">T_Modbus_</option>
-    {:else if Tselected2 == "WANs"}
-<option value="1">C-WAN Link Down</option>
-<option value="2">C-WAN Link Up</option>
-<option value="3">WAN Link Down</option>
-<option value="4">Dial Up failed 5 times</option>
-<option value="5">WAN Failover</option>
-<option value="6">SIM Switch</option>
-{:else if Tselected2 == "LANs"}
-<option value="1">Link Down</option>
-<option value="2">Link Up</option>
-{:else if Tselected2 == "Logins"}
-<option value="1">Web Login Fail from LAN</option>
-<option value="2">Web Login Fail from WAN</option>
-<option value="3">SSH Login Fail</option>
-{:else if Tselected2 == "Systems"}
-<option value="1">Cold Start</option>
-<option value="2">Firmware Upgrading</option>
-<option value="3">Password Changed</option>
-<option value="4">Reboot with reason</option>
-    {/if}
     </select>
 {:else}
 
-    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={TselectedProfile2}>
-    <option disabled="" value="">None</option>
-    {#if Tselected2 == 'SMS'}
-      <option value="1">T_sms_</option>
-    {:else if Tselected2 == 'DI'}
-      <option value="2">T_DI_</option>
-    {:else if Tselected2 == "Modbus"}
-    <option value="3">T_Modbus_</option>
-    {:else if Tselected2 == "WANs"}
-<option value="1">C-WAN Link Down</option>
-<option value="2">C-WAN Link Up</option>
-<option value="3">WAN Link Down</option>
-<option value="4">Dial Up failed 5 times</option>
-<option value="5">WAN Failover</option>
-<option value="6">SIM Switch</option>
-{:else if Tselected2 == "LANs"}
-<option value="1">Link Down</option>
-<option value="2">Link Up</option>
-{:else if Tselected2 == "Logins"}
-<option value="1">Web Login Fail from LAN</option>
-<option value="2">Web Login Fail from WAN</option>
-<option value="3">SSH Login Fail</option>
-{:else if Tselected2 == "Systems"}
-<option value="1">Cold Start</option>
-<option value="2">Firmware Upgrading</option>
-<option value="3">Password Changed</option>
-<option value="4">Reboot with reason</option>
-    {/if}
-    </select>
+
+{#if NewRuleItem[new_rule_index].secondTrigger.catalog <=6}
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].secondTrigger.profile}><option disabled="" value="">None</option>
+
+
+{#if NewRuleItem[new_rule_index].secondTrigger.catalog == 0}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms as SMS,index}
+<option value={SMS.aliasName}>{SMS.aliasName}</option>
+{/each}
+
+
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 1}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
+<option value={DI.aliasName}>{DI.aliasName}</option>
+{/each}
+
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 2}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus as MODBUS,index}
+<option value={MODBUS.aliasName}>{MODBUS.aliasName}</option>
+{/each}
+
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 3}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage as TCPM,index}
+<option value={TCPM.aliasName}>{TCPM.aliasName}</option>
+{/each}
+
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 4}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification as MQTTN,index}
+<option value={MQTTN.aliasName}>{MQTTN.aliasName}</option>
+{/each}
+
+
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 5}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.ping as PING,index}
+<option value={PING.aliasName}>{PING.aliasName}</option>
+{/each}
+
+
+
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 6}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi as RSSI,index}
+<option value={RSSI.aliasName}>{RSSI.aliasName}</option>
+{/each}
+
+{/if}
+</select>
+
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog <=10}
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].secondTrigger.statusType}><option disabled="" value="">None</option>
+
+{#if NewRuleItem[new_rule_index].secondTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
+<option value={1}>C-WAN Link Up</option>
+<option value={2}>WAN Link Down</option>
+<option value={3}>Dial Up failed 5 times</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 8}
+<option value={0}>Link Down</option>
+<option value={1}>Link Up</option>
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
+<option value={1}>SSH Login Fail</option>
+
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog  == 10}
+<option value={0}>Cold Start</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={2}>Password Changed</option>
+<option value={3}>Reboot with reason</option>
 {/if}
 
+</select>
+{/if}
+
+{/if}
 
 </td>
 </tr>
@@ -7841,34 +8943,27 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td class= "pl-4 pt-4">
 
 
-{#if R_TCount=='3'}
+{#if NewRuleItem[new_rule_index].triggerCount=='3'}
 
-<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={Tselected3}>
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].thirdTrigger.catalog}>
 <option disabled="" value="">None</option>
-<option value="SMS">SMS</option>
-<option value="DI">DI</option>
-<option value="Modbus">Modbus</option>
-<option value="MQTT Notification">MQTT Notification</option>
-<option value="TCPM">TCP Message</option>
-<option value="WANs">WAN Status</option>
-<option value="LANs">LAN Status</option>
-<option value="Logins">Login Status</option>
-<option value="Systems">System Status</option>
+<option value={0}>SMS</option>
+<option value={1}>DI</option>
+<option value={2}>Modbus</option>
+<option value={3}>TCP Message</option>
+<option value={4}>MQTT Notification</option>
+<option value={5}>PING</option>
+<option value={6}>RSSI</option>
+<option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
+<option value={10}>System Status</option>
 </select>
 
 {:else}
 
-<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled bind:value={Tselected3}>
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
 <option disabled="" value="">None</option>
-<option value="SMS">SMS</option>
-<option value="DI">DI</option>
-<option value="Modbus">Modbus</option>
-<option value="MQTT Notification">MQTT Notification</option>
-<option value="TCPM">TCP Message</option>
-<option value="WANs">WAN Status</option>
-<option value="LANs">LAN Status</option>
-<option value="Logins">Login Status</option>
-<option value="Systems">System Status</option>
 </select>
 
 
@@ -7881,7 +8976,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <tr>
       <td>
-{#if Tselected3 == "WANs" || Tselected3 == "Logins" || Tselected3 == "LANs" || Tselected3 == "Systems"}
+{#if NewRuleItem[new_rule_index].thirdTrigger.catalog == 7 || NewRuleItem[new_rule_index].thirdTrigger.catalog == 7 ||NewRuleItem[new_rule_index].thirdTrigger.catalog == 8 || NewRuleItem[new_rule_index].thirdTrigger.catalog == 9}
       <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
 {:else}
 
@@ -7890,65 +8985,89 @@ on:click={handleClickMV} on:keydown={() => {}}>
       </td>
 <td class= "pl-4 pt-4">
 
-{#if R_TCount=='3'}
-    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={TselectedProfile3}>
-    <option disabled="" value="">None</option>
-    {#if Tselected3 == 'SMS'}
-      <option value="1">T_sms_</option>
-    {:else if Tselected3 == 'DI'}
-      <option value="2">T_DI_</option>
-    {:else if Tselected3 == "Modbus"}
-    <option value="3">T_Modbus_</option>
-    {:else if Tselected3 == "WANs"}
-<option value="1">C-WAN Link Down</option>
-<option value="2">C-WAN Link Up</option>
-<option value="3">WAN Link Down</option>
-<option value="4">Dial Up failed 5 times</option>
-<option value="5">WAN Failover</option>
-<option value="6">SIM Switch</option>
-{:else if Tselected3 == "LANs"}
-<option value="1">Link Down</option>
-<option value="2">Link Up</option>
-{:else if Tselected3 == "Logins"}
-<option value="1">Web Login Fail from LAN</option>
-<option value="2">Web Login Fail from WAN</option>
-<option value="3">SSH Login Fail</option>
-{:else if Tselected3 == "Systems"}
-<option value="1">Cold Start</option>
-<option value="2">Firmware Upgrading</option>
-<option value="3">Password Changed</option>
-<option value="4">Reboot with reason</option>
-    {/if}
-    </select>
+{#if NewRuleItem[new_rule_index].triggerCount=='3'}
+
+{#if NewRuleItem[new_rule_index].thirdTrigger.catalog <=6}
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].thirdTrigger.profile}><option disabled="" value="">None</option>
+
+
+{#if NewRuleItem[new_rule_index].thirdTrigger.catalog == 0}
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms as SMS,index}
+<option value={SMS.aliasName}>{SMS.aliasName}</option>
+{/each}
+
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 1}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
+<option value={DI.aliasName}>{DI.aliasName}</option>
+{/each}
+
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 2}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus as MODBUS,index}
+<option value={MODBUS.aliasName}>{MODBUS.aliasName}</option>
+{/each}
+
+
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 3}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage as TCPM,index}
+<option value={TCPM.aliasName}>{TCPM.aliasName}</option>
+{/each}
+
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 4}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification as MQTTN,index}
+<option value={MQTTN.aliasName}>{MQTTN.aliasName}</option>
+{/each}
+
+
+
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 5}
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.ping as PING,index}
+<option value={PING.aliasName}>{PING.aliasName}</option>
+{/each}
+
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 6}
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi as RSSI,index}
+<option value={RSSI.aliasName}>{RSSI.aliasName}</option>
+{/each}
+
+{/if}
+</select>
+
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog<=10}
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].thirdTrigger.statusType}><option disabled="" value="">None</option>
+
+{#if NewRuleItem[new_rule_index].thirdTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
+<option value={1}>C-WAN Link Up</option>
+<option value={2}>WAN Link Down</option>
+<option value={3}>Dial Up failed 5 times</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 8}
+<option value={0}>Link Down</option>
+<option value={1}>Link Up</option>
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
+<option value={1}>SSH Login Fail</option>
+
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog  == 10}
+<option value={0}>Cold Start</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={2}>Password Changed</option>
+<option value={3}>Reboot with reason</option>
+{/if}
+</select>
+{/if}
+
 {:else}
-    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled bind:value={TselectedProfile3}>
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
     <option disabled="" value="">None</option>
-    {#if Tselected3 == 'SMS'}
-      <option value="1">T_sms_</option>
-    {:else if Tselected3 == 'DI'}
-      <option value="2">T_DI_</option>
-    {:else if Tselected3 == "Modbus"}
-    <option value="3">T_Modbus_</option>
-    {:else if Tselected3 == "WANs"}
-<option value="1">C-WAN Link Down</option>
-<option value="2">C-WAN Link Up</option>
-<option value="3">WAN Link Down</option>
-<option value="4">Dial Up failed 5 times</option>
-<option value="5">WAN Failover</option>
-<option value="6">SIM Switch</option>
-{:else if Tselected3 == "LANs"}
-<option value="1">Link Down</option>
-<option value="2">Link Up</option>
-{:else if Tselected3 == "Logins"}
-<option value="1">Web Login Fail from LAN</option>
-<option value="2">Web Login Fail from WAN</option>
-<option value="3">SSH Login Fail</option>
-{:else if Tselected3 == "Systems"}
-<option value="1">Cold Start</option>
-<option value="2">Firmware Upgrading</option>
-<option value="3">Password Changed</option>
-<option value="4">Reboot with reason</option>
-    {/if}
+
     </select>
 {/if}
 
@@ -7973,7 +9092,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </tr>
 {:else if currentStep==2}
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Delay Second</p></td><td class="pl-5 pt-5"><input type="number" bind:value={R_DelayS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Delay Second</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewRuleItem[new_rule_index].delaySecond} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -7983,29 +9102,29 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Action Option</p></td>
 
     <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
-    <Radio bind:group={R_Once_Repeat} value='once' >Once</Radio>
-    <Radio bind:group={R_Once_Repeat} value='repeat'>Repeat</Radio>
+    <Radio bind:group={NewRuleItem[new_rule_index].actionOption} value={0} >Once</Radio>
+    <Radio bind:group={NewRuleItem[new_rule_index].actionOption} value={1}>Repeat</Radio>
     </div></td>
     </tr>
-{#if R_Once_Repeat == 'repeat'}
+{#if NewRuleItem[new_rule_index].actionOption == 1}
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Count</p></td><td class="pl-5 pt-5"><input type="number" bind:value={R_Repeat} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Count</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewRuleItem[new_rule_index].repeatCnt} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={R_RepeatInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewRuleItem[new_rule_index].repeatInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
 {:else}
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Count</p></td><td class="pl-5 pt-5"><input type="number" bind:value={R_Repeat} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500  disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Count</p></td><td class="pl-5 pt-5"><input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500  disabled:cursor-not-allowed disabled:opacity-50" disabled></td>
 
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={R_RepeatInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-50  disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Interval</p></td><td class="pl-5 pt-5"><input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-50  disabled:cursor-not-allowed disabled:opacity-50" disabled></td>
 
 </tr>
 {/if}
@@ -8033,74 +9152,238 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Action Catalog</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionCatalogList} placeholder="None" bind:value={Aselected}/></td>
+    <td class= "pl-4 pt-4">
+  
+
+
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionCatalog}><option disabled="" value="">None</option>
+<option value={0}>SMS</option>
+<option value={1}>DO</option>
+<option value={2}>Modbus</option>
+<option value={3}>Email</option>
+<option value={4}>MQTT Publish</option>
+<option value={5}>LINE Notification</option>
+<option value={6}>TCP Message</option>
+<option value={7}>System</option>
+<option value={8}>MQTT API</option>
+<option value={9}>REST API</option>
+
+</select>
+
+
+    </td>
 
 
 </tr>
 
 
 
-{#if Aselected == 'SMS'}
+{#if NewRuleItem[new_rule_index].actionCatalog == 0}
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionSMSList} placeholder="None" /></td>
+    <td class= "pl-4 pt-4">
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.sms as SMS,index}
+<option value={SMS.aliasName}>{SMS.aliasName}</option>
+{/each}
+</select>
+
+    </td>
 
 </tr>
 
-{:else if Aselected == 'DO'}
+{:else if NewRuleItem[new_rule_index].actionCatalog == 1}
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionDIList} placeholder="None" /></td>
+    <td class= "pl-4 pt-4">
+
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.do as DO,index}
+<option value={DO.aliasName}>{DO.aliasName}</option>
+{/each}
+</select>
+
+
+    </td>
 
 </tr>
-{:else if Aselected == "Modbus"}
+{:else if NewRuleItem[new_rule_index].actionCatalog == 2}
 
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionMBList} placeholder="None" /></td>
+    <td class= "pl-4 pt-4">
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus as MODBUS,index}
+<option value={MODBUS.aliasName}>{MODBUS.aliasName}</option>
+{/each}
+
+</select>
+
+
+    </td>
 
 </tr>
 
 
-{:else if Aselected == "Email"}
+{:else if NewRuleItem[new_rule_index].actionCatalog == 3}
 
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionEmailList} placeholder="None" /></td>
+    <td class= "pl-4 pt-4">
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile as Email,index}
+<option value={Email.aliasName}>{Email.aliasName}</option>
+{/each}
+</select>
+
+    </td>
 
 </tr>
 
-{:else if Aselected == "System"}
+{:else if NewRuleItem[new_rule_index].actionCatalog == 4}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish as MQTTP,index}
+<option value={MQTTP.aliasName}>{MQTTP.aliasName}</option>
+{/each}
+</select>
+
+    </td>
+
+</tr>
+
+{:else if NewRuleItem[new_rule_index].actionCatalog == 5}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+     <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification as Line,index}
+<option value={Line.aliasName}>{Line.aliasName}</option>
+{/each}
+</select>
+
+    </td>
+
+</tr>
+
+
+{:else if NewRuleItem[new_rule_index].actionCatalog == 6}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+     <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage as TCPMsg,index}
+<option value={TCPMsg.aliasName}>{TCPMsg.aliasName}</option>
+{/each}
+</select>
+    </td>
+
+</tr>
+
+
+
+
+{:else if NewRuleItem[new_rule_index].actionCatalog == 7}
 
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Operation</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionSystemList} placeholder="None" /></td>
+    <td class= "pl-4 pt-4">
+
+
+<select class="block w-48 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionOperation}>
+
+<option disabled="" value="">None</option>
+<option value={0}>System Reboot</option>
+<option value={1}>SysLog server – on</option>
+<option value={2}>SysLog server – off</option>
+<option value={3}>SW Reset C-WAN module</option>
+<option value={4}>HW Reset C-WAN module</option>
+<option value={5}>WAN Backup Switch</option>
+<option value={6}>C-WAN power cycle</option>
+<option value={7}>SIM Switch</option>
+</select>
+
+
+    </td>
 
 </tr>
 
-{:else if Aselected="TCPM"}
+
+
+{:else if NewRuleItem[new_rule_index].actionCatalog == 8}
+
+
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionTCPMList} placeholder="None" /></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Operation</p></td>
+    <td class= "pl-4 pt-4">
+
+
+<select class="block w-48 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionOperation}>
+
+<option disabled="" value="">None</option>
+<option value={0}>MQTT API Disable</option>
+<option value={1}>MQTT API Enable</option>
+</select>
+
+
+    </td>
 
 </tr>
 
-{:else if Aselected="Line"}
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionLineList} placeholder="None" /></td>
 
-</tr>
 
-{:else if Aselected="MQTTP"}
+{:else if NewRuleItem[new_rule_index].actionCatalog == 9}
+
+
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
-    <td class= "pl-4 pt-4"><Select class="mt-2" items={ActionMQTTPList} placeholder="None" /></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Operation</p></td>
+    <td class= "pl-4 pt-4">
+
+
+<select class="block w-48 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].actionOperation}>
+
+<option disabled="" value="">None</option>
+<option value={0}>REST API Disable</option>
+<option value={1}>REST API Enable</option>
+</select>
+
+
+    </td>
 
 </tr>
 
@@ -8118,7 +9401,761 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <td></td>
     <td></td>
        <td class="pl-20"><Button color="dark" pill={true} on:click={Rule_Modal_Page2}>Back</Button></td>
-    <td class="pl-1"><Button color="dark" pill={true} on:click={Rule_Modal_Finish}>Finish</Button></td>
+    <td class="pl-1"><Button color="dark" pill={true} on:click={Rule_Modal_Add}>Add Rule</Button></td>
+
+
+    </tr>
+{/if}
+
+  </table>
+
+</Modal>
+
+
+
+<Modal bind:open={modify_rule_modal} autoclose={false} size="lg" class="w-full">
+
+<StepIndicator {currentStep} {steps} glow />
+
+<p class="mt-4"></p>
+
+
+
+<table>
+
+{#if currentStep == 1}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
+  <input class="center" type=checkbox bind:checked={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].enable}></td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+
+
+
+  </tr>
+
+
+<tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Trigger Count</p>
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].triggerCount} value={1} >1</Radio>
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].triggerCount} value={2} >2</Radio>
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].triggerCount} value={3} >3</Radio>
+
+</div></td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">1st Trigger Catalog</p></td>
+    <td class= "pl-4 pt-4">
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog}>
+<option disabled="" value="">None</option>
+<option value={0}>SMS</option>
+<option value={1}>DI</option>
+<option value={2}>Modbus</option>
+<option value={3}>TCP Message</option>
+<option value={4}>MQTT Notification</option>
+<option value={5}>PING</option>
+<option value={6}>RSSI</option>
+<option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
+<option value={10}>System Status</option>
+
+</select>
+
+    </td>
+
+</tr>
+
+
+
+
+
+<tr>
+      <td>
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 10 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 7 ||changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 8 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 9}
+      <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
+{:else}
+
+      <p class="pl-20 pt-4 text-lg font-light text-right">Profile</p>
+{/if}
+      </td>
+<td class= "pl-4 pt-4">
+
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog <=6}
+
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.profile}><option disabled="" value="">None</option>
+
+
+
+
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 0}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms as SMS,index}
+<option value={SMS.aliasName}>{SMS.aliasName}</option>
+{/each}
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 1}
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
+<option value={DI.aliasName}>{DI.aliasName}</option>
+{/each}
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 2}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus as MODBUS,index}
+<option value={MODBUS.aliasName}>{MODBUS.aliasName}</option>
+{/each}
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 3}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage as TCPM,index}
+<option value={TCPM.aliasName}>{TCPM.aliasName}</option>
+{/each}
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 4}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification as MQTTN,index}
+<option value={MQTTN.aliasName}>{MQTTN.aliasName}</option>
+{/each}
+
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 5}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.ping as PING,index}
+<option value={PING.aliasName}>{PING.aliasName}</option>
+{/each}
+
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 6}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi as RSSI,index}
+<option value={RSSI.aliasName}>{RSSI.aliasName}</option>
+{/each}
+
+
+{/if}
+</select>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog <=10}
+
+
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.statusType}><option disabled="" value="">None</option>
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
+<option value={1}>C-WAN Link Up</option>
+<option value={2}>WAN Link Down</option>
+<option value={3}>Dial Up failed 5 times</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 8}
+<option value={0}>Link Down</option>
+<option value={1}>Link Up</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
+<option value={1}>SSH Login Fail</option>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 10}
+<option value={0}>Cold Start</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={2}>Password Changed</option>
+<option value={3}>Reboot with reason</option>
+{/if}
+</select>
+
+{/if}
+</td>
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">2nd Trigger Catalog</p></td>
+    <td class= "pl-4 pt-4">
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].triggerCount == 1}
+
+
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+<option disabled="" value="">None</option>
+
+
+</select>
+
+
+
+{:else}
+
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog}>
+<option disabled="" value="">None</option>
+<option value={0}>SMS</option>
+<option value={1}>DI</option>
+<option value={2}>Modbus</option>
+<option value={3}>TCP Message</option>
+<option value={4}>MQTT Notification</option>
+<option value={5}>PING</option>
+<option value={6}>RSSI</option>
+<option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
+<option value={10}>System Status</option>
+
+</select>
+
+{/if}
+
+
+    </td>
+</tr>
+
+
+
+<tr>
+      <td>
+
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 10 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 7 ||changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 8 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 9}
+      <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
+{:else}
+
+      <p class="pl-20 pt-4 text-lg font-light text-right">Profile</p>
+{/if}
+
+
+      </td>
+<td class= "pl-4 pt-4">
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].triggerCount == 1}
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled >
+    <option disabled="" value="">None</option>
+    </select>
+{:else}
+
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog <=6}
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.profile}><option disabled="" value="">None</option>
+
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 0}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms as SMS,index}
+<option value={SMS.aliasName}>{SMS.aliasName}</option>
+{/each}
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 1}
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
+<option value={DI.aliasName}>{DI.aliasName}</option>
+{/each}
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 2}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus as MODBUS,index}
+<option value={MODBUS.aliasName}>{MODBUS.aliasName}</option>
+{/each}
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 3}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage as TCPM,index}
+<option value={TCPM.aliasName}>{TCPM.aliasName}</option>
+{/each}
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 4}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification as MQTTN,index}
+<option value={MQTTN.aliasName}>{MQTTN.aliasName}</option>
+{/each}
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 5}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.ping as PING,index}
+<option value={PING.aliasName}>{PING.aliasName}</option>
+{/each}
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 6}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi as RSSI,index}
+<option value={RSSI.aliasName}>{RSSI.aliasName}</option>
+{/each}
+
+{/if}
+</select>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog <=10}
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.statusType}><option disabled="" value="">None</option>
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
+<option value={1}>C-WAN Link Up</option>
+<option value={2}>WAN Link Down</option>
+<option value={3}>Dial Up failed 5 times</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 8}
+<option value={0}>Link Down</option>
+<option value={1}>Link Up</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
+<option value={1}>SSH Login Fail</option>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog  == 10}
+<option value={0}>Cold Start</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={2}>Password Changed</option>
+<option value={3}>Reboot with reason</option>
+{/if}
+
+</select>
+{/if}
+
+{/if}
+
+</td>
+</tr>
+
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">3rd Trigger Catalog</p></td>
+    <td class= "pl-4 pt-4">
+
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].triggerCount=='3'}
+
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog}>
+<option disabled="" value="">None</option>
+<option value={0}>SMS</option>
+<option value={1}>DI</option>
+<option value={2}>Modbus</option>
+<option value={3}>TCP Message</option>
+<option value={4}>MQTT Notification</option>
+<option value={5}>PING</option>
+<option value={6}>RSSI</option>
+<option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
+<option value={10}>System Status</option>
+</select>
+
+{:else}
+
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+<option disabled="" value="">None</option>
+</select>
+
+
+{/if}
+    </td>
+</tr>
+
+
+
+
+<tr>
+      <td>
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 10 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 7 ||changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 8 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 9}
+      <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
+{:else}
+
+      <p class="pl-20 pt-4 text-lg font-light text-right">Profile</p>
+{/if}
+      </td>
+<td class= "pl-4 pt-4">
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].triggerCount=='3'}
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog <=6}
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.profile}><option disabled="" value="">None</option>
+
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 0}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms as SMS,index}
+<option value={SMS.aliasName}>{SMS.aliasName}</option>
+{/each}
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 1}
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
+<option value={DI.aliasName}>{DI.aliasName}</option>
+{/each}
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 2}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus as MODBUS,index}
+<option value={MODBUS.aliasName}>{MODBUS.aliasName}</option>
+{/each}
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 3}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage as TCPM,index}
+<option value={TCPM.aliasName}>{TCPM.aliasName}</option>
+{/each}
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 4}
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification as MQTTN,index}
+<option value={MQTTN.aliasName}>{MQTTN.aliasName}</option>
+{/each}
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 5}
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.ping as PING,index}
+<option value={PING.aliasName}>{PING.aliasName}</option>
+{/each}
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 6}
+{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi as RSSI,index}
+<option value={RSSI.aliasName}>{RSSI.aliasName}</option>
+{/each}
+
+{/if}
+</select>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog<=10}
+
+ <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.statusType}><option disabled="" value="">None</option>
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
+<option value={1}>C-WAN Link Up</option>
+<option value={2}>WAN Link Down</option>
+<option value={3}>Dial Up failed 5 times</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 8}
+<option value={0}>Link Down</option>
+<option value={1}>Link Up</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
+<option value={1}>SSH Login Fail</option>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 10}
+<option value={0}>Cold Start</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={2}>Password Changed</option>
+<option value={3}>Reboot with reason</option>
+{/if}
+</select>
+{/if}
+
+{:else}
+    <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+    <option disabled="" value="">None</option>
+
+    </select>
+{/if}
+
+    </td>
+</tr>
+
+
+
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={Rule_Modal_Page2}>Next</Button></td>
+
+
+    </tr>
+{:else if currentStep==2}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Delay Second</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].delaySecond} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+  <tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Action Option</p></td>
+
+    <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+    <Radio bind:group={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionOption} value={0} >Once</Radio>
+    <Radio bind:group={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionOption} value={1}>Repeat</Radio>
+    </div></td>
+    </tr>
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionOption == 1}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Count</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].repeatCnt} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].repeatInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></td>
+
+</tr>
+{:else}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Count</p></td><td class="pl-5 pt-5"><input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500  disabled:cursor-not-allowed disabled:opacity-50" disabled></td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Repeat Interval</p></td><td class="pl-5 pt-5"><input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-50  disabled:cursor-not-allowed disabled:opacity-50" disabled></td>
+
+</tr>
+{/if}
+
+
+
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+       <td class="pl-20"><Button color="dark" pill={true} on:click={Rule_Modal_Page1}>Back</Button></td>
+    <td class="pl-1"><Button color="dark" pill={true} on:click={Rule_Modal_Page3}>Next</Button></td>
+
+
+    </tr>
+
+{:else if currentStep==3}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Action Catalog</p></td>
+    <td class= "pl-4 pt-4">
+  
+
+
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionCatalog}><option disabled="" value="">None</option>
+<option value={0}>SMS</option>
+<option value={1}>DO</option>
+<option value={2}>Modbus</option>
+<option value={3}>Email</option>
+<option value={4}>MQTT Publish</option>
+<option value={5}>LINE Notification</option>
+<option value={6}>TCP Message</option>
+<option value={7}>System</option>
+</select>
+
+
+    </td>
+
+
+</tr>
+
+
+
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionCatalog == 0}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+        <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+ {#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.sms as SMS,index}
+<option value={SMS.aliasName}>{SMS.aliasName}</option>
+{/each}
+</select>
+
+    </td>
+
+</tr>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionCatalog == 1}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+
+        <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.do as DO,index}
+<option value={DO.aliasName}>{DO.aliasName}</option>
+{/each}
+</select>
+
+    </td>
+
+</tr>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionCatalog == 2}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+
+
+        <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus as MODBUS,index}
+<option value={MODBUS.aliasName}>{MODBUS.aliasName}</option>
+{/each}
+
+</select>
+
+
+    </td>
+
+</tr>
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionCatalog == 3}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+
+        <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile as Email,index}
+<option value={Email.aliasName}>{Email.aliasName}</option>
+{/each}
+</select>
+
+
+    </td>
+
+</tr>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionCatalog == 4}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+
+        <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish as MQTTP,index}
+<option value={MQTTP.aliasName}>{MQTTP.aliasName}</option>
+{/each}
+</select>
+
+    </td>
+
+</tr>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionCatalog == 5}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+        <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+ 
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification as Line,index}
+<option value={Line.aliasName}>{Line.aliasName}</option>
+{/each}
+</select>
+    </td>
+
+</tr>
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionCatalog == 6}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+     <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionProfile}>
+ <option disabled="" value="">None</option>
+
+
+{#each saved_changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage as TCPMsg,index}
+<option value={TCPMsg.aliasName}>{TCPMsg.aliasName}</option>
+{/each}
+</select>
+
+    </td>
+
+</tr>
+
+
+
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionCatalog == 7}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Operation</p></td>
+    <td class= "pl-4 pt-4">
+
+
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].actionOperation}>
+
+<option disabled="" value="">None</option>
+<option value={0}>System Reboot</option>
+<option value={1}>SysLog server – on</option>
+<option value={2}>SysLog server – off</option>
+<option value={3}>SW Reset C-WAN module</option>
+<option value={4}>HW Reset C-WAN module</option>
+<option value={5}>WAN Backup Switch</option>
+<option value={6}>C-WAN power cycle</option>
+<option value={7}>SIM Switch</option>
+</select>
+
+
+    </td>
+
+</tr>
+
+
+{/if}
+
+
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+       <td class="pl-20"><Button color="dark" pill={true} on:click={Rule_Modal_Page2}>Back</Button></td>
+    <td class="pl-1"><Button color="dark" pill={true} on:click={Rule_Modal_Modify}>Modify Rule</Button></td>
 
 
     </tr>

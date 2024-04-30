@@ -101,11 +101,14 @@
       EventEngine_ActionDO_ConfigChangedLog,
       EventEngine_ActionEmail_ConfigChangedLog,
       EventEngine_ActionSMS_ConfigChangedLog,
+      EventEngine_TriggerRSSI_ConfigChangedLog,  
+      EventEngine_TriggerPING_ConfigChangedLog,      
       EventEngine_TriggerMQTT_ConfigChangedLog,
       EventEngine_TriggerTCPMsg_ConfigChangedLog,
       EventEngine_TriggerModbus_ConfigChangedLog,
       EventEngine_TriggerDI_ConfigChangedLog,
       EventEngine_TriggerSMS_ConfigChangedLog,
+      EventEngine_Rule_ConfigChangedLog,      
       EventEngine_General_ConfigChangedLog,
       ChangedEventEngineConfig
 			} from "./configG.js"
@@ -253,11 +256,14 @@
   let ContentEventEngine;
   let EventEngineBinary=null;
   let event_engine_general_changedValues = [];
+  let event_engine_rule_changedValues = [];  
   let event_engine_trigger_sms_changeValues=[];
   let event_engine_trigger_di_changeValues=[];
   let event_engine_trigger_modbus_changeValues=[];
   let event_engine_trigger_tcpmsg_changeValues=[];
   let event_engine_trigger_mqtt_changeValues=[];
+  let event_engine_trigger_ping_changeValues=[];
+  let event_engine_trigger_rssi_changeValues=[];  
   let event_engine_action_sms_changeValues=[];
   let event_engine_action_email_changeValues=[];
   let event_engine_action_do_changeValues=[];
@@ -362,6 +368,11 @@
       event_engine_general_changedValues = val;
   });
 
+  EventEngine_Rule_ConfigChangedLog.subscribe(val => {
+      event_engine_rule_changedValues = val;
+  });
+
+
   EventEngine_TriggerSMS_ConfigChangedLog.subscribe(val => {
       event_engine_trigger_sms_changeValues = val;
   });
@@ -380,6 +391,14 @@
   
   EventEngine_TriggerMQTT_ConfigChangedLog.subscribe(val => {
       event_engine_trigger_mqtt_changeValues = val;
+  });
+
+  EventEngine_TriggerPING_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_ping_changeValues = val;
+  });
+
+  EventEngine_TriggerRSSI_ConfigChangedLog.subscribe(val => {
+      event_engine_trigger_rssi_changeValues = val;
   });
 
   EventEngine_ActionSMS_ConfigChangedLog.subscribe(val => {
@@ -1609,11 +1628,14 @@
 
 
       event_engine_general_changedValues = [];
+      event_engine_rule_changedValues = [];      
       event_engine_trigger_sms_changeValues=[];
       event_engine_trigger_di_changeValues=[];
       event_engine_trigger_modbus_changeValues=[];
       event_engine_trigger_tcpmsg_changeValues=[];
       event_engine_trigger_mqtt_changeValues=[];
+      event_engine_trigger_ping_changeValues=[];
+      event_engine_trigger_rssi_changeValues=[];          
       event_engine_action_sms_changeValues=[];
       event_engine_action_email_changeValues=[];
       event_engine_action_do_changeValues=[];
@@ -1624,11 +1646,14 @@
 
 
       EventEngine_General_ConfigChangedLog.set(event_engine_general_changedValues);
+      EventEngine_Rule_ConfigChangedLog.set(event_engine_rule_changedValues);      
       EventEngine_TriggerSMS_ConfigChangedLog.set(event_engine_trigger_sms_changeValues);
       EventEngine_TriggerDI_ConfigChangedLog.set(event_engine_trigger_di_changeValues);
       EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
       EventEngine_TriggerTCPMsg_ConfigChangedLog.set(event_engine_trigger_tcpmsg_changeValues);
       EventEngine_TriggerMQTT_ConfigChangedLog.set(event_engine_trigger_mqtt_changeValues);
+      EventEngine_TriggerPING_ConfigChangedLog.set(event_engine_trigger_ping_changeValues);
+      EventEngine_TriggerRSSI_ConfigChangedLog.set(event_engine_trigger_rssi_changeValues);              
       EventEngine_ActionSMS_ConfigChangedLog.set(event_engine_action_sms_changeValues);
       EventEngine_ActionEmail_ConfigChangedLog.set(event_engine_action_email_changeValues);
       EventEngine_ActionDO_ConfigChangedLog.set(event_engine_action_do_changeValues);
@@ -1798,12 +1823,15 @@
         event_engine_action_do_changeValues.length != 0 ||
         event_engine_action_email_changeValues.length !=0 ||
         event_engine_action_sms_changeValues.length !=0 ||
+        event_engine_trigger_ping_changeValues.length != 0 || 
+        event_engine_trigger_rssi_changeValues.length != 0 ||           
         event_engine_trigger_mqtt_changeValues.length != 0 ||
         event_engine_trigger_tcpmsg_changeValues.length !=0 ||
         event_engine_trigger_modbus_changeValues.length != 0 ||
         event_engine_trigger_di_changeValues.length !=0 || 
         event_engine_trigger_sms_changeValues.length !=0 ||
-        event_engine_general_changedValues.length !=0 ))
+        event_engine_general_changedValues.length !=0 ||
+        event_engine_rule_changedValues.length !=0))
     {
       SetCount++;
       RestartCount++;   
@@ -2060,12 +2088,15 @@
                       event_engine_action_do_changeValues.length != 0 ||
                       event_engine_action_email_changeValues.length != 0 ||
                       event_engine_action_sms_changeValues.length != 0 ||
+                      event_engine_trigger_ping_changeValues.length != 0 ||
+                      event_engine_trigger_rssi_changeValues.length != 0 || 
                       event_engine_trigger_mqtt_changeValues.length !=0 ||
                       event_engine_trigger_tcpmsg_changeValues.length !=0||
                       event_engine_trigger_modbus_changeValues.length !=0 ||
                       event_engine_trigger_di_changeValues.length !=0 ||
                       event_engine_trigger_sms_changeValues.length !=0 ||
-                      event_engine_general_changedValues.length !=0 ))
+                      event_engine_general_changedValues.length !=0 ||
+                      event_engine_rule_changedValues.length !=0))
         {
           let EventEngineString = JSON.stringify(event_engine_data, null, 0);
           const bytesArray = Array.from(EventEngineString).map(char => char.charCodeAt(0));
@@ -2095,12 +2126,15 @@
       event_engine_action_do_changeValues.length != 0 ||
       event_engine_action_email_changeValues.length !=0 ||
       event_engine_action_sms_changeValues.length != 0 ||
+      event_engine_trigger_rssi_changeValues.length != 0 || 
+      event_engine_trigger_ping_changeValues.length != 0 ||
       event_engine_trigger_mqtt_changeValues.length !=0 ||
       event_engine_trigger_tcpmsg_changeValues.length !=0 ||
       event_engine_trigger_modbus_changeValues.length !=0 ||
       event_engine_trigger_di_changeValues.length !=0 ||
       event_engine_trigger_sms_changeValues.length !=0 ||
-      event_engine_general_changedValues.length !=0 }
+      event_engine_general_changedValues.length !=0 ||
+      event_engine_rule_changedValues.length !=0}
 <Li>Event Engine
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
 {#if event_engine_general_changedValues.length !=0}
@@ -2115,11 +2149,25 @@
 {/if}
 
 
+{#if event_engine_rule_changedValues.length !=0}
+<Li>Rule
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each event_engine_rule_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+</Li>
+{/if}
+
+
 {#if    event_engine_trigger_mqtt_changeValues.length !=0||
         event_engine_trigger_tcpmsg_changeValues.length !=0||
         event_engine_trigger_modbus_changeValues.length !=0||
         event_engine_trigger_di_changeValues.length !=0 ||
-        event_engine_trigger_sms_changeValues.length !=0}
+        event_engine_trigger_sms_changeValues.length !=0 ||
+        event_engine_trigger_rssi_changeValues.length != 0 || 
+        event_engine_trigger_ping_changeValues.length != 0}
 <Li>Trigger Profile
 {#if  event_engine_trigger_sms_changeValues.length !=0}
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
@@ -2192,6 +2240,36 @@
  </List>
 {/if}
 
+
+{#if  event_engine_trigger_ping_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> PING
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_trigger_ping_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+
+
+{#if  event_engine_trigger_rssi_changeValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> RSSI
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each event_engine_trigger_rssi_changeValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
 
 
 </Li>
@@ -3201,12 +3279,15 @@ event_engine_action_do_changeValues.length != 0 ||
         event_engine_action_do_changeValues.length != 0 ||
         event_engine_action_email_changeValues.length != 0||
         event_engine_action_sms_changeValues.length != 0 ||
+        event_engine_trigger_rssi_changeValues.length !=0 ||         
+        event_engine_trigger_ping_changeValues.length !=0 ||        
         event_engine_trigger_mqtt_changeValues.length !=0 ||
         event_engine_trigger_tcpmsg_changeValues.length !=0 ||
         event_engine_trigger_modbus_changeValues.length !=0||
         event_engine_trigger_di_changeValues.length !=0 ||
         event_engine_trigger_sms_changeValues.length !=0 ||
         event_engine_general_changedValues.length !=0 || 		
+        event_engine_rule_changedValues.length !=0 || 
         sdata_logger_general_changedValues.length !=0 ||
         sdata_logger_proxy_edge_changedValues.length !=0 ||
         sdata_logger_proxy_cloud_changedValues.length !=0 ||

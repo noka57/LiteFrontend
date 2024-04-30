@@ -29,12 +29,16 @@ export const EventEngine_ActionModbus_ConfigChangedLog=writable("");
 export const EventEngine_ActionDO_ConfigChangedLog=writable("");
 export const EventEngine_ActionEmail_ConfigChangedLog=writable("");
 export const EventEngine_ActionSMS_ConfigChangedLog=writable("");
+export const EventEngine_TriggerRSSI_ConfigChangedLog=writable("");
+export const EventEngine_TriggerPING_ConfigChangedLog=writable("");
 export const EventEngine_TriggerMQTT_ConfigChangedLog=writable("");
 export const EventEngine_TriggerTCPMsg_ConfigChangedLog=writable("");
 export const EventEngine_TriggerModbus_ConfigChangedLog=writable("");
 export const EventEngine_TriggerDI_ConfigChangedLog=writable("");
 export const EventEngine_TriggerSMS_ConfigChangedLog=writable("");
 export const EventEngine_General_ConfigChangedLog=writable("");
+export const EventEngine_Rule_ConfigChangedLog=writable("");
+
 export const ChangedEventEngineConfig=writable("");
 
 

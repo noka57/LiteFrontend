@@ -860,6 +860,35 @@
   }
 
 
+  async function downloadRSSIlog() {
+    try {
+      const response = await fetch(window.location.origin+"/Download4GRSSIlog", {
+        method: 'POST',
+         body: JSON.stringify({
+        sessionid
+      })
+      });
+      
+    if (response.status == 200)
+    {
+      const blob = await response.blob();
+      const export_filename = 'RSSI.log';
+
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = export_filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      }
+    } catch (error) {
+      console.error('Error exporting file:', error);
+    }
+  }
+
+
+
   async function getWANData () {
     const res = await fetch(window.location.origin+"/getWANData", {
       method: 'POST',
@@ -1044,31 +1073,78 @@
     </TableBodyRow>
 
     <TableBodyRow>
-      <TableBodyCell>Register Status</TableBodyCell>
-      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_generalStatus[0].registerStatus} {/if}</TableBodyCell>
-      <TableBodyCell rowspan="5">N.A</TableBodyCell>
-    </TableBodyRow>
+    <TableBodyCell>Phone Number</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.phoneNumber} {/if}</TableBodyCell>
+      </TableBodyRow>
 
-    <TableBodyRow>
-      <TableBodyCell>Network Type</TableBodyCell>
-      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_generalStatus[0].type} {/if}</TableBodyCell>
-    </TableBodyRow>
-
-    <TableBodyRow>
-      <TableBodyCell>Band</TableBodyCell>
-      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_generalStatus[0].band} {/if}</TableBodyCell>
-    </TableBodyRow>
+      <TableBodyRow>
+      <TableBodyCell>Modem Status</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.status} {/if}</TableBodyCell>
+      </TableBodyRow>
 
 
-    <TableBodyRow>
-      <TableBodyCell>Operator</TableBodyCell>
-      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_generalStatus[0].operator} {/if}</TableBodyCell>
-    </TableBodyRow>
+      <TableBodyRow>
+      <TableBodyCell>SIM Status</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.simStatus} {/if}</TableBodyCell>
+      </TableBodyRow>
 
-    <TableBodyRow>
+
+      <TableBodyRow>
+      <TableBodyCell>Active SIM</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.activeSim} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow>
+      <TableBodyCell>Signal Strength</TableBodyCell>
       <TableBodyCell>RSSI</TableBodyCell>
-      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_generalStatus[0].rssi} {/if}</TableBodyCell>
-    </TableBodyRow>
+      </TableBodyRow>
+
+      <TableBodyRow>
+      <TableBodyCell>RSSI</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.rssi} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow>
+      <TableBodyCell>Registered Mobile Operator</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.operator} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+
+
+
+      <TableBodyRow>
+      <TableBodyCell>Connect State</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.connectState} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow>
+      <TableBodyCell>Connected Network Type</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.type} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow>
+      <TableBodyCell>Connected Band</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.band} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow>
+      <TableBodyCell>Modem Vendor</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.modemVendor} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+
+      <TableBodyRow>
+      <TableBodyCell>Modem Firmware Version</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.modemFwVer} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
 
 
 
@@ -1744,7 +1820,7 @@ Modem HW Reset</label>
 
         <label for="gLinkCheck17" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
  <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck17" name="gLinkCheck17" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.recoverySequence.sysRebootEn} on:click={SystemReboot_check}>
-System Reboot</label>
+Modem Power Cycle</label>
 
     </td>
 
@@ -1773,7 +1849,7 @@ System Reboot</label>
     </table>
   </AccordionItem>
 
-{#if hidden ==0}
+
   <AccordionItem {defaultClass}>
     <span slot="header" class="pl-4">AT Debug</span>
 <div class='mb-6'>
@@ -1789,7 +1865,25 @@ System Reboot</label>
 </div>
 
   </AccordionItem>
- {/if} 
+
+
+  <AccordionItem {defaultClass}>
+    <span slot="header" class="pl-4">4G RSSI Log</span>
+
+
+
+<table>
+
+    <tr>
+    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Download RSSI log</p></td>
+
+<td class="pl-5 pt-5"><Button on:click={downloadRSSIlog}>Download</Button></td>
+  </tr>
+  </table>
+
+
+  </AccordionItem>
+
 </Accordion>
   </TabItem>
 
@@ -2239,12 +2333,16 @@ System Reboot</label>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkTarget} value={2} >DNS 2</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkTarget} value={3} >Gateway</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.chkTarget} value={4} >Other Host</Radio>
+<input type="text" bind:value={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failover.otherHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
 {:else if changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkTarget} value={0} >None</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkTarget} value={1} >DNS 1</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkTarget} value={2} >DNS 2</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkTarget} value={3} >Gateway</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.chkTarget} value={4} >Other Host</Radio>
+<input type="text" bind:value={changed_wan_data.config.networking_wan_wanRedundancyPolicy.failback.otherHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
 
 
 {/if}
@@ -2429,7 +2527,7 @@ changed_wan_data.config.networking_wan_wanRedundancyPolicy.mode==3}
       <td class="pl-5 pt-5 text-lg font-light text-right">(DD:HH:MM)</td>
     </tr>
 
-  {:else if changed_wan_data.config.networking_wan_fareSavingPolicyy.controlTrafficFlow.time.select==1}
+  {:else if changed_wan_data.config.networking_wan_fareSavingPolicy.controlTrafficFlow.time.select==1}
 
     <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-right">Start Time(Per month)</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_wan_data.config.networking_wan_fareSavingPolicy.controlTrafficFlow.time.period.startTime.day} min="1" max="31" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td class="pl-5 pt-5 text-lg font-light text-right">:</td>

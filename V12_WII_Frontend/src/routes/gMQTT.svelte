@@ -124,7 +124,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   };
 
   let NewItem=[
@@ -140,7 +141,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   },
   {
     enable: 0,
@@ -154,7 +156,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   },
   {
     enable: 0,
@@ -168,7 +171,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   },
   {
     enable: 0,
@@ -182,7 +186,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   },
   {
     enable: 0,
@@ -196,7 +201,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   },
   {
     enable: 0,
@@ -210,7 +216,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   }
   ,{
     enable: 0,
@@ -224,7 +231,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   },
   {
     enable: 0,
@@ -238,7 +246,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   },
   {
     enable: 0,
@@ -252,7 +261,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   },
   {
     enable: 0,
@@ -266,7 +276,8 @@
     password: "",
     qos: "",
     keepAliveInterval: 60,
-    dataCompression: 0
+    dataCompression: 0,
+    retained:0
   }
 
 
@@ -290,7 +301,7 @@
     NewItem[index].qos=0;
     NewItem[index].keepAliveInterval=60;    
     NewItem[index].dataCompression=0;        
-
+    NewItem[index].retained=0;
     new_item_index=index;
     new_modal = true;
   }
@@ -320,6 +331,7 @@
     BackupItem.qos=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].qos;
     BackupItem.keepAliveInterval=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].keepAliveInterval;    
     BackupItem.dataCompression=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].dataCompression;   
+    BackupItem.retained=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].retained;   
 
   }
 
@@ -338,6 +350,7 @@
     changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].qos=BackupItem.qos;
     changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].keepAliveInterval=BackupItem.keepAliveInterval;    
     changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].dataCompression=BackupItem.dataCompression;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].retained=BackupItem.retained;
 
   }
 
@@ -722,6 +735,7 @@
     <TableHeadCell>Client ID</TableHeadCell>
     <TableHeadCell>Account</TableHeadCell>
     <TableHeadCell>QoS</TableHeadCell>
+    <TableHeadCell>Retained</TableHeadCell>    
     <TableHeadCell class="w-18">Keep Alive Interval (sec)</TableHeadCell>
     <TableHeadCell class="w-18">Data Compression</TableHeadCell>
      </TableHead>
@@ -763,6 +777,13 @@
       <TableBodyCell class="w-10">{gMQTT.clientId}</TableBodyCell>
       <TableBodyCell class="w-10">{gMQTT.account}</TableBodyCell>
       <TableBodyCell class="w-10">{gMQTT.qos}</TableBodyCell>
+{#if gMQTT.retained ==0}
+      No
+      <TableBodyCell class="w-10">{gMQTT.qos}</TableBodyCell>
+{:else if gMQTT.retained ==1}
+      Yes
+{/if}
+
       <TableBodyCell class="w-18">{gMQTT.keepAliveInterval}</TableBodyCell>
 {#if gMQTT.dataCompression == 0}
       <TableBodyCell class="w-18">None</TableBodyCell>
@@ -947,6 +968,20 @@
 </tr>
 
 
+
+<tr class="pt-4">
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Retained</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].retained} value={1} >Yes</Radio>
+  <Radio class="pb-2" bind:group={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].retained} value={0} >No</Radio>
+
+</div></td>
+</tr>
+
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Keep Alive Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].keepAliveInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
 
@@ -1082,6 +1117,18 @@
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">QoS</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewItem[new_item_index].qos} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
+</tr>
+
+<tr class="pt-4">
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Retained</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={NewItem[new_item_index].retained} value={1} >Yes</Radio>
+  <Radio class="pb-2" bind:group={NewItem[new_item_index].retained} value={0} >No</Radio>
+
+</div></td>
 </tr>
 
 

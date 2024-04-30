@@ -142,7 +142,9 @@
     account: "",
     password: "",
     qos: "",
-    keepAliveInterval: 60
+    keepAliveInterval: 60,
+    mqtt_id_nickname:"",
+    retained:0
 
   };
 
@@ -161,7 +163,8 @@
     BackupItem.password=changed_remote_service_data.config.service_remoteService.mqtt_api_param[index].password;
     BackupItem.qos=changed_remote_service_data.config.service_remoteService.mqtt_api_param[index].qos;
     BackupItem.keepAliveInterval=changed_remote_service_data.config.service_remoteService.mqtt_api_param[index].keepAliveInterval;    
-  
+    BackupItem.mqtt_id_nickname=changed_remote_service_data.config.service_remoteService.mqtt_api_param[index].mqtt_id_nickname;
+    BackupItem.retained=changed_remote_service_data.config.service_remoteService.mqtt_api_param[index].retained;  
 
   }
 
@@ -179,7 +182,8 @@
     changed_remote_service_data.config.service_remoteService.mqtt_api_param[index].password=BackupItem.password;
     changed_remote_service_data.config.service_remoteService.mqtt_api_param[index].qos=BackupItem.qos;
     changed_remote_service_data.config.service_remoteService.mqtt_api_param[index].keepAliveInterval=BackupItem.keepAliveInterval;    
-
+    changed_remote_service_data.config.service_remoteService.mqtt_api_param[index].mqtt_id_nickname=BackupItem.mqtt_id_nickname;
+    changed_remote_service_data.config.service_remoteService.mqtt_api_param[index].retained=BackupItem.retained;
   }
 
   function ModifyMQTT(index)
@@ -344,6 +348,7 @@
     <TableHeadCell>Client ID</TableHeadCell>
     <TableHeadCell>Account</TableHeadCell>
     <TableHeadCell>QoS</TableHeadCell>
+    <TableHeadCell>Retained</TableHeadCell>    
     <TableHeadCell class="w-18">Keep Alive Interval (sec)</TableHeadCell>
     <TableHeadCell class="w-18">ID Nick Name</TableHeadCell>
      </TableHead>
@@ -382,6 +387,12 @@
       <TableBodyCell class="w-10">{MQTTparam.clientId}</TableBodyCell>
       <TableBodyCell class="w-10">{MQTTparam.account}</TableBodyCell>
       <TableBodyCell class="w-10">{MQTTparam.qos}</TableBodyCell>
+{#if MQTTparam.retained == 0}
+      <TableBodyCell class="w-4 !p-1">No</TableBodyCell>
+{:else if MQTTparam.retained==1}
+      <TableBodyCell class="w-4 !p-1">Yes</TableBodyCell>
+{/if}
+
       <TableBodyCell class="w-18">{MQTTparam.keepAliveInterval}</TableBodyCell>
       <TableBodyCell class="w-18">{MQTTparam.mqtt_id_nickname}</TableBodyCell>
     </TableBodyRow>
@@ -528,6 +539,18 @@
 
 </tr>
 
+
+<tr class="pt-4">
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Retained</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_remote_service_data.config.service_remoteService.mqtt_api_param[modify_index].retained} value={1} >Yes</Radio>
+  <Radio class="pb-2" bind:group={changed_remote_service_data.config.service_remoteService.mqtt_api_param[modify_index].retained} value={0} >No</Radio>
+
+</div></td>
+</tr>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Keep Alive Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_remote_service_data.config.service_remoteService.mqtt_api_param[modify_index].keepAliveInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>

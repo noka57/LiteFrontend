@@ -778,10 +778,9 @@
       <TableBodyCell class="w-10">{gMQTT.account}</TableBodyCell>
       <TableBodyCell class="w-10">{gMQTT.qos}</TableBodyCell>
 {#if gMQTT.retained ==0}
-      No
-      <TableBodyCell class="w-10">{gMQTT.qos}</TableBodyCell>
+      <TableBodyCell class="w-10">No</TableBodyCell>
 {:else if gMQTT.retained ==1}
-      Yes
+      <TableBodyCell class="w-10">Yes</TableBodyCell>
 {/if}
 
       <TableBodyCell class="w-18">{gMQTT.keepAliveInterval}</TableBodyCell>
@@ -821,11 +820,14 @@
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
 </TableBodyRow>
 
 <tr class="pt-5">
+    <td></td>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>

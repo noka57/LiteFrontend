@@ -375,11 +375,10 @@
 
        </TableBodyCell>
                 <TableBodyCell class="!p-1">  </TableBodyCell>
-{#if MQTTparam.enable}
-    <TableBodyCell class="w-4">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-4">0</TableBodyCell>
-{/if}
+    <TableBodyCell class="w-4">
+<input type="checkbox"  bind:checked={MQTTparam.enable}>
+    </TableBodyCell>
+
       <TableBodyCell class="!p-1 w-4">1</TableBodyCell>
       <TableBodyCell class="w-18">{MQTTparam.brokerHost}</TableBodyCell>
       <TableBodyCell class="w-18">{MQTTparam.brokerPort}</TableBodyCell>

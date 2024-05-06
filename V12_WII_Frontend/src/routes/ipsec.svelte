@@ -597,7 +597,7 @@ let RemoteCAList = [
     function modalTriggerInitiatorConnGeneral(index){
       initiatorConnGeneralModal = true;
       initiatorConnGeneralCurrentIndex=index;
-
+      BackupICG.enable=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].enable;
       BackupICG.name=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].name;
       BackupICG.remote_host=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].remote_host;
       BackupICG.local_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].local_certificate;
@@ -608,6 +608,7 @@ let RemoteCAList = [
 
     function NoModifyICG(index){
       initiatorConnGeneralModal = false;
+      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].enable=BackupICG.enable;      
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].name=BackupICG.name;
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].remote_host=BackupICG.remote_host;
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].local_certificate=BackupICG.local_certificate;
@@ -623,6 +624,7 @@ let RemoteCAList = [
 
 
     function NewICG_Item_Invoker(index){
+      newICG_item[index].enable=true;
       newICG_item[index].name="";
       newICG_item[index].remote_host="";
       newICG_item[index].local_certificate="";
@@ -708,6 +710,7 @@ let RemoteCAList = [
       responderConnSubnetModal=true;
       responderConnSubnetCurrentIndex=index;
 
+      BackupRCS.enable=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].enable;
       BackupRCS.local_subnet=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].local_subnet;
       BackupRCS.remote_subnet=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].remote_subnet;
 
@@ -716,7 +719,7 @@ let RemoteCAList = [
     function NoModifyRCS(index){
       
       responderConnSubnetModal=false;
-
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].enable=BackupRCS.enable;
       changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].local_subnet=BackupRCS.local_subnet;
       changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].remote_subnet=BackupRCS.remote_subnet;
 
@@ -729,6 +732,7 @@ let RemoteCAList = [
 
     function NewRCS_Item_Invoker(index){
 
+      newRCS_item[index].enable=true;
       newRCS_item[index].local_subnet="";
       newRCS_item[index].remote_subnet=""; 
 
@@ -1269,7 +1273,7 @@ let RemoteCAList = [
       initiatorConnSubnetModal=true;
       initiatorConnSubnetCurrentIndex=index;
 
-
+      BackupICS.enable=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].enable;
       BackupICS.local_subnet=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].local_subnet;
       BackupICS.remote_subnet=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].remote_subnet;
 
@@ -1279,6 +1283,7 @@ let RemoteCAList = [
       
       initiatorConnSubnetModal=false;
 
+      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].enable=BackupICS.enable;
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].local_subnet=BackupICS.local_subnet;
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].remote_subnet=BackupICS.remote_subnet;
 
@@ -1291,6 +1296,7 @@ let RemoteCAList = [
 
     function NewICS_Item_Invoker(index){
 
+      newICS_item[Initiator_Conn_Selected][index].enable=true;
       newICS_item[Initiator_Conn_Selected][index].local_subnet="";
       newICS_item[Initiator_Conn_Selected][index].remote_subnet=""; 
 
@@ -1642,6 +1648,7 @@ async function getIpsecStatus() {
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
+    <TableHeadCell class="w-10">Enable</TableHeadCell>    
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-18">Name</TableHeadCell>
     <TableHeadCell class="w-18">Remote Host</TableHeadCell>
@@ -1673,9 +1680,14 @@ async function getIpsecStatus() {
 
        </TableBodyCell>
 
-   <TableHeadCell class="!p-4">
-    </TableHeadCell>
+   <TableBodyCell class="!p-4">
+    </TableBodyCell>
 
+
+                    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={initiatorConn.enable}>
+
+                    </TableBodyCell>
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{initiatorConn.name}</TableBodyCell>
                     <TableBodyCell class="w-18">{initiatorConn.remote_host}</TableBodyCell>
@@ -1710,6 +1722,7 @@ async function getIpsecStatus() {
       
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>      
       <TableBodyCell class="w-8"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -1744,6 +1757,16 @@ async function getIpsecStatus() {
 </Table>
 
 <Modal bind:open={newICG_Modal} size="lg" class="w-full" autoclose>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={newICG_item[newICG_index].enable}>
+  Enable
+</label>
+
+<p class="mt-10"></p>
+
 <table>
 
 <tr>
@@ -1845,11 +1868,20 @@ async function getIpsecStatus() {
     </tr>
 
   </table>
-
+</form>
 </Modal>
 
 
 <Modal bind:open={initiatorConnGeneralModal} size="lg" class="w-full" permanent={true}>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].enable}>
+  Enable
+</label>
+
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyICG(initiatorConnGeneralCurrentIndex)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -1950,6 +1982,8 @@ async function getIpsecStatus() {
     </tr>
 
   </table>
+</form>
+
 </Modal>
 
 
@@ -1987,6 +2021,7 @@ async function getIpsecStatus() {
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
+    <TableHeadCell class="w-10">Enable</TableHeadCell>    
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-18">Local Subnet</TableHeadCell>
     <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
@@ -2014,8 +2049,10 @@ async function getIpsecStatus() {
 
        </TableBodyCell>
 
-   <TableHeadCell class="!p-4"></TableHeadCell>
-
+   <TableBodyCell class="!p-4"></TableBodyCell>
+                    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={tunnelSubnet.enable}>
+                    </TableBodyCell>
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{tunnelSubnet.local_subnet}</TableBodyCell>
                     <TableBodyCell class="w-18">{tunnelSubnet.remote_subnet}</TableBodyCell>
@@ -2038,9 +2075,10 @@ async function getIpsecStatus() {
 
 
        </TableBodyCell>
-       <TableHeadCell class="!p-4"></TableHeadCell>
-       <TableHeadCell class="!p-4"></TableHeadCell>
+      <TableBodyCell class="!p-4"></TableBodyCell>
+         <TableBodyCell class="!p-4"></TableBodyCell>
                     <TableBodyCell class="w-8"></TableBodyCell>
+                    <TableBodyCell class="w-10"></TableBodyCell>                    
                     <TableBodyCell class="w-18"></TableBodyCell>
                     <TableBodyCell class="w-18"></TableBodyCell>
                     <TableBodyCell class="w-18"></TableBodyCell>
@@ -2073,6 +2111,14 @@ async function getIpsecStatus() {
 
 
 <Modal bind:open={initiatorConnSubnetModal} size="lg" class="w-full" permanent={true}>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[initiatorConnSubnetCurrentIndex].enable}>
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyICS(initiatorConnSubnetCurrentIndex)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -2116,16 +2162,22 @@ Remote Subnet
     </tr>
 
   </table>
-
+</form>
 
 </Modal>
 
 
 <Modal bind:open={newICS_Modal} size="md" class="w-full" autoclose>
 
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={newICS_item[Initiator_Conn_Selected][newICS_index].enable}>
+  Enable
+</label>
+<p class="mt-10"></p>
+
 <table>
-
-
 
 <tr>
       <td>
@@ -2273,6 +2325,8 @@ Remote Subnet
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
+
+    <TableHeadCell class="w-10">Enable</TableHeadCell>    
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-18">Local Subnet</TableHeadCell>
     <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
@@ -2295,8 +2349,11 @@ Remote Subnet
 
        </TableBodyCell>
 
-   <TableHeadCell class="!p-4"></TableHeadCell>
+       <TableBodyCell class="!p-4"></TableBodyCell>
+                    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={tunnelSubnet.enable}>
 
+                    </TableBodyCell>
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{tunnelSubnet.local_subnet}</TableBodyCell>
                     <TableBodyCell class="w-18">{tunnelSubnet.remote_subnet}</TableBodyCell>
@@ -2319,8 +2376,10 @@ Remote Subnet
 
 
        </TableBodyCell>
-       <TableHeadCell class="!p-4"></TableHeadCell>
-       <TableHeadCell class="!p-4"></TableHeadCell>
+       <TableBodyCell class="!p-4"></TableBodyCell>
+       <TableBodyCell class="!p-4"></TableBodyCell>
+                    <TableBodyCell class="w-10"></TableBodyCell>
+
                     <TableBodyCell class="w-8"></TableBodyCell>
                     <TableBodyCell class="w-18"></TableBodyCell>
                     <TableBodyCell class="w-18"></TableBodyCell>
@@ -2338,6 +2397,14 @@ Remote Subnet
 
 
 <Modal bind:open={responderConnSubnetModal} size="lg" class="w-full" permanent={true}>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[responderConnSubnetCurrentIndex].enable}>
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyRCS(responderConnSubnetCurrentIndex)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -2381,16 +2448,22 @@ Remote Subnet
     </tr>
 
   </table>
-
+</form>
 
 </Modal>
 
 
 <Modal bind:open={newRCS_Modal} size="md" class="w-full" autoclose>
 
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={newRCS_item[newRCS_index].enable}>
+  Enable
+</label>
+
 <table>
-
-
 
 <tr>
       <td>
@@ -2424,6 +2497,8 @@ Remote Subnet
     </tr>
 
 </table>
+
+</form>
 </Modal>
 
 

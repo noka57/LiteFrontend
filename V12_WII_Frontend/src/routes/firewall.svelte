@@ -328,7 +328,7 @@
 
   function NewIpFilter_Item_Invoker(index)
   {
-      newIPF_Item[index].enable=0;
+      newIPF_Item[index].enable=false;
       newIPF_Item[index].fromIf=0;
       newIPF_Item[index].toIf=0;
       newIPF_Item[index].srcIp=0;
@@ -393,7 +393,7 @@
 
   function NewMAF_Item_Invoker(index)
   {
-    newMAF_Item[index].enable=0;
+    newMAF_Item[index].enable=false;
     newMAF_Item[index].macAddr="";
 
     new_macfilter_index=index;
@@ -647,7 +647,7 @@
   <tr>
 <label>
 {#if getDataReady == 1}
-  <input type=checkbox checked={!!changed_firewall_data.config.networking_firewall_general.enable} on:click={FilterCheck}>
+  <input type=checkbox bind:checked={changed_firewall_data.config.networking_firewall_general.enable} >
 {/if}
   Enable Filter
 </label>
@@ -720,11 +720,13 @@
 
        </TableBodyCell>
 
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
+    <TableBodyCell class="!p-4">
+    </TableBodyCell>
 
 
-          <TableBodyCell class="w-10">{IPfilter.enable}</TableBodyCell>
+          <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={IPfilter.enable}>
+          </TableBodyCell>
           <TableBodyCell class="w-10">{index+1}</TableBodyCell>
 {#if IPfilter.fromIf == 0}
           <TableBodyCell class="w-10">Any</TableBodyCell>
@@ -775,7 +777,7 @@
 {/if}  
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -814,7 +816,7 @@
 
 
 <label>
-  <input class="center" type=checkbox checked={!!newIPF_Item[new_ipfilter_index].enable} on:click={NewIPF_Enable(new_ipfilter_index)}>
+  <input class="center" type=checkbox bind:checked={newIPF_Item[new_ipfilter_index].enable}>
   Enable
 </label>
 
@@ -910,7 +912,7 @@
 
 <label>
 {#if getDataReady == 1}
-  <input class="center" type=checkbox checked={!!changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].enable} on:click={IPF_Item_enableCheck(ipfilter_current_index)}>
+  <input class="center" type=checkbox bind:checked={changed_firewall_data.config.networking_firewall_ipFilter.list[ipfilter_current_index].enable}>
 {/if}
   Enable
 </label>
@@ -1069,7 +1071,9 @@
 
             </TableBodyCell>
 
-      <TableBodyCell class="w-10">{MACfilter.enable}</TableBodyCell>
+      <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={MACfilter.enable}>
+      </TableBodyCell>
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-36">{MACfilter.macAddr}</TableBodyCell>
     </TableBodyRow>
@@ -1093,7 +1097,7 @@
 
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -1122,7 +1126,7 @@
 
 
 <label>
-  <input class="center" type=checkbox checked={!!newMAF_Item[new_macfilter_index].enable} on:click={NewMAF_Enable(new_macfilter_index)}>
+  <input class="center" type=checkbox bind:checked={newMAF_Item[new_macfilter_index].enable}>
   Enable
 </label>
 
@@ -1157,7 +1161,7 @@
 
 <label>
 {#if getDataReady == 1}
-  <input class="center" type=checkbox checked={!!changed_firewall_data.config.networking_firewall_macFilter.list[macfilter_current_index].enable} on:click={MAF_Item_enableCheck(macfilter_current_index)}>
+  <input class="center" type=checkbox bind:checked={changed_firewall_data.config.networking_firewall_macFilter.list[macfilter_current_index].enable}>
 {/if}
   Enable
 </label>

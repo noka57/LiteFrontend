@@ -761,12 +761,11 @@
 
        </TableBodyCell>
                <TableBodyCell class="!p-1">  </TableBodyCell>
-{#if gMQTT.enable}
-    <TableBodyCell class="w-4">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-4">0</TableBodyCell>
-{/if}
-      <TableBodyCell class="!p-1 w-4">1</TableBodyCell>
+
+
+               <TableBodyCell class="w-4"><input type="checkbox"  bind:checked={gMQTT.enable}></TableBodyCell>
+
+      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{gMQTT.brokerHost}</TableBodyCell>
       <TableBodyCell class="w-18">{gMQTT.brokerPort}</TableBodyCell>
 {#if gMQTT.tls == 0}

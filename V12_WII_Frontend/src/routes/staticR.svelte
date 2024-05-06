@@ -358,9 +358,9 @@
 
 </script>
 
-<label>
+<label class="pl-2">
 {#if getDataReady == 1}
-  <input type=checkbox checked={changed_staticR_data.config.networking_staticRoute.enable} on:click={StaticRouteCheck}>
+  <input type=checkbox bind:checked={changed_staticR_data.config.networking_staticRoute.enable}>
 {/if}
   Enable Static Route
 </label>
@@ -405,10 +405,12 @@
 
        </TableBodyCell>
 
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
+    <TableBodyCell  class="!p-4">
+    </TableBodyCell>
 
-      <TableBodyCell class="w-10">{StaticRoute.enable}</TableBodyCell>
+      <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={StaticRoute.enable}>
+      </TableBodyCell>
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-10">{StaticRoute.dstIp}</TableBodyCell>
       <TableBodyCell class="w-10">{StaticRoute.netmask}</TableBodyCell>
@@ -442,7 +444,7 @@
 {/if} 
  </TableBodyCell>
 
-            <TableBodyCell class="!p-4">
+            <TableBodyCell class="!p-4 w-4">
 
             </TableBodyCell>
             <TableBodyCell class="!p-4 w-4">
@@ -481,7 +483,7 @@
 
 <label>
 {#if getDataReady == 1}
-  <input class="center" type=checkbox checked={!!changed_staticR_data.config.networking_staticRoute.list[static_route_current_index].enable} on:click={StaticR_Item_enableCheck(static_route_current_index)}>
+  <input class="center" type=checkbox bind:checked={changed_staticR_data.config.networking_staticRoute.list[static_route_current_index].enable}>
 {/if}
   Enable
 
@@ -559,7 +561,7 @@
   <form action="#">
 
 <label>
-  <input class="center" type=checkbox checked={!!newStaticR_Item[new_static_route_index].enable} on:click={NewStaticR_enable(new_static_route_index)}>
+  <input class="center" type=checkbox bind:checked={newStaticR_Item[new_static_route_index].enable} >
   Enable
 </label>
 

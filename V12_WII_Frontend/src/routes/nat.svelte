@@ -61,7 +61,6 @@
 
 
 
-
     function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
     {
       for (const key in obj1) 
@@ -559,7 +558,7 @@
 
    function NewVS_Item_Invoker(index)
    {
-      newVS_Item[index].enable=0;
+      newVS_Item[index].enable=false;
       newVS_Item[index].wanIf=0;
       newVS_Item[index].serverIp="";  
       newVS_Item[index].sourceIp="";
@@ -578,7 +577,7 @@
 
    function NewVC_Item_Invoker(index)
    {
-      newVC_Item[index].enable=0;
+      newVC_Item[index].enable=false;
       newVC_Item[index].globalIp="";
       newVC_Item[index].localIp="";
 
@@ -758,7 +757,7 @@
 <TabItem open title="Port Forwarding">
 <label>
 {#if getDataReady == 1}
-  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_virtualServer.enable} on:click={EnableVS}>
+  <input type=checkbox bind:checked={changed_nat_data.config.networking_nat_virtualServer.enable}>
 {/if}
   Enable Port Forwarding
 </label>
@@ -799,9 +798,14 @@
 
        </TableBodyCell>
 
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-      <TableBodyCell class="w-10">{VirtualServer.enable}</TableBodyCell>
+    <TableBodyCell class="!p-4">
+    </TableBodyCell>
+
+
+      <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={VirtualServer.enable}>
+
+      </TableBodyCell>
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
 {#if VirtualServer.wanIf==0}
       <TableBodyCell class="w-10">All</TableBodyCell>
@@ -852,7 +856,7 @@
 {/if}    
  </TableBodyCell>
   
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -891,7 +895,7 @@
   <form action="#">
 
 <label>
-  <input class="center" type=checkbox checked={!!newVS_Item[new_vs_index].enable} on:click={NewVS_ItemEnable(new_vs_index)}>
+  <input class="center" type=checkbox bind:checked={newVS_Item[new_vs_index].enable}>
   Enable
 </label>
 
@@ -980,7 +984,7 @@
 
 <label>
 {#if getDataReady == 1}
-  <input class="center" type=checkbox checked={!!changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].enable} on:click={VS_Item_enableCheck(virtualserver_current_index)}>
+  <input class="center" type=checkbox bind:checked={changed_nat_data.config.networking_nat_virtualServer.list[virtualserver_current_index].enable}>
 {/if}
   Enable
 </label>
@@ -1091,7 +1095,7 @@
 
 <label>
 {#if getDataReady == 1}
-  <input type=checkbox checked={!!changed_nat_data.config.networking_nat_dmz.enable} on:click={EnableDMZ}>
+  <input type=checkbox bind:checked={changed_nat_data.config.networking_nat_dmz.enable}>
 {/if}
   Enable DMZ
 </label>

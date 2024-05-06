@@ -1360,11 +1360,12 @@
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if ProxyEdgeData.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+<TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={ProxyEdgeData.enable}>
+
+</TableBodyCell>
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{ProxyEdgeData.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{ProxyEdgeData.modbusVariable}</TableBodyCell>
@@ -2104,11 +2105,13 @@
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if MonitorEdgeData.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+<TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={MonitorEdgeData.enable}>
+
+</TableBodyCell>
+
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{MonitorEdgeData.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{MonitorEdgeData.modbusVariable}</TableBodyCell>

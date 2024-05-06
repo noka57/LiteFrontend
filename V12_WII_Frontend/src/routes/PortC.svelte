@@ -726,11 +726,10 @@
 </svg>
       </button>
        </TableBodyCell>
-{#if ComItem.enable}
-      <TableBodyCell>1</TableBodyCell>
-{:else}
-      <TableBodyCell>0</TableBodyCell>
-{/if}
+<TableBodyCell>
+<input type="checkbox"  bind:checked={ComItem.enable}>
+</TableBodyCell>
+
       <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{ComItem.serialProfile}</TableBodyCell>
 {#if ComItem.interface == 0}

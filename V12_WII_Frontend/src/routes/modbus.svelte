@@ -3244,11 +3244,11 @@
 
 
        </TableBodyCell>
-{#if RTUMasterItem.enable}
-      <TableBodyCell>1</TableBodyCell>
-{:else}
-      <TableBodyCell>0</TableBodyCell>
-{/if}
+
+      <TableBodyCell>
+<input type="checkbox"  bind:checked={RTUMasterItem.enable}>
+      </TableBodyCell>
+
       <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{RTUMasterItem.aliasName}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{RTUMasterItem.serialProfile}</TableBodyCell>
@@ -3377,12 +3377,9 @@
 
 
        </TableBodyCell>
-{#if RTUSlaveItem.enable}
-      <TableBodyCell>1</TableBodyCell>
-{:else}
-
-      <TableBodyCell>0</TableBodyCell>
-{/if}
+      <TableBodyCell>
+<input type="checkbox"  bind:checked={RTUSlaveItem.enable}>
+      </TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{RTUSlaveItem.aliasName}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{RTUSlaveItem.serialProfile}</TableBodyCell>
@@ -3530,11 +3527,11 @@
 
        </TableBodyCell>
        <TableBodyCell class="!p-1"></TableBodyCell>
-{#if TCPMasterItem.enable}
-      <TableBodyCell>1</TableBodyCell>
-{:else}
-      <TableBodyCell>0</TableBodyCell>
-{/if}
+
+    <TableBodyCell>
+<input type="checkbox"  bind:checked={TCPMasterItem.enable}>
+    </TableBodyCell>
+
       <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{TCPMasterItem.lanProfile}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{TCPMasterItem.aliasName}</TableBodyCell>
@@ -3808,11 +3805,13 @@
        </TableBodyCell>
        <TableBodyCell class="!p-1">            
 </TableBodyCell>
-{#if TCPSlaveItem.enable}
-      <TableBodyCell>1</TableBodyCell>
-{:else}
-      <TableBodyCell>0</TableBodyCell>
-{/if}
+
+
+    <TableBodyCell>
+<input type="checkbox"  bind:checked={TCPSlaveItem.enable}>
+    </TableBodyCell>
+
+
       <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{TCPSlaveItem.lanProfile}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{TCPSlaveItem.aliasName}</TableBodyCell>
@@ -4084,11 +4083,13 @@
 
        </TableBodyCell>
         <TableBodyCell class="!p-1">        </TableBodyCell>
-{#if VariableMasterItem.enable}
-       <TableBodyCell class='w-4'>1</TableBodyCell>
-{:else}
-       <TableBodyCell class='w-4'>0</TableBodyCell>
-{/if}
+
+
+    <TableBodyCell>
+<input type="checkbox"  bind:checked={VariableMasterItem.enable}>
+    </TableBodyCell>
+
+
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
   <TableBodyCell class="!p-1 w-18">{VariableMasterItem.variableName}</TableBodyCell>
   <TableBodyCell class="w-10">{VariableMasterItem.profile}</TableBodyCell>
@@ -4541,7 +4542,7 @@
 
 
 {#if getDataReady == 1}
-{#each changed_modbus_data.config.fieldManagement_modbus_variable.slave as TCPVariableSlaveItem, index}
+{#each changed_modbus_data.config.fieldManagement_modbus_variable.slave as VariableSlaveItem, index}
    
 
  <TableBodyRow>
@@ -4557,40 +4558,38 @@
        </TableBodyCell>
         <TableBodyCell class="!p-1">            </TableBodyCell>
 
-{#if TCPVariableSlaveItem.enable}
+    <TableBodyCell>
+<input type="checkbox"  bind:checked={VariableSlaveItem.enable}>
+    </TableBodyCell>
 
-       <TableBodyCell>1</TableBodyCell>
-{:else}
 
-       <TableBodyCell>0</TableBodyCell>
-{/if}
       <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
-  <TableBodyCell class="w-18">{TCPVariableSlaveItem.variableName}</TableBodyCell>
-  <TableBodyCell class="w-10">{TCPVariableSlaveItem.profile}</TableBodyCell>
-  <TableBodyCell class="w-18">{TCPVariableSlaveItem.slaveId}</TableBodyCell>
+  <TableBodyCell class="w-18">{VariableSlaveItem.variableName}</TableBodyCell>
+  <TableBodyCell class="w-10">{VariableSlaveItem.profile}</TableBodyCell>
+  <TableBodyCell class="w-18">{VariableSlaveItem.slaveId}</TableBodyCell>
 
-{#if TCPVariableSlaveItem.pointType == 0}
+{#if VariableSlaveItem.pointType == 0}
     <TableBodyCell class="w-10">Coil</TableBodyCell>
-{:else if TCPVariableSlaveItem.pointType == 1}
+{:else if VariableSlaveItem.pointType == 1}
     <TableBodyCell class="w-10">Discrete Input</TableBodyCell>
-{:else if TCPVariableSlaveItem.pointType == 2}
+{:else if VariableSlaveItem.pointType == 2}
     <TableBodyCell class="w-10">Input Registers</TableBodyCell>
-{:else if TCPVariableSlaveItem.pointType == 3}
+{:else if VariableSlaveItem.pointType == 3}
     <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
 {:else}
   <TableBodyCell class="w-10"></TableBodyCell>
 {/if}
 
 
-  <TableBodyCell class="w-18">{TCPVariableSlaveItem.address}</TableBodyCell>
-  <TableBodyCell class="w-10">{TCPVariableSlaveItem.quantity}</TableBodyCell>
-{#if TCPVariableSlaveItem.byteOrder==0} 
+  <TableBodyCell class="w-18">{VariableSlaveItem.address}</TableBodyCell>
+  <TableBodyCell class="w-10">{VariableSlaveItem.quantity}</TableBodyCell>
+{#if VariableSlaveItem.byteOrder==0} 
     <TableBodyCell class="w-18">Big Endian</TableBodyCell>
-{:else if TCPVariableSlaveItem.byteOrder==1}   
+{:else if VariableSlaveItem.byteOrder==1}   
         <TableBodyCell class="w-18">Little Endian</TableBodyCell>
-{:else if TCPVariableSlaveItem.byteOrder==2}
+{:else if VariableSlaveItem.byteOrder==2}
     <TableBodyCell class="w-18">Big Endian Byte Swap</TableBodyCell>
-{:else if TCPVariableSlaveItem.byteOrder==3}
+{:else if VariableSlaveItem.byteOrder==3}
         <TableBodyCell class="w-18">Little Endian Byte Swap</TableBodyCell>
 {:else}
     <TableBodyCell class="w-18"></TableBodyCell>
@@ -4979,12 +4978,10 @@
 
        </TableBodyCell>
         <TableBodyCell class="!p-1">            </TableBodyCell>
+<TableBodyCell>
+<input type="checkbox"  bind:checked={Tcp2RtuItem.enable}>
+</TableBodyCell>
 
-{#if Tcp2RtuItem.enable}
-      <TableBodyCell>1</TableBodyCell>
-{:else}
-      <TableBodyCell>0</TableBodyCell>
-{/if}
 
      <TableBodyCell class="!p-6 w-4">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{Tcp2RtuItem.aliasName}</TableBodyCell>
@@ -5290,11 +5287,13 @@
        </TableBodyCell>
         <TableBodyCell class="!p-1">            
 </TableBodyCell>
-{#if Rtu2TcpItem.enable}
-      <TableBodyCell>1</TableBodyCell>
-{:else}
-      <TableBodyCell>0</TableBodyCell>
-{/if}
+
+
+<TableBodyCell>
+<input type="checkbox"  bind:checked={Rtu2TcpItem.enable}>
+</TableBodyCell>
+
+
      <TableBodyCell class="!p-6 w-4">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.aliasName}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{Rtu2TcpItem.rtuProfileSlave}</TableBodyCell>
@@ -5594,11 +5593,12 @@
        </TableBodyCell>
         <TableBodyCell class="!p-1">            
 </TableBodyCell>
-{#if Rtu2RtuItem.enable}
-      <TableBodyCell>1</TableBodyCell>
-{:else}
-      <TableBodyCell>0</TableBodyCell>
-{/if}
+
+<TableBodyCell>
+<input type="checkbox"  bind:checked={Rtu2RtuItem.enable}>
+</TableBodyCell>
+
+
      <TableBodyCell class="!p-6 w-4">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{Rtu2RtuItem.aliasName}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{Rtu2RtuItem.rtuProfileSlave}</TableBodyCell>
@@ -5897,12 +5897,13 @@
        </TableBodyCell>
         <TableBodyCell class="!p-1">            
 </TableBodyCell>
-{#if Tcp2TcpItem.enable}
-      <TableBodyCell>1</TableBodyCell>
 
-{:else}
-      <TableBodyCell>0</TableBodyCell>
-{/if}
+
+<TableBodyCell>
+<input type="checkbox"  bind:checked={Tcp2TcpItem.enable}>
+</TableBodyCell>
+
+
      <TableBodyCell class="!p-6 w-4">1</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{Tcp2TcpItem.aliasName}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{Tcp2TcpItem.tcpProfileSlave}</TableBodyCell>
@@ -6175,22 +6176,19 @@
    <TableBody>
 
    <TableBodyRow>
-      <TableBodyCell class="!p-6 w-10"> Line Current Phase A</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> Valid</TableBodyCell>
+
 
    </TableBodyRow>
 
 
    <TableBodyRow>
-      <TableBodyCell class="!p-6 w-10"> RTU-DI Status</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> Timeout</TableBodyCell>
+
 
    </TableBodyRow>
 
 
     <TableBodyRow>
-      <TableBodyCell class="!p-6 w-10"> TCP-Line Current Phase B</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"> Error</TableBodyCell>
+   
 
    </TableBodyRow>
 

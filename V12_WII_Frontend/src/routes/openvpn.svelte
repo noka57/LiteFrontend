@@ -178,7 +178,7 @@
 
   let ServerConn_NewClientAccountPasswordModal=false;
   let server_conn_new_client_account_password_index;
-  let ServerConn_BackupClientAccountPassword={"account": "",
+  let ServerConn_BackupClientAccountPassword={"enable":true, "account": "",
       "password": ""};
   let ServerConn_NewClientAccountPassword=[
       {
@@ -236,6 +236,7 @@
 
 
   let BackupClientConn={
+    "enable":true,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -472,7 +473,7 @@
   let Advanced_Client_Index_Selected="none";
 
 
-  let BackupServerPFW={"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2};
+  let BackupServerPFW={"enable":true,"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2};
   let NewServerPFW=[
     {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
     {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
@@ -499,6 +500,8 @@
 
       BackupServerPFW.server_pfw_redirectedPort=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_redirectedPort;
 
+      BackupServerPFW.enable=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].enable;
+
       Modify_PFW_Server_Index=index;
       Modify_PFW_Server_Modal=true;
   }
@@ -508,7 +511,9 @@
       changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_incomingProtocol=BackupServerPFW.server_pfw_incomingProtocol;
       changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_incomingDport=BackupServerPFW.server_pfw_incomingDport;
 
-      changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_redirectedPort=        BackupServerPFW.server_pfw_redirectedPort;
+      changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_redirectedPort=BackupServerPFW.server_pfw_redirectedPort;
+
+      changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].enable=BackupServerPFW.enable;
 
       Modify_PFW_Server_Modal=false;
   }
@@ -520,6 +525,7 @@
 
   function NewServer_PFW_Item_Invoker(index)
   {
+      NewServerPFW[index].enable=true;
       NewServerPFW[index].server_pfw_incomingProtocol=0;
       NewServerPFW[index].server_pfw_incomingDport='';
       NewServerPFW[index].server_pfw_redirectedPort='';
@@ -546,7 +552,7 @@
 
   let NewCCD_Modal=false;
   let NewCCD_index;
-  let BackupCCD={"ccd_client_certificate_common_name": "",
+  let BackupCCD={"enable":1,"ccd_client_certificate_common_name": "",
       "ccd_client_command": ""};
   let NewCCD_Item=[
       {
@@ -585,6 +591,7 @@
   let ModifyRemoteNetworkAccess_Modal;
   let ModifyRemoteNetworkAccess_Index;
   let BackupRemoteNetworkAccess={
+      "enable":1,
       "remoteSubnet": "",
       "comment": ""
   };
@@ -1112,6 +1119,7 @@
       BackupClient_PFW.client_pfw_incomingDport=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_incomingDport;
       BackupClient_PFW.client_pfw_redirectedPort=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_redirectedPort;
 
+     BackupClient_PFW.enable=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].enable;
 
       ModifyClient_PFW_Index=index;
       ModifyClient_PFW_Modal=true;
@@ -1123,6 +1131,8 @@
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_incomingProtocol=BackupClient_PFW.client_pfw_incomingProtocol;
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_incomingDport=BackupClient_PFW.client_pfw_incomingDport;
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_redirectedPort=BackupClient_PFW.client_pfw_redirectedPort;
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].enable=BackupClient_PFW.enable;
+
       ModifyClient_PFW_Modal=false;
   }
 
@@ -1650,6 +1660,7 @@
 
     function NewClientPFW_Item_Invoker(index)
     {
+      NewClientPFW_Item[Advanced_Client_Index_Selected][index].enable=true;
       NewClientPFW_Item[Advanced_Client_Index_Selected][index].client_pfw_incomingProtocol=0;
       NewClientPFW_Item[Advanced_Client_Index_Selected][index].client_pfw_incomingDport='';
       NewClientPFW_Item[Advanced_Client_Index_Selected][index].client_pfw_redirectedPort='';
@@ -2303,6 +2314,10 @@
       BackupRemoteNetworkAccess.remoteSubnet=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].remoteSubnet;
 
       BackupRemoteNetworkAccess.comment=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].comment;
+
+
+      BackupRemoteNetworkAccess.enable=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].enable;
+
       ModifyRemoteNetworkAccess_Index=index
       ModifyRemoteNetworkAccess_Modal=true;
       isValidRemoteSubnet=true;
@@ -2315,6 +2330,10 @@
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].remoteSubnet=BackupRemoteNetworkAccess.remoteSubnet;
 
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].comment=BackupRemoteNetworkAccess.comment;
+
+
+
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].enable=BackupRemoteNetworkAccess.enable;
 
     }
 
@@ -2330,6 +2349,7 @@
 
     function NewRemoteNetworkAccess_Item_Invoker(index)
     {
+      NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index].enable=true;
       NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index].remoteSubnet="";
       NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index].comment="";
 
@@ -2366,6 +2386,8 @@
 
       BackupFailOver.remote_protocol=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_protocol;
 
+      BackupFailOver.enable=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].enable;
+
       ModifyFailOver_Index=index;
       ModifyFailOver_Modal=true;
       isValidRemotePort=true;
@@ -2380,6 +2402,9 @@
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_port=BackupFailOver.remote_port;
 
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].remote_protocol=BackupFailOver.remote_protocol;
+
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].enable=BackupFailOver.enable;
+
     }
 
     function ModifyFailover(index)
@@ -2395,6 +2420,7 @@
 
     function NewFailover_Item_Invoker(index)
     {
+        NewFailOver_Item[Advanced_Client_Index_Selected][index].enable=true;
         NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_host="";
         NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_port=0;
         NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_protocol=0;
@@ -2423,6 +2449,7 @@
 
     function modalTriggerCCD(index)
     {
+      BackupCCD.enable=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].enable;
       BackupCCD.ccd_client_certificate_common_name=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_certificate_common_name;
       
       BackupCCD.ccd_client_command=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_command;
@@ -2437,7 +2464,7 @@
       changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_certificate_common_name=BackupCCD.ccd_client_certificate_common_name;
       
       changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_command=BackupCCD.ccd_client_command;
-
+      changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].enable=BackupCCD.enable;
     }
 
     function ModifyCCD(index)
@@ -2447,6 +2474,7 @@
 
     function NewCCD_Item_Invoker(index)
     {
+      NewCCD_Item[index].enable=true;
       NewCCD_Item[index].ccd_client_certificate_common_name="";
       NewCCD_Item[index].ccd_client_command="";
 
@@ -2467,6 +2495,7 @@
     {
       ClientConnModal = true;
       ClientConnCurrentIndex=index;
+      BackupClientConn.enable=changed_openvpn_data.config.vpn_openvpn_client_connection[index].enable;      
       BackupClientConn.name=changed_openvpn_data.config.vpn_openvpn_client_connection[index].name;
       BackupClientConn.remote_host=changed_openvpn_data.config.vpn_openvpn_client_connection[index].remote_host;
       BackupClientConn.remote_port=changed_openvpn_data.config.vpn_openvpn_client_connection[index].remote_port;
@@ -2484,6 +2513,7 @@
     function NoModifyClientConn(index)
     {
       ClientConnModal = false;
+      changed_openvpn_data.config.vpn_openvpn_client_connection[index].enable=BackupClientConn.enable;
       changed_openvpn_data.config.vpn_openvpn_client_connection[index].name=BackupClientConn.name;
       changed_openvpn_data.config.vpn_openvpn_client_connection[index].remote_host=BackupClientConn.remote_host;
       changed_openvpn_data.config.vpn_openvpn_client_connection[index].remote_port=BackupClientConn.remote_port;
@@ -2508,6 +2538,7 @@
 
     function NewClientConn_Item_Invoker(index)
     {
+      NewClientConn[index].enable=true;
       NewClientConn[index].name="";
       NewClientConn[index].remote_host="";
       NewClientConn[index].remote_port=0;
@@ -2549,6 +2580,8 @@
       ServerConn_BackupClientAccountPassword.account=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].account;
       ServerConn_BackupClientAccountPassword.password=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].password;
 
+      ServerConn_BackupClientAccountPassword.enable=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].enable;
+
     }
 
 
@@ -2558,6 +2591,8 @@
       ServerConn_ClientAccountPasswordModal=false;
       changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].account=ServerConn_BackupClientAccountPassword.account;
       changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].password=ServerConn_BackupClientAccountPassword.password;
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].enable=ServerConn_BackupClientAccountPassword.enable;
+
     }
 
     function Server_ModifyClientAccountPassword(index)
@@ -2571,12 +2606,14 @@
         ClientCNameModal=true;
         ClientCNameIndex=index;
         BackupCName.cname=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].cname;
+        BackupCName.enable=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].enable;
     }
 
     function NoModifyCName(index)
     {
       ClientCNameModal=false;
       changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].cname=BackupCName.cname;
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].enable=BackupCName.enable;
     }
 
     function ModifyCName(index)
@@ -2587,7 +2624,7 @@
 
     function NewClientCName_Item_Invoker(index)
     {
-      NewClientCName[index].enable=1;
+      NewClientCName[index].enable=true;
       NewClientCName[index].cname="";
       new_client_cname_index=index;
       NewClientCNameModal=true;
@@ -2602,6 +2639,7 @@
 
     function Server_NewClientAccountPassword_Item_Invoker(index)
     {
+      ServerConn_NewClientAccountPassword[index].enable=true;
       ServerConn_NewClientAccountPassword[index].account="";
       ServerConn_NewClientAccountPassword[index].password="";
 
@@ -2780,6 +2818,16 @@
                       openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
 
                   }
+
+                  if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].enable != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].enable)
+                  {
+                      saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].enable=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].enable;
+                      let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Remote Network Access List No." + (i+1) +" has changed: enable is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].enable;
+
+                      openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+
+                  }
+
               }
 
               for (let i=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length;i< changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length;i++)
@@ -2813,6 +2861,17 @@
                     openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
 
                 }
+
+
+                if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].enable != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].enable)
+                {
+                    saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].enable=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].enable;
+                    let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Remote Network Access List No." + (i+1) +" has changed: enable is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].enable;
+
+                    openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+
+                }
+
               }
             }
 
@@ -2872,7 +2931,7 @@
                       openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
                   }
 
-                  if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_port != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_protocol)
+                  if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_protocol != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_protocol)
                   {
                       saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_protocol= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_protocol;
 
@@ -2880,6 +2939,17 @@
 
                       openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
                   }
+
+
+                  if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].enable != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].enable)
+                  {
+                      saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].enable= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].enable;
+
+                      let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Failover List No." + (i+1) +" has changed: enable is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].enable;
+
+                      openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+                  }
+
               }
 
               for (let i=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;i< changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;i++)
@@ -2913,7 +2983,7 @@
    
               }
 
-              if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_port != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_protocol)
+              if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_protocol != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_protocol)
               {
                   saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_protocol= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].remote_protocol;
 
@@ -2923,6 +2993,16 @@
   
               }
               
+              if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].enable != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].enable)
+              {
+                  saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].enable= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].enable;
+
+                  let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Failover List No." + (i+1) +" has changed: enable is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].enable;
+
+                  openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+  
+              }
+
             }
           }
 
@@ -2988,6 +3068,16 @@
                 openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
               }
 
+              if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable)
+              {
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable;
+
+                let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Port Forwarding List No." + (i+1) +" has changed: enable is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable;
+
+                openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
+              }
+
+
             }
 
             for (let i=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length;i< changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length;i++)
@@ -3027,6 +3117,16 @@
 
                 openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
               }
+
+              if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable)
+              {
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable;
+
+                let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Port Forwarding List No." + (i+1) +" has changed: enable is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable;
+
+                openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
+              }
+
 
             }
           }
@@ -3122,6 +3222,15 @@
           }
 
 
+
+          if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable != openvpn_data.config.vpn_openvpn_client_connection[i].enable)
+          {
+            let changedstr="Client No. "+(i+1)+" enable is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable;
+            openvpn_client_conn_changedValues=[...openvpn_client_conn_changedValues, changedstr];
+            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable=changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable;
+          }
+
+
           if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].auth != openvpn_data.config.vpn_openvpn_client_connection[i].auth)
           {
             let changedstr="Client No. "+(i+1)+" Authentication is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].auth;
@@ -3186,6 +3295,12 @@
             if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].local_certificate != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].local_certificate)
             {
                 saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].local_certificate=changed_openvpn_data.config.vpn_openvpn_client_connection[i].local_certificate;
+            }
+
+
+            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable)
+            {
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable=changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable;
             }
 
 
@@ -3436,6 +3551,19 @@
           saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].ccd_client_command=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].ccd_client_command;
 
         }
+
+
+        if (changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].enable !=
+          openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].enable)
+        {
+           let changedstr="CCD List No. "+(i+1)+" item is changed: enable has changed to "+changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].enable;
+
+          openvpn_server_advanced_ccd_changedValues=[...openvpn_server_advanced_ccd_changedValues, changedstr];
+
+          saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].enable=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].enable;
+
+        }
+
       }
 
       saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd))
@@ -3570,6 +3698,17 @@
           openvpn_server_advanced_pfw_changedValues=[...openvpn_server_advanced_pfw_changedValues, changedstr];
 
           saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].server_pfw_redirectedPort=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].server_pfw_redirectedPort;
+
+        }
+
+        if (changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].enable !=
+          openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].enable)
+        {
+           let changedstr="PortForwarding List No. "+(i+1)+" item is changed: enable has changed to "+changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].enable;
+
+          openvpn_server_advanced_pfw_changedValues=[...openvpn_server_advanced_pfw_changedValues, changedstr];
+
+          saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].enable=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].enable;
 
         }
       }
@@ -3776,7 +3915,9 @@
       {
         for(let i=0;i<openvpn_data.config.vpn_openvpn_client_connection.length;i++)
         {
-            changed_openvpn_data.config.vpn_openvpn_client_connection[i].name=openvpn_data.config.vpn_openvpn_client_connection[i].name
+            changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable=openvpn_data.config.vpn_openvpn_client_connection[i].enable;
+           
+            changed_openvpn_data.config.vpn_openvpn_client_connection[i].name=openvpn_data.config.vpn_openvpn_client_connection[i].name;
             changed_openvpn_data.config.vpn_openvpn_client_connection[i].remote_host=openvpn_data.config.vpn_openvpn_client_connection[i].remote_host; 
             changed_openvpn_data.config.vpn_openvpn_client_connection[i].remote_port=openvpn_data.config.vpn_openvpn_client_connection[i].remote_port;
             changed_openvpn_data.config.vpn_openvpn_client_connection[i].remote_protocol=openvpn_data.config.vpn_openvpn_client_connection[i].remote_protocol;
@@ -3817,6 +3958,9 @@
 
             changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment=openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].comment;
 
+
+            changed_openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].enable=openvpn_data.config.vpn_openvpn_client_connection[i].remoteNetworkAccess[j].enable;
+
           }        
 
         }
@@ -3833,6 +3977,9 @@
             changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port=openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_port;
 
             changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol=openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].remote_protocol;
+
+
+            changed_openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].enable=openvpn_data.config.vpn_openvpn_client_connection[i].failOver[j].enable;
 
           }        
 
@@ -3962,6 +4109,7 @@
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
+    <TableHeadCell>Enable</TableHeadCell>    
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-18">VPN Name</TableHeadCell>
     <TableHeadCell class="w-18">Remote Host</TableHeadCell>
@@ -3995,8 +4143,15 @@
 
        </TableBodyCell>
 
-   <TableHeadCell class="!p-4">
-    </TableHeadCell>
+   <TableBodyCell class="!p-4">
+    </TableBodyCell>
+
+
+
+      <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={clientConn.enable}>
+
+      </TableBodyCell>
 
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{clientConn.name}</TableBodyCell>
@@ -4083,6 +4238,13 @@
 
 
 <Modal bind:open={ClientConnModal} size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+  <input class="center" type=checkbox bind:checked={changed_openvpn_data.config.vpn_openvpn_client_connection[ClientConnCurrentIndex].enable}>
+  Enable
+</label>
+
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyClientConn(ClientConnCurrentIndex)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -4243,11 +4405,21 @@
     </tr>
 
   </table>
+  </form>
 </Modal>
 
 
 
 <Modal bind:open={NewClientConnModal} size="lg" class="w-full" permanent={true}>
+  <form action="#">
+
+<label>
+{#if getDataReady == 1}
+  <input class="center" type=checkbox bind:checked={NewClientConn[new_client_conn_index].enable}>
+{/if}
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddClientConn(new_client_conn_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -4405,6 +4577,7 @@
     </tr>
 
   </table>
+  </form>
 </Modal>
 
 
@@ -4525,6 +4698,7 @@
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
+    <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-18">
 {#if changed_openvpn_data.config.vpn_openvpn_server_connection.auth==0}
@@ -4561,8 +4735,15 @@
 
        </TableBodyCell>
 
-   <TableHeadCell class="!p-4">
-    </TableHeadCell>
+   <TableBodyCell class="!p-4">
+    </TableBodyCell>
+
+
+
+      <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={clientCN.enable}>
+
+      </TableBodyCell>
 
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{clientCN.cname}</TableBodyCell>
@@ -4621,8 +4802,13 @@
 
        </TableBodyCell>
 
-   <TableHeadCell class="!p-4">
-    </TableHeadCell>
+   <TableBodyCell class="!p-4">
+    </TableBodyCell>
+
+          <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={client_account_password.enable}>
+
+      </TableBodyCell>
 
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{client_account_password.account}</TableBodyCell>
@@ -4670,6 +4856,14 @@
 
 
 <Modal bind:open={ClientCNameModal} size="md" class="w-full" permanent={true}>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[ClientCNameIndex].enable}>
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyCName(ClientCNameIndex)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -4681,7 +4875,7 @@
       <p class="pl-1 pt-4 text-lg font-light text-right w-64">
     Certificate Common Name
       </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[ClientCNameIndex]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[ClientCNameIndex].cname} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -4699,6 +4893,7 @@
     </tr>
 
 </table>
+</form>
 </Modal>
 
 
@@ -4743,6 +4938,13 @@
 
 <Modal bind:open={NewClientCNameModal} size="lg" class="w-full" autoclose>
 
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={NewClientCName[new_client_cname_index].enable}>
+  Enable
+</label>
+
 <table>
 <tr>
       <td>
@@ -4767,10 +4969,19 @@
 
 
 </table>
+</form>
 </Modal>
 
 
 <Modal bind:open={ServerConn_NewClientAccountPasswordModal} size="lg" class="w-full" autoclose>
+
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={ServerConn_NewClientAccountPassword[server_conn_new_client_account_password_index].enable}>
+  Enable
+</label>
 
 <table>
 
@@ -4805,6 +5016,7 @@
 
 
 </table>
+</form>
 </Modal>
 
 </AccordionItem>
@@ -4855,6 +5067,7 @@
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
+        <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-96">Client Certificate Common Name</TableHeadCell>
     <TableHeadCell class="w-36">Command</TableHeadCell>
@@ -4883,6 +5096,11 @@
    <TableBodyCell class="!p-4">
     </TableBodyCell>
 
+
+                    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={ccd.enable}>
+                    </TableBodyCell>
+
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-96">{ccd.ccd_client_certificate_common_name}</TableBodyCell>
                     <TableBodyCell class="w-36">{ccd.ccd_client_command}</TableBodyCell>
@@ -4910,6 +5128,7 @@
       
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-8"></TableBodyCell>
       <TableBodyCell class="w-96"></TableBodyCell>
       <TableBodyCell class="w-36"></TableBodyCell>
@@ -5029,6 +5248,8 @@
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
+
+  <TableHeadCell>Enable</TableHeadCell>    
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-36">Incoming Protocol</TableHeadCell>
     <TableHeadCell class="w-48">Incoming Destination Port</TableHeadCell>
@@ -5056,6 +5277,11 @@
    <TableBodyCell class="!p-4">
     </TableBodyCell>
 
+                    <TableBodyCell class="w-10">
+
+<input type="checkbox"  bind:checked={serverPFW.enable}>
+
+                    </TableBodyCell>
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
 {#if serverPFW.server_pfw_incomingProtocol == 0}
                     <TableBodyCell class="w-36">UDP</TableBodyCell>
@@ -5089,6 +5315,7 @@
       
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-8"></TableBodyCell>
       <TableBodyCell class="w-36"></TableBodyCell>
       <TableBodyCell class="w-48"></TableBodyCell>                    
@@ -5127,6 +5354,12 @@
 
 
 <Modal bind:open={Modify_PFW_Server_Modal} size="md" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+  <input class="center" type=checkbox bind:checked={changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[Modify_PFW_Server_Index].enable}>
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyServerPortFW(Modify_PFW_Server_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -5177,12 +5410,19 @@
     </tr>
 
 </table>
+</form>
 </Modal>
 
 
 
 <Modal bind:open={New_PFW_Server_Modal} size="md" class="w-full" autoclose>
+  <form action="#">
+<label>
+  <input class="center" type=checkbox bind:checked={NewServerPFW[New_PFW_Server_Index].enable}>
+  Enable
+</label>
 
+<p class="mt-10"></p>
 <table>
 
 <tr>
@@ -5228,12 +5468,23 @@
 
 
 </table>
+
+</form>
 </Modal>
 
 
 
 
 <Modal bind:open={Modify_CCD_Modal} size="lg" class="w-full" permanent={true}>
+
+  <form action="#">
+<label>
+  <input class="center" type=checkbox bind:checked={changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[Modify_CCD_Index].enable}>
+  Enable
+</label>
+
+<p class="mt-10"></p>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyCCD(Modify_CCD_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -5274,11 +5525,22 @@
     </tr>
 
 </table>
+</form>
 </Modal>
 
 
 
 <Modal bind:open={NewCCD_Modal} size="lg" class="w-full" autoclose>
+
+
+
+  <form action="#">
+<label>
+  <input class="center" type=checkbox bind:checked={NewCCD_Item[NewCCD_index].enable}>
+  Enable
+</label>
+
+<p class="mt-10"></p>
 
 <table>
 
@@ -5317,6 +5579,7 @@
 
 
 </table>
+</form>
 </Modal>
 
 
@@ -5428,6 +5691,8 @@
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
+
+    <TableHeadCell>Enable</TableHeadCell>    
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
     <TableHeadCell class="w-18">Comment</TableHeadCell>
@@ -5456,8 +5721,14 @@
 
        </TableBodyCell>
 
-   <TableHeadCell class="!p-4">
-    </TableHeadCell>
+   <TableBodyCell class="!p-4">
+    </TableBodyCell>
+
+
+                    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={RemoteNetworkAccess.enable}>
+
+                    </TableBodyCell>
 
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{RemoteNetworkAccess.remoteSubnet}</TableBodyCell>
@@ -5486,6 +5757,7 @@
       
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-8"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -5520,6 +5792,14 @@
 
 
 <Modal bind:open={ModifyRemoteNetworkAccess_Modal} size="lg" class="w-full" permanent={true}>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[ModifyRemoteNetworkAccess_Index].enable}>
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyRemoteNetworkAccess(ModifyRemoteNetworkAccess_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -5578,9 +5858,19 @@
     </tr>
 
   </table>
+
+</form>  
 </Modal>
 
 <Modal bind:open={NewRemoteNetworkAccess_Modal} size="lg" class="w-full" permanent={true}>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][NewRemoteNetworkAccess_index].enable}>
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddRemoteNetworkAccess(NewRemoteNetworkAccess_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -5635,7 +5925,7 @@
 
   </table>
 
-
+</form>
 </Modal>
  </AccordionItem>
 
@@ -5654,6 +5944,8 @@
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
+
+    <TableHeadCell >Enable</TableHeadCell>
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-18">Remote Host</TableHeadCell>
     <TableHeadCell class="w-18">Remote Port</TableHeadCell>
@@ -5684,8 +5976,14 @@
 
        </TableBodyCell>
 
-   <TableHeadCell class="!p-4">
-    </TableHeadCell>
+   <TableBodyCell class="!p-4">
+    </TableBodyCell>
+
+
+
+   <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={FailOver.enable}>   
+    </TableBodyCell>
 
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{FailOver.remote_host}</TableBodyCell>
@@ -5718,6 +6016,7 @@
       
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>      
       <TableBodyCell class="w-8"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -5752,6 +6051,14 @@
 
 
 <Modal bind:open={ModifyFailOver_Modal} size="lg" class="w-full" permanent={true}>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[ModifyFailOver_Index].enable}>
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyFailover(ModifyFailOver_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -5820,10 +6127,22 @@
     </tr>
 
   </table>
+
+</form>
+
 </Modal>
 
 
 <Modal bind:open={NewFailOver_Modal}  size="lg" class="w-full" permanent={true}>
+
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={NewFailOver_Item[Advanced_Client_Index_Selected][NewFailOver_Index].enable}>
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddFailover(NewFailOver_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -5894,6 +6213,8 @@
     </tr>
 
   </table>
+
+</form>  
 </Modal>
 
 
@@ -5915,6 +6236,7 @@
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
+    <TableHeadCell>Enable</TableHeadCell>    
     <TableHeadCell class="w-8">No</TableHeadCell>
     <TableHeadCell class="w-36">Incoming Protocol</TableHeadCell>
     <TableHeadCell class="w-48">Incoming Destination Port</TableHeadCell>
@@ -5942,6 +6264,11 @@
        </TableBodyCell>
 
    <TableBodyCell class="!p-4"></TableBodyCell>
+
+
+                    <TableBodyCell class="w-10">
+                    <input type="checkbox"  bind:checked={clientPFW.enable}>
+                    </TableBodyCell>
 
                     <TableBodyCell class="w-8">{index+1}</TableBodyCell>
 {#if clientPFW.client_pfw_incomingProtocol== 0}
@@ -5975,6 +6302,7 @@
       
       <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>      
       <TableBodyCell class="w-8"></TableBodyCell>
       <TableBodyCell class="w-36"></TableBodyCell>
       <TableBodyCell class="w-48"></TableBodyCell>                    
@@ -6011,6 +6339,14 @@
 
 
 <Modal bind:open={ModifyClient_PFW_Modal} size="md" class="w-full" permanent={true}>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[ModifyClient_PFW_Index].enable}>
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyClientPFW(ModifyClient_PFW_Index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -6061,11 +6397,20 @@
     </tr>
 
 </table>
+</form>
 </Modal>
 
 
 
 <Modal bind:open={NewClientPFW_Modal} size="md" class="w-full" permanent={true}>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={NewClientPFW_Item[Advanced_Client_Index_Selected][NewClientPFW_Index].enable}>
+  Enable
+</label>
+
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddClientPFW}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
@@ -6117,6 +6462,8 @@
 
 
 </table>
+
+</form>
 </Modal>
 
 

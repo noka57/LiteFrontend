@@ -974,6 +974,60 @@
   }
 
 
+
+  let getRemoteCertReady=0;
+  let remoteCertList=[];
+  async function getRemoteCertificate() {
+    const res = await fetch(window.location.origin+"/GetRemotecert", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      remoteCertList =await res.json();
+      console.log(remoteCertList);
+      getRemoteCertReady=1;
+    
+    }
+  }
+  let getCaCertReady=0;
+  let caCertList=[];
+
+  async function getCACertificate() {
+    const res = await fetch(window.location.origin+"/getCaCERt", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      caCertList =await res.json();
+      console.log(caCertList);
+      getCaCertReady=1;
+    
+    }
+  }
+
+  let getMachineCertReady=0;
+  let machineCertList=[];
+
+  async function getMachineCertificate() {
+    const res = await fetch(window.location.origin+"/getMachinECert", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      machineCertList =await res.json();
+      console.log(machineCertList);
+      getMachineCertReady=1;
+    
+    }
+  }
+
+
   onMount(() => {
 
     console.log("event engine sessionid: ");
@@ -986,6 +1040,9 @@
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
         getEventEngineData();
+        getMachineCertificate();
+        getCACertificate();
+        getRemoteCertificate();
     }
     else if (sessionid && event_engine_data != "")
     {
@@ -993,6 +1050,11 @@
       const hexArray = sessionid.match(/.{1,2}/g); 
       const byteValues = hexArray.map(hex => parseInt(hex, 16));
       sessionBinary = new Uint8Array(byteValues);
+
+      getMachineCertificate();
+      getCACertificate();
+      getRemoteCertificate();
+
       changed_event_engine_data=JSON.parse(JSON.stringify(saved_changed_event_engine_data));
       if (event_engine_general_changedValues.length == 0)
       {
@@ -2164,7 +2226,7 @@
     NewActionDO[index].enable=false;
     NewActionDO[index].aliasName="";
     NewActionDO[index].type=0;
-    NewActionDO[index].duration=2;
+    NewActionDO[index].duration=1;
 
     new_action_do_index=index;
     new_action_do_modal=true;
@@ -2187,7 +2249,7 @@
       aliasName: "",
       smtpServerIp:"",
       port:1,
-      tls:false,
+      tls:0,
       serverCaCert:"",
       clientCert:"",
       account:"",
@@ -3669,85 +3731,9 @@
     { tt: '2023/11/02 02:03:40', tc: 'SMS', tn: 'T_sms_', at: '2023/11/02 02:03:45', ac: 'Email', an: 'A_Email_'  }
   ];
 
-  let TriggerCatalogList=[
-    {value:"SMS", name: "SMS"},
-    {value:"DI", name: "DI"},
-    {value:"Modbus", name: "Modbus"},
-    {value:"MQTTN", name: "MQTT Notification"},
-    {value:"TCPM", name: "TCP Message"},
-    {value:"WANs", name: "WAN Status"},
-
-  ];
-
-  let ActionCatalogList=[
-    {value:"SMS", name: "SMS"},
-    {value:"DO", name: "DO"},
-    {value:"Modbus", name: "Modbus"},
-    {value:"Email", name: "Email"},
-    {value:"MQTTP", name: "MQTT Publish"},
-    {value:"Line", name: "LINE Notification"},
-    {value:"TCPM", name: "TCP Message"},
-    {value:"System", name: "System"},
-  ];
 
 
-  let TriggerSMSList=[
-    {value:"1", name: "T_sms_"},
-  ];
 
-  let TriggerDIList=[
-    {value:"1", name: "T_DI_"},
-  ];
-
-  let TriggerMBList=[
-    {value:"1", name: "T_Modbus_"},
-  ];
-
-  let Tselected1="SMS";
-  let Tselected2="Modbus";
-  let Tselected3;
-  let TselectedProfile1;
-  let TselectedProfile2;
-  let TselectedProfile3;
-  let Aselected="DO";
-
-  let ActionLineList=[
- 
-  ];
-  let ActionTCPMList=[
- 
-  ];
-
-  let ActionMQTTPList=[
- 
-  ];
-
-  let ActionSMSList=[
-    {value:"1", name: "A_sms_"},
-  ];
-
-  let ActionDIList=[
-    {value:"1", name: "A_DO_"},
-  ];
-
-  let ActionMBList=[
-    {value:"1", name: "A_Modbus_"},
-  ];
-
-  let ActionEmailList=[
-    {value:"1", name: "A_Email_"},
-  ];
-
-  let ActionSystemList=[
-      {value:"1", name: "System Reboot"},
-      {value:"2", name: "SysLog server – on"},
-      {value:"3", name: "SysLog server – off"},
-      {value:"4", name: "SW Reset C-WAN module"},
-      {value:"5", name: "HW Reset C-WAN module"},
-      {value:"6", name: "WAN Backup Switch"},
-      {value:"7", name: "C-WAN power cycle"},
-      {value:"8", name: "SIM Switch"},
-  ]
 
 
 
@@ -3873,11 +3859,11 @@
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if TriggerSMS.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={TriggerSMS.enable}>
+
+    </TableBodyCell>
+
 
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{TriggerSMS.aliasName}</TableBodyCell>
@@ -4133,12 +4119,13 @@
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={TriggerDI.enable}>
+    </TableBodyCell>
 
-{#if TriggerDI.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{TriggerDI.aliasName}</TableBodyCell>
 {#if TriggerDI.type == 0}      
@@ -4497,13 +4484,12 @@
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
 
-{#if TriggerModbus.enable}
 
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={TriggerModbus.enable}>
+    </TableBodyCell>
 
-{/if}
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{TriggerModbus.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{TriggerModbus.modbusVariable}</TableBodyCell>
@@ -4831,11 +4817,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
    
 
  <TableBodyRow>
-{#if VariableMasterItem.enable}
-       <TableBodyCell class='w-2'>1</TableBodyCell>
-{:else}
-       <TableBodyCell class='w-2'>0</TableBodyCell>
-{/if}
+
+
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={VariableMasterItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+    </TableBodyCell>
+
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
   <TableBodyCell class="w-18">{VariableMasterItem.variableName}</TableBodyCell>
   <TableBodyCell class="w-10">{VariableMasterItem.profile}</TableBodyCell>
@@ -4914,11 +4902,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
     <TableBodyRow>
 
-{#if RTUMasterItem.enable}
-      <TableBodyCell>1</TableBodyCell>
-{:else}
-      <TableBodyCell>0</TableBodyCell>
-{/if}
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={RTUMasterItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+    </TableBodyCell>
+
+
       <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{RTUMasterItem.aliasName}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{RTUMasterItem.serialProfile}</TableBodyCell>
@@ -4971,11 +4959,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TCPMasterItem, index}
    
     <TableBodyRow>
-{#if TCPMasterItem.enable}
-      <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-      <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={TCPMasterItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+    </TableBodyCell>
+
       <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{TCPMasterItem.lanProfile}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{TCPMasterItem.aliasName}</TableBodyCell>
@@ -5047,11 +5037,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if TriggerTCPMsg.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={TriggerTCPMsg.enable}>
+    </TableBodyCell>
+
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{TriggerTCPMsg.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{TriggerTCPMsg.remoteHost}</TableBodyCell>
@@ -5308,11 +5299,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if MQTT.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={MQTT.enable}>
+    </TableBodyCell>
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{MQTT.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{MQTT.mqttProfile}</TableBodyCell>
@@ -5587,11 +5578,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if PING.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={PING.enable}>
+    </TableBodyCell>
+
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{PING.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{PING.remoteHost}</TableBodyCell>
@@ -5913,11 +5906,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if RSSI.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={RSSI.enable}>
+    </TableBodyCell>
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{RSSI.aliasName}</TableBodyCell>
 
@@ -6217,11 +6211,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if ActionSMS.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={ActionSMS.enable}>
+    </TableBodyCell>
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{ActionSMS.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{ActionSMS.smsPhoneNumber}</TableBodyCell>
@@ -6514,11 +6509,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
-{#if ActionEmailRemote.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={ActionEmailRemote.enable}>
+    </TableBodyCell>
+
+
       <TableBodyCell class="w-18">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{ActionEmailRemote.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{ActionEmailRemote.remoteEmail}</TableBodyCell>
@@ -6764,7 +6761,19 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Server CA Certificate</p></td>
     <td class= "pl-4 pt-4">
-{changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].serverCaCert}
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].tls ==1}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].serverCaCert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48 disabled:cursor-not-allowed disabled:opacity-50" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].serverCaCert} disabled>
+</select>
+{/if}
 
 
     </td>
@@ -6776,7 +6785,21 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Client Certificate</p></td>
     <td class= "pl-4 pt-4">
-{changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].clientCert}
+
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].tls ==1}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].clientCert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48 disabled:cursor-not-allowed disabled:opacity-50" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[modify_action_email_smtp_index].clientCert} disabled>
+</select>
+{/if}
+
 
 
     </td>
@@ -6877,17 +6900,17 @@ on:click={handleClickMV} on:keydown={() => {}}>
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
 
-{#if DO.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={DO.enable}>
+    </TableBodyCell>
+
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{DO.aliasName}</TableBodyCell>
 {#if DO.type == 0}
-      <TableBodyCell class="w-18">Pulse : Start</TableBodyCell>
+      <TableBodyCell class="w-18">Pulse : One Shot High</TableBodyCell>
 {:else if DO.type == 1}
-      <TableBodyCell class="w-18">Pulse : Stop</TableBodyCell>
+      <TableBodyCell class="w-18">Pulse : One Shot Low</TableBodyCell>
 {:else if DO.type == 2}
       <TableBodyCell class="w-18">DO : On</TableBodyCell>
 {:else if DO.type == 3}
@@ -6895,7 +6918,10 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {:else}
       <TableBodyCell class="w-18"></TableBodyCell>
 {/if}
+
+{#if DO.type ==0 || DO.type ==1}
       <TableBodyCell class="w-18">{DO.duration} second(s)</TableBodyCell>
+{/if}
 
     </TableBodyRow>
 {/each}
@@ -6978,7 +7004,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={NewActionDO[new_action_do_index].type} value={0} >Pulse : Start</Radio>
+  <Radio bind:group={NewActionDO[new_action_do_index].type} value={0} >Pulse : One Shot High</Radio>
   </td>
 </tr>
 
@@ -6986,7 +7012,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={NewActionDO[new_action_do_index].type} value={1} >Pulse : Stop</Radio>
+  <Radio bind:group={NewActionDO[new_action_do_index].type} value={1} >Pulse : One Shot Low</Radio>
   </td>
 </tr>
 
@@ -7010,12 +7036,16 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Duration</p></td>
 <td class="pl-5 pt-5">
 
+{#if NewActionDO[new_action_do_index].type == 0 || NewActionDO[new_action_do_index].type==1}
 <input type="number" bind:value={NewActionDO[new_action_do_index].duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
+{:else}
+<input type="number" bind:value={NewActionDO[new_action_do_index].duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{/if}
 </td>
 <td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
 
@@ -7074,7 +7104,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].type} value={0} >Pulse : Start</Radio>
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].type} value={0} >Pulse : One Shot High</Radio>
   </td>
 </tr>
 
@@ -7082,7 +7112,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
   <td class="pl-5 pt-4">
-  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].type} value={1} >Pulse : Stop</Radio>
+  <Radio bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].type} value={1} >Pulse : One Shot Low</Radio>
   </td>
 </tr>
 
@@ -7110,8 +7140,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Duration</p></td>
 <td class="pl-5 pt-5">
 
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].type == 0 || changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].type == 1}
 <input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+<input type="number" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.do[modify_action_do_index].duration} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 
+{/if}
 </td>
 <td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
 
@@ -7191,11 +7225,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
 
-{#if Modbus.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={Modbus.enable}>
+    </TableBodyCell>
+
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
 
       <TableBodyCell class="w-18">{Modbus.aliasName}</TableBodyCell>
@@ -7488,11 +7522,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
    
 
  <TableBodyRow>
-{#if VariableMasterItem.enable}
-       <TableBodyCell class='w-2'>1</TableBodyCell>
-{:else}
-       <TableBodyCell class='w-2'>0</TableBodyCell>
-{/if}
+
+
+    <TableBodyCell class="w-2">
+<input type="checkbox"  bind:checked={VariableMasterItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+    </TableBodyCell>
+
+
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
   <TableBodyCell class="w-18">{VariableMasterItem.variableName}</TableBodyCell>
   <TableBodyCell class="w-10">{VariableMasterItem.profile}</TableBodyCell>
@@ -7571,11 +7607,10 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
     <TableBodyRow>
 
-{#if RTUMasterItem.enable}
-      <TableBodyCell>1</TableBodyCell>
-{:else}
-      <TableBodyCell>0</TableBodyCell>
-{/if}
+    <TableBodyCell>
+<input type="checkbox"  bind:checked={RTUMasterItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+    </TableBodyCell>
+
       <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{RTUMasterItem.aliasName}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{RTUMasterItem.serialProfile}</TableBodyCell>
@@ -7628,11 +7663,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TCPMasterItem, index}
    
     <TableBodyRow>
-{#if TCPMasterItem.enable}
-      <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-      <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+
+    <TableBodyCell>
+<input type="checkbox"  bind:checked={TCPMasterItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+    </TableBodyCell>
+
       <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{TCPMasterItem.lanProfile}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{TCPMasterItem.aliasName}</TableBodyCell>
@@ -7704,11 +7740,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if TCPMsg.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+<TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={TCPMsg.enable}>
+</TableBodyCell>
+
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{TCPMsg.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{TCPMsg.remoteHost}</TableBodyCell>
@@ -7971,11 +8008,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if MQTT.enable}
-      <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+<TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={MQTT.enable}>
+</TableBodyCell>
+
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{MQTT.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{MQTT.mqttProfile}</TableBodyCell>
@@ -8250,11 +8288,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if LINE.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+<TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={LINE.enable}>
+</TableBodyCell>
+
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{LINE.aliasName}</TableBodyCell>
       <TableBodyCell class="w-18">{LINE.token}</TableBodyCell>
@@ -8490,11 +8529,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
-{#if rule.enable}
-    <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
+
+<TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={rule.enable}>
+</TableBodyCell>
+
+
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{rule.aliasName}</TableBodyCell>
       <TableBodyCell class="w-36">
@@ -8793,7 +8833,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if NewRuleItem[new_rule_index].triggerCount == 1}
 
 
-<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+<select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 <option disabled="" value="">None</option>
 
 </select>

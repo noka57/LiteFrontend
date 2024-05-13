@@ -45,10 +45,13 @@
 
 
 
-   function GPSClick() {
+  function GPSClick() {
     if (dashboard_data!="")
       window.open(dashboard_data.config.dashboard.gpsInfo.gMapUrl, "_blank");
   }
+
+  let disabledOpenVPNTunnel=[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+
 
   let RestartIntervalId;
   let RestartReady=0;
@@ -225,7 +228,7 @@
     }
     catch (error) 
     {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching dashboard data:', error);
       stopInterval();
       RestartIntervalId = setInterval(sendPing, 1000);
     }
@@ -821,39 +824,25 @@ NA
     <Badge large color="red">{index+1}</Badge>
     {/if}
   {/each}
-{/if}
 
-</div>
-</div>
-{/if}
-
-
-
-{#if dashboard_data!=""}
-{#if 0}
-<div class="flex">
-<div class="px-10">
-        <p class="text-black text-lg">{dashboard_data.config.dashboard.vpnStatus.type}</p>
-</div>
-<div class="px-40">
-        <p class="text-lg font-light">{dashboard_data.config.dashboard.vpnStatus.role}</p>
-</div>
-</div>
-
-<div class="pt-5 px-10" colspan="2">
-{#each dashboard_data.config.dashboard.vpnStatus.tunnelStatus as connection, index}
-{#if connection.status}
-<Badge large color="green">{index+1}</Badge>
-{:else}
-<Badge large color="red">{index+1}</Badge>
-{/if}
-
+{#each disabledOpenVPNTunnel as disabledT, index}
+  {#if index >= vpn_dashboard.openvpn[2].length}
+  <Badge large color="dark">{index+1}</Badge>
+  {/if}
 {/each}
-</div>                      
-
 
 {/if}
+
+
+
+
+
+</div>
+</div>
 {/if}
+
+
+
 
                       </TableBodyCell>
         </TableBodyRow>

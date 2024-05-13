@@ -42,6 +42,10 @@
 	    OpenVPN_Server_Conn_ConfigChangedLog,
 	    OpenVPN_Basic_ConfigChangedLog,
 	    GenericMQTTConfigChangedLog,
+	    AzHub_ConfigChangedLog,
+    	AzHubDPS_ConfigChangedLog,
+    	AzCentral_ConfigChangedLog,
+    	AWSIoTcoreConfigChangedLog,
 	    RemoteServiceConfigChangedLog,
 	    PortConnection_LAN_ConfigChangedLog,
     	PortConnection_COM_ConfigChangedLog,
@@ -200,6 +204,11 @@
     let openvpn_client_advanced_rna_changedValues=[];
     let openvpn_client_advanced_fo_changedValues=[];
     let generic_mqtt_changedValues=[];
+  	let azhub_changedValues = [];
+  	let azhubdps_changedValues=[];
+  	let azcentral_changedValues=[];
+  	let awsIoT_core_changedValues=[];  	
+
     let remote_service_changedValues = [];
     let port_connection_lan_changedValues = [];
     let port_connection_com_changedValues = [];
@@ -299,6 +308,10 @@
   			port_connection_com_changedValues.length !=0 ||
   			remote_service_changedValues.length !=0 ||
   			generic_mqtt_changedValues.length !=0 ||
+  			azhub_changedValues.length != 0 ||
+  			azhubdps_changedValues.length != 0 ||
+  			azcentral_changedValues.length != 0 ||
+  			awsIoT_core_changedValues.length !=0 ||
   			openvpn_basic_changedValues.length !=0 ||
   			openvpn_server_conn_changedValues.length !=0 ||
   			openvpn_client_conn_changedValues.length !=0 ||
@@ -549,6 +562,28 @@
       	generic_mqtt_changedValues = val;
         JudgeChangedOrNot();
   	});
+
+  	AWSIoTcoreConfigChangedLog.subscribe(val => {
+      awsIoT_core_changedValues = val;
+      JudgeChangedOrNot();
+  	});
+
+
+	AzHub_ConfigChangedLog.subscribe(val => {
+	  	azhub_changedValues = val;
+      	JudgeChangedOrNot();	  
+	});
+
+
+	AzHubDPS_ConfigChangedLog.subscribe(val => {
+	  	azhubdps_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	AzCentral_ConfigChangedLog.subscribe(val => {
+	  	azcentral_changedValues = val;
+	  	JudgeChangedOrNot();
+	});
 
   	RemoteServiceConfigChangedLog.subscribe(val => {
       	remote_service_changedValues = val;
@@ -960,8 +995,11 @@ const topMenuList = [{ href: '/apply', id: 0 },
         </svelte:fragment>
 
 						<SidebarDropdownItem label="Generic MQTT" href='/gMQTT' active={activeUrl === '/gMQTT'}/>
+						<SidebarDropdownItem label="Azure IoT" href='/azure' active={activeUrl === '/azure'}/>
+						<SidebarDropdownItem label="AWS IoT Core" href='/awsIoTcore' active={activeUrl === '/awsIoTcore'}/>
+
 					</SidebarDropdownWrapper>
-					
+
 <SidebarDropdownWrapper
 						label="Field Management"
 

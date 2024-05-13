@@ -62,6 +62,14 @@
       genericMQTTConfig,
 	    GenericMQTTConfigChangedLog,
     	ChangedGenericMQTTConfig,
+      azureConfig,
+      ChangedAzureConfig,
+      AzHub_ConfigChangedLog,
+      AzHubDPS_ConfigChangedLog,
+      AzCentral_ConfigChangedLog,
+      awsIoTcoreConfig,
+      AWSIoTcoreConfigChangedLog,
+      ChangedAWSIoTcoreConfig,
       remoteServiceConfig,
     	RemoteServiceConfigChangedLog,
     	ChangedRemoteServiceConfig,
@@ -128,6 +136,8 @@
   let ipsec_data="";
   let openvpn_data="";
   let generic_mqtt_data="";
+  let azure_data="";  
+  let awsIoT_core_data="";
   let remote_service_data="";
   let port_connection_data="";
   let certificate_data="";
@@ -212,6 +222,17 @@
   let generic_mqtt_changedValues=[];
 
 
+  let ContentAzure;
+  let AzureBinary=null;
+  let azhub_changedValues = [];
+  let azhubdps_changedValues=[];
+  let azcentral_changedValues=[];
+
+
+  let ContentAWSiotCore;
+  let AWSiotCoreBinary=null;
+  let awsIoT_core_changedValues=[];
+
   let ContentRemoteService;
   let RemoteServiceBinary=null;
   let remote_service_changedValues=[];
@@ -278,6 +299,8 @@
   let RestartCountOK=0;
   let wanWebAccessChanged="";
 
+  let RestartIntervalIdByWan;
+  let RestartIntervalIdByLan;
 
   function closeModal()
   {
@@ -338,6 +361,16 @@
   ChangedGenericMQTTConfig.subscribe(val => {
       generic_mqtt_data = val;
   }); 
+
+  ChangedAzureConfig.subscribe(val => {
+      azure_data = val;
+  });
+
+  ChangedAWSIoTcoreConfig.subscribe(val => {
+      awsIoT_core_data = val;
+  });
+
+
 
   ChangedRemoteServiceConfig.subscribe(val => {
       remote_service_data = val;
@@ -519,6 +552,24 @@
   });
 
 
+  AzHub_ConfigChangedLog.subscribe(val => {
+      azhub_changedValues = val;
+  });
+
+
+  AzHubDPS_ConfigChangedLog.subscribe(val => {
+      azhubdps_changedValues = val;
+  });
+
+  AzCentral_ConfigChangedLog.subscribe(val => {
+      azcentral_changedValues = val;
+  });
+
+  AWSIoTcoreConfigChangedLog.subscribe(val => {
+      awsIoT_core_changedValues = val;
+  });  
+
+
   OpenVPN_Client_Advanced_PFW_ConfigChangedLog.subscribe(val => {
       openvpn_client_advanced_pfw_changedValues = val;
   });
@@ -673,6 +724,56 @@
 
 
 
+  function sendPingbyRwan() 
+  {
+    fetch(window.location.origin)
+      .then(response => {
+        if (response.status === 200) 
+        {
+          console.log('PingbyRWan successful');
+          clearInterval(RestartIntervalIdByWan);
+
+          setTimeout(() => {
+              window.location.href = window.location.origin;
+              }, 3000); 
+        } 
+        else 
+        {
+          console.log('PingbyRWan failed. Retrying...');
+        }
+      })
+      .catch(error => 
+      {
+        console.error('PingbyRWan failed:', error);
+      });
+  }
+
+
+  function sendPingbyRlan() 
+  {
+    fetch(lan_data.config.networking_lan.ipStatic.ip)
+      .then(response => {
+        if (response.status === 200) 
+        {
+          console.log('PingbyRLan successful');
+          clearInterval(RestartIntervalIdByLan);
+
+          setTimeout(() => {
+              window.location.href = lan_data.config.networking_lan.ipStatic.ip;
+              }, 3000); 
+        } 
+        else 
+        {
+          console.log('PingbyRLan failed. Retrying...');
+        }
+      })
+      .catch(error => 
+      {
+        console.error('PingbyRLan failed:', error);
+      });
+  }
+
+
  	async function SetThenPostReboot () {
     
   const res = await fetch(window.location.origin+"/PostReboot", {
@@ -703,23 +804,33 @@
 
   async function RestartLAN()
   {
-    const res = await fetch(window.location.origin+"/RestArtLAn", {
-      method: 'POST',
-      body: sessionBinary
-     })
 
-    if (res.status == 200)
+    try
     {
-      console.log("restart lan OK\r\n");
-      RestartCountOK++;
-      if (RestartCountOK == RestartCount)
+      const res = await fetch(window.location.origin+"/RestArtLAn", {
+        method: 'POST',
+        body: sessionBinary
+       })
+
+      if (res.status == 200)
       {
-        AllRestartFinished=1;
+        console.log("restart lan OK\r\n");
+        RestartCountOK++;
+        if (RestartCountOK == RestartCount)
+        {
+          AllRestartFinished=1;
+        }
+
+        RestartLiteWeb();
+
       }
-
-      RestartLiteWeb();
-
     }
+    catch (error) 
+    {
+      console.error('Error fetching resTarTlan data:', error);
+      RestartIntervalIdByLan = setInterval(sendPingbyRlan, 1000);
+    }
+
   }
 
 
@@ -1030,20 +1141,28 @@
 
   async function RestartWAN()
   {
-    const res = await fetch(window.location.origin+"/resTarTWAn", {
-      method: 'POST',
-      body: sessionBinary
-     })
 
-    if (res.status == 200)
+    try
     {
-      console.log("restart wan OK\r\n");
-      RestartCountOK++;
-      if (RestartCountOK == RestartCount)
-      {
-        AllRestartFinished=1;
-      }
+      const res = await fetch(window.location.origin+"/resTarTWAn", {
+        method: 'POST',
+        body: sessionBinary
+      })
 
+      if (res.status == 200)
+      {
+        console.log("restart wan OK\r\n");
+        RestartCountOK++;
+        if (RestartCountOK == RestartCount)
+        {
+          AllRestartFinished=1;
+        }
+      }
+    }
+    catch (error) 
+    {
+      console.error('Error fetching resTarTWan data:', error);
+      RestartIntervalIdByWan = setInterval(sendPingbyRwan, 1000);
     }
   } 
 
@@ -1123,6 +1242,10 @@
       port_switch_changedValues = [];  
 
 
+      cwan1_glink_changedValues = [];
+      WAN_CWAN1_GLink_ConfigChangedLog.set(cwan1_glink_changedValues);
+
+
       WAN_CWAN1_BASIC_ConfigChangedLog.set(cwan1_basic_changedValues);
       WAN_CWAN1_Advanced_ConfigChangedLog.set(cwan1_advanced_changedValues);
       WAN_CWAN1_SimPolicy_ConfigChangedLog.set(cwan1_simpolicy_changedValues);
@@ -1152,15 +1275,6 @@
       console.log("reset wan");
       RestartWAN();
 
-
-      if (cwan1_glink_changedValues.length!=0)
-      {
-        RestartGlink();
-      }
-
-
-      cwan1_glink_changedValues = [];
-      WAN_CWAN1_GLink_ConfigChangedLog.set(cwan1_glink_changedValues);
 
 	  }
 	} 
@@ -1325,6 +1439,75 @@
       RestartGenericMQTT();
 	  }	
 	}
+
+
+  async function RestartAWSiotCore()
+  {
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+  }
+
+  async function SetAWSiotCoreData()
+  {
+    const res = await fetch(window.location.origin+"/seTawsIOTcore", {
+      method: 'POST',
+      body: ContentAWSiotCore
+     })
+
+    if (res.status == 200)
+    {
+      console.log("set generic mqtt data OK\r\n");
+      SetCountOK++;
+
+
+      let applied_new_awsIoT_core_data= JSON.parse(JSON.stringify(awsIoT_core_data));
+      awsIoTcoreConfig.set(applied_new_awsIoT_core_data);
+      awsIoT_core_changedValues=[];
+      AWSIoTcoreConfigChangedLog.set(awsIoT_core_changedValues);
+      RestartAWSiotCore();
+    } 
+  }
+
+
+  async function RestartAzure()
+  {
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+  }
+
+
+  async function SetAzureData()
+  {
+    const res = await fetch(window.location.origin+"/PostSetaZUre", {
+      method: 'POST',
+      body: ContentAzure
+     })
+
+    if (res.status == 200)
+    {
+      console.log("set azure data OK\r\n");
+      SetCountOK++;
+
+
+      let applied_new_azure_data= JSON.parse(JSON.stringify(azure_data));
+      azureConfig.set(applied_new_azure_data);
+
+      azhub_changedValues = [];
+      azhubdps_changedValues=[];
+      azcentral_changedValues=[];
+
+      AzHub_ConfigChangedLog.set(azhub_changedValues);
+      AzCentral_ConfigChangedLog.set(azcentral_changedValues);     
+      AzHubDPS_ConfigChangedLog.set(azhubdps_changedValues);
+      RestartAzure();
+    } 
+  }
 
 
 
@@ -1769,6 +1952,18 @@
       RestartCount++;
 		}
 
+    if (azure_data != "" && (azhub_changedValues.length !=0 || azhubdps_changedValues.length !=0 || azcentral_changedValues.length !=0))
+    {
+      SetCount++; 
+      RestartCount++;
+    }
+
+    if (awsIoT_core_data != "" && awsIoT_core_changedValues.length != 0)
+    {
+      SetCount++; 
+      RestartCount++;
+    }
+
 		if (remote_service_data != "" && remote_service_changedValues.length!=0)
 		{
 			SetCount++;	
@@ -2004,6 +2199,32 @@
 	        ContentGenericMQTT.set(GenericMQTTBinary, sessionBinary.length);
 	        SetGenericMQTTData();
 				}
+
+
+        if (azure_data != "" && (azhub_changedValues.length !=0 || azhubdps_changedValues.length !=0 || azcentral_changedValues.length !=0))
+        {
+          let AzureString = JSON.stringify(azure_data, null, 0);
+          const bytesArray = Array.from(AzureString).map(char => char.charCodeAt(0));
+          AzureBinary = new Uint8Array(bytesArray);
+          ContentAzure=new Uint8Array(AzureBinary.length+sessionBinary.length);
+          ContentAzure.set(sessionBinary,0);
+          ContentAzure.set(AzureBinary, sessionBinary.length);
+          SetAzureData();
+
+        }
+
+        if (awsIoT_core_data != "" && awsIoT_core_changedValues.length !=0)
+        {
+          let AWSiotString = JSON.stringify(awsIoT_core_data, null, 0);
+          const bytesArray = Array.from(AWSiotString).map(char => char.charCodeAt(0));
+          AWSiotCoreBinary = new Uint8Array(bytesArray);
+          ContentAWSiotCore=new Uint8Array(AWSiotCoreBinary.length+sessionBinary.length);
+          ContentAWSiotCore.set(sessionBinary,0);
+          ContentAWSiotCore.set(AWSiotCoreBinary, sessionBinary.length);
+          SetAWSiotCoreData();
+        }
+
+
 
 				if (remote_service_data != "" && remote_service_changedValues.length!=0)
 				{
@@ -2761,6 +2982,79 @@ event_engine_action_do_changeValues.length != 0 ||
 
 {/if}
 
+{#if azhub_changedValues.length !=0 || azhubdps_changedValues.length !=0 || azcentral_changedValues.length !=0}
+  <Li>Azure IoT
+{#if azhub_changedValues.length !=0}
+
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li> Hub
+
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each azhub_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+
+  </List>
+  
+{/if}
+
+
+{#if azhubdps_changedValues.length !=0}
+
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li> DPS
+
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each azhubdps_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+   
+  </List>
+  
+{/if}
+
+
+
+{#if azcentral_changedValues.length !=0}
+
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li> Central
+
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each azcentral_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+   
+  </List>
+  
+{/if}
+
+
+  </Li>
+
+
+{/if}
+
+
+{#if awsIoT_core_changedValues.length !=0}
+  <Li>AWS IoT Core
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each awsIoT_core_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+
+{/if}
+
+
+
 {#if openvpn_basic_changedValues.length !=0 ||
   	openvpn_server_conn_changedValues.length !=0 ||
   	openvpn_client_conn_changedValues.length !=0 ||
@@ -2954,7 +3248,7 @@ event_engine_action_do_changeValues.length != 0 ||
  {#if cwan1_basic_changedValues.length !=0}
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
   <Li>
-  	Cellular-WAN-1 Basic Settings
+  	Cellular-WAN Basic Settings
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
   {#each cwan1_basic_changedValues as item}
       <Li>{item}</Li>
@@ -2967,7 +3261,7 @@ event_engine_action_do_changeValues.length != 0 ||
 	{#if cwan1_advanced_changedValues.length !=0}
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
   <Li>
-  	Cellular-WAN-1 Advanced Settings
+  	Cellular-WAN Advanced Settings
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
   {#each cwan1_advanced_changedValues as item}
       <Li>{item}</Li>
@@ -2980,7 +3274,7 @@ event_engine_action_do_changeValues.length != 0 ||
 	{#if cwan1_simpolicy_changedValues.length !=0}
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
   <Li>
-  	Cellular-WAN-1 SIM Policy
+  	Cellular-WAN SIM Policy
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
   {#each cwan1_simpolicy_changedValues as item}
       <Li>{item}</Li>
@@ -2993,7 +3287,7 @@ event_engine_action_do_changeValues.length != 0 ||
 	{#if cwan1_glink_changedValues.length !=0}
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
   <Li>
-  	Cellular-WAN-1 LTE Guarantie Link
+  	Cellular-WAN LTE Guarantie Link
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
   {#each cwan1_glink_changedValues as item}
       <Li>{item}</Li>
@@ -3342,6 +3636,10 @@ event_engine_action_do_changeValues.length != 0 ||
   			openvpn_client_advanced_rna_changedValues.length !=0 ||
   			openvpn_client_advanced_fo_changedValues.length !=0 ||
   			generic_mqtt_changedValues.length !=0 ||
+        azhub_changedValues.length !=0 || 
+        azhubdps_changedValues.length !=0 || 
+        azcentral_changedValues.length !=0 ||
+        awsIoT_core_changedValues.length !=0 ||
   			remote_service_changedValues.length !=0 ||
   			port_connection_lan_changedValues.length !=0 ||
   			port_connection_com_changedValues.length !=0 ||

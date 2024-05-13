@@ -865,6 +865,13 @@
             sdata_logger_general_changedValues=[...sdata_logger_general_changedValues, changedStr];
         }
 
+        if (changed_sdata_logger_data.config.service_smartDataLogger_general.storage != sdata_logger_data.config.service_smartDataLogger_general.storage)
+        {
+            saved_changed_sdata_logger_data.config.service_smartDataLogger_general.storage=changed_sdata_logger_data.config.service_smartDataLogger_general.storage;
+            let changedStr="Smart Data Logger Storage is changed to " + changed_sdata_logger_data.config.service_smartDataLogger_general.storage;
+            sdata_logger_general_changedValues=[...sdata_logger_general_changedValues, changedStr]; 
+        }
+
         SDatalogger_General_ConfigChangedLog.set(sdata_logger_general_changedValues);
         ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
         console.log(sdata_logger_general_changedValues);

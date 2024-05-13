@@ -4,6 +4,9 @@ export const dashboadData= writable("");
 export const VPNdashboad= writable("");
 export const wanWebInputFlag=writable("");
 
+
+export const awsIoTcoreConfig=writable("");
+export const azureConfig=writable("");
 export const eventEngineConfig=writable("");
 export const sdataLoggerConfig=writable("");
 export const certificateConfig=writable("");
@@ -21,6 +24,16 @@ export const firewallConfig = writable("");
 export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
+
+
+export const AzCentral_ConfigChangedLog=writable("");
+export const AzHubDPS_ConfigChangedLog=writable("");
+export const AzHub_ConfigChangedLog=writable("");
+export const ChangedAzureConfig=writable("");
+
+
+export const AWSIoTcoreConfigChangedLog=writable("");
+export const ChangedAWSIoTcoreConfig=writable("");
 
 export const EventEngine_ActionLINE_ConfigChangedLog=writable("");
 export const EventEngine_ActionMQTT_ConfigChangedLog=writable("");

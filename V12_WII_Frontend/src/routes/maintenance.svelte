@@ -206,7 +206,7 @@
     }
     else if (PingType == 1)
     {
-      pingCmd +="-6 "+PingHost;
+      pingCmd +=" -6 "+PingHost;
     }
     else
     {

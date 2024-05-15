@@ -79,7 +79,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   };
 
   let NewItem=[
@@ -89,7 +91,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -97,7 +101,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -105,7 +111,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -113,7 +121,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -121,7 +131,10 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
+
   },
   {
     enable: false,
@@ -129,7 +142,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -137,7 +152,10 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
+
   },
   {
     enable: false,
@@ -145,7 +163,10 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
+
   },
   {
     enable: false,
@@ -153,7 +174,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -161,7 +184,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   }
   ];
 
@@ -177,6 +202,8 @@
     NewItem[index].symmetric_key_primary="";
     NewItem[index].modelID="";
     NewItem[index].attestation=0;
+    NewItem[index].machineCAcert="";
+    NewItem[index].machineCert="";
     new_item_index=index;
     new_modal = true;
   }
@@ -200,6 +227,9 @@
     BackupItem.symmetric_key_primary=changed_azure_data.config.cloud_azHub_profile[index].symmetric_key_primary;
     BackupItem.modelID=changed_azure_data.config.cloud_azHub_profile[index].modelID;
     BackupItem.attestation=changed_azure_data.config.cloud_azHub_profile[index].attestation;
+    BackupItem.machineCAcert=changed_azure_data.config.cloud_azHub_profile[index].machineCAcert;
+    BackupItem.machineCert=changed_azure_data.config.cloud_azHub_profile[index].machineCert;
+
   }
 
   function NoModifyAZhub(index)
@@ -211,6 +241,9 @@
     changed_azure_data.config.cloud_azHub_profile[index].symmetric_key_primary= BackupItem.symmetric_key_primary;
     changed_azure_data.config.cloud_azHub_profile[index].modelID= BackupItem.modelID;
     changed_azure_data.config.cloud_azHub_profile[index].attestation= BackupItem.attestation;
+    changed_azure_data.config.cloud_azHub_profile[index].machineCAcert= BackupItem.machineCAcert;
+    changed_azure_data.config.cloud_azHub_profile[index].machineCert= BackupItem.machineCert;    
+
   }
 
   function ModifyAZhub(index)
@@ -225,7 +258,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   };
 
   let NewItemDPS=[
@@ -235,7 +270,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   },
   {
     enable: false,
@@ -243,7 +280,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   },
   {
     enable: false,
@@ -251,7 +290,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   },
   {
     enable: false,
@@ -259,7 +300,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   },
   {
     enable: false,
@@ -267,7 +310,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   },
   {
     enable: false,
@@ -275,7 +320,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   },
   {
     enable: false,
@@ -283,7 +330,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   },
   {
     enable: false,
@@ -291,7 +340,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   },
   {
     enable: false,
@@ -299,7 +350,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   },
   {
     enable: false,
@@ -307,7 +360,9 @@
     RegistrationID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""    
   }
 
 
@@ -329,6 +384,8 @@
     NewItemDPS[index].symmetric_key_primary="";
     NewItemDPS[index].modelID="";
     NewItemDPS[index].attestation=0;
+    NewItemDPS[index].machineCAcert="";
+    NewItemDPS[index].machineCert="";    
     new_item_dps_index=index;
     new_modal_dps = true;
   }
@@ -352,6 +409,9 @@
     BackupItemDPS.symmetric_key_primary=changed_azure_data.config.cloud_azDPS_profile[index].symmetric_key_primary;
     BackupItemDPS.modelID=changed_azure_data.config.cloud_azDPS_profile[index].modelID;
     BackupItemDPS.attestation=changed_azure_data.config.cloud_azDPS_profile[index].attestation;
+    BackupItemDPS.machineCAcert=changed_azure_data.config.cloud_azDPS_profile[index].machineCAcert;
+    BackupItemDPS.machineCert=changed_azure_data.config.cloud_azDPS_profile[index].machineCert;    
+
   }
 
   function NoModifyAZhubDPS(index)
@@ -363,6 +423,8 @@
     changed_azure_data.config.cloud_azDPS_profile[index].symmetric_key_primary= BackupItemDPS.symmetric_key_primary;
     changed_azure_data.config.cloud_azDPS_profile[index].modelID= BackupItemDPS.modelID;
     changed_azure_data.config.cloud_azDPS_profile[index].attestation= BackupItemDPS.attestation;
+    changed_azure_data.config.cloud_azDPS_profile[index].machineCAcert= BackupItemDPS.machineCAcert;
+    changed_azure_data.config.cloud_azDPS_profile[index].machineCert= BackupItemDPS.machineCert;    
 
   }
 
@@ -378,7 +440,10 @@
     idScope: "",
     deviceID:"",
     symmetric_key_primary:"",
-    modelID:""
+    modelID:"",
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""  
   };
 
   let NewItemCentral=[
@@ -389,7 +454,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""  
   },
   {
     enable: false,
@@ -398,7 +465,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""  
   },
   {
     enable: false,
@@ -407,7 +476,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""  
   },
   {
     enable: false,
@@ -416,7 +487,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -425,7 +498,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -434,7 +509,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -443,7 +520,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -452,7 +531,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -461,7 +542,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   },
   {
     enable: false,
@@ -470,7 +553,9 @@
     deviceID:"",
     symmetric_key_primary:"",
     modelID:"",
-    attestation:0
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
   }
 
 
@@ -493,6 +578,9 @@
     NewItemCentral[index].symmetric_key_primary="";
     NewItemCentral[index].modelID="";
     NewItemCentral[index].attestation=0;
+    NewItemCentral[index].machineCAcert="";
+    NewItemCentral[index].machineCert="";
+
     new_item_central_index=index;
     new_modal_central = true;
   }
@@ -517,6 +605,10 @@
     BackupItemCentral.symmetric_key_primary=changed_azure_data.config.cloud_azCentral_profile[index].symmetric_key_primary;
     BackupItemCentral.modelID=changed_azure_data.config.cloud_azCentral_profile[index].modelID;
     BackupItemCentral.attestation=changed_azure_data.config.cloud_azCentral_profile[index].attestation;
+    BackupItemCentral.machineCAcert=changed_azure_data.config.cloud_azCentral_profile[index].machineCAcert;
+    BackupItemCentral.machineCert=changed_azure_data.config.cloud_azCentral_profile[index].machineCert;
+
+
   }
 
   function NoModifyAZCentral(index)
@@ -529,6 +621,9 @@
     changed_azure_data.config.cloud_azCentral_profile[index].symmetric_key_primary=BackupItemCentral.symmetric_key_primary;
     changed_azure_data.config.cloud_azCentral_profile[index].modelID=BackupItemCentral.modelID;
     changed_azure_data.config.cloud_azCentral_profile[index].attestation=BackupItemCentral.attestation;
+    changed_azure_data.config.cloud_azCentral_profile[index].machineCAcert=BackupItemCentral.machineCAcert;
+    changed_azure_data.config.cloud_azCentral_profile[index].machineCert=BackupItemCentral.machineCert;    
+
   }
 
   function ModifyAZCentral(index)
@@ -536,12 +631,6 @@
     modify_Modal_central=false;
   }
 
-
-/*
-  let azhubdps_changedValues=[];
-  let azcentral_changedValues=[];
-
-*/
 
 
   function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
@@ -806,18 +895,18 @@
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
         getAzureData();
-      //  getMachineCertificate();
-      //  getCACertificate();
-      //  getRemoteCertificate();
+        getMachineCertificate();
+        getCACertificate();
+        getRemoteCertificate();
     }
     else if(sessionid && azure_data!="")
     {
         const hexArray = sessionid.match(/.{1,2}/g); 
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
-     //   getMachineCertificate();
-     //   getCACertificate();
-     //   getRemoteCertificate();
+        getMachineCertificate();
+        getCACertificate();
+        getRemoteCertificate();
         changed_azure_data = JSON.parse(JSON.stringify(saved_changed_azure_data));
         getDataReady=1;
 
@@ -857,7 +946,8 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell class="!p-1">No</TableHeadCell>
     <TableHeadCell class="w-18">Hub Name</TableHeadCell>
-    <TableHeadCell class="w-18">Device ID</TableHeadCell>    
+    <TableHeadCell class="w-18">Device ID</TableHeadCell>
+    <TableHeadCell class="w-18">Attestation</TableHeadCell>        
     <TableHeadCell class="w-18">Model ID</TableHeadCell>       
      </TableHead>
   <TableBody>
@@ -889,6 +979,16 @@
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{azHub.azHubName}</TableBodyCell>
        <TableBodyCell class="w-18">{azHub.deviceID}</TableBodyCell>
+{#if azHub.attestation == 0}
+       <TableBodyCell class="w-18">SAS</TableBodyCell> 
+{:else if azHub.attestation ==1}
+
+       <TableBodyCell class="w-18">X509 Certificate</TableBodyCell>  
+{:else}
+       <TableBodyCell class="w-18"></TableBodyCell>  
+{/if}
+
+     
        <TableBodyCell class="w-18">{azHub.modelID}</TableBodyCell>
     </TableBodyRow>
 {/each}
@@ -918,7 +1018,7 @@
       <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
-
+       <TableBodyCell class="w-18"></TableBodyCell>
 </TableBodyRow>
 
 <tr class="pt-5">
@@ -998,17 +1098,71 @@
 
 
 <tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_azure_data.config.cloud_azHub_profile[modify_index].attestation} value={0} >SAS</Radio>
+  <Radio class="pb-2" bind:group={changed_azure_data.config.cloud_azHub_profile[modify_index].attestation} value={1} >X509</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+{#if changed_azure_data.config.cloud_azHub_profile[modify_index].attestation==0}
+
+
+<tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
 
+{:else if changed_azure_data.config.cloud_azHub_profile[modify_index].attestation==1}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="2">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].machineCAcert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+
+      </td>
+
+</tr>
 
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].machineCert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady == 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
 
 
+      </td>
 
+</tr>
+
+{/if}
 
   <tr>
     <td></td>
@@ -1072,13 +1226,77 @@
 
   </tr>
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={NewItem[new_item_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>    
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={NewItem[new_item_index].attestation} value={0} >SAS</Radio>
+  <Radio class="pb-2" bind:group={NewItem[new_item_index].attestation} value={1} >X509</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+
+
+{#if NewItem[new_item_index].attestation==0}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={NewItem[new_item_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
+
+{:else if NewItem[new_item_index].attestation==1}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="2">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItem[new_item_index].machineCAcert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+
+      </td>
+
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItem[new_item_index].machineCert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady == 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+
+      </td>
+
+</tr>
+
+{/if}
 
 
 
@@ -1124,8 +1342,11 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell class="!p-1">No</TableHeadCell>
     <TableHeadCell class="w-18">ID Scope</TableHeadCell>
-    <TableHeadCell class="w-18">Registration ID</TableHeadCell>  
-    <TableHeadCell class="w-18">Model ID</TableHeadCell>        
+    <TableHeadCell class="w-18">Registration ID</TableHeadCell> 
+    <TableHeadCell class="w-18">Attestation</TableHeadCell>      
+    <TableHeadCell class="w-18">Model ID</TableHeadCell> 
+
+
      </TableHead>
   <TableBody>
 {#if getDataReady == 1}
@@ -1154,6 +1375,15 @@
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{azDPS.idScope}</TableBodyCell>
        <TableBodyCell class="w-18">{azDPS.RegistrationID}</TableBodyCell>
+{#if azDPS.attestation == 0}
+       <TableBodyCell class="w-18">SAS</TableBodyCell>
+{:else if azDPS.attestation ==1}
+       <TableBodyCell class="w-18">X509 Certificate</TableBodyCell>
+{:else}
+       <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
+
+
   <TableBodyCell class="w-18">{azDPS.modelID}</TableBodyCell>
     </TableBodyRow>
 {/each}
@@ -1183,7 +1413,7 @@
       <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
-
+       <TableBodyCell class="w-18"></TableBodyCell>
 </TableBodyRow>
 
 <tr class="pt-5">
@@ -1261,6 +1491,29 @@
 
   </tr>
 
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].attestation} value={0} >SAS</Radio>
+  <Radio class="pb-2" bind:group={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].attestation} value={1} >X509</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+{#if changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].attestation==0}
+
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -1268,8 +1521,45 @@
 
   </tr>
 
+{:else if changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].attestation==1}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="2">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].machineCAcert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+
+      </td>
+
+</tr>
 
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].machineCert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady == 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+
+      </td>
+
+</tr>
+
+{/if}
 
 
 
@@ -1339,13 +1629,75 @@
   </tr>
 
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={NewItemDPS[new_item_dps_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>    
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={NewItemDPS[new_item_dps_index].attestation} value={0} >SAS</Radio>
+  <Radio class="pb-2" bind:group={NewItemDPS[new_item_dps_index].attestation} value={1} >X509</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+{#if NewItemDPS[new_item_dps_index].attestation==0}
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={NewItemDPS[new_item_dps_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
+
+{:else if NewItemDPS[new_item_dps_index].attestation==1}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="2">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItemDPS[new_item_dps_index].machineCAcert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+
+      </td>
+
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItemDPS[new_item_dps_index].machineCert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady == 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+
+      </td>
+
+</tr>
+
+{/if}
 
 
 
@@ -1545,6 +1897,29 @@
 
   </tr>
 
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].attestation} value={0} >SAS</Radio>
+  <Radio class="pb-2" bind:group={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].attestation} value={1} >X509</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+{#if changed_azure_data.config.cloud_azCentral_profile[modify_central_index].attestation==0}
+
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -1552,8 +1927,45 @@
 
   </tr>
 
+{:else if changed_azure_data.config.cloud_azCentral_profile[modify_central_index].attestation==1}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="2">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].machineCAcert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+
+      </td>
+
+</tr>
 
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].machineCert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady == 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+
+      </td>
+
+</tr>
+
+{/if}
 
 
 
@@ -1630,14 +2042,75 @@
 
   </tr>
 
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={NewItemCentral[new_item_central_index].attestation} value={0} >SAS</Radio>
+  <Radio class="pb-2" bind:group={NewItemCentral[new_item_central_index].attestation} value={1} >X509</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+{#if NewItemCentral[new_item_central_index].attestation==0}
+
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={NewItemCentral[new_item_central_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>    
-
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={NewItemCentral[new_item_central_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
+
+{:else if NewItemCentral[new_item_central_index].attestation==1}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="2">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItemCentral[new_item_central_index].machineCAcert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+
+      </td>
+
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItemCentral[new_item_central_index].machineCert}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getMachineCertReady == 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+
+      </td>
+
+</tr>
+
+{/if}
+
 
 
 

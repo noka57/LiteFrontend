@@ -788,7 +788,10 @@
 <tr>
   <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
 
-      <td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].serialProfile} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5">
+      {changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].serialProfile}
+
+      </td>
 
 </tr>
 

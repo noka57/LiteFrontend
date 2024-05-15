@@ -27,15 +27,6 @@
 
     let timestamp = 0;
     let dateString="";
-    $: {
-        const dateObject=new Date(timestamp*1000);
-        dateString =dateObject.toLocaleString('en-US', options);
-        MYear=dateObject.getFullYear();
-        MMonth=dateObject.getMonth()+1;
-        MDay=dateObject.getDate();
-        MHour=dateObject.getHours();
-        MMin=dateObject.getMinutes();
-    }
 
     let timezone = 'Asia/Taipei';
 
@@ -81,20 +72,6 @@
       saved_changed_operation_data = val;
     });
 
-
-    function formatDate(date) 
-    {   
-        console.log(date);
-        const utcDate=new Date(date);
-        const year = utcDate.getUTCFullYear();
-        const month = String(utcDate.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(utcDate.getUTCDate()).padStart(2, '0');
-        const hours = String(utcDate.getUTCHours()).padStart(2, '0');
-        const minutes = String(utcDate.getUTCMinutes()).padStart(2, '0');
-        const seconds = String(utcDate.getUTCSeconds()).padStart(2, '0');
-       
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    }
 
 
     let DateTimeContent="";
@@ -240,7 +217,7 @@
         saved_changed_operation_data = JSON.parse(JSON.stringify(operation_data))
         ChangedOperationConfig.set(saved_changed_operation_data);
         timezone=changed_operation_data.config.system_operation_time.autoSyncTimeParam.tz;
-        timestamp=changed_operation_data.config.system_operation_time.currTimestamp;
+      //  timestamp=changed_operation_data.config.system_operation_time.currTimestamp;
         getDataReady=1;
     }
   }
@@ -310,7 +287,11 @@
 <table>
     <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Current Local Date & Time</p></td>
-    <td class="pl-5 pt-5">{#if hidden == 0}{dateString}{/if}</td>
+    <td class="pl-5 pt-5">
+{#if getDataReady==1}
+{changed_operation_data.config.system_operation_time.currTimestamp}
+{/if}
+    </td>
 
 
     </tr>
@@ -361,16 +342,15 @@
 
     </td>
     </tr>
-{#if hidden == 0}
+
 <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Time Zone</p></td>
     <td class="w-85 pt-5 pl-5"><TimezonePicker on:update="{update}" /></td>
     </tr>
 
 
-
+{#if hidden == 0}
     <tr>
-
 {#if getDataReady==1}
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Day Light Saving</p></td><td class="pl-5 pt-5"><Toggle bind:checked={changed_operation_data.config.system_operation_time.autoSyncTimeParam.dstEn} on:change={CheckDLS}></Toggle></td>
 {/if}

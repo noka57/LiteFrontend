@@ -49,6 +49,7 @@
 	    RemoteServiceConfigChangedLog,
 	    PortConnection_LAN_ConfigChangedLog,
     	PortConnection_COM_ConfigChangedLog,
+    	PortConnection_Transparent_ConfigChangedLog,
     	Certificate_Settings_ConfigChangedLog,
 	    ModbusGateway_TtR_ConfigChangedLog,
 	    ModbusGateway_RtT_ConfigChangedLog,
@@ -212,6 +213,7 @@
     let remote_service_changedValues = [];
     let port_connection_lan_changedValues = [];
     let port_connection_com_changedValues = [];
+    let port_connection_transparent_changedValues=[];    
     let certificate_settings_changedValues = [];
     let modbus_gateway_TtR_changedValues=[];
     let modbus_gateway_RtT_changedValues=[];
@@ -306,6 +308,7 @@
   			certificate_settings_changedValues.length !=0 ||
   			port_connection_lan_changedValues.length !=0 ||
   			port_connection_com_changedValues.length !=0 ||
+  			port_connection_transparent_changedValues.length !=0 ||
   			remote_service_changedValues.length !=0 ||
   			generic_mqtt_changedValues.length !=0 ||
   			azhub_changedValues.length != 0 ||
@@ -599,6 +602,13 @@
       	port_connection_com_changedValues = val;
       	JudgeChangedOrNot();
     });
+
+
+    PortConnection_Transparent_ConfigChangedLog.subscribe(val => {
+      port_connection_transparent_changedValues = val;
+      JudgeChangedOrNot();
+    });    
+
 
     Certificate_Settings_ConfigChangedLog.subscribe(val => {
       certificate_settings_changedValues = val;

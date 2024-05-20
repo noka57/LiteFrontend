@@ -411,7 +411,7 @@
         new_tcp_master[index].lanProfile="";
         new_tcp_master[index].aliasName="";
         new_tcp_master[index].remoteServerIP="";
-        new_tcp_master[index].remotePort=0;
+        new_tcp_master[index].remotePort=502;
         new_tcp_master[index].connectionTimeout=3000;
 
         new_tcp_master_index=index;
@@ -477,6 +477,45 @@
     };
 
 
+    let new_rtu_master=[
+    {
+        enable:false,
+        aliasName:"",
+        serialProfile:""
+    },
+    {
+        enable:false,
+        aliasName:"",
+        serialProfile:""
+    }
+    ]
+
+
+    let New_RTU_Master_Modal=false;
+    let New_RTU_Master_index;
+
+
+    function new_rtu_master_trigger(index)
+    {
+        new_rtu_master[index].enable=false;
+        new_rtu_master[index].aliasName="";
+        new_rtu_master[index].serialProfile="";
+
+        New_RTU_Master_index=index;
+        New_RTU_Master_Modal=true;
+
+    }
+
+    function add_new_rtu_master(index)
+    {
+
+        New_RTU_Master_Modal=false;
+
+        changed_modbus_data.config.fieldManagement_modbus_rtu.master=[...changed_modbus_data.config.fieldManagement_modbus_rtu.master,new_rtu_master[index]];
+    }
+
+
+
     let Modify_RTU_Master_Modal=false;
     let Modify_RTU_Master_index;
 
@@ -501,6 +540,43 @@
     function ModifyRTUMaster()
     {
         Modify_RTU_Master_Modal=false;  
+    }
+
+
+    let new_rtu_slave=[
+    {
+        enable:false,
+        aliasName:"",
+        serialProfile:""
+    },
+    {
+        enable:false,
+        aliasName:"",
+        serialProfile:""
+    }
+    ]
+
+
+    let New_RTU_Slave_Modal=false;
+    let New_RTU_Slave_index;
+
+
+    function new_rtu_slave_trigger(index)
+    {
+        new_rtu_slave[index].enable=false;
+        new_rtu_slave[index].aliasName="";
+        new_rtu_slave[index].serialProfile="";
+
+        New_RTU_Slave_index=index;
+        New_RTU_Slave_Modal=true;
+
+    }
+
+    function add_new_rtu_slave(index)
+    {
+        New_RTU_Slave_Modal=false;
+
+        changed_modbus_data.config.fieldManagement_modbus_rtu.slave=[...changed_modbus_data.config.fieldManagement_modbus_rtu.slave,new_rtu_slave[index]];
     }
 
 
@@ -3256,6 +3332,36 @@
 
 {/each}
 {/if}
+
+
+ <TableBodyRow>
+     <TableBodyCell class="!p-1">
+
+{#if changed_modbus_data.config.fieldManagement_modbus_rtu.master.length < 2}
+            <button on:click={()=>new_rtu_master_trigger(changed_modbus_data.config.fieldManagement_modbus_rtu.master.length)}>
+    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+</button>
+{/if}
+
+     </TableBodyCell>
+     <TableBodyCell class="!p-1"></TableBodyCell>
+     <TableBodyCell class="!p-1"></TableBodyCell>
+        <TableBodyCell></TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-6 w-18"> </TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+
+
+    </TableBodyRow>
+
+
 <tr>
     <td></td>
     <td></td>
@@ -3281,6 +3387,66 @@
     </tr>
 
   </TableBody>
+
+
+
+ 
+<Modal bind:open={New_RTU_Master_Modal} autoclose>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_rtu_master[New_RTU_Master_index].enable}>
+{/if}
+  Enable
+</label>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_rtu_master[New_RTU_Master_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
+      <td class="pl-5 pt-5">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_rtu_master[New_RTU_Master_index].serialProfile}>
+<option disabled="" value="">Choose Profile ...</option>
+{#if saved_changed_port_connection_data != ""}
+{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_com as Serial, index}
+<option value={Serial.serialProfile}>{Serial.serialProfile}</option>
+{/each}
+{/if}
+</select>
+
+
+      </td>
+
+
+
+  </tr>
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={add_new_rtu_master(New_RTU_Master_index)}>Add</Button></td>
+
+
+    </tr>
+</table>
+</form>
+</Modal>
 
 
    
@@ -3388,6 +3554,36 @@
 {/each}
 {/if}
 
+
+
+ <TableBodyRow>
+     <TableBodyCell class="!p-1">
+
+{#if changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length < 2}
+            <button on:click={()=>new_rtu_slave_trigger(changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length)}>
+    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+</button>
+{/if}
+
+     </TableBodyCell>
+     <TableBodyCell class="!p-1"></TableBodyCell>
+     <TableBodyCell class="!p-1"></TableBodyCell>
+        <TableBodyCell></TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-6 w-18"> </TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+
+
+    </TableBodyRow>
+
+
 <tr>
     <td></td>
     <td></td>
@@ -3413,6 +3609,64 @@
     </tr>
 
   </TableBody>
+
+
+<Modal bind:open={New_RTU_Slave_Modal} autoclose>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_rtu_slave[New_RTU_Slave_index].enable}>
+{/if}
+  Enable
+</label>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_rtu_slave[New_RTU_Slave_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
+      <td class="pl-5 pt-5">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_rtu_slave[New_RTU_Slave_index].serialProfile}>
+<option disabled="" value="">Choose Profile ...</option>
+{#if saved_changed_port_connection_data != ""}
+{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_com as Serial, index}
+<option value={Serial.serialProfile}>{Serial.serialProfile}</option>
+{/each}
+{/if}
+</select>
+
+
+      </td>
+
+
+
+  </tr>
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true} on:click={add_new_rtu_slave(New_RTU_Slave_index)}>Add</Button></td>
+
+
+    </tr>
+</table>
+</form>
+</Modal>
 
 
    <Modal bind:open={Modify_RTU_Slave_Modal} permanent={true}>

@@ -76,6 +76,7 @@
       portConnectionConfig,
     	PortConnection_LAN_ConfigChangedLog,
     	PortConnection_COM_ConfigChangedLog,
+      PortConnection_Transparent_ConfigChangedLog,
     	ChangedPortConnectionConfig,
       certificateConfig,
     	Certificate_Settings_ConfigChangedLog,
@@ -242,6 +243,7 @@
   let PortConnectionBinary=null;
   let port_connection_lan_changedValues = [];
   let port_connection_com_changedValues = [];
+  let port_connection_transparent_changedValues=[];
 
   let ContentCertificate;
   let CertificateBinary=null;
@@ -541,6 +543,9 @@
     port_connection_com_changedValues = val;
  	});
 
+  PortConnection_Transparent_ConfigChangedLog.subscribe(val => {
+    port_connection_transparent_changedValues = val;
+  });    
 
   RemoteServiceConfigChangedLog.subscribe(val => {
       remote_service_changedValues = val;
@@ -1592,10 +1597,12 @@
 
       port_connection_lan_changedValues = [];
       port_connection_com_changedValues = [];
+      port_connection_transparent_changedValues = [];
 
 
       PortConnection_LAN_ConfigChangedLog.set(port_connection_lan_changedValues);
       PortConnection_COM_ConfigChangedLog.set(port_connection_com_changedValues);
+      PortConnection_Transparent_ConfigChangedLog.set(port_connection_transparent_changedValues);      
       RestartPortConnection();
 
 	  }		
@@ -1971,7 +1978,7 @@
 		}
 
 		if (port_connection_data != ""  && (port_connection_lan_changedValues.length !=0 ||
-  			port_connection_com_changedValues.length !=0 ))
+  			port_connection_com_changedValues.length !=0 || port_connection_transparent_changedValues.length != 0))
   	{
 			SetCount++;	
       RestartCount++;
@@ -2239,7 +2246,7 @@
 				}
 
 				if (port_connection_data != ""  && (port_connection_lan_changedValues.length !=0 ||
-  			port_connection_com_changedValues.length !=0 ))
+  			port_connection_com_changedValues.length !=0 || port_connection_transparent_changedValues.length !=0))
   			{
 					let PortConnectionString = JSON.stringify(port_connection_data, null, 0);
 					const bytesArray = Array.from(PortConnectionString).map(char => char.charCodeAt(0));
@@ -2928,7 +2935,8 @@ event_engine_action_do_changeValues.length != 0 ||
 {/if}
 
 {#if port_connection_lan_changedValues.length !=0 ||
-  			port_connection_com_changedValues.length !=0}
+  			port_connection_com_changedValues.length !=0 ||
+        port_connection_transparent_changedValues.length !=0}
   			<Li>Port Connection
     {#if port_connection_lan_changedValues.length !=0}			
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
@@ -2956,6 +2964,22 @@ event_engine_action_do_changeValues.length != 0 ||
   </Li> 
   </List>
   {/if}
+
+
+    {#if port_connection_transparent_changedValues.length !=0}      
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+    TCP Transparent
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+   {#each port_connection_transparent_changedValues as item}
+    <Li>{item}</Li>
+  {/each}
+  </List>
+  </Li> 
+  </List>
+  {/if}
+
+
   			</Li>
 
 {/if}
@@ -3643,6 +3667,7 @@ event_engine_action_do_changeValues.length != 0 ||
   			remote_service_changedValues.length !=0 ||
   			port_connection_lan_changedValues.length !=0 ||
   			port_connection_com_changedValues.length !=0 ||
+        port_connection_transparent_changedValues.length !=0 ||
   			certificate_settings_changedValues.length !=0
 
 		}

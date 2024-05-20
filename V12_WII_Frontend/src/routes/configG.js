@@ -80,6 +80,8 @@ export const ModbusRTU_Slave_ConfigChangedLog=writable("");
 export const ModbusRTU_Master_ConfigChangedLog=writable("");
 export const ChangedModbusConfig=writable("");
 
+
+export const PortConnection_Transparent_ConfigChangedLog=writable("");
 export const PortConnection_LAN_ConfigChangedLog=writable("");
 export const PortConnection_COM_ConfigChangedLog=writable("");
 export const ChangedPortConnectionConfig=writable("");

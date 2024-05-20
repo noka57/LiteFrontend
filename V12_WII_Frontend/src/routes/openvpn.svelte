@@ -3421,16 +3421,28 @@
             for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length,
             openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length);i++)
             {
-              if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i] !=
-              openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i])
+              if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].cname !=
+              openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].cname)
               {
-               let changedstr="Client Certificate Common Name List No. "+(i+1)+" item is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i];
+               let changedstr="Client Certificate Common Name List No. "+(i+1)+" Name is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].cname;
 
                 openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
 
-                saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i]=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i];
+                saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].cname=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].cname;
 
               }
+
+              if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].enable !=
+              openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].enable)
+              {
+               let changedstr="Client Certificate Common Name List No. "+(i+1)+" Enable is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].enable;
+
+                openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+                saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].enable=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].enable;
+
+              }
+              
             }
 
             if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length > openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length) 
@@ -3449,6 +3461,17 @@
             for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length,
             openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length);i++)
             {
+
+              if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].enable !=
+              openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].enable)
+              {
+               let changedstr="Client Account/Password List No. "+(i+1)+" item is changed: Enable has changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].enable;
+
+                openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+                saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].enable=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].enable;
+              }
+
               if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account !=
               openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account)
               {

@@ -9,6 +9,7 @@
     portConnectionConfig,
     PortConnection_LAN_ConfigChangedLog,
     PortConnection_COM_ConfigChangedLog,
+    PortConnection_Transparent_ConfigChangedLog,
     ChangedPortConnectionConfig,
     ChangedModbusConfig,
     modbusConfig,
@@ -25,6 +26,7 @@
     let getDataReady=0;
     let port_connection_lan_changedValues = [];
     let port_connection_com_changedValues = [];
+    let port_connection_transparent_changedValues=[];
 
     let modbus_rtu_master_changedValues=[];
     let modbus_rtu_slave_changedValues=[];
@@ -74,6 +76,10 @@
       port_connection_com_changedValues = val;
     });
 
+    PortConnection_Transparent_ConfigChangedLog.subscribe(val => {
+      port_connection_transparent_changedValues = val;
+    });    
+
     ChangedPortConnectionConfig.subscribe(val => {
       saved_changed_port_connection_data = val;
     });
@@ -85,6 +91,7 @@
    let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
+   let COM_TCP_Target_Index=-1;
 
 
     function compareModbusObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
@@ -386,6 +393,70 @@
   }
 
 
+  function SaveComTcpTransparent()
+  {
+    console.log("save com tcp transparent");
+    if (port_connection_transparent_changedValues.length !=0)
+    {
+      port_connection_transparent_changedValues =[];
+    }
+
+
+    for (let i=0;i<changed_port_connection_data.config.fieldManagement_com_tcp.length;i++)
+    {
+      if (changed_port_connection_data.config.fieldManagement_com_tcp[i].mode != port_connection_data.config.fieldManagement_com_tcp[i].mode)
+      {
+        let changedstr="COM No."+(i+1)+" TCP Transparent Mode is changed to "+changed_port_connection_data.config.fieldManagement_com_tcp[i].mode;
+
+        port_connection_transparent_changedValues=[...port_connection_transparent_changedValues, changedstr]; 
+
+        saved_changed_port_connection_data.config.fieldManagement_com_tcp[i].mode=changed_port_connection_data.config.fieldManagement_com_tcp[i].mode;
+
+      }
+
+      if (changed_port_connection_data.config.fieldManagement_com_tcp[i].listenPort != port_connection_data.config.fieldManagement_com_tcp[i].listenPort)
+      {
+
+        let changedstr="COM No."+(i+1)+" TCP Trasparent Listen Port is changed to "+changed_port_connection_data.config.fieldManagement_com_tcp[i].listenPort;
+
+        port_connection_transparent_changedValues=[...port_connection_transparent_changedValues, changedstr]; 
+
+        saved_changed_port_connection_data.config.fieldManagement_com_tcp[i].listenPort=changed_port_connection_data.config.fieldManagement_com_tcp[i].listenPort;
+      }
+
+
+
+      if (changed_port_connection_data.config.fieldManagement_com_tcp[i].remoteHost != port_connection_data.config.fieldManagement_com_tcp[i].remoteHost)
+      {
+
+        let changedstr="COM No."+(i+1)+" TCP Transparent Remote Host is changed to "+changed_port_connection_data.config.fieldManagement_com_tcp[i].remoteHost;
+
+        port_connection_transparent_changedValues=[...port_connection_transparent_changedValues, changedstr]; 
+
+        saved_changed_port_connection_data.config.fieldManagement_com_tcp[i].remoteHost=changed_port_connection_data.config.fieldManagement_com_tcp[i].remoteHost;
+      }
+
+
+      if (changed_port_connection_data.config.fieldManagement_com_tcp[i].remotePort != port_connection_data.config.fieldManagement_com_tcp[i].remotePort)
+      {
+        let changedstr="COM No."+(i+1)+" TCP Transparent Remote Port is changed to "+changed_port_connection_data.config.fieldManagement_com_tcp[i].remotePort;
+
+        port_connection_transparent_changedValues=[...port_connection_transparent_changedValues, changedstr]; 
+    
+        saved_changed_port_connection_data.config.fieldManagement_com_tcp[i].remotePort=changed_port_connection_data.config.fieldManagement_com_tcp[i].remotePort;
+
+      }
+
+    }
+
+
+    PortConnection_Transparent_ConfigChangedLog.set(port_connection_transparent_changedValues);
+    ChangedPortConnectionConfig.set(saved_changed_port_connection_data);
+    console.log(port_connection_transparent_changedValues);
+
+  }
+
+
 
   function TriggerModifyLAN(index)
   {
@@ -500,7 +571,6 @@
     PortConnection_LAN_ConfigChangedLog.set(port_connection_lan_changedValues);
     ChangedPortConnectionConfig.set(saved_changed_port_connection_data);
     console.log(port_connection_lan_changedValues);
-    console.log("end save");
   }
 
 
@@ -602,9 +672,8 @@
   <TableHead>
   <TableHeadCell class="!p-4">
     </TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
     <TableHeadCell class="w-18">Profile Name</TableHeadCell>
-    <TableHeadCell class="w-18">IP</TableHeadCell>
-    <TableHeadCell class="w-18">Status</TableHeadCell>
 
      </TableHead>
   <TableBody>
@@ -612,7 +681,11 @@
 {#if getDataReady == 1}
 {#each changed_port_connection_data.config.fieldManagement_portConnection_lan as LANItem, index}
     <TableBodyRow>
+
+
+
       <TableBodyCell class="!p-4 w-4">
+{#if 0}     
 <button on:click={() =>TriggerModifyLAN(index)}>
 
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
@@ -621,18 +694,14 @@
 
 
       </button>
-
+{/if}
 
        </TableBodyCell>
 
 
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{LANItem.profileName}</TableBodyCell>
-      <TableBodyCell class="w-18">{LANItem.ip}</TableBodyCell>
-{#if LANItem.status == 1}
-      <TableBodyCell class="w-18">LinkUp</TableBodyCell>
-{:else if LANItem.status == 0}
-      <TableBodyCell class="w-18">LinkDown</TableBodyCell>
-{/if}
+
 
     </TableBodyRow>
 {/each}
@@ -699,6 +768,17 @@
   </TabItem>
 
   <TabItem title="COM">
+
+
+<Accordion>
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    General
+    </span>
+
 
 <Table shadow striped={true} tableNoWFull={true}>
 <TableHead>    
@@ -852,6 +932,117 @@
 </Modal>
 
 </Table>
+
+
+</AccordionItem>
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    TCP Transparent
+    </span>
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={COM_TCP_Target_Index}>
+<option disabled="" value="none">Choose Profile ...</option>
+
+{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_com as TargetProfile,index}
+<option value={index}>{TargetProfile.serialProfile}</option>
+{/each}
+</select>
+
+<p class="pt-4"></p>
+
+{#if COM_TCP_Target_Index!= -1}
+
+    <table>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Mode</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].mode} value={0} >Server</Radio>
+  <Radio class="pb-2" bind:group={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].mode} value={1} >Client</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+{#if changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].mode == 0}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].listenPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+
+{:else if changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].mode == 1}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].remoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].remotePort}  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+
+{/if}
+
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveComTcpTransparent}>Save</Button></td>
+
+  </tr>
+
+
+
+    </table>
+
+{/if}
+
+</AccordionItem>
+</Accordion>
 
 
   </TabItem>

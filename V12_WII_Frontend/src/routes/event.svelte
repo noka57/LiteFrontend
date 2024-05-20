@@ -4076,7 +4076,7 @@
 
 </AccordionItem>
 
-
+{#if 0}
   <AccordionItem {defaultClass}>
 
 
@@ -4438,6 +4438,8 @@
 
 
 </AccordionItem>
+
+{/if}
 
 
   <AccordionItem {defaultClass}>
@@ -8542,7 +8544,9 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if rule.triggerCount == 1 || rule.triggerCount ==2 || rule.triggerCount ==3}
 
 {#if rule.firstTrigger.catalog ==0}SMS{rule.firstTrigger.profile})
-{:else if rule.firstTrigger.catalog ==1}DI({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==1}DI(
+{#if rule.firstTrigger.statusType ==1}High{:else if rule.firstTrigger.statusType == 0}Low{/if}
+)
 {:else if rule.firstTrigger.catalog ==2}Modbus({rule.firstTrigger.profile})
 {:else if rule.firstTrigger.catalog ==3}TCP Message({rule.firstTrigger.profile})
 {:else if rule.firstTrigger.catalog ==4}MQTT({rule.firstTrigger.profile})
@@ -8557,7 +8561,9 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if rule.triggerCount ==2 || rule.triggerCount==3}
 {#if rule.secondTrigger.catalog ==0},SMS{rule.firstTrigger.profile})
-{:else if rule.secondTrigger.catalog ==1},DI({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==1},DI(
+{#if rule.secondTrigger.statusType ==1}High{:else if rule.secondTrigger.statusType == 0}Low{/if}
+)
 {:else if rule.secondTrigger.catalog ==2},Modbus({rule.secondTrigger.profile})
 {:else if rule.secondTrigger.catalog ==3},TCP Message({rule.secondTrigger.profile})
 {:else if rule.secondTrigger.catalog ==4},MQTT({rule.secondTrigger.profile})
@@ -8573,7 +8579,9 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if rule.triggerCount ==3}
 {#if rule.thirdTrigger.catalog ==0},SMS{rule.firstTrigger.profile})
-{:else if rule.thirdTrigger.catalog ==1},DI({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==1},DI(
+{#if rule.thirdTrigger.statusType ==1}High{:else if rule.thirdTrigger.statusType == 0}Low{/if}
+)
 {:else if rule.thirdTrigger.catalog ==2},Modbus({rule.thirdTrigger.profile})
 {:else if rule.thirdTrigger.catalog ==3},TCP Message({rule.thirdTrigger.profile})
 {:else if rule.thirdTrigger.catalog ==4},MQTT({rule.thirdTrigger.profile})
@@ -8732,7 +8740,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <tr>
       <td>
 
-{#if NewRuleItem[new_rule_index].firstTrigger.catalog == 10 || NewRuleItem[new_rule_index].firstTrigger.catalog == 7 ||NewRuleItem[new_rule_index].firstTrigger.catalog == 8 || NewRuleItem[new_rule_index].firstTrigger.catalog == 9}
+{#if NewRuleItem[new_rule_index].firstTrigger.catalog == 10 || NewRuleItem[new_rule_index].firstTrigger.catalog == 7 ||NewRuleItem[new_rule_index].firstTrigger.catalog == 8 || NewRuleItem[new_rule_index].firstTrigger.catalog == 9 || NewRuleItem[new_rule_index].firstTrigger.catalog == 1}
       <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
 {:else}
 
@@ -8742,7 +8750,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <td class= "pl-4 pt-4">
 
 
-{#if NewRuleItem[new_rule_index].firstTrigger.catalog <=6}
+{#if NewRuleItem[new_rule_index].firstTrigger.catalog != 1 && NewRuleItem[new_rule_index].firstTrigger.catalog <=6}
 
     <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].firstTrigger.profile}><option disabled="" value="">None</option>
 
@@ -8750,13 +8758,6 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if NewRuleItem[new_rule_index].firstTrigger.catalog == 0}
 {#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms as SMS,index}
 <option value={SMS.aliasName}>{SMS.aliasName}</option>
-{/each}
-
-{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 1}
-
-
-{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
-<option value={DI.aliasName}>{DI.aliasName}</option>
 {/each}
 
 
@@ -8819,6 +8820,9 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog  == 1}
+<option value={0}>Low</option>
+<option value={1}>High</option>
 {/if}
 </select>
 
@@ -8870,7 +8874,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td>
 
 
-{#if NewRuleItem[new_rule_index].secondTrigger.catalog == 10 || NewRuleItem[new_rule_index].secondTrigger.catalog == 7 ||NewRuleItem[new_rule_index].secondTrigger.catalog == 8 || NewRuleItem[new_rule_index].secondTrigger.catalog == 9}
+{#if NewRuleItem[new_rule_index].secondTrigger.catalog == 10 || NewRuleItem[new_rule_index].secondTrigger.catalog == 7 ||NewRuleItem[new_rule_index].secondTrigger.catalog == 8 || NewRuleItem[new_rule_index].secondTrigger.catalog == 9 || NewRuleItem[new_rule_index].secondTrigger.catalog == 1}
       <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
 {:else}
 
@@ -8888,7 +8892,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {:else}
 
 
-{#if NewRuleItem[new_rule_index].secondTrigger.catalog <=6}
+{#if NewRuleItem[new_rule_index].secondTrigger.catalog != 1 && NewRuleItem[new_rule_index].secondTrigger.catalog <=6}
 
  <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].secondTrigger.profile}><option disabled="" value="">None</option>
 
@@ -8897,13 +8901,6 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms as SMS,index}
 <option value={SMS.aliasName}>{SMS.aliasName}</option>
-{/each}
-
-
-{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 1}
-
-{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
-<option value={DI.aliasName}>{DI.aliasName}</option>
 {/each}
 
 {:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 2}
@@ -8964,6 +8961,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
+
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog  == 1}
+<option value={0}>Low</option>
+<option value={1}>High</option>
+
 {/if}
 
 </select>
@@ -9016,7 +9018,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <tr>
       <td>
-{#if NewRuleItem[new_rule_index].thirdTrigger.catalog == 7 || NewRuleItem[new_rule_index].thirdTrigger.catalog == 7 ||NewRuleItem[new_rule_index].thirdTrigger.catalog == 8 || NewRuleItem[new_rule_index].thirdTrigger.catalog == 9}
+{#if NewRuleItem[new_rule_index].thirdTrigger.catalog == 7 || NewRuleItem[new_rule_index].thirdTrigger.catalog == 7 ||NewRuleItem[new_rule_index].thirdTrigger.catalog == 8 || NewRuleItem[new_rule_index].thirdTrigger.catalog == 9 || NewRuleItem[new_rule_index].thirdTrigger.catalog == 1}
       <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
 {:else}
 
@@ -9027,7 +9029,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if NewRuleItem[new_rule_index].triggerCount=='3'}
 
-{#if NewRuleItem[new_rule_index].thirdTrigger.catalog <=6}
+{#if NewRuleItem[new_rule_index].thirdTrigger.catalog!=1 && NewRuleItem[new_rule_index].thirdTrigger.catalog <=6}
 
  <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].thirdTrigger.profile}><option disabled="" value="">None</option>
 
@@ -9037,11 +9039,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={SMS.aliasName}>{SMS.aliasName}</option>
 {/each}
 
-{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 1}
 
-{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
-<option value={DI.aliasName}>{DI.aliasName}</option>
-{/each}
 
 {:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 2}
 
@@ -9100,6 +9098,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
+
+
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog  == 1}
+<option value={0}>Low</option>
+<option value={1}>High</option>
+
+
 {/if}
 </select>
 {/if}
@@ -9524,7 +9529,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <tr>
       <td>
 
-{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 10 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 7 ||changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 8 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 9}
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 10 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 7 ||changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 8 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 9 ||
+changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 1}
       <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
 {:else}
 
@@ -9534,7 +9540,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <td class= "pl-4 pt-4">
 
 
-{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog <=6}
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog!=1 && changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog <=6}
 
     <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.profile}><option disabled="" value="">None</option>
 
@@ -9548,12 +9554,6 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={SMS.aliasName}>{SMS.aliasName}</option>
 {/each}
 
-{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 1}
-
-
-{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
-<option value={DI.aliasName}>{DI.aliasName}</option>
-{/each}
 
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 2}
 
@@ -9617,6 +9617,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 1}
+<option value={0}>Low</option>
+<option value={1}>High</option>
+
 {/if}
 </select>
 
@@ -9669,7 +9674,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <td>
 
 
-{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 10 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 7 ||changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 8 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 9}
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 10 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 7 ||changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 8 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 9 ||
+changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 1}
       <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
 {:else}
 
@@ -9698,12 +9704,6 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={SMS.aliasName}>{SMS.aliasName}</option>
 {/each}
 
-{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 1}
-
-
-{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
-<option value={DI.aliasName}>{DI.aliasName}</option>
-{/each}
 
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 2}
 
@@ -9741,7 +9741,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {/if}
 </select>
 
-{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog <=10}
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog != 1 && changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog <=10}
  <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.statusType}><option disabled="" value="">None</option>
 
 {#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 7}
@@ -9763,6 +9763,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog  == 1}
+<option value={0}>Low</option>
+<option value={1}>High</option>
+
 {/if}
 
 </select>
@@ -9815,7 +9820,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <tr>
       <td>
-{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 10 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 7 ||changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 8 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 9}
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 10 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 7 ||changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 8 || changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 9 ||
+changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 1}
       <p class="pl-20 pt-4 text-lg font-light text-right">Status</p>
 {:else}
 
@@ -9826,7 +9832,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].triggerCount=='3'}
 
-{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog <=6}
+{#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog != 1 && changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog <=6}
 
  <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.profile}><option disabled="" value="">None</option>
 
@@ -9837,12 +9843,6 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={SMS.aliasName}>{SMS.aliasName}</option>
 {/each}
 
-{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 1}
-
-
-{#each saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di as DI,index}
-<option value={DI.aliasName}>{DI.aliasName}</option>
-{/each}
 
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 2}
 
@@ -9901,6 +9901,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
+
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 1}
+<option value={0}>Low</option>
+<option value={1}>High</option>
+
 {/if}
 </select>
 {/if}

@@ -579,16 +579,15 @@ NA
         <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10">
         <p class="text-black text-lg">IP Address(IPv4)</p>
                 {#if hidden == 0}
-        <p class="text-black text-lg">Default Gateway</p>
+        <p class="text-black text-lg">Gateway</p>
 
         {/if}
 </div>
 <div class="px-40">
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.ip}{/if}</p>
-                {#if hidden == 0}
+
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.gateway}{/if}</p>
 
-        {/if}
 </div>
 </div>
                       </TableBodyCell>

@@ -260,7 +260,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0        
   };
 
   let NewItemDPS=[
@@ -272,7 +273,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0  
   },
   {
     enable: false,
@@ -282,7 +284,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0     
   },
   {
     enable: false,
@@ -292,7 +295,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0     
   },
   {
     enable: false,
@@ -302,7 +306,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0     
   },
   {
     enable: false,
@@ -312,7 +317,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0    
   },
   {
     enable: false,
@@ -322,7 +328,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0   
   },
   {
     enable: false,
@@ -332,7 +339,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0    
   },
   {
     enable: false,
@@ -342,7 +350,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0    
   },
   {
     enable: false,
@@ -352,7 +361,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0     
   },
   {
     enable: false,
@@ -362,7 +372,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""    
+    machineCert:"",
+    enrollment:0     
   }
 
 
@@ -385,7 +396,8 @@
     NewItemDPS[index].modelID="";
     NewItemDPS[index].attestation=0;
     NewItemDPS[index].machineCAcert="";
-    NewItemDPS[index].machineCert="";    
+    NewItemDPS[index].machineCert="";
+    NewItemDPS[index].enrollment=0;    
     new_item_dps_index=index;
     new_modal_dps = true;
   }
@@ -411,7 +423,7 @@
     BackupItemDPS.attestation=changed_azure_data.config.cloud_azDPS_profile[index].attestation;
     BackupItemDPS.machineCAcert=changed_azure_data.config.cloud_azDPS_profile[index].machineCAcert;
     BackupItemDPS.machineCert=changed_azure_data.config.cloud_azDPS_profile[index].machineCert;    
-
+    BackupItemDPS.enrollment=changed_azure_data.config.cloud_azDPS_profile[index].enrollment;
   }
 
   function NoModifyAZhubDPS(index)
@@ -425,7 +437,7 @@
     changed_azure_data.config.cloud_azDPS_profile[index].attestation= BackupItemDPS.attestation;
     changed_azure_data.config.cloud_azDPS_profile[index].machineCAcert= BackupItemDPS.machineCAcert;
     changed_azure_data.config.cloud_azDPS_profile[index].machineCert= BackupItemDPS.machineCert;    
-
+    changed_azure_data.config.cloud_azDPS_profile[index].enrollment= BackupItemDPS.enrollment;  
   }
 
   function ModifyAZhubDPS(index)
@@ -443,7 +455,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""  
+    machineCert:"",
+    enrollment:0      
   };
 
   let NewItemCentral=[
@@ -456,7 +469,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""  
+    machineCert:"",
+    enrollment:0      
   },
   {
     enable: false,
@@ -467,7 +481,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""  
+    machineCert:"",
+    enrollment:0      
   },
   {
     enable: false,
@@ -478,7 +493,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""  
+    machineCert:"",
+    enrollment:0      
   },
   {
     enable: false,
@@ -489,7 +505,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    enrollment:0    
   },
   {
     enable: false,
@@ -500,7 +517,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    enrollment:0    
   },
   {
     enable: false,
@@ -511,7 +529,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    enrollment:0    
   },
   {
     enable: false,
@@ -522,7 +541,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    enrollment:0    
   },
   {
     enable: false,
@@ -533,7 +553,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    enrollment:0    
   },
   {
     enable: false,
@@ -544,7 +565,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    enrollment:0    
   },
   {
     enable: false,
@@ -555,7 +577,8 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    enrollment:0    
   }
 
 
@@ -580,7 +603,7 @@
     NewItemCentral[index].attestation=0;
     NewItemCentral[index].machineCAcert="";
     NewItemCentral[index].machineCert="";
-
+    NewItemCentral[index].enrollment=0;
     new_item_central_index=index;
     new_modal_central = true;
   }
@@ -607,7 +630,7 @@
     BackupItemCentral.attestation=changed_azure_data.config.cloud_azCentral_profile[index].attestation;
     BackupItemCentral.machineCAcert=changed_azure_data.config.cloud_azCentral_profile[index].machineCAcert;
     BackupItemCentral.machineCert=changed_azure_data.config.cloud_azCentral_profile[index].machineCert;
-
+    BackupItemCentral.enrollment=changed_azure_data.config.cloud_azCentral_profile[index].enrollment;
 
   }
 
@@ -623,7 +646,7 @@
     changed_azure_data.config.cloud_azCentral_profile[index].attestation=BackupItemCentral.attestation;
     changed_azure_data.config.cloud_azCentral_profile[index].machineCAcert=BackupItemCentral.machineCAcert;
     changed_azure_data.config.cloud_azCentral_profile[index].machineCert=BackupItemCentral.machineCert;    
-
+    changed_azure_data.config.cloud_azCentral_profile[index].enrollment=BackupItemCentral.enrollment; 
   }
 
   function ModifyAZCentral(index)
@@ -1343,6 +1366,7 @@
     <TableHeadCell class="!p-1">No</TableHeadCell>
     <TableHeadCell class="w-18">ID Scope</TableHeadCell>
     <TableHeadCell class="w-18">Registration ID</TableHeadCell> 
+    <TableHeadCell class="w-18">Enrollment</TableHeadCell>  
     <TableHeadCell class="w-18">Attestation</TableHeadCell>      
     <TableHeadCell class="w-18">Model ID</TableHeadCell> 
 
@@ -1375,6 +1399,15 @@
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{azDPS.idScope}</TableBodyCell>
        <TableBodyCell class="w-18">{azDPS.RegistrationID}</TableBodyCell>
+
+{#if azDPS.enrollment == 0}
+       <TableBodyCell class="w-18">Individual</TableBodyCell>
+{:else if azDPS.enrollment ==1}
+       <TableBodyCell class="w-18">Group</TableBodyCell>
+{:else}
+       <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
+
 {#if azDPS.attestation == 0}
        <TableBodyCell class="w-18">SAS</TableBodyCell>
 {:else if azDPS.attestation ==1}
@@ -1414,6 +1447,7 @@
        <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
+       <TableBodyCell class="w-18"></TableBodyCell>       
 </TableBodyRow>
 
 <tr class="pt-5">
@@ -1480,6 +1514,7 @@
 
   </tr>
 
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Model ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].modelID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -1490,6 +1525,29 @@
     <td class="w-10"></td>
 
   </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Enrollment</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].enrollment} value={0} >Individual</Radio>
+  <Radio class="pb-2" bind:group={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].enrollment} value={1} >Group</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+
+
 
 
 <tr>
@@ -1523,8 +1581,8 @@
 
 {:else if changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].attestation==1}
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
-      <td class="pl-5 pt-5" colspan="2">
+      <td><p class="pl-5 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="6">
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].machineCAcert}>
 <option disabled="" value="none">Choose Certificate ...</option>
@@ -1541,7 +1599,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+      <td><p class="pl-5 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="6">
 
 
 
@@ -1618,6 +1676,9 @@
 
   </tr>
 
+
+
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Model ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItemDPS[new_item_dps_index].modelID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     <td class="w-10"></td>
@@ -1627,6 +1688,27 @@
     <td class="w-10"></td>
 
   </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Enrollment</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={NewItemDPS[new_item_dps_index].enrollment} value={0} >Individual</Radio>
+  <Radio class="pb-2" bind:group={NewItemDPS[new_item_dps_index].enrollment} value={1} >Group</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
 
 
 
@@ -1661,8 +1743,8 @@
 
 {:else if NewItemDPS[new_item_dps_index].attestation==1}
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
-      <td class="pl-5 pt-5" colspan="2">
+      <td><p class="pl-5 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="6">
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItemDPS[new_item_dps_index].machineCAcert}>
 <option disabled="" value="none">Choose Certificate ...</option>
@@ -1679,7 +1761,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+      <td><p class="pl-5 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="6">
 
 
 
@@ -1749,6 +1831,8 @@
     <TableHeadCell class="w-18">Application Name</TableHeadCell>  
     <TableHeadCell class="w-18">ID Scope</TableHeadCell>
     <TableHeadCell class="w-18">Device ID</TableHeadCell>
+    <TableHeadCell class="w-18">Enrollment</TableHeadCell>  
+    <TableHeadCell class="w-18">Attestation</TableHeadCell>    
     <TableHeadCell class="w-18">Model ID</TableHeadCell>             
      </TableHead>
   <TableBody>
@@ -1780,6 +1864,24 @@
       <TableBodyCell class="w-18">{azCentral.applicationName}</TableBodyCell>
       <TableBodyCell class="w-18">{azCentral.idScope}</TableBodyCell>
        <TableBodyCell class="w-18">{azCentral.deviceID}</TableBodyCell>
+
+{#if azCentral.enrollment == 0}
+       <TableBodyCell class="w-18">Individual</TableBodyCell>
+{:else if azCentral.enrollment ==1}
+       <TableBodyCell class="w-18">Group</TableBodyCell>
+{:else}
+       <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
+
+{#if azCentral.attestation == 0}
+       <TableBodyCell class="w-18">SAS</TableBodyCell>
+{:else if azCentral.attestation ==1}
+       <TableBodyCell class="w-18">X509 Certificate</TableBodyCell>
+{:else}
+       <TableBodyCell class="w-18"></TableBodyCell>
+{/if}
+
+
  <TableBodyCell class="w-18">{azCentral.modelID}</TableBodyCell>
     </TableBodyRow>
 {/each}
@@ -1899,6 +2001,30 @@
 
 
 <tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Enrollment</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].enrollment} value={0} >Individual</Radio>
+  <Radio class="pb-2" bind:group={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].enrollment} value={1} >Group</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+
+
+
+
+
+<tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
 
       <td class="pl-5 pt-5">
@@ -1929,8 +2055,8 @@
 
 {:else if changed_azure_data.config.cloud_azCentral_profile[modify_central_index].attestation==1}
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
-      <td class="pl-5 pt-5" colspan="2">
+      <td><p class="pl-5 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="6">
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].machineCAcert}>
 <option disabled="" value="none">Choose Certificate ...</option>
@@ -1947,7 +2073,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+      <td><p class="pl-5 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="6">
 
 
 
@@ -2042,6 +2168,29 @@
 
   </tr>
 
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Enrollment</p></td>
+
+      <td class="pl-5 pt-5">
+<div class="flex gap-2">
+  <Radio class="pb-2" bind:group={NewItemCentral[new_item_central_index].enrollment} value={0} >Individual</Radio>
+  <Radio class="pb-2" bind:group={NewItemCentral[new_item_central_index].enrollment} value={1} >Group</Radio>
+
+</div>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+
+
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
 
@@ -2073,8 +2222,8 @@
 
 {:else if NewItemCentral[new_item_central_index].attestation==1}
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
-      <td class="pl-5 pt-5" colspan="2">
+      <td><p class="pl-5 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="6">
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItemCentral[new_item_central_index].machineCAcert}>
 <option disabled="" value="none">Choose Certificate ...</option>
@@ -2091,7 +2240,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+      <td><p class="pl-5 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="6">
 
 
 

@@ -115,7 +115,7 @@
 
   const btn1 = () => 
   {
-    PFormatUDefine+="$TimeStamp$";
+    PFormatUDefine+="$TIME$";
 
   };
 
@@ -625,7 +625,7 @@
 
   const NMbtn1=() =>
   {
-    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$TimeStamp$";
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$TIME$";
   }
 
 
@@ -639,25 +639,31 @@
 
   const NMbtn3=() =>
   {
-    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$Keyword2$";
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$NAME_RAWREQUEST$";
   }
 
   const NMbtn4=() =>
   {
-    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$Keyword3$";
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$NAME_RAWREPLY$";
   }
 
 
   const NMbtn5=() =>
   {
-    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$Keyword4$";
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$MODBUSREQ$";
+  }
+
+
+  const NMbtn6=() =>
+  {
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$MODBUSRESP$";
   }
 
 
   const NPbtn1=() =>
   {
     console.log("NPbtn1");
-    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$TimeStamp$";
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$TIME$";
   }
 
 
@@ -670,12 +676,12 @@
 
   const NPbtn3=() =>
   {
-    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$Keyword2$";
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$NAME_RAWREQUEST$";
   }
 
   const NPbtn4=() =>
   {
-    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$Keyword3$";
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$NAME_RAWREPLY$";
   }
 
 
@@ -688,7 +694,7 @@
 
   const CPbtn1=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$TimeStamp$";
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$TIME$";
   }
 
 
@@ -702,12 +708,12 @@
 
   const CPbtn3=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$Keyword2$";
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$NAME_RAWREQUEST$";
   }
 
   const CPbtn4=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$Keyword3$";
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$NAME_RAWREPLY$";
   }
 
 
@@ -719,7 +725,7 @@
 
   const CMbtn1=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$TimeStamp$";
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$TIME$";
   }
 
 
@@ -733,22 +739,25 @@
 
   const CMbtn3=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$Keyword2$";
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$NAME_RAWREQUEST$";
   }
 
   const CMbtn4=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$Keyword3$";
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$NAME_RAWREPLY$";
   }
 
 
   const CMbtn5=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$Keyword4$";
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$MODBUSREQ$";
   }
 
 
-
+  const CMbtn6=() =>
+  {
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$MODBUSRESP$";
+  }
 
 
 
@@ -1415,7 +1424,7 @@
       Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg></div>
-<Tooltip trigger="click" triggeredBy="#click">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip>
+<Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip>
 
 {:else if ProxyEdgeData.dataFormat==1}User Defined{/if}
 </TableBodyCell>
@@ -1598,7 +1607,7 @@
   <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].dataFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
-<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip></Radio>
   <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].dataFormat} value={1} >User Defined:</Radio>
 
 
@@ -1611,9 +1620,9 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
-    <Button size="xs" on:click={NPbtn1(new_proxy_edge_index)}>TimeStamp</Button>
+    <Button size="xs" on:click={NPbtn1(new_proxy_edge_index)}>TIME</Button>
 {:else}
-    <Button size="xs" disabled>TimeStamp</Button>
+    <Button size="xs" disabled>TIME</Button>
 {/if}
 </li>
 
@@ -1627,28 +1636,20 @@
 
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={NPbtn3}>Keyword2</Button>
+<Button size="xs" on:click={NPbtn3}>NAME_RAWREQUEST</Button>
 {:else}
-<Button size="xs" disabled>Keyword2</Button>
+<Button size="xs" disabled>NAME_RAWREQUEST</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={NPbtn4}>Keyword3</Button>
+<Button size="xs" on:click={NPbtn4}>NAME_RAWREPLY</Button>
 {:else}
-<Button size="xs" disabled>Keyword3</Button>
+<Button size="xs" disabled>NAME_RAWREPLY</Button>
 {/if}
 </li>
 
-
-<li class='pt-4'>
-{#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={NPbtn5}>Keyword4</Button>
-{:else}
-<Button size="xs" disabled>Keyword4</Button>
-{/if}
-</li>
 
 </ul>
   </div>
@@ -1806,7 +1807,7 @@
   <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
-<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip></Radio>
   <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat} value={1} >User Defined:</Radio>
 
 
@@ -1819,9 +1820,9 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
-    <Button size="xs" on:click={CPbtn1}>TimeStamp</Button>
+    <Button size="xs" on:click={CPbtn1}>TIME</Button>
 {:else}
-    <Button size="xs" disabled>TimeStamp</Button>
+    <Button size="xs" disabled>TIME</Button>
 {/if}
 </li>
 
@@ -1835,28 +1836,20 @@
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={CPbtn3}>Keyword2</Button>
+<Button size="xs" on:click={CPbtn3}>NAME_RAWREQUEST</Button>
 {:else}
-<Button size="xs" disabled>Keyword2</Button>
+<Button size="xs" disabled>NAME_RAWREQUEST</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={CPbtn4}>Keyword3</Button>
+<Button size="xs" on:click={CPbtn4}>NAME_RAWREPLY</Button>
 {:else}
-<Button size="xs" disabled>Keyword3</Button>
+<Button size="xs" disabled>NAME_RAWREPLY</Button>
 {/if}
 </li>
 
-
-<li class='pt-4'>
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
-<Button size="xs" on:click={CPbtn5}>Keyword4</Button>
-{:else}
-<Button size="xs" disabled>Keyword4</Button>
-{/if}
-</li>
 
 </ul>
   </div>
@@ -2153,7 +2146,7 @@
       Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg></div>
-<Tooltip trigger="click" triggeredBy="#click">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip>
+<Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,&quot;Content&quot;:[&quot;ModbusReq&quot;:$MODBUSREQ$,&quot;ModbusResp&quot;:$MODBUSRESP$]&#125;</Tooltip>
 
 {:else if MonitorEdgeData.dataFormat==1}User Defined{/if}
 </TableBodyCell>
@@ -2310,7 +2303,7 @@
   <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].dataFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
-<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,&quot;Content&quot;:[&quot;ModbusReq&quot;:$MODBUSREQ$,&quot;ModbusResp&quot;:$MODBUSRESP$]&#125;</Tooltip></Radio>
   <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].dataFormat} value={1} >User Defined:</Radio>
 
 
@@ -2323,9 +2316,9 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
-    <Button size="xs" on:click={NMbtn1}>TimeStamp</Button>
+    <Button size="xs" on:click={NMbtn1}>TIME</Button>
 {:else}
-    <Button size="xs" disabled>TimeStamp</Button>
+    <Button size="xs" disabled>TIME</Button>
 {/if}
 </li>
 
@@ -2339,28 +2332,37 @@
 
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={NMbtn3}>Keyword2</Button>
+<Button size="xs" on:click={NMbtn3}>NAME_RAWREQUEST</Button>
 {:else}
-<Button size="xs" disabled>Keyword2</Button>
+<Button size="xs" disabled>NAME_RAWREQUEST</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={NMbtn4}>Keyword3</Button>
+<Button size="xs" on:click={NMbtn4}>NAME_RAWREPLY</Button>
 {:else}
-<Button size="xs" disabled>Keyword3</Button>
+<Button size="xs" disabled>NAME_RAWREPLY</Button>
 {/if}
 </li>
 
 
 <li class='pt-4'>
 {#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={NMbtn5}>Keyword4</Button>
+<Button size="xs" on:click={NMbtn5}>MODBUSREQ</Button>
 {:else}
-<Button size="xs" disabled>Keyword4</Button>
+<Button size="xs" disabled>MODBUSREQ</Button>
 {/if}
 </li>
+
+<li class='pt-4'>
+{#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
+<Button size="xs" on:click={NMbtn6}>MODBUSRESP</Button>
+{:else}
+<Button size="xs" disabled>MODBUSRESP</Button>
+{/if}
+</li>
+
 
 </ul>
   </div>
@@ -2494,7 +2496,7 @@
   <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
-<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,&quot;Content&quot;:[&quot;ModbusReq&quot;:$MODBUSREQ$,&quot;ModbusResp&quot;:$MODBUSRESP$]&#125;</Tooltip></Radio>
   <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat} value={1} >User Defined:</Radio>
 
 
@@ -2507,9 +2509,9 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
-    <Button size="xs" on:click={CMbtn1}>TimeStamp</Button>
+    <Button size="xs" on:click={CMbtn1}>TIME</Button>
 {:else}
-    <Button size="xs" disabled>TimeStamp</Button>
+    <Button size="xs" disabled>TIME</Button>
 {/if}
 </li>
 
@@ -2523,28 +2525,38 @@
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={CMbtn3}>Keyword2</Button>
+<Button size="xs" on:click={CMbtn3}>NAME_RAWREQUEST</Button>
 {:else}
-<Button size="xs" disabled>Keyword2</Button>
+<Button size="xs" disabled>NAME_RAWREQUEST</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={CMbtn4}>Keyword3</Button>
+<Button size="xs" on:click={CMbtn4}>NAME_RAWREPLY</Button>
 {:else}
-<Button size="xs" disabled>Keyword3</Button>
+<Button size="xs" disabled>NAME_RAWREPLY</Button>
 {/if}
 </li>
 
 
 <li class='pt-4'>
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
-<Button size="xs" on:click={CMbtn5}>Keyword4</Button>
+<Button size="xs" on:click={CMbtn5}>MODBUSREQ</Button>
 {:else}
-<Button size="xs" disabled>Keyword4</Button>
+<Button size="xs" disabled>MODBUSREQ</Button>
 {/if}
 </li>
+
+
+<li class='pt-4'>
+{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
+<Button size="xs" on:click={CMbtn6}>MODBUSRESP</Button>
+{:else}
+<Button size="xs" disabled>MODBUSRESP</Button>
+{/if}
+</li>
+
 
 </ul>
   </div>

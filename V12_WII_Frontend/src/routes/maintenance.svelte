@@ -36,6 +36,9 @@
   let TracerouteType=0;
   let TracerouteHost="";
   let NSLookupHost="";
+  let system_log="";
+  let SystemLogContent;
+  let SystemLog_Offset=0;
 
 
   let sessionid;
@@ -83,6 +86,8 @@
   let FinishTraceroute=0;
 
 
+
+
   async function NsLookup() {
     const res = await fetch(window.location.origin+"/nsLoOkup", {
       method: 'POST',
@@ -102,7 +107,6 @@
       console.log("error nslookup");
     }
   }
-
 
 
   function executeNslookup()
@@ -540,6 +544,41 @@
     }
   }
 
+
+  async function getSystemLog() {
+    const res = await fetch(window.location.origin+"/getSystemlog", {
+      method: 'POST',
+      body: SystemLogContent
+    })
+
+    if (res.status == 200)
+    {
+
+        system_log =await res.text();
+        console.log(system_log);
+        console.log("system logOK");
+        console.log(system_log.length);
+ 
+    }
+  }
+
+  const RefreshSystemLog = () =>
+  {
+
+    const hexArray = sessionid.match(/.{1,2}/g); 
+    const byteValues = hexArray.map(hex => parseInt(hex, 16));
+    sessionBinary = new Uint8Array(byteValues);
+    let offset_string="offset="+SystemLog_Offset;
+    const bytesArray = Array.from(offset_string).map(char => char.charCodeAt(0));
+    let SystemLogBinary = new Uint8Array(bytesArray);
+    SystemLogContent=new Uint8Array(SystemLogBinary.length+sessionBinary.length);
+    SystemLogContent.set(sessionBinary,0);
+    SystemLogContent.set(SystemLogBinary, sessionBinary.length);
+
+    
+    getSystemLog();
+
+  } 
 
   onMount(() => {
 
@@ -1024,5 +1063,12 @@ Hour
   </AccordionItem> 
 
 </Accordion>
+ </TabItem>
+
+ <TabItem title="Log Viewer" on:click={RefreshSystemLog}>
+
+
+<pre style="white-space: pre-wrap;">{system_log}</pre>
+
  </TabItem>
 </Tabs>

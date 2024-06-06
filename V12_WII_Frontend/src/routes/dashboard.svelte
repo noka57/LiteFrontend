@@ -329,7 +329,7 @@
 </svg></div>
 <div class="w-full">
 <p class="text-sm font-light">System Uptime</p>
-<p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemUptime} s{/if}</p>
+<p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemUptime} {/if}</p>
 </div>
 </div></TableBodyCell>
       <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class=""><svg class="w-16 h-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 -3 24 24">
@@ -343,7 +343,7 @@
 </div>
 <div class="w-full">
 <p class="text-sm font-light">Internet Uptime</p>
-<p class="text-xl font-bold">{#if hidden == 0}{#if dashboard_data!=""}{dashboard_data.config.dashboard.internetUptime} s{/if}{/if}
+<p class="text-xl font-bold">{#if hidden == 0}{#if dashboard_data!=""}{dashboard_data.config.dashboard.internetUptime} {/if}{/if}
 {#if hidden == 1}
 NA
 {/if}

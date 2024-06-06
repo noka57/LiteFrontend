@@ -23,6 +23,9 @@
       maintenanceConfig,
       ChangedMaintenanceConfig,
   		MaintenanceConfigChangedLog,
+      configurationConfig,
+      ConfigurationP2EConfigChangedLog,
+      ChangedConfigurationConfig,
       operationConfig,
   		OperationConfigChangedLog,
   		ChangedOperationConfig,
@@ -131,6 +134,7 @@
   let firewall_data="";
   let static_route_data="";
   let maintenance_data="";
+  let configuration_data="";  
   let operation_data="";
   let docker_data="";
   let wan_data="";
@@ -173,6 +177,11 @@
   let ContentMaintenance;
   let MaintenanceBinary=null;
   let maintenance_changedValues = [];
+
+  let ContentConfiguration;
+  let ConfigurationBinary=null;
+  let configuration_p2e_changedValues = [];
+
 
   let ContentOperation;
   let OperationBinary=null;
@@ -334,6 +343,11 @@
   ChangedMaintenanceConfig.subscribe(val => {
       maintenance_data = val;
   });
+
+  ChangedConfigurationConfig.subscribe(val => {
+      configuration_data = val;
+  });
+
 
   ChangedOperationConfig.subscribe(val => {
       operation_data = val;
@@ -718,6 +732,11 @@
       maintenance_changedValues = val;
   });
 
+
+  ConfigurationP2EConfigChangedLog.subscribe(val => {
+      configuration_p2e_changedValues = val;
+  });
+
   OperationConfigChangedLog.subscribe(val => {
       operation_changedValues = val;
   });
@@ -1054,6 +1073,50 @@
 
 	  }
 	}  
+
+
+  async function RestartConfiguration()
+  {
+    const res = await fetch(window.location.origin+"/reStartConFigurATion", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart configuration OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
+
+
+  async function SetConfigurationData()
+  {
+    const res = await fetch(window.location.origin+"/SEtconFigurationData", {
+      method: 'POST',
+      body: ContentConfiguration
+     })
+
+    if (res.status == 200)
+    {
+      console.log("set configuration_data OK\r\n");
+      SetCountOK++;
+
+
+      let applied_new_configuration_data= JSON.parse(JSON.stringify(configuration_data));
+      configurationConfig.set(applied_new_configuration_data);
+      configuration_p2e_changedValues = [];
+      ConfigurationP2EConfigChangedLog.set(configuration_p2e_changedValues);
+      RestartConfiguration();
+
+    }
+  }  
 
 
   async function RestartOperation()
@@ -1448,11 +1511,20 @@
 
   async function RestartAWSiotCore()
   {
+    const res = await fetch(window.location.origin+"/ReStaRtawsiOt", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart awsiot OK\r\n");
       RestartCountOK++;
       if (RestartCountOK == RestartCount)
       {
         AllRestartFinished=1;
       }
+    }
   }
 
   async function SetAWSiotCoreData()
@@ -1479,11 +1551,20 @@
 
   async function RestartAzure()
   {
+    const res = await fetch(window.location.origin+"/RestARtAzUre", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart azure OK\r\n");
       RestartCountOK++;
       if (RestartCountOK == RestartCount)
       {
         AllRestartFinished=1;
       }
+    }
   }
 
 
@@ -1510,6 +1591,7 @@
       AzHub_ConfigChangedLog.set(azhub_changedValues);
       AzCentral_ConfigChangedLog.set(azcentral_changedValues);     
       AzHubDPS_ConfigChangedLog.set(azhubdps_changedValues);
+      console.log("before restart azure");
       RestartAzure();
     } 
   }
@@ -1597,14 +1679,31 @@
 
       port_connection_lan_changedValues = [];
       port_connection_com_changedValues = [];
+      let retartPortConnection=0;
+      if (port_connection_transparent_changedValues.length !=0)
+      {
+        retartPortConnection=1;
+      }
       port_connection_transparent_changedValues = [];
 
 
       PortConnection_LAN_ConfigChangedLog.set(port_connection_lan_changedValues);
       PortConnection_COM_ConfigChangedLog.set(port_connection_com_changedValues);
       PortConnection_Transparent_ConfigChangedLog.set(port_connection_transparent_changedValues);      
-      RestartPortConnection();
+      
+      if (retartPortConnection)
+      {
+        RestartPortConnection();
+      }
+      else
+      {
+        RestartCountOK++;
+        if (RestartCountOK == RestartCount)
+        {
+          AllRestartFinished=1;
+        }
 
+      }
 	  }		
 	}
 
@@ -1899,6 +1998,11 @@
       RestartCount++;     
     }
 
+    if (configuration_data != "" && configuration_p2e_changedValues.length !=0)
+    {
+      SetCount++;
+      RestartCount++;  
+    }
 
     if (operation_data != "" && operation_changedValues.length!=0)
     {
@@ -2110,6 +2214,18 @@
 	        ContentMaintenance.set(sessionBinary,0);
 	        ContentMaintenance.set(MaintenanceBinary, sessionBinary.length);
 	        SetMaintenanceData();    	
+        }
+
+
+        if (configuration_data != "" && configuration_p2e_changedValues.length !=0)
+        {
+          let ConfigurationDataString = JSON.stringify(configuration_data, null, 0);
+          const bytesArray = Array.from(ConfigurationDataString).map(char => char.charCodeAt(0));
+          ConfigurationBinary = new Uint8Array(bytesArray);
+          ContentConfiguration=new Uint8Array(ConfigurationBinary.length+sessionBinary.length);
+          ContentConfiguration.set(sessionBinary,0);
+          ContentConfiguration.set(ConfigurationBinary, sessionBinary.length);
+          SetConfigurationData(); 
         }
 
 
@@ -3557,6 +3673,17 @@ event_engine_action_do_changeValues.length != 0 ||
   </Li>
 {/if}
 
+{#if configuration_p2e_changedValues.length !=0}
+  <Li>Configuration
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each configuration_p2e_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+  </Li>
+{/if}
+
+
 {#if operation_changedValues.length!=0}
   <Li>Operation
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
@@ -3634,6 +3761,7 @@ event_engine_action_do_changeValues.length != 0 ||
   			Firewall_macfilter_changedValues.length !=0 ||
   			staticR_changedValues.length != 0 ||
   			maintenance_changedValues.length != 0 ||
+        configuration_p2e_changedValues.length != 0 ||
   			operation_changedValues.length != 0 ||
   			docker_changedValues.length != 0 ||
   			cwan1_basic_changedValues !=0 ||

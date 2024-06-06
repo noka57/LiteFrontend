@@ -24,7 +24,10 @@ export const firewallConfig = writable("");
 export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
+export const configurationConfig=writable("");
 
+export const ConfigurationP2EConfigChangedLog=writable("");
+export const ChangedConfigurationConfig=writable("");
 
 export const AzCentral_ConfigChangedLog=writable("");
 export const AzHubDPS_ConfigChangedLog=writable("");

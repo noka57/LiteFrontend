@@ -15,6 +15,7 @@
     	Firewall_IPFilter_ConfigChangedLog,
     	Firewall_MACFilter_ConfigChangedLog,
     	StaticRouteConfigChangedLog,
+    	ConfigurationP2EConfigChangedLog,
     	MaintenanceConfigChangedLog,
     	OperationConfigChangedLog,
     	DockerConfigChangedLog,
@@ -179,6 +180,7 @@
   	let Firewall_macfilter_changedValues = [];
   	let staticR_changedValues = [];
   	let maintenance_changedValues = [];
+  	let configuration_p2e_changedValues = [];
     let operation_changedValues = [];
     let docker_changedValues = [];
     let cwan1_basic_changedValues = [];
@@ -336,6 +338,7 @@
   			Firewall_macfilter_changedValues.length !=0 ||
   			staticR_changedValues.length != 0 ||
   			maintenance_changedValues.length != 0 ||
+  			configuration_p2e_changedValues.length !=0 ||
   			operation_changedValues.length != 0 ||
   			docker_changedValues.length != 0 ||
   			cwan1_basic_changedValues.length !=0 ||
@@ -432,6 +435,14 @@
     	maintenance_changedValues = val;
     	JudgeChangedOrNot();
   	});
+
+
+    ConfigurationP2EConfigChangedLog.subscribe(val => {
+      	configuration_p2e_changedValues = val;
+        JudgeChangedOrNot();
+    });
+
+
 
 	OperationConfigChangedLog.subscribe(val => {
       	operation_changedValues = val;

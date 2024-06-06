@@ -1,12 +1,26 @@
 <script>
-  import { Button, Spinner, Modal} from 'flowbite-svelte';
+  import { Tabs, TabItem,Toggle,Button, Spinner, Modal} from 'flowbite-svelte';
 
   import { sessionidG } from "./sessionG.js";
+  import { onMount } from 'svelte';
+  import { configurationConfig,
+        ConfigurationP2EConfigChangedLog,
+        ChangedConfigurationConfig
+   } from "./configG.js"
+
 
   let selectedFile = null;
   let sessionid;
   let fileContent; 
   let sessionBinary;
+
+  let configuration_data="";
+  let changed_configuration_data = {};
+  let saved_changed_configuration_data = {};
+  let getDataReady=0;
+  let configuration_p2e_changedValues = [];
+
+
 
   let hidden=1;
 
@@ -17,6 +31,22 @@
    sessionidG.subscribe(val => {
      sessionid = val;
    });
+
+
+
+    configurationConfig.subscribe(val => {
+        configuration_data = val;
+    });
+
+
+    ConfigurationP2EConfigChangedLog.subscribe(val => {
+      configuration_p2e_changedValues = val;
+    });
+
+
+    ChangedConfigurationConfig.subscribe(val => {
+        saved_changed_configuration_data = val;
+    });
 
 
   function closeModal()
@@ -92,9 +122,7 @@
     try {
       const response = await fetch(window.location.origin+"/downloadConfig", {
         method: 'POST',
-         body: JSON.stringify({
-        sessionid
-      })
+        body: sessionBinary
       });
       
     if (response.status == 200)
@@ -116,9 +144,87 @@
   }
 
 
+   async function getConfigurationData() {
+    const res = await fetch(window.location.origin+"/getconFiguraTionData", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      configuration_data = await res.json();
+      console.log(configuration_data);
+      configurationConfig.set(configuration_data);
+
+      changed_configuration_data = JSON.parse(JSON.stringify(configuration_data));
+      saved_changed_configuration_data = JSON.parse(JSON.stringify(configuration_data))
+      ChangedConfigurationConfig.set(saved_changed_configuration_data);
+      getDataReady=1;
+    }
+  }
+
+
+
+    function SaveP2E()
+    {
+      console.log("Save p2e\r\n");
+      if (configuration_p2e_changedValues.length !=0)
+      {
+        configuration_p2e_changedValues=[];
+      }
+
+
+      if (changed_configuration_data.config.system_configuration.p2eService != configuration_data.config.system_configuration.p2eService)
+      {
+        let changedstr="P2E service is changed to " + changed_configuration_data.config.system_configuration.p2eService;
+        configuration_p2e_changedValues=[...configuration_p2e_changedValues, changedstr];
+      }
+
+      ConfigurationP2EConfigChangedLog.set(configuration_p2e_changedValues);
+      saved_changed_configuration_data=JSON.parse(JSON.stringify(changed_configuration_data))
+      ChangedConfigurationConfig.set(saved_changed_configuration_data);
+    
+      console.log(configuration_p2e_changedValues);
+
+    };
+
+
+  onMount(() => {
+
+    console.log("configuration sessionid: ");
+    console.log(sessionid);
+
+
+    const hexArray = sessionid.match(/.{1,2}/g); 
+    const byteValues = hexArray.map(hex => parseInt(hex, 16));
+    sessionBinary = new Uint8Array(byteValues);
+
+    if (sessionid && configuration_data == "")
+    {
+        getConfigurationData();
+    }
+    else if (sessionid && configuration_data !="")
+    {
+        if (configuration_p2e_changedValues.length == 0)
+        {
+            changed_configuration_data = JSON.parse(JSON.stringify(configuration_data));
+        }
+        else
+        {
+            changed_configuration_data = JSON.parse(JSON.stringify(saved_changed_configuration_data));
+        }
+
+        getDataReady=1;
+    }
+
+  });
+
+
+
  </script>
 
-
+<Tabs style="underline">
+  <TabItem open title="Local">
 <table>
 {#if hidden == 0}
     <tr>
@@ -193,3 +299,36 @@
 </table>
 </Modal>
 
+
+</TabItem>
+
+  <TabItem title="P2E">
+
+<table>
+    <tr>
+    <td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">P2E Service</p></td><td class="pl-5 pt-5">
+{#if getDataReady == 1}
+    <Toggle bind:checked={changed_configuration_data.config.system_configuration.p2eService}></Toggle>
+{/if}
+    </td>
+    </tr>
+
+
+ <tr class="pt-5">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveP2E}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+</table>
+
+</TabItem>
+
+</Tabs>

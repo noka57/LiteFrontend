@@ -653,6 +653,11 @@
             changed_port_connection_data.config.fieldManagement_portConnection_com=JSON.parse(JSON.stringify(port_connection_data.config.fieldManagement_portConnection_com)); 
         }
 
+        if (port_connection_transparent_changedValues.length ==0)
+        {
+          changed_port_connection_data.config.fieldManagement_com_tcp=JSON.parse(JSON.stringify(port_connection_data.config.fieldManagement_com_tcp)); 
+        }
+
         if (saved_changed_modbus_data == "")
         {
           getModbusData();
@@ -960,6 +965,25 @@
 
     <table>
 
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Transparent</p></td>
+
+      <td class="pl-5 pt-5">
+    <Toggle bind:checked={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].transparent}></Toggle>
+      </td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+
+  </tr>
+
+
+{#if changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].transparent}
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Mode</p></td>
 
@@ -1013,6 +1037,9 @@
     <td class="w-10"></td>
 
   </tr>
+
+
+{/if}
 
 
 {/if}

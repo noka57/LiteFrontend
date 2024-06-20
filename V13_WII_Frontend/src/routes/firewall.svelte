@@ -174,7 +174,8 @@
   }
 
   let BackupIPF={
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -189,7 +190,8 @@
 
   let newIPF_Item=[
       {
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -203,7 +205,8 @@
       }
       ,
       {
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -217,7 +220,8 @@
       }
       ,
       {
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -231,7 +235,8 @@
       }
       ,
       {
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -245,7 +250,8 @@
       }
       ,
       {
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -259,7 +265,8 @@
       }
       ,
       {
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -272,7 +279,8 @@
         }
       },
       {
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -285,7 +293,8 @@
         }
       },
       {
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -298,7 +307,8 @@
         }
       },
       {
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -311,7 +321,8 @@
         }
       },
       {
-        "enable": 0,
+        "enable": false,
+        "delete": false,
         "fromIf": 0,
         "toIf": 0,
         "srcIp": "",
@@ -329,6 +340,7 @@
   function NewIpFilter_Item_Invoker(index)
   {
       newIPF_Item[index].enable=false;
+      newIPF_Item[index].delete=false;
       newIPF_Item[index].fromIf=0;
       newIPF_Item[index].toIf=0;
       newIPF_Item[index].srcIp=0;
@@ -344,49 +356,60 @@
 
   let BackupMAF=
   {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
   };
 
   let newMAF_Item=[
     {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
     },
     {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
     },
     {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
     },
     {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
     },
     {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
     },
     {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
     },
     {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
     },
     {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
     },
     {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
     },
     {
-      "enable": 0,
+      "enable": false,
+      "delete": false,
       "macAddr": "00:11:22:33:44:55"
     }
   ];
@@ -394,6 +417,7 @@
   function NewMAF_Item_Invoker(index)
   {
     newMAF_Item[index].enable=false;
+    newMAF_Item[index].delete=false;
     newMAF_Item[index].macAddr="";
 
     new_macfilter_index=index;
@@ -412,7 +436,25 @@
     compareObjects(changed_firewall_data.config.networking_firewall_ipFilter, firewall_data.config.networking_firewall_ipFilter,1,0,0);
     Firewall_IPFilter_ConfigChangedLog.set(ipfilter_changedValues);
 
-    saved_changed_firewall_data.config.networking_firewall_ipFilter=JSON.parse(JSON.stringify(changed_firewall_data.config.networking_firewall_ipFilter));
+
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_firewall_data.config.networking_firewall_ipFilter.list.length; i++)
+    {
+      if (!changed_firewall_data.config.networking_firewall_ipFilter.list[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_firewall_data.config.networking_firewall_ipFilter.list[i]]
+      }
+
+    }
+
+    saved_changed_firewall_data.config.networking_firewall_ipFilter.list=JSON.parse(JSON.stringify(tempForDelete));
+    changed_firewall_data.config.networking_firewall_ipFilter.list=JSON.parse(JSON.stringify(tempForDelete));
+
+
+    //saved_changed_firewall_data.config.networking_firewall_ipFilter=JSON.parse(JSON.stringify(changed_firewall_data.config.networking_firewall_ipFilter));
+    
+
     ChangedFirewallConfig.set(saved_changed_firewall_data);
     
     console.log(ipfilter_changedValues);
@@ -430,38 +472,30 @@
     
     compareObjects(changed_firewall_data.config.networking_firewall_macFilter, firewall_data.config.networking_firewall_macFilter,2,0,0);
     Firewall_MACFilter_ConfigChangedLog.set(macfilter_changedValues);
-    saved_changed_firewall_data.config.networking_firewall_macFilter=JSON.parse(JSON.stringify(changed_firewall_data.config.networking_firewall_macFilter));
+    
+
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_firewall_data.config.networking_firewall_macFilter.list.length; i++)
+    {
+      if (!changed_firewall_data.config.networking_firewall_macFilter.list[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_firewall_data.config.networking_firewall_macFilter.list[i]]
+      }
+
+    }
+
+    saved_changed_firewall_data.config.networking_firewall_macFilter.list=JSON.parse(JSON.stringify(tempForDelete));
+    changed_firewall_data.config.networking_firewall_macFilter.list=JSON.parse(JSON.stringify(tempForDelete));
+
+
+
+    //saved_changed_firewall_data.config.networking_firewall_macFilter=JSON.parse(JSON.stringify(changed_firewall_data.config.networking_firewall_macFilter));
 
     ChangedFirewallConfig.set(saved_changed_firewall_data);
     
     console.log(macfilter_changedValues);
   }
-
-  function NewIPF_Enable(index)
-  {
-    if (newIPF_Item[index].enable)
-    {
-      newIPF_Item[index].enable=0;
-    }
-    else
-    {
-      newIPF_Item[index].enable=1;
-    }
-  }
-
-
-  function NewMAF_Enable(index)
-  {
-    if (newMAF_Item[index].enable)
-    {
-      newMAF_Item[index].enable=0;
-    }
-    else
-    {
-      newMAF_Item[index].enable=1;
-    }
-  }
-
 
 
   function AddIPF(index)
@@ -480,36 +514,12 @@
   }
 
 
-  function IPF_Item_enableCheck(index)
-  {
-    if (changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable)
-    {
-      changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable=0;
-    }
-    else
-    {
-      changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable=1;
-    }
-  }
-
-
-  function MAF_Item_enableCheck(index)
-  {
-    if (changed_firewall_data.config.networking_firewall_macFilter.list[index].enable)
-    {
-      changed_firewall_data.config.networking_firewall_macFilter.list[index].enable=0;
-    }
-    else
-    {
-      changed_firewall_data.config.networking_firewall_macFilter.list[index].enable=1;
-    }
-  }
-
-
   function NoModifyIPF(index)
   {
     formModalIP = false;
     changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable= BackupIPF.enable;
+
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].delete= BackupIPF.delete;
     
     changed_firewall_data.config.networking_firewall_ipFilter.list[index].fromIf= BackupIPF.fromIf;
 
@@ -532,7 +542,7 @@
   {
     formModalMAC = false;
     changed_firewall_data.config.networking_firewall_macFilter.list[index].enable= BackupMAF.enable;
-    
+    changed_firewall_data.config.networking_firewall_macFilter.list[index].delete= BackupMAF.delete;
     changed_firewall_data.config.networking_firewall_macFilter.list[index].macAddr= BackupMAF.macAddr;   
       
   }
@@ -553,6 +563,7 @@
     ipfilter_current_index=index;
 
     BackupIPF.enable=changed_firewall_data.config.networking_firewall_ipFilter.list[index].enable;
+    BackupIPF.delete=changed_firewall_data.config.networking_firewall_ipFilter.list[index].delete;    
     BackupIPF.fromIf=changed_firewall_data.config.networking_firewall_ipFilter.list[index].fromIf;
     BackupIPF.toIf=changed_firewall_data.config.networking_firewall_ipFilter.list[index].toIf
 
@@ -575,9 +586,34 @@
     macfilter_current_index=index;
 
     BackupMAF.enable=changed_firewall_data.config.networking_firewall_macFilter.list[index].enable;
-    
+    BackupMAF.delete=changed_firewall_data.config.networking_firewall_macFilter.list[index].delete;
     BackupMAF.macAddr=changed_firewall_data.config.networking_firewall_macFilter.list[index].macAddr;   
   }
+
+
+  function RestoreDeleteIPF(index)
+  {
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].delete=false;
+  }
+
+
+  function deleteIPF(index)
+  {
+    changed_firewall_data.config.networking_firewall_ipFilter.list[index].delete=true;
+  }
+
+
+  function RestoreDeleteMACF(index)
+  {
+    changed_firewall_data.config.networking_firewall_macFilter.list[index].delete=false;
+  }
+
+
+  function deleteMACF(index)
+  {
+    changed_firewall_data.config.networking_firewall_macFilter.list[index].delete=true;
+  }
+
 
 
    async function getFirewallData () {
@@ -640,6 +676,36 @@
 
 </script>
 
+<style>
+ 
+.strikeout {
+  text-decoration: line-through;
+  color: #999; /* Adjust color for deleted text */
+  position: relative;
+}
+
+.strikeout:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #111; /* Adjust strikeout line color */
+  transform: translateY(-50%);
+}
+
+.strikeout:after {
+  content: "\00B7"; /* Unicode dot character */
+  font-size: 1px; /* Adjust dot size */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+</style>
+
 
 <Tabs style="underline">
   <TabItem open title="General">
@@ -693,8 +759,8 @@
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell>From Interface</TableHeadCell>
+    <th class="px-1 py-3">No</th>
+    <th class="px-1 py-3">From Interface</th>
     <TableHeadCell>To Interface</TableHeadCell>
     <TableHeadCell>Source IP</TableHeadCell>
     <TableHeadCell>Destination IP</TableHeadCell>
@@ -706,36 +772,108 @@
 {#if getDataReady == 1}
 {#each changed_firewall_data.config.networking_firewall_ipFilter.list as IPfilter, index}
 
+{#if IPfilter.delete}
+
+ <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteIPF(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={IPfilter.enable} disabled>
+          </td>
+  <td class="px-1 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+{#if IPfilter.fromIf == 0}
+  <td class="px-1 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Any</td>
+{:else if IPfilter.fromIf==1}
+  <td class="px-1 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">LAN</td>
+{:else if IPfilter.fromIf==2}
+  <td class="px-1 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Ethernet WAN</td>
+{:else if IPfilter.fromIf==3}
+  <td class="px-1 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Cellular WAN</td>
+{/if}
+
+{#if IPfilter.toIf == 0}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Any</td>
+{:else if IPfilter.toIf==1}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">LAN</td>
+{:else if IPfilter.toIf==2}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Ethernet WAN</td>
+{:else if IPfilter.toIf==3}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Cellular WAN</td>
+{/if}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{IPfilter.srcIp}</td>
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{IPfilter.dstIp}</td>
+
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{IPfilter.protocol}</td>
+{#if IPfilter.dstPort==0}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{IPfilter.dstPortRange.start}</td>
+{:else if IPfilter.dstPort==1}
+
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{IPfilter.dstPortRange.start}-{IPfilter.dstPortRange.end}</td>
+{/if}
+
+  </tr>
+{:else}
     <TableBodyRow>
 
-      <TableBodyCell class="!p-4">
+      <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerIP(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
 
-    <TableBodyCell class="!p-4">
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteIPF(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
     </TableBodyCell>
 
 
           <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={IPfilter.enable}>
           </TableBodyCell>
-          <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+          <td class="px-1 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10">{index+1}</td>
 {#if IPfilter.fromIf == 0}
-          <TableBodyCell class="w-10">Any</TableBodyCell>
+          <td class="px-1 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10">Any</td>
 {:else if IPfilter.fromIf==1}
-        <TableBodyCell class="w-10">LAN</TableBodyCell>
+        <td class="px-1 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10">LAN</td>
 {:else if IPfilter.fromIf==2}
-        <TableBodyCell class="w-10">Ethernet WAN</TableBodyCell>
+        <td class="px-1 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10">Ethernet WAN</td>
 {:else if IPfilter.fromIf==3}
-        <TableBodyCell class="w-10">Cellular WAN</TableBodyCell>
+        <td class="px-1 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10">Cellular WAN</td>
 {/if}
 
 {#if IPfilter.toIf == 0}
@@ -758,6 +896,9 @@
         <TableBodyCell class="w-10">{IPfilter.dstPortRange.start}-{IPfilter.dstPortRange.end}</TableBodyCell>
 {/if}
         </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
@@ -777,8 +918,8 @@
 {/if}  
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -1054,22 +1195,66 @@
 {#if getDataReady == 1}
 {#each changed_firewall_data.config.networking_firewall_macFilter.list as MACfilter, index}
 
+{#if MACfilter.delete}
+
+    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteMACF(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={MACfilter.enable} disabled>
+    </td>
+
+    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-36 strikeout">{MACfilter.macAddr}</td>
+
+    </tr>
+{:else}
+
     <TableBodyRow>
-      <TableBodyCell class="!p-4">
+      <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerMAC(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
  </TableBodyCell>
-
-            <TableBodyCell class="!p-4">
-
-            </TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteMACF(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
       <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={MACfilter.enable}>
@@ -1077,6 +1262,8 @@
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-36">{MACfilter.macAddr}</TableBodyCell>
     </TableBodyRow>
+
+{/if}
 
 {/each}
 {/if}
@@ -1097,8 +1284,8 @@
 
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-36"></TableBodyCell>

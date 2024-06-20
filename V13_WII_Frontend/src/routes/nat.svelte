@@ -11,18 +11,18 @@
    let formModalVC = false;
    let newformModalVC=false;
 
-   let virtualserver_current_index;
+   let port_forwarding_current_index;
    let virtualcomputer_current_index;
 
 
-   let new_vs_index;
+   let new_pfw_index;
    let new_vc_index;
 
    let nat_data="";
    let changed_nat_data = {};
    let saved_changed_nat_data ={};
    let dmz_changedValues = [];
-   let vs_changedValues = [];
+   let pfw_changedValues = [];
    let vc_changedValues = [];
    let loopback_changedValues = [];
    let getDataReady=0;
@@ -47,7 +47,7 @@
     });
 
     NAT_VS_ConfigChangedLog.subscribe(val => {
-        vs_changedValues = val;
+        pfw_changedValues = val;
     });
 
     NAT_Dmz_ConfigChangedLog.subscribe(val => {
@@ -88,7 +88,7 @@
               }
               else if (type == 1)
               {
-                vs_changedValues=[...vs_changedValues, changedstr];
+                pfw_changedValues=[...pfw_changedValues, changedstr];
               }
               else if (type == 0)
               {
@@ -109,7 +109,7 @@
               }
               else if (type == 1)
               {
-                vs_changedValues=[...vs_changedValues, changedstr];
+                pfw_changedValues=[...pfw_changedValues, changedstr];
               }
               else if (type == 0)
               {
@@ -144,7 +144,7 @@
           }
           else if (type == 1)
           {
-            vs_changedValues=[...vs_changedValues, changedstr];
+            pfw_changedValues=[...pfw_changedValues, changedstr];
           }
           else if (type == 0)
           {
@@ -193,40 +193,53 @@
       console.log(vc_changedValues);
     }
 
-    function SaveVirtualServer()
+    function SavePFW()
     {
-      console.log("Save VirtualServer");
-      if (vs_changedValues.length !=0)
+      console.log("Save Port Forwarding");
+      if (pfw_changedValues.length !=0)
       {
-        vs_changedValues=[];
+        pfw_changedValues=[];
       }
 
       compareObjects(changed_nat_data.config.networking_port_forwarding, nat_data.config.networking_port_forwarding,1,0,0);
 
 
-      NAT_VS_ConfigChangedLog.set(vs_changedValues);
+      NAT_VS_ConfigChangedLog.set(pfw_changedValues);
 
 
-    let tempForDelete=[];
-    for (let i = 0; i< changed_staticR_data.config.networking_staticRoute.list.length; i++)
-    {
-      if (!changed_staticR_data.config.networking_staticRoute.list[i].delete)
+      let tempForDelete=[];
+      for (let i = 0; i< changed_nat_data.config.networking_port_forwarding.list.length; i++)
       {
-        tempForDelete=[...tempForDelete, changed_staticR_data.config.networking_staticRoute.list[i]]
+        if (!changed_nat_data.config.networking_port_forwarding.list[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_nat_data.config.networking_port_forwarding.list[i]]
+        }
+
       }
 
-    }
-
-    saved_changed_staticR_data.config.networking_staticRoute.list=JSON.parse(JSON.stringify(tempForDelete));
-    changed_staticR_data.config.networking_staticRoute.list=JSON.parse(JSON.stringify(tempForDelete));
+      saved_changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(tempForDelete));
+      changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(tempForDelete));
 
 
 
       //saved_changed_nat_data.config.networking_port_forwarding=JSON.parse(JSON.stringify(changed_nat_data.config.networking_port_forwarding));
       ChangedNATConfig.set(saved_changed_nat_data);
     
-      console.log(vs_changedValues);
+      console.log(pfw_changedValues);
     }
+
+
+    function RestoreDelete(index)
+    {
+      changed_nat_data.config.networking_port_forwarding.list[index].delete=false;
+    }
+
+
+    function deletePFW(index)
+    {
+      changed_nat_data.config.networking_port_forwarding.list[index].delete=true;
+    }
+
 
     function SaveNatLoopBack()
     {
@@ -245,7 +258,7 @@
       console.log(loopback_changedValues);
     }
 
-    let BackupVSItem=
+    let BackupPFWItem=
     {
       "enable": false,
       "delete": false,
@@ -269,19 +282,19 @@
     function modalTriggerPFW(index)
     {
       formModalPFW = true;
-      virtualserver_current_index=index;
+      port_forwarding_current_index=index;
 
-      BackupVSItem.enable=changed_nat_data.config.networking_port_forwarding.list[index].enable;
-      BackupVSItem.wanIf=changed_nat_data.config.networking_port_forwarding.list[index].wanIf;
-      BackupVSItem.serverIp=changed_nat_data.config.networking_port_forwarding.list[index].serverIp;
-      BackupVSItem.sourceIp=changed_nat_data.config.networking_port_forwarding.list[index].sourceIp;
-      BackupVSItem.protocol=changed_nat_data.config.networking_port_forwarding.list[index].protocol;
-      BackupVSItem.pubPort=changed_nat_data.config.networking_port_forwarding.list[index].pubPort;
-      BackupVSItem.pubPortRange.start=changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.start;
-      BackupVSItem.pubPortRange.end=changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.end;
-      BackupVSItem.privPort=changed_nat_data.config.networking_port_forwarding.list[index].privPort;
-      BackupVSItem.privPortRange.start=changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.start;
-      BackupVSItem.privPortRange.end=changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.end;
+      BackupPFWItem.enable=changed_nat_data.config.networking_port_forwarding.list[index].enable;
+      BackupPFWItem.wanIf=changed_nat_data.config.networking_port_forwarding.list[index].wanIf;
+      BackupPFWItem.serverIp=changed_nat_data.config.networking_port_forwarding.list[index].serverIp;
+      BackupPFWItem.sourceIp=changed_nat_data.config.networking_port_forwarding.list[index].sourceIp;
+      BackupPFWItem.protocol=changed_nat_data.config.networking_port_forwarding.list[index].protocol;
+      BackupPFWItem.pubPort=changed_nat_data.config.networking_port_forwarding.list[index].pubPort;
+      BackupPFWItem.pubPortRange.start=changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.start;
+      BackupPFWItem.pubPortRange.end=changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.end;
+      BackupPFWItem.privPort=changed_nat_data.config.networking_port_forwarding.list[index].privPort;
+      BackupPFWItem.privPortRange.start=changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.start;
+      BackupPFWItem.privPortRange.end=changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.end;
     }
 
 
@@ -336,7 +349,7 @@
         ];
 
 
-    let newVS_Item = [{
+    let newPFW_Item = [{
       "enable": false,
       "delete":false,
       "wanIf": 0,
@@ -509,22 +522,22 @@
     }];
 
 
-   function NewVS_Item_Invoker(index)
+   function NewPFW_Item_Invoker(index)
    {
-      newVS_Item[index].enable=false;
-      newVS_Item[index].delete=false;
-      newVS_Item[index].wanIf=0;
-      newVS_Item[index].serverIp="";  
-      newVS_Item[index].sourceIp="";
-      newVS_Item[index].protocol="TCP";
-      newVS_Item[index].pubPort=0;
-      newVS_Item[index].pubPortRange.start=0;
-      newVS_Item[index].pubPortRange.end=0;
-      newVS_Item[index].privPort=0;
-      newVS_Item[index].privPortRange.start=0;
-      newVS_Item[index].privPortRange.end=0;
+      newPFW_Item[index].enable=false;
+      newPFW_Item[index].delete=false;
+      newPFW_Item[index].wanIf=0;
+      newPFW_Item[index].serverIp="";  
+      newPFW_Item[index].sourceIp="";
+      newPFW_Item[index].protocol="TCP";
+      newPFW_Item[index].pubPort=0;
+      newPFW_Item[index].pubPortRange.start=0;
+      newPFW_Item[index].pubPortRange.end=0;
+      newPFW_Item[index].privPort=0;
+      newPFW_Item[index].privPortRange.start=0;
+      newPFW_Item[index].privPortRange.end=0;
 
-      new_vs_index=index;
+      new_pfw_index=index;
       newformModalPFW = true;
 
    }
@@ -549,29 +562,29 @@
    function NoModifyPFW(index)
    {
       formModalPFW = false;
-      changed_nat_data.config.networking_port_forwarding.list[index].enable= BackupVSItem.enable;
-      changed_nat_data.config.networking_port_forwarding.list[index].delete= BackupVSItem.delete;
-      changed_nat_data.config.networking_port_forwarding.list[index].wanIf= BackupVSItem.wanIf;
+      changed_nat_data.config.networking_port_forwarding.list[index].enable= BackupPFWItem.enable;
+      changed_nat_data.config.networking_port_forwarding.list[index].delete= BackupPFWItem.delete;
+      changed_nat_data.config.networking_port_forwarding.list[index].wanIf= BackupPFWItem.wanIf;
 
 
-      changed_nat_data.config.networking_port_forwarding.list[index].serverIp= BackupVSItem.serverIp;
+      changed_nat_data.config.networking_port_forwarding.list[index].serverIp= BackupPFWItem.serverIp;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].sourceIp= BackupVSItem.sourceIp;
+      changed_nat_data.config.networking_port_forwarding.list[index].sourceIp= BackupPFWItem.sourceIp;
 
 
-      changed_nat_data.config.networking_port_forwarding.list[index].protocol= BackupVSItem.protocol;
+      changed_nat_data.config.networking_port_forwarding.list[index].protocol= BackupPFWItem.protocol;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].pubPort= BackupVSItem.pubPort;
+      changed_nat_data.config.networking_port_forwarding.list[index].pubPort= BackupPFWItem.pubPort;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.start= BackupVSItem.pubPortRange.start;
+      changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.start= BackupPFWItem.pubPortRange.start;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.end= BackupVSItem.pubPortRange.end;
+      changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.end= BackupPFWItem.pubPortRange.end;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].privPort= BackupVSItem.privPort;
+      changed_nat_data.config.networking_port_forwarding.list[index].privPort= BackupPFWItem.privPort;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.start= BackupVSItem.privPortRange.start;
+      changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.start= BackupPFWItem.privPortRange.start;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.end= BackupVSItem.privPortRange.end;
+      changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.end= BackupPFWItem.privPortRange.end;
 
    }
 
@@ -594,7 +607,7 @@
    {
       newformModalPFW = false;
 
-      changed_nat_data.config.networking_port_forwarding.list=[...changed_nat_data.config.networking_port_forwarding.list,newVS_Item[index]];
+      changed_nat_data.config.networking_port_forwarding.list=[...changed_nat_data.config.networking_port_forwarding.list,newPFW_Item[index]];
    }
 
 
@@ -659,7 +672,7 @@
       }
 
 
-      if (vs_changedValues.length == 0)
+      if (pfw_changedValues.length == 0)
       {
         changed_nat_data.config.networking_port_forwarding = JSON.parse(JSON.stringify(nat_data.config.networking_port_forwarding));     
       }
@@ -679,7 +692,35 @@
   });
 
 </script>
+<style>
+ 
+.strikeout {
+  text-decoration: line-through;
+  color: #999; /* Adjust color for deleted text */
+  position: relative;
+}
 
+.strikeout:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #111; /* Adjust strikeout line color */
+  transform: translateY(-50%);
+}
+
+.strikeout:after {
+  content: "\00B7"; /* Unicode dot character */
+  font-size: 1px; /* Adjust dot size */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+</style>
 
 <Tabs style="underline">
  
@@ -712,57 +753,133 @@
   <TableBody>
 
 {#if getDataReady == 1}
-  {#each changed_nat_data.config.networking_port_forwarding.list as VirtualServer, index}
+  {#each changed_nat_data.config.networking_port_forwarding.list as PFW, index}
+
+
+{#if PFW.delete}
+
+    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDelete(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={PFW.enable} disabled>
+
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+{#if PFW.wanIf==0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">All</td>
+{:else if PFW.wanIf==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Ethernet WAN</td>
+{:else if PFW.wanIf==2}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Cellular WAN</td>
+
+{/if}
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.serverIp}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.protocol}</td>
+
+{#if PFW.pubPort ==0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.pubPortRange.start}</td>
+{:else if PFW.pubPort ==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.pubPortRange.start}-{PFW.pubPortRange.end}</td>
+{/if}
+
+
+{#if PFW.privPort ==0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.privPortRange.start}</td>
+{:else if PFW.privPort ==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.privPortRange.start}-{PFW.privPortRange.end}</td>
+{/if}
+
+    </tr>
+
+
+{:else}
 
     <TableBodyRow>
 
-      <TableBodyCell class="!p-4">
+      <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerPFW(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
 
-    <TableBodyCell class="!p-4">
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deletePFW(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
     </TableBodyCell>
 
 
       <TableBodyCell class="w-10">
-<input type="checkbox"  bind:checked={VirtualServer.enable}>
+<input type="checkbox"  bind:checked={PFW.enable}>
 
       </TableBodyCell>
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
-{#if VirtualServer.wanIf==0}
+{#if PFW.wanIf==0}
       <TableBodyCell class="w-10">All</TableBodyCell>
-{:else if VirtualServer.wanIf==1}
+{:else if PFW.wanIf==1}
       <TableBodyCell class="w-10">Ethernet WAN</TableBodyCell>
-{:else if VirtualServer.wanIf==2}
+{:else if PFW.wanIf==2}
       <TableBodyCell class="w-10">Cellular WAN</TableBodyCell>
 
 {/if}
 
-      <TableBodyCell class="w-10">{VirtualServer.serverIp}</TableBodyCell>
-      <TableBodyCell class="w-10">{VirtualServer.protocol}</TableBodyCell>
+      <TableBodyCell class="w-10">{PFW.serverIp}</TableBodyCell>
+      <TableBodyCell class="w-10">{PFW.protocol}</TableBodyCell>
 
-{#if VirtualServer.pubPort ==0}
-      <TableBodyCell class="w-10">{VirtualServer.pubPortRange.start}</TableBodyCell>
-{:else if VirtualServer.pubPort ==1}
-      <TableBodyCell class="w-10">{VirtualServer.pubPortRange.start}-{VirtualServer.pubPortRange.end}</TableBodyCell>
+{#if PFW.pubPort ==0}
+      <TableBodyCell class="w-10">{PFW.pubPortRange.start}</TableBodyCell>
+{:else if PFW.pubPort ==1}
+      <TableBodyCell class="w-10">{PFW.pubPortRange.start}-{PFW.pubPortRange.end}</TableBodyCell>
 {/if}
 
 
-{#if VirtualServer.privPort ==0}
-      <TableBodyCell class="w-10">{VirtualServer.privPortRange.start}</TableBodyCell>
-{:else if VirtualServer.privPort ==1}
-      <TableBodyCell class="w-10">{VirtualServer.privPortRange.start}-{VirtualServer.privPortRange.end}</TableBodyCell>
+{#if PFW.privPort ==0}
+      <TableBodyCell class="w-10">{PFW.privPortRange.start}</TableBodyCell>
+{:else if PFW.privPort ==1}
+      <TableBodyCell class="w-10">{PFW.privPortRange.start}-{PFW.privPortRange.end}</TableBodyCell>
 {/if}
 
     </TableBodyRow>
+
+{/if}
+
+
 
 {/each}
 {/if}
@@ -775,7 +892,7 @@
       <TableBodyCell class="!p-4 w-10">     
 {#if getDataReady == 1}
 {#if changed_nat_data.config.networking_port_forwarding.list.length < 10}
-<button on:click={() => NewVS_Item_Invoker(changed_nat_data.config.networking_port_forwarding.list.length)}>
+<button on:click={() => NewPFW_Item_Invoker(changed_nat_data.config.networking_port_forwarding.list.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -786,8 +903,8 @@
 {/if}    
  </TableBodyCell>
   
-      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -813,7 +930,7 @@
         <td></td>
     <td></td>
 
-    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveVirtualServer}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SavePFW}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -825,7 +942,7 @@
   <form action="#">
 
 <label>
-  <input class="center" type=checkbox bind:checked={newVS_Item[new_vs_index].enable}>
+  <input class="center" type=checkbox bind:checked={newPFW_Item[new_pfw_index].enable}>
   Enable
 </label>
 
@@ -840,15 +957,15 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={newVS_Item[new_vs_index].wanIf} value={0} >All</Radio>
-  <Radio bind:group={newVS_Item[new_vs_index].wanIf} value={1} >Ethernet WAN</Radio>
-  <Radio bind:group={newVS_Item[new_vs_index].wanIf} value={2} >Cellular WAN</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].wanIf} value={0} >All</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].wanIf} value={1} >Ethernet WAN</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].wanIf} value={2} >Cellular WAN</Radio>
 </div></td>
 </tr>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newVS_Item[new_vs_index].serverIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newPFW_Item[new_pfw_index].serverIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -862,9 +979,9 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={newVS_Item[new_vs_index].protocol} value='TCP' >TCP</Radio>
-  <Radio bind:group={newVS_Item[new_vs_index].protocol} value='UDP' >UDP</Radio>
-  <Radio bind:group={newVS_Item[new_vs_index].protocol} value='TCPUDP' >TCP & UDP</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value='TCP' >TCP</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value='UDP' >UDP</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value='TCPUDP' >TCP & UDP</Radio>
 </div></td>
 </tr>
 
@@ -876,8 +993,8 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={newVS_Item[new_vs_index].pubPort} value={0} >Single Port</Radio><input type="number" bind:value={newVS_Item[new_vs_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={newVS_Item[new_vs_index].pubPort} value={1} >Port Range</Radio><input type="number" bind:value={newVS_Item[new_vs_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newVS_Item[new_vs_index].pubPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={newPFW_Item[new_pfw_index].pubPort} value={0} >Single Port</Radio><input type="number" bind:value={newPFW_Item[new_pfw_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={newPFW_Item[new_pfw_index].pubPort} value={1} >Port Range</Radio><input type="number" bind:value={newPFW_Item[new_pfw_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newPFW_Item[new_pfw_index].pubPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </div></td>
 </tr>
 
@@ -889,8 +1006,8 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={newVS_Item[new_vs_index].privPort} value={0} >Single Port</Radio><input type="number" bind:value={newVS_Item[new_vs_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={newVS_Item[new_vs_index].privPort} value={1} >Port Range</Radio><input type="number" bind:value={newVS_Item[new_vs_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newVS_Item[new_vs_index].privPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={newPFW_Item[new_pfw_index].privPort} value={0} >Single Port</Radio><input type="number" bind:value={newPFW_Item[new_pfw_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={newPFW_Item[new_pfw_index].privPort} value={1} >Port Range</Radio><input type="number" bind:value={newPFW_Item[new_pfw_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newPFW_Item[new_pfw_index].privPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </div></td>
 </tr>
 
@@ -898,7 +1015,7 @@
       <tr>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="dark" pill={true} on:click={AddPFW(new_vs_index)}>Add</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddPFW(new_pfw_index)}>Add</Button></td>
 
 
     </tr>
@@ -914,12 +1031,12 @@
 
 <label>
 {#if getDataReady == 1}
-  <input class="center" type=checkbox bind:checked={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].enable}>
+  <input class="center" type=checkbox bind:checked={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].enable}>
 {/if}
   Enable
 </label>
 
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyPFW(virtualserver_current_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyPFW(port_forwarding_current_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 
 <p class="mt-10"></p>
@@ -934,9 +1051,9 @@
 
   <td class="pl-5 pt-4"><div class="flex gap-4">
   {#if getDataReady == 1}
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].wanIf} value={0} >All</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].wanIf} value={1} >Ethernet WAN</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].wanIf} value={2} >Cellular WAN</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].wanIf} value={0} >All</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].wanIf} value={1} >Ethernet WAN</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].wanIf} value={2} >Cellular WAN</Radio>
   {/if}
 </div></td>
 </tr>
@@ -944,7 +1061,7 @@
 
 <tr>
 {#if getDataReady == 1}
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].serverIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].serverIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 {/if}
 
 
@@ -960,9 +1077,9 @@
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
 {#if getDataReady == 1}
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].protocol} value='TCP' >TCP</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].protocol} value='UDP' >UDP</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].protocol} value='TCPUDP' >TCP & UDP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value='TCP' >TCP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value='UDP' >UDP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value='TCPUDP' >TCP & UDP</Radio>
 {/if}
 </div></td>
 </tr>
@@ -976,8 +1093,8 @@
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
 {#if getDataReady == 1}
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].pubPort} value={0} >Single Port</Radio><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].pubPort} value={1} >Port Range</Radio><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].pubPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].pubPort} value={0} >Single Port</Radio><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].pubPort} value={1} >Port Range</Radio><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].pubPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
 </div></td>
 </tr>
@@ -991,8 +1108,8 @@
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
 {#if getDataReady == 1}
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].privPort} value={0} >Single Port</Radio><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].privPort} value={1} >Port Range</Radio><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[virtualserver_current_index].privPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].privPort} value={0} >Single Port</Radio><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].privPort} value={1} >Port Range</Radio><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].privPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
 </div></td>
 </tr>
@@ -1006,7 +1123,7 @@
     <td></td>
 
 
-    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyPFW(virtualserver_current_index)}>Modify</Button></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyPFW(port_forwarding_current_index)}>Modify</Button></td>
 
 
     </tr>

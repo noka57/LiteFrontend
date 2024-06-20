@@ -169,8 +169,8 @@
   let NewClientCNameModal=false;
   let new_client_cname_index;
 
-  let BackupCName={"enable":1, "cname":""};
-  let NewClientCName=[{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""},{"enable":1, "cname":""}];
+  let BackupCName={"enable":true, "delete": false, "cname":""};
+  let NewClientCName=[{"enable":true, "delete": false, "cname":""},{"enable":true, "delete": false, "cname":""},{"enable":true, "delete": false, "cname":""},{"enable":true, "delete": false, "cname":""},{"enable":true, "delete": false, "cname":""},{"enable":true, "delete": false, "cname":""},{"enable":true, "delete": false, "cname":""},{"enable":true, "delete": false, "cname":""},{"enable":true, "delete": false, "cname":""},{"enable":true, "delete": false, "cname":""}];
 
 
   let ServerConn_ClientAccountPasswordModal=false;
@@ -178,56 +178,66 @@
 
   let ServerConn_NewClientAccountPasswordModal=false;
   let server_conn_new_client_account_password_index;
-  let ServerConn_BackupClientAccountPassword={"enable":true, "account": "",
+  let ServerConn_BackupClientAccountPassword={"enable":true, "delete":false, "account": "",
       "password": ""};
   let ServerConn_NewClientAccountPassword=[
       {
-        "enable":1,
+        "enable":true,
+        "delete": false,
         "account": "",
         "password": ""
       },
       {
-        "enable":1,
+        "enable":true,
+        "delete": false,
         "account": "",
         "password": ""
       },
       {
-        "enable":1,
+        "enable":true,
+        "delete": false,
         "account": "",
         "password": ""
       },
       {
-        "enable":1,
+        "enable":true,
+        "delete": false,
         "account": "",
         "password": ""
       },
       {
-        "enable":1,
+        "enable":true,
+        "delete": false,
         "account": "",
         "password": ""
       },
       {
-        "enable":1,
+        "enable":true,
+        "delete": false,
         "account": "",
         "password": ""
       },
       {
-        "enable":1,
+        "enable":true,
+        "delete": false,
         "account": "",
         "password": ""
       },
       {
-        "enable":1,
+        "enable":true,
+        "delete": false,
         "account": "",
         "password": ""
       },
       {
-        "enable":1,
+        "enable":true,
+        "delete": false,
         "account": "",
         "password": ""
       },
       {
-        "enable":1,
+        "enable":true,
+        "delete": false,
         "account": "",
         "password": ""
       }
@@ -237,6 +247,7 @@
 
   let BackupClientConn={
     "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -258,7 +269,8 @@
   };
 
   let NewClientConn=[{
-    "enable":1,
+    "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -279,7 +291,8 @@
     "portForwarding":[]
   },
   {
-    "enable":1,
+    "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -300,7 +313,8 @@
     "portForwarding":[]
   },
   {
-    "enable":1,
+    "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -321,7 +335,8 @@
     "portForwarding":[]
   },
   {
-    "enable":1,
+    "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -342,7 +357,8 @@
     "portForwarding":[]
   },
   {
-    "enable":1,
+    "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -363,7 +379,8 @@
     "portForwarding":[]
   },
   {
-    "enable":1,
+    "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -384,7 +401,8 @@
     "portForwarding":[]
   },
   {
-    "enable":1,
+    "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -405,7 +423,8 @@
     "portForwarding":[]
   },
   {
-    "enable":1,
+    "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -426,7 +445,8 @@
     "portForwarding":[]
   },
   {
-    "enable":1,
+    "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -447,7 +467,8 @@
     "portForwarding":[]
   },
   {
-    "enable":1,
+    "enable":true,
+    "delete": false,
     "name": "",
     "remote_host": "",
     "remote_port": 0,
@@ -473,18 +494,18 @@
   let Advanced_Client_Index_Selected="none";
 
 
-  let BackupServerPFW={"enable":true,"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2};
+  let BackupServerPFW={"enable":true, "delete":false,"server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2};
   let NewServerPFW=[
-    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
-    {"enable":1, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2}
+    {"enable":true, "delete":false, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":true, "delete":false, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":true, "delete":false, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":true, "delete":false, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":true, "delete":false, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":true, "delete":false, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":true, "delete":false, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":true, "delete":false, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":true, "delete":false, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2},
+    {"enable":true, "delete":false, "server_pfw_incomingProtocol": 0,"server_pfw_incomingDport": 1, "server_pfw_redirectedPort": 2}
   ];
 
   let New_PFW_Server_Modal=false;
@@ -501,6 +522,8 @@
       BackupServerPFW.server_pfw_redirectedPort=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_redirectedPort;
 
       BackupServerPFW.enable=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].enable;
+      BackupServerPFW.delete=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].delete;
+
 
       Modify_PFW_Server_Index=index;
       Modify_PFW_Server_Modal=true;
@@ -514,6 +537,7 @@
       changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_redirectedPort=BackupServerPFW.server_pfw_redirectedPort;
 
       changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].enable=BackupServerPFW.enable;
+      changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].delete=BackupServerPFW.delete;
 
       Modify_PFW_Server_Modal=false;
   }
@@ -526,6 +550,7 @@
   function NewServer_PFW_Item_Invoker(index)
   {
       NewServerPFW[index].enable=true;
+      NewServerPFW[index].delete=false;
       NewServerPFW[index].server_pfw_incomingProtocol=0;
       NewServerPFW[index].server_pfw_incomingDport='';
       NewServerPFW[index].server_pfw_redirectedPort='';
@@ -552,38 +577,38 @@
 
   let NewCCD_Modal=false;
   let NewCCD_index;
-  let BackupCCD={"enable":1,"ccd_client_certificate_common_name": "",
+  let BackupCCD={"enable":true, "delete": false,"ccd_client_certificate_common_name": "",
       "ccd_client_command": ""};
   let NewCCD_Item=[
       {
-      "enable":1,
+      "enable":true, "delete": false,
       "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"enable":1,
+      {"enable":true, "delete": false,
       "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"enable":1,
+      {"enable":true, "delete": false,
       "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"enable":1,
+      {"enable":true, "delete": false,
       "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"enable":1,
+      {"enable":true, "delete": false,
       "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"enable":1,
+      {"enable":true, "delete": false,
       "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"enable":1,
+      {"enable":true, "delete": false,
       "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"enable":1,
+      {"enable":true, "delete": false,
       "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"enable":1,
+      {"enable":true, "delete": false,
       "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""},
-      {"enable":1,
+      {"enable":true, "delete": false,
       "ccd_client_certificate_common_name": "",
       "ccd_client_command": ""}
   ];
@@ -591,508 +616,609 @@
   let ModifyRemoteNetworkAccess_Modal;
   let ModifyRemoteNetworkAccess_Index;
   let BackupRemoteNetworkAccess={
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   };
 
   let NewRemoteNetworkAccess_Item=[[{
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   }],
   [{
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   }],
  [{
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   }],
   [{
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   }],
 [{
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   }],
  [{
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   }],
  [{
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   }],
  [{
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   }],
  [{
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   }],
  [{
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   },
   {
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "remoteSubnet": "",
       "comment": ""
   }]
@@ -1106,7 +1232,8 @@
   let ModifyClient_PFW_Modal=false
   let ModifyClient_PFW_Index;
   let BackupClient_PFW={
-      "enable":1,
+      "enable":true,
+      "delete":false,
       "client_pfw_incomingProtocol":0,
       "client_pfw_incomingDport":0,
       "client_pfw_redirectedPort":0
@@ -1119,7 +1246,9 @@
       BackupClient_PFW.client_pfw_incomingDport=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_incomingDport;
       BackupClient_PFW.client_pfw_redirectedPort=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_redirectedPort;
 
-     BackupClient_PFW.enable=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].enable;
+      BackupClient_PFW.enable=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].enable;
+
+      BackupClient_PFW.delete=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].delete;
 
       ModifyClient_PFW_Index=index;
       ModifyClient_PFW_Modal=true;
@@ -1133,6 +1262,8 @@
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].client_pfw_redirectedPort=BackupClient_PFW.client_pfw_redirectedPort;
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].enable=BackupClient_PFW.enable;
 
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].delete=BackupClient_PFW.delete;
+
       ModifyClient_PFW_Modal=false;
   }
 
@@ -1145,511 +1276,611 @@
     let NewClientPFW_Index;
     let NewClientPFW_Item=[
     [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    }],
-        [{
-        "enable":1,
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "enable":1,
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "enable":1,
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "enable":1,
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "enable":1,
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "enable":1,
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "enable":1,
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "enable":1,
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "enable":1,
-        "client_pfw_incomingProtocol":0,
-        "client_pfw_incomingDport":0,
-        "client_pfw_redirectedPort":0
-    },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+       "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+       "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+        "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+       "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
         [{
-        "enable":1,
+       "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    }],
+        [{
+      "enable":true,
+      "delete":false,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+      "enable":true,
+      "delete":false,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+      "enable":true,
+      "delete":false,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+      "enable":true,
+      "delete":false,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+      "enable":true,
+      "delete":false,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+      "enable":true,
+      "delete":false,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+      "enable":true,
+      "delete":false,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+      "enable":true,
+      "delete":false,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+       "enable":true,
+      "delete":false,
+        "client_pfw_incomingProtocol":0,
+        "client_pfw_incomingDport":0,
+        "client_pfw_redirectedPort":0
+    },{
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
     [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+       "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     }],
     [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
     },{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "client_pfw_incomingProtocol":0,
         "client_pfw_incomingDport":0,
         "client_pfw_redirectedPort":0
@@ -1661,6 +1892,7 @@
     function NewClientPFW_Item_Invoker(index)
     {
       NewClientPFW_Item[Advanced_Client_Index_Selected][index].enable=true;
+      NewClientPFW_Item[Advanced_Client_Index_Selected][index].delete=false;
       NewClientPFW_Item[Advanced_Client_Index_Selected][index].client_pfw_incomingProtocol=0;
       NewClientPFW_Item[Advanced_Client_Index_Selected][index].client_pfw_incomingDport='';
       NewClientPFW_Item[Advanced_Client_Index_Selected][index].client_pfw_redirectedPort='';
@@ -1685,7 +1917,8 @@
     let ModifyFailOver_Modal;
     let ModifyFailOver_Index;
     let BackupFailOver={
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
@@ -1694,610 +1927,710 @@
     let NewFailOver_Index;
     let NewFailOver_Modal;
     let NewFailOver_Item=[[{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+       "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
  [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
     [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
     [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
   [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+       "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
    [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
   [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
   [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
   [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     }
     ],
   [{
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
     },
     {
-        "enable":1,
+      "enable":true,
+      "delete":false,
         "remote_host": "",
         "remote_port": 12345,
         "remote_protocol": 0
@@ -2318,6 +2651,8 @@
 
       BackupRemoteNetworkAccess.enable=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].enable;
 
+      BackupRemoteNetworkAccess.delete=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].delete;
+
       ModifyRemoteNetworkAccess_Index=index
       ModifyRemoteNetworkAccess_Modal=true;
       isValidRemoteSubnet=true;
@@ -2332,8 +2667,10 @@
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].comment=BackupRemoteNetworkAccess.comment;
 
 
-
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].enable=BackupRemoteNetworkAccess.enable;
+
+
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].delete=BackupRemoteNetworkAccess.delete;
 
     }
 
@@ -2350,6 +2687,7 @@
     function NewRemoteNetworkAccess_Item_Invoker(index)
     {
       NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index].enable=true;
+      NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index].delete=false;
       NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index].remoteSubnet="";
       NewRemoteNetworkAccess_Item[Advanced_Client_Index_Selected][index].comment="";
 
@@ -2388,6 +2726,9 @@
 
       BackupFailOver.enable=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].enable;
 
+
+      BackupFailOver.delete=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].delete;
+
       ModifyFailOver_Index=index;
       ModifyFailOver_Modal=true;
       isValidRemotePort=true;
@@ -2405,6 +2746,8 @@
 
       changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].enable=BackupFailOver.enable;
 
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].delete=BackupFailOver.delete;
+
     }
 
     function ModifyFailover(index)
@@ -2421,6 +2764,7 @@
     function NewFailover_Item_Invoker(index)
     {
         NewFailOver_Item[Advanced_Client_Index_Selected][index].enable=true;
+        NewFailOver_Item[Advanced_Client_Index_Selected][index].delete=false;
         NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_host="";
         NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_port=0;
         NewFailOver_Item[Advanced_Client_Index_Selected][index].remote_protocol=0;
@@ -2450,6 +2794,7 @@
     function modalTriggerCCD(index)
     {
       BackupCCD.enable=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].enable;
+      BackupCCD.delete=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].delete;      
       BackupCCD.ccd_client_certificate_common_name=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_certificate_common_name;
       
       BackupCCD.ccd_client_command=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_command;
@@ -2465,6 +2810,7 @@
       
       changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].ccd_client_command=BackupCCD.ccd_client_command;
       changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].enable=BackupCCD.enable;
+      changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].delete=BackupCCD.delete;
     }
 
     function ModifyCCD(index)
@@ -2475,6 +2821,7 @@
     function NewCCD_Item_Invoker(index)
     {
       NewCCD_Item[index].enable=true;
+      NewCCD_Item[index].delete=false;      
       NewCCD_Item[index].ccd_client_certificate_common_name="";
       NewCCD_Item[index].ccd_client_command="";
 
@@ -2491,11 +2838,12 @@
 
 
 
-    function  modalTriggerClientConn(index)
+    function modalTriggerClientConn(index)
     {
       ClientConnModal = true;
       ClientConnCurrentIndex=index;
       BackupClientConn.enable=changed_openvpn_data.config.vpn_openvpn_client_connection[index].enable;      
+      BackupClientConn.delete=changed_openvpn_data.config.vpn_openvpn_client_connection[index].delete;
       BackupClientConn.name=changed_openvpn_data.config.vpn_openvpn_client_connection[index].name;
       BackupClientConn.remote_host=changed_openvpn_data.config.vpn_openvpn_client_connection[index].remote_host;
       BackupClientConn.remote_port=changed_openvpn_data.config.vpn_openvpn_client_connection[index].remote_port;
@@ -2514,6 +2862,7 @@
     {
       ClientConnModal = false;
       changed_openvpn_data.config.vpn_openvpn_client_connection[index].enable=BackupClientConn.enable;
+      changed_openvpn_data.config.vpn_openvpn_client_connection[index].delete=BackupClientConn.delete;      
       changed_openvpn_data.config.vpn_openvpn_client_connection[index].name=BackupClientConn.name;
       changed_openvpn_data.config.vpn_openvpn_client_connection[index].remote_host=BackupClientConn.remote_host;
       changed_openvpn_data.config.vpn_openvpn_client_connection[index].remote_port=BackupClientConn.remote_port;
@@ -2539,6 +2888,7 @@
     function NewClientConn_Item_Invoker(index)
     {
       NewClientConn[index].enable=true;
+      NewClientConn[index].delete=false;      
       NewClientConn[index].name="";
       NewClientConn[index].remote_host="";
       NewClientConn[index].remote_port=0;
@@ -2582,6 +2932,9 @@
 
       ServerConn_BackupClientAccountPassword.enable=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].enable;
 
+
+      ServerConn_BackupClientAccountPassword.delete=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].delete;
+
     }
 
 
@@ -2593,11 +2946,23 @@
       changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].password=ServerConn_BackupClientAccountPassword.password;
       changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].enable=ServerConn_BackupClientAccountPassword.enable;
 
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].delete=ServerConn_BackupClientAccountPassword.delete;
+
     }
 
     function Server_ModifyClientAccountPassword(index)
     {
         ServerConn_ClientAccountPasswordModal=false;
+    }
+
+    function deleteClientCName(index)
+    {
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].delete=true;  
+    }
+
+    function RestoreDeleteClientCName(index)
+    {
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].delete=false;    
     }
 
 
@@ -2607,6 +2972,9 @@
         ClientCNameIndex=index;
         BackupCName.cname=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].cname;
         BackupCName.enable=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].enable;
+
+        BackupCName.delete=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].delete;
+
     }
 
     function NoModifyCName(index)
@@ -2614,6 +2982,9 @@
       ClientCNameModal=false;
       changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].cname=BackupCName.cname;
       changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].enable=BackupCName.enable;
+
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].delete=BackupCName.delete;
+
     }
 
     function ModifyCName(index)
@@ -2625,6 +2996,7 @@
     function NewClientCName_Item_Invoker(index)
     {
       NewClientCName[index].enable=true;
+      NewClientCName[index].delete=false;
       NewClientCName[index].cname="";
       new_client_cname_index=index;
       NewClientCNameModal=true;
@@ -2640,6 +3012,7 @@
     function Server_NewClientAccountPassword_Item_Invoker(index)
     {
       ServerConn_NewClientAccountPassword[index].enable=true;
+      ServerConn_NewClientAccountPassword[index].delete=false;
       ServerConn_NewClientAccountPassword[index].account="";
       ServerConn_NewClientAccountPassword[index].password="";
 
@@ -4016,6 +4389,37 @@
 
 </script>
 
+<style>
+ 
+.strikeout {
+  text-decoration: line-through;
+  color: #999; /* Adjust color for deleted text */
+  position: relative;
+}
+
+.strikeout:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #111; /* Adjust strikeout line color */
+  transform: translateY(-50%);
+}
+
+.strikeout:after {
+  content: "\00B7"; /* Unicode dot character */
+  font-size: 1px; /* Adjust dot size */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+</style>
+
+
   <Tabs style="underline">
   <TabItem open title="Overview">
 {#if getDataReady == 1}
@@ -4743,14 +5147,57 @@
 {#if changed_openvpn_data.config.vpn_openvpn_server_connection.auth==0}
 {#each changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name as clientCN, index}
 
+{#if clientCN.delete}
+
+
+    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteClientCName(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={clientCN.enable} disabled>
+
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{clientCN.cname}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"></td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"></td>
+      </tr>
+
+{:else}
 
     <TableBodyRow>
-          <TableBodyCell class="!p-4">
+          <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerClientCName(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
@@ -4758,7 +5205,12 @@
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4">
+   <TableBodyCell class="!p-0 w-10">
+   <button on:click={() => deleteClientCName(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
     </TableBodyCell>
 
 
@@ -4768,7 +5220,7 @@
 
       </TableBodyCell>
 
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-10">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{clientCN.cname}</TableBodyCell>
 
 
@@ -4776,6 +5228,9 @@
                     <TableBodyCell class="w-10"></TableBodyCell>
 
     </TableBodyRow>
+
+{/if}
+
 
 {/each}
 

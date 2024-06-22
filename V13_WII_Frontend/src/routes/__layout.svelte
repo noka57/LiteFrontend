@@ -140,7 +140,7 @@
 		'pl-20 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white';
 
 	// Nav component
-	let navClass = 'py-3 px-1 text-lg';
+	let navClass = 'py-1 px-1 text-lg';
 
 	let navDivClass = 'pb-8';
 

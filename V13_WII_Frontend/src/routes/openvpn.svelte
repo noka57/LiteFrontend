@@ -514,6 +514,16 @@
   let Modify_PFW_Server_Modal=false;
   let Modify_PFW_Server_Index=0;
 
+  function RestoreDeleteServerPFW(index)
+  {
+    changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].delete=false;
+  }
+
+  function deleteServerPFW(index)
+  {
+    changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].delete=true;
+  }
+
   function modalTriggerServerPortFW(index)
   {
       BackupServerPFW.server_pfw_incomingProtocol=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[index].server_pfw_incomingProtocol;
@@ -1238,6 +1248,17 @@
       "client_pfw_incomingDport":0,
       "client_pfw_redirectedPort":0
   };
+
+  function deleteClientPFW(index)
+  {
+    changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].delete=true;
+
+  }
+
+  function RestoreDeleteClientPFW(index)
+  {
+    changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[index].delete=false;  
+  }
 
 
   function modalTriggerClientPFW(index)
@@ -2639,6 +2660,15 @@
 
     ];
 
+    function deleteClientRNA(index)
+    {
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].delete=true;
+    }
+
+    function RestoreDeleteClientRNA(index)
+    {
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[index].delete=false;  
+    }
     
 
     function modalTriggerRemoteNetworkAccess(index)
@@ -2715,6 +2745,16 @@
         NewRemoteNetworkAccess_Modal=false;
     }
 
+
+    function deleteFailOver(index)
+    {
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].delete=true;
+    }
+
+    function RestoreDeleteFailOver(index)
+    {
+      changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[index].delete=false;    
+    }
 
     function modalTriggerFailover(index)
     {
@@ -2834,6 +2874,17 @@
     {
       NewCCD_Modal=false;
       changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd=[...changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd,NewCCD_Item[index]];
+    }
+
+    function RestoreDeleteClientConn(index)
+    {
+      changed_openvpn_data.config.vpn_openvpn_client_connection[index].delete=false;
+    }
+
+
+    function deleteClientConn(index)
+    {
+      changed_openvpn_data.config.vpn_openvpn_client_connection[index].delete=true;
     }
 
 
@@ -2963,6 +3014,18 @@
     function RestoreDeleteClientCName(index)
     {
       changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[index].delete=false;    
+    }
+
+
+    function RestoreDeleteClientAccountPW(index)
+    {
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].delete=false;
+    }
+
+
+    function deleteClientAccountPW(index)
+    {
+      changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[index].delete=true;  
     }
 
 
@@ -3149,6 +3212,7 @@
         if (Advanced_Client_Index_Selected != "none")
         {
 
+          let tempForDelete=[];
 
           if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
           {
@@ -3159,6 +3223,14 @@
           else
           {
             console.log("start to save client rna");
+
+            for (let i = 0; i< changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length; i++)
+            {
+              if (!changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete)
+              {
+                tempForDelete=[...tempForDelete, changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i]]
+              }
+            }
 
             if (saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length <
             changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length)
@@ -3201,6 +3273,15 @@
 
                   }
 
+                  if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete)
+                  {
+                      saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete;
+                      let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Remote Network Access List No." + (i+1) +" has changed: delete is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete;
+
+                      openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+
+                  }
+
               }
 
               for (let i=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length;i< changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length;i++)
@@ -3213,6 +3294,7 @@
             else if (saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length ==
             changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length)
             {
+
               for (let i=0;i<saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length;i++)
               {
                 if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].remoteSubnet != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].remoteSubnet)
@@ -3245,8 +3327,33 @@
 
                 }
 
+
+                if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete)
+                {
+                    saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete;
+                    let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Remote Network Access List No." + (i+1) +" has changed: delete is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[i].delete;
+
+                    openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+
+                }
+
               }
             }
+            else
+            {
+              let deleteCount=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length-changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length;
+
+
+              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " delete "+deleteCount+" item(s) from Remote Network Access";
+            
+              openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+
+            }
+
+
+            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess=JSON.parse(JSON.stringify(tempForDelete));
+            changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess=JSON.parse(JSON.stringify(tempForDelete));
+
 
 
             ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
@@ -3275,6 +3382,19 @@
         else
         {
           console.log("start to save client fo");
+
+
+          let tempForDelete=[];
+          for (let i = 0; i< changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length; i++)
+          {
+            if (!changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete)
+            {
+              tempForDelete=[...tempForDelete, changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i]]
+            }
+
+          }
+
+
           if (saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length < changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length)
           {
             let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length-saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;
@@ -3323,6 +3443,16 @@
                       openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
                   }
 
+                  if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete)
+                  {
+                      saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete;
+
+                      let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Failover List No." + (i+1) +" has changed: delete is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete;
+
+                      openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+                  }
+
+
               }
 
               for (let i=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;i< changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;i++)
@@ -3331,7 +3461,6 @@
 
                   saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver, new_fo];
               }
-
           }
           else if (saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length == changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length)
           {
@@ -3376,8 +3505,31 @@
   
               }
 
+
+              if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete)
+              {
+                  saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete;
+
+                  let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Failover List No." + (i+1) +" has changed: delete is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[i].delete;
+
+                  openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+              }
+
             }
           }
+          else
+          {
+
+              let deletedCount=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length-changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;
+
+
+              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " delete "+deletedCount+" item(s) to Failover";
+            
+              openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+          }
+
+          saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver=JSON.parse(JSON.stringify(tempForDelete));
+          changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver=JSON.parse(JSON.stringify(tempForDelete));
 
 
           ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
@@ -3403,6 +3555,19 @@
         }
         else
         {
+
+          let tempForDelete=[];
+
+          for (let i = 0; i< changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length; i++)
+          {
+            if (!changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete)
+            {
+              tempForDelete=[...tempForDelete, changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i]]
+            }
+
+          }
+
+
           if (saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length < changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length)
           {
 
@@ -3446,6 +3611,16 @@
                 saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable;
 
                 let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Port Forwarding List No." + (i+1) +" has changed: enable is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].enable;
+
+                openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
+              }
+
+
+              if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete)
+              {
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete;
+
+                let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Port Forwarding List No." + (i+1) +" has changed: delete is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete;
 
                 openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
               }
@@ -3500,9 +3675,29 @@
                 openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
               }
 
+              if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete)
+              {
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete= changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete;
+
+                let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+" Port Forwarding List No." + (i+1) +" has changed: delete is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[i].delete;
+
+                openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
+              }
 
             }
           }
+          else
+          {
+            let deletedCount=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length-changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length;
+
+            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " delete "+deletedCount+" item(s) to Port Forwarding";
+                
+            openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
+          }
+
+
+          saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding=JSON.parse(JSON.stringify(tempForDelete));
+          changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding=JSON.parse(JSON.stringify(tempForDelete));
 
           ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
           OpenVPN_Client_Advanced_PFW_ConfigChangedLog.set(openvpn_client_advanced_pfw_changedValues);
@@ -3523,9 +3718,11 @@
       }
 
 
-      console.log(changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
-      console.log(openvpn_data.config.vpn_openvpn_basic.ovpnRole);
-      console.log(saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
+     // console.log(changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
+    //  console.log(openvpn_data.config.vpn_openvpn_basic.ovpnRole);
+    //  console.log(saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
+
+      let tempForDelete=[];
 
       if (1==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole &&  0==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
       {
@@ -3547,6 +3744,26 @@
           openvpn_client_conn_changedValues=[...openvpn_client_conn_changedValues, changedstr];
 
         }
+
+
+        if (changed_openvpn_data.config.vpn_openvpn_client_connection.length < openvpn_data.config.vpn_openvpn_client_connection.length) 
+        {
+          let deletedCount=openvpn_data.config.vpn_openvpn_client_connection.length-changed_openvpn_data.config.vpn_openvpn_client_connection.length;
+          let changedstr="Delete "+deletedCount+" item(s) to Client Connection";
+          
+          openvpn_client_conn_changedValues=[...openvpn_client_conn_changedValues, changedstr];
+
+        }
+
+        for (let i = 0; i< changed_openvpn_data.config.vpn_openvpn_client_connection.length; i++)
+        {
+          if (!changed_openvpn_data.config.vpn_openvpn_client_connection[i].delete)
+          {
+            tempForDelete=[...tempForDelete, changed_openvpn_data.config.vpn_openvpn_client_connection[i]]
+          }
+
+        }
+
 
         for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_client_connection.length,
           openvpn_data.config.vpn_openvpn_client_connection.length);i++)
@@ -3603,6 +3820,13 @@
             saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable=changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable;
           }
 
+
+          if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].delete != openvpn_data.config.vpn_openvpn_client_connection[i].delete)
+          {
+            let changedstr="Client No. "+(i+1)+" delete is changed to "+changed_openvpn_data.config.vpn_openvpn_client_connection[i].delete;
+            openvpn_client_conn_changedValues=[...openvpn_client_conn_changedValues, changedstr];
+            saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].delete=changed_openvpn_data.config.vpn_openvpn_client_connection[i].delete;
+          }
 
           if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].auth != openvpn_data.config.vpn_openvpn_client_connection[i].auth)
           {
@@ -3676,6 +3900,10 @@
                 saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable=changed_openvpn_data.config.vpn_openvpn_client_connection[i].enable;
             }
 
+            if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].delete != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].delete)
+            {
+                saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].delete=changed_openvpn_data.config.vpn_openvpn_client_connection[i].delete;
+            }
 
             if (changed_openvpn_data.config.vpn_openvpn_client_connection[i].auth != saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].auth)
             {
@@ -3707,6 +3935,12 @@
           let new_item=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_client_connection[i]))
           saved_changed_openvpn_data.config.vpn_openvpn_client_connection=[...saved_changed_openvpn_data.config.vpn_openvpn_client_connection, new_item];
         }
+
+
+
+        saved_changed_openvpn_data.config.vpn_openvpn_client_connection=JSON.parse(JSON.stringify(tempForDelete));
+        changed_openvpn_data.config.vpn_openvpn_client_connection=JSON.parse(JSON.stringify(tempForDelete));
+
 
         ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
         OpenVPN_Client_Conn_ConfigChangedLog.set(openvpn_client_conn_changedValues);
@@ -3791,6 +4025,17 @@
 
           if (changed_openvpn_data.config.vpn_openvpn_server_connection.auth==0)
           {
+
+            let tempForDelete=[];
+
+            for (let i=0; i < changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length;i++)
+            {
+              if (!changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].delete)
+              {
+                tempForDelete=[...tempForDelete, changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i]]
+              }
+            }
+
             for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length,
             openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length);i++)
             {
@@ -3815,6 +4060,18 @@
                 saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].enable=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].enable;
 
               }
+
+
+              if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].delete !=
+              openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].delete)
+              {
+               let changedstr="Client Certificate Common Name List No. "+(i+1)+" delete is changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].delete;
+
+                openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+                saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].delete=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[i].delete;
+
+              }
               
             }
 
@@ -3825,12 +4082,36 @@
               openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
 
 
-              saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name))
+              //saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name))
 
             }
+
+
+            if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length < openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length) 
+            {
+              let deletedCount=openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length-changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length;
+              let changedstr="Delete "+deletedCount+" item(s) to Client Certificate Common Name";
+              openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+            }
+
+
+            saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name=JSON.parse(JSON.stringify(tempForDelete));
+            changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name=JSON.parse(JSON.stringify(tempForDelete));
+
           }
           else if (changed_openvpn_data.config.vpn_openvpn_server_connection.auth==1)
           {
+
+            let tempForDelete=[];
+
+            for (let i=0; i < changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length;i++)
+            {
+              if (!changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].delete)
+              {
+                tempForDelete=[...tempForDelete, changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i]]
+              }
+            }
+
             for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length,
             openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length);i++)
             {
@@ -3844,6 +4125,17 @@
 
                 saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].enable=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].enable;
               }
+
+              if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].delete !=
+              openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].delete)
+              {
+               let changedstr="Client Account/Password List No. "+(i+1)+" item is changed: delete has changed to "+changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].delete;
+
+                openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+                saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].enable=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].enable;
+              }
+
 
               if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account !=
               openvpn_data.config.vpn_openvpn_server_connection.client_account_password[i].account)
@@ -3874,9 +4166,21 @@
               openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
             
 
-              saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password));
+              //saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password));
 
             }
+
+            if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length < openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length) 
+            {
+              let deletedCount=openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length-changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length;
+              let changedstr="Delete "+deletedCount+" item(s) to Client Account/Password";
+              openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+
+            }
+
+            saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password=JSON.parse(JSON.stringify(tempForDelete));
+            changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password=JSON.parse(JSON.stringify(tempForDelete));
+
           }
 
           ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
@@ -3886,6 +4190,17 @@
 
       }
   }
+
+  function deleteCCD(index)
+  {
+    changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].delete=true;
+  }
+
+  function RestoreDeleteCCD(index)
+  {
+    changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[index].delete=false;
+  }
+
 
 
   function saveServerCCD()
@@ -3921,6 +4236,27 @@
         
         openvpn_server_advanced_ccd_changedValues=[...openvpn_server_advanced_ccd_changedValues, changedstr];
       }
+
+
+      if (changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length < openvpn_data.config.vpn_openvpn_server_advanced.ccd.length) 
+      {
+        let deletedCount=openvpn_data.config.vpn_openvpn_server_advanced.ccd.length-changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length;
+        let changedstr="Delete "+deletedCount+" item(s) to CCD";
+        
+        openvpn_server_advanced_ccd_changedValues=[...openvpn_server_advanced_ccd_changedValues, changedstr];
+      }
+
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length; i++)
+      {
+        if (!changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i]]
+        }
+
+      }
+
 
       for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length,
         openvpn_data.config.vpn_openvpn_server_advanced.ccd.length);i++)
@@ -3960,9 +4296,26 @@
 
         }
 
+        if (changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].delete !=
+          openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].delete)
+        {
+           let changedstr="CCD List No. "+(i+1)+" item is changed: delete has changed to "+changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].delete;
+
+          openvpn_server_advanced_ccd_changedValues=[...openvpn_server_advanced_ccd_changedValues, changedstr];
+
+          saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].delete=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[i].delete;
+
+        }
+
       }
 
-      saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd))
+
+      saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd=JSON.parse(JSON.stringify(tempForDelete));
+      changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd=JSON.parse(JSON.stringify(tempForDelete));
+
+
+
+    //  saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd))
 
       ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
       OpenVPN_Server_Advanced_CCD_ConfigChangedLog.set(openvpn_server_advanced_ccd_changedValues);
@@ -4038,7 +4391,7 @@
 
     console.log(changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
     console.log(saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole);
-
+    let tempForDelete=[];
     if (0==changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole && 1==saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
     {
         console.log("Please save basic page first.");
@@ -4047,9 +4400,9 @@
     else
     {
 
-      console.log(changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length);
-      console.log(saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length);
-      console.log(openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length);
+     // console.log(changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length);
+     // console.log(saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length);
+     // console.log(openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length);
 
       if (changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length > openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length) 
       {
@@ -4058,6 +4411,28 @@
         
         openvpn_server_advanced_pfw_changedValues=[...openvpn_server_advanced_pfw_changedValues, changedstr];
       }
+
+
+      if (changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length < openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length) 
+      {
+        let deletedCount=openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length-changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length;
+        let changedstr="Delete "+deletedCount+" item(s) to PFW";
+        
+        openvpn_server_advanced_pfw_changedValues=[...openvpn_server_advanced_pfw_changedValues, changedstr];
+      }
+
+
+
+      for (let i = 0; i< changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length; i++)
+      {
+        if (!changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i]]
+        }
+
+      }
+
+
 
       for(let i=0;i<Math.min(changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length,
         openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length);i++)
@@ -4107,10 +4482,25 @@
           saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].enable=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].enable;
 
         }
+
+        if (changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].delete !=
+          openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].delete)
+        {
+           let changedstr="PortForwarding List No. "+(i+1)+" item is changed: delete has changed to "+changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].delete;
+
+          openvpn_server_advanced_pfw_changedValues=[...openvpn_server_advanced_pfw_changedValues, changedstr];
+
+          saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].delete=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[i].delete;
+
+        }
+
       }
     }
 
-    saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding))
+   // saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding))
+
+    saved_changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding=JSON.parse(JSON.stringify(tempForDelete));
+    changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding=JSON.parse(JSON.stringify(tempForDelete));
 
     ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
     OpenVPN_Server_Advanced_PFW_ConfigChangedLog.set(openvpn_server_advanced_pfw_changedValues);
@@ -4536,33 +4926,87 @@
     </TableHeadCell>
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
-    <TableHeadCell>Enable</TableHeadCell>    
-    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="!p-4">Enable</TableHeadCell>    
+    <TableHeadCell class="!p-4 w-10">No</TableHeadCell>
     <TableHeadCell class="w-18">VPN Name</TableHeadCell>
     <TableHeadCell class="w-18">Remote Host</TableHeadCell>
     <TableHeadCell class="w-18">Remote Port</TableHeadCell>
     <TableHeadCell class="w-18">Remote Protocol</TableHeadCell>
     <TableHeadCell class="w-18">Remote CA certificate</TableHeadCell>
     <TableHeadCell class="w-18">Local certificate</TableHeadCell>
+    <TableHeadCell class="w-18">Authentication</TableHeadCell>
 
-    <TableHeadCell class="w-16">Authentication</TableHeadCell>
-
-        <TableHeadCell class="w-10"></TableHeadCell>
-
-    <TableHeadCell class="w-10"></TableHeadCell>
 
   </TableHead>
   <TableBody>
 {#each changed_openvpn_data.config.vpn_openvpn_client_connection as clientConn, index}
 
+{#if clientConn.delete}
+  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteClientConn(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-4 w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={clientConn.enable} disabled></td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-4 w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{clientConn.name}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{clientConn.remote_host}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{clientConn.remote_port}</td>
+
+
+{#if clientConn.remote_protocol ==0}
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">UDP</td>
+{:else if clientConn.remote_protocol == 1}
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">TCP</td>
+{/if}
+
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{clientConn.remote_ca_certificate}</td>
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{clientConn.local_certificate}</td>
+
+{#if clientConn.auth == 0}
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">X509 Certificate</td>
+{:else if clientConn.auth ==1}
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">Account/Password</td>
+{/if}
+
+
+</tr>
+
+
+{:else}
 
     <TableBodyRow>
-          <TableBodyCell class="!p-4">
+          <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerClientConn(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
@@ -4570,17 +5014,22 @@
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4">
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteClientConn(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
     </TableBodyCell>
 
 
 
-      <TableBodyCell class="w-10">
+      <TableBodyCell class="!p-4 w-10">
 <input type="checkbox"  bind:checked={clientConn.enable}>
 
       </TableBodyCell>
 
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="!p-4 w-10">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{clientConn.name}</TableBodyCell>
                     <TableBodyCell class="w-18">{clientConn.remote_host}</TableBodyCell>
                     <TableBodyCell class="w-18">{clientConn.remote_port}</TableBodyCell>
@@ -4600,10 +5049,9 @@
 {/if}
 
 
-                    <TableBodyCell class="w-16"></TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
-
     </TableBodyRow>
+
+{/if}
 
 {/each}
 
@@ -4612,7 +5060,7 @@
 
 
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 
 {#if changed_openvpn_data.config.vpn_openvpn_client_connection.length < 10}    
 <button on:click={() => NewClientConn_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_client_connection.length)}>
@@ -4625,18 +5073,16 @@
 {/if}  
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="w-8"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-16"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
     </TableBodyRow>
 
      <tr>
@@ -4651,8 +5097,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
-    <td class="pl-10"><Button color="blue" pill={true} on:click={saveClientConn}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-4"><Button color="blue" pill={true} on:click={saveClientConn}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -5235,7 +5680,7 @@
 {/each}
 
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 
 {#if changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length < 10}    
 <button on:click={() => NewClientCName_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length)}>
@@ -5248,9 +5693,9 @@
 {/if}  
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -5266,13 +5711,58 @@
 {#each changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password as client_account_password, index}
 
 
+{#if client_account_password.delete}
+
+
+
+    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteClientAccountPW(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={client_account_password.enable} disabled>
+
+      </td>
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{client_account_password.account}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{client_account_password.password}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"></td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"></td>
+
+  </tr>
+{:else}
+
     <TableBodyRow>
-          <TableBodyCell class="!p-4">
+          <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerServer_ClientAccountPassword(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
@@ -5280,7 +5770,12 @@
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4">
+  <TableBodyCell class="!p-0 w-10">
+   <button on:click={() => deleteClientAccountPW(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
     </TableBodyCell>
 
           <TableBodyCell class="w-10">
@@ -5288,7 +5783,7 @@
 
       </TableBodyCell>
 
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-10">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{client_account_password.account}</TableBodyCell>
                     <TableBodyCell class="w-18">{client_account_password.password}</TableBodyCell>
 
@@ -5297,11 +5792,14 @@
 
     </TableBodyRow>
 
+
+{/if}
+
 {/each}
 
 
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 
 {#if changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length < 10}    
 <button on:click={() => Server_NewClientAccountPassword_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length)}>
@@ -5314,8 +5812,8 @@
 {/if}  
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-8"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -5546,8 +6044,8 @@
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
         <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell class="w-8">No</TableHeadCell>
-    <TableHeadCell class="w-96">Client Certificate Common Name</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-48">Client Certificate Common Name</TableHeadCell>
     <TableHeadCell class="w-36">Command</TableHeadCell>
 </TableHead>
 
@@ -5556,14 +6054,56 @@
 
 {#each changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd as ccd, index}
 
+{#if ccd.delete}
+ <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteCCD(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={ccd.enable} disabled>
+
+      </td>
+
+    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+
+    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-48 strikeout">{ccd.ccd_client_certificate_common_name}</td>
+    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-36 strikeout">{ccd.ccd_client_command}</td>
+
+    </tr>
+{:else}
 
     <TableBodyRow>
-          <TableBodyCell class="!p-4">
+          <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerCCD(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
@@ -5571,7 +6111,12 @@
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4">
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteCCD(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
     </TableBodyCell>
 
 
@@ -5579,19 +6124,19 @@
 <input type="checkbox"  bind:checked={ccd.enable}>
                     </TableBodyCell>
 
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
-                    <TableBodyCell class="w-96">{ccd.ccd_client_certificate_common_name}</TableBodyCell>
+                    <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-48">{ccd.ccd_client_certificate_common_name}</TableBodyCell>
                     <TableBodyCell class="w-36">{ccd.ccd_client_command}</TableBodyCell>
 
-                    <TableBodyCell class="w-10"></TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
+   
 
     </TableBodyRow>
+{/if}    
 
 {/each}
 
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 
 {#if changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length < 10}    
 <button on:click={() => NewCCD_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length)}>
@@ -5604,14 +6149,13 @@
 {/if}  
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-8"></TableBodyCell>
-      <TableBodyCell class="w-96"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-48"></TableBodyCell>
       <TableBodyCell class="w-36"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
+
     </TableBodyRow>
 
 
@@ -5625,8 +6169,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
+
     <td class="pl-10"><Button color="blue" pill={true} on:click={saveServerCCD}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
@@ -5728,8 +6271,8 @@
     </TableHeadCell>
 
   <TableHeadCell>Enable</TableHeadCell>    
-    <TableHeadCell class="w-8">No</TableHeadCell>
-    <TableHeadCell class="w-36">Incoming Protocol</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-32">Incoming Protocol</TableHeadCell>
     <TableHeadCell class="w-48">Incoming Destination Port</TableHeadCell>
     <TableHeadCell class="w-36">Redirected Port</TableHeadCell>
 
@@ -5739,20 +6282,75 @@
 <TableBody>
 
 {#each changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding as serverPFW, index}
+
+{#if serverPFW.delete}
+    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteServerPFW(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={serverPFW.enable} disabled>
+
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+{#if serverPFW.server_pfw_incomingProtocol == 0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-32 strikeout">UDP</td>
+{:else if serverPFW.server_pfw_incomingProtocol == 1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-32 strikeout">TCP</td>
+{/if}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-48 strikeout">{serverPFW.server_pfw_incomingDport}</td>
+
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-36 strikeout">{serverPFW.server_pfw_redirectedPort}</td>
+
+
+      </tr>
+
+{:else}
+
   <TableBodyRow>
-          <TableBodyCell class="!p-4">
+          <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerServerPortFW(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4">
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteServerPFW(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
     </TableBodyCell>
 
                     <TableBodyCell class="w-10">
@@ -5760,23 +6358,25 @@
 <input type="checkbox"  bind:checked={serverPFW.enable}>
 
                     </TableBodyCell>
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-10">{index+1}</TableBodyCell>
 {#if serverPFW.server_pfw_incomingProtocol == 0}
-                    <TableBodyCell class="w-36">UDP</TableBodyCell>
+                    <TableBodyCell class="w-32">UDP</TableBodyCell>
 {:else if serverPFW.server_pfw_incomingProtocol == 1}
-                    <TableBodyCell class="w-36">TCP</TableBodyCell>
+                    <TableBodyCell class="w-32">TCP</TableBodyCell>
 {/if}
                     <TableBodyCell class="w-48">{serverPFW.server_pfw_incomingDport}</TableBodyCell>                    
                     <TableBodyCell class="w-36">{serverPFW.server_pfw_redirectedPort}</TableBodyCell>
 
-                    <TableBodyCell class="w-10"></TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
+
 
     </TableBodyRow>
+
+{/if}
+
 {/each}
 
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 
 
 {#if changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length < 10}    
@@ -5791,15 +6391,14 @@
 
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-8"></TableBodyCell>
-      <TableBodyCell class="w-36"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-32"></TableBodyCell>
       <TableBodyCell class="w-48"></TableBodyCell>                    
       <TableBodyCell class="w-36"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
+
     </TableBodyRow>
  <tr>
         <td></td>
@@ -6170,28 +6769,67 @@
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
 
-    <TableHeadCell>Enable</TableHeadCell>    
-    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="!p-4">Enable</TableHeadCell>    
+    <TableHeadCell class="!p-1 w-10">No</TableHeadCell>
     <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
     <TableHeadCell class="w-18">Comment</TableHeadCell>
-
-
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
 
   </TableHead>
   <TableBody>
 
 {#each changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess as RemoteNetworkAccess, index}
 
+{#if RemoteNetworkAccess.delete}
+ <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteClientRNA(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={RemoteNetworkAccess.enable} disabled>
+
+      </td>
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-1 w-10 strikeout">{index+1}</td>
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{RemoteNetworkAccess.remoteSubnet}</td>
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{RemoteNetworkAccess.comment}</td>
+      </tr>
+
+{:else}
 
     <TableBodyRow>
-          <TableBodyCell class="!p-4">
+          <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerRemoteNetworkAccess(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
@@ -6199,7 +6837,12 @@
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4">
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteClientRNA(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
     </TableBodyCell>
 
 
@@ -6208,19 +6851,19 @@
 
                     </TableBodyCell>
 
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="!p-1 w-10">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{RemoteNetworkAccess.remoteSubnet}</TableBodyCell>
                     <TableBodyCell class="w-18">{RemoteNetworkAccess.comment}</TableBodyCell>
 
-                    <TableBodyCell class="w-10"></TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
 
     </TableBodyRow>
+
+{/if}
 
 {/each}
 
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 
 {#if changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length < 10}    
 <button on:click={() => NewRemoteNetworkAccess_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length)}>
@@ -6233,14 +6876,13 @@
 {/if}  
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="!p-1 w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
+
 
     </TableBodyRow>
 
@@ -6424,13 +7066,11 @@
     </TableHeadCell>
 
     <TableHeadCell >Enable</TableHeadCell>
-    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
     <TableHeadCell class="w-18">Remote Host</TableHeadCell>
     <TableHeadCell class="w-18">Remote Port</TableHeadCell>
     <TableHeadCell class="w-18">Remote Protocol</TableHeadCell>
 
-
-    <TableHeadCell class="w-10"></TableHeadCell>
 
   </TableHead>
   <TableBody>
@@ -6439,14 +7079,62 @@
 
 {#each changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver as FailOver, index}
 
+{#if FailOver.delete}
+
+ <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteFailOver(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={FailOver.enable} disabled>
+
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{FailOver.remote_host}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{FailOver.remote_port}</td>
+{#if FailOver.remote_protocol == 0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">UDP</td>
+{:else if FailOver.remote_protocol == 1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">TCP</td>
+{/if} 
+
+      </tr>
+
+
+{:else}
 
     <TableBodyRow>
           <TableBodyCell class="!p-4">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerFailover(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
@@ -6454,7 +7142,12 @@
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4">
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteFailOver(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
     </TableBodyCell>
 
 
@@ -6463,7 +7156,7 @@
 <input type="checkbox"  bind:checked={FailOver.enable}>   
     </TableBodyCell>
 
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-10">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{FailOver.remote_host}</TableBodyCell>
                     <TableBodyCell class="w-18">{FailOver.remote_port}</TableBodyCell>
 {#if FailOver.remote_protocol == 0}
@@ -6471,15 +7164,17 @@
 {:else if FailOver.remote_protocol == 1}
                     <TableBodyCell class="w-18">TCP</TableBodyCell>
 {/if} 
-                    <TableBodyCell class="w-10"></TableBodyCell>
+
 
 
     </TableBodyRow>
 
+{/if}    
+
 {/each}
 
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 
 {#if changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length < 10}    
 <button on:click={() => NewFailover_Item_Invoker(changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length)}>
@@ -6492,14 +7187,13 @@
 {/if}  
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>      
-      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
 
     </TableBodyRow>
 
@@ -6727,13 +7421,63 @@
 
 {#each changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding as clientPFW, index}
 
+
+{#if clientPFW.delete}
+
+ <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteClientPFW(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={clientPFW.enable} disabled>
+
+      </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+
+{#if clientPFW.client_pfw_incomingProtocol== 0}
+                    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-36 strikeout">UDP</td>
+{:else if clientPFW.client_pfw_incomingProtocol == 1}
+                    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-36 strikeout">TCP</td>
+{/if}
+                    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-48 strikeout">{clientPFW.client_pfw_incomingDport}</td>                    
+                    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-36 strikeout">{clientPFW.client_pfw_redirectedPort}</td>
+
+      </tr>
+{:else}
+
   <TableBodyRow>
-          <TableBodyCell class="!p-4">
+          <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerClientPFW(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
@@ -6741,14 +7485,20 @@
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteClientPFW(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 
                     <TableBodyCell class="w-10">
                     <input type="checkbox"  bind:checked={clientPFW.enable}>
                     </TableBodyCell>
 
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-10">{index+1}</TableBodyCell>
 {#if clientPFW.client_pfw_incomingProtocol== 0}
                     <TableBodyCell class="w-36">UDP</TableBodyCell>
 {:else if clientPFW.client_pfw_incomingProtocol == 1}
@@ -6757,13 +7507,16 @@
                     <TableBodyCell class="w-48">{clientPFW.client_pfw_incomingDport}</TableBodyCell>                    
                     <TableBodyCell class="w-36">{clientPFW.client_pfw_redirectedPort}</TableBodyCell>
 
-                    <TableBodyCell class="w-10"></TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
+
 
     </TableBodyRow>
+
+
+{/if}
+
 {/each}
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 
 
 {#if changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length < 10}    
@@ -6778,15 +7531,14 @@
 
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>      
-      <TableBodyCell class="w-8"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-36"></TableBodyCell>
       <TableBodyCell class="w-48"></TableBodyCell>                    
       <TableBodyCell class="w-36"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
+
     </TableBodyRow>
  <tr>
         <td></td>

@@ -3363,14 +3363,27 @@ event_engine_action_do_changeValues.length != 0 ||
       <Li>{item}</Li>
    {/each}
   </List>
-   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  </Li> 
+  </List>
+	{/if}
+
+
+  {#if initiator_conn_subnet_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+    Initiator Connection Tunnel Subnet
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
   {#each initiator_conn_subnet_changedValues as item}
       <Li>{item}</Li>
    {/each}
   </List>
   </Li> 
   </List>
-	{/if}
+  {/if}
+
+
+
+
   </Li>	
 {/if}
 

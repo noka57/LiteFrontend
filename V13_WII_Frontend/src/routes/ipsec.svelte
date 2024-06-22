@@ -263,6 +263,16 @@ let RemoteCAList = [
       {
         console.log("start to save initiator conn general");
 
+        let tempForDelete=[];
+        for (let i = 0; i< changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length; i++)
+        {
+          if (!changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete)
+          {
+            tempForDelete=[...tempForDelete, changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i]]
+          }
+        }
+
+
         if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length > ipsec_data.config.vpn_ipsec_connection.initiator_conn.length)
         {
             let addedCount = changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length-ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;
@@ -280,7 +290,28 @@ let RemoteCAList = [
         let i=0;
         for (;i<Math.min(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length,ipsec_data.config.vpn_ipsec_connection.initiator_conn.length);i++)
         {
-            console.log(i);
+            //console.log(i);
+
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].enable !=
+            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].enable)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].enable=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].enable;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: enable has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].enable;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete !=
+            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: delete has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }
+
+
             if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name !=
             ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name)
             {
@@ -333,6 +364,23 @@ let RemoteCAList = [
     
         for (i=ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i<saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
         {
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].enable !=
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].enable)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].enable=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].enable;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: enable has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].enable;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }
+
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete !=
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete)
+            {
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete;
+                let arrayindex=i+1;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: delete has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].delete;
+                initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }
 
             if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name !=
             saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name)
@@ -391,6 +439,12 @@ let RemoteCAList = [
           saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn=[...saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn, new_initiator_conn];
         }
         
+
+        saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn=JSON.parse(JSON.stringify(tempForDelete));
+        changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn=JSON.parse(JSON.stringify(tempForDelete));
+
+
+
         IPsec_Initiator_Conn_General_ConfigChangedLog.set(initiator_conn_general_changedValues);
         ChangedIPsecConfig.set(saved_changed_ipsec_data);
 
@@ -423,12 +477,23 @@ let RemoteCAList = [
             }
 
 
+            let tempForDelete=[];
+            for (let i = 0; i< changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length; i++)
+            {
+              if (!changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[i].delete)
+              {
+                tempForDelete=[...tempForDelete, changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[i]]
+              }
+
+            }
+
+
             let j=0;
  
             if (saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].type == 0)
             {
-                console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
-                console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+               // console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+               // console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
                 if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length < saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
                 {
                     let deletedCount = saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length-changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;
@@ -467,6 +532,31 @@ let RemoteCAList = [
 
                 
                     }
+
+
+                    if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].enable != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].enable)
+                    {
+
+                        saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].enable=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].enable;
+                        let arrayindex=j+1;
+                        let changedstr="Initiator Connection("+saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].name+") Tunnel Subnet List No."+arrayindex+" item is changed: enable has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].enable;
+                        initiator_conn_subnet_changedValues=[...initiator_conn_subnet_changedValues, changedstr];
+
+                
+                    }
+
+
+                    if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].delete != saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].delete)
+                    {
+
+                        saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].delete=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].delete;
+                        let arrayindex=j+1;
+                        let changedstr="Initiator Connection("+saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].name+") Tunnel Subnet List No."+arrayindex+" item is changed: delete has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[j].delete;
+                        initiator_conn_subnet_changedValues=[...initiator_conn_subnet_changedValues, changedstr];
+
+                
+                    }
+
                 }
 
 
@@ -482,6 +572,9 @@ let RemoteCAList = [
 
             }
         
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[    Initiator_Conn_Selected].tunnel_subnet=JSON.parse(JSON.stringify(tempForDelete));
+            changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet=JSON.parse(JSON.stringify(tempForDelete));
+
 
 
             IPsec_Initiator_Conn_Subnet_ConfigChangedLog.set(initiator_conn_subnet_changedValues);
@@ -493,7 +586,8 @@ let RemoteCAList = [
     }
 
     let BackupICG={
-        "enable":1,
+        "enable":false,
+        "delete":false,
         "name": 0,
         "remote_host":"",
         "local_certificate": "",
@@ -502,7 +596,8 @@ let RemoteCAList = [
     };
 
     let newICG_item=[{
-            "enable":1,
+            "enable":true,
+            "delete":false,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -511,7 +606,8 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
-            "enable":1,
+            "enable":true,
+            "delete":false,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -520,7 +616,8 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
-            "enable":1,
+            "enable":true,
+            "delete":false,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -529,7 +626,8 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
-            "enable":1,
+            "enable":true,
+            "delete":false,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -538,7 +636,8 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
-            "enable":1,
+            "enable":true,
+            "delete":false,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -547,7 +646,8 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
-            "enable":1,
+            "enable":true,
+            "delete":false,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -556,7 +656,8 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
-            "enable":1,
+            "enable":true,
+            "delete":false,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -565,7 +666,8 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
-            "enable":1,
+            "enable":true,
+            "delete":false,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -574,7 +676,8 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
-            "enable":1,
+            "enable":true,
+            "delete":false,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -583,7 +686,8 @@ let RemoteCAList = [
             "tunnel_subnet":[]
         },
         {
-            "enable":1,
+            "enable":true,
+            "delete":false,
             "name": 0,
             "remote_host":"",
             "local_certificate": "",
@@ -593,11 +697,23 @@ let RemoteCAList = [
         }
     ];
 
+    function deleteInitiatorConnGeneral(index)
+    {
+      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].delete=true;
+    }
+
+
+    function RestoreDeleteInitiatorConnGeneral(index)
+    {
+      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].delete=false;
+    }
+
 
     function modalTriggerInitiatorConnGeneral(index){
       initiatorConnGeneralModal = true;
       initiatorConnGeneralCurrentIndex=index;
       BackupICG.enable=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].enable;
+      BackupICG.delete=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].delete;
       BackupICG.name=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].name;
       BackupICG.remote_host=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].remote_host;
       BackupICG.local_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].local_certificate;
@@ -609,6 +725,7 @@ let RemoteCAList = [
     function NoModifyICG(index){
       initiatorConnGeneralModal = false;
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].enable=BackupICG.enable;      
+      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].delete=BackupICG.delete; 
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].name=BackupICG.name;
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].remote_host=BackupICG.remote_host;
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].local_certificate=BackupICG.local_certificate;
@@ -625,6 +742,7 @@ let RemoteCAList = [
 
     function NewICG_Item_Invoker(index){
       newICG_item[index].enable=true;
+      newICG_item[index].delete=false;      
       newICG_item[index].name="";
       newICG_item[index].remote_host="";
       newICG_item[index].local_certificate="";
@@ -646,58 +764,69 @@ let RemoteCAList = [
     }
 
     let BackupRCS={
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     };
 
     let newRCS_item=[{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
@@ -711,6 +840,7 @@ let RemoteCAList = [
       responderConnSubnetCurrentIndex=index;
 
       BackupRCS.enable=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].enable;
+      BackupRCS.delete=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].delete;
       BackupRCS.local_subnet=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].local_subnet;
       BackupRCS.remote_subnet=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].remote_subnet;
 
@@ -720,6 +850,7 @@ let RemoteCAList = [
       
       responderConnSubnetModal=false;
       changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].enable=BackupRCS.enable;
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].delete=BackupRCS.delete;      
       changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].local_subnet=BackupRCS.local_subnet;
       changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].remote_subnet=BackupRCS.remote_subnet;
 
@@ -733,6 +864,7 @@ let RemoteCAList = [
     function NewRCS_Item_Invoker(index){
 
       newRCS_item[index].enable=true;
+      newRCS_item[index].delete=false;      
       newRCS_item[index].local_subnet="";
       newRCS_item[index].remote_subnet=""; 
 
@@ -751,520 +883,632 @@ let RemoteCAList = [
 
 
    let BackupICS={
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     };
 
     let newICS_item=[[{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
 [{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
    [{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
     [{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
    [{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
   [{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
     [{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],
     [{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],[{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ],[{
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     },
     {
-        "enable":1,
+        "enable":true,
+        "delete":false,
         "local_subnet": "",
         "remote_subnet": ""
     }
     ]
     ];
+
+
+    function RestoreDeleteInitiatorConnSubnet(index)
+    {
+      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].delete=false;
+    }
+
+    function deleteInitiatorConnSubnet(index)
+    {
+      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].delete=true;
+    }
 
 
 
@@ -1274,6 +1518,7 @@ let RemoteCAList = [
       initiatorConnSubnetCurrentIndex=index;
 
       BackupICS.enable=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].enable;
+      BackupICS.delete=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].delete;      
       BackupICS.local_subnet=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].local_subnet;
       BackupICS.remote_subnet=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].remote_subnet;
 
@@ -1284,6 +1529,8 @@ let RemoteCAList = [
       initiatorConnSubnetModal=false;
 
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].enable=BackupICS.enable;
+      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].delete=BackupICS.delete;
+
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].local_subnet=BackupICS.local_subnet;
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].remote_subnet=BackupICS.remote_subnet;
 
@@ -1297,6 +1544,7 @@ let RemoteCAList = [
     function NewICS_Item_Invoker(index){
 
       newICS_item[Initiator_Conn_Selected][index].enable=true;
+      newICS_item[Initiator_Conn_Selected][index].delete=false;      
       newICS_item[Initiator_Conn_Selected][index].local_subnet="";
       newICS_item[Initiator_Conn_Selected][index].remote_subnet=""; 
 
@@ -1310,13 +1558,13 @@ let RemoteCAList = [
         newICS_Modal = false;
 
 
-        console.log("before");
-        console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
-        console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+       // console.log("before");
+        //console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+        //console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
         changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet=[...changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet,newICS_item[Initiator_Conn_Selected][index]];
-        console.log("addICS");
-        console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
-        console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+        //console.log("addICS");
+        //console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+       // console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
     }
 
 
@@ -1529,6 +1777,37 @@ async function getIpsecStatus() {
 
 
 </script>
+
+<style>
+ 
+.strikeout {
+  text-decoration: line-through;
+  color: #999; /* Adjust color for deleted text */
+  position: relative;
+}
+
+.strikeout:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #111; /* Adjust strikeout line color */
+  transform: translateY(-50%);
+}
+
+.strikeout:after {
+  content: "\00B7"; /* Unicode dot character */
+  font-size: 1px; /* Adjust dot size */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+</style>
+
  <Tabs style="underline">
   <TabItem open title="Overview">
 
@@ -1649,30 +1928,80 @@ async function getIpsecStatus() {
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell class="w-10">Enable</TableHeadCell>    
-    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
     <TableHeadCell class="w-18">Name</TableHeadCell>
     <TableHeadCell class="w-18">Remote Host</TableHeadCell>
     <TableHeadCell class="w-18">Remote Certificate</TableHeadCell>
     <TableHeadCell class="w-18">Local Certificate</TableHeadCell>
     <TableHeadCell class="w-18">Type</TableHeadCell>
-        <TableHeadCell class="w-10"></TableHeadCell>
 
-    <TableHeadCell class="w-10"></TableHeadCell>
 
   </TableHead>
   
   <TableBody>
 {#each changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn as initiatorConn, index}
 
+{#if initiatorConn.delete}
 
+
+    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteInitiatorConnGeneral(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={initiatorConn.enable} disabled>
+
+      </td>
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.name}</td>
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.remote_host}</td>
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.remote_certificate}</td>
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.local_certificate}</td>
+{#if initiatorConn.type==0}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Tunnel</td>
+{:else if initiatorConn.type==1}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Transport</td>
+{/if}
+      </tr>
+
+
+
+{:else}
 
     <TableBodyRow>
-          <TableBodyCell class="!p-4">
+          <TableBodyCell class="!p-4 w-10">
 
       </TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerInitiatorConnGeneral(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
@@ -1680,7 +2009,13 @@ async function getIpsecStatus() {
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4">
+   <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteInitiatorConnGeneral(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+
     </TableBodyCell>
 
 
@@ -1688,7 +2023,7 @@ async function getIpsecStatus() {
 <input type="checkbox"  bind:checked={initiatorConn.enable}>
 
                     </TableBodyCell>
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-10">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{initiatorConn.name}</TableBodyCell>
                     <TableBodyCell class="w-18">{initiatorConn.remote_host}</TableBodyCell>
                     <TableBodyCell class="w-18">{initiatorConn.remote_certificate}</TableBodyCell>
@@ -1698,16 +2033,18 @@ async function getIpsecStatus() {
 {:else if initiatorConn.type==1}
                     <TableBodyCell class="w-18">Transport</TableBodyCell>
 {/if}
-                    <TableBodyCell class="w-16"></TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
+
 
     </TableBodyRow>
+
+{/if}
+
 
 {/each}
 
 
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 
 {#if changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length < 10}    
 <button on:click={() => NewICG_Item_Invoker(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length)}>
@@ -1720,22 +2057,19 @@ async function getIpsecStatus() {
 {/if}  
  </TableBodyCell>
       
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>      
-      <TableBodyCell class="w-8"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-16"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+
     </TableBodyRow>
 
      <tr>
-        <td></td>
-        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -2022,7 +2356,7 @@ async function getIpsecStatus() {
     <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell class="w-10">Enable</TableHeadCell>    
-    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
     <TableHeadCell class="w-18">Local Subnet</TableHeadCell>
     <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
 
@@ -2035,13 +2369,52 @@ async function getIpsecStatus() {
 
 {#each changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet as tunnelSubnet, index}
 
+{#if tunnelSubnet.delete}
+  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
 
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteInitiatorConnSubnet(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={tunnelSubnet.enable} disabled>
+
+      </td>
+                    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{tunnelSubnet.local_subnet}</td>
+                    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{tunnelSubnet.remote_subnet}</td>
+      </tr>
+
+{:else}
     <TableBodyRow>
           
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerInitiatorConnSubnet(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
@@ -2049,21 +2422,28 @@ async function getIpsecStatus() {
 
        </TableBodyCell>
 
-   <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteInitiatorConnSubnet(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
                     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={tunnelSubnet.enable}>
                     </TableBodyCell>
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-10">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{tunnelSubnet.local_subnet}</TableBodyCell>
                     <TableBodyCell class="w-18">{tunnelSubnet.remote_subnet}</TableBodyCell>
 
-                    <TableBodyCell class="w-18"></TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
 
     </TableBodyRow>
+{/if}
+
+
 {/each}
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 {#if changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length < 10}  
 <button on:click={() => NewICS_Item_Invoker(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
@@ -2075,14 +2455,13 @@ async function getIpsecStatus() {
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-         <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+         <TableBodyCell class="!p-0 w-10"></TableBodyCell>
                     <TableBodyCell class="w-8"></TableBodyCell>
                     <TableBodyCell class="w-10"></TableBodyCell>                    
                     <TableBodyCell class="w-18"></TableBodyCell>
                     <TableBodyCell class="w-18"></TableBodyCell>
-                    <TableBodyCell class="w-18"></TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
+
     </TableBodyRow>
 
 

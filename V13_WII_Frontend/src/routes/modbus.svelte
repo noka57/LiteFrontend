@@ -293,6 +293,17 @@
     let Modify_TCP_Slave_Modal=false;
     let Modify_TCP_Slave_index;
 
+
+    function deleteTCPSlave(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].delete=true;
+    }
+
+    function RestoreDeleteTCPSlave(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_tcp.slave[index].delete=false;
+    }
+
     function TriggerModifyTCPSlave(index)
     {
         Modify_TCP_Slave_Modal=true;
@@ -467,6 +478,18 @@
     let Modify_TCP_Master_index;
 
 
+    function deleteTCPMaster(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].delete=true;
+    }
+
+
+    function RestoreDeleteTCPMaster(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_tcp.master[index].delete=false;
+    }
+
+
     function TriggerModifyTCPMaster(index)
     {
         Modify_TCP_Master_Modal=true;
@@ -638,6 +661,17 @@
         aliasName:"",
         serialProfile:""
     };
+
+    function deleteRTUSlave(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_rtu.slave[index].delete=true;
+    }
+
+    function RestoreDeleteRTUSlave(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_rtu.slave[index].delete=false;
+    }
+
 
     function TriggerModifyRtuSlave(index)
     {
@@ -868,6 +902,16 @@
     let Modify_Data_Model_Master_Modal=false;
     let Modify_Data_Model_Master_index;
 
+    function deleteDataModelMaster(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].delete=true;
+    }
+
+    function RestoreDeleteDataModelMaster(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].delete=false;
+    }
+
 
     function TriggerModifyDataModelMaster(index)
     {
@@ -1073,6 +1117,16 @@
 
     let Modify_Data_Model_Slave_Modal=false;
     let Modify_Data_Model_Slave_index;
+
+    function deleteDataModelSlave(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].delete=true;
+    }
+
+    function RestoreDeleteDataModelSlave(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].delete=false;
+    }
 
 
     function TriggerModifyDataModelSlave(index)
@@ -1901,7 +1955,16 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName != "")
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile= changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName;
+
+                    if (!changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile= changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile="";
+                    }
+
                     needSaveDataModelSlave=1;
                 }
 
@@ -1914,7 +1977,15 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName != ""
                 )
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].rtuProfileSlave=changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].rtuProfileSlave=changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].rtuProfileSlave="";
+                    }    
+
                     needSaveGatewayR2T=1;
                 }
             }
@@ -1926,7 +1997,15 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName != ""
                 )
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[j].rtuProfileSlave=changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[j].rtuProfileSlave=changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[j].rtuProfileSlave="";
+                    }
+
                     needSaveGatewayR2R=1;
                 }
             }
@@ -1936,13 +2015,50 @@
         if (changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length > modbus_data.config.fieldManagement_modbus_rtu.slave.length)
         {
           let addedCount=changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length-modbus_data.config.fieldManagement_modbus_rtu.slave.length;
-          let changedstr="Add "+addedCount+" item(s) to Modbus RTU Slave List";
-          modbus_rtu_slave_changedValues=[...modbus_rtu_slave_changedValues, changedstr];
+
+          for (let k= modbus_data.config.fieldManagement_modbus_rtu.slave.length;k<changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length;k++)
+          {
+            if (changed_modbus_data.config.fieldManagement_modbus_rtu.slave[k].delete)
+            {
+                addedCount--;
+            }
+          }
+
+            if (addedCount > 0)
+            {
+                let changedstr="Add "+addedCount+" item(s) to Modbus RTU Slave List";
+                modbus_rtu_slave_changedValues=[...modbus_rtu_slave_changedValues, changedstr];
+            }
+        }
+
+
+        if (changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length < modbus_data.config.fieldManagement_modbus_rtu.slave.length)
+        {
+            let deletedCount=modbus_data.config.fieldManagement_modbus_rtu.slave.length-changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length;
+
+            let changedstr="Delete "+deletedCount+" item(s) from Modbus RTU Slave List";
+            modbus_rtu_slave_changedValues=[...modbus_rtu_slave_changedValues, changedstr];
         }
 
 
         ModbusRTU_Slave_ConfigChangedLog.set(modbus_rtu_slave_changedValues);
-        saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_rtu.slave));
+
+        let tempForDelete=[];
+        for (let i = 0; i< changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length; i++)
+        {
+            if (!changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].delete)
+            {
+                tempForDelete=[...tempForDelete, changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i]]
+            }
+
+        }
+
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave=JSON.parse(JSON.stringify(tempForDelete));
+        changed_modbus_data.config.fieldManagement_modbus_rtu.slave=JSON.parse(JSON.stringify(tempForDelete));
+
+
+       // saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_rtu.slave));
 
         ChangedModbusConfig.set(saved_changed_modbus_data);
         console.log(modbus_rtu_slave_changedValues);   
@@ -1961,7 +2077,6 @@
         {
             saveGatewayR2R();
         }
-
     }
 
     function saveRTUMaster()
@@ -2097,12 +2212,8 @@
 
         }
 
-
         saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master=JSON.parse(JSON.stringify(tempForDelete));
         changed_modbus_data.config.fieldManagement_modbus_rtu.master=JSON.parse(JSON.stringify(tempForDelete));
-
-
-
 
         ChangedModbusConfig.set(saved_changed_modbus_data);
         console.log(modbus_rtu_master_changedValues);  
@@ -2122,10 +2233,8 @@
         {
             saveGatewayT2R();
         }
-
     } 
 
-  
 
     function saveTCPSlave()
     {
@@ -2148,7 +2257,15 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != "")
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile="";
+                    }
+
                     needSaveDataModelSlave=1;
                 }
 
@@ -2161,7 +2278,15 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != ""
                 )
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].tcpProfileSlave="";
+                    }
+
                     needSaveGatewayT2R=1;
                 }
             }
@@ -2173,7 +2298,15 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != ""
                 )
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileSlave="";
+                    }
+
                     needSaveGatewayT2T=1;
                 }
             }
@@ -2188,7 +2321,15 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != "")
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile="";
+                    }
+
                     needSaveDataModelSlave=1;
                 }
 
@@ -2201,7 +2342,15 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != ""
                 )
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[j].tcpProfileSlave="";
+                    }
+
                     needSaveGatewayT2R=1;
                 }
             }
@@ -2213,7 +2362,16 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != ""
                 )
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileSlave=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileSlave="";
+                    }
+
+
                     needSaveGatewayT2T=1;
                 }
             }
@@ -2222,13 +2380,50 @@
         if (changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length > modbus_data.config.fieldManagement_modbus_tcp.slave.length)
         {
           let addedCount=changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length-modbus_data.config.fieldManagement_modbus_tcp.slave.length;
-          let changedstr="Add "+addedCount+" item(s) to Modbus TCP Slave List";
-          modbus_tcp_slave_changedValues=[...modbus_tcp_slave_changedValues, changedstr];
+          
+          for (let k=modbus_data.config.fieldManagement_modbus_tcp.slave.length; k < changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length;k++)
+          {
+            if (changed_modbus_data.config.fieldManagement_modbus_tcp.slave[k].delete)
+            {
+                addedCount--;
+            }
+          }
+
+            if (addedCount > 0)
+            {
+                let changedstr="Add "+addedCount+" item(s) to Modbus TCP Slave List";
+                modbus_tcp_slave_changedValues=[...modbus_tcp_slave_changedValues, changedstr];
+            }
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length < modbus_data.config.fieldManagement_modbus_tcp.slave.length)
+        {
+            let deletedCount=modbus_data.config.fieldManagement_modbus_tcp.slave.length-changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length;
+
+
+            let changedstr="Delete "+deletedCount+" item(s) from Modbus TCP Slave List";
+            modbus_tcp_slave_changedValues=[...modbus_tcp_slave_changedValues, changedstr];
         }
 
 
         ModbusTCP_Slave_ConfigChangedLog.set(modbus_tcp_slave_changedValues);
-        saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_tcp.slave));
+
+        let tempForDelete=[];
+        for (let i = 0; i< changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length; i++)
+        {
+            if (!changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].delete)
+            {
+                tempForDelete=[...tempForDelete, changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i]]
+            }
+
+        }
+
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave=JSON.parse(JSON.stringify(tempForDelete));
+        changed_modbus_data.config.fieldManagement_modbus_tcp.slave=JSON.parse(JSON.stringify(tempForDelete));
+
+
+        //saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_tcp.slave));
 
         ChangedModbusConfig.set(saved_changed_modbus_data);
         console.log(modbus_tcp_slave_changedValues);  
@@ -2274,7 +2469,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != "")
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile="";
+                    }    
                     needSaveDataModelMaster=1;
                 }
 
@@ -2287,7 +2489,15 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != ""
                 )
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].tcpProfileMaster="";
+                    }
+
                     needSaveGatewayR2T=1;
                 }
             }
@@ -2300,7 +2510,16 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != ""
                 )
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileMaster="";
+                    }
+
+
                     needSaveGatewayT2T=1;
                 }
             }
@@ -2317,7 +2536,15 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != "")
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile="";
+                    }
+
                     needSaveDataModelMaster=1;
                 }
 
@@ -2330,7 +2557,14 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != ""
                 )
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[j].tcpProfileMaster="";
+                    }
                     needSaveGatewayR2T=1;
                 }
             }
@@ -2343,7 +2577,15 @@
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != ""
                 )
                 {
-                    changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].delete)
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                    }
+                    else
+                    {
+                        changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[j].tcpProfileMaster="";
+                    }
+
                     needSaveGatewayT2T=1;
                 }
             }
@@ -2354,13 +2596,50 @@
         if (changed_modbus_data.config.fieldManagement_modbus_tcp.master.length > modbus_data.config.fieldManagement_modbus_tcp.master.length)
         {
           let addedCount=changed_modbus_data.config.fieldManagement_modbus_tcp.master.length-modbus_data.config.fieldManagement_modbus_tcp.master.length;
-          let changedstr="Add "+addedCount+" item(s) to Modbus TCP Master List";
-          modbus_tcp_master_changedValues=[...modbus_tcp_master_changedValues, changedstr];
+
+          for (let k=modbus_data.config.fieldManagement_modbus_tcp.master.length;k<changed_modbus_data.config.fieldManagement_modbus_tcp.master.length;k++)
+          {
+            if (changed_modbus_data.config.fieldManagement_modbus_tcp.master[k].delete)
+            {
+                addedCount--;
+            }
+          }
+
+            if (addedCount > 0)
+            {
+                let changedstr="Add "+addedCount+" item(s) to Modbus TCP Master List";
+                modbus_tcp_master_changedValues=[...modbus_tcp_master_changedValues, changedstr];
+            }
         }
 
 
+        if (changed_modbus_data.config.fieldManagement_modbus_tcp.master.length < modbus_data.config.fieldManagement_modbus_tcp.master.length)
+        {
+            let deletedCount=modbus_data.config.fieldManagement_modbus_tcp.master.length-changed_modbus_data.config.fieldManagement_modbus_tcp.master.length;
+
+            let changedstr="Delete "+addedCount+" item(s) from Modbus TCP Master List";
+            modbus_tcp_master_changedValues=[...modbus_tcp_master_changedValues, changedstr];
+        }
+
+
+
         ModbusTCP_Master_ConfigChangedLog.set(modbus_tcp_master_changedValues);
-        saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_tcp.master));
+
+        let tempForDelete=[];
+        for (let i = 0; i< changed_modbus_data.config.fieldManagement_modbus_tcp.master.length; i++)
+        {
+            if (!changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].delete)
+            {
+                tempForDelete=[...tempForDelete, changed_modbus_data.config.fieldManagement_modbus_tcp.master[i]]
+            }
+
+        }
+
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master=JSON.parse(JSON.stringify(tempForDelete));
+        changed_modbus_data.config.fieldManagement_modbus_tcp.master=JSON.parse(JSON.stringify(tempForDelete));
+
+      //  saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_tcp.master));
 
         ChangedModbusConfig.set(saved_changed_modbus_data);
         console.log(modbus_tcp_master_changedValues);  
@@ -2376,7 +2655,6 @@
         {
             saveGatewayR2T();
         } 
-
 
         if (needSaveGatewayT2T != 0)
         {
@@ -2400,16 +2678,27 @@
 
             if (obj1[key].length > obj2[key].length) 
             {
-              let addedCount=obj1[key].length-obj2[key].length;
-              let changedstr="Add "+addedCount+" item(s) to "+ key;
-              if (type == 2)
-              {
-                sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-              }
-              else if (type == 0)
-              {
-                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
-              }
+                let addedCount=obj1[key].length-obj2[key].length;
+                for (let j=obj2[key].length; j <obj1[key].length; j++)
+                {
+                    if (obj1[key][j]["delete"])
+                    {
+                    addedCount--;
+                    }
+                }
+
+                if (addedCount >0)
+                {
+                    let changedstr="Add "+addedCount+" item(s) to "+ key;
+                    if (type == 2)
+                    {
+                        sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+                    }
+                    else if (type == 0)
+                    {
+                        sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                    }
+                }
             }
             else if (obj1[key].length < obj2[key].length)
             {
@@ -2471,17 +2760,28 @@
 
             if (obj1[key].length > obj2[key].length) 
             {
-              let addedCount=obj1[key].length-obj2[key].length;
-              let changedstr="Add "+addedCount+" item(s) to "+ key;
+                let addedCount=obj1[key].length-obj2[key].length;
+                for (let j=obj2[key].length; j <obj1[key].length; j++)
+                {
+                    if (obj1[key][j]["delete"])
+                    {
+                        addedCount--;
+                    }
+                }
 
-              if (type == 2)
-              {
-                event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];   
-              }
-              else if (type == 8)
-              {
-                 event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues,changedstr];
-              }
+                if (addedCount >0)
+                {
+                    let changedstr="Add "+addedCount+" item(s) to "+ key;
+
+                    if (type == 2)
+                    {
+                        event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];   
+                    }
+                    else if (type == 8)
+                    {
+                        event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues,changedstr];
+                    }
+                }
 
             }
             else if (obj1[key].length < obj2[key].length)
@@ -2553,7 +2853,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel="";
+                    }    
 
                     if (sdata_logger_proxy_edge_changedValues.length !=0)
                     {
@@ -2577,7 +2884,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel="";
+                    }
                 }
             }
 
@@ -2588,7 +2902,15 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
+                    }
 
                     if (sdata_logger_monitor_edge_changedValues.length !=0)
                     {
@@ -2612,8 +2934,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
-
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
+                    }
                 }
             }
 
@@ -2622,8 +2950,15 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
 
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";
+                    }
 
 
                     if (event_engine_trigger_modbus_changeValues.length !=0)
@@ -2634,12 +2969,8 @@
                     compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
                     event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
 
-                    
-
                     EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
                     ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-
                 }
 
             }
@@ -2648,7 +2979,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";
+                    }
                 }
 
             }
@@ -2658,8 +2996,15 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
 
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=""; 
+                    }
 
 
                     if (event_engine_action_modbus_changeValues.length !=0)
@@ -2684,7 +3029,15 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
+                    }
                 }
             }
           }
@@ -2703,7 +3056,16 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel="";
+                    }
+
 
                     if (sdata_logger_proxy_edge_changedValues.length !=0)
                     {
@@ -2727,7 +3089,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel="";
+                    }
                 }
             }
 
@@ -2738,7 +3107,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";   
+                    }
 
                     if (sdata_logger_monitor_edge_changedValues.length !=0)
                     {
@@ -2762,7 +3138,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
+                    }
                 }
             }
 
@@ -2770,8 +3153,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
-
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";
+                    }
 
 
                     if (event_engine_trigger_modbus_changeValues.length !=0)
@@ -2796,7 +3185,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";
+                    }
                 }
 
             }
@@ -2806,7 +3202,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
+                    }
 
 
 
@@ -2832,7 +3235,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
+                    }
                 }
             }
 
@@ -2843,13 +3253,48 @@
         if (changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length > modbus_data.config.fieldManagement_modbus_data_model.slave.length)
         {
           let addedCount=changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length-modbus_data.config.fieldManagement_modbus_data_model.slave.length;
-          let changedstr="Add "+addedCount+" item(s) to Modbus Data Model Slave List";
-          modbus_data_model_slave_changedValues=[...modbus_data_model_slave_changedValues, changedstr];
+
+          for (let k=modbus_data.config.fieldManagement_modbus_data_model.slave.length;k < changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length;k++)
+          {
+            if (changed_modbus_data.config.fieldManagement_modbus_data_model.slave[k].delete)
+            {
+                addedCount--;
+            }
+          }
+
+            if (addedCount > 0)
+            {
+                let changedstr="Add "+addedCount+" item(s) to Modbus Data Model Slave List";
+                modbus_data_model_slave_changedValues=[...modbus_data_model_slave_changedValues, changedstr];
+            }   
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length < modbus_data.config.fieldManagement_modbus_data_model.slave.length)
+        {
+
+            let deleteedCount=modbus_data.config.fieldManagement_modbus_data_model.slave.length-changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length;
+
+            let changedstr="Delete "+deletedCount+" item(s) from Modbus Data Model Slave List";
+            modbus_data_model_slave_changedValues=[...modbus_data_model_slave_changedValues, changedstr];
         }
 
 
+
+        let tempForDelete=[];
+        for (let i = 0; i< changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length; i++)
+        {
+            if (!changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i].delete)
+            {
+              tempForDelete=[...tempForDelete, changed_modbus_data.config.fieldManagement_modbus_data_model.slave[i]]
+            }
+
+        }
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave=JSON.parse(JSON.stringify(tempForDelete));
+        changed_modbus_data.config.fieldManagement_modbus_data_model.slave=JSON.parse(JSON.stringify(tempForDelete));
+
         ModbusDataModel_Slave_ConfigChangedLog.set(modbus_data_model_slave_changedValues);
-        saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_data_model.slave));
+       // saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_data_model.slave));
 
         ChangedModbusConfig.set(saved_changed_modbus_data);
         console.log(modbus_data_model_slave_changedValues);    
@@ -2875,7 +3320,15 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel="";
+                    }
 
                     if (sdata_logger_proxy_edge_changedValues.length !=0)
                     {
@@ -2898,7 +3351,15 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel="";
+                    }
                 }
             }
 
@@ -2909,7 +3370,15 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
+                    }
 
                     if (sdata_logger_monitor_edge_changedValues.length !=0)
                     {
@@ -2932,7 +3401,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
+                    }
                 }
             }
 
@@ -2941,8 +3417,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";
+                    }
 
 
                     if (event_engine_trigger_modbus_changeValues.length !=0)
@@ -2953,11 +3435,8 @@
                     compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
                     event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
 
-                    
-
                     EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
                     ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
 
                 }
 
@@ -2967,7 +3446,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";   
+                    }
                 }
 
             }
@@ -2977,9 +3463,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-
-
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
+                    }
 
                     if (event_engine_action_modbus_changeValues.length !=0)
                     {
@@ -2989,11 +3480,8 @@
                     compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
                     event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
 
-                    
-
                     EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
                     ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
 
                 }
 
@@ -3003,7 +3491,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
+                    }
                 }
             }
 
@@ -3022,7 +3517,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=""; 
+                    }
 
                     if (sdata_logger_proxy_edge_changedValues.length !=0)
                     {
@@ -3045,7 +3547,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel="";
+                    }
                 }
             }
 
@@ -3056,7 +3565,14 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;                   
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
+                    }
 
                     if (sdata_logger_monitor_edge_changedValues.length !=0)
                     {
@@ -3079,7 +3595,15 @@
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
+                    }
+
                 }
             }
 
@@ -3088,8 +3612,15 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
 
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";
+                    }
 
 
                     if (event_engine_trigger_modbus_changeValues.length !=0)
@@ -3100,11 +3631,8 @@
                     compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
                     event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
 
-                    
-
                     EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
                     ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
 
                 }
 
@@ -3114,7 +3642,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";
+                    }
                 }
 
             }
@@ -3124,7 +3659,15 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
+                    }
 
 
 
@@ -3137,10 +3680,8 @@
                     event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
 
                     
-
                     EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
                     ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
 
                 }
 
@@ -3150,7 +3691,14 @@
             {
                 if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
                 {
-                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
+                    }
+                    else
+                    {
+                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
+                    }
                 }
             }
           }
@@ -3160,13 +3708,47 @@
         if (changed_modbus_data.config.fieldManagement_modbus_data_model.master.length > modbus_data.config.fieldManagement_modbus_data_model.master.length)
         {
           let addedCount=changed_modbus_data.config.fieldManagement_modbus_data_model.master.length-modbus_data.config.fieldManagement_modbus_data_model.master.length;
-          let changedstr="Add "+addedCount+" item(s) to Modbus Data Model Master List";
-          modbus_data_model_master_changedValues=[...modbus_data_model_master_changedValues, changedstr];
+
+          for (let k=modbus_data.config.fieldManagement_modbus_data_model.master.length;k<changed_modbus_data.config.fieldManagement_modbus_data_model.master.length;k++)
+          {
+            if (changed_modbus_data.config.fieldManagement_modbus_data_model.master[k].delete)
+            {
+                addedCount--;
+            }
+          }
+
+            if (addedCount > 0)
+            {
+                let changedstr="Add "+addedCount+" item(s) to Modbus Data Model Master List";
+                modbus_data_model_master_changedValues=[...modbus_data_model_master_changedValues, changedstr];
+            }
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_data_model.master.length < modbus_data.config.fieldManagement_modbus_data_model.master.length)
+        {
+            let deletedCount=modbus_data.config.fieldManagement_modbus_data_model.master.length-changed_modbus_data.config.fieldManagement_modbus_data_model.master.length;
+
+            let changedstr="Delete "+deleteCount+" item(s) from Modbus Data Model Master List";
+            modbus_data_model_master_changedValues=[...modbus_data_model_master_changedValues, changedstr];
         }
 
 
         ModbusDataModel_Master_ConfigChangedLog.set(modbus_data_model_master_changedValues);
-        saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_data_model.master));
+
+
+
+        let tempForDelete=[];
+        for (let i = 0; i< changed_modbus_data.config.fieldManagement_modbus_data_model.master.length; i++)
+        {
+            if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
+            {
+                tempForDelete=[...tempForDelete, changed_modbus_data.config.fieldManagement_modbus_data_model.master[i]]
+            }
+        }
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master=JSON.parse(JSON.stringify(tempForDelete));
+        changed_modbus_data.config.fieldManagement_modbus_data_model.master=JSON.parse(JSON.stringify(tempForDelete));
+        //saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_data_model.master));
 
         ChangedModbusConfig.set(saved_changed_modbus_data);
         console.log(modbus_data_model_master_changedValues);    
@@ -3189,8 +3771,20 @@
         if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length > modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length)
         {
           let addedCount=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length-modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length;
-          let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From TCP to RTU List";
-          modbus_gateway_TtR_changedValues=[...modbus_gateway_TtR_changedValues, changedstr];
+
+          for (let k=modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length;k<changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length;k++)
+          {
+            if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[k].delete)
+            {
+                addedCount--;
+            }
+          }
+
+            if (addedCount > 0)
+            {
+                let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From TCP to RTU List";
+                modbus_gateway_TtR_changedValues=[...modbus_gateway_TtR_changedValues, changedstr];
+            }
         }
 
 
@@ -3220,8 +3814,20 @@
         if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length > modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length)
         {
           let addedCount=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length-modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length;
-          let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From RTU to Tcp List";
-          modbus_gateway_RtT_changedValues=[...modbus_gateway_RtT_changedValues, changedstr];
+          for (let k=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length; k<modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length;k++)
+          {
+            if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[k].delete)
+            {
+                addedCount--;
+            }
+          }
+
+            if (addedCount > 0)
+            {
+                let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From RTU to Tcp List";
+                modbus_gateway_RtT_changedValues=[...modbus_gateway_RtT_changedValues, changedstr];
+            }
+
         }
 
 
@@ -3251,8 +3857,20 @@
         if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length > modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length)
         {
           let addedCount=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length-modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length;
-          let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From RTU to RTU List";
-          modbus_gateway_RtR_changedValues=[...modbus_gateway_RtR_changedValues, changedstr];
+          
+          for (let k=modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length;k < changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu.length; k++)
+          {
+            if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToRtu[k].delete)
+            {
+                addedCount--;
+            }
+          }
+
+            if (addedCount > 0)
+            {
+                let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From RTU to RTU List";
+                modbus_gateway_RtR_changedValues=[...modbus_gateway_RtR_changedValues, changedstr];
+            }
         }
 
 
@@ -3282,8 +3900,20 @@
         if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length > modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length)
         {
           let addedCount=changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length-modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length;
-          let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From TCP to TCP List";
-          modbus_gateway_TtT_changedValues=[...modbus_gateway_TtT_changedValues, changedstr];
+          for (let k=modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length; k < changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp.length;k++)
+          {
+            if (changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToTcp[k].delete)
+            {
+                addedCount--;
+            }
+
+          }
+
+            if (addedCount > 0)
+            {
+                let changedstr="Add "+addedCount+" item(s) to Modbus Gateway From TCP to TCP List";
+                modbus_gateway_TtT_changedValues=[...modbus_gateway_TtT_changedValues, changedstr];
+            }
         }
 
 
@@ -3824,7 +4454,11 @@
 
 <Table shadow striped={true} tableNoWFull={true}>
 <TableHead>    
-  <TableHeadCell class="!p-4">
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
@@ -3835,16 +4469,79 @@
 {#if getDataReady == 1}
 {#each changed_modbus_data.config.fieldManagement_modbus_rtu.slave as RTUSlaveItem, index}
    
+{#if RTUSlaveItem.delete}   
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteRTUSlave(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={RTUSlaveItem.enable} disabled>
+
+      </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{RTUSlaveItem.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{RTUSlaveItem.serialProfile}</td>
+
+      </tr>
+
+
+{:else}
+
  <TableBodyRow>
-   <TableBodyCell class="!p-4 w-10">
+
+      <TableBodyCell class="!p-4 w-10">
+
+      </TableBodyCell>
+
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyRtuSlave(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
+
+
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteRTUSlave(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+
+
+
       <TableBodyCell>
 <input type="checkbox"  bind:checked={RTUSlaveItem.enable}>
       </TableBodyCell>
@@ -3853,34 +4550,34 @@
       <TableBodyCell class="!p-6 w-10">{RTUSlaveItem.serialProfile}</TableBodyCell>
 
     </TableBodyRow>
+{/if}
+
 {/each}
 {/if}
 
 
 
- <TableBodyRow>
-     <TableBodyCell class="!p-1">
 
+ <TableBodyRow>
 {#if changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length < 2}
-            <button on:click={()=>new_rtu_slave_trigger(changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length)}>
+    <TableBodyCell class="!p-4 w-10">
+<button on:click={()=>new_rtu_slave_trigger(changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
+     </TableBodyCell>
+{:else}
+
+    <TableBodyCell class="!p-4 w-16"></TableBodyCell>
 {/if}
 
-     </TableBodyCell>
-     <TableBodyCell class="!p-1"></TableBodyCell>
-     <TableBodyCell class="!p-1"></TableBodyCell>
-        <TableBodyCell></TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> </TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+    <TableBodyCell class="!p-6 w-10"></TableBodyCell>
+    <TableBodyCell class="!p-6 w-18"></TableBodyCell>
+    <TableBodyCell class="!p-6 w-10"></TableBodyCell>
 
 
     </TableBodyRow>
@@ -3896,13 +4593,10 @@
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
 
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
     <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveRTUSlave}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
@@ -4051,11 +4745,11 @@
 
 <Table shadow striped={true} tableNoWFull={true}>
 <TableHead>
-  <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-      <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-      <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
@@ -4069,20 +4763,74 @@
   <TableBody>
 {#if getDataReady == 1}
 {#each changed_modbus_data.config.fieldManagement_modbus_tcp.master as TCPMasterItem, index}
-   
+
+{#if TCPMasterItem.delete} 
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteTCPMaster(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={TCPMasterItem.enable} disabled></td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{TCPMasterItem.lanProfile}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{TCPMasterItem.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{TCPMasterItem.remoteServerIp}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{TCPMasterItem.remotePort}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{TCPMasterItem.connectionTimeout} ms</td>
+
+</tr>
+
+{:else}
 
     <TableBodyRow>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-       <TableBodyCell class="!p-1">
+      <TableBodyCell class="!p-4 w-10">
+
+      </TableBodyCell>
+
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyTCPMaster(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-       <TableBodyCell class="!p-1"></TableBodyCell>
+
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteTCPMaster(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
     <TableBodyCell>
 <input type="checkbox"  bind:checked={TCPMasterItem.enable}>
@@ -4095,34 +4843,38 @@
       <TableBodyCell class="w-10">{TCPMasterItem.remotePort}</TableBodyCell>
       <TableBodyCell class="w-10">{TCPMasterItem.connectionTimeout} ms</TableBodyCell>
     </TableBodyRow>
+{/if}
+
 {/each}
 {/if}
 
 
  <TableBodyRow>
-     <TableBodyCell class="!p-1">
 
-{#if changed_modbus_data.config.fieldManagement_modbus_tcp.master.length < 10}
+ {#if changed_modbus_data.config.fieldManagement_modbus_tcp.master.length < 10}
+    <TableBodyCell class="!p-4 w-10">
             <button on:click={()=>new_tcp_master_trigger(changed_modbus_data.config.fieldManagement_modbus_tcp.master.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
-{/if}
+
 
      </TableBodyCell>
-     <TableBodyCell class="!p-1"></TableBodyCell>
-     <TableBodyCell class="!p-1"></TableBodyCell>
+{:else}
+    <TableBodyCell class="!p-4 w-16"></TableBodyCell>     
+{/if}
+
+     <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+     <TableBodyCell class="!p-0 w-10"></TableBodyCell>
         <TableBodyCell></TableBodyCell>
       <TableBodyCell class="!p-6 w-10"></TableBodyCell>
       <TableBodyCell class="!p-6 w-18"> </TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-6 w-18"></TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>      
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-
 
     </TableBodyRow>
 
@@ -4328,11 +5080,11 @@
 
 <Table shadow striped={true} tableNoWFull={true}>
 <TableHead>
-  <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-      <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-      <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
@@ -4346,21 +5098,72 @@
 
 {#if getDataReady == 1}
 {#each changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TCPSlaveItem, index}
-   
+
+{#if TCPSlaveItem.delete}
+ 
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteTCPSlave(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={TCPSlaveItem.enable} disabled></td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{TCPSlaveItem.lanProfile}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{TCPSlaveItem.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{TCPSlaveItem.listenPort}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{TCPSlaveItem.maxConnectionCount}</td>
+
+</tr>  
+
+{:else}
 
  <TableBodyRow>
-     <TableBodyCell class="!p-1"></TableBodyCell>
-       <TableBodyCell class="!p-1">
+      <TableBodyCell class="!p-4 w-10">
+
+      </TableBodyCell>
+
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyTCPSlave(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-       <TableBodyCell class="!p-1">            
-</TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteTCPSlave(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 
     <TableBodyCell>
@@ -4375,30 +5178,36 @@
       <TableBodyCell class="w-10">{TCPSlaveItem.maxConnectionCount}</TableBodyCell>
 
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
  <TableBodyRow>
-     <TableBodyCell class="!p-1">
-{#if changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length <10}
+ {#if changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length <10}
+<TableBodyCell class="!p-4 w-10">
             <button on:click={()=>new_tcp_slave_trigger(changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
-{/if}
+
      </TableBodyCell>
-     <TableBodyCell class="!p-1"></TableBodyCell>
-     <TableBodyCell class="!p-1"></TableBodyCell>
+{:else}
+
+<TableBodyCell class="!p-4 w-16"></TableBodyCell>  
+{/if}
+     <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+     <TableBodyCell class="!p-0 w-10"></TableBodyCell>
  <TableBodyCell></TableBodyCell>
       <TableBodyCell class="!p-6 w-10"></TableBodyCell>
       <TableBodyCell class="!p-6 w-18"> </TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-6 w-18"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+
 
 
     </TableBodyRow>
@@ -4416,8 +5225,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td></td>
-    <td></td>
+
     <td class="pl-10"><Button color="blue" pill={true} on:click={saveTCPSlave}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
@@ -4602,20 +5410,20 @@
  <Table shadow striped={true} tableNoWFull={true}>
 
 <TableHead>
-    <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-        <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-        <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell class="!p-1">No</TableHeadCell>
-    <TableHeadCell class="!p-1">Data Model Name</TableHeadCell>
+    <TableHeadCell class="!p-4">Data Model Name</TableHeadCell>
     <TableHeadCell class="w-18">Master Profile</TableHeadCell>
     <TableHeadCell class="w-18">Slave ID</TableHeadCell>
-    <TableHeadCell class="w-18">Point Type</TableHeadCell>
+    <TableHeadCell class="!p-4 w-10">Point Type</TableHeadCell>
     <TableHeadCell class="w-18">Address (DEC)</TableHeadCell>
-    <TableHeadCell>Quantity</TableHeadCell>
+    <TableHeadCell class="!p-4">Quantity</TableHeadCell>
     <TableHeadCell>Response Timeout</TableHeadCell>
     <TableHeadCell class="w-18">Polling Rate</TableHeadCell>
     <TableHeadCell>Delay Between Polls</TableHeadCell>
@@ -4625,44 +5433,117 @@
 
 {#if getDataReady == 1}
 {#each changed_modbus_data.config.fieldManagement_modbus_data_model.master as DataModelMasterItem, index}
-   
+{#if DataModelMasterItem.delete}
 
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteDataModelMaster(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={DataModelMasterItem.enable} disabled></td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1 w-4 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-4 w-18 strikeout">{DataModelMasterItem.dataModelName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout"> {DataModelMasterItem.profile}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout"> {DataModelMasterItem.slaveId}</td>
+{#if DataModelMasterItem.pointType == 0}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-4 w-10 strikeout">Coil</td>
+{:else if DataModelMasterItem.pointType == 1}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-4 w-10 strikeout">Discrete Input</td>
+{:else if DataModelMasterItem.pointType == 2}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-4 w-10 strikeout">Input Registers</td>
+{:else if DataModelMasterItem.pointType == 3}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-4 w-10 strikeout">Holding Registers</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-4 w-10 strikeout"></td>
+{/if}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{DataModelMasterItem.address}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-4 w-10 strikeout">{DataModelMasterItem.quantity}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{DataModelMasterItem.responseTimeout} ms</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{DataModelMasterItem.pollingRate} ms</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{DataModelMasterItem.delayBetweenPolls} ms</td>
+
+{#if DataModelMasterItem.byteOrder==0} 
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">Big Endian</td>
+{:else if DataModelMasterItem.byteOrder==1}   
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">Little Endian</td>
+{:else if DataModelMasterItem.byteOrder==2}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">Big Endian Byte Swap</td>
+{:else if DataModelMasterItem.byteOrder==3}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">Little Endian Byte Swap</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout"></td>
+{/if}
+
+
+</tr>
+   
+{:else}
  <TableBodyRow>
-   <TableBodyCell class="!p-1"></TableBodyCell>
-  <TableBodyCell class="!p-1 w-4">
+   <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+  <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyDataModelMaster(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-        <TableBodyCell class="!p-1">        </TableBodyCell>
-
-
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteDataModelMaster(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
     <TableBodyCell>
 <input type="checkbox"  bind:checked={DataModelMasterItem.enable}>
     </TableBodyCell>
 
 
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
-  <TableBodyCell class="!p-1 w-18">{DataModelMasterItem.dataModelName}</TableBodyCell>
+  <TableBodyCell class="!p-4 w-18">{DataModelMasterItem.dataModelName}</TableBodyCell>
   <TableBodyCell class="w-10">{DataModelMasterItem.profile}</TableBodyCell>
   <TableBodyCell class="w-18">{DataModelMasterItem.slaveId}</TableBodyCell>
 {#if DataModelMasterItem.pointType == 0}
-    <TableBodyCell class="w-10">Coil</TableBodyCell>
+    <TableBodyCell class="!p-4 w-10">Coil</TableBodyCell>
 {:else if DataModelMasterItem.pointType == 1}
-    <TableBodyCell class="w-10">Discrete Input</TableBodyCell>
+    <TableBodyCell class="!p-4 w-10">Discrete Input</TableBodyCell>
 {:else if DataModelMasterItem.pointType == 2}
-    <TableBodyCell class="w-10">Input Registers</TableBodyCell>
+    <TableBodyCell class="!p-4 w-10">Input Registers</TableBodyCell>
 {:else if DataModelMasterItem.pointType == 3}
-    <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
+    <TableBodyCell class="!p-4 w-10">Holding Registers</TableBodyCell>
 {:else}
   <TableBodyCell class="w-10"></TableBodyCell>
 {/if}
   <TableBodyCell class="w-18">{DataModelMasterItem.address}</TableBodyCell>
-  <TableBodyCell class="w-10">{DataModelMasterItem.quantity}</TableBodyCell>
+  <TableBodyCell class="!p-4 w-10">{DataModelMasterItem.quantity}</TableBodyCell>
   <TableBodyCell class="w-18">{DataModelMasterItem.responseTimeout} ms</TableBodyCell>
 <TableBodyCell class="w-18">{DataModelMasterItem.pollingRate} ms</TableBodyCell>
     <TableBodyCell class="w-18">{DataModelMasterItem.delayBetweenPolls} ms</TableBodyCell>
@@ -4680,14 +5561,19 @@
 {/if}
 
     </TableBodyRow>
+
+{/if}
+
+
 {/each}
 {/if}
 
 
 
      <TableBodyRow>
-     <TableBodyCell class="!p-1">
-{#if changed_modbus_data.config.fieldManagement_modbus_data_model.master.length < 10}     
+{#if changed_modbus_data.config.fieldManagement_modbus_data_model.master.length < 10}        
+     <TableBodyCell class="!p-4 w-10">
+  
             <button on:click={() =>new_data_model_master_trigger(changed_modbus_data.config.fieldManagement_modbus_data_model.master.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
@@ -4695,18 +5581,20 @@
 </svg>
 </button>
 
-{/if}
+
      </TableBodyCell>
-     <TableBodyCell class="!p-1"></TableBodyCell>
-     <TableBodyCell class="!p-1"></TableBodyCell>
+{:else}
+<TableBodyCell class="!p-4 w-16"></TableBodyCell>  
+{/if}
+     <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+     <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell></TableBodyCell>
+      <TableBodyCell class="!p-1 w-4"></TableBodyCell>
+      <TableBodyCell class="!p-4 w-18"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"> </TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="!p-4 w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
 
 
@@ -5077,11 +5965,11 @@
     </span>
 <Table>
 <TableHead>
-    <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-        <TableHeadCell class="!p-1">
+        <TableHeadCell class="!p-4">
     </TableHeadCell>
-        <TableHeadCell class="!p-1">
+        <TableHeadCell class="!p-4">
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
@@ -5100,26 +5988,101 @@
 {#if getDataReady == 1}
 {#each changed_modbus_data.config.fieldManagement_modbus_data_model.slave as DataModelSlaveItem, index}
    
+{#if DataModelSlaveItem.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteDataModelSlave(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={DataModelSlaveItem.enable} disabled></td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1 w-4 strikeout">{index+1}</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{DataModelSlaveItem.dataModelName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">{DataModelSlaveItem.profile}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{DataModelSlaveItem.slaveId}</td>
+
+{#if DataModelSlaveItem.pointType == 0}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">Coil</td>
+{:else if DataModelSlaveItem.pointType == 1}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">Discrete Input</td>
+{:else if DataModelSlaveItem.pointType == 2}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">Input Registers</td>
+{:else if DataModelSlaveItem.pointType == 3}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">Holding Registers</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout"></td>
+{/if}
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{DataModelSlaveItem.address}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">{DataModelSlaveItem.quantity}</td>
+{#if DataModelSlaveItem.byteOrder==0} 
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">Big Endian</td>
+{:else if DataModelSlaveItem.byteOrder==1}   
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">Little Endian</td>
+{:else if DataModelSlaveItem.byteOrder==2}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">Big Endian Byte Swap</td>
+{:else if DataModelSlaveItem.byteOrder==3}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">Little Endian Byte Swap</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout"></td>
+{/if}
+
+</tr>
+
+{:else}
 
  <TableBodyRow>
-   <TableBodyCell class="!p-1 w-10"></TableBodyCell>
-  <TableBodyCell class="!p-1 w-10">
+   <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+  <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyDataModelSlave(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-        <TableBodyCell class="!p-1">            </TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteDataModelSlave(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
     <TableBodyCell>
 <input type="checkbox"  bind:checked={DataModelSlaveItem.enable}>
     </TableBodyCell>
 
 
-      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
   <TableBodyCell class="w-18">{DataModelSlaveItem.dataModelName}</TableBodyCell>
   <TableBodyCell class="w-10">{DataModelSlaveItem.profile}</TableBodyCell>
   <TableBodyCell class="w-18">{DataModelSlaveItem.slaveId}</TableBodyCell>
@@ -5151,6 +6114,7 @@
     <TableBodyCell class="w-18"></TableBodyCell>
 {/if}
     </TableBodyRow>
+{/if}
 
 {/each}
 {/if}
@@ -5158,22 +6122,27 @@
 
 
      <TableBodyRow>
-     <TableBodyCell class="!p-1">
 {#if changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length <10}
+
+     <TableBodyCell class="!p-4 w-10">
+
             <button on:click={()=>new_data_model_slave_trigger(changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 </button>
-{/if}
+
      </TableBodyCell>
-     <TableBodyCell class="!p-1"></TableBodyCell>
-     <TableBodyCell class="!p-1"></TableBodyCell>
-      <TableBodyCell></TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
-      <TableBodyCell class="!p-6 w-18"> </TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
+{:else}
+         <TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}     
+     <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+     <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+    <TableBodyCell></TableBodyCell>
+      <TableBodyCell class="!p-1 w-4"></TableBodyCell>
+      <TableBodyCell class="w-18"> </TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -5198,10 +6167,7 @@
         <td></td>
 
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+
         <td></td>
     <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveDataModelSlave}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>

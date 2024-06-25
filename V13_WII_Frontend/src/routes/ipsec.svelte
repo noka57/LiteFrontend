@@ -133,14 +133,27 @@ let RemoteCAList = [
             if (obj1[key].length > obj2[key].length) 
             {
               let addedCount=obj1[key].length-obj2[key].length;
-              let changedstr="Add "+addedCount+" item(s) to "+ key;
-              if (type == 1)
+
+              for (let j=obj2[key].length; j <obj1[key].length; j++)
               {
-                responder_conn_changedValues=[...responder_conn_changedValues, changedstr];
+                if (obj1[key][j]["delete"])
+                {
+                  addedCount--;
+                }
+
               }
-              else if (type == 0)
+
+              if (addedCount >0)
               {
-                basic_changedValues=[...basic_changedValues, changedstr]; 
+                let changedstr="Add "+addedCount+" item(s) to "+ key;
+                if (type == 1)
+                {
+                  responder_conn_changedValues=[...responder_conn_changedValues, changedstr];
+                }
+                else if (type == 0)
+                {
+                  basic_changedValues=[...basic_changedValues, changedstr]; 
+                }
               }
             }
             else if (obj1[key].length < obj2[key].length)
@@ -292,9 +305,19 @@ let RemoteCAList = [
         if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length > ipsec_data.config.vpn_ipsec_connection.initiator_conn.length)
         {
             let addedCount = changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length-ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;
-            let changedstr = "Add "+addedCount+" item(s) to initiator_conn";
-            initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            for (let k=ipsec_data.config.vpn_ipsec_connection.initiator_conn.length; k < changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length; k++)
+            {
+              if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[k].delete)
+              {
+                addedCount--;
+              }
+            }
 
+            if (addedCount > 0)
+            {
+              let changedstr = "Add "+addedCount+" item(s) to initiator_conn";
+              initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
+            }
         }
         else if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length < ipsec_data.config.vpn_ipsec_connection.initiator_conn.length)
         {
@@ -522,9 +545,22 @@ let RemoteCAList = [
                 if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length > saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length)
                 {
                     let addedCount = changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length-saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;
-                    let changedstr = "Add "+addedCount+" item(s) to initiator_conn ("+saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].name+") tunnel_subnet.";
-                
-                    initiator_conn_subnet_changedValues=[...initiator_conn_subnet_changedValues, changedstr];
+                    
+                    for(let k=saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length;k < changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length; k++)
+                    {
+                      if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[k].delete)
+                      {
+                        addedCount--;
+                      }
+                    }
+
+
+                    if (addedCount > 0)
+                    {
+                      let changedstr = "Add "+addedCount+" item(s) to initiator_conn ("+saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].name+") tunnel_subnet.";
+                  
+                      initiator_conn_subnet_changedValues=[...initiator_conn_subnet_changedValues, changedstr];
+                    }
                 }
 
                 for (;j<Math.min(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length, saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);j++)

@@ -76,23 +76,36 @@
 
             if (obj1[key].length > obj2[key].length) 
             {
+
               let addedCount=obj1[key].length-obj2[key].length;
-              let changedstr="Add "+addedCount+" item(s) to "+ key;
-              if (type == 3)
+              for (let j=obj2[key].length; j <obj1[key].length; j++)
               {
-                dmz_changedValues=[...dmz_changedValues, changedstr];
+                if (obj1[key][j]["delete"])
+                {
+                  addedCount--;
+                }
+
               }
-              else if (type == 2)
+
+              if (addedCount >0)
               {
-                vc_changedValues=[...vc_changedValues, changedstr];
-              }
-              else if (type == 1)
-              {
-                pfw_changedValues=[...pfw_changedValues, changedstr];
-              }
-              else if (type == 0)
-              {
-                loopback_changedValues=[...loopback_changedValues, changedstr]; 
+                let changedstr="Add "+addedCount+" item(s) to "+ key;
+                if (type == 3)
+                {
+                  dmz_changedValues=[...dmz_changedValues, changedstr];
+                }
+                else if (type == 2)
+                {
+                  vc_changedValues=[...vc_changedValues, changedstr];
+                }
+                else if (type == 1)
+                {
+                  pfw_changedValues=[...pfw_changedValues, changedstr];
+                }
+                else if (type == 0)
+                {
+                  loopback_changedValues=[...loopback_changedValues, changedstr]; 
+                }
               }
             }
             else if (obj1[key].length < obj2[key].length)

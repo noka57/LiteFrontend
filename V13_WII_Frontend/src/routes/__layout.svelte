@@ -56,8 +56,8 @@
 	    ModbusGateway_RtT_ConfigChangedLog,
 	    ModbusGateway_RtR_ConfigChangedLog,
 	    ModbusGateway_TtT_ConfigChangedLog,
-	    ModbusVariable_Slave_ConfigChangedLog,
-	    ModbusVariable_Master_ConfigChangedLog,
+	    ModbusDataModel_Slave_ConfigChangedLog,
+	    ModbusDataModel_Master_ConfigChangedLog,
 	    ModbusTCP_Slave_ConfigChangedLog,
 	    ModbusTCP_Master_ConfigChangedLog,
 	    ModbusRTU_Slave_ConfigChangedLog,
@@ -222,8 +222,8 @@
     let modbus_gateway_RtR_changedValues=[];
     let modbus_gateway_TtT_changedValues=[];
 
-    let modbus_variable_master_changedValues=[];
-    let modbus_variable_slave_changedValues=[];
+    let modbus_data_model_master_changedValues=[];
+    let modbus_data_model_slave_changedValues=[];
     let modbus_tcp_master_changedValues=[];
     let modbus_tcp_slave_changedValues=[];
     let modbus_rtu_master_changedValues=[];
@@ -301,8 +301,8 @@
 		    modbus_gateway_RtT_changedValues.length !=0 ||
 		    modbus_gateway_RtR_changedValues.length !=0 ||
 		    modbus_gateway_TtT_changedValues.length !=0 ||
-		    modbus_variable_master_changedValues.length !=0 ||
-		    modbus_variable_slave_changedValues.length !=0 ||
+		    modbus_data_model_master_changedValues.length !=0 ||
+		    modbus_data_model_slave_changedValues.length !=0 ||
 		    modbus_tcp_master_changedValues.length !=0 ||
 		    modbus_tcp_slave_changedValues.length !=0 ||
 		    modbus_rtu_master_changedValues.length !=0 ||
@@ -648,13 +648,13 @@
     });
 
 
-    ModbusVariable_Slave_ConfigChangedLog.subscribe(val => {
-        modbus_variable_slave_changedValues = val;
+    ModbusDataModel_Slave_ConfigChangedLog.subscribe(val => {
+        modbus_data_model_slave_changedValues = val;
     	JudgeChangedOrNot();
     });
 
-    ModbusVariable_Master_ConfigChangedLog.subscribe(val => {
-        modbus_variable_master_changedValues = val;
+    ModbusDataModel_Master_ConfigChangedLog.subscribe(val => {
+        modbus_data_model_master_changedValues = val;
        	JudgeChangedOrNot();
     });
 

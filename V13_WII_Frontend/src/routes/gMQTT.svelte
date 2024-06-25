@@ -113,7 +113,8 @@
   let modify_index;
 
   let BackupItem={
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -130,7 +131,8 @@
 
   let NewItem=[
   {
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -145,7 +147,8 @@
     retained:0
   },
   {
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -160,7 +163,8 @@
     retained:0
   },
   {
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -175,7 +179,8 @@
     retained:0
   },
   {
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -190,7 +195,8 @@
     retained:0
   },
   {
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -205,7 +211,8 @@
     retained:0
   },
   {
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -220,7 +227,8 @@
     retained:0
   }
   ,{
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -235,7 +243,8 @@
     retained:0
   },
   {
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -250,7 +259,8 @@
     retained:0
   },
   {
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -265,7 +275,8 @@
     retained:0
   },
   {
-    enable: 0,
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -289,7 +300,8 @@
 
   function NewMQTT_Item_Invoker(index)
   {
-    NewItem[index].enable=false;
+    NewItem[index].enable=true;
+    NewItem[index].delete=false;
     NewItem[index].brokerHost=""
     NewItem[index].brokerPort=0;
     NewItem[index].tls=0;
@@ -314,12 +326,23 @@
   }
 
 
+  function deleteMQTT(index)
+  {
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].delete = true;
+  }
+
+  function RestoreDeleteMQTT(index)
+  {
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].delete = false;
+  }
+
 
   function TriggerModifyMQTT(index)
   {
     modify_Modal=true;
     modify_index=index;
     BackupItem.enable=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].enable;
+    BackupItem.delete=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].delete;
     BackupItem.brokerHost=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].brokerHost;
     BackupItem.brokerPort=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].brokerPort;
     BackupItem.tls=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].tls;
@@ -335,10 +358,12 @@
 
   }
 
+
   function NoModifyMQTT(index)
   {
     modify_Modal=false;
     changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].enable=BackupItem.enable;
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].delete=BackupItem.delete;    
     changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].brokerHost=BackupItem.brokerHost;
     changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].brokerPort=BackupItem.brokerPort;
     changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].tls=BackupItem.tls;
@@ -376,8 +401,21 @@
             if (obj1[key].length > obj2[key].length) 
             {
               let addedCount=obj1[key].length-obj2[key].length;
-              let changedstr="Add "+addedCount+" item(s) to "+ key;
-              generic_mqtt_changedValues=[...generic_mqtt_changedValues, changedstr];
+
+              for (let j=obj2[key].length; j <obj1[key].length; j++)
+              {
+                if (obj1[key][j]["delete"])
+                {
+                  addedCount--;
+                }
+
+              }
+
+              if (addedCount > 0)
+              {
+                let changedstr="Add "+addedCount+" item(s) to "+ key;
+                generic_mqtt_changedValues=[...generic_mqtt_changedValues, changedstr];
+              }
             }
             else if (obj1[key].length < obj2[key].length)
             {
@@ -427,6 +465,23 @@
 
     }
 
+  //  console.log(changed_generic_mqtt_data.config.cloud_genericMqtt_profile);
+
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length; i++)
+    {
+      if (!changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i]]
+      }
+
+    }
+
+    let tempForSmartDataLoggerProxy=[];
+    let tempForSmartDataLoggerProxyTopic=[];    
+    let tempForSmartDataLoggerMonitor=[];
+    let tempForSmartDataLoggerMonitorTopic=[];
 
 
     for (let i=0; i < Math.min(changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length, saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length); i++) 
@@ -439,8 +494,8 @@
         console.log(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]);
         if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j] == item)
         {
-          if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
-          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort)
+          if (!changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete &&(changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
+          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort))
           {
             let new_item= changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
 
@@ -448,20 +503,38 @@
 
             let changedstr="CloudProfile No. "+ (j+1)+ " is changed to "+ new_item;
             sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-            console.log(changedstr);
+            //console.log(changedstr);
             SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
-            ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data); 
+           // ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data); 
           }
+
+          if (!changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete)
+          {
+            tempForSmartDataLoggerProxy=[...tempForSmartDataLoggerProxy, saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]]
+
+            tempForSmartDataLoggerProxyTopic=[...tempForSmartDataLoggerProxyTopic, saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[j]]
+          }
+          else if (!saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete && changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete)
+          {
+            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
+            sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+
+            SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
+          }
+          
         }
       }
+
+      saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile=JSON.parse(JSON.stringify(tempForSmartDataLoggerProxy));
+     // ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
 
       for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length;j++)
       {
 
         if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j] == item)
         {
-          if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
-          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort)
+          if (!changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete&&(changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
+          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort))
           {
             let new_item= changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
 
@@ -470,20 +543,42 @@
             let changedstr="CloudProfile No. "+ (j+1)+ " is changed to "+ new_item;
             sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
 
-            console.log(changedstr);
+            //console.log(changedstr);
             SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
             ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data); 
+
+          }
+
+          if (!changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete)
+          {
+            tempForSmartDataLoggerMonitor=[...tempForSmartDataLoggerMonitor, saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j]]
+
+            tempForSmartDataLoggerMonitorTopic=[...tempForSmartDataLoggerMonitorTopic, saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j]]
+          }
+          else if (!saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete && changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete)
+          {
+            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
+            sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+
+           // console.log(changedstr);
+            SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
+            //ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data); 
 
           }
         }
       }
 
+
+      saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile
+=JSON.parse(JSON.stringify(tempForSmartDataLoggerMonitor));
+      ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
       for (let j=0; j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length;j++)
       {
         if (saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[j].mqttProfile == item)
         {
-          if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
-          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort)
+          if (!changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete&&(changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
+          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort))
           {
             let new_item= changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
 
@@ -492,11 +587,22 @@
             let changedstr="List No." +(j+1) +" item is changed: value of mqttProfile is changed to "+ new_item;
             event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
 
-            console.log(changedstr);
+           // console.log(changedstr);
             EventEngine_TriggerMQTT_ConfigChangedLog.set(event_engine_trigger_mqtt_changeValues);
             ChangedEventEngineConfig.set(saved_changed_event_engine_data); 
 
           }
+
+          if (!saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete && changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete)
+          {
+            let changedstr="List No." +(j+1) +" item is changed: value of mqttProfile is is deleted";
+            event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
+
+            saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[j].mqttProfile="";
+            EventEngine_TriggerMQTT_ConfigChangedLog.set(event_engine_trigger_mqtt_changeValues);
+            ChangedEventEngineConfig.set(saved_changed_event_engine_data); 
+          }
+
         }
       }
 
@@ -505,8 +611,8 @@
       {
         if (saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[j].mqttProfile == item)
         {
-          if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
-          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort)
+          if (!changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete&&(changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
+          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort))
           {
             let new_item= changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
 
@@ -520,21 +626,55 @@
             ChangedEventEngineConfig.set(saved_changed_event_engine_data); 
 
           }
+
+
+          if (!saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete && changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete)
+          {
+            let changedstr="List No." +(j+1) +" item is changed: value of mqttProfile is is deleted";
+            event_engine_action_mqtt_changeValues=[...event_engine_action_mqtt_changeValues, changedstr];
+
+            saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[j].mqttProfile="";
+            EventEngine_ActionMQTT_ConfigChangedLog.set(event_engine_action_mqtt_changeValues);
+            ChangedEventEngineConfig.set(saved_changed_event_engine_data); 
+          }
         }
       }
-
     }
 
     if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length > generic_mqtt_data.config.cloud_genericMqtt_profile.length)
     {
       let addedCount=changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length-generic_mqtt_data.config.cloud_genericMqtt_profile.length;
-      let changedstr="Add "+addedCount+" item(s) to Profile List";
+
+      for (let k=generic_mqtt_data.config.cloud_genericMqtt_profile.length; k < changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length; k++)
+      {
+        if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile[k].delete)
+        {
+          addedCount--;
+        }
+      }
+
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to Profile List";
+        generic_mqtt_changedValues=[...generic_mqtt_changedValues, changedstr];
+      }
+    }
+
+    if (changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length < generic_mqtt_data.config.cloud_genericMqtt_profile.length)
+    {
+      let deletedCount=generic_mqtt_data.config.cloud_genericMqtt_profile.length-changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length;
+      let changedstr="Delete "+deletedCount+" item(s) from Profile List";
       generic_mqtt_changedValues=[...generic_mqtt_changedValues, changedstr];
     }
 
-
     GenericMQTTConfigChangedLog.set(generic_mqtt_changedValues);
-    saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile=JSON.parse(JSON.stringify(changed_generic_mqtt_data.config.cloud_genericMqtt_profile));
+    
+
+    //saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile=JSON.parse(JSON.stringify(changed_generic_mqtt_data.config.cloud_genericMqtt_profile));
+
+    saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile=JSON.parse(JSON.stringify(tempForDelete));
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile=JSON.parse(JSON.stringify(tempForDelete));
+
 
     ChangedGenericMQTTConfig.set(saved_changed_generic_mqtt_data);
     console.log(generic_mqtt_changedValues);
@@ -716,6 +856,36 @@
 
 
  </script>
+
+ <style>
+ 
+.strikeout {
+  text-decoration: line-through;
+  color: #999; /* Adjust color for deleted text */
+  position: relative;
+}
+
+.strikeout:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #111; /* Adjust strikeout line color */
+  transform: translateY(-50%);
+}
+
+.strikeout:after {
+  content: "\00B7"; /* Unicode dot character */
+  font-size: 1px; /* Adjust dot size */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+</style>
 <Tabs style="underline">
   <TabItem open title="Profile">
 
@@ -746,12 +916,77 @@
 {#each changed_generic_mqtt_data.config.cloud_genericMqtt_profile as gMQTT, index}
 
 
+{#if gMQTT.delete}
+
+
+    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-0 w-10">
+<button on:click={() => RestoreDeleteMQTT(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-4 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={gMQTT.enable} disabled>
+
+      </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-4 strikeout !p-1">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{gMQTT.brokerHost}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{gMQTT.brokerPort}</td>
+{#if gMQTT.tls == 0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-4 strikeout !p-1">No</td>
+{:else if gMQTT.tls==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-4 strikeout !p-1">Yes</td>
+{/if}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{gMQTT.clientId}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{gMQTT.account}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{gMQTT.qos}</td>
+{#if gMQTT.retained ==0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">No</td>
+{:else if gMQTT.retained ==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Yes</td>
+{/if}
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{gMQTT.keepAliveInterval}</td>
+{#if gMQTT.dataCompression == 0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">None</td>
+{:else if gMQTT.dataCompression == 1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">gzip</td>
+{/if}
+
+      </tr>
+
+
+{:else}
+
     <TableBodyRow>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">
+    <TableBodyCell class="!p-1 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyMQTT(index)}>
 
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 
@@ -760,7 +995,14 @@
 
 
        </TableBodyCell>
-               <TableBodyCell class="!p-1">  </TableBodyCell>
+
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteMQTT(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 
                <TableBodyCell class="w-4"><input type="checkbox"  bind:checked={gMQTT.enable}></TableBodyCell>
@@ -789,12 +1031,15 @@
       <TableBodyCell class="w-18">gzip</TableBodyCell>
 {/if}
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
 
  <TableBodyRow>
-    <TableBodyCell class="!p-1">
+    <TableBodyCell class="!p-1 w-10">
 
 {#if getDataReady == 1}
 {#if changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length < 10}
@@ -808,8 +1053,8 @@
 {/if} 
 {/if} 
 </TableBodyCell>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-    <TableBodyCell class="!p-1"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
     <TableBodyCell class="w-4"></TableBodyCell>
       <TableBodyCell class="!p-1 w-4"></TableBodyCell>
@@ -836,10 +1081,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+
     <td class="pl-10"><Button color="blue" pill={true} on:click={saveMQTT}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>

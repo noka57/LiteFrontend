@@ -95,8 +95,21 @@
             if (obj1[key].length > obj2[key].length) 
             {
               let addedCount=obj1[key].length-obj2[key].length;
-              let changedstr="Add "+addedCount+" item(s) to "+ key;
-              staticR_changedValues=[...staticR_changedValues, changedstr];
+
+              for (let j=obj2[key].length; j <obj1[key].length; j++)
+              {
+                if (obj1[key][j]["delete"])
+                {
+                  addedCount--;
+                }
+
+              }
+
+              if (addedCount > 0)
+              {
+                let changedstr="Add "+addedCount+" item(s) to "+ key;
+                staticR_changedValues=[...staticR_changedValues, changedstr];
+              }
             }
             else if (obj1[key].length < obj2[key].length)
             {
@@ -258,10 +271,7 @@
       staticR_changedValues=[];
     }
 
-    
-    
-    compareObjects(changed_staticR_data.config.networking_staticRoute, static_route_data.config.networking_staticRoute,0,0,0);
-    StaticRouteConfigChangedLog.set(staticR_changedValues);
+
 
     let tempForDelete=[];
     for (let i = 0; i< changed_staticR_data.config.networking_staticRoute.list.length; i++)
@@ -272,6 +282,11 @@
       }
 
     }
+    
+    
+    compareObjects(changed_staticR_data.config.networking_staticRoute, static_route_data.config.networking_staticRoute,0,0,0);
+    StaticRouteConfigChangedLog.set(staticR_changedValues);
+
 
     saved_changed_staticR_data.config.networking_staticRoute.list=JSON.parse(JSON.stringify(tempForDelete));
     changed_staticR_data.config.networking_staticRoute.list=JSON.parse(JSON.stringify(tempForDelete));

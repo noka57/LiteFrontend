@@ -224,116 +224,125 @@
 
   }
 
-
     let new_proxy_edge=[
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     }
 
@@ -345,14 +354,15 @@
 
     function new_proxy_edge_trigger(index)
     {
-        new_proxy_edge[index].enable=false;
-        new_proxy_edge[index].aliasName="";
-        new_proxy_edge[index].modbusVariable="";
-        new_proxy_edge[index].variableType=2;
-        new_proxy_edge[index].variablePostprocessing=0;
-        new_proxy_edge[index].variablePostprocessingValue=1;
+        new_proxy_edge[index].enable=true;
+        new_proxy_edge[index].delete=false;
+        new_proxy_edge[index].tagName="";
+        new_proxy_edge[index].modbusDataModel="";
+        new_proxy_edge[index].dataType=2;
+        new_proxy_edge[index].postprocessing=0;
+        new_proxy_edge[index].postprocessingValue=1;
         new_proxy_edge[index].postprocessedDisplay=1;
-        new_proxy_edge[index].dataFormat=0;
+        new_proxy_edge[index].dataLogFormat=0;
         new_proxy_edge[index].userDefineedData="";
 
         new_proxy_edge_index=index;
@@ -372,13 +382,14 @@
     let BackupProxyEdge=
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variablePostprocessing:1,
-      variablePostprocessingValue:1,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:1,
+      postprocessing:1,
+      postprocessingValue:1,
       postprocessedDisplay:0,
-      dataFormat:0,
+      dataLogFormat:0,
       userDefineedData:""
     };
 
@@ -389,13 +400,14 @@
         modify_proxy_edge_modal=true;
         modify_proxy_edge_index=index;
         BackupProxyEdge.enable=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].enable;
-        BackupProxyEdge.aliasName=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].aliasName;
-        BackupProxyEdge.modbusVariable=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusVariable;
-        BackupProxyEdge.variableType=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].variableType;
-        BackupProxyEdge.variablePostprocessing=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].variablePostprocessing;
-        BackupProxyEdge.variablePostprocessingValue=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].variablePostprocessingValue;
+        BackupProxyEdge.delete=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].delete;      
+        BackupProxyEdge.tagName=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].tagName;
+        BackupProxyEdge.modbusDataModel=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusDataModel;
+        BackupProxyEdge.dataType=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataType;
+        BackupProxyEdge.postprocessing=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessing;
+        BackupProxyEdge.postprocessingValue=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessingValue;
         BackupProxyEdge.postprocessedDisplay=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessedDisplay;
-        BackupProxyEdge.dataFormat=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataFormat;
+        BackupProxyEdge.dataFormat=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataLogFormat;
         BackupProxyEdge.userDefineedData=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].userDefineedData;
 
     }
@@ -406,20 +418,20 @@
         modify_proxy_edge_modal=false;
 
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].enable=BackupProxyEdge.enable;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].delete=BackupProxyEdge.delete;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].tagName=BackupProxyEdge.tagName;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].aliasName=BackupProxyEdge.aliasName;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusDataModel=BackupProxyEdge.modbusDataModel;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusVariable=BackupProxyEdge.modbusVariable;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataType=BackupProxyEdge.dataType;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].variableType=BackupProxyEdge.variableType;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessing=BackupProxyEdge.postprocessing;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].variablePostprocessing=BackupProxyEdge.variablePostprocessing;
-
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].variablePostprocessingValue=BackupProxyEdge.variablePostprocessingValue;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessingValue=BackupProxyEdge.postprocessingValue;
 
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessedDisplay=BackupProxyEdge.postprocessedDisplay;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataFormat=BackupProxyEdge.dataFormat;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataLogFormat=BackupProxyEdge.dataLogFormat;
 
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].userDefineedData=BackupProxyEdge.userDefineedData;
 
@@ -438,92 +450,102 @@
     let new_monitor_edge=[
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:2,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:2,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:2,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:2,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     },    
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:2,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:2,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:2,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:2,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:2,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     },
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:2,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     }
 
@@ -531,12 +553,13 @@
 
     function new_monitor_edge_trigger(index)
     {
-        new_monitor_edge[index].enable=false;
-        new_monitor_edge[index].aliasName="";
-        new_monitor_edge[index].modbusVariable="";
-        new_monitor_edge[index].variableType=2;
-        new_monitor_edge[index].variableDisplay=1;
-        new_monitor_edge[index].dataFormat=0;
+        new_monitor_edge[index].enable=true;
+        new_monitor_edge[index].delete=false;
+        new_monitor_edge[index].tagName="";
+        new_monitor_edge[index].modbusDataModel="";
+        new_monitor_edge[index].dataType=2;
+        new_monitor_edge[index].display=1;
+        new_monitor_edge[index].dataLogFormat=0;
         new_monitor_edge[index].userDefineedData="";
 
         new_monitor_edge_index=index;
@@ -564,11 +587,12 @@
     let BackupMonitorEdge=
     {
       enable: false,
-      aliasName: "",
-      modbusVariable:"",
-      variableType:1,
-      variableDisplay:0,
-      dataFormat:0,
+      delete: false,
+      tagName: "",
+      modbusDataModel:"",
+      dataType:2,
+      display:0,
+      dataLogFormat:0,
       userDefineedData:""
     };
 
@@ -585,11 +609,12 @@
         modify_monitor_edge_modal=true;
         modify_monitor_edge_index=index;
         BackupMonitorEdge.enable=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].enable;
-        BackupMonitorEdge.aliasName=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].aliasName;
-        BackupMonitorEdge.modbusVariable=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].modbusVariable;
-        BackupMonitorEdge.variableType=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].variableType;
-        BackupMonitorEdge.variableDisplay=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].variableDisplay;
-        BackupMonitorEdge.dataFormat=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataFormat;
+        BackupMonitorEdge.delete=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].delete;        
+        BackupMonitorEdge.tagName=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].tagName;
+        BackupMonitorEdge.modbusDataModel=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].modbusDataModel;
+        BackupMonitorEdge.dataType=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataType;
+        BackupMonitorEdge.display=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].display;
+        BackupMonitorEdge.dataLogFormat=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataLogFormat;
         BackupMonitorEdge.userDefineedData=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].userDefineedData;
 
     }
@@ -598,18 +623,18 @@
     {
 
         modify_monitor_edge_modal=false;
-
         changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].enable=BackupMonitorEdge.enable;
+        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].delete=BackupMonitorEdge.delete;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].aliasName=BackupMonitorEdge.aliasName;
+        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].tagName=BackupMonitorEdge.tagName;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].modbusVariable=BackupMonitorEdge.modbusVariable;
+        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].modbusDataModel=BackupMonitorEdge.modbusDataModel;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].variableType=BackupMonitorEdge.variableType;
+        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataType=BackupMonitorEdge.dataType;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].variableDisplay=BackupMonitorEdge.variableDisplay;
+        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].display=BackupMonitorEdge.display;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataFormat=BackupMonitorEdge.dataFormat;
+        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataLogFormat=BackupMonitorEdge.dataLogFormat;
 
         changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].userDefineedData=BackupMonitorEdge.userDefineedData;
 
@@ -1266,7 +1291,35 @@
 
 </script>
 
+<style>
+ 
+.strikeout {
+  text-decoration: line-through;
+  color: #999; /* Adjust color for deleted text */
+  position: relative;
+}
 
+.strikeout:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #111; /* Adjust strikeout line color */
+  transform: translateY(-50%);
+}
+
+.strikeout:after {
+  content: "\00B7"; /* Unicode dot character */
+  font-size: 1px; /* Adjust dot size */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+</style>
 
  <Tabs style="underline">
    <TabItem open title="General">
@@ -1353,12 +1406,12 @@
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-18">Modbus Variable</TableHeadCell>
-    <TableHeadCell class="w-18">Variable Type</TableHeadCell>
-    <TableHeadCell class="w-18">Variable Postprocessing</TableHeadCell>
+    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
+    <TableHeadCell class="w-18">Modbus Data Model</TableHeadCell>
+    <TableHeadCell class="w-18">Data Type</TableHeadCell>
+    <TableHeadCell class="w-18">Postprocessing</TableHeadCell>
     <TableHeadCell class="w-18">Postprocessed Display</TableHeadCell>
-    <TableHeadCell class="w-36">Data Format</TableHeadCell>
+    <TableHeadCell class="w-36">Data Log Format</TableHeadCell>
   </TableHead>
 
 <TableBody>
@@ -1383,21 +1436,21 @@
 </TableBodyCell>
 
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
-      <TableBodyCell class="w-18">{ProxyEdgeData.aliasName}</TableBodyCell>
-      <TableBodyCell class="w-18">{ProxyEdgeData.modbusVariable}</TableBodyCell>
-{#if ProxyEdgeData.variableType == 1}
+      <TableBodyCell class="w-18">{ProxyEdgeData.tagName}</TableBodyCell>
+      <TableBodyCell class="w-18">{ProxyEdgeData.modbusDataModel}</TableBodyCell>
+{#if ProxyEdgeData.dataType == 1}
         <TableBodyCell class="w-18">Boolean</TableBodyCell>
-{:else if ProxyEdgeData.variableType == 2}
+{:else if ProxyEdgeData.dataType == 2}
         <TableBodyCell class="w-18">Unsigned Short</TableBodyCell>
-{:else if ProxyEdgeData.variableType == 3}
+{:else if ProxyEdgeData.dataType == 3}
         <TableBodyCell class="w-18">Signed Short</TableBodyCell>
-{:else if ProxyEdgeData.variableType == 4}
+{:else if ProxyEdgeData.dataType == 4}
       <TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
-{:else if ProxyEdgeData.variableType == 5}
+{:else if ProxyEdgeData.dataType == 5}
       <TableBodyCell class="w-18">Signed Integer</TableBodyCell>
-{:else if ProxyEdgeData.variableType == 6}
+{:else if ProxyEdgeData.dataType == 6}
       <TableBodyCell class="w-18">Float</TableBodyCell>
-{:else if ProxyEdgeData.variableType == 7}
+{:else if ProxyEdgeData.dataType == 7}
       <TableBodyCell class="w-18">Double</TableBodyCell>
 {:else}
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -1405,12 +1458,12 @@
 
 
       <TableBodyCell class="w-18">
-{#if ProxyEdgeData.variablePostprocessing == 1}+
-{:else if ProxyEdgeData.variablePostprocessing == 2}-
-{:else if ProxyEdgeData.variablePostprocessing == 3}*
-{:else if ProxyEdgeData.variablePostprocessing == 4}/
+{#if ProxyEdgeData.postprocessing == 1}+
+{:else if ProxyEdgeData.postprocessing == 2}-
+{:else if ProxyEdgeData.postprocessing == 3}*
+{:else if ProxyEdgeData.postprocessing == 4}/
 {/if}
-{ProxyEdgeData.variablePostprocessingValue}
+{ProxyEdgeData.postprocessingValue}
       </TableBodyCell>
       <TableBodyCell class="w-18">
   {#if ProxyEdgeData.postprocessedDisplay == 0}Hexadecimal
@@ -1420,13 +1473,13 @@
        
 
        </TableBodyCell>
-      <TableBodyCell class="w-36">{#if ProxyEdgeData.dataFormat==0}<div class="flex gap-2">
+      <TableBodyCell class="w-36">{#if ProxyEdgeData.dataLogFormat==0}<div class="flex gap-2">
       Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg></div>
 <Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip>
 
-{:else if ProxyEdgeData.dataFormat==1}User Defined{/if}
+{:else if ProxyEdgeData.dataLogFormat==1}User Defined{/if}
 </TableBodyCell>
     
 
@@ -1507,23 +1560,23 @@
 <table>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={new_proxy_edge[new_proxy_edge_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Tag Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={new_proxy_edge[new_proxy_edge_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_proxy_edge[new_proxy_edge_index].modbusVariable}>
-<option disabled="" value="">Choose Variable ...</option>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_proxy_edge[new_proxy_edge_index].modbusDataModel}>
+<option disabled="" value="">Choose ...</option>
 {#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
-<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
+<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
 {/each}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave as SlaveVariable, index}
-<option value={SlaveVariable.variableName}>{SlaveVariable.variableName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave as SlaveDataModel, index}
+<option value={SlaveDataModel.dataModelName}>{SlaveDataModel.dataModelName}</option>
 {/each}
 {/if}
 </select>
@@ -1538,12 +1591,12 @@
 </tr>
 
 <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Type</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
 
   </td>
 
  <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_proxy_edge[new_proxy_edge_index].variableType}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_proxy_edge[new_proxy_edge_index].dataType}>
 <option disabled="" value="none">Choose Type ...</option>
 
 <option value={1}>Boolean</option>
@@ -1563,10 +1616,10 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Postprocessing</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Postprocessing</p></td>
 
  <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-16" bind:value={new_proxy_edge[new_proxy_edge_index].variablePostprocessing}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-16" bind:value={new_proxy_edge[new_proxy_edge_index].postprocessing}>
 <option disabled="" value="none">Choose Operator ...</option>
 
 <option value={1}>+</option>
@@ -1577,7 +1630,7 @@
 
 
    
- <FloatingLabelInput style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_proxy_edge[new_proxy_edge_index].ariablePostprocessingValue}>
+ <FloatingLabelInput style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_proxy_edge[new_proxy_edge_index].postprocessingValue}>
   </FloatingLabelInput> 
   </div>
   </td>
@@ -1599,16 +1652,16 @@
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Format</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Log Format</p>
 
   </td>
 
     <td class="pl-4 pt-8" ><div class="flex gap-6">
-  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].dataFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].dataLogFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 <Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip></Radio>
-  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].dataFormat} value={1} >User Defined:</Radio>
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].dataLogFormat} value={1} >User Defined:</Radio>
 
 
 </div></td>
@@ -1619,7 +1672,7 @@
   <div>
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
-{#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
+{#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
     <Button size="xs" on:click={NPbtn1(new_proxy_edge_index)}>TIME</Button>
 {:else}
     <Button size="xs" disabled>TIME</Button>
@@ -1627,7 +1680,7 @@
 </li>
 
 <li class="pt-4">
-{#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
+{#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={NPbtn2}>ARRAY</Button>
 {:else}
 <Button size="xs" disabled>ARRAY</Button>
@@ -1635,7 +1688,7 @@
 </li>
 
 <li class="pt-4">
-{#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
+{#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={NPbtn3}>NAME_RAWREQUEST</Button>
 {:else}
 <Button size="xs" disabled>NAME_RAWREQUEST</Button>
@@ -1643,7 +1696,7 @@
 </li>
 
 <li class="pt-4">
-{#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
+{#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={NPbtn4}>NAME_RAWREPLY</Button>
 {:else}
 <Button size="xs" disabled>NAME_RAWREPLY</Button>
@@ -1656,9 +1709,9 @@
   </td>
 
     <td class="pl-4 pt-4">
-{#if new_proxy_edge[new_proxy_edge_index].dataFormat == 1}
+{#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
 
-<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={new_proxy_edge[new_proxy_edge_index].userDefineedData} />
+<Textarea id="textarea-id" placeholder="Data Log Format" rows="12" name="message" bind:value={new_proxy_edge[new_proxy_edge_index].userDefineedData} />
 
 
 
@@ -1709,24 +1762,24 @@
 <table>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Tag Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
     <td class= "pl-4 pt-4">
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusVariable}>
-<option disabled="" value="">Choose Variable ...</option>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusDataModel}>
+<option disabled="" value="">Choose ...</option>
 {#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
-<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
+<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
 {/each}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave as SlaveVariable, index}
-<option value={SlaveVariable.variableName}>{SlaveVariable.variableName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave as SlaveDataModel, index}
+<option value={SlaveDataModel.dataModelName}>{SlaveDataModel.dataModelName}</option>
 {/each}
 {/if}
 </select>
@@ -1738,12 +1791,12 @@
 </tr>
 
 <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Type</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
 
   </td>
 
  <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].variableType}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataType}>
 <option disabled="" value="none">Choose Type ...</option>
 
 <option value={1}>Boolean</option>
@@ -1763,10 +1816,10 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Postprocessing</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Postprocessing</p></td>
 
  <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-16" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].variablePostprocessing}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-16" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].postprocessing}>
 <option disabled="" value="none">Choose Operator ...</option>
 
 <option value={1}>+</option>
@@ -1777,7 +1830,7 @@
 
 
    
- <FloatingLabelInput style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].variablePostprocessingValue}>
+ <FloatingLabelInput style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].postprocessingValue}>
   </FloatingLabelInput> 
   </div>
   </td>
@@ -1799,16 +1852,16 @@
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Format</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Log Format</p>
 
   </td>
 
     <td class="pl-4 pt-8" ><div class="flex gap-6">
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 <Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip></Radio>
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat} value={1} >User Defined:</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat} value={1} >User Defined:</Radio>
 
 
 </div></td>
@@ -1819,7 +1872,7 @@
   <div>
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
     <Button size="xs" on:click={CPbtn1}>TIME</Button>
 {:else}
     <Button size="xs" disabled>TIME</Button>
@@ -1827,7 +1880,7 @@
 </li>
 
 <li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={CPbtn2}>ARRAY</Button>
 {:else}
 <Button size="xs" disabled>ARRAY</Button>
@@ -1835,7 +1888,7 @@
 </li>
 
 <li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={CPbtn3}>NAME_RAWREQUEST</Button>
 {:else}
 <Button size="xs" disabled>NAME_RAWREQUEST</Button>
@@ -1843,7 +1896,7 @@
 </li>
 
 <li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={CPbtn4}>NAME_RAWREPLY</Button>
 {:else}
 <Button size="xs" disabled>NAME_RAWREPLY</Button>
@@ -1856,9 +1909,9 @@
   </td>
 
     <td class="pl-4 pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
 
-<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData} />
+<Textarea id="textarea-id" placeholder="Data Log Format" rows="12" name="message" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData} />
 
 
 
@@ -2079,11 +2132,11 @@
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-18">Modbus Variable</TableHeadCell>
-    <TableHeadCell class="w-18">Variable Type</TableHeadCell>
-    <TableHeadCell class="w-18">Variable Display</TableHeadCell>
-    <TableHeadCell class="w-18">Data Format</TableHeadCell>
+    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
+    <TableHeadCell class="w-18">Modbus Data Model</TableHeadCell>
+    <TableHeadCell class="w-18">Data Type</TableHeadCell>
+    <TableHeadCell class="w-18">Display</TableHeadCell>
+    <TableHeadCell class="w-18">Data Log Format</TableHeadCell>
   </TableHead>
 
 <TableBody>
@@ -2113,21 +2166,21 @@
 
 
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
-      <TableBodyCell class="w-18">{MonitorEdgeData.aliasName}</TableBodyCell>
-      <TableBodyCell class="w-18">{MonitorEdgeData.modbusVariable}</TableBodyCell>
-{#if MonitorEdgeData.variableType == 1}
+      <TableBodyCell class="w-18">{MonitorEdgeData.tagName}</TableBodyCell>
+      <TableBodyCell class="w-18">{MonitorEdgeData.modbusDataModel}</TableBodyCell>
+{#if MonitorEdgeData.dataType == 1}
         <TableBodyCell class="w-18">Boolean</TableBodyCell>
-{:else if MonitorEdgeData.variableType == 2}
+{:else if MonitorEdgeData.dataType == 2}
         <TableBodyCell class="w-18">Unsigned Short</TableBodyCell>
-{:else if MonitorEdgeData.variableType == 3}
+{:else if MonitorEdgeData.dataType == 3}
         <TableBodyCell class="w-18">Signed Short</TableBodyCell>
-{:else if MonitorEdgeData.variableType == 4}
+{:else if MonitorEdgeData.dataType == 4}
       <TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
-{:else if MonitorEdgeData.variableType == 5}
+{:else if MonitorEdgeData.dataType == 5}
       <TableBodyCell class="w-18">Signed Integer</TableBodyCell>
-{:else if MonitorEdgeData.variableType == 6}
+{:else if MonitorEdgeData.dataType == 6}
       <TableBodyCell class="w-18">Float</TableBodyCell>
-{:else if MonitorEdgeData.variableType == 7}
+{:else if MonitorEdgeData.dataType == 7}
       <TableBodyCell class="w-18">Double</TableBodyCell>
 {:else}
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -2135,20 +2188,20 @@
 
 
       <TableBodyCell class="w-18">
-  {#if MonitorEdgeData.variableDisplay == 0}Hexadecimal
-{:else if MonitorEdgeData.variableDisplay == 1}Decimal
-{:else if MonitorEdgeData.variableDisplay == 2}Binary
+  {#if MonitorEdgeData.display == 0}Hexadecimal
+{:else if MonitorEdgeData.display == 1}Decimal
+{:else if MonitorEdgeData.display == 2}Binary
 {/if}  
        
 
        </TableBodyCell>
-      <TableBodyCell class="w-18">{#if MonitorEdgeData.dataFormat==0}<div class="flex gap-2">
+      <TableBodyCell class="w-18">{#if MonitorEdgeData.dataLogFormat==0}<div class="flex gap-2">
       Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg></div>
 <Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,&quot;Content&quot;:[&quot;ModbusReq&quot;:$MODBUSREQ$,&quot;ModbusResp&quot;:$MODBUSRESP$]&#125;</Tooltip>
 
-{:else if MonitorEdgeData.dataFormat==1}User Defined{/if}
+{:else if MonitorEdgeData.dataLogFormat==1}User Defined{/if}
 </TableBodyCell>
     
 
@@ -2224,24 +2277,24 @@
 <table>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={new_monitor_edge[new_monitor_edge_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Tag Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={new_monitor_edge[new_monitor_edge_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
     <td class= "pl-4 pt-4">
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_monitor_edge[new_monitor_edge_index].modbusVariable}>
-<option disabled="" value="">Choose Variable ...</option>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_monitor_edge[new_monitor_edge_index].modbusDataModel}>
+<option disabled="" value="">Choose ...</option>
 {#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
-<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
+<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
 {/each}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave as SlaveVariable, index}
-<option value={SlaveVariable.variableName}>{SlaveVariable.variableName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave as SlaveDataModel, index}
+<option value={SlaveDataModel.dataModelName}>{SlaveDataModel.dataModelName}</option>
 {/each}
 {/if}
 </select>
@@ -2254,12 +2307,12 @@
 </tr>
 
 <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Type</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
 
   </td>
 
  <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_monitor_edge[new_monitor_edge_index].variableType}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_monitor_edge[new_monitor_edge_index].dataType}>
 <option disabled="" value="none">Choose Type ...</option>
 
 <option value={1}>Boolean</option>
@@ -2281,30 +2334,30 @@
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Display</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Display</p>
 
   </td>
 
     <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].variableDisplay} value={0} >Hexadecimal</Radio>
-  <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].variableDisplay} value={1} >Decimal</Radio>
-  <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].variableDisplay} value={2} >Binary</Radio>
+  <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].display} value={0} >Hexadecimal</Radio>
+  <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].display} value={1} >Decimal</Radio>
+  <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].display} value={2} >Binary</Radio>
 
 </div></td>
 </tr>
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Format</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Log Format</p>
 
   </td>
 
     <td class="pl-4 pt-8" ><div class="flex gap-6">
-  <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].dataFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].dataLogFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 <Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,&quot;Content&quot;:[&quot;ModbusReq&quot;:$MODBUSREQ$,&quot;ModbusResp&quot;:$MODBUSRESP$]&#125;</Tooltip></Radio>
-  <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].dataFormat} value={1} >User Defined:</Radio>
+  <Radio class="pb-2" bind:group={new_monitor_edge[new_monitor_edge_index].dataLogFormat} value={1} >User Defined:</Radio>
 
 
 </div></td>
@@ -2315,7 +2368,7 @@
   <div>
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
-{#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
+{#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
     <Button size="xs" on:click={NMbtn1}>TIME</Button>
 {:else}
     <Button size="xs" disabled>TIME</Button>
@@ -2323,7 +2376,7 @@
 </li>
 
 <li class="pt-4">
-{#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
+{#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={NMbtn2}>ARRAY</Button>
 {:else}
 <Button size="xs" disabled>ARRAY</Button>
@@ -2331,7 +2384,7 @@
 </li>
 
 <li class="pt-4">
-{#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
+{#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={NMbtn3}>NAME_RAWREQUEST</Button>
 {:else}
 <Button size="xs" disabled>NAME_RAWREQUEST</Button>
@@ -2339,7 +2392,7 @@
 </li>
 
 <li class="pt-4">
-{#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
+{#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={NMbtn4}>NAME_RAWREPLY</Button>
 {:else}
 <Button size="xs" disabled>NAME_RAWREPLY</Button>
@@ -2348,7 +2401,7 @@
 
 
 <li class='pt-4'>
-{#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
+{#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={NMbtn5}>MODBUSREQ</Button>
 {:else}
 <Button size="xs" disabled>MODBUSREQ</Button>
@@ -2356,7 +2409,7 @@
 </li>
 
 <li class='pt-4'>
-{#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
+{#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={NMbtn6}>MODBUSRESP</Button>
 {:else}
 <Button size="xs" disabled>MODBUSRESP</Button>
@@ -2369,9 +2422,9 @@
   </td>
 
     <td class="pl-4 pt-4">
-{#if new_monitor_edge[new_monitor_edge_index].dataFormat == 1}
+{#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
 
-<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={new_monitor_edge[new_monitor_edge_index].userDefineedData} />
+<Textarea id="textarea-id" placeholder="Data Log Format" rows="12" name="message" bind:value={new_monitor_edge[new_monitor_edge_index].userDefineedData} />
 
 
 
@@ -2420,23 +2473,23 @@
 <table>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Alias Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Tag Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Variable</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].modbusVariable}>
-<option disabled="" value="">Choose Variable ...</option>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].modbusDataModel}>
+<option disabled="" value="">Choose ...</option>
 {#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as MasterVariable, index}
-<option value={MasterVariable.variableName}>{MasterVariable.variableName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
+<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
 {/each}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.slave as SlaveVariable, index}
-<option value={SlaveVariable.variableName}>{SlaveVariable.variableName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave as SlaveDataModel, index}
+<option value={SlaveDataModel.dataModelName}>{SlaveDataModel.dataModelName}</option>
 {/each}
 {/if}
 </select>
@@ -2447,12 +2500,12 @@
 </tr>
 
 <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Type</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
 
   </td>
 
  <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].variableType}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataType}>
 <option disabled="" value="none">Choose Type ...</option>
 
 <option value={1}>Boolean</option>
@@ -2474,30 +2527,30 @@
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Variable Display</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Display</p>
 
   </td>
 
     <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].variableDisplay} value={0} >Hexadecimal</Radio>
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].variableDisplay} value={1} >Decimal</Radio>
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].variableDisplay} value={2} >Binary</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].display} value={0} >Hexadecimal</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].display} value={1} >Decimal</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].display} value={2} >Binary</Radio>
 
 </div></td>
 </tr>
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Format</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Log Format</p>
 
   </td>
 
     <td class="pl-4 pt-8" ><div class="flex gap-6">
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 <Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,&quot;Content&quot;:[&quot;ModbusReq&quot;:$MODBUSREQ$,&quot;ModbusResp&quot;:$MODBUSRESP$]&#125;</Tooltip></Radio>
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat} value={1} >User Defined:</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat} value={1} >User Defined:</Radio>
 
 
 </div></td>
@@ -2508,7 +2561,7 @@
   <div>
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
     <Button size="xs" on:click={CMbtn1}>TIME</Button>
 {:else}
     <Button size="xs" disabled>TIME</Button>
@@ -2516,7 +2569,7 @@
 </li>
 
 <li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={CMbtn2}>ARRAY</Button>
 {:else}
 <Button size="xs" disabled>ARRAY</Button>
@@ -2524,7 +2577,7 @@
 </li>
 
 <li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={CMbtn3}>NAME_RAWREQUEST</Button>
 {:else}
 <Button size="xs" disabled>NAME_RAWREQUEST</Button>
@@ -2532,7 +2585,7 @@
 </li>
 
 <li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={CMbtn4}>NAME_RAWREPLY</Button>
 {:else}
 <Button size="xs" disabled>NAME_RAWREPLY</Button>
@@ -2541,7 +2594,7 @@
 
 
 <li class='pt-4'>
-{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={CMbtn5}>MODBUSREQ</Button>
 {:else}
 <Button size="xs" disabled>MODBUSREQ</Button>
@@ -2550,7 +2603,7 @@
 
 
 <li class='pt-4'>
-{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
 <Button size="xs" on:click={CMbtn6}>MODBUSRESP</Button>
 {:else}
 <Button size="xs" disabled>MODBUSRESP</Button>
@@ -2563,9 +2616,9 @@
   </td>
 
     <td class="pl-4 pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataFormat == 1}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
 
-<Textarea id="textarea-id" placeholder="Data Format" rows="12" name="message" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData} />
+<Textarea id="textarea-id" placeholder="Data Log Format" rows="12" name="message" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData} />
 
 
 
@@ -2853,7 +2906,7 @@ Data Duration</label>
   </TableHead>
   <TableBody >
 
-
+{#if 0}
       <TableBodyRow>
         <TableBodyCell class="w-18">2023/11/03 13:02:25</TableBodyCell>
         <TableBodyCell class="w-18">Proxy Mode</TableBodyCell>
@@ -2872,7 +2925,7 @@ Data Duration</label>
         <TableBodyCell class="w-18">2 days 20 hours 2 mins</TableBodyCell>
       </TableBodyRow>
 
-
+{/if}
 
   </TableBody>
 </Table>

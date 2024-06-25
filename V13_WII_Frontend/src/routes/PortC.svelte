@@ -1088,6 +1088,8 @@
 
   <TabItem title="Simulator">
 
+{#if 0}
+
   <table>
 <tr>
    <td class="pl-10"><Button pill={true}>Test DI</Button></td>
@@ -1106,6 +1108,8 @@
 </tr>
 
 </table>
+
+{/if}
   </TabItem>
 
 

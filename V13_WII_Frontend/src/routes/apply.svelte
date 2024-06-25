@@ -89,8 +89,8 @@
 	    ModbusGateway_RtT_ConfigChangedLog,
 	    ModbusGateway_RtR_ConfigChangedLog,
 	    ModbusGateway_TtT_ConfigChangedLog,
-	    ModbusVariable_Slave_ConfigChangedLog,
-	    ModbusVariable_Master_ConfigChangedLog,
+	    ModbusDataModel_Slave_ConfigChangedLog,
+	    ModbusDataModel_Master_ConfigChangedLog,
 	    ModbusTCP_Slave_ConfigChangedLog,
 	    ModbusTCP_Master_ConfigChangedLog,
 	    ModbusRTU_Slave_ConfigChangedLog,
@@ -265,8 +265,8 @@
   let modbus_gateway_RtR_changedValues=[];
   let modbus_gateway_TtT_changedValues=[];
 
-  let modbus_variable_master_changedValues=[];
-  let modbus_variable_slave_changedValues=[];
+  let modbus_data_model_master_changedValues=[];
+  let modbus_data_model_slave_changedValues=[];
   let modbus_tcp_master_changedValues=[];
   let modbus_tcp_slave_changedValues=[];
   let modbus_rtu_master_changedValues=[];
@@ -526,12 +526,12 @@
         modbus_gateway_TtT_changedValues = val;
     });
 
-  ModbusVariable_Slave_ConfigChangedLog.subscribe(val => {
-      modbus_variable_slave_changedValues = val;
+  ModbusDataModel_Slave_ConfigChangedLog.subscribe(val => {
+      modbus_data_model_slave_changedValues = val;
   });
 
-  ModbusVariable_Master_ConfigChangedLog.subscribe(val => {
-      modbus_variable_master_changedValues = val;
+  ModbusDataModel_Master_ConfigChangedLog.subscribe(val => {
+      modbus_data_model_master_changedValues = val;
   });
 
   ModbusTCP_Slave_ConfigChangedLog.subscribe(val => {
@@ -1794,8 +1794,8 @@
       modbus_gateway_RtR_changedValues=[];
       modbus_gateway_TtT_changedValues=[];
 
-      modbus_variable_master_changedValues=[];
-      modbus_variable_slave_changedValues=[];
+      modbus_data_model_master_changedValues=[];
+      modbus_data_model_slave_changedValues=[];
       modbus_tcp_master_changedValues=[];
       modbus_tcp_slave_changedValues=[];
       modbus_rtu_master_changedValues=[];
@@ -1805,8 +1805,8 @@
       ModbusGateway_RtT_ConfigChangedLog.set(modbus_gateway_RtT_changedValues);
       ModbusGateway_RtR_ConfigChangedLog.set(modbus_gateway_RtR_changedValues);
       ModbusGateway_TtT_ConfigChangedLog.set(modbus_gateway_TtT_changedValues);
-      ModbusVariable_Slave_ConfigChangedLog.set(modbus_variable_slave_changedValues);
-      ModbusVariable_Master_ConfigChangedLog.set(modbus_variable_master_changedValues);
+      ModbusDataModel_Slave_ConfigChangedLog.set(modbus_data_model_slave_changedValues);
+      ModbusDataModel_Master_ConfigChangedLog.set(modbus_data_model_master_changedValues);
       ModbusTCP_Slave_ConfigChangedLog.set(modbus_tcp_slave_changedValues);
       ModbusTCP_Master_ConfigChangedLog.set(modbus_tcp_master_changedValues);
       ModbusRTU_Slave_ConfigChangedLog.set(modbus_rtu_slave_changedValues);
@@ -2098,8 +2098,8 @@
 		    modbus_gateway_RtT_changedValues.length !=0 ||
 		    modbus_gateway_RtR_changedValues.length !=0 ||
 		    modbus_gateway_TtT_changedValues.length !=0 ||
-		    modbus_variable_master_changedValues.length !=0 ||
-		    modbus_variable_slave_changedValues.length !=0 ||
+		    modbus_data_model_master_changedValues.length !=0 ||
+		    modbus_data_model_slave_changedValues.length !=0 ||
 		    modbus_tcp_master_changedValues.length !=0 ||
 		    modbus_tcp_slave_changedValues.length !=0 ||
 		    modbus_rtu_master_changedValues.length !=0 ||
@@ -2387,8 +2387,8 @@
 										    modbus_gateway_RtT_changedValues.length !=0 ||
 										    modbus_gateway_RtR_changedValues.length !=0 ||
 										    modbus_gateway_TtT_changedValues.length !=0 ||
-										    modbus_variable_master_changedValues.length !=0 ||
-										    modbus_variable_slave_changedValues.length !=0 ||
+										    modbus_data_model_master_changedValues.length !=0 ||
+										    modbus_data_model_slave_changedValues.length !=0 ||
 										    modbus_tcp_master_changedValues.length !=0 ||
 										    modbus_tcp_slave_changedValues.length !=0 ||
 										    modbus_rtu_master_changedValues.length !=0 ||
@@ -2877,8 +2877,8 @@ event_engine_action_do_changeValues.length != 0 ||
 										    modbus_gateway_RtT_changedValues.length !=0 ||
 										    modbus_gateway_RtR_changedValues.length !=0 ||
 										    modbus_gateway_TtT_changedValues.length !=0 ||
-										    modbus_variable_master_changedValues.length !=0 ||
-										    modbus_variable_slave_changedValues.length !=0 ||
+										    modbus_data_model_master_changedValues.length !=0 ||
+										    modbus_data_model_slave_changedValues.length !=0 ||
 										    modbus_tcp_master_changedValues.length !=0 ||
 										    modbus_tcp_slave_changedValues.length !=0 ||
 										    modbus_rtu_master_changedValues.length !=0 ||
@@ -2944,23 +2944,23 @@ event_engine_action_do_changeValues.length != 0 ||
 {/if}
 
 
-{#if modbus_variable_master_changedValues.length !=0 || modbus_variable_slave_changedValues.length !=0}
-			<Li>Variable
+{#if modbus_data_model_master_changedValues.length !=0 || modbus_data_model_slave_changedValues.length !=0}
+			<Li>Data Model
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-{#if modbus_variable_master_changedValues.length !=0}
+{#if modbus_data_model_master_changedValues.length !=0}
 			<Li>Master
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
-  {#each modbus_variable_master_changedValues as item}
+  {#each modbus_data_model_master_changedValues as item}
       <Li>{item}</Li>
    {/each}
 
   </List>
   </Li>
 {/if}
-{#if modbus_variable_slave_changedValues.length !=0}
+{#if modbus_data_model_slave_changedValues.length !=0}
 			<Li>Slave
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
-  {#each modbus_variable_slave_changedValues as item}
+  {#each modbus_data_model_slave_changedValues as item}
       <Li>{item}</Li>
    {/each}
 
@@ -3757,8 +3757,8 @@ event_engine_action_do_changeValues.length != 0 ||
 		    modbus_gateway_RtT_changedValues.length !=0 ||
 		    modbus_gateway_RtR_changedValues.length !=0 ||
 		    modbus_gateway_TtT_changedValues.length !=0 ||
-		    modbus_variable_master_changedValues.length !=0 ||
-		    modbus_variable_slave_changedValues.length !=0 ||
+		    modbus_data_model_master_changedValues.length !=0 ||
+		    modbus_data_model_slave_changedValues.length !=0 ||
 		    modbus_tcp_master_changedValues.length !=0 ||
 		    modbus_tcp_slave_changedValues.length !=0 ||
 		    modbus_rtu_master_changedValues.length !=0 ||

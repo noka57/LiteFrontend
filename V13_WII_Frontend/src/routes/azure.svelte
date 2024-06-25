@@ -75,6 +75,7 @@
 
   let BackupItem={
     enable: false,
+    delete:false,
     azHubName: "",
     deviceID:"",
     symmetric_key_primary:"",
@@ -87,6 +88,7 @@
   let NewItem=[
   {
     enable: false,
+    delete:false,    
     azHubName: "",
     deviceID:"",
     symmetric_key_primary:"",
@@ -97,6 +99,7 @@
   },
   {
     enable: false,
+    delete:false,    
     azHubName: "",
     deviceID:"",
     symmetric_key_primary:"",
@@ -107,6 +110,7 @@
   },
   {
     enable: false,
+    delete:false,    
     azHubName: "",
     deviceID:"",
     symmetric_key_primary:"",
@@ -117,6 +121,7 @@
   },
   {
     enable: false,
+    delete:false,    
     azHubName: "",
     deviceID:"",
     symmetric_key_primary:"",
@@ -127,27 +132,7 @@
   },
   {
     enable: false,
-    azHubName: "",
-    deviceID:"",
-    symmetric_key_primary:"",
-    modelID:"",
-    attestation:0,
-    machineCAcert:"",
-    machineCert:""
-
-  },
-  {
-    enable: false,
-    azHubName: "",
-    deviceID:"",
-    symmetric_key_primary:"",
-    modelID:"",
-    attestation:0,
-    machineCAcert:"",
-    machineCert:""
-  },
-  {
-    enable: false,
+    delete:false,    
     azHubName: "",
     deviceID:"",
     symmetric_key_primary:"",
@@ -159,6 +144,18 @@
   },
   {
     enable: false,
+    delete:false,    
+    azHubName: "",
+    deviceID:"",
+    symmetric_key_primary:"",
+    modelID:"",
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
+  },
+  {
+    enable: false,
+    delete:false,    
     azHubName: "",
     deviceID:"",
     symmetric_key_primary:"",
@@ -170,6 +167,19 @@
   },
   {
     enable: false,
+    delete:false,    
+    azHubName: "",
+    deviceID:"",
+    symmetric_key_primary:"",
+    modelID:"",
+    attestation:0,
+    machineCAcert:"",
+    machineCert:""
+
+  },
+  {
+    enable: false,
+    delete:false,    
     azHubName: "",
     deviceID:"",
     symmetric_key_primary:"",
@@ -180,6 +190,7 @@
   },
   {
     enable: false,
+    delete:false,    
     azHubName: "",
     deviceID:"",
     symmetric_key_primary:"",
@@ -196,7 +207,8 @@
 
   function NewAzHub_Item_Invoker(index)
   {
-    NewItem[index].enable=false;
+    NewItem[index].enable=true;
+    NewItem[index].delete=false;    
     NewItem[index].azHubName=""
     NewItem[index].deviceID="";
     NewItem[index].symmetric_key_primary="";
@@ -216,12 +228,23 @@
   }
 
 
+  function deleteAzHub(index)
+  {
+    changed_azure_data.config.cloud_azHub_profile[index].delete=true;
+  }
+
+  function RestoreDeleteAzHub(index)
+  {
+    changed_azure_data.config.cloud_azHub_profile[index].delete=false;
+  }
+
 
   function TriggerModifyAZhub(index)
   {
     modify_Modal=true;
     modify_index=index;
     BackupItem.enable=changed_azure_data.config.cloud_azHub_profile[index].enable;
+    BackupItem.delete=changed_azure_data.config.cloud_azHub_profile[index].delete;    
     BackupItem.azHubName=changed_azure_data.config.cloud_azHub_profile[index].azHubName;
     BackupItem.deviceID=changed_azure_data.config.cloud_azHub_profile[index].deviceID;
     BackupItem.symmetric_key_primary=changed_azure_data.config.cloud_azHub_profile[index].symmetric_key_primary;
@@ -236,6 +259,7 @@
   {
     modify_Modal=false;
     changed_azure_data.config.cloud_azHub_profile[index].enable= BackupItem.enable;
+    changed_azure_data.config.cloud_azHub_profile[index].delete= BackupItem.delete;    
     changed_azure_data.config.cloud_azHub_profile[index].azHubName= BackupItem.azHubName;
     changed_azure_data.config.cloud_azHub_profile[index].deviceID= BackupItem.deviceID;
     changed_azure_data.config.cloud_azHub_profile[index].symmetric_key_primary= BackupItem.symmetric_key_primary;
@@ -254,6 +278,7 @@
 
   let BackupItemDPS={
     enable: false,
+    delete: false,
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -267,6 +292,7 @@
   let NewItemDPS=[
   {
     enable: false,
+    delete: false,    
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -278,6 +304,7 @@
   },
   {
     enable: false,
+    delete: false,    
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -289,6 +316,7 @@
   },
   {
     enable: false,
+    delete: false,    
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -300,6 +328,7 @@
   },
   {
     enable: false,
+    delete: false,    
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -311,6 +340,7 @@
   },
   {
     enable: false,
+    delete: false,    
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -322,6 +352,7 @@
   },
   {
     enable: false,
+    delete: false,    
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -333,6 +364,7 @@
   },
   {
     enable: false,
+    delete: false,    
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -344,6 +376,7 @@
   },
   {
     enable: false,
+    delete: false,    
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -355,6 +388,7 @@
   },
   {
     enable: false,
+    delete: false,    
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -366,6 +400,7 @@
   },
   {
     enable: false,
+    delete: false,    
     idScope: "",
     RegistrationID:"",
     symmetric_key_primary:"",
@@ -389,7 +424,8 @@
 
   function NewAzHubDPS_Item_Invoker(index)
   {
-    NewItemDPS[index].enable=false;
+    NewItemDPS[index].enable=true;
+    NewItemDPS[index].delete=false;
     NewItemDPS[index].idScope=""
     NewItemDPS[index].RegistrationID="";
     NewItemDPS[index].symmetric_key_primary="";
@@ -409,6 +445,16 @@
     changed_azure_data.config.cloud_azDPS_profile=[...changed_azure_data.config.cloud_azDPS_profile,NewItemDPS[index]];
   }
 
+  function RestoreDeleteAzHubDPS(index)
+  {
+    changed_azure_data.config.cloud_azDPS_profile[index].delete=false;
+  }
+
+
+  function deleteAZhubDPS(index)
+  {
+    changed_azure_data.config.cloud_azDPS_profile[index].delete=true;
+  }
 
 
   function TriggerModifyAZhubDPS(index)
@@ -416,6 +462,7 @@
     modify_Modal_dps=true;
     modify_dps_index=index;
     BackupItemDPS.enable=changed_azure_data.config.cloud_azDPS_profile[index].enable;
+    BackupItemDPS.delete=changed_azure_data.config.cloud_azDPS_profile[index].delete;    
     BackupItemDPS.idScope=changed_azure_data.config.cloud_azDPS_profile[index].idScope;
     BackupItemDPS.RegistrationID=changed_azure_data.config.cloud_azDPS_profile[index].RegistrationID;
     BackupItemDPS.symmetric_key_primary=changed_azure_data.config.cloud_azDPS_profile[index].symmetric_key_primary;
@@ -430,6 +477,7 @@
   {
     modify_Modal_dps=false;
     changed_azure_data.config.cloud_azDPS_profile[index].enable= BackupItemDPS.enable;
+    changed_azure_data.config.cloud_azDPS_profile[index].delete= BackupItemDPS.delete;    
     changed_azure_data.config.cloud_azDPS_profile[index].idScope= BackupItemDPS.idScope;
     changed_azure_data.config.cloud_azDPS_profile[index].RegistrationID= BackupItemDPS.RegistrationID;
     changed_azure_data.config.cloud_azDPS_profile[index].symmetric_key_primary= BackupItemDPS.symmetric_key_primary;
@@ -448,6 +496,7 @@
 
   let BackupItemCentral={
     enable: false,
+    delete: false,
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -462,6 +511,7 @@
   let NewItemCentral=[
   {
     enable: false,
+    delete: false,    
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -474,6 +524,7 @@
   },
   {
     enable: false,
+    delete: false,
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -486,6 +537,7 @@
   },
   {
     enable: false,
+    delete: false,
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -498,6 +550,7 @@
   },
   {
     enable: false,
+    delete: false,
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -510,6 +563,7 @@
   },
   {
     enable: false,
+    delete: false,    
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -522,6 +576,7 @@
   },
   {
     enable: false,
+    delete: false,    
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -534,6 +589,7 @@
   },
   {
     enable: false,
+    delete: false,    
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -546,6 +602,7 @@
   },
   {
     enable: false,
+    delete: false,    
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -558,6 +615,7 @@
   },
   {
     enable: false,
+    delete: false,    
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -570,6 +628,7 @@
   },
   {
     enable: false,
+    delete: false,    
     applicationName:"",
     idScope: "",
     deviceID:"",
@@ -594,7 +653,8 @@
 
   function NewAzCentral_Item_Invoker(index)
   {
-    NewItemCentral[index].enable=false;
+    NewItemCentral[index].enable=true;
+    NewItemCentral[index].delete=false;    
     NewItemCentral[index].applicationName=""
     NewItemCentral[index].idScope=""
     NewItemCentral[index].deviceID="";
@@ -616,12 +676,24 @@
   }
 
 
+  function deleteAZCentral(index)
+  {
+    changed_azure_data.config.cloud_azCentral_profile[index].delete=true;
+
+  }
+
+  function RestoreDeleteAZCentral(index)
+  {
+    changed_azure_data.config.cloud_azCentral_profile[index].delete=false;
+  }
+
 
   function TriggerModifyAZCentral(index)
   {
     modify_Modal_central=true;
     modify_central_index=index;
     BackupItemCentral.enable=changed_azure_data.config.cloud_azCentral_profile[index].enable;
+    BackupItemCentral.delete=changed_azure_data.config.cloud_azCentral_profile[index].delete;    
     BackupItemCentral.applicationName=changed_azure_data.config.cloud_azCentral_profile[index].applicationName;    
     BackupItemCentral.idScope=changed_azure_data.config.cloud_azCentral_profile[index].idScope;
     BackupItemCentral.deviceID=changed_azure_data.config.cloud_azCentral_profile[index].deviceID;
@@ -638,6 +710,7 @@
   {
     modify_Modal_central=false;
     changed_azure_data.config.cloud_azCentral_profile[index].enable=BackupItemCentral.enable;
+    changed_azure_data.config.cloud_azCentral_profile[index].delete=BackupItemCentral.delete;    
     changed_azure_data.config.cloud_azCentral_profile[index].applicationName=BackupItemCentral.applicationName;    
     changed_azure_data.config.cloud_azCentral_profile[index].idScope=BackupItemCentral.idScope;
     changed_azure_data.config.cloud_azCentral_profile[index].deviceID=BackupItemCentral.deviceID;
@@ -672,18 +745,31 @@
             if (obj1[key].length > obj2[key].length) 
             {
               let addedCount=obj1[key].length-obj2[key].length;
-              let changedstr="Add "+addedCount+" item(s) to "+ key;
-              if (type == 0)
+
+              for (let j=obj2[key].length; j <obj1[key].length; j++)
               {
-                azhub_changedValues=[...azhub_changedValues, changedstr];
+                if (obj1[key][j]["delete"])
+                {
+                  addedCount--;
+                }
+
               }
-              else if (type ==1)
+
+              if (addedCount > 0)
               {
-                azhubdps_changedValues=[...azhubdps_changedValues, changedstr];              
-              }
-              else if (type ==2)
-              {
-                azcentral_changedValues=[...azcentral_changedValues, changedstr];              
+                let changedstr="Add "+addedCount+" item(s) to "+ key;
+                if (type == 0)
+                {
+                  azhub_changedValues=[...azhub_changedValues, changedstr];
+                }
+                else if (type ==1)
+                {
+                  azhubdps_changedValues=[...azhubdps_changedValues, changedstr];              
+                }
+                else if (type ==2)
+                {
+                  azcentral_changedValues=[...azcentral_changedValues, changedstr];              
+                }
               }
 
             }
@@ -758,13 +844,47 @@
     if (changed_azure_data.config.cloud_azHub_profile.length > azure_data.config.cloud_azHub_profile.length)
     {
       let addedCount=changed_azure_data.config.cloud_azHub_profile.length-azure_data.config.cloud_azHub_profile.length;
-      let changedstr="Add "+addedCount+" item(s) to Azure Hub List";
+      for (let j=azure_data.config.cloud_azHub_profile.length; j < changed_azure_data.config.cloud_azHub_profile.length; j++)
+      {
+        if (changed_azure_data.config.cloud_azHub_profile[j].delete)
+        {
+          addedCount--;
+        }
+
+      }
+
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to Azure Hub List";
+        azhub_changedValues=[...azhub_changedValues, changedstr];
+      }
+    }
+
+    if (changed_azure_data.config.cloud_azHub_profile.length < azure_data.config.cloud_azHub_profile.length)
+    {
+      let deletedCount=azure_data.config.cloud_azHub_profile.length-changed_azure_data.config.cloud_azHub_profile.length;
+      let changedstr="Delete "+deletedCount+" item(s) from Azure Hub List";
       azhub_changedValues=[...azhub_changedValues, changedstr];
     }
 
 
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_azure_data.config.cloud_azHub_profile.length; i++)
+    {
+      if (!changed_azure_data.config.cloud_azHub_profile[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_azure_data.config.cloud_azHub_profile[i]]
+      }
+
+    }
+
+    saved_changed_azure_data.config.cloud_azHub_profile=JSON.parse(JSON.stringify(tempForDelete));
+    changed_azure_data.config.cloud_azHub_profile=JSON.parse(JSON.stringify(tempForDelete));
+
+
     AzHub_ConfigChangedLog.set(azhub_changedValues);
-    saved_changed_azure_data.config.cloud_azHub_profile=JSON.parse(JSON.stringify(changed_azure_data.config.cloud_azHub_profile));
+   // saved_changed_azure_data.config.cloud_azHub_profile=JSON.parse(JSON.stringify(changed_azure_data.config.cloud_azHub_profile));
 
     ChangedAzureConfig.set(saved_changed_azure_data);
     console.log(azhub_changedValues);    
@@ -787,13 +907,46 @@
     if (changed_azure_data.config.cloud_azDPS_profile.length > azure_data.config.cloud_azDPS_profile.length)
     {
       let addedCount=changed_azure_data.config.cloud_azDPS_profile.length-azure_data.config.cloud_azDPS_profile.length;
-      let changedstr="Add "+addedCount+" item(s) to Azure DPS List";
+      for (let j=azure_data.config.cloud_azDPS_profile.length; j < changed_azure_data.config.cloud_azDPS_profile.length; j++)
+      {
+        if (changed_azure_data.config.cloud_azDPS_profile[j].delete)
+        {
+          addedCount--;
+        }
+      }
+
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to Azure DPS List";
+        azhubdps_changedValues=[...azhubdps_changedValues, changedstr];
+      }
+    }
+
+
+    if (changed_azure_data.config.cloud_azDPS_profile.length < azure_data.config.cloud_azDPS_profile.length)
+    {
+      let deletedCount=azure_data.config.cloud_azDPS_profile.length-changed_azure_data.config.cloud_azDPS_profile.length;
+      let changedstr="Delete "+deletedCount+" item(s) from Azure DPS List";
       azhubdps_changedValues=[...azhubdps_changedValues, changedstr];
     }
 
 
+    let tempForDelete=[];
+    for (let i = 0; i< changed_azure_data.config.cloud_azDPS_profile.length; i++)
+    {
+      if (!changed_azure_data.config.cloud_azDPS_profile[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_azure_data.config.cloud_azDPS_profile[i]]
+      }
+
+    }
+
+
     AzHubDPS_ConfigChangedLog.set(azhubdps_changedValues);
-    saved_changed_azure_data.config.cloud_azDPS_profile=JSON.parse(JSON.stringify(changed_azure_data.config.cloud_azDPS_profile));
+    saved_changed_azure_data.config.cloud_azDPS_profile=JSON.parse(JSON.stringify(tempForDelete));
+    changed_azure_data.config.cloud_azDPS_profile=JSON.parse(JSON.stringify(tempForDelete));
+
+   // saved_changed_azure_data.config.cloud_azDPS_profile=JSON.parse(JSON.stringify(changed_azure_data.config.cloud_azDPS_profile));
 
     ChangedAzureConfig.set(saved_changed_azure_data);
     console.log(azhubdps_changedValues); 
@@ -816,13 +969,40 @@
     if (changed_azure_data.config.cloud_azCentral_profile.length > azure_data.config.cloud_azCentral_profile.length)
     {
       let addedCount=changed_azure_data.config.cloud_azCentral_profile.length-azure_data.config.cloud_azCentral_profile.length;
-      let changedstr="Add "+addedCount+" item(s) to Azure Central List";
-      azcentral_changedValues=[...azcentral_changedValues, changedstr];
+      
+      for (let j=azure_data.config.cloud_azCentral_profile.length;j < changed_azure_data.config.cloud_azCentral_profile.length; j++)
+      {
+        if (changed_azure_data.config.cloud_azCentral_profile[j].delete)
+        {
+          addedCount--;
+        }
+
+      }
+
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to Azure Central List";
+        azcentral_changedValues=[...azcentral_changedValues, changedstr];
+      }
     }
 
 
     AzCentral_ConfigChangedLog.set(azcentral_changedValues);
-    saved_changed_azure_data.config.cloud_azCentral_profile=JSON.parse(JSON.stringify(changed_azure_data.config.cloud_azCentral_profile));
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_azure_data.config.cloud_azCentral_profile.length; i++)
+    {
+      if (!changed_azure_data.config.cloud_azCentral_profile[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_azure_data.config.cloud_azCentral_profile[i]]
+      }
+    }
+
+    saved_changed_azure_data.config.cloud_azCentral_profile=JSON.parse(JSON.stringify(tempForDelete));
+    changed_azure_data.config.cloud_azCentral_profile=JSON.parse(JSON.stringify(tempForDelete));
+
+
+  //  saved_changed_azure_data.config.cloud_azCentral_profile=JSON.parse(JSON.stringify(changed_azure_data.config.cloud_azCentral_profile));
 
     ChangedAzureConfig.set(saved_changed_azure_data);
     console.log(azcentral_changedValues);    
@@ -955,19 +1135,51 @@
 
 
  </script>
+
+
+ <style>
+ 
+.strikeout {
+  text-decoration: line-through;
+  color: #999; /* Adjust color for deleted text */
+  position: relative;
+}
+
+.strikeout:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #111; /* Adjust strikeout line color */
+  transform: translateY(-50%);
+}
+
+.strikeout:after {
+  content: "\00B7"; /* Unicode dot character */
+  font-size: 1px; /* Adjust dot size */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+</style>
+
 <Tabs style="underline">
   <TabItem open title="Hub">
 
  <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
-  <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-      <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-      <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell class="!p-1">No</TableHeadCell>
+    <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Hub Name</TableHeadCell>
     <TableHeadCell class="w-18">Device ID</TableHeadCell>
     <TableHeadCell class="w-18">Attestation</TableHeadCell>        
@@ -979,13 +1191,66 @@
 {#if getDataReady == 1}
 {#each changed_azure_data.config.cloud_azHub_profile as azHub, index}
 
+{#if azHub.delete}
 
+    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteAzHub(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={azHub.enable} disabled>
+
+</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azHub.azHubName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azHub.deviceID}</td>
+{#if azHub.attestation == 0}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">SAS</td> 
+{:else if azHub.attestation ==1}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">X509 Certificate</td>  
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>  
+{/if}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azHub.modelID}</td>
+
+</tr>
+
+{:else}
     <TableBodyRow>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">
+
+      <TableBodyCell class="!p-4 w-10">
+
+      </TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyAZhub(index)}>
 
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 
@@ -994,12 +1259,18 @@
 
 
        </TableBodyCell>
-               <TableBodyCell class="!p-1">  </TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteAzHub(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 
-               <TableBodyCell class="w-4"><input type="checkbox"  bind:checked={azHub.enable}></TableBodyCell>
+               <TableBodyCell class="w-10"><input type="checkbox"  bind:checked={azHub.enable}></TableBodyCell>
 
-      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{azHub.azHubName}</TableBodyCell>
        <TableBodyCell class="w-18">{azHub.deviceID}</TableBodyCell>
 {#if azHub.attestation == 0}
@@ -1014,12 +1285,15 @@
      
        <TableBodyCell class="w-18">{azHub.modelID}</TableBodyCell>
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
 
  <TableBodyRow>
-    <TableBodyCell class="!p-1">
+    <TableBodyCell class="!p-4 w-10">
 
 {#if getDataReady == 1}
 {#if changed_azure_data.config.cloud_azHub_profile.length < 10}
@@ -1033,23 +1307,18 @@
 {/if} 
 {/if} 
 </TableBodyCell>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-    <TableBodyCell class="!p-1"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
-    <TableBodyCell class="w-4"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4"></TableBodyCell>
+    <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
-       <TableBodyCell class="w-18"></TableBodyCell>
+         <TableBodyCell class="w-18"></TableBodyCell>
 </TableBodyRow>
 
 <tr class="pt-5">
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
     <td></td>
     <td></td>
     <td></td>
@@ -1356,14 +1625,14 @@
 
  <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
-  <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-      <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-      <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell class="!p-1">No</TableHeadCell>
+    <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">ID Scope</TableHeadCell>
     <TableHeadCell class="w-18">Registration ID</TableHeadCell> 
     <TableHeadCell class="w-18">Enrollment</TableHeadCell>  
@@ -1376,13 +1645,78 @@
 {#if getDataReady == 1}
 {#each changed_azure_data.config.cloud_azDPS_profile as azDPS, index}
 
+{#if azDPS.delete}
 
+
+    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteAzHubDPS(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={azDPS.enable} disabled>
+
+</td>
+
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> {index+1}</td>
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"> {azDPS.idScope}</td>
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"> {azDPS.RegistrationID}</td>
+
+{#if azDPS.enrollment == 0}
+ <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Individual</td>
+{:else if azDPS.enrollment ==1}
+ <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Group</td>
+{:else}
+ <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
+{/if}
+
+{#if azDPS.attestation == 0}
+ <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">SAS</td>
+{:else if azDPS.attestation ==1}
+ <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">X509 Certificate</td>
+{:else}
+ <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
+{/if}
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azDPS.modelID}</td>
+
+</tr>
+
+
+{:else}
     <TableBodyRow>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">
+      <TableBodyCell class="!p-4 w-10">
+
+      </TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyAZhubDPS(index)}>
 
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 
@@ -1391,12 +1725,16 @@
 
 
        </TableBodyCell>
-               <TableBodyCell class="!p-1">  </TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteAZhubDPS(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+               <TableBodyCell class="w-10"><input type="checkbox"  bind:checked={azDPS.enable}></TableBodyCell>
 
-
-               <TableBodyCell class="w-4"><input type="checkbox"  bind:checked={azDPS.enable}></TableBodyCell>
-
-      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{azDPS.idScope}</TableBodyCell>
        <TableBodyCell class="w-18">{azDPS.RegistrationID}</TableBodyCell>
 
@@ -1419,12 +1757,16 @@
 
   <TableBodyCell class="w-18">{azDPS.modelID}</TableBodyCell>
     </TableBodyRow>
+
+{/if}
+
+
 {/each}
 {/if}
 
 
  <TableBodyRow>
-    <TableBodyCell class="!p-1">
+    <TableBodyCell class="!p-4 w-10">
 
 {#if getDataReady == 1}
 {#if changed_azure_data.config.cloud_azDPS_profile.length < 10}
@@ -1438,11 +1780,11 @@
 {/if} 
 {/if} 
 </TableBodyCell>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-    <TableBodyCell class="!p-1"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
-    <TableBodyCell class="w-4"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4"></TableBodyCell>
+    <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
@@ -1820,14 +2162,14 @@
 
  <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
-  <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-      <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4">
     </TableHeadCell>
-      <TableHeadCell class="!p-1">
+    <TableHeadCell class="!p-4 w-4">
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell class="!p-1">No</TableHeadCell>
+    <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Application Name</TableHeadCell>  
     <TableHeadCell class="w-18">ID Scope</TableHeadCell>
     <TableHeadCell class="w-18">Device ID</TableHeadCell>
@@ -1840,13 +2182,78 @@
 {#if getDataReady == 1}
 {#each changed_azure_data.config.cloud_azCentral_profile as azCentral, index}
 
+{#if azCentral.delete}
+ <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteAZCentral(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={azCentral.enable} disabled>
+
+      </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azCentral.applicationName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azCentral.idScope}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azCentral.deviceID}</td>
+
+{#if azCentral.enrollment == 0}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Individual</td>
+{:else if azCentral.enrollment ==1}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Group</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
+{/if}
+
+{#if azCentral.attestation == 0}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">SAS</td>
+{:else if azCentral.attestation ==1}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">X509 Certificate</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
+{/if}
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azCentral.modelID}</td>
+
+
+      </tr>
+
+{:else}
 
     <TableBodyRow>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">
+      <TableBodyCell class="!p-4 w-10">
+
+      </TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyAZCentral(index)}>
 
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
 
@@ -1855,12 +2262,17 @@
 
 
        </TableBodyCell>
-               <TableBodyCell class="!p-1">  </TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteAZCentral(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
+               <TableBodyCell class="w-10"><input type="checkbox"  bind:checked={azCentral.enable}></TableBodyCell>
 
-               <TableBodyCell class="w-4"><input type="checkbox"  bind:checked={azCentral.enable}></TableBodyCell>
-
-      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
+      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{azCentral.applicationName}</TableBodyCell>
       <TableBodyCell class="w-18">{azCentral.idScope}</TableBodyCell>
        <TableBodyCell class="w-18">{azCentral.deviceID}</TableBodyCell>
@@ -1884,12 +2296,15 @@
 
  <TableBodyCell class="w-18">{azCentral.modelID}</TableBodyCell>
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
 
  <TableBodyRow>
-    <TableBodyCell class="!p-1">
+    <TableBodyCell class="!p-4 w-10">
 
 {#if getDataReady == 1}
 {#if changed_azure_data.config.cloud_azCentral_profile.length < 10}
@@ -1903,15 +2318,19 @@
 {/if} 
 {/if} 
 </TableBodyCell>
-    <TableBodyCell class="!p-1"></TableBodyCell>
-    <TableBodyCell class="!p-1"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
-    <TableBodyCell class="w-4"></TableBodyCell>
-      <TableBodyCell class="!p-1 w-4"></TableBodyCell>
+    <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
    <TableBodyCell class="w-18"></TableBodyCell>
+
+       <TableBodyCell class="w-18"></TableBodyCell>
+   <TableBodyCell class="w-18"></TableBodyCell>
+
 </TableBodyRow>
 
 <tr class="pt-5">
@@ -1927,9 +2346,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+
     <td class="pl-10"><Button color="blue" pill={true} on:click={saveAzCentral}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>

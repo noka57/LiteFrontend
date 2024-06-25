@@ -3237,10 +3237,20 @@
             {
                let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length-saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length;
 
+               for (let k=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length; k < changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length; k++)
+               {
+                if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess[k].delete)
+                {
+                  addedCount--;
+                }
+               }
 
-              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Remote Network Access";
+              if (addedCount > 0)
+              {
+                let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Remote Network Access";
             
-              openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+                openvpn_client_advanced_rna_changedValues=[...openvpn_client_advanced_rna_changedValues, changedstr];
+              }
 
               for (let i=0;i<saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].remoteNetworkAccess.length;i++)
               {
@@ -3399,10 +3409,20 @@
           {
             let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length-saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;
 
+            for (let k = saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length; k < changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length; k++)
+            {
+              if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver[k].delete)
+              {
+                addedCount--;
+              }
+            }
 
+            if (addedCount > 0)
+            {
               let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Failover";
             
               openvpn_client_advanced_fo_changedValues=[...openvpn_client_advanced_fo_changedValues, changedstr];
+            }
 
               for (let i=0;i<saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].failOver.length;i++)
               {
@@ -3573,9 +3593,20 @@
 
             let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length-saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length;
 
-            let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Port Forwarding";
+            for (let k=saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length; k < changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length; k++)
+            {
+              if (changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding[k].delete)
+              {
+                addedCount--;
+              }
+            }
+
+            if (addedCount > 0)
+            {
+              let changedstr=changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].name+ " add "+addedCount+" item(s) to Port Forwarding";
                 
-            openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
+              openvpn_client_advanced_pfw_changedValues=[...openvpn_client_advanced_pfw_changedValues, changedstr];
+            }
 
             for (let i=0;i<saved_changed_openvpn_data.config.vpn_openvpn_client_connection[Advanced_Client_Index_Selected].portForwarding.length;i++)
             {
@@ -3739,10 +3770,21 @@
         if (changed_openvpn_data.config.vpn_openvpn_client_connection.length > openvpn_data.config.vpn_openvpn_client_connection.length) 
         {
           let addedCount=changed_openvpn_data.config.vpn_openvpn_client_connection.length-openvpn_data.config.vpn_openvpn_client_connection.length;
-          let changedstr="Add "+addedCount+" item(s) to Client Connection";
-          
-          openvpn_client_conn_changedValues=[...openvpn_client_conn_changedValues, changedstr];
 
+          for (let k=openvpn_data.config.vpn_openvpn_client_connection.length; k < changed_openvpn_data.config.vpn_openvpn_client_connection.length; k++)
+          {
+            if (changed_openvpn_data.config.vpn_openvpn_client_connection[k].delete)
+            {
+              addedCount--;
+            }
+          }
+
+          if (addedCount > 0)
+          {
+            let changedstr="Add "+addedCount+" item(s) to Client Connection";
+          
+            openvpn_client_conn_changedValues=[...openvpn_client_conn_changedValues, changedstr];
+          }
         }
 
 
@@ -4078,9 +4120,20 @@
             if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length > openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length) 
             {
               let addedCount=changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length-openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length;
-              let changedstr="Add "+addedCount+" item(s) to Client Certificate Common Name";
-              openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
 
+              for (let k=openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length;k < changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name.length; k++)
+              {
+                if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name[k].delete)
+                {
+                  addedCount--;
+                }
+              }
+
+              if (addedCount > 0)
+              {
+                let changedstr="Add "+addedCount+" item(s) to Client Certificate Common Name";
+                openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+              }
 
               //saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_certificate_common_name))
 
@@ -4162,9 +4215,20 @@
             if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length > openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length) 
             {
               let addedCount=changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length-openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length;
-              let changedstr="Add "+addedCount+" item(s) to Client Account/Password";
-              openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
-            
+
+              for (let k= openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length; k < changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password.length; k++)
+              {
+                if (changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password[k].delete)
+                {
+                  addedCount--;
+                }
+              }
+
+              if (addedCount > 0)
+              {
+                let changedstr="Add "+addedCount+" item(s) to Client Account/Password";
+                openvpn_server_conn_changedValues=[...openvpn_server_conn_changedValues, changedstr];
+              }
 
               //saved_changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_server_connection.client_account_password));
 
@@ -4232,9 +4296,21 @@
       if (changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length > openvpn_data.config.vpn_openvpn_server_advanced.ccd.length) 
       {
         let addedCount=changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length-openvpn_data.config.vpn_openvpn_server_advanced.ccd.length;
-        let changedstr="Add "+addedCount+" item(s) to CCD";
-        
-        openvpn_server_advanced_ccd_changedValues=[...openvpn_server_advanced_ccd_changedValues, changedstr];
+
+        for (let k=openvpn_data.config.vpn_openvpn_server_advanced.ccd.length; k < changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd.length; k++)
+        {
+          if (changed_openvpn_data.config.vpn_openvpn_server_advanced.ccd[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+
+        if (addedCount > 0)
+        {
+          let changedstr="Add "+addedCount+" item(s) to CCD";
+          openvpn_server_advanced_ccd_changedValues=[...openvpn_server_advanced_ccd_changedValues, changedstr];
+        }
       }
 
 
@@ -4407,9 +4483,21 @@
       if (changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length > openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length) 
       {
         let addedCount=changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length-openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length;
-        let changedstr="Add "+addedCount+" item(s) to PFW";
+
+        for (let k=openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length; k < changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding.length; k++)
+        {
+          if (changed_openvpn_data.config.vpn_openvpn_server_advanced.portForwarding[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        {
+          let changedstr="Add "+addedCount+" item(s) to PFW";
         
-        openvpn_server_advanced_pfw_changedValues=[...openvpn_server_advanced_pfw_changedValues, changedstr];
+          openvpn_server_advanced_pfw_changedValues=[...openvpn_server_advanced_pfw_changedValues, changedstr];
+        }
       }
 
 

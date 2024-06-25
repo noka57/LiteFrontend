@@ -77,18 +77,31 @@
             if (obj1[key].length > obj2[key].length) 
             {
               let addedCount=obj1[key].length-obj2[key].length;
-              let changedstr="Add "+addedCount+" item(s) to "+ key;
-              if (type == 2)
+
+              for (let j=obj2[key].length; j <obj1[key].length; j++)
               {
-                macfilter_changedValues=[...macfilter_changedValues, changedstr];
+                if (obj1[key][j]["delete"])
+                {
+                  addedCount--;
+                }
+
               }
-              else if (type == 1)
+
+              if (addedCount > 0)
               {
-                ipfilter_changedValues=[...ipfilter_changedValues, changedstr];
-              }
-              else if (type == 0)
-              {
-                general_changedValues=[...general_changedValues, changedstr]; 
+                let changedstr="Add "+addedCount+" item(s) to "+ key;
+                if (type == 2)
+                {
+                  macfilter_changedValues=[...macfilter_changedValues, changedstr];
+                }
+                else if (type == 1)
+                {
+                  ipfilter_changedValues=[...ipfilter_changedValues, changedstr];
+                }
+                else if (type == 0)
+                {
+                  general_changedValues=[...general_changedValues, changedstr]; 
+                }
               }
             }
             else if (obj1[key].length < obj2[key].length)

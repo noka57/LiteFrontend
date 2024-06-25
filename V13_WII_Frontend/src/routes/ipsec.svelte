@@ -231,7 +231,23 @@ let RemoteCAList = [
         compareObjects(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn, ipsec_data.config.vpn_ipsec_connection.responder_conn,1,0,0,"");
         IPsec_Responder_Conn_ConfigChangedLog.set(responder_conn_changedValues);
 
+
+
         saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn=JSON.parse(JSON.stringify(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn));
+
+
+        let tempForDelete=[];
+        for (let i = 0; i< changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet.length; i++)
+        {
+          if (!changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[i].delete)
+          {
+            tempForDelete=[...tempForDelete, changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[i]]
+          }
+
+        }
+
+        saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet=JSON.parse(JSON.stringify(tempForDelete));
+        changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet=JSON.parse(JSON.stringify(tempForDelete));
         ChangedIPsecConfig.set(saved_changed_ipsec_data);
     
         console.log(responder_conn_changedValues);
@@ -832,6 +848,16 @@ let RemoteCAList = [
     }
     ];
 
+    function RestoreDeleteResponderConnSubnet(index)
+    {
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].delete=false
+    }
+
+
+    function deleteResponderConnSubnet(index)
+    {
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].delete=true;
+    }
 
 
     function modalTriggerResponderConnSubnet(index){
@@ -2706,7 +2732,7 @@ Remote Subnet
     </TableHeadCell>
 
     <TableHeadCell class="w-10">Enable</TableHeadCell>    
-    <TableHeadCell class="w-8">No</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
     <TableHeadCell class="w-18">Local Subnet</TableHeadCell>
     <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
 
@@ -2714,13 +2740,56 @@ Remote Subnet
   <TableBody>
 {#each changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet as tunnelSubnet, index}
 
+{#if tunnelSubnet.delete}
+ <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteResponderConnSubnet(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={tunnelSubnet.enable} disabled>
+
+      </td>
+
+
+                    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{tunnelSubnet.local_subnet}</td>
+                    <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{tunnelSubnet.remote_subnet}</td>
+
+      </tr>
+
+{:else}
 
     <TableBodyRow>
           
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => modalTriggerResponderConnSubnet(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
@@ -2728,22 +2797,29 @@ Remote Subnet
 
        </TableBodyCell>
 
-       <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteResponderConnSubnet(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
                     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={tunnelSubnet.enable}>
 
                     </TableBodyCell>
-                    <TableBodyCell class="w-8">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-10">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{tunnelSubnet.local_subnet}</TableBodyCell>
                     <TableBodyCell class="w-18">{tunnelSubnet.remote_subnet}</TableBodyCell>
 
-                    <TableBodyCell class="w-18"></TableBodyCell>
-                    <TableBodyCell class="w-10"></TableBodyCell>
 
     </TableBodyRow>
+
+{/if}
+
 {/each}
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-8">
+      <TableBodyCell class="!p-4 w-10">
 {#if changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet.length < 10}  
 <button on:click={() => NewRCS_Item_Invoker(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
@@ -2755,15 +2831,14 @@ Remote Subnet
 
 
        </TableBodyCell>
-       <TableBodyCell class="!p-4"></TableBodyCell>
-       <TableBodyCell class="!p-4"></TableBodyCell>
+       <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+       <TableBodyCell class="!p-0 w-10"></TableBodyCell>
                     <TableBodyCell class="w-10"></TableBodyCell>
 
-                    <TableBodyCell class="w-8"></TableBodyCell>
-                    <TableBodyCell class="w-18"></TableBodyCell>
-                    <TableBodyCell class="w-18"></TableBodyCell>
-                    <TableBodyCell class="w-18"></TableBodyCell>
                     <TableBodyCell class="w-10"></TableBodyCell>
+                    <TableBodyCell class="w-18"></TableBodyCell>
+                    <TableBodyCell class="w-18"></TableBodyCell>
+
     </TableBodyRow>
 
 

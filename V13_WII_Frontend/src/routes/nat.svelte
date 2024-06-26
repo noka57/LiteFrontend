@@ -771,7 +771,7 @@
 
 {#if PFW.delete}
 
-    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
 
 <td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
 <button on:click={() => RestoreDelete(index)}>
@@ -898,9 +898,6 @@
 {/if}
 
 <TableBodyRow>
-
-
- 
 
       <TableBodyCell class="!p-4 w-10">     
 {#if getDataReady == 1}

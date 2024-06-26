@@ -393,6 +393,15 @@
       userDefineedData:""
     };
 
+    function deletePE(index)
+    {
+      changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].delete=true;
+    }
+
+    function RestoreDeletePE(index)
+    {
+      changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].delete=false; 
+    }
 
 
     function TriggerModifyProxyEdge(index)
@@ -602,6 +611,15 @@
       new_monitor_edge_modal=false;
     }
 
+    function deleteME(index)
+    {
+      changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].delete=true;
+    }
+
+    function RestoreDeleteME(index)
+    {
+      changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].delete=false;
+    }
 
 
     function TriggerModifyMonitorEdge(index)
@@ -804,22 +822,35 @@
               if (obj1[key].length > obj2[key].length) 
               {
                 let addedCount=obj1[key].length-obj2[key].length;
-                let changedstr="Add "+addedCount+" item(s) to "+ key;
-                if (type == 3)
+                for (let j=obj2[key].length; j <obj1[key].length; j++)
                 {
-                  sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                  if (obj1[key][j]["delete"])
+                  {
+                    addedCount--;
+                  }
+
                 }
-                else if (type == 2)
+
+                if (addedCount >0)
                 {
-                  sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                }
-                else if (type == 1)
-                {
-                  sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-                }
-                else if (type == 0)
-                {
-                  sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+
+                  let changedstr="Add "+addedCount+" item(s) to "+ key;
+                  if (type == 3)
+                  {
+                    sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                  }
+                  else if (type == 2)
+                  {
+                    sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+                  }
+                  else if (type == 1)
+                  {
+                    sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+                  }
+                  else if (type == 0)
+                  {
+                    sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                  }
                 }
               }
               else if (obj1[key].length < obj2[key].length)
@@ -926,13 +957,43 @@
         if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length > sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length)
         {
           let addedCount=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length-sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;
-          let changedstr="Add "+addedCount+" item(s) to Proxy Mode Edge Data List";
-          sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr];
+
+          for (let k=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length; k < changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;k++)
+          {
+            if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[k].delete)
+            {
+              addedCount--;
+            }
+
+          }
+
+          if (addedCount > 0)
+          {
+            let changedstr="Add "+addedCount+" item(s) to Proxy Mode Edge Data List";
+            sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr];
+          }
         }
 
 
         SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData));
+        
+
+        let tempForDelete=[];
+        for (let i = 0; i< changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length; i++)
+        {
+          if (!changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[i].delete)
+          {
+            tempForDelete=[...tempForDelete, changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[i]]
+          }
+        }
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData=JSON.parse(JSON.stringify(tempForDelete));
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData=JSON.parse(JSON.stringify(tempForDelete));
+
+
+
+
+       // saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData));
 
         ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
         console.log(sdata_logger_proxy_edge_changedValues);    
@@ -1022,13 +1083,43 @@
         if (changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length > sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length)
         {
           let addedCount=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length-sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;
-          let changedstr="Add "+addedCount+" item(s) to Monitor Mode Edge Data List";
-          sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+
+          for (let k=sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;k < changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length; k++)
+          {
+            if (changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[k].delete)
+            {
+              addedCount--;
+            }
+          }
+
+          if (addedCount > 0)
+          {
+            let changedstr="Add "+addedCount+" item(s) to Monitor Mode Edge Data List";
+            sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+          }
         }
 
 
         SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData));
+        
+
+        let tempForDelete=[];
+        for (let i = 0; i< changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length; i++)
+        {
+          if (!changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[i].delete)
+          {
+            tempForDelete=[...tempForDelete, changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[i]]
+          }
+
+        }
+
+
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData=JSON.parse(JSON.stringify(tempForDelete));
+        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData=JSON.parse(JSON.stringify(tempForDelete));
+
+
+
+        //saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData));
 
         ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
         console.log(sdata_logger_monitor_edge_changedValues);    
@@ -1418,17 +1509,112 @@
 {#if getDataReady == 1}
 {#each changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData as ProxyEdgeData, index}
 
+{#if ProxyEdgeData.delete}
+
+  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeletePE(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={ProxyEdgeData.enable} disabled>
+      </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{ProxyEdgeData.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{ProxyEdgeData.modbusDataModel}</td>
+{#if ProxyEdgeData.dataType == 1}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
+{:else if ProxyEdgeData.dataType == 2}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Short</td>
+{:else if ProxyEdgeData.dataType == 3}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Short</td>
+{:else if ProxyEdgeData.dataType == 4}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Integer</td>
+{:else if ProxyEdgeData.dataType == 5}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Integer</td>
+{:else if ProxyEdgeData.dataType == 6}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
+{:else if ProxyEdgeData.dataType == 7}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
+{/if}
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
+{#if ProxyEdgeData.postprocessing == 1}+
+{:else if ProxyEdgeData.postprocessing == 2}-
+{:else if ProxyEdgeData.postprocessing == 3}*
+{:else if ProxyEdgeData.postprocessing == 4}/
+{/if}
+{ProxyEdgeData.postprocessingValue}
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
+  {#if ProxyEdgeData.postprocessedDisplay == 0}Hexadecimal
+{:else if ProxyEdgeData.postprocessedDisplay == 1}Decimal
+{:else if ProxyEdgeData.postprocessedDisplay == 2}Binary
+{/if}  
+       
+
+       </td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-36 strikeout">{#if ProxyEdgeData.dataLogFormat==0}<div class="flex gap-2">
+      Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg></div>
+<Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip>
+
+{:else if ProxyEdgeData.dataLogFormat==1}User Defined{/if}
+</td>
+    
+
+
+
+</tr>
+
+{:else}
+
     <TableBodyRow>
- <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+ <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyProxyEdge(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deletePE(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={ProxyEdgeData.enable}>
@@ -1485,26 +1671,31 @@
 
 
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
 
   <TableBodyRow>
- <TableBodyCell class="!p-4">
+
 {#if getDataReady == 1}
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length < 10}
+ <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_proxy_edge_trigger(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-{/if}
-{/if}
  </TableBodyCell>
+ {:else}
+ <TableBodyCell class="!p-4 w-16"> </TableBodyCell>
+{/if}
+{/if}
+
       <TableBodyCell class="!p-4">
-
-
 
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
@@ -1518,6 +1709,7 @@
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-36"></TableBodyCell>      
     </TableBodyRow>
 
 
@@ -1531,9 +1723,7 @@
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+
     <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveProxyEdgeData}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
@@ -2147,17 +2337,102 @@
 {#if getDataReady == 1}
 {#each changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData as MonitorEdgeData, index}
 
+{#if MonitorEdgeData.delete}
+
+  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteME(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={MonitorEdgeData.enable} disabled>
+
+      </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"> {MonitorEdgeData.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MonitorEdgeData.modbusDataModel}</td>
+{#if MonitorEdgeData.dataType == 1}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
+{:else if MonitorEdgeData.dataType == 2}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Short</td>
+{:else if MonitorEdgeData.dataType == 3}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Short</td>
+{:else if MonitorEdgeData.dataType == 4}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Integer</td>
+{:else if MonitorEdgeData.dataType == 5}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Integer</td>
+{:else if MonitorEdgeData.dataType == 6}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
+{:else if MonitorEdgeData.dataType == 7}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
+{/if}
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
+  {#if MonitorEdgeData.display == 0}Hexadecimal
+{:else if MonitorEdgeData.display == 1}Decimal
+{:else if MonitorEdgeData.display == 2}Binary
+{/if}  
+       
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{#if MonitorEdgeData.dataLogFormat==0}<div class="flex gap-2">
+      Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg></div>
+<Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,&quot;Content&quot;:[&quot;ModbusReq&quot;:$MODBUSREQ$,&quot;ModbusResp&quot;:$MODBUSRESP$]&#125;</Tooltip>
+
+{:else if MonitorEdgeData.dataLogFormat==1}User Defined{/if}
+</td>
+
+
+      </tr>
+{:else}
+
     <TableBodyRow>
- <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+ <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyMonitorEdge(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteME(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={MonitorEdgeData.enable}>
@@ -2195,8 +2470,8 @@
        
 
        </TableBodyCell>
-      <TableBodyCell class="w-18">{#if MonitorEdgeData.dataLogFormat==0}<div class="flex gap-2">
-      Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<TableBodyCell class="w-18">{#if MonitorEdgeData.dataLogFormat==0}<div class="flex gap-2">
+      Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg></div>
 <Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,&quot;Content&quot;:[&quot;ModbusReq&quot;:$MODBUSREQ$,&quot;ModbusResp&quot;:$MODBUSRESP$]&#125;</Tooltip>
@@ -2204,23 +2479,29 @@
 {:else if MonitorEdgeData.dataLogFormat==1}User Defined{/if}
 </TableBodyCell>
     
-
-
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
   <TableBodyRow>
- <TableBodyCell class="!p-4">
+
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length < 10}
+ <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_monitor_edge_trigger(changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-{/if}
  </TableBodyCell>
+{:else}
+
+ <TableBodyCell class="!p-4 w-16"> </TableBodyCell>
+{/if}
+
       <TableBodyCell class="!p-4">
 
 
@@ -2243,8 +2524,6 @@
   <tr>
     <td></td>
     <td></td>
-        <td></td>
-        <td></td>
         <td></td>
         <td></td>
         <td></td>

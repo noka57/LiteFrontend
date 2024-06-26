@@ -276,67 +276,80 @@
             if (obj1[key].length > obj2[key].length) 
             {
               let addedCount=obj1[key].length-obj2[key].length;
-              let changedstr="Add "+addedCount+" item(s) to "+ key;
+              for (let j=obj2[key].length; j <obj1[key].length; j++)
+              {
+                if (obj1[key][j]["delete"])
+                {
+                  addedCount--;
+                }
 
-              if (type == 0)
-              {
-                event_engine_trigger_sms_changeValues=[...event_engine_trigger_sms_changeValues, changedstr];
               }
-              else if (type == 1)
+
+              if (addedCount > 0)
               {
-                event_engine_trigger_di_changeValues=[...event_engine_trigger_di_changeValues, changedstr];
-              }
-              else if (type == 2)
-              {
-                event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];   
-              }
-              else if (type == 3)
-              {
-                event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];
-              }
-              else if (type == 4)
-              {
-                event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
-              }
-              else if (type == 5)
-              {
-                event_engine_action_sms_changeValues=[...event_engine_action_sms_changeValues, changedstr];
-              }
-              else if (type == 6)
-              {
-                event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
-              }
-              else if (type == 7)
-              {
-                event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
-              }
-              else if (type == 8)
-              {
-                 event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues,changedstr];
-              }
-              else if (type == 9)
-              {
-                 event_engine_action_tcpmsg_changeValues=[...event_engine_action_tcpmsg_changeValues,changedstr];
-              }
-              else if (type == 10)
-              {
-                 event_engine_action_mqtt_changeValues=[...event_engine_action_mqtt_changeValues,changedstr];
-              }
-              else if (type == 11)
-              {
-                 event_engine_action_line_changeValues=[...event_engine_action_line_changeValues,changedstr];
-              }
-              else if (type == 12)
-              {
-                 event_engine_trigger_ping_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
-              }
-              else if (type == 13)
-              { 
-                event_engine_rule_changedValues=[...event_engine_rule_changedValues, changedstr];
-              }
-              else if (type ==14)
-              {
-                event_engine_trigger_rssi_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+                let changedstr="Add "+addedCount+" item(s) to "+ key;
+
+                if (type == 0)
+                {
+                  event_engine_trigger_sms_changeValues=[...event_engine_trigger_sms_changeValues, changedstr];
+                }
+                else if (type == 1)
+                {
+                  event_engine_trigger_di_changeValues=[...event_engine_trigger_di_changeValues, changedstr];
+                }
+                else if (type == 2)
+                {
+                  event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];   
+                }
+                else if (type == 3)
+                {
+                  event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];
+                }
+                else if (type == 4)
+                {
+                  event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
+                }
+                else if (type == 5)
+                {
+                  event_engine_action_sms_changeValues=[...event_engine_action_sms_changeValues, changedstr];
+                }
+                else if (type == 6)
+                {
+                  event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+                }
+                else if (type == 7)
+                {
+                  event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
+                }
+                else if (type == 8)
+                {
+                   event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues,changedstr];
+                }
+                else if (type == 9)
+                {
+                   event_engine_action_tcpmsg_changeValues=[...event_engine_action_tcpmsg_changeValues,changedstr];
+                }
+                else if (type == 10)
+                {
+                   event_engine_action_mqtt_changeValues=[...event_engine_action_mqtt_changeValues,changedstr];
+                }
+                else if (type == 11)
+                {
+                   event_engine_action_line_changeValues=[...event_engine_action_line_changeValues,changedstr];
+                }
+                else if (type == 12)
+                {
+                   event_engine_trigger_ping_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+                }
+                else if (type == 13)
+                { 
+                  event_engine_rule_changedValues=[...event_engine_rule_changedValues, changedstr];
+                }
+                else if (type ==14)
+                {
+                  event_engine_trigger_rssi_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+                }
+
               } 
 
             }
@@ -507,8 +520,20 @@
       if (changed_event_engine_data.config.service_eventEngine_ruleSettings.length > event_engine_data.config.service_eventEngine_ruleSettings.length)
       {
         let addedCount=changed_event_engine_data.config.service_eventEngine_ruleSettings.length-event_engine_data.config.service_eventEngine_ruleSettings.length;
-        let changedstr="Add "+addedCount+" item(s) to Rule List";
-        event_engine_rule_changedValues=[...event_engine_rule_changedValues, changedstr];
+
+        for (let k=event_engine_data.config.service_eventEngine_ruleSettings.length; k < changed_event_engine_data.config.service_eventEngine_ruleSettings.length; k++)
+        {
+          if (changed_event_engine_data.config.service_eventEngine_ruleSettings[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        {
+          let changedstr="Add "+addedCount+" item(s) to Rule List";
+          event_engine_rule_changedValues=[...event_engine_rule_changedValues, changedstr];
+        }
       }
 
       saved_changed_event_engine_data.config.service_eventEngine_ruleSettings=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_ruleSettings));
@@ -559,11 +584,38 @@
       if (changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length > event_engine_data.config.service_eventEngine_triggerProfile.sms.length)
       {
         let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length-event_engine_data.config.service_eventEngine_triggerProfile.sms.length;
-        let changedstr="Add "+addedCount+" item(s) to SMS Trigger List";
-        event_engine_trigger_sms_changeValues=[...event_engine_trigger_sms_changeValues, changedstr];
+
+        for (let k=event_engine_data.config.service_eventEngine_triggerProfile.sms.length; k<changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length;k++)
+        {
+          if (changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        {
+          let changedstr="Add "+addedCount+" item(s) to SMS Trigger List";
+          event_engine_trigger_sms_changeValues=[...event_engine_trigger_sms_changeValues, changedstr];
+        }
       }
 
-      saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.sms));
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_triggerProfile.sms=JSON.parse(JSON.stringify(tempForDelete));
+
+
+     // saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.sms=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.sms));
 
       EventEngine_TriggerSMS_ConfigChangedLog.set(event_engine_trigger_sms_changeValues);
       ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -588,8 +640,20 @@
     if (changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length > event_engine_data.config.service_eventEngine_triggerProfile.di.length)
     {
       let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length-event_engine_data.config.service_eventEngine_triggerProfile.di.length;
-      let changedstr="Add "+addedCount+" item(s) to DI Trigger List";
-      event_engine_trigger_di_changeValues=[...event_engine_trigger_di_changeValues, changedstr];
+
+      for (let k=event_engine_data.config.service_eventEngine_triggerProfile.di.length; k<changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length;k++)
+      {
+          if (changed_event_engine_data.config.service_eventEngine_triggerProfile.di[k].delete)
+          {
+            addedCount--;
+          }
+      }
+
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to DI Trigger List";
+        event_engine_trigger_di_changeValues=[...event_engine_trigger_di_changeValues, changedstr];
+      }
     }
 
     saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.di=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.di));
@@ -618,11 +682,39 @@
     if (changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length > event_engine_data.config.service_eventEngine_triggerProfile.modbus.length)
     {
       let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length-event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;
-      let changedstr="Add "+addedCount+" item(s) to Modbus Trigger List";
-      event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];
+
+      for (let k=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length; k<changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;k++)
+      {
+          if (changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[k].delete)
+          {
+            addedCount--;
+          }
+      }
+
+      if (addedCount > 0)
+      {      
+        let changedstr="Add "+addedCount+" item(s) to Modbus Trigger List";
+        event_engine_trigger_modbus_changeValues=[...event_engine_trigger_modbus_changeValues, changedstr];
+      }
     }
 
-    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus));
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus=JSON.parse(JSON.stringify(tempForDelete));
+
+
+
+    //saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus));
 
     EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
     ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -648,11 +740,39 @@
     if (changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length > event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length)
     {
       let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length-event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length;
-      let changedstr="Add "+addedCount+" item(s) to TCP Message Trigger List";
-      event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];
+
+      for (let k=event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length; k<changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length;k++)
+      {
+          if (changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[k].delete)
+          {
+            addedCount--;
+          }
+      }
+
+      if (addedCount > 0)
+      {  
+        let changedstr="Add "+addedCount+" item(s) to TCP Message Trigger List";
+        event_engine_trigger_tcpmsg_changeValues=[...event_engine_trigger_tcpmsg_changeValues, changedstr];
+      }
     }
 
-    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage));
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage=JSON.parse(JSON.stringify(tempForDelete));
+
+
+
+    //saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage));
 
     EventEngine_TriggerTCPMsg_ConfigChangedLog.set(event_engine_trigger_tcpmsg_changeValues);
     ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -677,11 +797,39 @@
     if (changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length > event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length)
     {
       let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length-event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length;
-      let changedstr="Add "+addedCount+" item(s) to MQTT Trigger List";
-      event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
+      
+      for (let k=event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length; k<changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length;k++)
+      {
+          if (changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[k].delete)
+          {
+            addedCount--;
+          }
+      }
+
+      if (addedCount > 0)
+      {  
+        let changedstr="Add "+addedCount+" item(s) to MQTT Trigger List";
+        event_engine_trigger_mqtt_changeValues=[...event_engine_trigger_mqtt_changeValues, changedstr];
+      }
     }
 
-    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification));
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length; i++)
+    {
+      if (!changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[i]]
+      }
+
+    }
+
+    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification=JSON.parse(JSON.stringify(tempForDelete));
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification=JSON.parse(JSON.stringify(tempForDelete));
+
+
+
+   // saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification));
 
     EventEngine_TriggerMQTT_ConfigChangedLog.set(event_engine_trigger_mqtt_changeValues);
     ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -707,11 +855,38 @@
     if (changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length > event_engine_data.config.service_eventEngine_triggerProfile.ping.length)
     {
       let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length-event_engine_data.config.service_eventEngine_triggerProfile.ping.length;
-      let changedstr="Add "+addedCount+" item(s) to PING Trigger List";
-      event_engine_trigger_ping_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+
+
+      for (let k=event_engine_data.config.service_eventEngine_triggerProfile.ping.length; k<changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length;k++)
+      {
+          if (changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[k].delete)
+          {
+            addedCount--;
+          }
+      }
+
+      if (addedCount > 0)
+      {  
+        let changedstr="Add "+addedCount+" item(s) to PING Trigger List";
+        event_engine_trigger_ping_changeValues=[...event_engine_trigger_ping_changeValues, changedstr];
+      }
     }
 
-    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.ping=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.ping));
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length; i++)
+    {
+      if (!changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[i]]
+      }
+
+    }
+
+    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.ping=JSON.parse(JSON.stringify(tempForDelete));
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping=JSON.parse(JSON.stringify(tempForDelete));
+
+    //saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.ping=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.ping));
 
     EventEngine_TriggerPING_ConfigChangedLog.set(event_engine_trigger_ping_changeValues);
     ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -737,11 +912,39 @@
     if (changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length > event_engine_data.config.service_eventEngine_triggerProfile.rssi.length)
     {
       let addedCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length-event_engine_data.config.service_eventEngine_triggerProfile.rssi.length;
-      let changedstr="Add "+addedCount+" item(s) to RSSI Trigger List";
-      event_engine_trigger_rssi_changeValues=[...event_engine_trigger_rssi_changeValues, changedstr];
+
+
+      for (let k=event_engine_data.config.service_eventEngine_triggerProfile.rssi.length; k<changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length;k++)
+      {
+          if (changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[k].delete)
+          {
+            addedCount--;
+          }
+      }
+
+      if (addedCount > 0)
+      {  
+        let changedstr="Add "+addedCount+" item(s) to RSSI Trigger List";
+        event_engine_trigger_rssi_changeValues=[...event_engine_trigger_rssi_changeValues, changedstr];
+      }
     }
 
-    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi));
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length; i++)
+    {
+      if (!changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[i]]
+      }
+
+    }
+
+    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi=JSON.parse(JSON.stringify(tempForDelete));
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi=JSON.parse(JSON.stringify(tempForDelete));
+
+
+    //saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi));
 
     EventEngine_TriggerRSSI_ConfigChangedLog.set(event_engine_trigger_rssi_changeValues);
     ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -767,11 +970,38 @@
       if (changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length > event_engine_data.config.service_eventEngine_actionProfile.sms.length)
       {
         let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length-event_engine_data.config.service_eventEngine_actionProfile.sms.length;
-        let changedstr="Add "+addedCount+" item(s) to SMS Action List";
-        event_engine_action_sms_changeValues=[...event_engine_action_sms_changeValues, changedstr];
+
+
+        for (let k=event_engine_data.config.service_eventEngine_actionProfile.sms.length; k<changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length;k++)
+        {
+          if (changed_event_engine_data.config.service_eventEngine_actionProfile.sms[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        {  
+          let changedstr="Add "+addedCount+" item(s) to SMS Action List";
+          event_engine_action_sms_changeValues=[...event_engine_action_sms_changeValues, changedstr];
+        }
       }
 
-      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.sms=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.sms));
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_actionProfile.sms[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_actionProfile.sms[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.sms=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_actionProfile.sms=JSON.parse(JSON.stringify(tempForDelete));
+
+      //saved_changed_event_engine_data.config.service_eventEngine_actionProfile.sms=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.sms));
 
       EventEngine_ActionSMS_ConfigChangedLog.set(event_engine_action_sms_changeValues);
       ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -797,10 +1027,34 @@
       if (changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length > event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length)
       {
         let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length-event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length;
-        let changedstr="Add "+addedCount+" item(s) to Action Email SMTP List";
-        event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+
+        for (let k=event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length; k<changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length;k++)
+        {
+          if (changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        {  
+          let changedstr="Add "+addedCount+" item(s) to Action Email SMTP List";
+          event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+        }
       }
 
+      let tempForDelete2=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[i].delete)
+        {
+          tempForDelete2=[...tempForDelete2, changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer=JSON.parse(JSON.stringify(tempForDelete2));
+      changed_event_engine_data.config.service_eventEngine_actionProfile.email.smtpServer=JSON.parse(JSON.stringify(tempForDelete2));
 
 
       for (let i = 0; i < Math.min(changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length, event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length); i++) 
@@ -812,12 +1066,38 @@
       if (changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length > event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length)
       {
         let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length-event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length;
-        let changedstr="Add "+addedCount+" item(s) to Action Remote Email List";
-        event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+
+
+        for (let k=event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length; k<changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length;k++)
+        {
+          if (changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        { 
+          let changedstr="Add "+addedCount+" item(s) to Action Remote Email List";
+          event_engine_action_email_changeValues=[...event_engine_action_email_changeValues, changedstr];
+        }
       }
 
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[i]]
+        }
 
-      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.email=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.email));
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile=JSON.parse(JSON.stringify(tempForDelete));
+
+
+     // saved_changed_event_engine_data.config.service_eventEngine_actionProfile.email=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.email));
 
       EventEngine_ActionEmail_ConfigChangedLog.set(event_engine_action_email_changeValues);
       ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -842,11 +1122,37 @@
       if (changed_event_engine_data.config.service_eventEngine_actionProfile.do.length > event_engine_data.config.service_eventEngine_actionProfile.do.length)
       {
         let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.do.length-event_engine_data.config.service_eventEngine_actionProfile.do.length;
-        let changedstr="Add "+addedCount+" item(s) to DO Action List";
-        event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
+
+        for (let k=event_engine_data.config.service_eventEngine_actionProfile.do.length; k<changed_event_engine_data.config.service_eventEngine_actionProfile.do.length;k++)
+        {
+          if (changed_event_engine_data.config.service_eventEngine_actionProfile.do[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        { 
+          let changedstr="Add "+addedCount+" item(s) to DO Action List";
+          event_engine_action_do_changeValues=[...event_engine_action_do_changeValues, changedstr];
+        }
       }
 
-      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.do=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.do));
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_actionProfile.do.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_actionProfile.do[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_actionProfile.do[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.do=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_actionProfile.do=JSON.parse(JSON.stringify(tempForDelete));
+
+      //saved_changed_event_engine_data.config.service_eventEngine_actionProfile.do=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.do));
 
       EventEngine_ActionDO_ConfigChangedLog.set(event_engine_action_do_changeValues);
       ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -871,11 +1177,37 @@
       if (changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length > event_engine_data.config.service_eventEngine_actionProfile.modbus.length)
       {
         let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length-event_engine_data.config.service_eventEngine_actionProfile.modbus.length;
-        let changedstr="Add "+addedCount+" item(s) to Modbus Action List";
-        event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues, changedstr];
+
+        for (let k=event_engine_data.config.service_eventEngine_actionProfile.modbus.length; k<changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;k++)
+        {
+          if (changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        { 
+          let changedstr="Add "+addedCount+" item(s) to Modbus Action List";
+          event_engine_action_modbus_changeValues=[...event_engine_action_modbus_changeValues, changedstr];
+        }
       }
 
-      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.modbus));
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_actionProfile.modbus=JSON.parse(JSON.stringify(tempForDelete));
+
+
+      //saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.modbus));
 
       EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
       ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -901,11 +1233,37 @@
       if (changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length > event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length)
       {
         let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length-event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length;
-        let changedstr="Add "+addedCount+" item(s) to TCP Message Action List";
-        event_engine_action_tcpmsg_changeValues=[...event_engine_action_tcpmsg_changeValues, changedstr];
+
+        for (let k=event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length; k<changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length;k++)
+        {
+          if (changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        { 
+          let changedstr="Add "+addedCount+" item(s) to TCP Message Action List";
+          event_engine_action_tcpmsg_changeValues=[...event_engine_action_tcpmsg_changeValues, changedstr];
+        }
       }
 
-      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage));
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage=JSON.parse(JSON.stringify(tempForDelete));
+
+      //saved_changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage));
 
       EventEngine_ActionTCPMsg_ConfigChangedLog.set(event_engine_action_tcpmsg_changeValues);
       ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -931,11 +1289,38 @@
       if (changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length > event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length)
       {
         let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length-event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length;
-        let changedstr="Add "+addedCount+" item(s) to MQTT Action List";
-        event_engine_action_mqtt_changeValues=[...event_engine_action_mqtt_changeValues, changedstr];
+
+        for (let k=event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length; k<changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length;k++)
+        {
+          if (changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        {
+          let changedstr="Add "+addedCount+" item(s) to MQTT Action List";
+          event_engine_action_mqtt_changeValues=[...event_engine_action_mqtt_changeValues, changedstr];
+        }
       }
 
-      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish));
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish=JSON.parse(JSON.stringify(tempForDelete));
+
+
+      //saved_changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish));
 
       EventEngine_ActionMQTT_ConfigChangedLog.set(event_engine_action_mqtt_changeValues);
       ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -961,11 +1346,38 @@
       if (changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length > event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length)
       {
         let addedCount=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length-event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length;
-        let changedstr="Add "+addedCount+" item(s) to LINE Action List";
-        event_engine_action_line_changeValues=[...event_engine_action_line_changeValues, changedstr];
+
+        for (let k=event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length; k<changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length;k++)
+        {
+          if (changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[k].delete)
+          {
+            addedCount--;
+          }
+        }
+
+        if (addedCount > 0)
+        {
+          let changedstr="Add "+addedCount+" item(s) to LINE Action List";
+          event_engine_action_line_changeValues=[...event_engine_action_line_changeValues, changedstr];
+        }
       }
 
-      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification));
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification=JSON.parse(JSON.stringify(tempForDelete));
+
+
+     // saved_changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification));
 
       EventEngine_ActionLINE_ConfigChangedLog.set(event_engine_action_line_changeValues);
       ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -1162,14 +1574,27 @@
   let BackupActionLINE=
   {
     enable: false,
+    delete: false,
     aliasName: "",
     token: "",
     sendingContent:""
   };
 
+  function deleteLINE(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].delete=true;
+  }
+
+
+  function RestoreDeleteLINE(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].delete=false;
+  }
+
   function TriggerModifyActionLINE(index)
   {
     BackupActionLINE.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].enable;
+    BackupActionLINE.delete=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].delete;
     BackupActionLINE.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].aliasName;  
     BackupActionLINE.token=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].token; 
     BackupActionLINE.sendingContent=changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].sendingContent;  
@@ -1182,6 +1607,8 @@
   {
     modify_action_line_modal=false;
     changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].enable=BackupActionLINE.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].delete=BackupActionLINE.delete;
+
     changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].aliasName=BackupActionLINE.aliasName;  
     changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].token=BackupActionLINE.token; 
     changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification[index].sendingContent=BackupActionLINE.sendingContent;
@@ -1201,6 +1628,7 @@
   [
   {
     enable: false,
+    delete:false,
     aliasName: "",
     token: "",
     sendingContent:""
@@ -1208,54 +1636,63 @@
 ,
   {
     enable: false,
+    delete:false,
     aliasName: "",
     token: "",
     sendingContent:""
   }
   ,  {
     enable: false,
+    delete:false,
     aliasName: "",
     token: "",
     sendingContent:""
   }
   ,  {
     enable: false,
+    delete:false,
     aliasName: "",
     token: "",
     sendingContent:""
   }
   ,  {
     enable: false,
+    delete:false,
     aliasName: "",
     token: "",
     sendingContent:""
   }
   ,  {
     enable: false,
+    delete:false,
     aliasName: "",
     token: "",
     sendingContent:""
   }
   ,  {
     enable: false,
+    delete:false,
     aliasName: "",
     token: "",
     sendingContent:""
   }
   ,  {
     enable: false,
+    delete:false,
     aliasName: "",
     token: "",
     sendingContent:""
   }
   ,  {
     enable: false,
+    delete:false,
     aliasName: "",
     token: "",
     sendingContent:""
   }
   ,  {
     enable: false,
+    delete:false,
     aliasName: "",
     token: "",
     sendingContent:""
@@ -1265,7 +1702,8 @@
 
   function new_action_line_trigger(index)
   {
-    NewActionLINE[index].enable=false;
+    NewActionLINE[index].enable=true;
+    NewActionLINE[index].delete=false;    
     NewActionLINE[index].aliasName="";
     NewActionLINE[index].token="";
     NewActionLINE[index].sendingContent="";
@@ -1291,6 +1729,7 @@
   let NewRuleItem=
   [{
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1319,6 +1758,7 @@
   },
   {
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1347,6 +1787,7 @@
   },
   {
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1375,6 +1816,7 @@
   },
   {
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1403,6 +1845,7 @@
   },
   {
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1431,6 +1874,7 @@
   },
   {
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1459,6 +1903,7 @@
   },
   {
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1487,6 +1932,7 @@
   },
   {
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1515,6 +1961,7 @@
   },
   {
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1543,6 +1990,7 @@
   },
   {
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1574,8 +2022,8 @@
 
   function new_rule_trigger(index)
   {
-
-    NewRuleItem[index].enable=false;
+    NewRuleItem[index].enable=true;
+    NewRuleItem[index].delete=false;
     NewRuleItem[index].aliasName="";
     NewRuleItem[index].triggerCount=1;
     NewRuleItem[index].multipleTriggerRelationship=0;
@@ -1618,6 +2066,7 @@
   let BackupRule=
     {
           enable: false,
+          delete: false,
           aliasName: "",
           triggerCount: 0, 
           multipleTriggerRelationship: 0, 
@@ -1653,6 +2102,7 @@
     console.log(changed_event_engine_data.config.service_eventEngine_ruleSettings);
 
     BackupRule.enable=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].enable;
+    BackupRule.delete=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].delete;
     BackupRule.aliasName=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].aliasName;
     BackupRule.triggerCount=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].triggerCount;
     BackupRule.multipleTriggerRelationship=changed_event_engine_data.config.service_eventEngine_ruleSettings[index].multipleTriggerRelationship;
@@ -1694,15 +2144,28 @@
   let BackupActionMQTT=
   {
     enable: false,
+    delete: false,
     aliasName: "",
     mqttProfile: "",
     publishTopic: "",
     sendingContent:""
   };
 
+
+  function deleteActionMQTT(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].delete=true;
+  }
+
+  function RestoreDeleteActionMQTT(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].delete=false;
+  }
+
   function TriggerModifyActionMQTT(index)
   {
     BackupActionMQTT.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].enable;
+    BackupActionMQTT.delete=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].delete;    
     BackupActionMQTT.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].aliasName;  
     BackupActionMQTT.mqttProfile=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].mqttProfile;  
     BackupActionMQTT.publishTopic=changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].publishTopic;  
@@ -1716,6 +2179,7 @@
   {
     modify_action_mqtt_modal=false;
     changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].enable=BackupActionMQTT.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].delete=BackupActionMQTT.delete;    
     changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].aliasName=BackupActionMQTT.aliasName; 
     changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].mqttProfile=BackupActionMQTT.mqttProfile;  
     changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish[index].publishTopic=BackupActionMQTT.publishTopic; 
@@ -1735,6 +2199,7 @@
   let NewActionMQTT=[
   {
     enable: false,
+    delete: false,
     aliasName: "",
     mqttProfile: "",
     publishTopic: "",
@@ -1743,6 +2208,7 @@
 ,
   {
     enable: false,
+    delete: false,
     aliasName: "",
     mqttProfile: "",
     publishTopic: "",
@@ -1751,6 +2217,7 @@
   ,
     {
     enable: false,
+    delete: false,
     aliasName: "",
     mqttProfile: "",
     publishTopic: "",
@@ -1765,6 +2232,7 @@
   }
   ,  {
     enable: false,
+    delete: false,
     aliasName: "",
     mqttProfile: "",
     publishTopic: "",
@@ -1772,6 +2240,7 @@
   }
   ,  {
     enable: false,
+    delete: false,
     aliasName: "",
     mqttProfile: "",
     publishTopic: "",
@@ -1779,6 +2248,7 @@
   }
   ,  {
     enable: false,
+    delete: false,
     aliasName: "",
     mqttProfile: "",
     publishTopic: "",
@@ -1786,6 +2256,7 @@
   }
   ,  {
     enable: false,
+    delete: false,
     aliasName: "",
     mqttProfile: "",
     publishTopic: "",
@@ -1793,6 +2264,7 @@
   }
   ,  {
     enable: false,
+    delete: false,
     aliasName: "",
     mqttProfile: "",
     publishTopic: "",
@@ -1800,6 +2272,7 @@
   }
   ,  {
     enable: false,
+    delete: false,
     aliasName: "",
     mqttProfile: "",
     publishTopic: "",
@@ -1810,7 +2283,8 @@
 
   function new_action_mqtt_trigger(index)
   {
-    NewActionMQTT[index].enable=false;
+    NewActionMQTT[index].enable=true;
+    NewActionMQTT[index].delete=false;    
     NewActionMQTT[index].aliasName="";
     NewActionMQTT[index].mqttProfile="";
     NewActionMQTT[index].publishTopic="";
@@ -1835,16 +2309,29 @@
   let BackupActionTCPMsg=
   {
     enable: false,
+    delete: false,
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
     sendingMessage:""
   };
 
+  function deleteActionTCPMsg(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].delete=true;
+  }
+
+
+  function RestoreDeleteActionTCPMsg(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].delete=false;
+  }
+
 
   function TriggerModifyActionTCPMsg(index)
   {
     BackupActionTCPMsg.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].enable;
+    BackupActionTCPMsg.delete=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].delete;    
     BackupActionTCPMsg.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].aliasName;  
     BackupActionTCPMsg.remoteHost=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].remoteHost;  
     BackupActionTCPMsg.remotePort=changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].remotePort;  
@@ -1857,8 +2344,8 @@
   function NoModifyActionTCPMsg(index)
   {
     modify_action_tcpmsg_modal=false;
-
     changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].enable=BackupActionTCPMsg.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].delete=BackupActionTCPMsg.delete;
     changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].aliasName=BackupActionTCPMsg.aliasName;  
     changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].remoteHost=BackupActionTCPMsg.remoteHost;  
     changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage[index].remotePort=BackupActionTCPMsg.remotePort;  
@@ -1876,6 +2363,7 @@
   let NewActionTCPMsg=[
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
@@ -1884,6 +2372,7 @@
 ,
   {
     enable: false,
+    delete: false,      
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
@@ -1892,6 +2381,7 @@
 ,
   {
     enable: false,
+    delete: false,      
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
@@ -1900,6 +2390,7 @@
 ,
   {
     enable: false,
+    delete: false,      
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
@@ -1908,6 +2399,7 @@
 ,
   {
     enable: false,
+    delete: false,      
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
@@ -1916,6 +2408,7 @@
 ,
   {
     enable: false,
+    delete: false,      
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
@@ -1924,6 +2417,7 @@
 ,
   {
     enable: false,
+    delete: false,      
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
@@ -1932,6 +2426,7 @@
 ,
   {
     enable: false,
+    delete: false,      
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
@@ -1940,6 +2435,7 @@
 ,
   {
     enable: false,
+    delete: false,      
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
@@ -1948,6 +2444,7 @@
 ,
   {
     enable: false,
+    delete: false,      
     aliasName: "",
     remoteHost: "",
     remotePort: 0,
@@ -1958,7 +2455,8 @@
 
   function new_action_tcpmsg_trigger(index)
   {
-    NewActionTCPMsg[index].enable=false;
+    NewActionTCPMsg[index].enable=true;
+    NewActionTCPMsg[index].delete=false;
     NewActionTCPMsg[index].aliasName="";
     NewActionTCPMsg[index].modbusDataModel="";
     NewActionTCPMsg[index].dataType;
@@ -1983,6 +2481,7 @@
   let BackupActionModbus=
   {
     enable: false,
+    delete: false,
     aliasName: "",
     modbusDataModel: "",
     dataType: 0,
@@ -1990,9 +2489,22 @@
   };
 
 
+  function deleteActionModbus(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].delete=true;
+
+  }
+
+  function RestoreDeleteActionModbus(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].delete=false;
+  }
+
+
   function TriggerModifyActionModbus(index)
   {
     BackupActionModbus.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].enable;
+    BackupActionModbus.delete=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].delete;
     BackupActionModbus.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].aliasName;  
     BackupActionModbus.modbusDataModel=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].modbusDataModel;
     BackupActionModbus.dataType=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].dataType;
@@ -2006,8 +2518,8 @@
   function NoModifyActionModbus(index)
   {
     modify_action_modbus_modal=false;
-
     changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].enable=BackupActionModbus.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].delete=BackupActionModbus.delete;
     changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].aliasName=BackupActionModbus.aliasName;  
     changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].modbusDataModel=BackupActionModbus.modbusDataModel;
     changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].dataType=BackupActionModbus.dataType;
@@ -2108,7 +2620,8 @@
 
   function new_action_modbus_trigger(index)
   {
-    NewActionModbus[index].enable=false;
+    NewActionModbus[index].enable=true;
+    NewActionModbus[index].delete=false;    
     NewActionModbus[index].aliasName="";
     NewActionModbus[index].modbusDataModel="";
     NewActionModbus[index].dataType;
@@ -2134,14 +2647,27 @@
   let BackupActionDO=
   {
     enable: false,
+    delete: false,
     aliasName: "",
     type: 0,
     duration: 2
   };
 
+
+  function deleteActionDO(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].delete=true; 
+  }
+
+  function RestoreDeleteActionDO(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].delete=false;
+  }
+
   function TriggerModifyActionDO(index)
   {
     BackupActionDO.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].enable;
+    BackupActionDO.delete=changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].delete;    
     BackupActionDO.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].aliasName;  
     BackupActionDO.type=changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].type;
     BackupActionDO.duration=changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].duration;
@@ -2154,6 +2680,7 @@
     modify_action_do_modal=false;
 
     changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].enable=BackupActionDO.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].delete=BackupActionDO.delete;    
     changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].aliasName=BackupActionDO.aliasName;  
     changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].type=BackupActionDO.type;
     changed_event_engine_data.config.service_eventEngine_actionProfile.do[index].duration=BackupActionDO.duration;
@@ -2170,60 +2697,70 @@
   let NewActionDO=[
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     type: 0,
     duration: 2
   },
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     type: 0,
     duration: 2
   },
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     type: 0,
     duration: 2
   },
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     type: 0,
     duration: 2
   },
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     type: 0,
     duration: 2
   },
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     type: 0,
     duration: 2
   },
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     type: 0,
     duration: 2
   },
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     type: 0,
     duration: 2
   },
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     type: 0,
     duration: 2
   },
   {
     enable: false,
+    delete: false,    
     aliasName: "",
     type: 0,
     duration: 2
@@ -2233,7 +2770,8 @@
 
   function new_action_do_trigger(index)
   {
-    NewActionDO[index].enable=false;
+    NewActionDO[index].enable=true;
+    NewActionDO[index].delete=false;    
     NewActionDO[index].aliasName="";
     NewActionDO[index].type=0;
     NewActionDO[index].duration=1;
@@ -2312,15 +2850,27 @@
   let BackupActionEmailRemote=
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
   };  
 
+  function deleteActionEmail(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].delete=true;
+  }
+
+  function RestoreDeleteActionEmail(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].delete=false;
+  }
+
 
   function TriggerModifyActionEmailRemote(index)
   {
     BackupActionEmailRemote.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].enable;
+    BackupActionEmailRemote.delete=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].delete;    
     BackupActionEmailRemote.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].aliasName;
     BackupActionEmailRemote.remoteEmail=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].remoteEmail;
     BackupActionEmailRemote.emailContent=changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].emailContent;
@@ -2335,6 +2885,7 @@
     modify_action_email_remote_modal=false;
 
     changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].enable=BackupActionEmailRemote.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].delete=BackupActionEmailRemote.delete;    
     changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].aliasName=BackupActionEmailRemote.aliasName;
     changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].remoteEmail=BackupActionEmailRemote.remoteEmail;
     changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile[index].emailContent=BackupActionEmailRemote.emailContent;
@@ -2355,60 +2906,70 @@
   let NewActionEmailRemote=[
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteEmail:"",
       emailContent:""
@@ -2419,7 +2980,8 @@
 
   function new_action_email_remote_trigger(index)
   {
-    NewActionEmailRemote[index].enable=false;
+    NewActionEmailRemote[index].enable=true;
+    NewActionEmailRemote[index].delete=false;    
     NewActionEmailRemote[index].aliasName="";
     NewActionEmailRemote[index].remoteEmail="";
     NewActionEmailRemote[index].emailContent="";
@@ -2443,15 +3005,28 @@
   let BackupActionSMS=
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
   };
 
 
+  function deleteActionSMS(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].delete=true;
+  }
+
+  function RestoreDeleteActionSMS(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].delete=false;
+  }
+
+
   function TriggerModifyActionSMS(index)
   {
     BackupActionSMS.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].enable;
+    BackupActionSMS.delete=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].delete;    
     BackupActionSMS.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].aliasName
     BackupActionSMS.smsPhoneNumber=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsPhoneNumber;
     BackupActionSMS.smsContent=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsContent;
@@ -2464,9 +3039,9 @@
   function NoModifyActionSMS(index)
   {
     modify_action_sms_modal=false;
-
-
     changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].enable=BackupActionSMS.enable;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].delete=BackupActionSMS.delete;
+
     changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].aliasName=BackupActionSMS.aliasName;
     changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsPhoneNumber=BackupActionSMS.smsPhoneNumber;
     changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsContent=BackupActionSMS.smsContent;
@@ -2484,60 +3059,70 @@
   let NewActionSMS=[
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber:"",
       smsContent:""
@@ -2547,7 +3132,8 @@
 
   function new_action_sms_trigger(index)
   {
-      NewActionSMS[index].enable=false;
+      NewActionSMS[index].enable=true;
+      NewActionSMS[index].delete=false;      
       NewActionSMS[index].aliasName="";
       NewActionSMS[index].smsPhoneNumber="";
       NewActionSMS[index].smsContent="";
@@ -2570,15 +3156,29 @@
   let BackupTriggerMQTT=
   {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
       receivedContent: ""
   };
 
+
+  function deleteMQTTN(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].delete=true;
+  }
+
+  function RestoreDeleteMQTTN(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].delete=false;
+  }
+
   function TriggerModifyMQTTN(index)
   {
     BackupTriggerMQTT.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].enable;
+    BackupTriggerMQTT.delete=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].delete;
+
     BackupTriggerMQTT.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].aliasName;
     BackupTriggerMQTT.mqttProfile=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].mqttProfile;
     BackupTriggerMQTT.subscribedTopic=changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].subscribedTopic;
@@ -2593,6 +3193,7 @@
   {
     modify_trigger_mqtt_modal=false;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].enable=BackupTriggerMQTT.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].delete=BackupTriggerMQTT.delete;    
     changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].aliasName=BackupTriggerMQTT.aliasName;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].mqttProfile=BackupTriggerMQTT.mqttProfile;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification[index].subscribedTopic= BackupTriggerMQTT.subscribedTopic;
@@ -2610,6 +3211,7 @@
   let NewTriggerMQTT=[
   {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
@@ -2618,6 +3220,7 @@
 ,
   {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
@@ -2625,6 +3228,7 @@
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
@@ -2632,6 +3236,7 @@
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
@@ -2639,6 +3244,7 @@
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
@@ -2646,6 +3252,7 @@
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
@@ -2653,6 +3260,7 @@
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
@@ -2660,6 +3268,7 @@
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
@@ -2667,6 +3276,7 @@
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
@@ -2674,6 +3284,7 @@
   },
     {
       enable: false,
+      delete: false,
       aliasName: "",
       mqttProfile: "",
       subscribedTopic: "", 
@@ -2684,7 +3295,8 @@
 
   function new_trigger_mqtt_trigger(index)
   {
-      NewTriggerMQTT[index].enable=false;
+      NewTriggerMQTT[index].enable=true;
+      NewTriggerMQTT[index].delete=false;      
       NewTriggerMQTT[index].aliasName="";
       NewTriggerMQTT[index].mqttProfile="";
       NewTriggerMQTT[index].subscribedTopic="";
@@ -2708,6 +3320,7 @@
   let BackupTriggerPING=
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2716,9 +3329,20 @@
       RepeatDelaySec:1
   };
 
+  function deletePING(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].delete=true;
+  }
+
+  function RestoreDeletePING(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].delete=false;
+  }
+
   function TriggerModifyPING(index)
   {
     BackupTriggerPING.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].enable;
+    BackupTriggerPING.delete=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].delete;
     BackupTriggerPING.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].aliasName;
     BackupTriggerPING.remoteHost=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].remoteHost;
     BackupTriggerPING.pingResult=changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].pingResult;
@@ -2736,8 +3360,8 @@
   {
     modify_trigger_ping_modal=false;
 
-
     changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].enable=BackupTriggerPING.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].delete=BackupTriggerPING.delete;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].aliasName=BackupTriggerPING.aliasName;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].remoteHost=BackupTriggerPING.remoteHost;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.ping[index].pingResult=BackupTriggerPING.pingResult;
@@ -2760,6 +3384,7 @@
   let NewTriggerPING=[
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2770,6 +3395,7 @@
 ,
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2779,6 +3405,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2788,6 +3415,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2797,6 +3425,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2806,6 +3435,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2815,6 +3445,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2824,6 +3455,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2833,6 +3465,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2842,6 +3475,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost:"",
       pingResult: 0,
@@ -2854,7 +3488,8 @@
 
   function new_trigger_ping_trigger(index)
   {
-      NewTriggerPING[index].enable=false;
+      NewTriggerPING[index].enable=true;
+      NewTriggerPING[index].delete=false;      
       NewTriggerPING[index].aliasName="";
       NewTriggerPING[index].remoteHost="";
       NewTriggerPING[index].pingResult=0;
@@ -2883,6 +3518,7 @@
   let NewTriggerRSSI=[
   {
     enable:false,
+    delete:false,
     aliasName: "",
     comparision:0,
     comparedSelected:0,
@@ -2890,6 +3526,7 @@
   },
     {
     enable:false,
+    delete:false,
     aliasName: "",
     comparision:0,
     comparedSelected:0,
@@ -2897,6 +3534,7 @@
   },
     {
     enable:false,
+    delete:false,
     aliasName: "",
     comparision:0,
     comparedSelected:0,
@@ -2904,6 +3542,7 @@
   },
     {
     enable:false,
+    delete:false,
     aliasName: "",
     comparision:0,
     comparedSelected:0,
@@ -2911,6 +3550,7 @@
   },
     {
     enable:false,
+    delete:false,
     aliasName: "",
     comparision:0,
     comparedSelected:0,
@@ -2918,6 +3558,7 @@
   },
     {
     enable:false,
+    delete:false,
     aliasName: "",
     comparision:0,
     comparedSelected:0,
@@ -2925,6 +3566,7 @@
   },
     {
     enable:false,
+    delete:false,
     aliasName: "",
     comparision:0,
     comparedSelected:0,
@@ -2932,6 +3574,7 @@
   },
     {
     enable:false,
+    delete:false,
     aliasName: "",
     comparision:0,
     comparedSelected:0,
@@ -2939,6 +3582,7 @@
   },
     {
     enable:false,
+    delete:false,
     aliasName: "",
     comparision:0,
     comparedSelected:0,
@@ -2946,6 +3590,7 @@
   },
     {
     enable:false,
+    delete:false,
     aliasName: "",
     comparision:0,
     comparedSelected:0,
@@ -2956,7 +3601,8 @@
 
   function new_trigger_rssi_trigger(index)
   {
-    NewTriggerRSSI[index].enable=false;
+    NewTriggerRSSI[index].enable=true;
+    NewTriggerRSSI[index].delete=false;    
     NewTriggerRSSI[index].aliasName="";
     NewTriggerRSSI[index].comparision=0;
     NewTriggerRSSI[index].comparedSelected=0;
@@ -2979,15 +3625,28 @@
   let BackupTriggerRSSI=
   {
       enable: false,
+      delete: false,
       aliasName: "",
       comparision:0,
       comparedSelected:0,
       comparedUserDefinedValue:10
   };
 
+
+  function deleteRSSI(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].delete=true;
+  }
+
+  function RestoreDeleteRSSI(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].delete=false;
+  }
+
   function TriggerModifyRSSI(index)
   {
     BackupTriggerRSSI.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].enable;
+    BackupTriggerRSSI.delete=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].delete;
     BackupTriggerRSSI.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].aliasName;
     BackupTriggerRSSI.comparision=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].comparision;
     BackupTriggerRSSI.comparedSelected=changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].comparedSelected;
@@ -3002,6 +3661,7 @@
   {
     modify_trigger_rssi_modal=false;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].enable=BackupTriggerRSSI.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].delete=BackupTriggerRSSI.delete;    
     changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].aliasName=BackupTriggerRSSI.aliasName;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].comparision=BackupTriggerRSSI.comparision;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi[index].comparedSelected=    BackupTriggerRSSI.comparedSelected;
@@ -3021,15 +3681,28 @@
   let BackupTriggerTCPMsg=
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
       receivedMessage: ""
   };
 
+
+  function deleteTCPMsg(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].delete=true;
+  }
+
+  function RestoreDeleteTriggerTCPMsg(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].delete=false;
+  }
+
   function TriggerModifyTCPMsg(index)
   {
     BackupTriggerTCPMsg.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].enable;
+    BackupTriggerTCPMsg.delete=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].delete;    
     BackupTriggerTCPMsg.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].aliasName;
     BackupTriggerTCPMsg.remoteHost=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].remoteHost;
     BackupTriggerTCPMsg.remotePort=changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].remotePort;
@@ -3044,6 +3717,7 @@
   {
     modify_trigger_tcpMsg_modal=false;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].enable=BackupTriggerTCPMsg.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].delete=BackupTriggerTCPMsg.delete;    
     changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].aliasName=BackupTriggerTCPMsg.aliasName;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].remoteHost=BackupTriggerTCPMsg.remoteHost;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage[index].remotePort=BackupTriggerTCPMsg.remotePort;
@@ -3063,6 +3737,7 @@
   let NewTriggerTCPMsg=[
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
@@ -3070,6 +3745,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
@@ -3077,6 +3753,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
@@ -3084,6 +3761,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
@@ -3091,6 +3769,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
@@ -3098,6 +3777,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
@@ -3105,6 +3785,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
@@ -3112,6 +3793,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
@@ -3119,6 +3801,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
@@ -3126,6 +3809,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       remoteHost: "",
       remotePort: 8000, 
@@ -3136,7 +3820,8 @@
 
   function new_trigger_tcpmsg_trigger(index)
   {
-      NewTriggerTCPMsg[index].enable=false;
+      NewTriggerTCPMsg[index].enable=true;
+      NewTriggerTCPMsg[index].delete=false;      
       NewTriggerTCPMsg[index].aliasName="";
       NewTriggerTCPMsg[index].remoteHost="";
       NewTriggerTCPMsg[index].remotePort=8000;
@@ -3160,6 +3845,7 @@
   let BackupTriggerModbus=
   {
       enable: false,
+      delete: false,
       aliasName: "",
       modbusDataModel: "",
       dataType: 0, 
@@ -3167,9 +3853,20 @@
       comparisonValue: 1
   };
 
+  function deleteTriggerModbus(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].delete=true;
+  }
+
+  function RestoreDeleteTriggerModbus(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].delete=false;
+  }
+
   function TriggerModifyModbus(index)
   {
     BackupTriggerModbus.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].enable;
+    BackupTriggerModbus.delete=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].delete;    
     BackupTriggerModbus.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].aliasName;
  
     BackupTriggerModbus.modbusDataModel=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].modbusDataModel;
@@ -3186,6 +3883,7 @@
   {
     modify_trigger_modbus_modal=false;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].enable=BackupTriggerModbus.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].delete=BackupTriggerModbus.delete;    
     changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].aliasName=BackupTriggerModbus.aliasName;
  
     changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].modbusDataModel=BackupTriggerModbus.modbusDataModel;
@@ -3298,7 +3996,8 @@
 
   function new_trigger_modbus_trigger(index)
   {
-      NewTriggerModbus[index].enable=false;
+      NewTriggerModbus[index].enable=true;
+      NewTriggerModbus[index].delete=false;      
       NewTriggerModbus[index].aliasName="";
       NewTriggerModbus[index].modbusDataModel="";
       NewTriggerModbus[index].dataType=1;
@@ -3322,6 +4021,7 @@
   let BackupTriggerDI=
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3331,9 +4031,23 @@
       duration: 2
   };
 
+
+  function deleteTriggerDI(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].delete=true;
+  }
+
+
+  function RestoreDeleteTriggerDI(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].delete=false;
+  }
+
+
   function TriggerModifyDI(index)
   {
     BackupTriggerDI.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].enable;
+    BackupTriggerDI.delete=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].delete;    
     BackupTriggerDI.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].aliasName;
     BackupTriggerDI.type=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].type;
     BackupTriggerDI.debouncing.rateCount=changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].debouncing.rateCount;   
@@ -3348,6 +4062,7 @@
   {
     modify_trigger_di_modal=false;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].enable=BackupTriggerDI.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].delete=BackupTriggerDI.delete;    
     changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].aliasName=BackupTriggerDI.aliasName;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].type=BackupTriggerDI.type;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.di[index].debouncing.rateCount=BackupTriggerDI.debouncing.rateCount;   
@@ -3368,6 +4083,7 @@
   let NewTriggerDI=[
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3378,6 +4094,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3388,6 +4105,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3398,6 +4116,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3408,6 +4127,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3418,6 +4138,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3428,6 +4149,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3438,6 +4160,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3448,6 +4171,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3458,6 +4182,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       type:0,
       debouncing:{
@@ -3472,7 +4197,8 @@
 
   function new_trigger_di_trigger(index)
   {
-      NewTriggerDI[index].enable=false;
+      NewTriggerDI[index].enable=true;
+      NewTriggerDI[index].delete=false;      
       NewTriggerDI[index].aliasName="";
       NewTriggerDI[index].type=0;
       NewTriggerDI[index].debouncing.rateCount=1;
@@ -3496,6 +4222,7 @@
   let BackupTriggerSMS=
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3503,11 +4230,21 @@
   };
 
 
+  function deleteSMS(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].delete=true;
+  }
+
+  function RestoreDeleteSMS(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].delete=false;
+  }
+
 
   function TriggerModifySMS(index)
   {
-
     BackupTriggerSMS.enable=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].enable;
+    BackupTriggerSMS.delete=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].delete;
     BackupTriggerSMS.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].aliasName;
     BackupTriggerSMS.smsPhoneNumber=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsPhoneNumber;
     BackupTriggerSMS.smsPhoneNumberSpecified=changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsPhoneNumberSpecified;
@@ -3521,6 +4258,7 @@
   {
     modify_trigger_sms_modal=false;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].enable=BackupTriggerSMS.enable;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].delete=BackupTriggerSMS.delete;    
     changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].aliasName=BackupTriggerSMS.aliasName;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsPhoneNumber=BackupTriggerSMS.smsPhoneNumber;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.sms[index].smsPhoneNumberSpecified=BackupTriggerSMS.smsPhoneNumberSpecified;
@@ -3538,6 +4276,7 @@
   let NewTriggerSMS=[
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3545,6 +4284,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3552,6 +4292,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3559,6 +4300,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3566,6 +4308,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3573,6 +4316,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3580,6 +4324,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3587,6 +4332,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3594,6 +4340,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3601,6 +4348,7 @@
   },
   {
       enable: false,
+      delete: false,
       aliasName: "",
       smsPhoneNumber: 0,
       smsPhoneNumberSpecified: "0912345678",
@@ -3610,7 +4358,8 @@
 
   function new_trigger_sms_trigger(index)
   {
-      NewTriggerSMS[index].enable=false;
+      NewTriggerSMS[index].enable=true;
+      NewTriggerSMS[index].delete=false;      
       NewTriggerSMS[index].aliasName="";
       NewTriggerSMS[index].smsPhoneNumber=0;
       NewTriggerSMS[index].smsPhoneNumberSpecified="";
@@ -3783,6 +4532,36 @@
  </script>
 
 
+<style>
+ 
+.strikeout {
+  text-decoration: line-through;
+  color: #999; /* Adjust color for deleted text */
+  position: relative;
+}
+
+.strikeout:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #111; /* Adjust strikeout line color */
+  transform: translateY(-50%);
+}
+
+.strikeout:after {
+  content: "\00B7"; /* Unicode dot character */
+  font-size: 1px; /* Adjust dot size */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+</style>
+
 
  <Tabs style="underline">
    <TabItem open title="General">
@@ -3856,19 +4635,73 @@
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_triggerProfile.sms as TriggerSMS, index}
 
+{#if TriggerSMS.delete}
+ <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteSMS(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={TriggerSMS.enable} disabled>
+
+      </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerSMS.aliasName}</td>
+{#if TriggerSMS.smsPhoneNumber == 0}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Any</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerSMS.smsPhoneNumberSpecified}</td>
+{/if}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerSMS.smsContent}</td>
+
+      </tr>
+
+{:else}
 
     <TableBodyRow>
-          <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+          <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifySMS(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteSMS(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+
     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={TriggerSMS.enable}>
 
@@ -3886,11 +4719,15 @@
       <TableBodyCell class="w-18">{TriggerSMS.smsContent}</TableBodyCell>
 
     </TableBodyRow>
+{/if}
+
 {/each}
 {/if}    
     <TableBodyRow>
+
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length < 10}    
       <TableBodyCell class="!p-4 w-10">
-{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length < 10}
+
 <button on:click={() => new_trigger_sms_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.sms.length)}>
 
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
@@ -3898,11 +4735,14 @@
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
+</TableBodyCell>
+{:else}
+<TableBodyCell class="!p-4 w-16">
+       </TableBodyCell>
 {/if}
 
-       </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
     <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -4115,11 +4955,51 @@
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_triggerProfile.di as TriggerDI, index}
 
+{#if TriggerDI.delete}
 
+ <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteTriggerDI(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={TriggerDI.enable} disabled>
+
+      </td>
+
+
+      </tr>
+
+
+{:else}
 
     <TableBodyRow>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+      <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyDI(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -4128,7 +5008,14 @@
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteTriggerDI(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+
     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={TriggerDI.enable}>
     </TableBodyCell>
@@ -4152,26 +5039,30 @@
       <TableBodyCell class="w-18">{TriggerDI.debouncing.rateCount} X {TriggerDI.debouncing.interval}</TableBodyCell>
       <TableBodyCell class="w-18">{TriggerDI.duration} second(s)</TableBodyCell>
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
 <TableBodyRow>
 
-      <TableBodyCell class="!p-4 w-10">
 {#if changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length <10}
+      <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_trigger_di_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.di.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
+       </TableBodyCell>
+{:else}
+     <TableBodyCell class="!p-4 w-16"></TableBodyCell>
 
 {/if}
-       </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-
-    <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-36"></TableBodyCell>
@@ -4482,19 +5373,103 @@
 
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus as TriggerModbus, index}
+{#if TriggerModbus.delete}
+
+  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteTriggerModbus(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"><input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={TriggerModbus.enable} disabled>
+
+      </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerModbus.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerModbus.modbusDataModel}</td>
+{#if TriggerModbus.dataType==1}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
+{:else if TriggerModbus.dataType ==2}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Short</td>
+{:else if TriggerModbus.dataType ==3}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed
+Short</td>
+{:else if TriggerModbus.dataType ==4}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Integer</td>
+{:else if TriggerModbus.dataType ==5}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Integer</td>
+{:else if TriggerModbus.dataType ==6}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
+{:else if TriggerModbus.dataType ==7}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
+
+{/if}
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
+{#if TriggerModbus.comparison==1}
+>
+{:else if TriggerModbus.comparison==2}
+{'<'}
+
+{:else if TriggerModbus.comparison==3}
+>=
+
+{:else if TriggerModbus.comparison==4}
+{'<'}=
+{:else if TriggerModbus.comparison==5}
+==
+{:else if TriggerModbus.comparison==6}
+!=
+{/if}
+
+      {TriggerModbus.comparisonValue}</td>
+      </tr>
+{:else}
 
     <TableBodyRow>
- <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+ <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyModbus(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteTriggerModbus(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 
     <TableBodyCell class="w-10">
@@ -4545,28 +5520,32 @@ Short</TableBodyCell>
       {TriggerModbus.comparisonValue}</TableBodyCell>
 
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
   <TableBodyRow>
- <TableBodyCell class="!p-4">
 
 {#if changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length < 10}
+
+ <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_trigger_modbus_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-{/if}
+
  </TableBodyCell>
-      <TableBodyCell class="!p-4">
 
+{:else}
+ <TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}
 
-
-       </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
     <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -5037,18 +6016,67 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage as TriggerTCPMsg, index}
 
+{#if TriggerTCPMsg.delete}
+  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteTriggerTCPMsg(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={TriggerTCPMsg.enable} disabled>
+
+      </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerTCPMsg.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerTCPMsg.remoteHost}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerTCPMsg.remotePort}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerTCPMsg.receivedMessage}</td>
+      </tr>
+
+{:else}
+
     <TableBodyRow>
-          <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+          <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyTCPMsg(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteTCPMsg(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+      </TableBodyCell>
 
     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={TriggerTCPMsg.enable}>
@@ -5062,24 +6090,30 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-18">{TriggerTCPMsg.receivedMessage}</TableBodyCell>
 
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
-
 {#if changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length < 10}
+    <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_trigger_tcpmsg_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.tcpMessage.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
+</TableBodyCell>
+
+{:else}
+    <TableBodyCell class="!p-4 w-16"></TableBodyCell>
 {/if}
 
-       </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
     <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -5299,18 +6333,69 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification as MQTT, index}
 
+{#if MQTT.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteMQTTN(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={MQTT.enable} disabled>
+
+      </td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MQTT.aliasName}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MQTT.mqttProfile}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MQTT.subscribedTopic}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MQTT.receivedContent}</td>
+
+
+      </tr>
+
+{:else}
 
     <TableBodyRow>
-          <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+          <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyMQTTN(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteMQTTN(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={MQTT.enable}>
@@ -5324,26 +6409,28 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
     </TableBodyRow>
+{/if}
+
 {/each}
 {/if}
 
 
     <TableBodyRow>
+{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length < 10}
       <TableBodyCell class="!p-4 w-10">
-
-{#if changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length < 10 }
 <button on:click={() => new_trigger_mqtt_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.mqttNotification.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-{/if}
-
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-    <TableBodyCell class="w-10"></TableBodyCell>
+{:else}
+<TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}       
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -5578,19 +6665,75 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_triggerProfile.ping as PING, index}
 
+{#if PING.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeletePING(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={PING.enable} disabled>
+
+      </td>
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{PING.aliasName}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{PING.remoteHost}</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-36 strikeout">
+{#if PING.pingResult == 0}Failed{:else if PING.pingResult == 1}Successfully{:else}Unknown{/if} {#if PING.ResultOption ==0} Once{:else if PING.ResultOption ==1} repeatedly {PING.ResultContinuousCount} times{:else} Unknown{/if}
+</td>
+
+
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-36 strikeout">{PING.RepeatDelaySec}-second delay repeatedly ping after trigger</td>
+
+
+      </tr>
+
+{:else}
 
     <TableBodyRow>
-          <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+          <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyPING(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deletePING(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={PING.enable}>
@@ -5610,25 +6753,34 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-36">{PING.RepeatDelaySec}-second delay repeatedly ping after trigger</TableBodyCell>
 
     </TableBodyRow>
+
+{/if}
+
+
 {/each}
 {/if}
 
 
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
+
 
 {#if changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length < 10 }
+      <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_trigger_ping_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.ping.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
+       </TableBodyCell>
+
+{:else}       
+    <TableBodyCell class="!p-4 w-16"></TableBodyCell>
 {/if}
 
-       </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
     <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -5644,7 +6796,6 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-                <td></td>
         <td></td>
     <td class="pl-10"><Button color="blue" pill={true} on:click={saveTriggerPING}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -5906,19 +7057,71 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi as RSSI, index}
 
+{#if RSSI.delete}
 
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteRSSI(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={RSSI.enable} disabled>
+
+      </td>
+
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{RSSI.aliasName}</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-36 strikeout">
+{#if RSSI.comparision ==0}{'<'}= {:else if RSSI.comparision==1}>= {/if} {#if RSSI.comparedSelected==0}10 (L){:else if RSSI.comparedSelected==1}15 (M){:else if RSSI.comparedSelected==2}25 (H){:else if RSSI.comparedSelected==3} {RSSI.comparedUserDefinedValue}{/if}
+
+</td>
+
+      </tr>
+
+{:else}
     <TableBodyRow>
-          <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+          <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyRSSI(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteRSSI(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={RSSI.enable}>
@@ -5933,28 +7136,33 @@ on:click={handleClickMV} on:keydown={() => {}}>
 </TableBodyCell>
 
 
-
-
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
 
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
-
 {#if changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length < 10 }
+      <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_trigger_rssi_trigger(changed_event_engine_data.config.service_eventEngine_triggerProfile.rssi.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-{/if}
+
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+{:else}
+
+      <TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}
+
+      <TableBodyCell class="!p-0"></TableBodyCell>
+      <TableBodyCell class="!p-0"></TableBodyCell>
     <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -5970,7 +7178,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-                <td></td>
+        <td></td>
         <td></td>
     <td class="pl-10"><Button color="blue" pill={true} on:click={saveTriggerRSSI}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -6180,15 +7388,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <TabItem title="Action Profiles">
 
-
-
 <Accordion>
 <AccordionItem {defaultClass}>
     <span slot="header" class="pl-4">
     SMS
     </span>
-
-
 
  <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
@@ -6210,19 +7414,68 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_actionProfile.sms as ActionSMS, index}
+{#if ActionSMS.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteActionSMS(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={ActionSMS.enable} disabled>
+
+      </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{ActionSMS.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{ActionSMS.smsPhoneNumber}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{ActionSMS.smsContent}</td>
+      </tr>
+
+{:else}
 
     <TableBodyRow>
           <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyActionSMS(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteActionSMS(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 
     <TableBodyCell class="w-10">
@@ -6235,25 +7488,30 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-18">{ActionSMS.smsContent}</TableBodyCell>
 
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
-
 {#if getDataReady == 1}
 {#if changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length < 10}
+      <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_action_sms_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.sms.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-{/if}
-{/if}
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-    <TableBodyCell class="w-10"></TableBodyCell>
+{:else}
+    <TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}
+{/if}
+
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -6509,19 +7767,67 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile as ActionEmailRemote, index}
 
+{#if ActionEmailRemote.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteActionEmail(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={ActionEmailRemote.enable} disabled>
+</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{ActionEmailRemote.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{ActionEmailRemote.remoteEmail}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{ActionEmailRemote.emailContent}</td>
+
+      </tr>
+
+{:else}
 
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-4">
+      <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyActionEmailRemote(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4 w-4"></TableBodyCell>
-
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteActionEmail(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={ActionEmailRemote.enable}>
@@ -6534,24 +7840,31 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-18">{ActionEmailRemote.emailContent}</TableBodyCell>
 
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
 
 <TableBodyRow>
-      <TableBodyCell class="!p-4 w-4">
+
 
 {#if getDataReady == 1}      
 {#if changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length < 10}
+            <TableBodyCell class="!p-4 w-10">
       <button on:click={() => new_action_email_remote_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.email.remoteEmailProfile.length)}>
       <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
+      </TableBodyCell> 
+{:else}      
+      <TableBodyCell class="!p-4 w-16"></TableBodyCell>
 {/if}
 {/if}
-      </TableBodyCell>
+
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-4"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
@@ -6898,19 +8211,85 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_actionProfile.do as DO, index}
-  
+
+{#if DO.delete} 
+
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteActionDO(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={DO.enable} disabled>
+
+      </td>
+
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{DO.aliasName}</td>
+{#if DO.type == 0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Pulse : One Shot High</td>
+{:else if DO.type == 1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Pulse : One Shot Low</td>
+{:else if DO.type == 2}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">DO : On</td>
+{:else if DO.type == 3}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">DO : Off</td>
+{:else}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
+{/if}
+
+{#if DO.type ==0 || DO.type ==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{DO.duration} second(s)</td>
+{/if}
+
+      </tr>
+
+{:else}
+
     <TableBodyRow>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+      <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyActionDO(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteActionDO(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={DO.enable}>
@@ -6936,28 +8315,32 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {/if}
 
     </TableBodyRow>
+
+{/if}
+
 {/each}
 {/if}
 
 
 <TableBodyRow>
-
-      <TableBodyCell class="!p-4 w-10">
-
 {#if getDataReady == 1} 
-{#if changed_event_engine_data.config.service_eventEngine_actionProfile.do.length < 10}    
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.do.length < 10} 
+      <TableBodyCell class="!p-4 w-10"> 
 <button on:click={() => new_action_do_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.do.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
+       </TableBodyCell>
+{:else}
+      <TableBodyCell class="!p-4 w-16"></TableBodyCell>
 {/if}
 {/if}
 
-       </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -7223,20 +8606,92 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_actionProfile.modbus as Modbus, index}
   
+{#if Modbus.delete}
 
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteActionModbus(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={Modbus.enable} disabled>
+
+      </td>
+
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Modbus.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Modbus.modbusDataModel}</td>
+{#if Modbus.dataType==1}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
+{:else if Modbus.dataType ==2}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Short</td>
+{:else if Modbus.dataType ==3}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed
+Short</td>
+{:else if Modbus.dataType ==4}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Integer</td>
+{:else if Modbus.dataType ==5}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Integer</td>
+{:else if Modbus.dataType ==6}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
+{:else if Modbus.dataType ==7}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
+
+{/if}
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Modbus.assignment}</td>
+
+
+</tr>
+{:else}
 <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyActionModbus(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteActionModbus(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
     <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={Modbus.enable}>
     </TableBodyCell>
@@ -7271,30 +8726,32 @@ Short</TableBodyCell>
 
 </TableBodyRow>
 
+{/if}
+
 {/each}
 {/if}
 
 
 
   <TableBodyRow>
- <TableBodyCell class="!p-4">
+
 {#if getDataReady == 1}
 {#if changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length < 10}
+ <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_action_modbus_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
     <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
     </svg>
 </button>
-{/if}
-{/if}
  </TableBodyCell>
-      <TableBodyCell class="!p-4">
+{:else}
+ <TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}
+{/if}
 
-
-
-       </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
 
     <TableBodyCell class="w-10"></TableBodyCell>
@@ -7740,18 +9197,71 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#each changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage as TCPMsg, index}
   
 
+{#if TCPMsg.delete}
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteActionTCPMsg(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={TCPMsg.enable} disabled>
+
+      </td>
+
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TCPMsg.aliasName}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TCPMsg.remoteHost}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TCPMsg.remotePort}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TCPMsg.sendingMessage}</td>
+
+
+      </tr>
+
+{:else}
     <TableBodyRow>
-          <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+          <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyActionTCPMsg(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteActionTCPMsg(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+
 
 <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={TCPMsg.enable}>
@@ -7766,26 +9276,29 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
     </TableBodyRow>
+{/if}
+
 {/each}
 {/if}
 
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
+
 {#if getDataReady == 1}
 {#if changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length < 10}
+      <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_action_tcpmsg_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.tcpMessage.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
-{/if}
-{/if}
-
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+{:else}
+<TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}
+{/if}
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
     <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -8005,21 +9518,70 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish as MQTT, index}
-  
 
+{#if MQTT.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteActionMQTT(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={MQTT.enable} disabled>
+
+      </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MQTT.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MQTT.mqttProfile}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MQTT.publishTopic}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MQTT.sendingContent}</td>
+
+      </tr>
+  
+{:else}
 
     <TableBodyRow>
-          <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+          <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyActionMQTT(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteActionMQTT(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={MQTT.enable}>
@@ -8034,25 +9596,35 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
     </TableBodyRow>
+
+{/if}    
 {/each}
 {/if}
 
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
+
 {#if getDataReady == 1}
 {#if changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length < 10}
+
+      <TableBodyCell class="!p-4 w-10">
+
 <button on:click={() => new_action_mqtt_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.mqttPublish.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-{/if}
-{/if}
+
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-    <TableBodyCell class="w-10"></TableBodyCell>
+{:else}
+
+  <TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}
+{/if}
+
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
@@ -8284,22 +9856,73 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification as LINE, index}
-  
+ 
+
+{#if LINE.delete}  
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteLINE(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={LINE.enable} disabled>
+
+      </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{LINE.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{LINE.token}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{LINE.sendingContent}</td>
+
+      </tr>
+
+{:else}
 
 
     <TableBodyRow>
-          <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+          <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 
 <button on:click={() => TriggerModifyActionLINE(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteLINE(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={LINE.enable}>
@@ -8314,24 +9937,34 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
     </TableBodyRow>
 
+
+{/if}
+
 {/each}
 {/if}
 
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
+
 {#if getDataReady == 1}
 {#if changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length < 10}
+
+      <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_action_line_trigger(changed_event_engine_data.config.service_eventEngine_actionProfile.lineNotification.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-{/if}
-{/if}
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+
+{:else}
+<TableBodyCell class="!p-4 w-16"></TableBodyCell>
+
+{/if}
+{/if}
+
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
     <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>

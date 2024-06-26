@@ -536,7 +536,24 @@
         }
       }
 
-      saved_changed_event_engine_data.config.service_eventEngine_ruleSettings=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_ruleSettings));
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_event_engine_data.config.service_eventEngine_ruleSettings.length; i++)
+      {
+        if (!changed_event_engine_data.config.service_eventEngine_ruleSettings[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_event_engine_data.config.service_eventEngine_ruleSettings[i]]
+        }
+
+      }
+
+      saved_changed_event_engine_data.config.service_eventEngine_ruleSettings=JSON.parse(JSON.stringify(tempForDelete));
+      changed_event_engine_data.config.service_eventEngine_ruleSettings=JSON.parse(JSON.stringify(tempForDelete));
+
+
+
+
+      //saved_changed_event_engine_data.config.service_eventEngine_ruleSettings=JSON.parse(JSON.stringify(changed_event_engine_data.config.service_eventEngine_ruleSettings));
 
       EventEngine_Rule_ConfigChangedLog.set(event_engine_rule_changedValues);
       ChangedEventEngineConfig.set(saved_changed_event_engine_data);
@@ -2093,6 +2110,17 @@
           actionProfile: "",
           actionOperation:0
   };
+
+
+  function deleteRule(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_ruleSettings[index].delete=true;
+  }
+
+  function RestoreDeleteRule(index)
+  {
+    changed_event_engine_data.config.service_eventEngine_ruleSettings[index].delete=false;
+  }
 
 
   function TriggerModifyRule(index)
@@ -10159,21 +10187,138 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 {#if getDataReady == 1}
 {#each changed_event_engine_data.config.service_eventEngine_ruleSettings as rule, index}
-  
+ 
+{#if rule.delete}  
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteRule(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
 
 
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={rule.enable} disabled>
+
+      </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-18 strikeout">{rule.aliasName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-36 strikeout">
+
+{#if rule.triggerCount == 1 || rule.triggerCount ==2 || rule.triggerCount ==3}
+
+{#if rule.firstTrigger.catalog ==0}SMS{rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==1}DI(
+{#if rule.firstTrigger.statusType ==1}High{:else if rule.firstTrigger.statusType == 0}Low{/if}
+)
+{:else if rule.firstTrigger.catalog ==2}Modbus({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==3}TCP Message({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==4}MQTT({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==5}PING({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==6}RSSI({rule.firstTrigger.profile})
+{:else if rule.firstTrigger.catalog ==7}WAN( {#if rule.firstTrigger.statusType == 0}C-WAN Link Down{:else if rule.firstTrigger.statusType == 1}C-WAN Link Up{:else if rule.firstTrigger.statusType == 2}WAN Link Down{:else if rule.firstTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.firstTrigger.statusType==4}WAN Failover{:else if rule.firstTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.firstTrigger.catalog ==8}LAN({#if rule.firstTrigger.statusType==0}Link Down{:else if rule.firstTrigger.statusType==1}Link Up{/if})
+{:else if rule.firstTrigger.catalog ==9}Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
+{:else if rule.firstTrigger.catalog ==10}System({#if rule.firstTrigger.statusType==0}Cold Start{:else if rule.firstTrigger.statusType ==1}Firmware Upgrading{:else if rule.firstTrigger.statusType==2}Password Changed{:else if rule.firstTrigger.statusType==3}Reboot with reason{/if})
+{/if}
+
+
+{#if rule.triggerCount ==2 || rule.triggerCount==3}
+{#if rule.secondTrigger.catalog ==0},SMS{rule.firstTrigger.profile})
+{:else if rule.secondTrigger.catalog ==1},DI(
+{#if rule.secondTrigger.statusType ==1}High{:else if rule.secondTrigger.statusType == 0}Low{/if}
+)
+{:else if rule.secondTrigger.catalog ==2},Modbus({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==3},TCP Message({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==4},MQTT({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==5},PING({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==6},RSSI({rule.secondTrigger.profile})
+{:else if rule.secondTrigger.catalog ==7},WAN( {#if rule.secondTrigger.statusType == 0}C-WAN Link Down{:else if rule.secondTrigger.statusType == 1}C-WAN Link Up{:else if rule.secondTrigger.statusType == 2}WAN Link Down{:else if rule.secondTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.secondTrigger.statusType==4}WAN Failover{:else if rule.secondTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.secondTrigger.catalog ==8},LAN({#if rule.secondTrigger.statusType==0}Link Down{:else if rule.secondTrigger.statusType==1}Link Up{/if})
+{:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
+{:else if rule.secondTrigger.catalog ==10},System({#if rule.secondTrigger.statusType==0}Cold Start{:else if rule.secondTrigger.statusType ==1}Firmware Upgrading{:else if rule.secondTrigger.statusType==2}Password Changed{:else if rule.secondTrigger.statusType==3}Reboot with reason{/if})
+{/if}
+{/if}
+
+
+{#if rule.triggerCount ==3}
+{#if rule.thirdTrigger.catalog ==0},SMS{rule.firstTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==1},DI(
+{#if rule.thirdTrigger.statusType ==1}High{:else if rule.thirdTrigger.statusType == 0}Low{/if}
+)
+{:else if rule.thirdTrigger.catalog ==2},Modbus({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==3},TCP Message({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==4},MQTT({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==5},PING({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==6},RSSI({rule.thirdTrigger.profile})
+{:else if rule.thirdTrigger.catalog ==7},WAN( {#if rule.thirdTrigger.statusType == 0}C-WAN Link Down{:else if rule.thirdTrigger.statusType == 1}C-WAN Link Up{:else if rule.thirdTrigger.statusType == 2}WAN Link Down{:else if rule.thirdTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.thirdTrigger.statusType==4}WAN Failover{:else if rule.thirdTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.thirdTrigger.catalog ==8},LAN({#if rule.thirdTrigger.statusType==0}Link Down{:else if rule.thirdTrigger.statusType==1}Link Up{/if})
+{:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
+{:else if rule.thirdTrigger.catalog ==10},System({#if rule.thirdTrigger.statusType==0}Cold Start{:else if rule.thirdTrigger.statusType ==1}Firmware Upgrading{:else if rule.thirdTrigger.statusType==2}Password Changed{:else if rule.thirdTrigger.statusType==3}Reboot with reason{/if})
+{/if}
+{/if}
+
+
+
+{:else}
+(unknown)
+{/if}
+
+      </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-36 strikeout">
+      {rule.delaySecond}-second delay to execute {#if rule.actionOption==0}once {:else if rule.actionOption==1}repeatedly{/if} the action: {#if rule.actionCatalog==0}SMS({rule.actionProfile}){:else if rule.actionCatalog==1}DO({rule.actionProfile}){:else if rule.actionCatalog==2}Modbus({rule.actionProfile}){:else if rule.actionCatalog==3}({rule.actionProfile}){:else if rule.actionCatalog==4}MQTT({rule.actionProfile}){:else if rule.actionCatalog==5}LINE({rule.actionProfile}){:else if rule.actionCatalog==6}TCP Message({rule.actionProfile}){:else if rule.actionCatalog==7}System({#if rule.actionOperation==0}System Reboot{:else if rule.actionOperation==1}SysLog Server On{:else if rule.actionOperation==2}SysLog Server Off{:else if rule.actionOperation==3}SW Reset C-WAN module{:else if rule.actionOperation==4}HW Reset C-WAN module{:else if rule.actionOperation==5}WAN Backup Switch{:else if rule.actionOperation==6}C-WAN Power Cycle{:else if rule.actionOperation==7}SIM Switch{/if}){:else if rule.actionCatalog==8}MQTT API({#if rule.actionOperation==0}MQTT API Disable{:else if rule.actionOperation==1}MQTT API Enable{/if}){:else if rule.actionCatalog==9}REST API({#if rule.actionOperation==0}REST API Disable{:else if rule.actionOperation==1}REST API Enable{/if}){/if} {#if rule.actionOption==1} with a {rule.repeatInterval}-second interval.{/if}
+
+
+      </td>
+
+
+
+
+</tr>
+
+{:else}
     <TableBodyRow>
-          <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
+          <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
 
 <button on:click={() => TriggerModifyRule(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteRule(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
 <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={rule.enable}>
@@ -10250,41 +10395,43 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
       </TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+
 
     </TableBodyRow>
+
+{/if}
 
 {/each}
 {/if}
 
     <TableBodyRow>
-      <TableBodyCell class="!p-4 w-10">
+
 {#if getDataReady == 1}
 {#if changed_event_engine_data.config.service_eventEngine_ruleSettings.length < 10}
+
+      <TableBodyCell class="!p-4 w-10">
+
 <button on:click={() => new_rule_trigger(changed_event_engine_data.config.service_eventEngine_ruleSettings.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-{/if}
-{/if}
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+{:else}
+
+<TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}
+{/if}
+
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
     <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-36"></TableBodyCell>
+      <TableBodyCell class="w-36"></TableBodyCell>      
     </TableBodyRow>
-
-
-
 
 
 
@@ -10299,10 +10446,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
 
-        <td></td>
-        <td></td>
     <td class="pl-10"><Button color="blue" pill={true} on:click={saveRule}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>

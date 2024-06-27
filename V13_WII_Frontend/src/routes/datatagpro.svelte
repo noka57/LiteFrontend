@@ -75,6 +75,20 @@
   }
 
 
+  let modify_com_modal=false;
+  let modify_com_index;
+  function TriggerModifyCOM(index)
+  {
+    modify_com_modal=true;
+    modify_com_index=index;
+  }
+
+  function NoModifyCOM(index)
+  {
+    modify_com_modal=false;
+
+  }
+
 
   function TriggerModifyModbusTag()
   {
@@ -92,6 +106,22 @@
   function TriggerModifyCalculateTag()
   {
   
+  }
+
+  let Modify_TCP_Master_Modal=false;
+  let Modify_TCP_Master_index;
+
+  function TriggerModifyTCPMaster(index)
+  {
+    Modify_TCP_Master_Modal=true;
+    Modify_TCP_Master_index=index;
+
+  }
+
+  function NoModifyTCPMaster(index)
+  {
+    Modify_TCP_Master_Modal=false;
+
   }
 
 
@@ -334,56 +364,321 @@
     Modbus Tag
     </span>
 
+<Table shadow striped={true}>
+<caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
+on:click={handleClickMMS} on:keydown={() => {}}>
+    Modbus RTU Master Profile
+    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Please set rtu master configuration first.</p>
+  </caption>
 
-<Table shadow striped={true} tableNoWFull={true}>
+{#if openDetailStatusMMS}
+<TableHead>    
+  <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="w-10">Enable</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-10">Serial Profile</TableHeadCell>
+    <TableHeadCell class="w-10">Interface</TableHeadCell>
+    <TableHeadCell class="w-10">Baudrate</TableHeadCell>
+    <TableHeadCell class="w-10">Parity</TableHeadCell>
+    <TableHeadCell class="w-10">Data Bits</TableHeadCell>
+    <TableHeadCell class="w-18">Stop Bits</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>    
+    <TableHeadCell class="w-10"></TableHeadCell> 
+  </TableHead>
+  <TableBody>
+
+ <TableBodyRow>
+      <TableBodyCell class="!p-1 w-4">
+<button on:click={() => TriggerModifyCOM(1)}>
+
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+
+
+      </button>
+
+       </TableBodyCell>
+
+    <TableBodyCell class="w-4">
+<input type="checkbox">
+    </TableBodyCell>
+
+    <TableBodyCell></TableBodyCell>
+ <TableBodyCell></TableBodyCell>
+  <TableBodyCell></TableBodyCell>
+   <TableBodyCell></TableBodyCell>
+    <TableBodyCell></TableBodyCell>
+     <TableBodyCell></TableBodyCell>
+     <TableBodyCell></TableBodyCell>
+ </TableBodyRow>
+  </TableBody>
+{/if}  
+
+  
+<Modal bind:open={modify_com_modal} size="md" class="w-full" permanent={true}>
+<form action="#">
+<label>
+  <input type="checkbox"  >
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyCOM(modify_com_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+<table>
+  
+<tr>
+  <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
+
+      <td class="pl-5 pt-5">
+
+
+      </td>
+
+</tr>
+
+<tr>
+  <td><p class="pl-4 pt-4 text-lg font-light text-right">Interface</p>
+
+  </td>
+
+    <td class="pl-5 pt-4"><div class="flex gap-4">
+  <Radio  value={0} >RS 485</Radio>
+</div></td>
+</tr>
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Parity</p></td>
+
+
+    <td class="pl-5 pt-4"><div class="flex gap-4">
+  <Radio  value={0} >None</Radio>
+  <Radio  value={1} >Even</Radio>
+  <Radio  value={2} >Odd</Radio>
+</div></td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="text"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="text"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+  
+  </tr>
+      <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true}>Modify</Button></td>
+    </tr>
+</table>
+  </form>
+</Modal>
+
+</Table>
+
+
+<p class="mt-8"></p>  
+
+
+<Table shadow striped={true} >
+
+  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMT} on:keydown={() => {}}>
+    Modbus TCP Master Profile
+    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Please set tcp master configuration first.</p>
+  </caption>
+
+{#if openDetailStatusMMT}
   <TableHead>
     <TableHeadCell class="!p-4">
     </TableHeadCell>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-18">Modbus Variable</TableHeadCell>
-    <TableHeadCell class="w-18">Variable Type</TableHeadCell>
+     <TableHeadCell class="w-10">Enable</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>  
+    <TableHeadCell class="w-10">Remote Server IP</TableHeadCell>
+    <TableHeadCell class="w-10">Remote Port</TableHeadCell>
+    <TableHeadCell class="w-10">Connection Timeout</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell> 
+    <TableHeadCell class="w-10"></TableHeadCell> 
+    <TableHeadCell class="w-10"></TableHeadCell> 
+  </TableHead>
+  <TableBody>
 
-    <TableHeadCell class="w-18">Preset Value</TableHeadCell> 
-    <TableHeadCell class="w-18">Variable Display</TableHeadCell>
-    <TableHeadCell class="w-18">?</TableHeadCell>
+ <TableBodyRow>
+      <TableBodyCell class="!p-1 w-4">
+<button on:click={() => TriggerModifyTCPMaster(1)}>
+
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+
+
+      </button>
+
+       </TableBodyCell>
+
+
+    <TableBodyCell class="w-4">
+<input type="checkbox">
+    </TableBodyCell>
+
+    <TableBodyCell></TableBodyCell>
+ <TableBodyCell></TableBodyCell>
+  <TableBodyCell></TableBodyCell>
+   <TableBodyCell></TableBodyCell>
+ </TableBodyRow>
+  </TableBody>
+{/if} 
+
+
+
+
+   <Modal bind:open={Modify_TCP_Master_Modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox" >
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTCPMaster(Modify_TCP_Master_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Remote Server IP</p></td><td class="pl-5 pt-5"><input type="text"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Connection Timeout</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"> </td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
+
+
+
+  </tr>
+
+      <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+    <td></td>
+
+            <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="dark" pill={true}>Modify</Button></td>
+
+
+    </tr>
+</table>
+</form>
+</Modal>
+
+</Table>
+<p class="mt-8"></p>  
+
+
+<Table shadow striped={true}>
+  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+    Modbus Parameter
+
+  
+<TableHead>
+    <TableHeadCell class="!p-1">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4 w-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">Enable</TableHeadCell>
+    <TableHeadCell class="!p-1 w-2">No</TableHeadCell>
+    <TableHeadCell class="!p-4 w-18">Tag Name</TableHeadCell>
+    <TableHeadCell class="!p-2 w-10">Protocol</TableHeadCell>
+    <TableHeadCell class="!p-1 w-10">Slave ID</TableHeadCell>
+    <TableHeadCell class="!p-4 w-18">Point Type</TableHeadCell>
+    <TableHeadCell class="!p-2 w-18">Address (DEC)</TableHeadCell>
+    <TableHeadCell class="!p-2 w-10">Quantity</TableHeadCell>
+    <TableHeadCell class="!p-1 w-10">Response Timeout</TableHeadCell>
+    <TableHeadCell class="!p-2 w-10">Polling Rate</TableHeadCell>
+    <TableHeadCell class="!p-1 w-10">Delay Between Polls</TableHeadCell>
+    <TableHeadCell class="!p-2 w-10">Byte Order</TableHeadCell>
   </TableHead>
 
 <TableBody>
 {#if getDataReady == 1}
 
- <TableBodyRow>
- <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
-<button on:click={() => TriggerModifyModbusTag()}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<TableBodyRow>
+   <TableBodyCell class="!p-1 w-10"></TableBodyCell>
+  <TableBodyCell class="!p-0 w-10">
+<button >
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
+
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button >    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+    <TableBodyCell>
+<input class="mb-1" type="checkbox"  >
+    </TableBodyCell>
 
-    <TableBodyCell class="w-10">1</TableBodyCell>
 
+      <TableBodyCell class="!p-1 w-4"></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
 
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">mb_KW</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18">Double</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
 
-      <TableBodyCell class="w-18">Hexadecimal
-       </TableBodyCell>
-    
-
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
 
     </TableBodyRow>
+
+
 {/if}
 
   <TableBodyRow>
@@ -404,15 +699,21 @@
        </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
 
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
 
-    <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
     </TableBodyRow>
 
 
@@ -429,6 +730,9 @@
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
+        <td></td>
+
     <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
@@ -563,205 +867,6 @@
 
  </Table> 
 
-
-<p class="mt-8">
-
-<Table shadow striped={true}>
-
-
-<caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
-on:click={handleClickMV} on:keydown={() => {}}>
-    Modbus Variable
-    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus variable. Please go to modbus page for detailed setting.</p>
-  </caption>
-{#if openDetailStatusMV}
-<TableHead>
-
-    <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell class="!p-2">No</TableHeadCell>
-    <TableHeadCell class="">Variable Name</TableHeadCell>
-    <TableHeadCell class="w-18">Master Profile</TableHeadCell>
-    <TableHeadCell class="w-18">Slave ID</TableHeadCell>
-    <TableHeadCell class="w-18">Point Type</TableHeadCell>
-    <TableHeadCell class="w-18">Address (DEC)</TableHeadCell>
-    <TableHeadCell>Quantity</TableHeadCell>
-    <TableHeadCell>Response Timeout</TableHeadCell>
-    <TableHeadCell class="w-18">Polling Rate</TableHeadCell>
-    <TableHeadCell>Delay Between Polls</TableHeadCell>
-    <TableHeadCell>Byte Order</TableHeadCell>
-  </TableHead>
-  <TableBody>
-
-{#if getDataReady == 1}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_variable.master as VariableMasterItem, index}
-   
-
- <TableBodyRow>
-{#if VariableMasterItem.enable}
-       <TableBodyCell class='w-2'>1</TableBodyCell>
-{:else}
-       <TableBodyCell class='w-2'>0</TableBodyCell>
-{/if}
-      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
-  <TableBodyCell class="w-18">{VariableMasterItem.variableName}</TableBodyCell>
-  <TableBodyCell class="w-10">{VariableMasterItem.profile}</TableBodyCell>
-  <TableBodyCell class="w-18">{VariableMasterItem.slaveId}</TableBodyCell>
-{#if VariableMasterItem.pointType == 0}
-    <TableBodyCell class="w-10">Coil</TableBodyCell>
-{:else if VariableMasterItem.pointType == 1}
-    <TableBodyCell class="w-10">Discrete Input</TableBodyCell>
-{:else if VariableMasterItem.pointType == 2}
-    <TableBodyCell class="w-10">Input Registers</TableBodyCell>
-{:else if VariableMasterItem.pointType == 3}
-    <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
-{:else}
-  <TableBodyCell class="w-10"></TableBodyCell>
-{/if}
-  <TableBodyCell class="w-18">{VariableMasterItem.address}</TableBodyCell>
-  <TableBodyCell class="w-10">{VariableMasterItem.quantity}</TableBodyCell>
-  <TableBodyCell class="w-18">{VariableMasterItem.responseTimeout} ms</TableBodyCell>
-<TableBodyCell class="w-18">{VariableMasterItem.pollingRate} ms</TableBodyCell>
-    <TableBodyCell class="w-18">{VariableMasterItem.delayBetweenPolls} ms</TableBodyCell>
-
-{#if VariableMasterItem.byteOrder==0} 
-    <TableBodyCell class="w-18">Big Endian</TableBodyCell>
-{:else if VariableMasterItem.byteOrder==1}   
-        <TableBodyCell class="w-18">Little Endian</TableBodyCell>
-{:else if VariableMasterItem.byteOrder==2}
-    <TableBodyCell class="w-18">Big Endian Byte Swap</TableBodyCell>
-{:else if VariableMasterItem.byteOrder==3}
-        <TableBodyCell class="w-18">Little Endian Byte Swap</TableBodyCell>
-{:else}
-    <TableBodyCell class="w-18"></TableBodyCell>
-{/if}
-
-    </TableBodyRow>
-{/each}
-{/if}
-
-
-  </TableBody>
-      {/if}
-</Table>   
-
-<p class="mt-4">
-
-<Table shadow striped={true}>
-
-
-  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMS} on:keydown={() => {}}>
-    Modbus RTU Master Profile
-    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus master in RTU mode. Please go to modbus page for detailed setting.</p>
-  </caption>
-
-
-{#if openDetailStatusMMS}
-
-  <TableHead>
-    <TableHeadCell class="w-10">Enable</TableHeadCell>
-    <TableHeadCell class="w-10">No</TableHeadCell>
-    <TableHeadCell class="w-10">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-10">Serial Profile</TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>    
-  </TableHead>
-  <TableBody>
-
-
-{#if getDataReady == 1}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RTUMasterItem, index}
-
-    <TableBodyRow>
-
-{#if RTUMasterItem.enable}
-      <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-      <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
-      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">{RTUMasterItem.aliasName}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">{RTUMasterItem.serialProfile}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>      
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell> 
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>      
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell> 
-
-    </TableBodyRow>
-
-{/each}
-{/if}
-
-
-  
-
-  </TableBody>
-  {/if}
-</Table>
-
-<p class="mt-4">
-
-<Table shadow striped={true} >
-
-  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMT} on:keydown={() => {}}>
-    Modbus TCP Master Profile
-    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus master in TCP mode. Please go to modbus page for detailed setting.</p>
-  </caption>
-
-{#if openDetailStatusMMT}
-  <TableHead>
-     <TableHeadCell class="w-10">Enable</TableHeadCell>
-    <TableHeadCell class="w-10">No</TableHeadCell>
-    <TableHeadCell class="w-10">LAN Profile</TableHeadCell>   
-    <TableHeadCell class="w-10">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-10">Remote Server IP</TableHeadCell>
-    <TableHeadCell class="w-10">Remote Port</TableHeadCell>
-    <TableHeadCell class="w-10">Connection Timeout</TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>  
-    <TableHeadCell class="w-10"></TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell> 
-  </TableHead>
-  <TableBody>
-
-
-{#if getDataReady == 1}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TCPMasterItem, index}
-   
-    <TableBodyRow>
-{#if TCPMasterItem.enable}
-      <TableBodyCell class="w-10">1</TableBodyCell>
-{:else}
-      <TableBodyCell class="w-10">0</TableBodyCell>
-{/if}
-      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.lanProfile}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.aliasName}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.remoteServerIp}</TableBodyCell>
-      <TableBodyCell class="w-10">{TCPMasterItem.remotePort}</TableBodyCell>
-      <TableBodyCell class="w-10">{TCPMasterItem.connectionTimeout} ms</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell> 
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell> 
-    </TableBodyRow>
-{/each}
-{/if}
-
-
-
-  </TableBody>
-    {/if}
-</Table>
 
 
   </AccordionItem>
@@ -1619,6 +1724,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
   </AccordionItem>
 
+{#if 0}
 
   <AccordionItem {defaultClass}>
 
@@ -1695,6 +1801,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
 </table>
 
   </AccordionItem>
+{/if}
+
 
 </Accordion>
 
@@ -1985,6 +2093,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
 </TabItem>
 
 
+{#if 0}
+
 <TabItem title="Observation">
 
 <Accordion>
@@ -2043,7 +2153,9 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 </TabItem>
 
+{/if}
 
+{#if 0}
 <TabItem title="Simulator">
 
 
@@ -2099,6 +2211,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
  </TabItem>
+
+ {/if}
 
 
  </Tabs>

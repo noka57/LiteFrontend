@@ -1051,9 +1051,9 @@ const topMenuList = [{ href: '/apply', id: 0 },
         				<SidebarDropdownItem label="Remote Service" href='/remoteS' active={activeUrl === '/remoteS'}/>
 
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
-{#if 0}
+
         			    <SidebarDropdownItem label="Data Tag Pro" href='/datatagpro' active={activeUrl === '/datatagpro'}/>
-{/if}
+
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
 						<SidebarDropdownItem label="Docker Engine" href='/docker' active={activeUrl === '/docker'}/>
 

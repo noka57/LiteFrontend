@@ -122,7 +122,18 @@
       EventEngine_TriggerSMS_ConfigChangedLog,
       EventEngine_Rule_ConfigChangedLog,      
       EventEngine_General_ConfigChangedLog,
-      ChangedEventEngineConfig
+      ChangedEventEngineConfig,
+      datatagproConfig,
+      ChangedDataTagProConfig,
+      DataTagPro_ULRule_ConfigChangedLog,
+      DataTagPro_TagRuleEvent_ConfigChangedLog,
+      DataTagPro_TagRuleSCADA_ConfigChangedLog,
+      DataTagPro_TagRuleDM_ConfigChangedLog,
+      DataTagPro_TagRuleTOU_ConfigChangedLog,
+      DataTagPro_TagRuleAccumulated_ConfigChangedLog,
+      DataTagPro_TagRuleCalculation_ConfigChangedLog,
+      DataTagPro_TagRuleModbus_ConfigChangedLog,
+      DataTagPro_General_ConfigChangedLog
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
 	let defaultModal = false;
@@ -149,6 +160,7 @@
   let modbus_data="";
   let sdata_logger_data="";
   let event_engine_data="";
+  let data_tag_pro_data="";  
 
 	let sessionid;
   let sessionBinary;
@@ -285,6 +297,18 @@
   let sdata_logger_monitor_topic_changedValues = [];
 
 
+  let ContentDatatagPro;
+  let DatatagProBinary=null;
+  let data_tag_pro_general_changedValues = [];
+  let data_tag_pro_tag_modbus_changedValues = [];
+  let data_tag_pro_tag_calculation_changedValues = [];
+  let data_tag_pro_tag_accumulated_changedValues = [];  
+  let data_tag_pro_tag_tou_changedValues = [];
+  let data_tag_pro_tag_dm_changedValues = [];
+  let data_tag_pro_tag_scada_changedValues = [];
+  let data_tag_pro_tag_event_changedValues = [];
+  let data_tag_pro_ul_changedValues = [];
+
   let ContentEventEngine;
   let EventEngineBinary=null;
   let event_engine_general_changedValues = [];
@@ -330,7 +354,6 @@
   ChangedNATConfig.subscribe(val => {
       nat_data = val;
   });
-
 
   ChangedFirewallConfig.subscribe(val => {
       firewall_data = val;
@@ -386,8 +409,6 @@
       awsIoT_core_data = val;
   });
 
-
-
   ChangedRemoteServiceConfig.subscribe(val => {
       remote_service_data = val;
   });
@@ -412,6 +433,50 @@
   ChangedEventEngineConfig.subscribe(val => {
       event_engine_data = val;
   });
+
+
+  ChangedDataTagProConfig.subscribe(val => {
+      data_tag_pro_data = val;
+  });
+
+  DataTagPro_ULRule_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_ul_changedValues = val;
+  });
+
+
+  DataTagPro_TagRuleEvent_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_event_changedValues = val;
+  });
+  
+  DataTagPro_TagRuleSCADA_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_scada_changedValues = val;
+  });
+  
+  DataTagPro_TagRuleDM_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_dm_changedValues = val;
+  });
+  
+  DataTagPro_TagRuleTOU_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_tou_changedValues = val;
+  });
+
+  DataTagPro_TagRuleAccumulated_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_accumulated_changedValues = val;
+  });
+  
+  DataTagPro_TagRuleCalculation_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_calculation_changedValues = val;
+  });
+
+  DataTagPro_TagRuleModbus_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_modbus_changedValues = val;
+  });
+  
+  DataTagPro_General_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_general_changedValues = val;
+  });
+
+
 
   EventEngine_General_ConfigChangedLog.subscribe(val => {
       event_engine_general_changedValues = val;
@@ -1958,6 +2023,66 @@
 
   }     
 
+  async function RestartDataTagPro()
+  {
+    const res = await fetch(window.location.origin+"/ReSTartDatatagPro", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart data tag pro OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  }   
+
+  async function SetDataTagPro()
+  {
+    const res = await fetch(window.location.origin+"/sETdaTATagPRO", {
+      method: 'POST',
+      body: ContentDatatagPro
+     })
+
+    if (res.status == 200)
+    {
+      console.log("set data tag pro OK\r\n");
+      SetCountOK++;
+
+
+      let applied_new_data_tag_pro= JSON.parse(JSON.stringify(data_tag_pro_data));
+      datatagproConfig.set(applied_new_data_tag_pro);
+
+      data_tag_pro_general_changedValues = [];
+      data_tag_pro_tag_modbus_changedValues = [];
+      data_tag_pro_tag_calculation_changedValues = [];
+      data_tag_pro_tag_accumulated_changedValues = [];  
+      data_tag_pro_tag_tou_changedValues = [];
+      data_tag_pro_tag_dm_changedValues = [];
+      data_tag_pro_tag_scada_changedValues = [];
+      data_tag_pro_tag_event_changedValues = [];
+      data_tag_pro_ul_changedValues = [];
+
+      DataTagPro_ULRule_ConfigChangedLog.set(data_tag_pro_ul_changedValues);
+      DataTagPro_TagRuleEvent_ConfigChangedLog.set(data_tag_pro_tag_event_changedValues);
+      DataTagPro_TagRuleSCADA_ConfigChangedLog.set(data_tag_pro_tag_scada_changedValues);
+      DataTagPro_TagRuleDM_ConfigChangedLog.set(data_tag_pro_tag_dm_changedValues);
+      DataTagPro_TagRuleTOU_ConfigChangedLog.set(data_tag_pro_tag_tou_changedValues);
+      DataTagPro_TagRuleAccumulated_ConfigChangedLog.set(data_tag_pro_tag_accumulated_changedValues);
+      DataTagPro_TagRuleCalculation_ConfigChangedLog.set(data_tag_pro_tag_calculation_changedValues);
+      DataTagPro_TagRuleModbus_ConfigChangedLog.set(data_tag_pro_tag_modbus_changedValues);
+      DataTagPro_General_ConfigChangedLog.set(data_tag_pro_general_changedValues);
+
+      RestartDataTagPro();  
+
+    }
+
+  }
 
 	function CalculateTotalSetCount()
 	{
@@ -2142,6 +2267,21 @@
       SetCount++;
       RestartCount++;   
     }
+
+    if (data_tag_pro_data != "" && (
+        data_tag_pro_general_changedValues.length !=0 ||
+        data_tag_pro_tag_modbus_changedValues.length !=0 ||
+        data_tag_pro_tag_calculation_changedValues.length !=0 ||
+        data_tag_pro_tag_accumulated_changedValues.length !=0 ||
+        data_tag_pro_tag_tou_changedValues.length !=0 ||
+        data_tag_pro_tag_dm_changedValues.length !=0 ||
+        data_tag_pro_tag_scada_changedValues.length !=0 ||
+        data_tag_pro_tag_event_changedValues.length !=0 ||
+        data_tag_pro_ul_changedValues.length !=0 ))
+    {
+      SetCount++;
+      RestartCount++;   
+    }    
 
 	}
 
@@ -2451,6 +2591,27 @@
           SetEventEngineData();
         }
 
+        if (data_tag_pro_data != "" && (
+          data_tag_pro_general_changedValues.length !=0 ||
+          data_tag_pro_tag_modbus_changedValues.length !=0 ||
+          data_tag_pro_tag_calculation_changedValues.length !=0 ||
+          data_tag_pro_tag_accumulated_changedValues.length !=0 ||
+          data_tag_pro_tag_tou_changedValues.length !=0 ||
+          data_tag_pro_tag_dm_changedValues.length !=0 ||
+          data_tag_pro_tag_scada_changedValues.length !=0 ||
+          data_tag_pro_tag_event_changedValues.length !=0 ||
+          data_tag_pro_ul_changedValues.length !=0 ))
+        {
+          let DataTagProString=JSON.stringify(data_tag_pro_data, null, 0);
+          const bytesArray = Array.from(DataTagProString).map(char => char.charCodeAt(0));
+          DatatagProBinary = new Uint8Array(bytesArray);
+
+          ContentDatatagPro=new Uint8Array(DatatagProBinary.length+sessionBinary.length);
+          ContentDatatagPro.set(sessionBinary,0);
+          ContentDatatagPro.set(DatatagProBinary, sessionBinary.length);
+          SetDataTagPro();
+        }
+
       }
 	};
 
@@ -2462,6 +2623,170 @@
 <div class="text-center">
 <Heading tag="h2" customSize="text-3xl font-extrabold" class="text-center mb-2 font-semibold text-gray-900 dark:text-white">The following configs are changed:</Heading>
 <List tag="ol" {color} class="text-2xl space-y-1" style="display: inline-block;text-align: left;">
+
+
+
+{#if data_tag_pro_general_changedValues.length !=0 || data_tag_pro_tag_modbus_changedValues.length !=0 || 
+          data_tag_pro_tag_calculation_changedValues.length !=0 ||
+          data_tag_pro_tag_accumulated_changedValues.length !=0 ||
+          data_tag_pro_tag_tou_changedValues.length !=0 ||
+          data_tag_pro_tag_dm_changedValues.length !=0 ||
+          data_tag_pro_tag_scada_changedValues.length !=0 ||
+          data_tag_pro_tag_event_changedValues.length !=0 ||
+          data_tag_pro_ul_changedValues.length !=0}
+<Li>Data Tag Pro
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+{#if data_tag_pro_general_changedValues.length !=0}
+<Li>General
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each data_tag_pro_general_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+</Li>
+{/if}
+
+{#if  data_tag_pro_tag_modbus_changedValues.length !=0 || 
+          data_tag_pro_tag_calculation_changedValues.length !=0 ||
+          data_tag_pro_tag_accumulated_changedValues.length !=0 ||
+          data_tag_pro_tag_tou_changedValues.length !=0 ||
+          data_tag_pro_tag_dm_changedValues.length !=0 ||
+          data_tag_pro_tag_scada_changedValues.length !=0 ||
+          data_tag_pro_tag_event_changedValues.length !=0 }
+<Li>Tag Rule
+{#if  data_tag_pro_tag_modbus_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Modbus
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each data_tag_pro_tag_modbus_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+{#if  data_tag_pro_tag_calculation_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Calculation
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each data_tag_pro_tag_calculation_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+{#if  data_tag_pro_tag_accumulated_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Accumulated
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each data_tag_pro_tag_accumulated_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+
+{#if  data_tag_pro_tag_tou_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> TOU
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each data_tag_pro_tag_tou_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+
+
+{#if data_tag_pro_tag_dm_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Direct Method
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each data_tag_pro_tag_dm_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+{#if data_tag_pro_tag_scada_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> SCADA
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each data_tag_pro_tag_scada_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+{#if data_tag_pro_tag_event_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> SCADA
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each data_tag_pro_tag_event_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+{/if}
+
+</Li>
+{/if}
+
+
+{#if  data_tag_pro_ul_changedValues.length
+        }
+<Li>UL Rule
+
+{#if data_tag_pro_ul_changedValues.length !=0}
+
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each data_tag_pro_ul_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+</List>
+
+{/if}
+
+</Li>
+{/if}
+
+  </List>
+  </Li>
+
+
+{/if}
+
+
+
+
 
 {#if  event_engine_action_line_changeValues.length != 0 ||
       event_engine_action_mqtt_changeValues.length != 0 || 
@@ -3730,7 +4055,16 @@ event_engine_action_do_changeValues.length != 0 ||
 </div>
 <div class="pt-10 pl-10 text-center">
 
-{#if    event_engine_action_line_changeValues.length != 0 ||
+{#if    data_tag_pro_general_changedValues.length !=0 ||
+        data_tag_pro_tag_modbus_changedValues.length !=0 ||
+        data_tag_pro_tag_calculation_changedValues.length !=0 ||
+        data_tag_pro_tag_accumulated_changedValues.length !=0 ||
+        data_tag_pro_tag_tou_changedValues.length !=0 ||
+        data_tag_pro_tag_dm_changedValues.length !=0 ||
+        data_tag_pro_tag_scada_changedValues.length !=0 ||
+        data_tag_pro_tag_event_changedValues.length !=0 ||
+        data_tag_pro_ul_changedValues.length !=0 ||
+        event_engine_action_line_changeValues.length != 0 ||
         event_engine_action_mqtt_changeValues.length != 0 ||
         event_engine_action_tcpmsg_changeValues.length !=0 ||
         event_engine_action_modbus_changeValues.length !=0 ||

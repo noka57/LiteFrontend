@@ -85,6 +85,15 @@
     	EventEngine_TriggerSMS_ConfigChangedLog,
     	EventEngine_General_ConfigChangedLog,
     	EventEngine_Rule_ConfigChangedLog,
+	    DataTagPro_ULRule_ConfigChangedLog,
+	    DataTagPro_TagRuleEvent_ConfigChangedLog,
+	    DataTagPro_TagRuleSCADA_ConfigChangedLog,
+	    DataTagPro_TagRuleDM_ConfigChangedLog,
+	    DataTagPro_TagRuleTOU_ConfigChangedLog,
+	    DataTagPro_TagRuleAccumulated_ConfigChangedLog,
+	    DataTagPro_TagRuleCalculation_ConfigChangedLog,
+	    DataTagPro_TagRuleModbus_ConfigChangedLog,
+	    DataTagPro_General_ConfigChangedLog,    	
     	VPNdashboad,
     	dashboadData
   	} from "./configG.js"
@@ -256,6 +265,17 @@
   	let event_engine_action_mqtt_changeValues=[];
   	let event_engine_action_line_changeValues=[];
 
+  	let data_tag_pro_general_changedValues = [];
+  	let data_tag_pro_tag_modbus_changedValues = [];
+  	let data_tag_pro_tag_calculation_changedValues = [];
+  	let data_tag_pro_tag_accumulated_changedValues = [];  
+  	let data_tag_pro_tag_tou_changedValues = [];
+  	let data_tag_pro_tag_dm_changedValues = [];
+  	let data_tag_pro_tag_scada_changedValues = [];
+  	let data_tag_pro_tag_event_changedValues = [];
+  	let data_tag_pro_ul_changedValues = [];
+
+
 	const BlinkApply = () => {
 		if (svg0background=="")
 		{
@@ -274,7 +294,16 @@
 
   	function JudgeChangedOrNot()
   	{
-  		if (event_engine_action_line_changeValues.length !=0 ||
+  		if (data_tag_pro_general_changedValues.length !=0 ||
+  			data_tag_pro_tag_modbus_changedValues.length !=0 ||
+  			data_tag_pro_tag_calculation_changedValues.length !=0 ||
+  			data_tag_pro_tag_accumulated_changedValues.length !=0 ||
+  			data_tag_pro_tag_tou_changedValues.length !=0 ||
+  			data_tag_pro_tag_dm_changedValues.length !=0 ||
+  			data_tag_pro_tag_scada_changedValues.length !=0 ||
+  			data_tag_pro_tag_event_changedValues.length !=0 ||
+  			data_tag_pro_ul_changedValues.length !=0 ||
+  			event_engine_action_line_changeValues.length !=0 ||
   			event_engine_action_mqtt_changeValues.length !=0 ||
   			event_engine_action_tcpmsg_changeValues.length !=0 ||
   			event_engine_action_modbus_changeValues.length != 0 ||
@@ -376,6 +405,52 @@
 
   	}
 
+
+ 	DataTagPro_ULRule_ConfigChangedLog.subscribe(val => {
+      	data_tag_pro_ul_changedValues = val;
+      	JudgeChangedOrNot();
+  	});
+
+
+  	DataTagPro_TagRuleEvent_ConfigChangedLog.subscribe(val => {
+      	data_tag_pro_tag_event_changedValues = val;
+      	JudgeChangedOrNot();
+  	});
+  
+  	DataTagPro_TagRuleSCADA_ConfigChangedLog.subscribe(val => {
+      	data_tag_pro_tag_scada_changedValues = val;
+      	JudgeChangedOrNot();
+  	});
+  
+  	DataTagPro_TagRuleDM_ConfigChangedLog.subscribe(val => {
+      	data_tag_pro_tag_dm_changedValues = val;
+      	JudgeChangedOrNot();
+  	});
+  
+  	DataTagPro_TagRuleTOU_ConfigChangedLog.subscribe(val => {
+      	data_tag_pro_tag_tou_changedValues = val;
+      	JudgeChangedOrNot();
+  	});
+
+  	DataTagPro_TagRuleAccumulated_ConfigChangedLog.subscribe(val => {
+      	data_tag_pro_tag_accumulated_changedValues = val;
+      	JudgeChangedOrNot();
+  	});
+  
+  	DataTagPro_TagRuleCalculation_ConfigChangedLog.subscribe(val => {
+      	data_tag_pro_tag_calculation_changedValues = val;
+      	JudgeChangedOrNot();
+  	});
+
+  	DataTagPro_TagRuleModbus_ConfigChangedLog.subscribe(val => {
+      	data_tag_pro_tag_modbus_changedValues = val;
+      	JudgeChangedOrNot();
+  	});
+  
+  	DataTagPro_General_ConfigChangedLog.subscribe(val => {
+      	data_tag_pro_general_changedValues = val;
+        JudgeChangedOrNot();
+  	});
 
 	LanConfigChangedLog.subscribe(val => {
     	LANchangedValues=val;

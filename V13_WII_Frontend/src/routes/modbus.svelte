@@ -5680,7 +5680,7 @@
 {#if changed_modbus_data.config.fieldManagement_modbus_data_model.master.length < 10}        
      <TableBodyCell class="!p-4 w-10">
   
-            <button on:click={() =>new_data_model_master_trigger(changed_modbus_data.config.fieldManagement_modbus_data_model.master.length)}>
+    <button on:click={() =>new_data_model_master_trigger(changed_modbus_data.config.fieldManagement_modbus_data_model.master.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 

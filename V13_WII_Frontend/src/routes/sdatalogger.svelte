@@ -1319,35 +1319,30 @@
       const hexArray = sessionid.match(/.{1,2}/g); 
       const byteValues = hexArray.map(hex => parseInt(hex, 16));
       sessionBinary = new Uint8Array(byteValues);
-
+      changed_sdata_logger_data=JSON.parse(JSON.stringify(saved_changed_sdata_logger_data));
       if (sdata_logger_general_changedValues.length==0)
       {
-          changed_sdata_logger_data=JSON.parse(JSON.stringify(saved_changed_sdata_logger_data));
           changed_sdata_logger_data.config.service_smartDataLogger_general=JSON.parse(JSON.stringify(sdata_logger_data.config.service_smartDataLogger_general)); 
       }
       
       if (sdata_logger_proxy_edge_changedValues.length==0)
       {
-          changed_sdata_logger_data=JSON.parse(JSON.stringify(saved_changed_sdata_logger_data));
           changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData=JSON.parse(JSON.stringify(sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData)); 
       }
       
       if (sdata_logger_proxy_cloud_changedValues.length==0)
       {
-          changed_sdata_logger_data=JSON.parse(JSON.stringify(saved_changed_sdata_logger_data));
           changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings=JSON.parse(JSON.stringify(sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings)); 
       }
       
 
       if (sdata_logger_monitor_edge_changedValues.length==0)
       {
-          changed_sdata_logger_data=JSON.parse(JSON.stringify(saved_changed_sdata_logger_data));
           changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData=JSON.parse(JSON.stringify(sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData)); 
       }
 
       if (sdata_logger_monitor_cloud_changedValues.length==0)
       {
-          changed_sdata_logger_data=JSON.parse(JSON.stringify(saved_changed_sdata_logger_data));
           changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings=JSON.parse(JSON.stringify(sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings)); 
       }
 

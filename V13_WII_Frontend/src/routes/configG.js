@@ -25,6 +25,7 @@ export const natConfig=writable("");
 export const lanConfig=writable("");
 export const wanConfig=writable("");
 export const configurationConfig=writable("");
+export const datatagproConfig=writable("");
 
 export const ConfigurationP2EConfigChangedLog=writable("");
 export const ChangedConfigurationConfig=writable("");
@@ -56,6 +57,17 @@ export const EventEngine_General_ConfigChangedLog=writable("");
 export const EventEngine_Rule_ConfigChangedLog=writable("");
 
 export const ChangedEventEngineConfig=writable("");
+
+export const DataTagPro_ULRule_ConfigChangedLog=writable("");
+export const DataTagPro_TagRuleEvent_ConfigChangedLog=writable("");
+export const DataTagPro_TagRuleSCADA_ConfigChangedLog=writable("");
+export const DataTagPro_TagRuleDM_ConfigChangedLog=writable("");
+export const DataTagPro_TagRuleTOU_ConfigChangedLog=writable("");
+export const DataTagPro_TagRuleAccumulated_ConfigChangedLog=writable("");
+export const DataTagPro_TagRuleCalculation_ConfigChangedLog=writable("");
+export const DataTagPro_TagRuleModbus_ConfigChangedLog=writable("");
+export const DataTagPro_General_ConfigChangedLog=writable("");
+export const ChangedDataTagProConfig=writable("");
 
 
 export const SDatalogger_MonitorMode_Topic_ConfigChangedLog=writable("");

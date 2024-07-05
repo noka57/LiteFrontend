@@ -174,6 +174,7 @@
 	let sessionid='';
   	let dashboard_data="";
   	let vpn_dashboard="";
+  	let data_tag_pro_flag=0;
 
 
   	let interval;
@@ -885,6 +886,24 @@
         vpn_dashboard = val;
     });
 
+    async function getDataTagProFlag(){
+		const res = await fetch(window.location.origin+"/GEtdaTatagProFLAg", 
+    	{
+			method: 'POST',
+			body: sessionBinary
+		})
+
+		if (res.status == 200)
+		{
+			const data =await res.arrayBuffer();
+			console.log("data tag pro flag");
+			console.log(data);
+			const uint8Array = new Uint8Array(data);
+			data_tag_pro_flag = parseInt(uint8Array, 16);
+			console.log(data_tag_pro_flag);
+		}
+    }
+
 
 	async function getUserType () {
 		const res = await fetch(window.location.origin+"/getUserType", {
@@ -919,6 +938,7 @@
       		const byteValues = hexArray.map(hex => parseInt(hex, 16));
       		sessionBinary = new Uint8Array(byteValues);
 			getUserType();
+			getDataTagProFlag();
 		}
 	});
 
@@ -1127,8 +1147,9 @@ const topMenuList = [{ href: '/apply', id: 0 },
 
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
 
+{#if data_tag_pro_flag ==1}
         			    <SidebarDropdownItem label="Data Tag Pro" href='/datatagpro' active={activeUrl === '/datatagpro'}/>
-
+{/if}
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
 						<SidebarDropdownItem label="Docker Engine" href='/docker' active={activeUrl === '/docker'}/>
 

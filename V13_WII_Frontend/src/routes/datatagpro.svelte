@@ -2,6 +2,7 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button, Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Fileupload, FloatingLabelInput, Helper, StepIndicator,MultiSelect } from 'flowbite-svelte';
 
  import { writable } from 'svelte/store';
+import { DateInput } from 'date-picker-svelte'
 
 
   import { onMount } from 'svelte';
@@ -24,7 +25,7 @@
     DataTagPro_General_ConfigChangedLog
   } from "./configG.js"
 
-
+  let date = new Date();
   let getDataReady=0;
 
   let sessionid;
@@ -35,8 +36,8 @@
 
 
   let data_tag_pro_data="";
-  let changed_data_tag_pro_data = {};
-  let saved_changed_data_tag_pro_data ={};
+  let changed_data_tag_pro_data = "";
+  let saved_changed_data_tag_pro_data ="";
 
 
   let data_tag_pro_general_changedValues = [];
@@ -51,6 +52,9 @@
 
   let selectedFile = null;
   let fileContent; 
+
+  let textareaInputNew;
+  let textareaInputModify;
 
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
   let tdClass = 'px-6 py-4 whitespace-nowrap font-light text-center';
@@ -135,7 +139,7 @@
       data_tag_pro_general_changedValues = val;
   });
 
-    function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
+    function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex, ArrayName) 
     {
       for (const key in obj1) 
       {
@@ -145,7 +149,7 @@
           {
             for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
             {
-              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
+              compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1,key);
             }
 
             if (obj1[key].length > obj2[key].length) 
@@ -236,7 +240,7 @@
           }
           else
           {
-            compareObjects(obj1[key], obj2[key], type, 0,0);
+            compareObjects(obj1[key], obj2[key], type, 0,0, key);
           }
         } 
         else if (obj1[key] != obj2[key]) 
@@ -244,11 +248,26 @@
           let changedstr="";
           if (isArrayItem == 0)
           {
-            changedstr="Value of "+key+" has changed to "+obj1[key];
+            if (type==0 && (ArrayName=="rtuMasterProfile"||ArrayName=="tcpMasterProfile"))
+            {
+              changedstr=ArrayName+ ", Value of "+key+" has changed to "+obj1[key];
+            }
+            else
+            {
+              changedstr="Value of "+key+" has changed to "+obj1[key];
+            }
+
           }
           else
           {
-            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+            if (type==0)
+            {
+              changedstr=ArrayName +" List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+            }
+            else
+            {
+              changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+            }
           }
 
           if (type == 0)
@@ -287,6 +306,123 @@
       }
     }
 
+
+  function saveCTag()
+  {
+    console.log("save calculation tag");
+    if (data_tag_pro_tag_calculation_changedValues.length != 0)
+    {
+      data_tag_pro_tag_calculation_changedValues=[];
+    }
+    
+
+    for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length, data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length); i++) 
+    {
+
+      compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[i], data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[i],1,1,i+1,"calculationTag");
+    }
+
+
+
+    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length > data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length)
+    {
+      let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length-data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length;
+
+      for (let k=data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length; k < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length;k++)
+      {
+        if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[k].delete)
+        {
+          addedCount--;
+        }
+
+      }
+
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to Calculation Tag List";
+        data_tag_pro_tag_calculation_changedValues=[...data_tag_pro_tag_calculation_changedValues, changedstr];
+      }
+    }
+
+
+
+    DataTagPro_TagRuleCalculation_ConfigChangedLog.set(data_tag_pro_tag_calculation_changedValues);
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length; i++)
+    {
+      if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[i]]
+      }
+
+    }
+
+
+
+    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag=JSON.parse(JSON.stringify(tempForDelete));
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag=JSON.parse(JSON.stringify(tempForDelete));
+
+
+    ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+    
+    console.log(data_tag_pro_tag_calculation_changedValues);
+
+
+  }
+
+  function saveModbus()
+  {
+    console.log("save modbus tag");
+    if (data_tag_pro_tag_modbus_changedValues.length !=0)
+    {
+      data_tag_pro_tag_modbus_changedValues=[];
+    }
+
+
+    compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag, data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag,0,0,0,"modbusTag");
+    DataTagPro_TagRuleModbus_ConfigChangedLog.set(data_tag_pro_tag_modbus_changedValues);
+
+
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length; i++)
+    {
+      if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[i]]
+      }
+
+    }
+
+    let tempForDelete2=[];
+    for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing.length; i++)
+    {
+      if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[i].delete)
+      {
+        tempForDelete2=[...tempForDelete2, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[i]]
+      }
+
+    }
+
+    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile));
+
+
+    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile));
+
+    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter=JSON.parse(JSON.stringify(tempForDelete));
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter=JSON.parse(JSON.stringify(tempForDelete));
+
+
+    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing=JSON.parse(JSON.stringify(tempForDelete2));
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing=JSON.parse(JSON.stringify(tempForDelete2));
+
+    //DataTagPro_TagRuleModbus_ConfigChangedLog.set(
+    ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+    
+    console.log(data_tag_pro_tag_modbus_changedValues);
+
+  }
 
   function saveGeneral()
   {
@@ -350,23 +486,6 @@
   }
 
 
-  function TriggerModifyModbusTag()
-  {
-
-    ModbusTagModifyModal=true;
-  }
-
-  function NoModifyModbusTag()
-  {
-    console.log("no modify modbus tag");
-    ModbusTagModifyModal=false;
-  }
-
-
-  function TriggerModifyCalculateTag()
-  {
-  
-  }
 
   let Modify_TCP_Master_Modal=false;
   let Modify_TCP_Master_index;
@@ -389,6 +508,7 @@
   {
     Modify_TCP_Master_Modal=false;  
   }
+
 
 
   let modify_modbus_parameter_modal=false;
@@ -419,6 +539,855 @@
   function modify_modbus_parameter()
   {
     modify_modbus_parameter_modal=false;
+  }
+
+  let modify_mtag_processing_modal=false;
+  let modify_mtag_processing_index;
+
+  function TriggerMtagProcessing(index)
+  {
+    modify_mtag_processing_index=index;
+    modify_mtag_processing_modal=true;
+
+  }
+
+
+  function no_modify_mtag_processing()
+  {
+    modify_mtag_processing_modal=false;
+  }
+
+  function modify_mtag_processing()
+  {
+    modify_mtag_processing_modal=false;
+  }
+
+  let modify_calculation_tag_modal=false;
+  let modify_calculation_tag_index;
+
+  function TriggerModifyCTag(index)
+  {
+
+    modify_calculation_tag_index=index;
+    modify_calculation_tag_modal=true;
+  }
+
+  function no_modify_calculation_tag()
+  {
+    modify_calculation_tag_modal=false;
+  }
+
+  function modify_calculation_tag()
+  {
+    modify_calculation_tag_modal=false;
+  }
+
+
+  let new_calculation_tag_modal=false;
+  let new_calculation_tag_index;
+
+  let new_calculation_tag=[
+  {
+
+    enable:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  },
+    {
+
+    enable:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  },
+    {
+
+    enable:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  },
+    {
+
+    enable:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  },
+    {
+
+    enable:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  },
+    {
+
+    enable:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  },
+    {
+
+    enable:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  },
+    {
+
+    enable:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  },
+    {
+
+    enable:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  },
+    {
+
+    enable:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  }
+
+  ];
+
+
+  function new_calculation_tag_trigger(index)
+  {
+    new_calculation_tag[index].enable=true;
+
+    new_calculation_tag[index].tagName="";
+    new_calculation_tag[index].spanHigh=1000;
+    new_calculation_tag[index].spanLow=0;    
+    new_calculation_tag[index].updateCondition=1;
+    new_calculation_tag[index].updatePeriod=100;
+    new_calculation_tag[index].referenceParameter[0].enable=true;
+    new_calculation_tag[index].referenceParameter[1].enable=true;
+    new_calculation_tag[index].referenceParameter[2].enable=true;
+    new_calculation_tag[index].referenceParameter[3].enable=true;
+
+
+    new_calculation_tag[index].referenceParameter[0].usage=0;
+    new_calculation_tag[index].referenceParameter[1].usage=0;
+    new_calculation_tag[index].referenceParameter[2].usage=0;
+    new_calculation_tag[index].referenceParameter[3].usage=0;
+
+    new_calculation_tag[index].referenceParameter[0].tagName="";
+    new_calculation_tag[index].referenceParameter[1].tagName="";
+    new_calculation_tag[index].referenceParameter[2].tagName="";
+    new_calculation_tag[index].referenceParameter[3].tagName="";
+
+
+    new_calculation_tag[index].referenceParameter[0].constantValue=1;
+    new_calculation_tag[index].referenceParameter[1].constantValue=1;
+    new_calculation_tag[index].referenceParameter[2].constantValue=1;
+    new_calculation_tag[index].referenceParameter[3].constantValue=1;
+
+
+    new_calculation_tag_index=index;
+    new_calculation_tag_modal=true;    
+  }
+
+
+  function modify_calculation_tag_fomula(index, type)
+  {
+    if (type ==0)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+=new_calculation_tag[index].referenceParameter[0].tagName;
+    }
+    else if (type ==1)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].referenceParameter[1].tagName;    
+    }
+    else if (type ==2)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].referenceParameter[2].tagName;
+    }
+    else if (type ==3)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].referenceParameter[3].tagName;    
+    }
+    else if (type ==4)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+="Max()";
+    }
+    else if (type ==5)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+="Min()";    
+    }  
+    else if (type ==6)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+="Avg()";    
+    }  
+    else if (type ==7)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+="Abs()";    
+    }
+    else if (type ==8)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+="Add()";    
+    }
+    else if (type ==9)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+="Sub()";    
+    }          
+    else if (type ==10)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+="Mul()";    
+    }
+    else if (type ==11)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+="Div()";    
+    } 
+    else if (type ==12)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+="Reminder()";    
+    }
+  }
+
+
+
+  function new_calculation_tag_fomula(index, type)
+  {
+    if (type ==0)
+    {
+      new_calculation_tag[index].calculationFormula+=new_calculation_tag[index].referenceParameter[0].tagName;
+    }
+    else if (type ==1)
+    {
+      new_calculation_tag[index].calculationFormula+=new_calculation_tag[index].referenceParameter[1].tagName;    
+    }
+    else if (type ==2)
+    {
+      new_calculation_tag[index].calculationFormula+=new_calculation_tag[index].referenceParameter[2].tagName;
+    }
+    else if (type ==3)
+    {
+      new_calculation_tag[index].calculationFormula+=new_calculation_tag[index].referenceParameter[3].tagName;    
+    }
+    else if (type ==4)
+    {
+      new_calculation_tag[index].calculationFormula+="Max()";
+    }
+    else if (type ==5)
+    {
+      new_calculation_tag[index].calculationFormula+="Min()";    
+    }  
+    else if (type ==6)
+    {
+      new_calculation_tag[index].calculationFormula+="Avg()";    
+    }  
+    else if (type ==7)
+    {
+      new_calculation_tag[index].calculationFormula+="Abs()";    
+    }
+    else if (type ==8)
+    {
+      new_calculation_tag[index].calculationFormula+="Add()";    
+    }
+    else if (type ==9)
+    {
+      new_calculation_tag[index].calculationFormula+="Sub()";    
+    }          
+    else if (type ==10)
+    {
+      new_calculation_tag[index].calculationFormula+="Mul()";    
+    }
+    else if (type ==11)
+    {
+      new_calculation_tag[index].calculationFormula+="Div()";    
+    } 
+    else if (type ==12)
+    {
+      new_calculation_tag[index].calculationFormula+="Reminder()";    
+    }
+  }
+
+
+  function NoAddCalculation(index)
+  {
+      new_calculation_tag_modal=false;
+  }
+
+  function add_new_calculation_tag(index)
+  {
+    new_calculation_tag_modal=false;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag,new_calculation_tag[index]];
+  }
+
+  function RestoreDeleteCtag(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].delete=false;
+  }
+
+  function DeleteCtag(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].delete=true;
+  }
+
+  let new_mtag_processing_modal=false;
+  let new_mtag_processing_index;
+
+  let new_mtag_processing=[
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    pollingRate:0,
+    pollingRateMS:100,
+    realTimePublishing:0,
+    access:0,
+    dataType:0,
+    scaleFactor:{
+      operator:0,
+      value:1,
+      unit:0
+    },
+    sbir:{
+      enable:false,
+      registerAddress:1,
+      writeIndexContent:1
+    }
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    pollingRate:0,
+    pollingRateMS:100,
+    realTimePublishing:0,
+    access:0,
+    dataType:0,
+    scaleFactor:{
+      operator:0,
+      value:1,
+      unit:0
+    },
+    sbir:{
+      enable:false,
+      registerAddress:1,
+      writeIndexContent:1
+    }
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    pollingRate:0,
+    pollingRateMS:100,
+    realTimePublishing:0,
+    access:0,
+    dataType:0,
+    scaleFactor:{
+      operator:0,
+      value:1,
+      unit:0
+    },
+    sbir:{
+      enable:false,
+      registerAddress:1,
+      writeIndexContent:1
+    }
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    pollingRate:0,
+    pollingRateMS:100,
+    realTimePublishing:0,
+    access:0,
+    dataType:0,
+    scaleFactor:{
+      operator:0,
+      value:1,
+      unit:0
+    },
+    sbir:{
+      enable:false,
+      registerAddress:1,
+      writeIndexContent:1
+    }
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    pollingRate:0,
+    pollingRateMS:100,
+    realTimePublishing:0,
+    access:0,
+    dataType:0,
+    scaleFactor:{
+      operator:0,
+      value:1,
+      unit:0
+    },
+    sbir:{
+      enable:false,
+      registerAddress:1,
+      writeIndexContent:1
+    }
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    pollingRate:0,
+    pollingRateMS:100,
+    realTimePublishing:0,
+    access:0,
+    dataType:0,
+    scaleFactor:{
+      operator:0,
+      value:1,
+      unit:0
+    },
+    sbir:{
+      enable:false,
+      registerAddress:1,
+      writeIndexContent:1
+    }
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    pollingRate:0,
+    pollingRateMS:100,
+    realTimePublishing:0,
+    access:0,
+    dataType:0,
+    scaleFactor:{
+      operator:0,
+      value:1,
+      unit:0
+    },
+    sbir:{
+      enable:false,
+      registerAddress:1,
+      writeIndexContent:1
+    }
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    pollingRate:0,
+    pollingRateMS:100,
+    realTimePublishing:0,
+    access:0,
+    dataType:0,
+    scaleFactor:{
+      operator:0,
+      value:1,
+      unit:0
+    },
+    sbir:{
+      enable:false,
+      registerAddress:1,
+      writeIndexContent:1
+    }
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    pollingRate:0,
+    pollingRateMS:100,
+    realTimePublishing:0,
+    access:0,
+    dataType:0,
+    scaleFactor:{
+      operator:0,
+      value:1,
+      unit:0
+    },
+    sbir:{
+      enable:false,
+      registerAddress:1,
+      writeIndexContent:1
+    }
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    pollingRate:0,
+    pollingRateMS:100,
+    realTimePublishing:0,
+    access:0,
+    dataType:0,
+    scaleFactor:{
+      operator:0,
+      value:1,
+      unit:0
+    },
+    sbir:{
+      enable:false,
+      registerAddress:1,
+      writeIndexContent:1
+    }
+  }
+
+  ];
+
+  function RestoreDeleteMTagProcess(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[index].delete=false;
+  }
+
+  function DeleteMTagProcess(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[index].delete=true;
+  }
+
+  function new_mtag_processing_trigger(index)
+  {
+    new_mtag_processing[index].enable=true;
+    new_mtag_processing[index].delete=false;
+    new_mtag_processing[index].tagName="";
+    new_mtag_processing[index].pollingRate=0;
+    new_mtag_processing[index].pollingRateMS=100;
+    new_mtag_processing[index].realTimePublishing=0;
+    new_mtag_processing[index].access=0;
+    new_mtag_processing[index].dataType=0;
+    new_mtag_processing[index].scaleFactor.operator=0;
+    new_mtag_processing[index].scaleFactor.value=1;
+    new_mtag_processing[index].scaleFactor.unit=0;
+    new_mtag_processing[index].sbir.enable=false;
+    new_mtag_processing[index].sbir.registerAddress=1;
+    new_mtag_processing[index].sbir.writeIndexContent=1;
+
+    new_mtag_processing_index=index;
+    new_mtag_processing_modal=true;
+    
+  }
+
+  function add_new_mtag_processing(index)
+  {
+    new_mtag_processing_modal=false;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing,new_mtag_processing[index]];
+
   }
 
   let new_modbus_parameter_modal=false;
@@ -613,6 +1582,7 @@ async function getDataTagPro () {
     {
       console.log("get data tag pro")
       data_tag_pro_data=await res.json();
+      datatagproConfig.set(data_tag_pro_data);
       console.log(data_tag_pro_data);
 
       changed_data_tag_pro_data= JSON.parse(JSON.stringify(data_tag_pro_data));
@@ -768,15 +1738,13 @@ async function getDataTagPro () {
     console.log("data tag pro sessionid: ");
     console.log(sessionid);
 
+
     if (sessionid && data_tag_pro_data=="")
     {
         const hexArray = sessionid.match(/.{1,2}/g); 
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
-
-
         getDataTagPro();
-
     }
     else if (sessionid && data_tag_pro_data != "")
     {
@@ -1256,7 +2224,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 <input class="mb-1 strikeout" type="checkbox" bind:checked={deviceParameter.enable}>
     </td>
   <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-1 w-4 strikeout">{index+1}</td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">{deviceParameter.tagName}</td>      
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-4 strikeout">{deviceParameter.tagName}</td>      
 {#if deviceParameter.protocol == 0}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">RTU</td>
 {:else if deviceParameter.protocol == 1}
@@ -1323,7 +2291,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 <input class="mb-1" type="checkbox" bind:checked={deviceParameter.enable}>
     </TableBodyCell>
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
-  <TableBodyCell>{deviceParameter.tagName}</TableBodyCell>      
+  <TableBodyCell class="!p-4">{deviceParameter.tagName}</TableBodyCell>      
 {#if deviceParameter.protocol == 0}
   <TableBodyCell>RTU</TableBodyCell>
 {:else if deviceParameter.protocol == 1}
@@ -1553,7 +2521,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 <table>
 
-<tr>
+
      
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
@@ -1704,10 +2672,141 @@ on:click={handleClickMMS} on:keydown={() => {}}>
   </TableHead>
   <TableBody>
 
+
+{#if getDataReady == 1}
+
+{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing as tagProcessing, index}
+{#if tagProcessing.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteMTagProcess(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 strikeout" type="checkbox" bind:checked={tagProcessing.enable}>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{tagProcessing.tagName}</td>
+
+{#if tagProcessing.pollingRate ==0}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">None</td>
+{:else if tagProcessing.pollingRate ==1}
+
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{tagProcessing.pollingRateMS}</td>
+{:else}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
+{/if}
+
+{#if tagProcessing.realTimePublishing==0}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">No</td>
+{:else if tagProcessing.realTimePublishing==1}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Yes</td>
+{:else}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
+{/if}
+
+
+{#if tagProcessing.access==0}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Read Only</td>
+{:else if tagProcessing.access==1}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Write Only</td>
+{:else if tagProcessing.access==2}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Read and Write</td>
+{:else}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
+{/if}
+
+
+
+{#if tagProcessing.dataType==0}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Signed Integer 16</td>
+
+{:else if tagProcessing.dataType==1}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unsigned Integer 16</td>
+{:else if tagProcessing.dataType==2}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Signed Integer 32</td>
+{:else if tagProcessing.dataType==3}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unsigned Integer 32</td>
+{:else if tagProcessing.dataType==4}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Signed Integer 64</td>
+{:else if tagProcessing.dataType==5}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unsigned Integer 64</td>
+{:else if tagProcessing.dataType==6}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Float 32</td>
+{:else if tagProcessing.dataType==7}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Float 64</td>
+{:else if tagProcessing.dataType==8}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Ascii</td>
+{:else if tagProcessing.dataType==9}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Bitmap</td>
+{:else if tagProcessing.dataType==10}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Str32</td>
+{:else if tagProcessing.dataType==11}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">String</td>
+{:else if tagProcessing.dataType==12}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">RAW</td>
+{:else if tagProcessing.dataType==13}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Bool</td>
+
+{:else}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
+{/if}
+
+
+{#if tagProcessing.scaleFactor.operator==0}
+ <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">None</td>
+{:else if tagProcessing.scaleFactor.operator==1}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">+ {tagProcessing.scaleFactor.value}</td>
+{:else if tagProcessing.scaleFactor.operator==2}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">- {tagProcessing.scaleFactor.value}</td> 
+{:else if tagProcessing.scaleFactor.operator==3}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">* {tagProcessing.scaleFactor.value}</td> 
+{:else if tagProcessing.scaleFactor.operator==4}
+   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">/ {tagProcessing.scaleFactor.value}</td> 
+{:else}
+  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
+{/if}
+
+
+{#if !tagProcessing.sbir.enable}
+ <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Disable</td>
+{:else}
+ <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">({tagProcessing.sbir.registerAddress}, {tagProcessing.sbir.writeIndexContent})</td>
+{/if}
+
+
+
+   </tr>
+
+{:else}
  <TableBodyRow>
       <TableBodyCell class="!p-1 w-10"></TableBodyCell>
   <TableBodyCell class="!p-0 w-10">
-<button >
+<button on:click={()=>TriggerMtagProcessing(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1716,34 +2815,122 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
        </TableBodyCell>
     <TableBodyCell class="!p-0 w-10">
-<button >    
+<button on:click={() => DeleteMTagProcess(index)}>    
     <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
   <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 </button>
     </TableBodyCell>
     <TableBodyCell>
-<input class="mb-1" type="checkbox"  >
+<input class="mb-1" type="checkbox"  bind:checked={tagProcessing.enable}>
     </TableBodyCell>
 
-    <TableBodyCell></TableBodyCell>
- <TableBodyCell></TableBodyCell>
-  <TableBodyCell></TableBodyCell>
-   <TableBodyCell></TableBodyCell>
-    <TableBodyCell></TableBodyCell>
- <TableBodyCell></TableBodyCell>
-  <TableBodyCell></TableBodyCell>
-   <TableBodyCell></TableBodyCell>
+    <TableBodyCell>{index+1}</TableBodyCell>
+ <TableBodyCell>{tagProcessing.tagName}</TableBodyCell>
+
+{#if tagProcessing.pollingRate ==0}
+  <TableBodyCell>None</TableBodyCell>
+{:else if tagProcessing.pollingRate ==1}
+
+  <TableBodyCell>{tagProcessing.pollingRateMS}</TableBodyCell>
+{:else}
+  <TableBodyCell>Unknown</TableBodyCell>
+{/if}
+
+{#if tagProcessing.realTimePublishing==0}
+  <TableBodyCell>No</TableBodyCell>
+{:else if tagProcessing.realTimePublishing==1}
+  <TableBodyCell>Yes</TableBodyCell>
+{:else}
+  <TableBodyCell>Unknown</TableBodyCell>
+{/if}
+
+
+{#if tagProcessing.access==0}
+  <TableBodyCell>Read Only</TableBodyCell>
+{:else if tagProcessing.access==1}
+  <TableBodyCell>Write Only</TableBodyCell>
+{:else if tagProcessing.access==2}
+  <TableBodyCell>Read and Write</TableBodyCell>
+{:else}
+  <TableBodyCell>Unknown</TableBodyCell>
+{/if}
+
+
+
+{#if tagProcessing.dataType==0}
+  <TableBodyCell>Signed Integer 16</TableBodyCell>
+
+{:else if tagProcessing.dataType==1}
+   <TableBodyCell>Unsigned Integer 16</TableBodyCell>
+{:else if tagProcessing.dataType==2}
+   <TableBodyCell>Signed Integer 32</TableBodyCell>
+{:else if tagProcessing.dataType==3}
+   <TableBodyCell>Unsigned Integer 32</TableBodyCell>
+{:else if tagProcessing.dataType==4}
+   <TableBodyCell>Signed Integer 64</TableBodyCell>
+{:else if tagProcessing.dataType==5}
+   <TableBodyCell>Unsigned Integer 64</TableBodyCell>
+{:else if tagProcessing.dataType==6}
+   <TableBodyCell>Float 32</TableBodyCell>
+{:else if tagProcessing.dataType==7}
+   <TableBodyCell>Float 64</TableBodyCell>
+{:else if tagProcessing.dataType==8}
+   <TableBodyCell>Ascii</TableBodyCell>
+{:else if tagProcessing.dataType==9}
+   <TableBodyCell>Bitmap</TableBodyCell>
+{:else if tagProcessing.dataType==10}
+   <TableBodyCell>Str32</TableBodyCell>
+{:else if tagProcessing.dataType==11}
+   <TableBodyCell>String</TableBodyCell>
+{:else if tagProcessing.dataType==12}
+   <TableBodyCell>RAW</TableBodyCell>
+{:else if tagProcessing.dataType==13}
+   <TableBodyCell>Bool</TableBodyCell>
+
+{:else}
+  <TableBodyCell>Unknown</TableBodyCell>
+{/if}
+
+
+{#if tagProcessing.scaleFactor.operator==0}
+ <TableBodyCell>None</TableBodyCell>
+{:else if tagProcessing.scaleFactor.operator==1}
+   <TableBodyCell>+ {tagProcessing.scaleFactor.value}</TableBodyCell>
+{:else if tagProcessing.scaleFactor.operator==2}
+   <TableBodyCell>- {tagProcessing.scaleFactor.value}</TableBodyCell> 
+{:else if tagProcessing.scaleFactor.operator==3}
+   <TableBodyCell>* {tagProcessing.scaleFactor.value}</TableBodyCell> 
+{:else if tagProcessing.scaleFactor.operator==4}
+   <TableBodyCell>/ {tagProcessing.scaleFactor.value}</TableBodyCell> 
+{:else}
+  <TableBodyCell>Unknown</TableBodyCell>
+{/if}
+
+
+{#if !tagProcessing.sbir.enable}
+ <TableBodyCell>Disable</TableBodyCell>
+{:else}
+ <TableBodyCell>({tagProcessing.sbir.registerAddress}, {tagProcessing.sbir.writeIndexContent})</TableBodyCell>
+{/if}
+
+
 
  </TableBodyRow>
 
+{/if}
+
+{/each}
+{/if}
 
 
-
+ 
   <TableBodyRow>
- <TableBodyCell class="!p-4">
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing.length < 10}
 
-<button>
+ <TableBodyCell class="!p-4 w-10">
+
+<button on:click={() =>new_mtag_processing_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -1751,12 +2938,11 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       </button>
 
  </TableBodyCell>
-      <TableBodyCell class="!p-4">
-
-
-
-       </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+{:else}
+ <TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
   <TableBodyCell ></TableBodyCell>
   <TableBodyCell ></TableBodyCell>
@@ -1778,6 +2964,356 @@ on:click={handleClickMMS} on:keydown={() => {}}>
   </TableBody>
 {/if} 
 
+ <Modal bind:open={new_mtag_processing_modal}  size="lg" class="w-full" autoclose>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_mtag_processing[new_mtag_processing_index].enable}>
+{/if}
+  Enable
+</label>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={new_mtag_processing[new_mtag_processing_index].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].pollingRate} value={0} >None</Radio>
+  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].pollingRate} value={1} >User Define:</Radio>
+{#if new_mtag_processing[new_mtag_processing_index].pollingRate==0}
+
+<input type="text" bind:value={new_mtag_processing[new_mtag_processing_index].pollingRateMS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{:else}
+<input type="text" bind:value={new_mtag_processing[new_mtag_processing_index].pollingRateMS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+</div></td>
+
+    </tr>
+
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Realtime Publish</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].realTimePublishing} value={0} >No</Radio>
+  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].realTimePublishing} value={1} >Yes</Radio>
+</div></td>
+
+    </tr>
+
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Access</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].access} value={0} >Read Only</Radio>
+  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].access} value={1} >Write Only</Radio>
+  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].access} value={2} >Read and Write</Radio>
+</div></td>
+
+    </tr>
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Data Type</p></td>
+    <td class="pl-5 pt-5">  
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={new_mtag_processing[new_mtag_processing_index].dataType}>
+<option disabled="" value="none">Choose ...</option>
+
+
+<option value={0}>Signed Integer 16</option>
+<option value={1}>Unsigned Integer 16</option>
+<option value={2}>Signed Integer 32</option>
+<option value={3}>Unsigned Integer 32</option>
+<option value={4}>Signed Integer 64</option>
+<option value={5}>Unsigned Integer 64</option>
+<option value={6}>Float 32</option>
+<option value={7}>Float 64</option>
+<option value={8}>Ascii</option>
+<option value={9}>Bitmap</option>
+<option value={10}>Str32</option>
+<option value={11}>String</option>
+<option value={12}>Raw</option>
+<option value={13}>Bool</option>
+</select>
+
+  </td>
+
+    </tr>
+
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Scale</p></td>
+    <td class="pl-5 pt-5">
+<div class="flex gap-4">
+    <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={new_mtag_processing[new_mtag_processing_index].scaleFactor.operator}>
+<option disabled="" value="none">Choose ...</option>
+<option value={0}>None</option>
+<option value={1}>+</option>
+<option value={2}>-</option>
+<option value={3}>*</option>
+<option value={4}>/</option>
+
+</select>
+
+{#if new_mtag_processing[new_mtag_processing_index].scaleFactor.operator ==0}
+ <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_mtag_processing[new_mtag_processing_index].scaleFactor.value} disabled>
+  </FloatingLabelInput> 
+
+{:else}
+ <FloatingLabelInput style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_mtag_processing[new_mtag_processing_index].scaleFactor.value}>
+  </FloatingLabelInput> 
+{/if}
+
+  </div>
+
+</td>
+
+    </tr>
+
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">SBIR</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].sbir.enable} value={false} >Disable</Radio>
+  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].sbir.enable} value={true} >Enable:</Radio>
+{#if !new_mtag_processing[new_mtag_processing_index].sbir.enable}
+
+ <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="Register Address" name="Register Address" type="number" label="Register Address" bind:value={new_mtag_processing[new_mtag_processing_index].sbir.registerAddress} disabled>
+  </FloatingLabelInput>
+
+ <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="Write Index Content" name="Write Index Content" type="number" label="Write Index Content" bind:value={new_mtag_processing[new_mtag_processing_index].sbir.writeIndexContent} disabled>
+  </FloatingLabelInput>
+
+{:else}
+ <FloatingLabelInput style="outlined" id="Register Address" name="Register Address" type="number" label="Register Address" bind:value={new_mtag_processing[new_mtag_processing_index].sbir.registerAddress}>
+  </FloatingLabelInput>
+
+ <FloatingLabelInput style="outlined" id="Write Index Content" name="Write Index Content" type="number" label="Write Index Content" bind:value={new_mtag_processing[new_mtag_processing_index].sbir.writeIndexContent}>
+  </FloatingLabelInput>
+
+{/if}
+</div></td>
+
+    </tr>
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_mtag_processing(new_mtag_processing_index)}>Add</Button></td>
+
+</table>
+</form>
+</Modal>
+
+<Modal bind:open={modify_mtag_processing_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={no_modify_mtag_processing}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+<table>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+      </td>
+
+
+  </tr>
+
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].pollingRate} value={0} >None</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].pollingRate} value={1} >User Define:</Radio>
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].pollingRate==0}
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].pollingRateMS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{:else}
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].pollingRateMS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+</div></td>
+
+    </tr>
+
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Realtime Publish</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].realTimePublishing} value={0} >No</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].realTimePublishing} value={1} >Yes</Radio>
+</div></td>
+
+    </tr>
+
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Access</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].access} value={0} >Read Only</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].access} value={1} >Write Only</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].access} value={2} >Read and Write</Radio>
+</div></td>
+
+    </tr>
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Data Type</p></td>
+    <td class="pl-5 pt-5">  
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].dataType}>
+<option disabled="" value="none">Choose ...</option>
+
+
+<option value={0}>Signed Integer 16</option>
+<option value={1}>Unsigned Integer 16</option>
+<option value={2}>Signed Integer 32</option>
+<option value={3}>Unsigned Integer 32</option>
+<option value={4}>Signed Integer 64</option>
+<option value={5}>Unsigned Integer 64</option>
+<option value={6}>Float 32</option>
+<option value={7}>Float 64</option>
+<option value={8}>Ascii</option>
+<option value={9}>Bitmap</option>
+<option value={10}>Str32</option>
+<option value={11}>String</option>
+<option value={12}>Raw</option>
+<option value={13}>Bool</option>
+</select>
+
+  </td>
+
+    </tr>
+
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Scale</p></td>
+    <td class="pl-5 pt-5">
+<div class="flex gap-4">
+    <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].scaleFactor.operator}>
+<option disabled="" value="none">Choose ...</option>
+<option value={0}>None</option>
+<option value={1}>+</option>
+<option value={2}>-</option>
+<option value={3}>*</option>
+<option value={4}>/</option>
+
+</select>
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].scaleFactor.operator ==0}
+ <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].scaleFactor.value} disabled>
+  </FloatingLabelInput> 
+
+{:else}
+ <FloatingLabelInput style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].scaleFactor.value}>
+  </FloatingLabelInput> 
+{/if}
+
+  </div>
+
+</td>
+
+    </tr>
+
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">SBIR</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.enable} value={false} >Disable</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.enable} value={true} >Enable:</Radio>
+{#if !changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.enable}
+
+ <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="Register Address" name="Register Address" type="number" label="Register Address" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.registerAddress} disabled>
+  </FloatingLabelInput>
+
+ <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="Write Index Content" name="Write Index Content" type="number" label="Write Index Content" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.writeIndexContent} disabled>
+  </FloatingLabelInput>
+
+{:else}
+ <FloatingLabelInput style="outlined" id="Register Address" name="Register Address" type="number" label="Register Address" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.registerAddress}>
+  </FloatingLabelInput>
+
+ <FloatingLabelInput style="outlined" id="Write Index Content" name="Write Index Content" type="number" label="Write Index Content" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.writeIndexContent}>
+  </FloatingLabelInput>
+
+{/if}
+</div></td>
+
+    </tr>
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={modify_mtag_processing}>Modify</Button></td>
+
+
+    </tr>
+</table>
+</form>
+</Modal>
+
+
 </Table>
 
 
@@ -1786,17 +3322,17 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 <table>
 
   <tr>
-    <td class="w-10"></td>
-    <td class="w-10"></td>
-    <td class="w-10"></td>
-    <td class="w-10"></td>
-    <td class="w-10"></td>
-    <td class="w-10"></td>
+    <td class="w-18"></td>
+    <td class="w-18"></td>
+    <td class="w-18"></td>
+    <td class="w-18"></td>
+    <td class="w-18"></td>
+    <td class="w-18"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>    
 
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveModbus}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -1827,16 +3363,69 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-48">Update Condition</TableHeadCell>    
+    <TableHeadCell class="w-18">Span High/Low</TableHeadCell>
+    <TableHeadCell class="w-80">Update Condition</TableHeadCell>    
 
   </TableHead>
 
 <TableBody>
+{#if getDataReady == 1}
+{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag as Ctag, index}
+{#if Ctag.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteCtag(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 strikeout" type="checkbox" bind:checked={Ctag.enable}>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.spanHigh}/{Ctag.spanLow}</td>
+
+{#if Ctag.updateCondition==0}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Update per {Ctag.updatePeriod} ms with the formula: {Ctag.calculationFormula}</td>
+{:else if Ctag.updateCondition==1}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Update will be trigger by reference tags ({Ctag.referenceParameter[0].tagName},{Ctag.referenceParameter[1].tagName},{Ctag.referenceParameter[2].tagName},{Ctag.referenceParameter[3].tagName}) with the formula: {Ctag.calculationFormula}</td>
+{:else}
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
+{/if}
+
+
+
+
+   </tr>
+
+{:else}   
+
 
  <TableBodyRow>
       <TableBodyCell class="!p-1 w-10"></TableBodyCell>
   <TableBodyCell class="!p-0 w-10">
-<button >
+<button on:click={()=>TriggerModifyCTag(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -1845,31 +3434,46 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
        </TableBodyCell>
     <TableBodyCell class="!p-0 w-10">
-<button >    
+<button on:click={() => DeleteCtag(index)}>    
     <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
   <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 </button>
     </TableBodyCell>
     <TableBodyCell>
-<input class="mb-1" type="checkbox"  >
+<input class="mb-1" type="checkbox"  bind:checked={Ctag.enable}>
     </TableBodyCell>
 
-    <TableBodyCell></TableBodyCell>
- <TableBodyCell></TableBodyCell>
-  <TableBodyCell></TableBodyCell>
+    <TableBodyCell>{index+1}</TableBodyCell>
+ <TableBodyCell>{Ctag.tagName}</TableBodyCell>
+ <TableBodyCell>{Ctag.spanHigh}/{Ctag.spanLow}</TableBodyCell>
+
+{#if Ctag.updateCondition==0}
+    <TableBodyCell>Update per {Ctag.updatePeriod} ms with the formula: {Ctag.calculationFormula}</TableBodyCell>
+{:else if Ctag.updateCondition==1}
+    <TableBodyCell>Update will be trigger by reference tags ({Ctag.referenceParameter[0].tagName},{Ctag.referenceParameter[1].tagName},{Ctag.referenceParameter[2].tagName},{Ctag.referenceParameter[3].tagName}) with the formula: {Ctag.calculationFormula}</TableBodyCell>
+{:else}
+
+  <TableBodyCell>Unknown</TableBodyCell>
+{/if}
+
 
 
 
  </TableBodyRow>
 
 
+{/if}
+{/each}
+{/if}
 
 
   <TableBodyRow>
- <TableBodyCell class="!p-4">
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length < 10}
 
-<button>
+ <TableBodyCell class="!p-4 w-10">
+
+<button on:click={() =>new_calculation_tag_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -1877,11 +3481,12 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       </button>
 
  </TableBodyCell>
-      <TableBodyCell class="!p-4">
+{:else}
+ <TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
-
-
-       </TableBodyCell>
       <TableBodyCell class="!p-4"></TableBodyCell>
 
   <TableBodyCell ></TableBodyCell>
@@ -1902,12 +3507,9 @@ on:click={handleClickMMS} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
 
 
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveCTag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -1915,10 +3517,453 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     </tr>
 
 
-
-
-
 </TableBody>
+
+
+<Modal bind:open={new_calculation_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_calculation_tag[new_calculation_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddCalculation(new_calculation_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={new_calculation_tag[new_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Span High</p></td>
+    <td class="pl-5 pt-5">
+<input type="number" bind:value={new_calculation_tag[new_calculation_tag_index].spanHigh} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+</td>
+
+    </tr>
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Span Low</p></td>
+    <td class="pl-5 pt-5">
+<input type="number" bind:value={new_calculation_tag[new_calculation_tag_index].spanLow} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+</td>
+
+    </tr>
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Update</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={new_calculation_tag[new_calculation_tag_index].updateCondition} value={1} >When Ref Tag is updated</Radio>
+  <Radio bind:group={new_calculation_tag[new_calculation_tag_index].updateCondition} value={0} >Period:</Radio>
+{#if new_calculation_tag[new_calculation_tag_index].updateCondition==1}
+
+<input type="text" bind:value={new_calculation_tag[new_calculation_tag_index].updatePeriod} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pl-1 pt-1 text-lg">ms</p>
+{:else}
+<input type="text" bind:value={new_calculation_tag[new_calculation_tag_index].updatePeriod} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-1 text-lg">ms</p>
+{/if}
+</div></td>
+
+    </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 1</p></td>
+      <td class="pl-5 pt-2">
+
+<div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_calculation_tag[new_calculation_tag_index].referenceParameter[0].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+</select>
+    <Button size="xs" class="my-2" on:click={new_calculation_tag_fomula(new_calculation_tag_index,0)}>Ref Tag 1</Button>
+</div>
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 2</p></td>
+      <td class="pl-5 pt-2">
+
+<div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_calculation_tag[new_calculation_tag_index].referenceParameter[1].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+</select>
+    <Button size="xs" class="my-2" on:click={new_calculation_tag_fomula(new_calculation_tag_index,1)}>Ref Tag 2</Button>
+</div>
+
+      </td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 3</p></td>
+      <td class="pl-5 pt-2">
+
+<div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_calculation_tag[new_calculation_tag_index].referenceParameter[2].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+    <Button size="xs" class="my-2" on:click={new_calculation_tag_fomula(new_calculation_tag_index,2)}>Ref Tag 3</Button>
+</div>
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 4</p></td>
+      <td class="pl-5 pt-2" >
+
+<div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_calculation_tag[new_calculation_tag_index].referenceParameter[3].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+    <Button size="xs" class="my-2" on:click={new_calculation_tag_fomula(new_calculation_tag_index,3)}>Ref Tag 4</Button>
+</div>
+      </td>
+  </tr>
+
+
+
+
+<tr>
+      <td class="pt-2"><div><p class="pl-10 pt-1 mb-4 text-lg font-light text-right">Calculation</p>
+
+
+  <ul style="list-style-type:none;" class="py-1">
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,4)}>Max()</Button>
+    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,5)}>Min()</Button>
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,6)}>Avg()</Button>
+    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,7)}>Abs()</Button>
+
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,8)}>Add()</Button>
+    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,9)}>Sub()</Button>
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,10)}>Mul()</Button>
+    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,11)}>Div()</Button>
+
+</li>
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,12)}>Reminder()</Button>
+
+</li>
+
+</ul>
+  </div>
+
+
+      </td>
+      <td class="pl-5 pt-2">
+<Textarea id="Formula" placeholder="User Defined Formula" rows="12" name="message" bind:value={new_calculation_tag[new_calculation_tag_index].calculationFormula} />
+
+      </td>
+  </tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_calculation_tag(new_calculation_tag_index)}>Add</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+
+<Modal bind:open={modify_calculation_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={no_modify_calculation_tag(modify_calculation_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Span High</p></td>
+    <td class="pl-5 pt-5">
+<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].spanHigh} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+</td>
+
+    </tr>
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Span Low</p></td>
+    <td class="pl-5 pt-5">
+<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].spanLow} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+</td>
+
+    </tr>
+
+<tr>
+    <td><p class="pl-2 pt-4 text-lg font-light text-right">Update</p></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].updateCondition} value={1} >When Ref Tag is updated</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].updateCondition} value={0} >Period:</Radio>
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].updateCondition==1}
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].updatePeriod} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pl-1 pt-1 text-lg">ms</p>
+{:else}
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].updatePeriod} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-1 text-lg">ms</p>
+{/if}
+</div></td>
+
+    </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 1</p></td>
+      <td class="pl-5 pt-2">
+
+<div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].referenceParameter[0].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+</select>
+    <Button size="xs" class="my-2" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,0)}>Ref Tag 1</Button>
+</div>
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 2</p></td>
+      <td class="pl-5 pt-2">
+
+<div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].referenceParameter[1].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+</select>
+    <Button size="xs" class="my-2" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,1)}>Ref Tag 2</Button>
+</div>
+
+      </td>
+
+
+
+  </tr>
+
+<tr>
+      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 3</p></td>
+      <td class="pl-5 pt-2">
+
+<div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].referenceParameter[2].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+    <Button size="xs" class="my-2" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,2)}>Ref Tag 3</Button>
+</div>
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 4</p></td>
+      <td class="pl-5 pt-2" >
+
+<div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].referenceParameter[3].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+    <Button size="xs" class="my-2" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,3)}>Ref Tag 4</Button>
+</div>
+      </td>
+  </tr>
+
+
+
+
+<tr>
+      <td class="pt-2"><div><p class="pl-10 pt-1 mb-4 text-lg font-light text-right">Calculation</p>
+
+
+  <ul style="list-style-type:none;" class="py-1">
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,4)}>Max()</Button>
+    <Button class="pl-2" size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,5)}>Min()</Button>
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,6)}>Avg()</Button>
+    <Button class="pl-2" size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,7)}>Abs()</Button>
+
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,8)}>Add()</Button>
+    <Button class="pl-2" size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,9)}>Sub()</Button>
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,10)}>Mul()</Button>
+    <Button class="pl-2" size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,11)}>Div()</Button>
+
+</li>
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,12)}>Reminder()</Button>
+
+</li>
+
+</ul>
+  </div>
+
+
+      </td>
+      <td class="pl-5 pt-2">
+<Textarea id="Formula" placeholder="User Defined Formula" rows="12" name="message" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula} />
+
+      </td>
+  </tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={modify_calculation_tag(modify_calculation_tag_index)}>Modify</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+
 
 </Table>
 
@@ -1935,6 +3980,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     </span>
 
 
+<DateInput bind:value={date} />
 
 <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
@@ -1964,7 +4010,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
  <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => TriggerModifyCalculateTag()}>
+<button>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -2088,7 +4134,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
  <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => TriggerModifyCalculateTag()}>
+<button>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -2210,7 +4256,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
  <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => TriggerModifyCalculateTag()}>
+<button>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -2328,7 +4374,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
  <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => TriggerModifyCalculateTag()}>
+<button>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -2447,7 +4493,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
  <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => TriggerModifyCalculateTag()}>
+<button>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -2571,7 +4617,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
  <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => TriggerModifyCalculateTag()}>
+<button>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -2772,7 +4818,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
  <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
       <TableBodyCell class="!p-4 w-10">
-<button on:click={() => TriggerModifyCalculateTag()}>
+<button>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>

@@ -930,6 +930,9 @@
 			sessionidG.set(currentUri.split('?')[1]);
 			sessionid=currentUri.split('?')[1];
 			console.log(sessionid);
+			let host=currentUri.split('/')[0];
+			console.log("host");
+			console.log(host);
 		}
 
 		if (sessionid)
@@ -1147,7 +1150,7 @@ const topMenuList = [{ href: '/apply', id: 0 },
 
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
 
-{#if data_tag_pro_flag ==1}
+{#if data_tag_pro_flag ==0}
         			    <SidebarDropdownItem label="Data Tag Pro" href='/datatagpro' active={activeUrl === '/datatagpro'}/>
 {/if}
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>

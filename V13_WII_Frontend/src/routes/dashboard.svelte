@@ -262,6 +262,14 @@
 
       console.log("dashboard sessionid:")
       console.log(sessionid);
+
+      console.log("currentUri");
+      console.log(currentUri);
+      let host=currentUri.split('/')[2];
+      console.log("host");
+      console.log(host);
+
+      history.pushState({}, '', "/dashboard");
     }
 
 

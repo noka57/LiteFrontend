@@ -25,7 +25,8 @@ import { DateInput } from 'date-picker-svelte'
     DataTagPro_General_ConfigChangedLog
   } from "./configG.js"
 
-  let date = new Date();
+  let start_time_object=null;
+  let end_time_object =null;
   let getDataReady=0;
 
   let sessionid;
@@ -33,6 +34,18 @@ import { DateInput } from 'date-picker-svelte'
   sessionidG.subscribe(val => {
       sessionid = val;
   });
+
+
+  function formatDate(date) {
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, '0');
+    let day = String(date.getDate()).padStart(2, '0');
+    let hours = String(date.getHours()).padStart(2, '0');
+    let minutes = String(date.getMinutes()).padStart(2, '0');
+    let seconds = String(date.getSeconds()).padStart(2, '0');
+    
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
 
 
   let data_tag_pro_data="";
@@ -307,6 +320,132 @@ import { DateInput } from 'date-picker-svelte'
     }
 
 
+  function saveTouTag()
+  {
+    console.log("save tou tag");
+    if (data_tag_pro_tag_tou_changedValues.length != 0)
+    {
+      data_tag_pro_tag_tou_changedValues=[];
+    }
+    
+
+    for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length, data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length); i++) 
+    {
+
+      compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[i], data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[i],3,1,i+1,"touTag");
+    }
+
+
+
+    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length > data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length)
+    {
+      let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length-data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length;
+
+      for (let k=data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length; k < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length;k++)
+      {
+        if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[k].delete)
+        {
+          addedCount--;
+        }
+
+      }
+
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to TOU Tag List";
+        data_tag_pro_tag_tou_changedValues=[...data_tag_pro_tag_tou_changedValues, changedstr];
+      }
+    }
+
+
+
+    DataTagPro_TagRuleTOU_ConfigChangedLog.set(data_tag_pro_tag_tou_changedValues);
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length; i++)
+    {
+      if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[i]]
+      }
+
+    }
+
+
+
+    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag=JSON.parse(JSON.stringify(tempForDelete));
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag=JSON.parse(JSON.stringify(tempForDelete));
+
+
+    ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+    
+    console.log(data_tag_pro_tag_tou_changedValues);
+  }
+
+
+  function saveATag()
+  {
+    console.log("save accumulated tag");
+    if (data_tag_pro_tag_accumulated_changedValues.length != 0)
+    {
+      data_tag_pro_tag_accumulated_changedValues=[];
+    }
+    
+
+    for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length, data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length); i++) 
+    {
+
+      compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[i], data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[i],2,1,i+1,"accumulatedTag");
+    }
+
+
+
+    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length > data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length)
+    {
+      let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length-data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length;
+
+      for (let k=data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length; k < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length;k++)
+      {
+        if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[k].delete)
+        {
+          addedCount--;
+        }
+
+      }
+
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to Accumulated Tag List";
+        data_tag_pro_tag_accumulated_changedValues=[...data_tag_pro_tag_accumulated_changedValues, changedstr];
+      }
+    }
+
+
+
+    DataTagPro_TagRuleAccumulated_ConfigChangedLog.set(data_tag_pro_tag_accumulated_changedValues);
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length; i++)
+    {
+      if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[i]]
+      }
+
+    }
+
+
+
+    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag=JSON.parse(JSON.stringify(tempForDelete));
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag=JSON.parse(JSON.stringify(tempForDelete));
+
+
+    ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+    
+    console.log(data_tag_pro_tag_accumulated_changedValues);
+  } 
+
+
   function saveCTag()
   {
     console.log("save calculation tag");
@@ -417,7 +556,6 @@ import { DateInput } from 'date-picker-svelte'
     saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing=JSON.parse(JSON.stringify(tempForDelete2));
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing=JSON.parse(JSON.stringify(tempForDelete2));
 
-    //DataTagPro_TagRuleModbus_ConfigChangedLog.set(
     ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
     
     console.log(data_tag_pro_tag_modbus_changedValues);
@@ -582,14 +720,461 @@ import { DateInput } from 'date-picker-svelte'
     modify_calculation_tag_modal=false;
   }
 
+  let modify_accumulated_tag_modal=false;
+  let modify_accumulated_tag_index;
+
+  function TriggerModifyATag(index)
+  {
+    start_time_object= new Date(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].startTime);
+    end_time_object= new Date(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].endTime);
+    modify_accumulated_tag_index=index;
+    modify_accumulated_tag_modal=true;
+
+  }
+
+  function no_modify_accumulated_tag()
+  {
+    modify_accumulated_tag_modal=false;
+  }
+
+  function modify_accumulated_tag()
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startTime=formatDate(start_time_object);
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].endTime=formatDate(end_time_object);
+    modify_accumulated_tag_modal=false;
+  }
+
+  let modify_tou_tag_modal=false;
+  let modify_tou_tag_index;
+
+  function TriggerModifyTouTag(index)
+  {
+    start_time_object= new Date(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].startTime);
+    end_time_object= new Date(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].endTime);
+    modify_tou_tag_index=index;
+    modify_tou_tag_modal=true;
+
+  }
+
+  function no_modify_tou_tag()
+  {
+    modify_tou_tag_modal=false;
+  }
+
+  function modify_tou_tag()
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].startTime=formatDate(start_time_object);
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].endTime=formatDate(end_time_object);
+    modify_tou_tag_modal=false;
+  }
+
+
+  let modify_DM_tag_modal=false;
+  let modify_DM_tag_index;
+
+  function TriggerModifyDMTag(index)
+  {
+    modify_DM_tag_index=index;
+    modify_DM_tag_modal=true;
+  }
+
+  function NoModifyDM()
+  {
+    modify_DM_tag_modal=false;
+
+  }
+
+
+  function modify_DM_tag()
+  {
+    modify_DM_tag_modal=false;
+  }
+
+
+  let new_DM_tag_modal=false;
+  let new_DM_tag_index;
+
+  let new_DM_tag=[
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:""
+  }      
+  ];
+
+
+  function NoAddDM(index)
+  {
+    new_DM_tag_modal=false;
+  }
+
+  function RestoreDeleteDMtag(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[index].delete=false;
+  }
+
+  function DeleteDMtag(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[index].delete=true;
+  }
+
+
+  function add_new_DM_tag(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag,new_DM_tag[index]];
+
+    new_DM_tag_modal=false;
+  }
+
+
+  function new_DM_tag_trigger(index)
+  {
+    new_DM_tag[index].enable=true;
+    new_DM_tag[index].delete=false;
+    new_DM_tag[index].tagName="";
+    new_DM_tag[index].targetTag="";
+
+    new_DM_tag_index=index;
+    new_DM_tag_modal=true;
+
+  }
+
+  let new_tou_tag_modal=false;
+  let new_tou_tag_index;
+
+  let new_tou_tag=[
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:"",
+    rate:1
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:"",
+    rate:1
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:"",
+    rate:1
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:"",
+    rate:1
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:"",
+    rate:1
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:"",
+    rate:1
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:"",
+    rate:1
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:"",
+    rate:1
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:"",
+    rate:1
+  }
+  ];
+
+  function new_tou_tag_trigger(index)
+  {
+    new_tou_tag[index].enable=true;
+    new_tou_tag[index].delete=false;
+    new_tou_tag[index].tagName="";
+    new_tou_tag[index].targetTag="";
+    new_tou_tag[index].startTime="2024-01-01 00:00:00";
+    new_tou_tag[index].endTime="2024-01-01 00:00:00";
+    new_tou_tag[index].rate=1;
+
+    start_time_object= new Date(new_tou_tag[index].startTime);
+    end_time_object= new Date(new_tou_tag[index].endTime);
+
+    new_tou_tag_index=index;
+    new_tou_tag_modal=true;
+
+
+  }
+
+
+  function NoAddTOU(index)
+  {
+    new_tou_tag_modal=false;
+  }
+
+
+  function add_new_tou_tag(index)
+  {
+    new_tou_tag[index].startTime=formatDate(start_time_object);
+    new_tou_tag[index].endTime=formatDate(end_time_object);
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag,new_tou_tag[index]];
+
+    new_tou_tag_modal=false;
+  }
+
+
+  function RestoreDeleteTOUtag(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].delete=false;
+  }
+
+  function DeleteTOUtag(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].delete=true;
+  }
+
+
+  let new_accumulated_tag_modal=false;
+  let new_accumulated_tag_index;
+
+  let new_accumulated_tag=[
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  }
+  ];
+
+  function new_accumulated_tag_trigger(index)
+  {
+    new_accumulated_tag[index].enable=true;
+    new_accumulated_tag[index].delete=false;
+    new_accumulated_tag[index].tagName="";
+    new_accumulated_tag[index].targetTag="";
+    new_accumulated_tag[index].startTime="2024-01-01 00:00:00";
+    new_accumulated_tag[index].endTime="2024-01-01 00:00:00";
+
+    start_time_object= new Date(new_accumulated_tag[index].startTime);
+    end_time_object= new Date(new_accumulated_tag[index].endTime);
+
+    new_accumulated_tag_index=index;
+    new_accumulated_tag_modal=true;
+
+
+  }
+
+
+  function NoAddAccumulated(index)
+  {
+    new_accumulated_tag_modal=false;
+  }
+
+
+  function add_new_accumulated_tag(index)
+  {
+    new_accumulated_tag[index].startTime=formatDate(start_time_object);
+    new_accumulated_tag[index].endTime=formatDate(end_time_object);
+    new_accumulated_tag_modal=false;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag,new_accumulated_tag[index]];
+  }
+
+
+  function RestoreDeleteAtag(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].delete=false;
+  }
+
+  function DeleteAtag(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].delete=true;
+  }
+
 
   let new_calculation_tag_modal=false;
   let new_calculation_tag_index;
 
   let new_calculation_tag=[
   {
-
     enable:false,
+    delete:false,
     tagName:"",
     updateCondition:0,
     updatePeriod:100,
@@ -628,6 +1213,7 @@ import { DateInput } from 'date-picker-svelte'
     {
 
     enable:false,
+    delete:false,
     tagName:"",
     updateCondition:0,
     updatePeriod:100,
@@ -666,6 +1252,7 @@ import { DateInput } from 'date-picker-svelte'
     {
 
     enable:false,
+    delete:false,
     tagName:"",
     updateCondition:0,
     updatePeriod:100,
@@ -704,6 +1291,45 @@ import { DateInput } from 'date-picker-svelte'
     {
 
     enable:false,
+    delete:false,
+    tagName:"",
+    updateCondition:0,
+    updatePeriod:100,
+    referenceParameter:
+    [
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      },
+      {
+        enable:true,
+        usage:0,
+        tagName:"",
+        constantValue:1
+      }
+          
+    ],
+    calculationFormula:"",
+    spanHigh:1000,
+    spanLow:0
+  },
+    {
+    enable:false,
+    delete:false,
     tagName:"",
     updateCondition:0,
     updatePeriod:100,
@@ -742,6 +1368,7 @@ import { DateInput } from 'date-picker-svelte'
     {
 
     enable:false,
+    delete:false,
     tagName:"",
     updateCondition:0,
     updatePeriod:100,
@@ -780,6 +1407,7 @@ import { DateInput } from 'date-picker-svelte'
     {
 
     enable:false,
+    delete:false,
     tagName:"",
     updateCondition:0,
     updatePeriod:100,
@@ -816,8 +1444,8 @@ import { DateInput } from 'date-picker-svelte'
     spanLow:0
   },
     {
-
     enable:false,
+    delete:false,
     tagName:"",
     updateCondition:0,
     updatePeriod:100,
@@ -854,8 +1482,8 @@ import { DateInput } from 'date-picker-svelte'
     spanLow:0
   },
     {
-
     enable:false,
+    delete:false,
     tagName:"",
     updateCondition:0,
     updatePeriod:100,
@@ -892,46 +1520,8 @@ import { DateInput } from 'date-picker-svelte'
     spanLow:0
   },
     {
-
     enable:false,
-    tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
-  },
-    {
-
-    enable:false,
+    delete:false,
     tagName:"",
     updateCondition:0,
     updatePeriod:100,
@@ -974,7 +1564,7 @@ import { DateInput } from 'date-picker-svelte'
   function new_calculation_tag_trigger(index)
   {
     new_calculation_tag[index].enable=true;
-
+    new_calculation_tag[index].delete=false;
     new_calculation_tag[index].tagName="";
     new_calculation_tag[index].spanHigh=1000;
     new_calculation_tag[index].spanLow=0;    
@@ -3980,7 +4570,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     </span>
 
 
-<DateInput bind:value={date} />
+
 
 <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
@@ -3992,52 +4582,104 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-18">Target Tag</TableHeadCell>    
-    <TableHeadCell class="w-18">Start Time</TableHeadCell>
-    <TableHeadCell class="w-18">End Time</TableHeadCell> 
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>    
+    <TableHeadCell >Tag Name</TableHeadCell>
+    <TableHeadCell >Target Tag</TableHeadCell>    
+    <TableHeadCell >Start Time</TableHeadCell>
+    <TableHeadCell >End Time</TableHeadCell> 
+  
 
   </TableHead>
 
 <TableBody>
 
+{#if getDataReady == 1}
+{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag as Atag, index}
+{#if Atag.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteAtag(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
 
 
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 strikeout" type="checkbox" bind:checked={Atag.enable}>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.targetTag}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.startTime}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.endTime}</td>
+
+
+
+
+</tr>
+
+{:else}
  <TableBodyRow>
- <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
-<button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+ <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
+<button on:click={()=>TriggerModifyATag(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
 
-    <TableBodyCell class="w-10">1</TableBodyCell>
+ <TableBodyCell class="!p-0 w-10">
+<button on:click={() => DeleteAtag(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+
+    <TableBodyCell ><input class="mb-1" type="checkbox" bind:checked={Atag.enable}></TableBodyCell>
 
 
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">acc_</TableBodyCell>
-      <TableBodyCell class="w-18">mb_KW</TableBodyCell>
-      <TableBodyCell class="w-18">2024-02-03 00:00</TableBodyCell>
-      <TableBodyCell class="w-18">2024-02-04 16:00</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell >{index+1}</TableBodyCell>
+      <TableBodyCell >{Atag.tagName}</TableBodyCell>
+      <TableBodyCell >{Atag.targetTag}</TableBodyCell>
+
+      <TableBodyCell >{Atag.startTime}</TableBodyCell>
+      <TableBodyCell >{Atag.endTime}</TableBodyCell>
 
  </TableBodyRow>
 
- <TableBodyRow>
- <TableBodyCell class="!p-4">
+{/if}
+{/each}
+{/if}
 
-<button>
+ <TableBodyRow>
+
+ {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length < 10}
+
+ <TableBodyCell class="!p-4 w-10">
+
+
+<button on:click={()=>new_accumulated_tag_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -4045,24 +4687,26 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       </button>
 
  </TableBodyCell>
-      <TableBodyCell class="!p-4">
+{:else}
+
+ <TableBodyCell class="!p-4 w-16"> </TableBodyCell>
+
+{/if}
+      <TableBodyCell class="!p-0 w-10">
 
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
 
-    <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+    <TableBodyCell ></TableBodyCell>
+      <TableBodyCell ></TableBodyCell>
+      <TableBodyCell ></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+
 
     </TableBodyRow>
 
@@ -4076,11 +4720,8 @@ on:click={handleClickMMS} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveATag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -4089,6 +4730,197 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 </TableBody>
+
+
+
+<Modal bind:open={new_accumulated_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_accumulated_tag[new_accumulated_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddAccumulated(new_accumulated_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={new_accumulated_tag[new_accumulated_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
+      <td class="pl-5 pt-5">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_accumulated_tag[new_accumulated_tag_index].targetTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
+      <td class="pl-5 pt-5">
+
+<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={start_time_object} />
+
+      </td>
+  </tr>
+
+<p class="pt-5"></p>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">End Time</p></td>
+      <td class="pl-5 pt-5">
+
+<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={end_time_object} />
+
+      </td>
+  </tr>
+<p class="pt-48"></p>
+<p class="pt-5"></p>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_accumulated_tag(new_accumulated_tag_index)}>Add</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+
+
+<Modal bind:open={modify_accumulated_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={no_modify_accumulated_tag}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
+      <td class="pl-5 pt-5">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].targetTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
+      <td class="pl-5 pt-5">
+
+<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={start_time_object} />
+
+      </td>
+  </tr>
+
+<p class="pt-5"></p>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">End Time</p></td>
+      <td class="pl-5 pt-5">
+
+<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={end_time_object} />
+
+      </td>
+  </tr>
+<p class="pt-48"></p>
+<p class="pt-5"></p>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={modify_accumulated_tag}>Modify</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
 
 </Table>
 
@@ -4116,52 +4948,104 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-18">Target Tag</TableHeadCell>    
-    <TableHeadCell class="w-18">Start Time</TableHeadCell>
-    <TableHeadCell class="w-18">End Time</TableHeadCell> 
-    <TableHeadCell class="w-18">Rate</TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>    
+    <TableHeadCell >Tag Name</TableHeadCell>
+    <TableHeadCell >Target Tag</TableHeadCell>    
+    <TableHeadCell >Start Time</TableHeadCell>
+    <TableHeadCell >End Time</TableHeadCell> 
+    <TableHeadCell >Rate</TableHeadCell> 
 
   </TableHead>
 
 <TableBody>
 
+{#if getDataReady == 1}
+{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag as TOUtag, index}
+{#if TOUtag.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteTOUtag(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
 
 
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 strikeout" type="checkbox" bind:checked={TOUtag.enable}>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{TOUtag.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{TOUtag.targetTag}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{TOUtag.startTime}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{TOUtag.endTime}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{TOUtag.rate}</td>
+
+
+
+
+</tr>
+
+{:else}
  <TableBodyRow>
- <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
-<button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+ <TableBodyCell class="!p-4 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
+<button on:click={()=>TriggerModifyTouTag(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
 
-    <TableBodyCell class="w-10">1</TableBodyCell>
+ <TableBodyCell class="!p-0 w-10">
+<button on:click={() => DeleteTOUtag(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+
+    <TableBodyCell ><input class="mb-1" type="checkbox" bind:checked={TOUtag.enable}></TableBodyCell>
 
 
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">acc_</TableBodyCell>
-      <TableBodyCell class="w-18">mb_KW</TableBodyCell>
-      <TableBodyCell class="w-18">2024-02-03 00:00</TableBodyCell>
-      <TableBodyCell class="w-18">2024-02-04 16:00</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-
+      <TableBodyCell >{index+1}</TableBodyCell>
+      <TableBodyCell >{TOUtag.tagName}</TableBodyCell>
+      <TableBodyCell >{TOUtag.targetTag}</TableBodyCell>
+      <TableBodyCell >{TOUtag.startTime}</TableBodyCell>
+      <TableBodyCell >{TOUtag.endTime}</TableBodyCell>
+      <TableBodyCell >{TOUtag.rate}</TableBodyCell>
  </TableBodyRow>
 
- <TableBodyRow>
- <TableBodyCell class="!p-4">
+{/if}
+{/each}
+{/if}
 
-<button>
+ <TableBodyRow>
+
+ {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length < 10}
+
+ <TableBodyCell class="!p-4 w-10">
+
+
+<button on:click={()=>new_tou_tag_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -4169,24 +5053,26 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       </button>
 
  </TableBodyCell>
-      <TableBodyCell class="!p-4">
+{:else}
+
+ <TableBodyCell class="!p-4 w-16"> </TableBodyCell>
+
+{/if}
+      <TableBodyCell class="!p-0 w-10">
 
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
 
-    <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+    <TableBodyCell ></TableBodyCell>
+      <TableBodyCell ></TableBodyCell>
+      <TableBodyCell ></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
+      <TableBodyCell></TableBodyCell>
 
     </TableBodyRow>
 
@@ -4200,11 +5086,8 @@ on:click={handleClickMMS} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveTouTag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -4213,6 +5096,221 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 </TableBody>
+
+
+
+<Modal bind:open={new_tou_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_tou_tag[new_tou_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddTOU(new_tou_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={new_tou_tag[new_tou_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
+      <td class="pl-5 pt-5">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_tou_tag[new_tou_tag_index].targetTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
+      <td class="pl-5 pt-5">
+
+<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={start_time_object} />
+
+      </td>
+  </tr>
+
+<p class="pt-5"></p>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">End Time</p></td>
+      <td class="pl-5 pt-5">
+
+<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={end_time_object} />
+
+      </td>
+  </tr>
+<p class="pt-5"></p>
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Rate</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={new_tou_tag[new_tou_tag_index].rate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+<p class="pt-48"></p>
+<p class="pt-5"></p>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_tou_tag(new_tou_tag_index)}>Add</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+<Modal bind:open={modify_tou_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={no_modify_tou_tag}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
+      <td class="pl-5 pt-5">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].targetTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
+      <td class="pl-5 pt-5">
+
+<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={start_time_object} />
+
+      </td>
+  </tr>
+
+<p class="pt-5"></p>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">End Time</p></td>
+      <td class="pl-5 pt-5">
+
+<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={end_time_object} />
+
+      </td>
+  </tr>
+<p class="pt-5"></p>
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Rate</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].rate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+<p class="pt-48"></p>
+<p class="pt-5"></p>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={modify_tou_tag}>Modify</Button></td>
+
+
+</table>
+</form>
+</Modal>
 
 </Table>
 
@@ -4242,46 +5340,94 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     <TableHeadCell class="w-18">Tag Name</TableHeadCell>
     <TableHeadCell class="w-18">Target Tag</TableHeadCell>    
 
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>    
-
   </TableHead>
 
 <TableBody>
 
 
+{#if getDataReady == 1}
+{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag as DMtag, index}
+{#if DMtag.delete}
+
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteDMtag(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 strikeout" type="checkbox" bind:checked={DMtag.enable}>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{DMtag.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{DMtag.targetTag}</td>
+
+</tr>
+
+
+{:else}
 
  <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
-<button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+      <TableBodyCell class="!p-0 w-10">
+<button on:click={()=>TriggerModifyDMTag(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+ <TableBodyCell class="!p-0 w-10">
+<button on:click={() => DeleteDMtag(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
-    <TableBodyCell class="w-10">1</TableBodyCell>
+
+    <TableBodyCell><input class="mb-1" type="checkbox" bind:checked={DMtag.enable}></TableBodyCell>
 
 
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">acc_</TableBodyCell>
-      <TableBodyCell class="w-18">mb_KW</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell>{index+1}</TableBodyCell>
+      <TableBodyCell>{DMtag.tagName}</TableBodyCell>
+      <TableBodyCell>{DMtag.targetTag}</TableBodyCell>
+
 
  </TableBodyRow>
 
- <TableBodyRow>
- <TableBodyCell class="!p-4">
+{/if}
+{/each}
+{/if}
 
-<button>
+ <TableBodyRow>
+
+ {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length < 10}
+
+ <TableBodyCell class="!p-4 w-10">
+
+<button on:click={()=>new_DM_tag_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -4289,22 +5435,25 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       </button>
 
  </TableBodyCell>
-      <TableBodyCell class="!p-4">
+{:else}
+
+ <TableBodyCell class="!p-4 w-16"> </TableBodyCell>
+{/if}
+
+
+      <TableBodyCell class="!p-0 w-10">
 
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
 
     <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+
 
     </TableBodyRow>
 
@@ -4331,6 +5480,148 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 </TableBody>
+
+
+<Modal bind:open={new_DM_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_DM_tag[new_DM_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddDM(new_DM_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={new_DM_tag[new_DM_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
+      <td class="pl-5 pt-5">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_DM_tag[new_DM_tag_index].targetTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+      </td>
+
+
+
+  </tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_DM_tag(new_DM_tag_index)}>Add</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+
+<Modal bind:open={modify_DM_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyDM}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
+      <td class="pl-5 pt-5">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].targetTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+      </td>
+
+
+
+  </tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={modify_DM_tag}>Modify</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
 
 </Table>
 

@@ -2745,7 +2745,7 @@
 
 {#if data_tag_pro_tag_event_changedValues.length !=0}
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
- <Li> SCADA
+ <Li> Event
 <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
   {#each data_tag_pro_tag_event_changedValues as item}
       <Li>{item}</Li>
@@ -2761,11 +2761,9 @@
 {/if}
 
 
-{#if  data_tag_pro_ul_changedValues.length
-        }
+{#if  data_tag_pro_ul_changedValues.length !=0}
 <Li>UL Rule
 
-{#if data_tag_pro_ul_changedValues.length !=0}
 
 <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
   {#each data_tag_pro_ul_changedValues as item}
@@ -2773,7 +2771,7 @@
    {/each}
 </List>
 
-{/if}
+
 
 </Li>
 {/if}

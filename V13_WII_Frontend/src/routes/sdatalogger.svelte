@@ -1858,7 +1858,7 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
-    <Button size="xs" on:click={NPbtn1(new_proxy_edge_index)}>TIME</Button>
+    <Button size="xs" on:click={NPbtn1}>TIME</Button>
 {:else}
     <Button size="xs" disabled>TIME</Button>
 {/if}

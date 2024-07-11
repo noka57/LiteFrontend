@@ -461,6 +461,8 @@
 
     }
 
+
+    saved_changed_firewall_data.config.networking_firewall_ipFilter.type=changed_firewall_data.config.networking_firewall_ipFilter.type;
     saved_changed_firewall_data.config.networking_firewall_ipFilter.list=JSON.parse(JSON.stringify(tempForDelete));
     changed_firewall_data.config.networking_firewall_ipFilter.list=JSON.parse(JSON.stringify(tempForDelete));
 
@@ -498,6 +500,7 @@
 
     }
 
+    saved_changed_firewall_data.config.networking_firewall_macFilter.type=changed_firewall_data.config.networking_firewall_macFilter.type;
     saved_changed_firewall_data.config.networking_firewall_macFilter.list=JSON.parse(JSON.stringify(tempForDelete));
     changed_firewall_data.config.networking_firewall_macFilter.list=JSON.parse(JSON.stringify(tempForDelete));
 

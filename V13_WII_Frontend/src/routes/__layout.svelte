@@ -1150,7 +1150,7 @@ const topMenuList = [{ href: '/apply', id: 0 },
 
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
 
-{#if data_tag_pro_flag ==0}
+{#if data_tag_pro_flag ==1}
         			    <SidebarDropdownItem label="Data Tag Pro" href='/datatagpro' active={activeUrl === '/datatagpro'}/>
 {/if}
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>

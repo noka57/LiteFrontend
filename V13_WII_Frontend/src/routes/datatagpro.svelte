@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button, Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Fileupload, FloatingLabelInput, Helper, StepIndicator,MultiSelect } from 'flowbite-svelte';
+  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button, Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Fileupload, FloatingLabelInput, Helper, StepIndicator,MultiSelect, Dropdown, DropdownItem } from 'flowbite-svelte';
 
  import { writable } from 'svelte/store';
 import { DateInput } from 'date-picker-svelte'
@@ -86,8 +86,8 @@ import { DateInput } from 'date-picker-svelte'
   let generic_mqtt_data="";
   let saved_changed_generic_mqtt_data ="";
 
-  let CloudProfile=[];
 
+  let CloudProfile=[];
 
   genericMQTTConfig.subscribe(val => {
       generic_mqtt_data = val;
@@ -273,7 +273,7 @@ import { DateInput } from 'date-picker-svelte'
           }
           else
           {
-            if (type==0)
+            if (type==0 || type==5)
             {
               changedstr=ArrayName +" List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
             }
@@ -319,6 +319,261 @@ import { DateInput } from 'date-picker-svelte'
       }
     }
 
+
+  function saveULRule()
+  {
+    console.log("save ul rule");
+    if (data_tag_pro_ul_changedValues.length !=0)
+    {
+      data_tag_pro_ul_changedValues=[];
+    }
+
+      for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length, data_tag_pro_data.config.service_dataTagPro_ulRule.length); i++) 
+      {
+
+        compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_ulRule[i], data_tag_pro_data.config.service_dataTagPro_ulRule[i],7,1,i+1,"UL Rule");
+      }
+
+
+
+      if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length > data_tag_pro_data.config.service_dataTagPro_ulRule.length)
+      {
+        let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length-data_tag_pro_data.config.service_dataTagPro_ulRule.length;
+
+        for (let k=data_tag_pro_data.config.service_dataTagPro_ulRule.length; k < changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length;k++)
+        {
+          if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[k].delete)
+          {
+            addedCount--;
+          }
+
+        }
+
+        if (addedCount > 0)
+        {
+          let changedstr="Add "+addedCount+" item(s) to UL Rule List";
+          data_tag_pro_ul_changedValues=[...data_tag_pro_ul_changedValues, changedstr];
+        }
+      }
+
+
+
+      DataTagPro_ULRule_ConfigChangedLog.set(data_tag_pro_ul_changedValues);
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length; i++)
+      {
+        if (!changed_data_tag_pro_data.config.service_dataTagPro_ulRule[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_ulRule[i]]
+        }
+
+      }
+
+
+
+      saved_changed_data_tag_pro_data.config.service_dataTagPro_ulRule=JSON.parse(JSON.stringify(tempForDelete));
+      changed_data_tag_pro_data.config.service_dataTagPro_ulRule=JSON.parse(JSON.stringify(tempForDelete));
+
+
+      ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+      
+      console.log(data_tag_pro_ul_changedValues);
+
+
+  }
+
+  function saveEventTag()
+  {
+    console.log("save event tag");
+    if (data_tag_pro_tag_event_changedValues.length !=0)
+    {
+      data_tag_pro_tag_event_changedValues=[];
+    }
+
+      for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length, data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length); i++) 
+      {
+
+        compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[i], data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[i],6,1,i+1,"EventTag");
+      }
+
+
+
+      if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length > data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length)
+      {
+        let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length-data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length;
+
+        for (let k=data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length; k < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length;k++)
+        {
+          if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[k].delete)
+          {
+            addedCount--;
+          }
+
+        }
+
+        if (addedCount > 0)
+        {
+          let changedstr="Add "+addedCount+" item(s) to Event Tag List";
+          data_tag_pro_tag_event_changedValues=[...data_tag_pro_tag_event_changedValues, changedstr];
+        }
+      }
+
+
+
+      DataTagPro_TagRuleEvent_ConfigChangedLog.set(data_tag_pro_tag_event_changedValues);
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length; i++)
+      {
+        if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[i]]
+        }
+
+      }
+
+
+
+      saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag=JSON.parse(JSON.stringify(tempForDelete));
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag=JSON.parse(JSON.stringify(tempForDelete));
+
+
+      ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+      
+      console.log(data_tag_pro_tag_event_changedValues);
+
+
+  }
+
+
+  function saveScadaTag()
+  {
+    console.log("save scada tag");
+    if (data_tag_pro_tag_scada_changedValues.length !=0)
+    {
+      data_tag_pro_tag_scada_changedValues=[];
+    }
+
+      for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length, data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length); i++) 
+      {
+
+        compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[i], data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[i],5,1,i+1,"ScadaTag");
+      }
+
+
+
+      if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length > data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length)
+      {
+        let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length-data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length;
+
+        for (let k=data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length; k < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length;k++)
+        {
+          if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[k].delete)
+          {
+            addedCount--;
+          }
+
+        }
+
+        if (addedCount > 0)
+        {
+          let changedstr="Add "+addedCount+" item(s) to Scada Tag List";
+          data_tag_pro_tag_scada_changedValues=[...data_tag_pro_tag_scada_changedValues, changedstr];
+        }
+      }
+
+
+
+      DataTagPro_TagRuleSCADA_ConfigChangedLog.set(data_tag_pro_tag_scada_changedValues);
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length; i++)
+      {
+        if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[i]]
+        }
+
+      }
+
+
+
+      saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag=JSON.parse(JSON.stringify(tempForDelete));
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag=JSON.parse(JSON.stringify(tempForDelete));
+
+
+      ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+      
+      console.log(data_tag_pro_tag_scada_changedValues);
+
+
+  }
+
+
+  function saveDMtag()
+  {
+      console.log("save DM tag");
+      if (data_tag_pro_tag_dm_changedValues.length !=0)
+      {
+        data_tag_pro_tag_dm_changedValues=[];
+      }
+
+
+      for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length, data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length); i++) 
+      {
+
+        compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[i], data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[i],4,1,i+1,"direct_method_tag");
+      }
+
+
+
+      if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length > data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length)
+      {
+        let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length-data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length;
+
+        for (let k=data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length; k < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length;k++)
+        {
+          if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[k].delete)
+          {
+            addedCount--;
+          }
+
+        }
+
+        if (addedCount > 0)
+        {
+          let changedstr="Add "+addedCount+" item(s) to Direct Method Tag List";
+          data_tag_pro_tag_dm_changedValues=[...data_tag_pro_tag_dm_changedValues, changedstr];
+        }
+      }
+
+
+
+      DataTagPro_TagRuleDM_ConfigChangedLog.set(data_tag_pro_tag_dm_changedValues);
+
+      let tempForDelete=[];
+      for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag.length; i++)
+      {
+        if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[i].delete)
+        {
+          tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[i]]
+        }
+
+      }
+
+
+
+      saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag=JSON.parse(JSON.stringify(tempForDelete));
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag=JSON.parse(JSON.stringify(tempForDelete));
+
+
+      ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+      
+      console.log(data_tag_pro_tag_dm_changedValues);
+
+
+  }
 
   function saveTouTag()
   {
@@ -788,6 +1043,604 @@ import { DateInput } from 'date-picker-svelte'
   function modify_DM_tag()
   {
     modify_DM_tag_modal=false;
+  }
+
+
+  let scada_target_tag=[];
+  let modify_scada_tag_modal=false;
+  let modify_scada_tag_index;
+
+  function TriggerModifyScadaTag(index)
+  {
+    scada_target_tag=[];
+
+    for (let i=0; i < saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length;i++)
+    {
+      scada_target_tag=[...scada_target_tag,false];
+    }
+
+    for (let j=0; j < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[index].targetTag.length; j++)
+    {
+        scada_target_tag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[index].targetTag[j]]=true;
+    } 
+
+    
+
+    modify_scada_tag_index=index;
+    modify_scada_tag_modal=true;
+  }
+
+  function NoModifyScada()
+  {
+    modify_scada_tag_modal=false;
+
+  }
+
+
+  function modify_scada_tag()
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].targetTag=[];
+
+    for(let i=0; i < saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length;i++)
+    {
+      if (scada_target_tag[i])
+      {
+        changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].targetTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].targetTag, i];
+      }
+
+    }
+
+    modify_scada_tag_modal=false;
+  }
+
+  let modify_event_tag_modal=false;
+  let modify_event_tag_index;
+
+
+  function TriggerModifyEventTag(index)
+  {
+    modify_event_tag_index=index;
+    modify_event_tag_modal=true;
+  }
+
+  function NoModifyEventTag()
+  {
+    modify_event_tag_modal=false;
+
+  }
+
+
+  function modify_event_tag()
+  {
+    modify_event_tag_modal=false;
+  }
+
+
+  let MultiSelectedCloudProfile=[];
+  let Cloud1Topic=[];
+  let Cloud2Topic=[];
+
+
+  let modify_ul_rule_modal=false;
+  let modify_ul_rule_index;
+
+  function TriggerModifyULRule(index)
+  {
+    MultiSelectedCloudProfile=[];
+    for (let i=0; i<changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].cloudProfile.length; i++)
+    {
+
+      MultiSelectedCloudProfile=[...MultiSelectedCloudProfile,changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].cloudProfile[i].cloudTarget];
+
+    }
+
+
+    modify_ul_rule_index=index;
+    modify_ul_rule_modal=true;
+  }
+
+  function NoModifyULRule()
+  {
+    modify_ul_rule_modal=false;
+  }
+
+  function modify_ul_rule()
+  {
+
+    for (let i=0; i<MultiSelectedCloudProfile.length; i++)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[i].cloudTarget=MultiSelectedCloudProfile[i];
+    }
+    modify_ul_rule_modal=false;  
+  }
+
+
+  let new_ul_rule_modal=false;
+  let new_ul_rule_index;
+  let new_ul_rule=[
+  {
+    enable:false,
+    delete:false,
+    tagName:"",        
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0, 
+    dataPriority: 0, 
+    cloudProfile: [],
+    contentFormat: 0,
+    userDefineedData: ""
+  },   
+  {
+    enable:false,
+    delete:false,
+    tagName:"",        
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0, 
+    dataPriority: 0, 
+    cloudProfile: [],
+    contentFormat: 0,
+    userDefineedData: ""
+  },   
+  {
+    enable:false,
+    delete:false,
+    tagName:"",        
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0, 
+    dataPriority: 0, 
+    cloudProfile: [],
+    contentFormat: 0,
+    userDefineedData: ""
+  },   
+  {
+    enable:false,
+    delete:false,
+    tagName:"",        
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0, 
+    dataPriority: 0, 
+    cloudProfile: [],
+    contentFormat: 0,
+    userDefineedData: ""
+  },   
+  {
+    enable:false,
+    delete:false,
+    tagName:"",        
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0, 
+    dataPriority: 0, 
+    cloudProfile: [],
+    contentFormat: 0,
+    userDefineedData: ""
+  },       
+  {
+    enable:false,
+    delete:false,
+    tagName:"",        
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0, 
+    dataPriority: 0, 
+    cloudProfile: [],
+    contentFormat: 0,
+    userDefineedData: ""
+  },   
+  {
+    enable:false,
+    delete:false,
+    tagName:"",        
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0, 
+    dataPriority: 0, 
+    cloudProfile: [],
+    contentFormat: 0,
+    userDefineedData: ""
+  },   
+  {
+    enable:false,
+    delete:false,
+    tagName:"",        
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0, 
+    dataPriority: 0, 
+    cloudProfile: [],
+    contentFormat: 0,
+    userDefineedData: ""
+  },   
+  {
+    enable:false,
+    delete:false,
+    tagName:"",        
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0, 
+    dataPriority: 0, 
+    cloudProfile: [],
+    contentFormat: 0,
+    userDefineedData: ""
+  },   
+  {
+    enable:false,
+    delete:false,
+    tagName:"",        
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0, 
+    dataPriority: 0, 
+    cloudProfile: [],
+    contentFormat: 0,
+    userDefineedData: ""
+  }
+  ];
+
+  function NoAddULRule(index)
+  {
+    new_ul_rule_modal=false;
+  }
+
+  function RestoreDeleteULRule(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].delete=false;
+  }
+
+  function DeleteULRule(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].delete=true;
+  }
+
+
+  function add_new_ul_rule(index)
+  {
+    for (let i=0; i<MultiSelectedCloudProfile.length; i++)
+    {
+      let cloudItem={
+        cloudTarget:"", 
+        cloudTopic:[]
+      }
+      cloudItem.cloudTarget=MultiSelectedCloudProfile[i];
+      if (i==0)
+      {
+        cloudItem.cloudTopic=Cloud1Topic;
+      }
+      else if (i==1)
+      {
+        cloudItem.cloudTopic=Cloud2Topic;
+      }
+
+      new_ul_rule[index].cloudProfile=[...new_ul_rule[index].cloudProfile, cloudItem];
+    }
+
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule=[...changed_data_tag_pro_data.config.service_dataTagPro_ulRule,new_ul_rule[index]];
+    
+    new_ul_rule_modal=false;
+  }
+
+
+  function new_ul_rule_trigger(index)
+  {
+    new_ul_rule[index].enable=true;
+    new_ul_rule[index].delete=false;
+    new_ul_rule[index].tagName="";
+    new_ul_rule[index].dataPushInterval=0;
+    new_ul_rule[index].dataPushIntervalValue=15;
+    new_ul_rule[index].linkLostRetransmit=0;
+    new_ul_rule[index].dataPriority=0;
+    new_ul_rule[index].cloudProfile=[];
+    new_ul_rule[index].contentFormat=0;
+    new_ul_rule[index].userDefineedData="";
+    MultiSelectedCloudProfile=[];
+    Cloud1Topic=["","",""];
+    Cloud2Topic=["","",""];
+    new_ul_rule_index=index;
+    new_ul_rule_modal=true;
+
+  }
+
+
+
+
+  let new_event_tag_modal=false;
+  let new_event_tag_index;
+
+  let new_event_tag=[
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  },  
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  }    
+  ];
+
+
+  function NoAddEvent(index)
+  {
+    new_event_tag_modal=false;
+  }
+
+  function RestoreDeleteEventTag(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[index].delete=false;
+  }
+
+  function DeleteEventTag(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[index].delete=true;
+  }
+
+
+  function add_new_event_tag(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag,new_event_tag[index]];
+    
+    new_event_tag_modal=false;
+  }
+
+
+  function new_event_tag_trigger(index)
+  {
+    new_event_tag[index].enable=true;
+    new_event_tag[index].delete=false;
+    new_event_tag[index].tagName="";
+    new_event_tag[index].triggerTag="";
+    new_event_tag[index].triggerConditionOperand=0;
+    new_event_tag[index].triggerConditionValue=1;
+    new_event_tag[index].pollingRateS=1;
+    new_event_tag[index].actionOperation=0;
+    new_event_tag[index].actionOperationValue=1;
+    new_event_tag[index].actionTarget="";
+
+
+    new_event_tag_index=index;
+    new_event_tag_modal=true;
+
+  }
+
+
+
+  let new_scada_tag_modal=false;
+  let new_scada_tag_index;
+
+  let new_scada_tag=[
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[]
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[]
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[]
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[]
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[]
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[]
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[]
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[]
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[]
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[]
+  }                
+
+  ];
+
+
+  function NoAddScada(index)
+  {
+    new_scada_tag_modal=false;
+  }
+
+  function RestoreDeleteScadaTag(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[index].delete=false;
+  }
+
+  function DeleteScadaTag(index)
+  {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[index].delete=true;
+  }
+
+
+  function add_new_scada_tag(index)
+  {
+
+    for(let i=0; i < saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length;i++)
+    {
+      if (scada_target_tag[i])
+      {
+        new_scada_tag[index].targetTag=[...new_scada_tag[index].targetTag, i];
+      }
+
+    }
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag,new_scada_tag[index]];
+
+
+
+    new_scada_tag_modal=false;
+  }
+
+
+
+
+
+  function new_scada_tag_trigger(index)
+  {
+    new_scada_tag[index].enable=true;
+    new_scada_tag[index].delete=false;
+    new_scada_tag[index].tagName="";
+    new_scada_tag[index].targetTag=[];
+
+    new_scada_tag_index=index;
+    new_scada_tag_modal=true;
+
+    scada_target_tag=[];
+    for(let i=0; i < saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length;i++)
+    {
+     scada_target_tag=[...scada_target_tag, false];
+    }
+
   }
 
 
@@ -2287,39 +3140,28 @@ async function getDataTagPro () {
     }
   }
 
- let PFormatUDefine="Hello";
+  const NPbtn1=() =>
+  {
+    console.log("NPbtn1");
+    new_ul_rule[new_ul_rule_index].userDefineedData+="$TIME$";
+  }
 
 
+  const NPbtn2=() =>
+  {
+    new_ul_rule[new_ul_rule_index].userDefineedData+="$ARRAY$";
+  }
 
- const btn1 = () => 
- {
-    PFormatUDefine+="$TimeStamp$";
+  const NPbtn3=() =>
+  {
+    new_ul_rule[new_ul_rule_index].userDefineedData+="$NAME_RAWREQUEST$";
+  }
 
-};
+  const NPbtn4=() =>
+  {
+    new_ul_rule[new_ul_rule_index].userDefineedData+="$NAME_RAWREPLY$";
+  }
 
- const btn2 = () => 
- {
-
-    PFormatUDefine+="$Keyword1$";
- };
-
- const btn3 = () => 
- {
-
-    PFormatUDefine+="$Keyword2$";
- };
-
- const btn4 = () => 
- {
-
-    PFormatUDefine+="$Keyword3$";
- };
-
-  const btn5 = () => 
- {
-
-    PFormatUDefine+="$Keyword4$";
- };
 
 
 
@@ -5471,7 +6313,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveDMtag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -5662,35 +6504,89 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 
+{#if getDataReady == 1}
+{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag as ScadaTag, index}
+{#if ScadaTag.delete}
+
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteScadaTag(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 strikeout" type="checkbox" bind:checked={ScadaTag.enable}>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScadaTag.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScadaTag.targetTag.length}</td>
+
+</tr>
+
+
+{:else}
+
  <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
-<button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+      <TableBodyCell class="!p-0 w-10">
+<button on:click={()=>TriggerModifyScadaTag(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+ <TableBodyCell class="!p-0 w-10">
+<button on:click={() => DeleteScadaTag(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
-    <TableBodyCell class="w-10">1</TableBodyCell>
+
+    <TableBodyCell><input class="mb-1" type="checkbox" bind:checked={ScadaTag.enable}></TableBodyCell>
 
 
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">acc_</TableBodyCell>
-      <TableBodyCell class="w-18">10</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell>{index+1}</TableBodyCell>
+      <TableBodyCell>{ScadaTag.tagName}</TableBodyCell>
+      <TableBodyCell>{ScadaTag.targetTag.length}</TableBodyCell>
+
 
  </TableBodyRow>
 
- <TableBodyRow>
- <TableBodyCell class="!p-4">
+{/if}
+{/each}
+{/if}
 
-<button>
+ <TableBodyRow>
+
+ {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length < 10}
+
+ <TableBodyCell class="!p-4 w-10">
+
+<button on:click={()=>new_scada_tag_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -5698,23 +6594,20 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       </button>
 
  </TableBodyCell>
-      <TableBodyCell class="!p-4">
+{:else}
+
+ <TableBodyCell class="!p-4 w-16"> </TableBodyCell>
+{/if}
+
+
+      <TableBodyCell class="!p-0 w-10">
 
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-
-
-    <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-
     </TableBodyRow>
 
 
@@ -5731,7 +6624,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveScadaTag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -5740,6 +6633,157 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 </TableBody>
+
+
+<Modal bind:open={new_scada_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_scada_tag[new_scada_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddScada(new_scada_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={new_scada_tag[new_scada_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
+      <td class="pl-5 pt-5">
+<Button>Select Target <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg></Button>
+<Dropdown class="w-44 p-3 space-y-3 text-sm">
+
+
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter,index}
+  <li>
+<label class="pl-2">
+  <input type="checkbox" bind:checked={scada_target_tag[index]}>
+  {deviceParameter.tagName}
+</label>
+  </li>
+{/each}
+
+</Dropdown>
+
+      </td>
+
+
+
+  </tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_scada_tag(new_scada_tag_index)}>Add</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+
+<Modal bind:open={modify_scada_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyScada}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
+      <td class="pl-5 pt-5">
+<Button>Select Target <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg></Button>
+<Dropdown class="w-44 p-3 space-y-3 text-sm">
+
+
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter,index}
+  <li>
+<label class="pl-2">
+  <input type="checkbox" bind:checked={scada_target_tag[index]}>
+  {deviceParameter.tagName}
+</label>
+  </li>
+{/each}
+
+</Dropdown>
+
+      </td>
+
+
+
+  </tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={modify_scada_tag}>Modify</Button></td>
+
+
+</table>
+</form>
+</Modal>
 
 </Table>
 
@@ -5766,14 +6810,11 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-18">Target Tag</TableHeadCell>    
+    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
+    <TableHeadCell class="w-18">Trigger Tag</TableHeadCell>    
     <TableHeadCell class="w-18">Trigger Condition</TableHeadCell>
-    <TableHeadCell class="w-18">Action</TableHeadCell> 
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>    
+    <TableHeadCell class="w-36">Action</TableHeadCell> 
+ 
 
   </TableHead>
 
@@ -5781,37 +6822,136 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 
+{#if getDataReady == 1}
+{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag as EventTag, index}
+{#if EventTag.delete}
+
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteEventTag(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 strikeout" type="checkbox" bind:checked={EventTag.enable}>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">{EventTag.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">{EventTag.triggerTag}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
+{#if EventTag.triggerConditionOperand==5}
+>
+{:else if EventTag.triggerConditionOperand==4}
+{'<'}
+
+{:else if EventTag.triggerConditionOperand==3}
+>=
+
+{:else if EventTag.triggerConditionOperand==2}
+{'<'}=
+{:else if EventTag.triggerConditionOperand==0}
+=
+{:else if EventTag.triggerConditionOperand==1}
+!=
+{/if}
+
+      {EventTag.triggerConditionValue}
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-36">
+{#if EventTag.actionOperation==0}Write{/if} {EventTag.actionTarget} with {EventTag.actionOperationValue}
+
+</td>
+</tr>
+
+
+{:else}
+
  <TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
-<button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+      <TableBodyCell class="!p-0 w-10">
+<button on:click={()=>TriggerModifyEventTag(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+     <TableBodyCell class="!p-0 w-10">
+<button on:click={() => DeleteEventTag(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
-    <TableBodyCell class="w-10">1</TableBodyCell>
+
+    <TableBodyCell><input class="mb-1" type="checkbox" bind:checked={EventTag.enable}></TableBodyCell>
 
 
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">evt_</TableBodyCell>
-      <TableBodyCell class="w-18">mb_KW</TableBodyCell>
-      <TableBodyCell class="w-18"> > 65</TableBodyCell>
-      <TableBodyCell class="w-18">write value to what?</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell>{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{EventTag.tagName}</TableBodyCell>
+      <TableBodyCell class="w-18">{EventTag.triggerTag}</TableBodyCell>
+  <TableBodyCell class="w-18">
+{#if EventTag.triggerConditionOperand==5}
+>
+{:else if EventTag.triggerConditionOperand==4}
+{'<'}
+
+{:else if EventTag.triggerConditionOperand==3}
+>=
+
+{:else if EventTag.triggerConditionOperand==2}
+{'<'}=
+{:else if EventTag.triggerConditionOperand==0}
+=
+{:else if EventTag.triggerConditionOperand==1}
+!=
+{/if}
+
+      {EventTag.triggerConditionValue}</TableBodyCell>
+
+      <TableBodyCell class="w-36">
+{#if EventTag.actionOperation==0}Write{/if} {EventTag.actionTarget} with {EventTag.actionOperationValue}
+
+
+      </TableBodyCell>
+    
 
  </TableBodyRow>
 
- <TableBodyRow>
- <TableBodyCell class="!p-4">
+{/if}
+{/each}
+{/if}
 
-<button>
+
+ <TableBodyRow>
+
+ {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length < 10}
+
+ <TableBodyCell class="!p-4 w-10">
+
+<button on:click={()=>new_event_tag_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -5819,12 +6959,18 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       </button>
 
  </TableBodyCell>
-      <TableBodyCell class="!p-4">
+{:else}
+
+ <TableBodyCell class="!p-4 w-16"> </TableBodyCell>
+{/if}
+
+
+      <TableBodyCell class="!p-0 w-10">
 
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
 
 
     <TableBodyCell class="w-10"></TableBodyCell>
@@ -5832,11 +6978,8 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-36"></TableBodyCell>
+   
 
     </TableBodyRow>
 
@@ -5854,7 +6997,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveEventTag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -5863,6 +7006,277 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 </TableBody>
+
+
+
+<Modal bind:open={new_event_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_event_tag[new_event_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddEvent(new_event_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={new_event_tag[new_event_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-36 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Trigger Tag</p></td>
+      <td class="pl-5 pt-5">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_event_tag[new_event_tag_index].triggerTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Trigger Condition</p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-16" bind:value={new_event_tag[new_event_tag_index].triggerConditionOperand}>
+<option disabled="" value="none">Choose Operator ...</option>
+<option value={5}>></option>
+<option value={4}>{'<'}</option>
+<option value={3}>>=</option>
+<option value={2}>{'<'}=</option>
+<option value={1}>!=</option>
+<option value={0}>=</option>
+
+</select>
+
+
+   
+ <FloatingLabelInput style="outlined" class="mt-1" id="compared_value" name="compared_value" type="number" label="compared_value" bind:value={new_event_tag[new_event_tag_index].triggerConditionValue}>
+  </FloatingLabelInput> 
+  </div>
+  </td>
+  </tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td>
+      <td class="pl-5 pt-5">
+<div class="flex gap-4">
+<input type="number" bind:value={new_event_tag[new_event_tag_index].pollingRateS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+     <p class="pt-1 text-lg">s</p>
+
+</div>
+</td>
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Action</p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+
+  <Radio bind:group={new_event_tag[new_event_tag_index].actionOperation} value={0}>Write</Radio>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_event_tag[new_event_tag_index].actionTarget}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+<p class="pt-5"> with </p>
+ <FloatingLabelInput style="outlined" class="mt-1" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_event_tag[new_event_tag_index].actionOperationValue}>
+  </FloatingLabelInput> 
+ </div>
+  </td>
+  </tr>
+
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_event_tag(new_event_tag_index)}>Add</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+<Modal bind:open={modify_event_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyEventTag}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-36 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Trigger Tag</p></td>
+      <td class="pl-5 pt-5">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Trigger Condition</p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-16" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionOperand}>
+<option disabled="" value="none">Choose Operator ...</option>
+<option value={5}>></option>
+<option value={4}>{'<'}</option>
+<option value={3}>>=</option>
+<option value={2}>{'<'}=</option>
+<option value={1}>!=</option>
+<option value={0}>=</option>
+
+</select>
+
+
+   
+ <FloatingLabelInput style="outlined" class="mt-1" id="compared_value" name="compared_value" type="number" label="compared_value" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionValue}>
+  </FloatingLabelInput> 
+  </div>
+  </td>
+  </tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td>
+      <td class="pl-5 pt-5">
+<div class="flex gap-4">
+<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].pollingRateS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      <p class="pt-1 text-lg"> s</p>
+</div>
+</td>
+
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Action</p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperation} value={0}>Write</Radio>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionTarget}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+<p class="pt-5"> with </p>
+ <FloatingLabelInput style="outlined" class="mt-1" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperationValue}>
+  </FloatingLabelInput> 
+ </div>
+  </td>
+  </tr>
+
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={modify_event_tag}>Modify</Button></td>
+
+
+</table>
+</form>
+</Modal>
 
 </Table>
 
@@ -5890,7 +7304,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Alias Name</TableHeadCell>
+    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
     <TableHeadCell class="w-18"></TableHeadCell>    
     <TableHeadCell class="w-18"></TableHeadCell>
     <TableHeadCell class="w-18"></TableHeadCell> 
@@ -5905,85 +7319,6 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 
- <TableBodyRow>
- <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
-<button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-       </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-
-    <TableBodyCell class="w-10">1</TableBodyCell>
-
-
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">sche_</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-
- </TableBodyRow>
-
- <TableBodyRow>
- <TableBodyCell class="!p-4">
-
-<button>
-    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-
-  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
- </TableBodyCell>
-      <TableBodyCell class="!p-4">
-
-
-
-       </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
-
-
-    <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-
-    </TableBodyRow>
-
-
-  <tr>
-    <td></td>
-    <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>Save</Button></td>
-
-
-    </tr>
 
 
 </TableBody>
@@ -6092,11 +7427,11 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>    
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell> 
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
+    <TableHeadCell class="w-18">Data Push Interval</TableHeadCell>    
+    <TableHeadCell class="w-18">Link Lost Retransmit</TableHeadCell>
+    <TableHeadCell class="w-18">Data Priority</TableHeadCell> 
+    <TableHeadCell class="w-18">Cloud Profile</TableHeadCell>
+    <TableHeadCell class="w-18">Content Format</TableHeadCell>
     <TableHeadCell class="w-18"></TableHeadCell>
     <TableHeadCell class="w-18"></TableHeadCell>    
 
@@ -6106,37 +7441,171 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 
- <TableBodyRow>
+{#if getDataReady == 1}
+{#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule as ulRule, index}
+{#if ulRule.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteULRule(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 strikeout" type="checkbox" bind:checked={ulRule.enable}>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">{ulRule.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
+{#if ulRule.dataPushInterval==0}
+Right Away
+{:else if ulRule.dataPushInterval==1}
+{ulRule.dataPushIntervalValue} min(s)
+
+{/if}
+</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
+{ulRule.linkLostRetransmit} Delay Seconds
+</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
+{#if ulRule.dataPriority==0}
+Latest First
+{:else if ulRule.dataPriority==1}
+First In, First Out
+{/if}
+</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
+{#each ulRule.cloudProfile as cloudProfile, index2}
+{cloudProfile.cloudTarget}(
+{#each cloudProfile.cloudTopic as cloudTopic,index3}
+{cloudTopic}{#if index3 != cloudProfile.cloudTopic.length-1},{/if}
+{/each}
+)
+<p class="pl-2"></p>
+{#if index2 != ulRule.cloudProfile.length-1},{/if}
+{/each}
+
+</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
+{#if ulRule.contentFormat==0}<div class="flex gap-2">
+      Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg></div>
+<Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip>
+
+{:else if ulRule.contentFormat==1}User Defined{/if}
+
+</td>
+
+</tr>
+
+{:else}
+<TableBodyRow>
  <TableBodyCell class="!p-4"></TableBodyCell>
-      <TableBodyCell class="!p-4 w-10">
-<button>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+      <TableBodyCell class="!p-0 w-10">
+<button on:click={()=>TriggerModifyULRule(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+     <TableBodyCell class="!p-0 w-10">
+<button on:click={() => DeleteULRule(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
 
-    <TableBodyCell class="w-10">1</TableBodyCell>
+
+    <TableBodyCell><input class="mb-1" type="checkbox" bind:checked={ulRule.enable}></TableBodyCell>
 
 
-      <TableBodyCell class="w-10">1</TableBodyCell>
-      <TableBodyCell class="w-18">sche_</TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell>{index+1}</TableBodyCell>
+      <TableBodyCell class="w-18">{ulRule.tagName}</TableBodyCell>
+      <TableBodyCell class="w-18">
+{#if ulRule.dataPushInterval==0}
+Right Away
+{:else if ulRule.dataPushInterval==1}
+{ulRule.dataPushIntervalValue} min(s)
+
+{/if}
+      </TableBodyCell>
+      <TableBodyCell class="w-18">
+{ulRule.linkLostRetransmit} Delay Seconds
+      </TableBodyCell>
+      <TableBodyCell class="w-18">
+{#if ulRule.dataPriority==0}
+Latest First
+{:else if ulRule.dataPriority==1}
+First In, First Out
+{/if}
+
+      </TableBodyCell>
+
+
+      <TableBodyCell class="w-18">
+{#each ulRule.cloudProfile as cloudProfile, index2}
+{cloudProfile.cloudTarget}(
+{#each cloudProfile.cloudTopic as cloudTopic,index3}
+{cloudTopic}{#if index3 != cloudProfile.cloudTopic.length-1},{/if}
+{/each}
+)
+<p class="pl-2"></p>
+{#if index2 != ulRule.cloudProfile.length-1},{/if}
+{/each}
+
+      </TableBodyCell>
+      <TableBodyCell class="w-18">
+{#if ulRule.contentFormat==0}<div class="flex gap-2">
+      Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg></div>
+<Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip>
+
+{:else if ulRule.contentFormat==1}User Defined{/if}
+
+
+      </TableBodyCell>
+
 
  </TableBodyRow>
 
- <TableBodyRow>
- <TableBodyCell class="!p-4">
+{/if}
+{/each}
+{/if}
 
-<button>
+ <TableBodyRow>
+ {#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length < 10}
+
+ <TableBodyCell class="!p-4 w-10">
+
+<button on:click={()=>new_ul_rule_trigger(changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -6144,12 +7613,19 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       </button>
 
  </TableBodyCell>
-      <TableBodyCell class="!p-4">
+{:else}
+
+ <TableBodyCell class="!p-4 w-16"> </TableBodyCell>
+{/if}
+
+
+      <TableBodyCell class="!p-0 w-10">
 
 
 
        </TableBodyCell>
-      <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+
 
 
     <TableBodyCell class="w-10"></TableBodyCell>
@@ -6160,8 +7636,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+
 
     </TableBodyRow>
 
@@ -6175,16 +7650,516 @@ on:click={handleClickMMS} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveULRule}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
 
     </tr>
+
+
+
+
+<Modal bind:open={new_ul_rule_modal}  size="xl" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_ul_rule[new_ul_rule_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddULRule(new_ul_rule_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_ul_rule[new_ul_rule_index].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5">
+<div class="flex gap-4">
+  <Radio bind:group={new_ul_rule[new_ul_rule_index].dataPushInterval} value={0} >Right Away</Radio>
+  <Radio bind:group={new_ul_rule[new_ul_rule_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
+{#if new_ul_rule[new_ul_rule_index].dataPushInterval == 0}
+  <input type="number" bind:value={new_ul_rule[new_ul_rule_index].dataPushIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+
+{:else}
+  <input type="number" bind:value={new_ul_rule[new_ul_rule_index].dataPushIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+</div>
+
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-5 pt-5">
+<div class="flex gap-4">
+      <input type="number" bind:value={new_ul_rule[new_ul_rule_index].linkLostRetransmit} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
+</div>
+    </td>
+</tr>
+
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-5 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={new_ul_rule[new_ul_rule_index].dataPriority} value={0} >Latest First</Radio>
+  <Radio bind:group={new_ul_rule[new_ul_rule_index].dataPriority} value={1} >First In, First Out </Radio>
+
+</div>
+
+
+
+</td>
+
+
+</tr>
+
+<tr>
+
+
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+<td class= "pl-4 pt-4">
+<MultiSelect items={CloudProfile} bind:value={MultiSelectedCloudProfile} />
+
+    </td>
+<td class= "pl-4 pt-4">
+</td>
+
+<td class= "pl-4 pt-4">
+</td>
+
+</tr>
+
+<p class="pt-10"></p>
+
+
+{#if MultiSelectedCloudProfile.length==1}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[0]} Topic</p></td>
+      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
+<input type="text" bind:value={Cloud1Topic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+<input type="text" bind:value={Cloud1Topic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+<input type="text" bind:value={Cloud1Topic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+</div>
+      </td>
+
+</tr>
+  
+
+{:else if MultiSelectedCloudProfile.length==2}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[0]} Topic</p></td>
+      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
+<input type="text" bind:value={Cloud1Topic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+<input type="text" bind:value={Cloud1Topic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+<input type="text" bind:value={Cloud1Topic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+</div>
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[1]} Topic</p></td>
+ <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
+<input type="text" bind:value={Cloud2Topic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+<input type="text" bind:value={Cloud2Topic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+<input type="text" bind:value={Cloud2Topic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+</div>
+      </td>
+
+</tr>
+{/if}
+
+
+
+
+<tr class="pt-4">
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Content Format</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-6">
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].contentFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip></Radio>
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].contentFormat} value={1} >User Defined:</Radio>
+
+
+</div></td>
+</tr>
+
+<tr>
+  <td class="text-right" >
+  <div>
+  <ul style="list-style-type:none;" class="py-1">
+<li class="pt-4">
+{#if new_ul_rule[new_ul_rule_index].contentFormat == 1}
+    <Button size="xs" on:click={NPbtn1}>TIME</Button>
+{:else}
+    <Button size="xs" disabled>TIME</Button>
+{/if}
+</li>
+
+<li class="pt-4">
+{#if new_ul_rule[new_ul_rule_index].contentFormat == 1}
+<Button size="xs" on:click={NPbtn2}>ARRAY</Button>
+{:else}
+<Button size="xs" disabled>ARRAY</Button>
+{/if}
+</li>
+
+<li class="pt-4">
+{#if new_ul_rule[new_ul_rule_index].contentFormat == 1}
+<Button size="xs" on:click={NPbtn3}>NAME_RAWREQUEST</Button>
+{:else}
+<Button size="xs" disabled>NAME_RAWREQUEST</Button>
+{/if}
+</li>
+
+<li class="pt-4">
+{#if new_ul_rule[new_ul_rule_index].contentFormat == 1}
+<Button size="xs" on:click={NPbtn4}>NAME_RAWREPLY</Button>
+{:else}
+<Button size="xs" disabled>NAME_RAWREPLY</Button>
+{/if}
+</li>
+
+
+</ul>
+  </div>
+  </td>
+
+    <td class="pl-4 pt-4">
+{#if new_ul_rule[new_ul_rule_index].contentFormat == 1}
+
+<Textarea id="textarea-id" placeholder="Content Format" rows="12" name="message" bind:value={new_ul_rule[new_ul_rule_index].userDefineedData} />
+
+
+
+{:else}
+<Textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled/>
+{/if}
+
+
+    </td>
+
+
+
+
+</tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={add_new_ul_rule(new_ul_rule_index)}>Add</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+
+<Modal bind:open={modify_ul_rule_modal}  size="xl" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyULRule}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].tagName}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_data_tag_pro_data != ""}
+{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
+<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5">
+<div class="flex gap-4">
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPushInterval} value={0} >Right Away</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPushInterval == 0}
+  <input type="number" bind:value={new_ul_rule[new_ul_rule_index].dataPushIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+
+{:else}
+  <input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPushIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+</div>
+
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-5 pt-5">
+<div class="flex gap-4">
+      <input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].linkLostRetransmit} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
+</div>
+    </td>
+</tr>
+
+
+<tr>
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-5 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPriority} value={0} >Latest First</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPriority} value={1} >First In, First Out </Radio>
+
+</div>
+
+
+
+</td>
+
+
+</tr>
+
+<tr>
+
+
+<td><p class="pl-20 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+<td class= "pl-4 pt-4">
+<MultiSelect items={CloudProfile} bind:value={MultiSelectedCloudProfile} />
+
+    </td>
+<td class= "pl-4 pt-4">
+</td>
+
+<td class= "pl-4 pt-4">
+</td>
+
+</tr>
+
+<p class="pt-10"></p>
+
+
+{#if MultiSelectedCloudProfile.length==1}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[0]} Topic</p></td>
+      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+</div>
+      </td>
+
+</tr>
+  
+
+{:else if MultiSelectedCloudProfile.length==2}
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[0]} Topic</p></td>
+      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+</div>
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[1]} Topic</p></td>
+ <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[1].cloudTopic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[1].cloudTopic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[1].cloudTopic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+</div>
+      </td>
+
+</tr>
+{/if}
+
+
+
+
+<tr class="pt-4">
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Content Format</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-6">
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip></Radio>
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat} value={1} >User Defined:</Radio>
+
+
+</div></td>
+</tr>
+
+<tr>
+  <td class="text-right" >
+  <div>
+  <ul style="list-style-type:none;" class="py-1">
+<li class="pt-4">
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat == 1}
+    <Button size="xs" on:click={NPbtn1}>TIME</Button>
+{:else}
+    <Button size="xs" disabled>TIME</Button>
+{/if}
+</li>
+
+<li class="pt-4">
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat == 1}
+<Button size="xs" on:click={NPbtn2}>ARRAY</Button>
+{:else}
+<Button size="xs" disabled>ARRAY</Button>
+{/if}
+</li>
+
+<li class="pt-4">
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat == 1}
+<Button size="xs" on:click={NPbtn3}>NAME_RAWREQUEST</Button>
+{:else}
+<Button size="xs" disabled>NAME_RAWREQUEST</Button>
+{/if}
+</li>
+
+<li class="pt-4">
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat == 1}
+<Button size="xs" on:click={NPbtn4}>NAME_RAWREPLY</Button>
+{:else}
+<Button size="xs" disabled>NAME_RAWREPLY</Button>
+{/if}
+</li>
+
+
+</ul>
+  </div>
+  </td>
+
+    <td class="pl-4 pt-4">
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat == 1}
+
+<Textarea id="textarea-id" placeholder="Content Format" rows="12" name="message" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].userDefineedData} />
+
+
+
+{:else}
+<Textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled/>
+{/if}
+
+
+    </td>
+
+
+
+
+</tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={modify_ul_rule}>Modify</Button></td>
+
+
+</table>
+</form>
+</Modal>
 
 
 </TableBody>
@@ -6193,10 +8168,11 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 </TabItem>
 
+{#if 0}
 
 <TabItem title="DL Rule">
 </TabItem>
-
+{/if}
 
 {#if 0}
 

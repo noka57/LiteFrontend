@@ -230,6 +230,8 @@
 
       }
 
+      saved_changed_nat_data.config.networking_port_forwarding.enable=changed_nat_data.config.networking_port_forwarding.enable
+
       saved_changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(tempForDelete));
       changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(tempForDelete));
 
@@ -741,7 +743,7 @@
 <TabItem open title="Port Forwarding">
 <label>
 {#if getDataReady == 1}
-  <input type=checkbox bind:checked={changed_nat_data.config.networking_port_forwarding.enable}>
+  <input type="checkbox" bind:checked={changed_nat_data.config.networking_port_forwarding.enable}>
 {/if}
   Enable Port Forwarding
 </label>

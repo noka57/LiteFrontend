@@ -1072,10 +1072,7 @@
       <TableBodyCell class="text-center bg-green-400" colspan="3">Cellular Status</TableBodyCell>
     </TableBodyRow>
 
-    <TableBodyRow>
-    <TableBodyCell>Phone Number</TableBodyCell>
-      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.phoneNumber} {/if}</TableBodyCell>
-      </TableBodyRow>
+
 
       <TableBodyRow>
       <TableBodyCell>Modem Status</TableBodyCell>
@@ -1100,7 +1097,7 @@
       </TableBodyRow>
 
       <TableBodyRow>
-      <TableBodyCell>RSSI</TableBodyCell>
+      <TableBodyCell>RSSI/RSRP/RSRQ/SINR</TableBodyCell>
       <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.rssi} {/if}</TableBodyCell>
       </TableBodyRow>
 
@@ -1184,11 +1181,6 @@
 {#if openDetailStatus}
 
 
- <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="2">Phone Number</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.phoneNumber} {/if}</TableBodyCell>
-      </TableBodyRow>
-
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="2">Modem Status</TableBodyCell>
       <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.status} {/if}</TableBodyCell>
@@ -1212,7 +1204,7 @@
       </TableBodyRow>
 
       <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="2">RSSI</TableBodyCell>
+      <TableBodyCell class="text-right" colspan="2">RSSI/RSRP/RSRQ/SINR</TableBodyCell>
       <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.rssi} {/if}</TableBodyCell>
       </TableBodyRow>
 

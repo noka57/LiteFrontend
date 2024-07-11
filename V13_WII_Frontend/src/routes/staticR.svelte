@@ -288,6 +288,7 @@
     StaticRouteConfigChangedLog.set(staticR_changedValues);
 
 
+    saved_changed_staticR_data.config.networking_staticRoute.enable=changed_staticR_data.config.networking_staticRoute.enable;
     saved_changed_staticR_data.config.networking_staticRoute.list=JSON.parse(JSON.stringify(tempForDelete));
     changed_staticR_data.config.networking_staticRoute.list=JSON.parse(JSON.stringify(tempForDelete));
 
@@ -416,7 +417,7 @@
 
 <label class="pl-2">
 {#if getDataReady == 1}
-  <input type=checkbox bind:checked={changed_staticR_data.config.networking_staticRoute.enable}>
+  <input type="checkbox" bind:checked={changed_staticR_data.config.networking_staticRoute.enable}>
 {/if}
   Enable Static Route
 </label>

@@ -1,0 +1,81 @@
+# 
+# Copyright (C) 2022 ETHERWAN
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+# 
+# Noka Tang
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=litebackendEW50v
+PKG_VERSION:=1.0
+
+PKG_RELEASE:=1
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/litebackendEW50v
+
+PKG_BUILD_DEPENDS:=uci
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/litebackendEW50v
+	SECTION:=utils
+	CATEGORY:=EtherWAN
+	DEPENDS:=+libuci +libpthread +libopenssl +libcurl +lua +libjson-c
+	TITLE:=litebackendEW50v
+endef
+
+define Package/litebackendEW50v/description
+	Lite Backend Server EW50v
+endef
+
+define Build/Prepare
+	mkdir -p litebackendEW50v/obj
+	mkdir -p litebackendEW50v/bin
+	mkdir -p $(PKG_BUILD_DIR)
+	$(CP) -r ./litebackendEW50v/* $(PKG_BUILD_DIR)/
+endef
+
+define Package/litebackendEW50v/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/liteWEBd $(1)/usr/sbin/liteWEBd
+
+	$(INSTALL_DIR) $(1)/usr/sbin/litebackendEW50v
+	$(CP) -r ./files/* $(1)/usr/sbin/litebackendEW50v/
+
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/liteWEBd.init $(1)/etc/init.d/liteWEBd
+
+	$(INSTALL_DIR) $(1)/usr/lib/lua/litebackend
+	$(CP) ./scripts/* $(1)/usr/lib/lua/litebackend
+
+	$(INSTALL_DIR) $(1)/etc/config
+	$(CP) ./configs/* $(1)/etc/config
+
+	$(INSTALL_DIR) $(1)/etc/config/machineCert
+	$(INSTALL_DIR) $(1)/etc/config/remoteCert
+	$(INSTALL_DIR) $(1)/etc/config/caCert
+endef
+
+$(eval $(call BuildPackage,litebackendEW50v))
+
+
+INCDIR=-I./include
+LIBS=-lpthread -luci -lcrypto -lssl -lcurl -llua -ljson-c
+CFLAGS=-Wall -DJSMN_STATIC
+LITEBACKEND_OBJS=obj/backend.o
+OBJS=obj/posturl.o obj/webfilesearch.o obj/picohttpparser.o obj/loginhandler.o obj/userhandler.o obj/response_sender.o obj/dashboardhandler.o obj/wanhandler.o obj/wanhandler_lua.o obj/lanhandler.o obj/lanhandler_lua.o obj/nathandler.o obj/nathandler_lua.o  obj/firewallhandler.o obj/firewallhandler_lua.o obj/staticroutehandler.o obj/dockerhandler.o obj/accounthandler.o obj/operationhandler.o obj/maintenancehandler.o obj/confighandler.o obj/cryptolib.o obj/ew50vRestfulAPI.o obj/ew50vRestfulhandler.o obj/lua_config.o obj/ipsechandler.o obj/openvpnhandler.o obj/genericMQTThandler.o obj/remoteservicehandler.o obj/portconnectionhandler.o obj/modbushandler.o obj/certificatehandler.o obj/sdataloggerhandler.o obj/eventEnginehandler.o obj/json_parser.o
+LITEBACKEND_EXE=bin/liteWEBd
+
+all: $(LITEBACKEND_EXE)
+	$(CC) $(OBJS) $(LITEBACKEND_OBJS) -o $(LITEBACKEND_EXE) $(LIBS)
+
+$(LITEBACKEND_EXE): $(LITEBACKEND_OBJS) $(OBJS)
+
+obj/%.o : src/%.c
+	$(CC) -c $(CFLAGS) $(INCLUDES) $(INCDIR) $< -o $@ 
+
+clean:
+	rm -f obj/* bin/*

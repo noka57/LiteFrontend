@@ -840,15 +840,16 @@
 
   function sendPingbyRlan() 
   {
-    fetch(lan_data.config.networking_lan.ipStatic.ip)
+    fetch("https://"+lan_data.config.networking_lan.ipStatic.ip)
       .then(response => {
         if (response.status === 200) 
         {
           console.log('PingbyRLan successful');
           clearInterval(RestartIntervalIdByLan);
-
+          console.log("window.location.href");
+          console.log(window.location.href);
           setTimeout(() => {
-              window.location.href = lan_data.config.networking_lan.ipStatic.ip;
+              window.location.href = "https://"+lan_data.config.networking_lan.ipStatic.ip;
               }, 3000); 
         } 
         else 

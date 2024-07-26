@@ -631,6 +631,86 @@
   }
 
 
+  let GetDIReady=0;
+  let DIValue=0;
+  let SetDOHighReady=0;
+  let SetDOLowReady=0;
+
+
+  async function getDI() {
+    const res = await fetch(window.location.origin+"/GeTDI", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+
+      const data =await res.arrayBuffer();
+      //console.log("di value");
+      //console.log(data);
+      const uint8Array = new Uint8Array(data);
+      DIValue = parseInt(uint8Array, 16);
+      console.log(DIValue);
+
+      GetDIReady=1;
+
+    
+    }
+  }
+
+
+  async function setDOHigh() {
+    const res = await fetch(window.location.origin+"/SetdoHIgh", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+
+      SetDOHighReady=1;
+    }
+  }
+
+  async function setDOLow() {
+    const res = await fetch(window.location.origin+"/sETDoLOw", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      SetDOLowReady=1;
+    
+    }
+  }
+
+  function TestDI()
+  {
+    GetDIReady=0;
+    console.log("Test DI");
+    getDI();
+
+  }
+
+  function TestDOHigh()
+  {
+    SetDOHighReady=0;
+    console.log("Test DO High");
+    setDOHigh();
+
+  }
+
+  function TestDOLow()
+  {
+    SetDOLowReady=0;
+    console.log("Test DO Low");
+    setDOLow();
+
+  }
+
+
   onMount(() => {
 
     console.log("port connection sessionid: ");
@@ -1088,28 +1168,43 @@
 
   <TabItem title="Simulator">
 
-{#if 0}
-
   <table>
 <tr>
-   <td class="pl-10"><Button pill={true}>Test DI</Button></td>
+   <td class="pl-10">
+   <div class="flex gap-4">
+   <Button pill={true} on:click={TestDI}>Test DI</Button>
+
+   <p class="pl-2 pt-2">{#if GetDIReady==1}Result: {DIValue}{/if}</p>
+   </div>
+   </td>
 </tr>
 
 <p class="pt-10"></p>
 
 <tr >
-   <td class="pl-10"><Button pill={true}>Test DO High</Button></td>
+   <td class="pl-10">
+  <div class="flex gap-4">
+   <Button pill={true} on:click={TestDOHigh}>Test DO High</Button>
+   
+<p class="pl-2 pt-2">{#if SetDOHighReady==1}Command Executed{/if}</p>
+   </div>
+
+   </td>
 </tr>
 
 <p class="pt-10"></p>
 
 <tr>
-   <td class="pl-10"><Button pill={true}>Test DO Low</Button></td>
+   <td class="pl-10">  <div class="flex gap-4">
+   <Button pill={true} on:click={TestDOLow}>Test DO Low</Button>
+   <p class="pl-2 pt-2">{#if SetDOLowReady==1}Command Executed{/if}</p>
+   </div>
+   </td>
 </tr>
 
 </table>
 
-{/if}
+
   </TabItem>
 
 

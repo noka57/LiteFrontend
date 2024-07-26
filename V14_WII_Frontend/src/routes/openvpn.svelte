@@ -2942,8 +2942,8 @@
       NewClientConn[index].delete=false;      
       NewClientConn[index].name="";
       NewClientConn[index].remote_host="";
-      NewClientConn[index].remote_port=0;
-      NewClientConn[index].remote_protocol;
+      NewClientConn[index].remote_port=1194;
+      NewClientConn[index].remote_protocol=0;
       NewClientConn[index].remote_ca_certificate="";
       NewClientConn[index].local_certificate="";
       NewClientConn[index].auth="";

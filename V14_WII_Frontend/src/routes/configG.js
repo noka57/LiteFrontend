@@ -2,8 +2,8 @@ import { writable } from 'svelte/store';
 
 export const dashboadData= writable("");
 export const VPNdashboad= writable("");
-export const wanWebInputFlag=writable("");
-
+export const ewanWebInputFlag=writable("");
+export const cwanWebInputFlag=writable("");
 
 export const awsIoTcoreConfig=writable("");
 export const azureConfig=writable("");

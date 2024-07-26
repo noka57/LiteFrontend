@@ -4,7 +4,8 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import {natConfig, ChangedNATConfig, NAT_LoopBack_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_Dmz_ConfigChangedLog} from "./configG.js"
+  import {natConfig, ChangedNATConfig, NAT_LoopBack_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_Dmz_ConfigChangedLog,
+  ChangedWANConfig, ChangedOpenVPNConfig} from "./configG.js"
 
    let formModalPFW = false;
    let newformModalPFW=false;
@@ -33,6 +34,19 @@
      sessionid = val;
    });
 
+   let newPFW_openvpnIndex;
+
+
+    let openvpn_data="";
+    let wan_data="";
+
+    ChangedOpenVPNConfig.subscribe(val => {
+      openvpn_data = val;
+    });    
+
+    ChangedWANConfig.subscribe(val => {
+      wan_data = val;
+    });
 
     natConfig.subscribe(val => {
         nat_data = val;
@@ -275,21 +289,27 @@
 
     let BackupPFWItem=
     {
-      "enable": false,
+      "enable": false, 
       "delete": false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     };
 
@@ -300,273 +320,348 @@
       port_forwarding_current_index=index;
 
       BackupPFWItem.enable=changed_nat_data.config.networking_port_forwarding.list[index].enable;
-      BackupPFWItem.wanIf=changed_nat_data.config.networking_port_forwarding.list[index].wanIf;
-      BackupPFWItem.serverIp=changed_nat_data.config.networking_port_forwarding.list[index].serverIp;
-      BackupPFWItem.sourceIp=changed_nat_data.config.networking_port_forwarding.list[index].sourceIp;
+      BackupPFWItem.delete=changed_nat_data.config.networking_port_forwarding.list[index].delete;      
+      BackupPFWItem.incomingIf=changed_nat_data.config.networking_port_forwarding.list[index].incomingIf;
+      BackupPFWItem.incomingTun=changed_nat_data.config.networking_port_forwarding.list[index].incomingTun;
+      BackupPFWItem.incomingTunAliasName=changed_nat_data.config.networking_port_forwarding.list[index].incomingTunAliasName;
+      BackupPFWItem.incomingSrcIp=changed_nat_data.config.networking_port_forwarding.list[index].incomingSrcIp;
+      BackupPFWItem.incomingSrcIpUserDefined=changed_nat_data.config.networking_port_forwarding.list[index].incomingSrcIpUserDefined;
+
+      BackupPFWItem.forwardingIf=changed_nat_data.config.networking_port_forwarding.list[index].forwardingIf;
+      BackupPFWItem.forwardingTun=changed_nat_data.config.networking_port_forwarding.list[index].forwardingTun; 
+      BackupPFWItem.forwardingTunAliasName=changed_nat_data.config.networking_port_forwarding.list[index].forwardingTunAliasName; 
+
+
+      BackupPFWItem.redirectIp=changed_nat_data.config.networking_port_forwarding.list[index].redirectIp;
+      BackupPFWItem.redirectIpUserDefined=changed_nat_data.config.networking_port_forwarding.list[index].redirectIpUserDefined;
+
       BackupPFWItem.protocol=changed_nat_data.config.networking_port_forwarding.list[index].protocol;
-      BackupPFWItem.pubPort=changed_nat_data.config.networking_port_forwarding.list[index].pubPort;
-      BackupPFWItem.pubPortRange.start=changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.start;
-      BackupPFWItem.pubPortRange.end=changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.end;
-      BackupPFWItem.privPort=changed_nat_data.config.networking_port_forwarding.list[index].privPort;
-      BackupPFWItem.privPortRange.start=changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.start;
-      BackupPFWItem.privPortRange.end=changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.end;
+      BackupPFWItem.incomingDstPort=changed_nat_data.config.networking_port_forwarding.list[index].incomingDstPort;
+      BackupPFWItem.incomingDstPortRange.start=changed_nat_data.config.networking_port_forwarding.list[index].incomingDstPortRange.start;
+      BackupPFWItem.incomingDstPortRange.end=changed_nat_data.config.networking_port_forwarding.list[index].incomingDstPortRange.end;
+      BackupPFWItem.redirectPort=changed_nat_data.config.networking_port_forwarding.list[index].redirectPort;
+      BackupPFWItem.redirectPortRange.start=changed_nat_data.config.networking_port_forwarding.list[index].redirectPortRange.start;
+      BackupPFWItem.redirectPortRange.end=changed_nat_data.config.networking_port_forwarding.list[index].redirectPortRange.end;
     }
 
-
-    let BackupVC_Item={
-      "enable": false,
-      "globalIp": "",
-      "localIp": ""
-    };
-
-
-    let newVC_Item=[{
-          "enable": false,
-          "globalIp": "",
-          "localIp": ""
-        },{
-          "enable": false,
-          "globalIp": "",
-          "localIp": ""
-        },{
-          "enable": false,
-          "globalIp": "",
-          "localIp": ""
-        },{
-          "enable": false,
-          "globalIp": "",
-          "localIp": ""
-        },{
-          "enable": false,
-          "globalIp": "",
-          "localIp": ""
-        },{
-          "enable": false,
-          "globalIp": "",
-          "localIp": ""
-        },{
-          "enable": false,
-          "globalIp": "",
-          "localIp": ""
-        },{
-          "enable": false,
-          "globalIp": "",
-          "localIp": ""
-        },{
-          "enable": false,
-          "globalIp": "",
-          "localIp": ""
-        },{
-          "enable": false,
-          "globalIp": "",
-          "localIp": ""
-        }
-        ];
-
-
     let newPFW_Item = [{
-      "enable": false,
-      "delete":false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingTunAliasName":"",
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     },{
-      "enable": false,
-      "delete":false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingTunAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     },{
-      "enable": false,
-      "delete":false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingTunAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     },{
-      "enable": false,
-      "delete":false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingTunAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     },{
-      "enable": false,
-      "delete":false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingTunAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     },{
-      "enable": false,
-      "delete":false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingTunAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     },{
-      "enable": false,
-      "delete":false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingTunAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     },{
-      "enable": false,
-      "delete":false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingTunAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     },{
-      "enable": false,
-      "delete":false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingTunAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     },{
-      "enable": false,
-      "delete":false,
-      "wanIf": 0,
-      "serverIp": "",
-      "sourceIp": "",
-      "protocol": "TCP",
-      "pubPort": 0,
-      "pubPortRange": {
-        "start": 0,
-        "end": 0
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingTunAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
       },
-      "privPort": 0,
-      "privPortRange": {
-        "start": 0,
-        "end": 0
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
       }
     }];
 
 
    function NewPFW_Item_Invoker(index)
    {
-      newPFW_Item[index].enable=false;
+      newPFW_Item[index].enable=true;
       newPFW_Item[index].delete=false;
-      newPFW_Item[index].wanIf=0;
-      newPFW_Item[index].serverIp="";  
-      newPFW_Item[index].sourceIp="";
-      newPFW_Item[index].protocol="TCP";
-      newPFW_Item[index].pubPort=0;
-      newPFW_Item[index].pubPortRange.start=0;
-      newPFW_Item[index].pubPortRange.end=0;
-      newPFW_Item[index].privPort=0;
-      newPFW_Item[index].privPortRange.start=0;
-      newPFW_Item[index].privPortRange.end=0;
+      newPFW_Item[index].incomingIf=2;
+
+      if (openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1)
+      {
+        if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
+        {
+          //server
+          newPFW_Item[index].incomingTun="openvpn0";
+          newPFW_Item[index].incomingTunAliasName="Server";
+          newPFW_Item[index].forwardingTunAliasName="Server";
+          newPFW_Item[index].forwardingTun="openvpn0"; 
+        }
+        else if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
+        {
+          //client
+          newPFW_Item[index].incomingTun="";
+          newPFW_Item[index].incomingTunAliasName=""; 
+        }
+      } 
+      else if (openvpn_data !="")
+      {
+        newPFW_Item[index].incomingTun="";
+        newPFW_Item[index].incomingTunAliasName=""; 
+      }
+
+
+     
+      newPFW_Item[index].incomingSrcIp=0;
+      newPFW_Item[index].incomingSrcIpUserDefined="";
+      newPFW_Item[index].forwardingIf=0;
+      newPFW_Item[index].forwardingTun="";
+      newPFW_Item[index].redirectIp=0;
+      newPFW_Item[index].redirectIpUserDefined=""; 
+      newPFW_Item[index].protocol=0;
+      newPFW_Item[index].incomingDstPort=2;
+      newPFW_Item[index].incomingDstPortRange.start=0;
+      newPFW_Item[index].incomingDstPortRange.end=0;
+      newPFW_Item[index].redirectPort=2;
+      newPFW_Item[index].redirectPortRange.start=0;
+      newPFW_Item[index].redirectPortRange.end=0;
 
       new_pfw_index=index;
       newformModalPFW = true;
 
    }
 
-   function NewVC_Item_Invoker(index)
+   function NewIncomingIfChanged()
    {
-      newVC_Item[index].enable=false;
-      newVC_Item[index].globalIp="";
-      newVC_Item[index].localIp="";
+     console.log("NewIncomingIfChanged:" + newPFW_Item[new_pfw_index].incomingIf);
+     if (newPFW_Item[new_pfw_index].incomingIf==1 || newPFW_Item[new_pfw_index].incomingIf==2)
+     {
+        newPFW_Item[new_pfw_index].forwardingIf=0;
+        newPFW_Item[new_pfw_index].incomingSrcIp=0;
+     }
+     else if (newPFW_Item[new_pfw_index].incomingIf==0)
+     {
+        newPFW_Item[new_pfw_index].forwardingIf=1;
+     }
+     else if (newPFW_Item[new_pfw_index].incomingIf==3)
+     {
+        newPFW_Item[new_pfw_index].forwardingIf=0;
+     }
 
-      new_vc_index=index;
-      newformModalVC = true;
+     console.log("incomingTunAliasName:" + newPFW_Item[new_pfw_index].incomingTunAliasName);
 
    }
+
+   function NewIncomingSrcIpChanged()
+   {
+     console.log("NewIncomingSrcIpChanged:" + newPFW_Item[new_pfw_index].incomingSrcIp);
+   }
+
 
 
    function ModifyPFW(index)
@@ -577,45 +672,39 @@
    function NoModifyPFW(index)
    {
       formModalPFW = false;
+
+
       changed_nat_data.config.networking_port_forwarding.list[index].enable= BackupPFWItem.enable;
       changed_nat_data.config.networking_port_forwarding.list[index].delete= BackupPFWItem.delete;
-      changed_nat_data.config.networking_port_forwarding.list[index].wanIf= BackupPFWItem.wanIf;
+      changed_nat_data.config.networking_port_forwarding.list[index].incomingIf= BackupPFWItem.incomingIf;
+      changed_nat_data.config.networking_port_forwarding.list[index].incomingTun= BackupPFWItem.incomingTun; 
+      changed_nat_data.config.networking_port_forwarding.list[index].incomingTunAliasName= BackupPFWItem.incomingTunAliasName;         
+      changed_nat_data.config.networking_port_forwarding.list[index].incomingSrcIp= BackupPFWItem.incomingSrcIp;
+      changed_nat_data.config.networking_port_forwarding.list[index].incomingSrcIpUserDefined= BackupPFWItem.incomingSrcIpUserDefined
+      ;
+
+      changed_nat_data.config.networking_port_forwarding.list[index].forwardingIf= BackupPFWItem.forwardingIf;
+      changed_nat_data.config.networking_port_forwarding.list[index].forwardingTun= BackupPFWItem.forwardingTun;
+      changed_nat_data.config.networking_port_forwarding.list[index].forwardingTunAliasName= BackupPFWItem.forwardingTunAliasName;
 
 
-      changed_nat_data.config.networking_port_forwarding.list[index].serverIp= BackupPFWItem.serverIp;
-
-      changed_nat_data.config.networking_port_forwarding.list[index].sourceIp= BackupPFWItem.sourceIp;
-
+      changed_nat_data.config.networking_port_forwarding.list[index].redirectIp= BackupPFWItem.redirectIp;
+      changed_nat_data.config.networking_port_forwarding.list[index].redirectIpUserDefined= BackupPFWItem.redirectIpUserDefined;
 
       changed_nat_data.config.networking_port_forwarding.list[index].protocol= BackupPFWItem.protocol;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].pubPort= BackupPFWItem.pubPort;
+      changed_nat_data.config.networking_port_forwarding.list[index].srcPort= BackupPFWItem.srcPort;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.start= BackupPFWItem.pubPortRange.start;
+      changed_nat_data.config.networking_port_forwarding.list[index].srcPortRange.start= BackupPFWItem.srcPortRange.start;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].pubPortRange.end= BackupPFWItem.pubPortRange.end;
+      changed_nat_data.config.networking_port_forwarding.list[index].srcPortRange.end= BackupPFWItem.srcPortRange.end;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].privPort= BackupPFWItem.privPort;
+      changed_nat_data.config.networking_port_forwarding.list[index].redirectPort= BackupPFWItem.redirectPort;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.start= BackupPFWItem.privPortRange.start;
+      changed_nat_data.config.networking_port_forwarding.list[index].redirectPortRange.start= BackupPFWItem.redirectPortRange.start;
 
-      changed_nat_data.config.networking_port_forwarding.list[index].privPortRange.end= BackupPFWItem.privPortRange.end;
+      changed_nat_data.config.networking_port_forwarding.list[index].redirectPortRange.end= BackupPFWItem.redirectPortRange.end;
 
-   }
-
-
-   function ModifyVC(index)
-   {
-      formModalVC = false;
-   }
-
-   function NoModifyVC(index)
-   {
-      formModalVC = false; 
-
-      changed_nat_data.config.networking_nat_virtualComputer.list[index].enable= BackupVC_Item.enable;
-      changed_nat_data.config.networking_nat_virtualComputer.list[index].globalIp= BackupVC_Item.globalIp;
-      changed_nat_data.config.networking_nat_virtualComputer.list[index].localIp= BackupVC_Item.localIp;
    }
 
    function AddPFW(index)
@@ -625,22 +714,6 @@
       changed_nat_data.config.networking_port_forwarding.list=[...changed_nat_data.config.networking_port_forwarding.list,newPFW_Item[index]];
    }
 
-
-   function AddVC(index)
-   {
-      newformModalVC = false;
-
-      changed_nat_data.config.networking_nat_virtualComputer.list=[...changed_nat_data.config.networking_nat_virtualComputer.list, newVC_Item[index]];
-   }
-
-
-    function modalTriggerVC(index){
-      formModalVC = true;
-      virtualcomputer_current_index=index;
-      BackupVC_Item.enable=changed_nat_data.config.networking_nat_virtualComputer.list[index].enable;
-      BackupVC_Item.globalIp=changed_nat_data.config.networking_nat_virtualComputer.list[index].globalIp;
-      BackupVC_Item.localIp=changed_nat_data.config.networking_nat_virtualComputer.list[index].localIp;
-   }
 
 
    async function getNATData () {
@@ -663,6 +736,47 @@
     }
   }
 
+   async function getWANData () {
+    const res = await fetch(window.location.origin+"/getWANData", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+        wan_data =await res.json();
+        console.log(wan_data);
+        ChangedWANConfig.set(wan_data);
+    }
+  }
+
+
+
+  async function getOpenVPNData () {
+    const res = await fetch(window.location.origin+"/getOPENvpndata", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      openvpn_data =await res.json();
+      console.log(openvpn_data);
+      ChangedOpenVPNConfig.set(openvpn_data);
+
+    
+     // if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
+     // {
+        //getOpenVPNServerStatus();
+      //}
+     // else if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
+     // {
+        //getOpenVPNClientStatus();
+     // }
+    }
+  }
+
+
 
   onMount(() => {
 
@@ -674,11 +788,33 @@
         const hexArray = sessionid.match(/.{1,2}/g); 
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
-
         getNATData();
+
+        if (wan_data == "")
+        {
+          getWANData();
+        }
+        else
+        {
+          console.log("wan data already");
+        }
+
+        if (openvpn_data=="")
+        {
+          getOpenVPNData();
+        }
+        else
+        {
+          console.log("openvpn data already");
+        }
+
     }
     else if (sessionid && nat_data !="")
-    {  
+    { 
+      const hexArray = sessionid.match(/.{1,2}/g); 
+      const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      sessionBinary = new Uint8Array(byteValues); 
+      
       getDataReady=1;
       changed_nat_data=JSON.parse(JSON.stringify(saved_changed_nat_data));
       if (dmz_changedValues.length == 0)
@@ -700,6 +836,25 @@
       if (loopback_changedValues.length == 0)
       {
         changed_nat_data.config.networking_nat_loopback = JSON.parse(JSON.stringify(nat_data.config.networking_nat_loopback));     
+      }
+
+      if (wan_data == "")
+      {
+        getWANData();
+      }
+      else
+      {
+        console.log("wan data already");
+      }
+
+
+      if (openvpn_data=="")
+      {
+        getOpenVPNData();
+      }
+      else
+      {
+        console.log("openvpn data already");
       }
 
     }
@@ -747,7 +902,6 @@
 {/if}
   Enable Port Forwarding
 </label>
-
 <p class="mt-10"></p>
   <Table shadow striped={true}>
   <TableHead>
@@ -759,11 +913,11 @@
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell>WAN Interface</TableHeadCell>
-    <TableHeadCell>Host IP</TableHeadCell>
+    <TableHeadCell>Incoming Interface</TableHeadCell>
+    <TableHeadCell>Forwarding Interface</TableHeadCell>    
     <TableHeadCell>Protocol</TableHeadCell>
-    <TableHeadCell>Public Port</TableHeadCell>
-    <TableHeadCell class="w-22">Private Port</TableHeadCell>
+    <TableHeadCell>Source Port</TableHeadCell>
+    <TableHeadCell class="w-22">Destination Port</TableHeadCell>
   </TableHead>
   <TableBody>
 
@@ -807,29 +961,50 @@
 
       </td>
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
-{#if PFW.wanIf==0}
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">All</td>
-{:else if PFW.wanIf==1}
+{#if PFW.incomingIf==0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">LAN</td>
+{:else if PFW.incomingIf==1}
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Ethernet WAN</td>
-{:else if PFW.wanIf==2}
+{:else if PFW.incomingIf==2}
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Cellular WAN</td>
+{:else if PFW.incomingIf==3}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">OpenVPN</td>
+
 
 {/if}
 
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.serverIp}</td>
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.protocol}</td>
 
-{#if PFW.pubPort ==0}
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.pubPortRange.start}</td>
-{:else if PFW.pubPort ==1}
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.pubPortRange.start}-{PFW.pubPortRange.end}</td>
+
+{#if PFW.forwardingIf==0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">LAN</td>
+{:else if PFW.forwardingIf==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">OpenVPN</td>
+
 {/if}
 
 
-{#if PFW.privPort ==0}
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.privPortRange.start}</td>
-{:else if PFW.privPort ==1}
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.privPortRange.start}-{PFW.privPortRange.end}</td>
+{#if PFW.protocol==0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">ALL</td>
+{:else if PFW.protocol==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">TCP</td>
+{:else if PFW.protocol==2}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">UDP</td>
+{:else if PFW.protocol==3}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">TCP & UDP</td>
+
+{/if}
+
+{#if PFW.srcPort ==0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.srcPortRange.start}</td>
+{:else if PFW.srcPort ==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.srcPortRange.start}-{PFW.srcPortRange.end}</td>
+{/if}
+
+
+{#if PFW.redirectPort ==0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.redirectPortRange.start}</td>
+{:else if PFW.redirectPort ==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.redirectPortRange.start}-{PFW.redirectPortRange.end}</td>
 {/if}
 
     </tr>
@@ -860,34 +1035,58 @@
     </TableBodyCell>
 
 
+
       <TableBodyCell class="w-10">
 <input type="checkbox"  bind:checked={PFW.enable}>
 
       </TableBodyCell>
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
-{#if PFW.wanIf==0}
-      <TableBodyCell class="w-10">All</TableBodyCell>
-{:else if PFW.wanIf==1}
+{#if PFW.incomingIf==0}
+      <TableBodyCell class="w-10">LAN</TableBodyCell>
+{:else if PFW.incomingIf==1}
       <TableBodyCell class="w-10">Ethernet WAN</TableBodyCell>
-{:else if PFW.wanIf==2}
+{:else if PFW.incomingIf==2}
       <TableBodyCell class="w-10">Cellular WAN</TableBodyCell>
+{:else if PFW.incomingIf==3}
 
-{/if}
-
-      <TableBodyCell class="w-10">{PFW.serverIp}</TableBodyCell>
-      <TableBodyCell class="w-10">{PFW.protocol}</TableBodyCell>
-
-{#if PFW.pubPort ==0}
-      <TableBodyCell class="w-10">{PFW.pubPortRange.start}</TableBodyCell>
-{:else if PFW.pubPort ==1}
-      <TableBodyCell class="w-10">{PFW.pubPortRange.start}-{PFW.pubPortRange.end}</TableBodyCell>
+      <TableBodyCell class="w-10">OpenVPN ({PFW.AliasName})
+      </TableBodyCell>
 {/if}
 
 
-{#if PFW.privPort ==0}
-      <TableBodyCell class="w-10">{PFW.privPortRange.start}</TableBodyCell>
-{:else if PFW.privPort ==1}
-      <TableBodyCell class="w-10">{PFW.privPortRange.start}-{PFW.privPortRange.end}</TableBodyCell>
+
+{#if PFW.forwardingIf==0}
+      <TableBodyCell class="w-10">LAN</TableBodyCell>
+{:else if PFW.forwardingIf==1}
+      <TableBodyCell class="w-10">OpenVPN</TableBodyCell>
+{/if}
+
+
+
+
+{#if PFW.protocol==0}
+       <TableBodyCell class="w-10">ALL</TableBodyCell>
+{:else if PFW.protocol==1}
+       <TableBodyCell class="w-10">TCP</TableBodyCell>
+{:else if PFW.protocol==2}
+       <TableBodyCell class="w-10">UDP</TableBodyCell>
+{:else if PFW.protocol==3}
+       <TableBodyCell class="w-10">TCP & UDP</TableBodyCell>
+
+{/if}
+
+
+{#if PFW.incomingDstPort ==0}
+      <TableBodyCell class="w-10">{PFW.incomingDstPortRange.start}</TableBodyCell>
+{:else if PFW.srcPort ==1}
+      <TableBodyCell class="w-10">{PFW.incomingDstPortRange.start}-{PFW.srcPortRange.end}</TableBodyCell>
+{/if}
+
+
+{#if PFW.redirectPort ==0}
+      <TableBodyCell class="w-10">{PFW.redirectPortRange.start}</TableBodyCell>
+{:else if PFW.redirectPort ==1}
+      <TableBodyCell class="w-10">{PFW.redirectPortRange.start}-{PFW.redirectPortRange.end}</TableBodyCell>
 {/if}
 
     </TableBodyRow>
@@ -950,7 +1149,7 @@
     </tr>
 
 
-<Modal bind:open={newformModalPFW} size="lg" class="w-full" autoclose>
+<Modal bind:open={newformModalPFW} size="xl" class="w-full" autoclose>
   <form action="#">
 
 <label>
@@ -964,62 +1163,271 @@
 
 
  <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">WAN Interface</p>
+  <td ><p class="pl-5 pt-4 text-lg font-light text-right">Incoming Interface</p>
 
   </td>
 
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={newPFW_Item[new_pfw_index].wanIf} value={0} >All</Radio>
-  <Radio bind:group={newPFW_Item[new_pfw_index].wanIf} value={1} >Ethernet WAN</Radio>
-  <Radio bind:group={newPFW_Item[new_pfw_index].wanIf} value={2} >Cellular WAN</Radio>
+    <td class="pl-5 pt-4" colspan="3"><div class="flex gap-4">
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={0} on:change={NewIncomingIfChanged}>LAN</Radio>
+{#if wan_data != "" && wan_data.config.networking_wan_port_switch==1}  
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={1} on:change={NewIncomingIfChanged}>Ethernet WAN</Radio>
+{/if}  
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={2} on:change={NewIncomingIfChanged}>Cellular WAN</Radio>
+{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
+
+{#if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={3} on:change={NewIncomingIfChanged}>OpenVPN: {newPFW_Item[new_pfw_index].incomingTunAliasName}</Radio>
+
+{:else if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={3} on:change={NewIncomingIfChanged}>OpenVPN: </Radio>
+
+{#if newPFW_Item[new_pfw_index].incomingIf ==3}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={newPFW_Item[new_pfw_index].incomingTunAliasName}>
+<option disabled="" value="none">Choose ...</option>
+
+{#each openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
+<option value={client_conn.name}>{client_conn.name}</option>
+{/each}
+</select>
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+<option disabled="" value="none">Choose ...</option>
+</select>
+{/if}
+
+{/if}
+
+
+{/if}
+  
+
 </div></td>
 </tr>
 
 
+
+
+ <tr>
+  <td class="w-60"><p class="pl-5 pt-4 text-lg font-light text-right">Forwarding Interface</p>
+
+  </td>
+
+    <td class="pl-5 pt-4" colspan="3"><div class="flex gap-4">
+{#if newPFW_Item[new_pfw_index].incomingIf!=0}        
+  <Radio bind:group={newPFW_Item[new_pfw_index].forwardingIf} value={0} >LAN</Radio>
+{:else}
+  <Radio value={0} disabled>LAN</Radio>
+{/if}
+
+{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
+{#if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
+{#if newPFW_Item[new_pfw_index].incomingIf !=0}
+  <Radio value={1} disabled>OpenVPN :{newPFW_Item[new_pfw_index].forwardingTunAliasName}</Radio>
+
+{:else}
+  <Radio bind:group={newPFW_Item[new_pfw_index].forwardingIf} value={1} >OpenVPN: {newPFW_Item[new_pfw_index].forwardingTunAliasName}</Radio>
+
+{/if}
+{:else if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+{#if newPFW_Item[new_pfw_index].incomingIf !=0}
+  <Radio value={1} disabled>OpenVPN :</Radio>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+<option disabled="" value="none">Choose ...</option>
+</select>
+{:else}
+  <Radio bind:group={newPFW_Item[new_pfw_index].forwardingIf} value={1} >OpenVPN: {newPFW_Item[new_pfw_index].forwardingTunAliasName}</Radio>
+  <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={newPFW_Item[new_pfw_index].forwardingTunAliasName}>
+<option disabled="" value="none">Choose ...</option>
+{#each openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
+<option value={client_conn.name}>{client_conn.name}</option>
+{/each}
+</select>
+{/if}
+
+{/if}
+{/if}
+</div></td>
+</tr>
+
+
+
+
+
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newPFW_Item[new_pfw_index].serverIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="w-10"><p class="pl-20 pt-4 text-lg font-light text-right">Incoming Source IP</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-4">
 
 
+{#if newPFW_Item[new_pfw_index].incomingIf !=1 && newPFW_Item[new_pfw_index].incomingIf !=2}     
+      <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={0} on:change={NewIncomingSrcIpChanged}>Any</Radio>
+
+{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1&&openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+      <Radio value={1} disabled>User Define :</Radio>
+{:else}
+
+      <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1} on:change={NewIncomingSrcIpChanged}>User Define :</Radio>
+{/if}
+
+{#if newPFW_Item[new_pfw_index].incomingSrcIp==1}
+
+      <input type="text" bind:value={newPFW_Item[new_pfw_index].incomingSrcIpUserDefined} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+      <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+{/if}
+{:else}
+      <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={0} disabled>Any</Radio>
+      <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1} disabled>User Defined :</Radio>
+      <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{/if}
+
+
+      </div>
+      </td>
+      <td class="pl-5 pt-4">
+
+      </td>
+
+      <td class="pl-5 pt-4">
+
+      </td>
+
+      <td class="pl-5 pt-4">
+
+      </td>
+
+
+      <td class="pl-5 pt-4">
+
+      </td>
+
+
+      <td class="pl-5 pt-4">
+
+      </td>
+
+
+  </tr>
+
+ <tr>
+  <td><p class="pl-5 pt-4 text-lg font-light text-right">Protocol</p>
+
+  </td>
+
+    <td class="pl-5 pt-4" colspan="3"><div class="flex gap-4">
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={0} >ALL</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={1} >TCP</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={2} >UDP</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={3} >TCP & UDP</Radio>
+</div></td>
+</tr>
+
+
+
+ <tr>
+  <td><p class="pl-5 pt-4 text-lg font-light text-right">Incoming Destination Port</p>
+
+  </td>
+
+    <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={2} >Any</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={0} >Single Port</Radio>
+{#if newPFW_Item[new_pfw_index].incomingDstPort==1}
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{:else}
+  <input type="number" bind:value={newPFW_Item[new_pfw_index].incomingDstPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+
+
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={1} >Port Range</Radio>
+{#if newPFW_Item[new_pfw_index].incomingDstPort==0}
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+
+{:else}
+  <input type="number" bind:value={newPFW_Item[new_pfw_index].incomingDstPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newPFW_Item[new_pfw_index].incomingDstPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+
+
+</div></td>
+</tr>
+
+
+
+
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Redirect IP</p></td><td class="pl-5 pt-5 w-10" colspan="2">
+<div class="flex gap-4">
+        <Radio bind:group={newPFW_Item[new_pfw_index].redirectIp} value={0} >Any</Radio>
+
+{#if newPFW_Item[new_pfw_index].forwardingIf == 0 && (newPFW_Item[new_pfw_index].incomingIf ==1 || newPFW_Item[new_pfw_index].incomingIf ==2)}
+      <Radio bind:group={newPFW_Item[new_pfw_index].redirectIp} value={1} >User Define :</Radio>
+      <input type="text" bind:value={newPFW_Item[new_pfw_index].redirectIpUserDefined} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+
+<Radio value={1} disabled>User Define :</Radio>
+<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{/if}
+
+</div>
+      </td>
+
+
+      <td class="pl-5 pt-4">
+
+      </td>
+
+      <td class="pl-5 pt-4">
+
+      </td>
+
+      <td class="pl-5 pt-4">
+
+      </td>
+
+
+      <td class="pl-5 pt-4">
+
+      </td>
 
   </tr>
 
 
 
- <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Protocol</p>
 
-  </td>
 
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value='TCP' >TCP</Radio>
-  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value='UDP' >UDP</Radio>
-  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value='TCPUDP' >TCP & UDP</Radio>
-</div></td>
-</tr>
 
 
 
  <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Public Port</p>
+  <td><p class="pl-5 pt-4 text-lg font-light text-right">Redirect Port</p>
 
   </td>
 
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={newPFW_Item[new_pfw_index].pubPort} value={0} >Single Port</Radio><input type="number" bind:value={newPFW_Item[new_pfw_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={newPFW_Item[new_pfw_index].pubPort} value={1} >Port Range</Radio><input type="number" bind:value={newPFW_Item[new_pfw_index].pubPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newPFW_Item[new_pfw_index].pubPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-</div></td>
-</tr>
+    <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
+  <Radio bind:group={newPFW_Item[new_pfw_index].redirectPort} value={2} >Keep Origin Port</Radio>   
+  <Radio bind:group={newPFW_Item[new_pfw_index].redirectPort} value={0} >Single Port</Radio>
+{#if newPFW_Item[new_pfw_index].redirectPort==1}
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{:else}
+  <input type="number" bind:value={newPFW_Item[new_pfw_index].redirectPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+
+
+  <Radio bind:group={newPFW_Item[new_pfw_index].redirectPort} value={1} >Port Range</Radio>
+{#if newPFW_Item[new_pfw_index].redirectPort==0}
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+
+{:else}
+  <input type="number" bind:value={newPFW_Item[new_pfw_index].redirectPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newPFW_Item[new_pfw_index].redirectPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
 
 
 
- <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Private Port</p>
-
-  </td>
-
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={newPFW_Item[new_pfw_index].privPort} value={0} >Single Port</Radio><input type="number" bind:value={newPFW_Item[new_pfw_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-  <Radio bind:group={newPFW_Item[new_pfw_index].privPort} value={1} >Port Range</Radio><input type="number" bind:value={newPFW_Item[new_pfw_index].privPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newPFW_Item[new_pfw_index].privPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 </div></td>
 </tr>
 
@@ -1027,6 +1435,11 @@
       <tr>
     <td></td>
     <td></td>
+    <td></td>
+    <td></td> 
+    <td></td>
+    <td></td> 
+
     <td class="pl-10"><Button color="dark" pill={true} on:click={AddPFW(new_pfw_index)}>Add</Button></td>
 
 

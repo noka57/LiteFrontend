@@ -2,7 +2,8 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, Toggle,Select, Checkbox, Input, Tooltip, Radio,FloatingLabelInput } from 'flowbite-svelte';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { wanConfig, wanWebInputFlag,
+  import { wanConfig, ewanWebInputFlag,
+    cwanWebInputFlag,
     LastestReadableWANConfig,
     WAN_CWAN1_BASIC_ConfigChangedLog,
     WAN_CWAN1_Advanced_ConfigChangedLog,
@@ -22,6 +23,8 @@
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
    let openDetailStatus = false;
+   let cwanBasicPasswordShow=false;
+   let ewanPPPoEPasswordShow=false;
 
 
   function handleDetailClick() {
@@ -332,7 +335,7 @@
       port_switch_changedValues=[];
     }
 
-    if (changed_wan_data.config.networking_wan_port_switch != wan_data.config.networking_port_switch)
+    if (changed_wan_data.config.networking_wan_port_switch != wan_data.config.networking_wan_port_switch)
     {
       if (changed_wan_data.config.networking_wan_port_switch ==1)
       {
@@ -363,6 +366,13 @@
         cwan1_basic_changedValues=[];
       }
       compareObjects(changed_wan_data.config.networking_wan_cwan[0].basicSetting, wan_data.config.networking_wan_cwan[0].basicSetting,0,0,0);
+
+
+      if (wan_data.config.networking_wan_cwan[0].basicSetting.webAccess != changed_wan_data.config.networking_wan_cwan[0].basicSetting.webAccess)
+      {
+        console.log("web access changed!!");
+        cwanWebInputFlag.set("1");
+      }
 
 
       WAN_CWAN1_BASIC_ConfigChangedLog.set(cwan1_basic_changedValues);
@@ -445,8 +455,7 @@
 
     if (wan_data.config.networking_wan_ewan[0].basicSetting.webAccess != changed_wan_data.config.networking_wan_ewan[0].basicSetting.webAccess)
     {
-      console.log("web access changed!!");
-      wanWebInputFlag.set("1");
+      ewanWebInputFlag.set("1");
     }
 
 
@@ -1267,31 +1276,21 @@
 
     </tr>
 
-{#if 0}
 
- <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">DNS</p></td>
-    <td class="pl-5 pt-5">
-{#if getdataAlready}    
-    <input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].basicSetting.dns[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<tr>
+  <td><p class="pl-40 pt-5 text-lg font-light text-right">Web Access</p>
+
+  </td>
+
+  <td class="pl-5 pt-5"><div class="flex gap-4">
+{#if getdataAlready}  
+  <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].basicSetting.webAccess} value={0} >Reject</Radio>
+  <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].basicSetting.webAccess} value={1} >Accept</Radio>
 {/if}
-    </td>
 
-    </tr>
+</div></td>
 
-
-
- <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right"></p></td>
-    <td class="pl-5 pt-5">
-{#if getdataAlready}    
-    <input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].basicSetting.dns[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-{/if}
-    </td>
-
-    </tr>
-
-{/if}
+  </tr>
 
     <tr>
     <td><p class="pl-40 pt-5 text-lg font-light text-center">Automatic APN Selection</p></td><td class="pl-5 pt-5">
@@ -1313,7 +1312,25 @@
 
 
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="password" bind:value={changed_wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5">
+
+{#if cwanBasicPasswordShow}
+    <input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+{:else}
+
+    <input type="password" bind:value={changed_wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+
+    </td>
+    </tr>
+    <tr>
+    <td>
+    <p class="pl-40"></p>
+    </td>
+    <td class="pl-5 pt-5">
+  <input type="checkbox" bind:checked={cwanBasicPasswordShow}> Show Password
+    </td>
     </tr>
 
     <tr>
@@ -1328,10 +1345,7 @@
   <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.auth} value='AUTO' >AUTO</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.auth} value='CHAP' >CHAP</Radio>
   <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].basicSetting.apnManual.auth} value='PAP' >PAP</Radio>
-
 </div>
-
-
     </td>
 
 {/if}
@@ -1387,7 +1401,7 @@
 {#if changed_wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockEn}
 
     <tr>
-    <td><p class="pl-40 pt-5 text-lg font-light text-right">Band Select: </p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandSelect} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+    <td><p class="pl-40 pt-5 text-lg font-light text-right">Band Select: </p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_cwan[0].advancedSetting.bandLockParam.bandSelect} class="bg-blue-50 border border-blue-500 text-blue-900 placeholder-gray-400 dark:text-green-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" placeholder="B3"></td>
     </tr>
   
 {/if}
@@ -1476,19 +1490,47 @@
 
 
     <tr>
-    <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Cellular Level Checking</p></td>
+    <td></td>
+{#if changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.cellLvChk==0}
+    <td style="border-top:solid;border-left:solid;border-bottom:solid;border-color:#1762BC;"><p class="pl-1 pt-1 text-lg font-light text-left">Cellular Level Checking</p></td>
 
-    <td class="pl-5 pt-5"><div class="flex gap-4">
+    <td class="pt-1 pl-5" style="border-top:solid;border-bottom:solid;border-color:#1762BC;"><div class="flex gap-4">
     <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.cellLvChk} value={0} >Disable</Radio>
     <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.cellLvChk} value={1} >Enable</Radio>
 
 </div></td>
+
+{:else}    
+
+    <td style="border-top:solid;border-left:solid;border-color:#1762BC;"><p class="pl-1 pt-1 text-lg font-light text-left">Cellular Level Checking</p></td>
+
+    <td class="pt-1 pl-3" style="border-top:solid;border-color:#1762BC;"><div class="flex gap-4">
+    <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.cellLvChk} value={0} >Disable</Radio>
+    <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.cellLvChk} value={1} >Enable</Radio>
+
+</div></td>
+{/if}
+
+
+
+{#if changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.cellLvChk==0}
+    <td style="border-top:solid;border-right:solid;border-bottom:solid;border-color:#1762BC;"></td>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
+
+{:else}
+    <td style="border-top:solid;border-color:#1762BC;"></td>
+    <td style="border-top:solid;border-color:#1762BC;"></td>
+    <td style="border-top:solid;border-color:#1762BC;"></td>
+    <td style="border-top:solid;border-color:#1762BC;"></td>
+
+    <td style="border-top:solid;border-right:solid;border-color:#1762BC;"></td>
+
+{/if}
     </tr>
 
 
@@ -1497,20 +1539,19 @@
 
     <tr>
     <td></td>
-    <td><p class="pl-5 pt-5 text-lg font-light text-right">Checking Rules</p></td>
-       <td></td>
+    <td style="border-left:solid;border-color:#1762BC;"><p class="pl-5 pt-5 text-lg font-light text-right">Checking Rules</p></td>
+      <td></td>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
-    <td></td> 
-    <td></td>
-    <td></td> 
+
+    <td style="border-right:solid;border-color:#1762BC;"></td> 
     </tr>
 
     <tr>
 
-    <td></td><td></td>
+    <td></td><td style="border-left:solid;border-color:#1762BC;"></td>
               <td class="border-b-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
               Fail Connections
               </td>
@@ -1523,12 +1564,18 @@
               <td>
               times (1-10)
               </td> 
+              <td>
+              </td>
+              <td>
+              </td>
+              <td style="border-right:solid;border-color:#1762BC;">
+              </td>
               </tr>
 
 
     <tr>
 
-    <td></td><td></td>
+    <td></td><td style="border-left:solid;border-color:#1762BC;"></td>
               <td class="border-t-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
               RSSI Monitor
               </td>
@@ -1549,11 +1596,15 @@
               <td>
               (-90~-113 dBm)
               </td>
+              <td>
+              </td>              
+              <td style="border-right:solid;border-color:#1762BC;">
+              </td>    
               </tr>
 
     <tr>
 
-    <td></td><td></td>
+    <td></td><td style="border-left:solid;border-color:#1762BC;"></td>
               <td class="border-t-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
               Network Service
               </td>
@@ -1573,11 +1624,16 @@
               <td>
               (1-30 minutes)
               </td>
+              <td>
+              </td>
+
+              <td style="border-right:solid;border-color:#1762BC;">
+              </td>              
               </tr>
 
     <tr>
 
-    <td></td><td></td>
+    <td></td><td style="border-left:solid;border-color:#1762BC;"></td>
               <td class="border-t-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
               Roaming Service
               </td>
@@ -1588,12 +1644,22 @@
   <label for="simCheck3" class="font-medium">Once Roaming</label>
               </td>
 
+              <td>
+              </td>
+              <td>
+              </td>              
+
+              <td>
+              </td>
+              <td style="border-right:solid;border-color:#1762BC;">
+              </td>
+
               </tr>
 
     <tr>
 
     <td></td>
-    <td><p class="pl-5 pt-5 text-lg font-light text-right">SIM failover Treatment</p></td>
+    <td style="border-left:solid;border-color:#1762BC;"><p class="pl-5 pt-5 text-lg font-light text-right">SIM failover Treatment</p></td>
     <td class="pl-5 pt-5">
 {#if getdataAlready}
 
@@ -1604,20 +1670,18 @@
 </td>
     <td></td>
     <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-        <td></td>
-    <td></td> 
+    <td ></td>
+    <td ></td>
+
+    <td style="border-right:solid;border-color:#1762BC;"></td> 
     </tr>
 
 
     <tr>
 
     <td></td>
-    <td><p class="pl-5 pt-5 text-lg font-light text-right">Packet Count Increase</p></td>
-    <td class="pl-5 pt-5">
+    <td style="border-left:solid;border-bottom:solid;border-color:#1762BC;"><p class="pl-5 pt-5 text-lg font-light text-right">Packet Count Increase</p></td>
+    <td style="border-bottom:solid;border-color:#1762BC;" class="pl-5 pt-5">
 {#if getdataAlready}
 
 
@@ -1627,61 +1691,87 @@
 </td>
 
 
- <td class="pt-5" colspan="1">
+ <td style="border-bottom:solid;border-color:#1762BC;" class="pt-5" colspan="1">
     <div class="flex gap-3">
     <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.pktCountIncreaseMode} value={0}>RX</Radio>
     <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.pktCountIncreaseMode} value={1}>RX + TX</Radio>
     </div>
     </td>
 
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-        <td></td>
-    <td></td> 
+    <td style="border-bottom:solid;border-color:#1762BC;"></td>
+    <td style="border-bottom:solid;border-color:#1762BC;"></td>
+    <td style="border-bottom:solid;border-color:#1762BC;"></td>
+
+  
+    <td style="border-right:solid;border-bottom:solid;border-color:#1762BC;"></td> 
     </tr>
 
 
 {/if}
 
+<p class="pt-5"></p>
 
     <tr>
-    <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Packet Level Checking</p></td>
+    <td></td>
 
-    <td class="pl-5 pt-5"><div class="flex gap-4">
+{#if changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.pktLvChk==0}
+
+    <td style="border-top:solid;border-left:solid;border-bottom:solid;border-color:#1762BC;"><p class="pl-1 pt-1 text-lg font-light text-left">Packet Level Checking</p></td>
+
+    <td class="pl-5 pt-1" style="border-top:solid;border-bottom:solid;border-color:#1762BC;"><div class="flex gap-4">
       <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.pktLvChk} value={0} >Disable</Radio>
       <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.pktLvChk} value={1} >Enable</Radio>
 
 </div></td>
+{:else}
+    <td style="border-top:solid;border-left:solid;border-color:#1762BC;"><p class="pl-1 pt-1 text-lg font-light text-left">Packet Level Checking</p></td>
+
+    <td class="pl-5 pt-1" style="border-top:solid;border-color:#1762BC;"><div class="flex gap-4">
+      <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.pktLvChk} value={0} >Disable</Radio>
+      <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.pktLvChk} value={1} >Enable</Radio>
+
+</div></td>
+
+
+
+{/if}
+
+
+{#if changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.pktLvChk==0}
+    <td style="border-top:solid;border-right:solid;border-bottom:solid;border-color:#1762BC;"></td>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
     <td></td>
+
+{:else}
+    <td style="border-top:solid;border-color:#1762BC;"></td>
+
+
+    <td style="border-top:solid;border-right:solid;border-color:#1762BC;"></td>
+
+{/if}
     </tr>
 {#if changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.pktLvChk}
     <tr>
-    <td></td><td><p class="pl-5 pt-5 text-lg font-light text-right">Checking Method</p></td>
+    <td></td><td style="border-left:solid;border-color:#1762BC;"><p class="pl-5 pt-5 text-lg font-light text-right">Checking Method</p></td>
         <td></td>
     <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+
+    <td style="border-right:solid;border-color:#1762BC;"></td>
 
     </tr>
 
 
     <tr>
 
-    <td></td><td></td><td class="pt-5" colspan="1">
+    <td></td><td style="border-left:solid;border-color:#1762BC;"></td><td class="pt-5" colspan="1">
 
   <label for="gLinkCheck1" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
  <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck1" name="gLinkCheck1" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pingEn} on:click={PingPacket_check}>Ping Packet:</label>
-    </td><td colspan="1"><FloatingLabelInput style="filled" id="packet_size" name="packet_size" type="number" label="Packet Size (Bytes)" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pingParam.size}/></td><td>
+    </td><td colspan="1"><FloatingLabelInput style="filled" id="packet_size" name="packet_size" type="number" label="Packet Size (Bytes)" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pingParam.size}/></td><td style="border-right:solid;border-color:#1762BC;">
     <FloatingLabelInput style="filled" id="remote_host" name="remote_host" type="text" label="Remote Host" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pingParam.ip}/></td> 
     
 
@@ -1689,7 +1779,7 @@
 
 
     <tr>
-    <td></td><td></td><td class="pt-5" colspan="1">
+    <td></td><td style="border-left:solid;border-color:#1762BC;"></td><td class="pt-5" colspan="1">
 
       <label for="gLinkCheck9" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
  <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck9" name="gLinkCheck9" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.dnsLockupEn} on:click={DNSLookup_check}>
@@ -1697,43 +1787,27 @@ DNS Lookup</label>
     </td>
     
     <td class="pt-5" colspan="1"><FloatingLabelInput style="filled" id="FQDN" name="FQDN" type="text" label="FQDN" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.dnsLockupParam.fqdn}/></td>
-    <td class="pt-5" colspan="1"><FloatingLabelInput style="filled" id="DNSer" name="DNSer" type="text" label="DNS Server" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.dnsLockupParam.dnser}/></td>
+    <td class="pt-5" colspan="1" style="border-right:solid;border-color:#1762BC;"><FloatingLabelInput style="filled" id="DNSer" name="DNSer" type="text" label="DNS Server" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.dnsLockupParam.dnser}/></td>
     </tr>
 
 
     <tr>
-    <td></td><td></td><td class="pt-5" colspan="1">
+    <td></td><td style="border-left:solid;border-bottom:solid;border-color:#1762BC;"></td><td class="pt-3" colspan="1" style="border-bottom:solid;border-color:#1762BC;">
     <label for="gLinkCheck11" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
  <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck11" name="gLinkCheck11" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.httpEn} on:click={HTTPS_check}>
 Http(s)</label>
 
     </td>
-    <td class="pt-5" colspan="1"><FloatingLabelInput style="filled" id="url" name="url" type="text" label="URL" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.httpUrl}/></td>
+    <td class="pt-3" colspan="1" style="border-bottom:solid;border-color:#1762BC;"><FloatingLabelInput style="filled" id="url" name="url" type="text" label="URL" bind:value={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.httpUrl}/></td>
+
+    <td style="border-right:solid;border-bottom:solid;border-color:#1762BC;">
+    </td>
 
 
     </tr>
 
 
-{#if 0}
 
-    <tr>
-    <td></td><td></td><td class="pt-5" colspan="1">
-    <label for="gLinkCheck12" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
- <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="gLinkCheck12" name="gLinkCheck12" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseEn} on:click={PacketCountInc_check}>
-Packet Count Increase</label>
-
-    </td>
-
-    <td class="pt-5" colspan="1">
-    <div class="flex gap-3">
-    <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseMode} value={0}>RX</Radio>
-    <Radio bind:group={changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.chkMethod.pktCountIncreaseMode} value={1}>RX + TX</Radio>
-    </div>
-    </td>
-  
-    </tr>
-
-{/if}
 
 {/if} 
 
@@ -2043,7 +2117,22 @@ Modem Power Cycle</label>
 
   <tr>
 
-            <td><p class="pl-40 pt-1 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="password" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.pppoe.password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+            <td><p class="pl-40 pt-1 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5">
+{#if ewanPPPoEPasswordShow}            
+            <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.pppoe.password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+            <input type="password" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.pppoe.password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}            
+
+            </td>
+  </tr>
+
+  <tr>
+      <td><p class="pl-40"></p>
+      </td>
+      <td class="pl-5 pt-5">
+        <input type="checkbox" bind:checked={ewanPPPoEPasswordShow}> Show Password
+      </td>
   </tr>
 
 {/if}

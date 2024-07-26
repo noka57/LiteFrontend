@@ -33,7 +33,11 @@
   let azcentral_changedValues=[];
 
 
+  let NewHubConnectionStringEnable=false;
+  let NewHubConnectionString="";
 
+  let ModifyHubConnectionStringEnable=false;
+  let ModifyHubConnectionString="";
 
   let getDataReady=0;
 
@@ -217,8 +221,89 @@
     NewItem[index].machineCAcert="";
     NewItem[index].machineCert="";
     new_item_index=index;
+    NewHubConnectionStringEnable=false;
+    NewHubConnectionString="";
     new_modal = true;
   }
+
+
+  function NewHubConnectionStringEnableChanged()
+  {
+    if (NewHubConnectionStringEnable)
+    {
+      NewItem[new_item_index].attestation=0
+    }
+  }
+
+
+
+  function NewComposeConnectionString()
+  {
+    console.log("NewComposeConnectionString")
+    if (NewItem[new_item_index].azHubName !=""&&
+        NewItem[new_item_index].deviceID !=""&&
+        NewItem[new_item_index].symmetric_key_primary !="" &&
+        NewItem[new_item_index].attestation==0)
+    {
+
+      NewHubConnectionString="HostName="+NewItem[new_item_index].azHubName+".azure-devices.net;DeviceId="+NewItem[new_item_index].deviceID+";SharedAccessKey="+NewItem[new_item_index].symmetric_key_primary;
+    }
+    else
+    {
+      console.log(NewItem[new_item_index].azHubName);
+      console.log(NewItem[new_item_index].deviceID);
+      console.log(NewItem[new_item_index].symmetric_key_primary);
+      console.log(NewItem[new_item_index].attestation);
+    }
+   
+
+
+  }
+
+  function NewHubConnectionStringParse()
+  {
+    console.log(NewHubConnectionString)
+    let hostname = "";
+    let deviceId = "";
+    let sharedAccessKey = "";
+    let regex = /([^;=]+)=([^;]*)/g;
+
+    let match;
+    while ((match = regex.exec(NewHubConnectionString)) !== null) {
+      let key = match[1].trim();
+      let value = match[2].trim();
+
+      switch (key) {
+        case 'HostName':
+          hostname = value;
+          break;
+        case 'DeviceId':
+          deviceId = value;
+          break;
+        case 'SharedAccessKey':
+          sharedAccessKey = value;
+          break;
+        default:
+
+          break;
+      }
+    }
+
+    let parts = hostname.split('.');
+
+
+    let hubname = parts[0];
+
+    console.log('HostName:', hostname);
+    console.log('hub name:', hubname);
+    console.log('DeviceId:', deviceId);
+    console.log('SharedAccessKey:', sharedAccessKey);
+    NewItem[new_item_index].azHubName=hubname;
+    NewItem[new_item_index].deviceID=deviceId;
+    NewItem[new_item_index].symmetric_key_primary=sharedAccessKey;
+
+  }
+
 
   function AddNewAZhub(index)
   {
@@ -239,10 +324,93 @@
   }
 
 
+  function ModifyComposeHubConnectionString()
+  {
+    console.log("ModifyHubConnectionString")
+    if (changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName !=""&&
+        changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID !=""&&
+        changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary !="" &&
+        changed_azure_data.config.cloud_azHub_profile[modify_index].attestation==0)
+    {
+
+      ModifyHubConnectionString="HostName="+changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName+".azure-devices.net;DeviceId="+changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID+";SharedAccessKey="+changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary;
+    }
+    else
+    {
+      console.log(changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName);
+      console.log(changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID);
+      console.log(changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary);
+      console.log(changed_azure_data.config.cloud_azHub_profile[modify_index].attestation);
+    }  
+  }
+
+
+  function ModifyHubConnectionStringEnableChanged()
+  {
+    if (ModifyHubConnectionStringEnable)
+    {
+      changed_azure_data.config.cloud_azHub_profile[modify_index].attestation=0
+    }
+  }
+
+  function ModifyHubConnectionStringParse()
+  {
+    console.log(ModifyHubConnectionString)
+    let hostname = "";
+    let deviceId = "";
+    let sharedAccessKey = "";
+    let regex = /([^;=]+)=([^;]*)/g;
+
+    let match;
+    while ((match = regex.exec(ModifyHubConnectionString)) !== null) {
+      let key = match[1].trim();
+      let value = match[2].trim();
+
+      switch (key) {
+        case 'HostName':
+          hostname = value;
+          break;
+        case 'DeviceId':
+          deviceId = value;
+          break;
+        case 'SharedAccessKey':
+          sharedAccessKey = value;
+          break;
+        default:
+
+          break;
+      }
+    }
+
+    let parts = hostname.split('.');
+
+
+    let hubname = parts[0];
+
+    console.log('HostName:', hostname);
+    console.log('hub name:', hubname);
+    console.log('DeviceId:', deviceId);
+    console.log('SharedAccessKey:', sharedAccessKey);
+    changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName=hubname;
+    changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID=deviceId;
+    changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary=sharedAccessKey;
+  }
+
   function TriggerModifyAZhub(index)
   {
     modify_Modal=true;
     modify_index=index;
+
+    if (changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName !=""&&
+        changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID !=""&&
+        changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary !="" &&
+        changed_azure_data.config.cloud_azHub_profile[modify_index].attestation==0)
+    {
+
+      ModifyHubConnectionString="HostName="+changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName+".azure-devices.net;DeviceId="+changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID+";SharedAccessKey="+changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary;
+    }
+
+    ModifyHubConnectionStringEnable=false;
     BackupItem.enable=changed_azure_data.config.cloud_azHub_profile[index].enable;
     BackupItem.delete=changed_azure_data.config.cloud_azHub_profile[index].delete;    
     BackupItem.azHubName=changed_azure_data.config.cloud_azHub_profile[index].azHubName;
@@ -1355,8 +1523,30 @@
 <table>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Hub Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+<td class="pl-5 pt-5">
+<input type="checkbox"  class="mb-1" bind:checked={ModifyHubConnectionStringEnable} on:change={ModifyHubConnectionStringEnableChanged}>
+  <span class="pl-1 pt-3 text-lg font-light text-right">Use Connection String</span>
+</td>
+<td class="pl-5 pt-5" colspan="6">
+{#if ModifyHubConnectionStringEnable}
+<input type="text" bind:value={ModifyHubConnectionString} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" on:input={ModifyHubConnectionStringParse}>
+{:else}
+<input type="text" bind:value={ModifyHubConnectionString} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{/if}
+</td>
 
+</tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Hub Name</p></td><td class="pl-5 pt-5">
+{#if ModifyHubConnectionStringEnable}
+      <input type="text" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+{:else}
+      <input type="text" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" on:input={ModifyComposeHubConnectionString}>
+{/if}
+</td>
     <td class="w-10"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
@@ -1367,7 +1557,13 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Device ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Device ID</p></td><td class="pl-5 pt-5">
+{#if ModifyHubConnectionStringEnable}
+      <input type="text" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{:else}
+      <input type="text" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" on:input={ModifyComposeHubConnectionString}>
+{/if}
+      </td>
 
     <td class="w-10"></td>
     <td class="w-10"></td>
@@ -1412,7 +1608,14 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6">
+{#if ModifyHubConnectionStringEnable}
+      <input type="text" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+{:else}
+      <input type="text" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" on:input={ModifyComposeHubConnectionString}>
+{/if}
+      </td>
 
 
 
@@ -1485,9 +1688,31 @@
 
 <table>
 
+<tr>
+<td class="pl-5 pt-5">
+<input type="checkbox"  class="mb-1" bind:checked={NewHubConnectionStringEnable} on:change={NewHubConnectionStringEnableChanged}>
+  <span class="pl-1 pt-3 text-lg font-light text-right">Use Connection String</span>
+</td>
+<td class="pl-5 pt-5" colspan="6">
+{#if NewHubConnectionStringEnable}
+<input type="text" bind:value={NewHubConnectionString} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" on:input={NewHubConnectionStringParse}>
+{:else}
+<input type="text" bind:value={NewHubConnectionString} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{/if}
+</td>
+
+</tr>
+
+
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Hub Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].azHubName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Hub Name</p></td><td class="pl-5 pt-5">
+{#if NewHubConnectionStringEnable}
+      <input type="text" bind:value={NewItem[new_item_index].azHubName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{:else}
+      <input type="text" bind:value={NewItem[new_item_index].azHubName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" on:input={NewComposeConnectionString}>
+{/if}
+      </td>
     <td class="w-10"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
@@ -1498,7 +1723,14 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Device ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].deviceID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Device ID</p></td><td class="pl-5 pt-5">
+{#if NewHubConnectionStringEnable}
+      <input type="text" bind:value={NewItem[new_item_index].deviceID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+{:else}
+      <input type="text" bind:value={NewItem[new_item_index].deviceID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" on:input={NewComposeConnectionString}>
+{/if}
+      </td>
     <td class="w-10"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
@@ -1509,7 +1741,14 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Model ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].modelID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Model ID</p></td><td class="pl-5 pt-5">
+{#if NewHubConnectionStringEnable}
+      <input type="text" bind:value={NewItem[new_item_index].modelID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{:else}
+      <input type="text" bind:value={NewItem[new_item_index].modelID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      
+{/if}      
+      </td>
     <td class="w-10"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
@@ -1524,9 +1763,14 @@
 
       <td class="pl-5 pt-5">
 <div class="flex gap-2">
+
+{#if NewHubConnectionStringEnable}
+  <Radio class="pb-2 disabled:cursor-not-allowed disabled:opacity-50" bind:group={NewItem[new_item_index].attestation} value={0} disabled>SAS</Radio>
+  <Radio class="pb-2 disabled:cursor-not-allowed disabled:opacity-50" bind:group={NewItem[new_item_index].attestation} value={1} disabled>X509</Radio>
+{:else}
   <Radio class="pb-2" bind:group={NewItem[new_item_index].attestation} value={0} >SAS</Radio>
   <Radio class="pb-2" bind:group={NewItem[new_item_index].attestation} value={1} >X509</Radio>
-
+{/if}
 </div>
       </td>
 
@@ -1544,7 +1788,13 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" bind:value={NewItem[new_item_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6">
+{#if NewHubConnectionStringEnable}
+      <input type="text" bind:value={NewItem[new_item_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{:else}
+      <input type="text" bind:value={NewItem[new_item_index].symmetric_key_primary} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" on:input={NewComposeConnectionString}>
+{/if}
+      </td>
 
 
 
@@ -1552,7 +1802,7 @@
 
 {:else if NewItem[new_item_index].attestation==1}
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
       <td class="pl-5 pt-5" colspan="2">
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItem[new_item_index].machineCAcert}>
@@ -1570,7 +1820,7 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2">
 
 
 
@@ -1589,6 +1839,8 @@
 </tr>
 
 {/if}
+
+
 
 
 

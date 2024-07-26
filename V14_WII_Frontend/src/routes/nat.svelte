@@ -646,7 +646,16 @@
      }
      else if (newPFW_Item[new_pfw_index].incomingIf==0)
      {
-        newPFW_Item[new_pfw_index].forwardingIf=1;
+        if (openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1)
+        {
+          newPFW_Item[new_pfw_index].forwardingIf=1;
+          newPFW_Item[new_pfw_index].incomingSrcIp=0;
+        }
+        else
+        {
+          newPFW_Item[new_pfw_index].forwardingIf=-1;
+          newPFW_Item[new_pfw_index].incomingSrcIp=0;
+        }
      }
      else if (newPFW_Item[new_pfw_index].incomingIf==3)
      {
@@ -1257,15 +1266,19 @@
       <td class="w-10"><p class="pl-20 pt-4 text-lg font-light text-right">Incoming Source IP</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-4">
 
 
-{#if newPFW_Item[new_pfw_index].incomingIf !=1 && newPFW_Item[new_pfw_index].incomingIf !=2}     
+
+{#if newPFW_Item[new_pfw_index].forwardingIf !=-1 && (newPFW_Item[new_pfw_index].incomingIf ==0 || newPFW_Item[new_pfw_index].incomingIf ==3)}     
       <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={0} on:change={NewIncomingSrcIpChanged}>Any</Radio>
 
-{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1&&openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 && newPFW_Item[new_pfw_index].incomingIf ==3}
       <Radio value={1} disabled>User Define :</Radio>
-{:else}
-
+{:else if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1 && newPFW_Item[new_pfw_index].incomingIf ==3}
+      <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1} on:change={NewIncomingSrcIpChanged}>User Define :</Radio>
+{:else if newPFW_Item[new_pfw_index].incomingIf ==1}
       <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1} on:change={NewIncomingSrcIpChanged}>User Define :</Radio>
 {/if}
+
+
 
 {#if newPFW_Item[new_pfw_index].incomingSrcIp==1}
 
@@ -1276,7 +1289,7 @@
 {/if}
 {:else}
       <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={0} disabled>Any</Radio>
-      <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1} disabled>User Defined :</Radio>
+      <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1} disabled>User Define :</Radio>
       <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 {/if}
 

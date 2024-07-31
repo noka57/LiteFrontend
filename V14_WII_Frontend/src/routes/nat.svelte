@@ -667,6 +667,10 @@
      else if (newPFW_Item[new_pfw_index].incomingIf==3)
      {
         newPFW_Item[new_pfw_index].forwardingIf=0;
+        newPFW_Item[new_pfw_index].incomingSrcIp=0;
+        newPFW_Item[new_pfw_index].incomingDstPort=2;
+        newPFW_Item[new_pfw_index].redirectIp=0;
+        newPFW_Item[new_pfw_index].redirectPort=2;
      }
 
      console.log("incomingTunAliasName:" + newPFW_Item[new_pfw_index].incomingTunAliasName);

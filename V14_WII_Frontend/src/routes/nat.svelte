@@ -1038,7 +1038,7 @@
     <TableHeadCell>Forwarding Interface</TableHeadCell>    
     <TableHeadCell>Protocol</TableHeadCell>
     <TableHeadCell>Source Port</TableHeadCell>
-    <TableHeadCell class="w-22">Destination Port</TableHeadCell>
+    <TableHeadCell>Destination Port</TableHeadCell>
   </TableHead>
   <TableBody>
 
@@ -1169,22 +1169,22 @@
       </TableBodyCell>
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
 {#if PFW.incomingIf==0}
-      <TableBodyCell class="w-10">LAN</TableBodyCell>
+      <TableBodyCell class="w-10">LAN {#if PFW.incomingSrcIp==1}({PFW.incomingSrcIpUserDefined}){/if}</TableBodyCell>
 {:else if PFW.incomingIf==1}
       <TableBodyCell class="w-10">Ethernet WAN</TableBodyCell>
 {:else if PFW.incomingIf==2}
       <TableBodyCell class="w-10">Cellular WAN</TableBodyCell>
 {:else if PFW.incomingIf==3}
 
-      <TableBodyCell class="w-10">OpenVPN</TableBodyCell>
+      <TableBodyCell class="w-10">OpenVPN {#if PFW.incomingSrcIp==1}({PFW.incomingSrcIpUserDefined}){/if}</TableBodyCell>
 {/if}
 
 
 
 {#if PFW.forwardingIf==0}
-      <TableBodyCell class="w-10">LAN</TableBodyCell>
+      <TableBodyCell class="w-10">LAN {#if PFW.redirectIp==1}({PFW.redirectIpUserDefined}){/if}</TableBodyCell>
 {:else if PFW.forwardingIf==1}
-      <TableBodyCell class="w-10">OpenVPN</TableBodyCell>
+      <TableBodyCell class="w-10">OpenVPN {#if PFW.redirectIp==1}({PFW.redirectIpUserDefined}){/if}</TableBodyCell>
 {/if}
 
 
@@ -1253,7 +1253,6 @@
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-22"></TableBodyCell>
     </TableBodyRow>
 
 

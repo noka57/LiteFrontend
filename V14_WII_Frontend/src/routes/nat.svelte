@@ -5,7 +5,7 @@
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
   import {natConfig, ChangedNATConfig, NAT_LoopBack_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_Dmz_ConfigChangedLog,
-  ChangedWANConfig, ChangedOpenVPNConfig} from "./configG.js"
+  ChangedWANConfig, wanConfig,ChangedOpenVPNConfig, openvpnConfig} from "./configG.js"
 
    let formModalPFW = false;
    let newformModalPFW=false;
@@ -38,15 +38,27 @@
 
 
     let openvpn_data="";
+    let saved_changed_openvpn_data="";
     let wan_data="";
+    let saved_changed_wan_data="";
+
+    openvpnConfig.subscribe(val => {
+      openvpn_data = val;
+    });
 
     ChangedOpenVPNConfig.subscribe(val => {
-      openvpn_data = val;
+      saved_changed_openvpn_data = val;
     });    
 
-    ChangedWANConfig.subscribe(val => {
-      wan_data = val;
+
+    wanConfig.subscribe(val => {
+        wan_data = val;
     });
+
+
+    ChangedWANConfig.subscribe(val => {
+      saved_changed_wan_data = val;
+    }); 
 
     natConfig.subscribe(val => {
         nat_data = val;
@@ -256,6 +268,9 @@
     
       console.log(pfw_changedValues);
     }
+
+
+
 
 
     function RestoreDelete(index)
@@ -592,9 +607,9 @@
       newPFW_Item[index].delete=false;
       newPFW_Item[index].incomingIf=2;
 
-      if (openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1)
+      if (saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1)
       {
-        if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
+        if (saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
         {
           //server
           newPFW_Item[index].incomingTun="openvpn0";
@@ -602,7 +617,7 @@
           newPFW_Item[index].forwardingTunAliasName="Server";
           newPFW_Item[index].forwardingTun="openvpn0"; 
         }
-        else if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
+        else if (saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
         {
           //client
           newPFW_Item[index].incomingTun="";
@@ -611,7 +626,7 @@
           newPFW_Item[index].forwardingTun=""; 
         }
       } 
-      else if (openvpn_data !="")
+      else if (saved_changed_openvpn_data !="")
       {
         newPFW_Item[index].incomingTun="";
         newPFW_Item[index].incomingTunAliasName=""; 
@@ -653,7 +668,7 @@
      }
      else if (newPFW_Item[new_pfw_index].incomingIf==0)
      {
-        if (openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1)
+        if (saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1)
         {
           newPFW_Item[new_pfw_index].forwardingIf=1;
           newPFW_Item[new_pfw_index].incomingSrcIp=0;
@@ -687,7 +702,7 @@
      }
      else if (changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf==0)
      {
-        if (openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1)
+        if (saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1)
         {
           changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf=1;
           changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp=0;
@@ -715,16 +730,16 @@
 
       if (changed_nat_data.config.networking_port_forwarding.list[index].forwardingIf ==1)
       {
-         if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
+         if (saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
          {
             changed_nat_data.config.networking_port_forwarding.list[index].forwardingTun="openvpn0";
          }
-         else if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
+         else if (saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
          {
 
-            for (let i=0; i < openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+            for (let i=0; i < saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
             {
-              if (openvpn_data.config.vpn_openvpn_client_connection[i].name == changed_nat_data.config.networking_port_forwarding.list[index].forwardingTunAliasName)
+              if (saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].name == changed_nat_data.config.networking_port_forwarding.list[index].forwardingTunAliasName)
               {
                 changed_nat_data.config.networking_port_forwarding.list[index].forwardingTun="openvpn"+i;
               }
@@ -736,15 +751,15 @@
 
       if (changed_nat_data.config.networking_port_forwarding.list[index].incomingIf ==3)
       {
-          if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
+          if (saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
          {
             changed_nat_data.config.networking_port_forwarding.list[index].incomingTun="openvpn0";
          }
-         else if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
+         else if (saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
          {
-            for (let i=0; i < openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+            for (let i=0; i < saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
             {
-              if (openvpn_data.config.vpn_openvpn_client_connection[i].name == changed_nat_data.config.networking_port_forwarding.list[index].incomingTunAliasName)
+              if (saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].name == changed_nat_data.config.networking_port_forwarding.list[index].incomingTunAliasName)
               {
                 changed_nat_data.config.networking_port_forwarding.list[index].incomingTun="openvpn"+i;
               }
@@ -799,15 +814,15 @@
 
       if (newPFW_Item[index].forwardingIf ==1)
       {
-         if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
+         if (saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
          {
             newPFW_Item[index].forwardingTun="openvpn0";
          }
-         else if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
+         else if (saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
          {
-            for (let i=0; i < openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+            for (let i=0; i < saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
             {
-              if (openvpn_data.config.vpn_openvpn_client_connection[i].name == newPFW_Item[index].forwardingTunAliasName)
+              if (saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].name == newPFW_Item[index].forwardingTunAliasName)
               {
                 newPFW_Item[index].forwardingTun="openvpn"+i;
               }
@@ -819,15 +834,15 @@
 
       if (newPFW_Item[index].incomingIf ==3)
       {
-          if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
+          if (saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
          {
             newPFW_Item[index].incomingTun="openvpn0";
          }
-         else if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
+         else if (saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
          {
-            for (let i=0; i < openvpn_data.config.vpn_openvpn_client_connection.length;i++)
+            for (let i=0; i < saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length;i++)
             {
-              if (openvpn_data.config.vpn_openvpn_client_connection[i].name == newPFW_Item[index].incomingTunAliasName)
+              if (saved_changed_openvpn_data.config.vpn_openvpn_client_connection[i].name == newPFW_Item[index].incomingTunAliasName)
               {
                 newPFW_Item[index].incomingTun="openvpn"+i;
               }
@@ -871,7 +886,10 @@
     {
         wan_data =await res.json();
         console.log(wan_data);
-        ChangedWANConfig.set(wan_data);
+        wanConfig.set(wan_data);
+        saved_changed_wan_data= JSON.parse(JSON.stringify(wan_data));
+
+        ChangedWANConfig.set(saved_changed_wan_data);
     }
   }
 
@@ -887,17 +905,12 @@
     {
       openvpn_data =await res.json();
       console.log(openvpn_data);
-      ChangedOpenVPNConfig.set(openvpn_data);
+      openvpnConfig.set(openvpn_data);
 
-    
-     // if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0)
-     // {
-        //getOpenVPNServerStatus();
-      //}
-     // else if (openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1)
-     // {
-        //getOpenVPNClientStatus();
-     // }
+      saved_changed_openvpn_data= JSON.parse(JSON.stringify(openvpn_data));
+      ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
+
+
     }
   }
 
@@ -915,7 +928,7 @@
         sessionBinary = new Uint8Array(byteValues);
         getNATData();
 
-        if (wan_data == "")
+        if (saved_changed_wan_data == "")
         {
           getWANData();
         }
@@ -924,7 +937,7 @@
           console.log("wan data already");
         }
 
-        if (openvpn_data=="")
+        if (saved_changed_openvpn_data=="")
         {
           getOpenVPNData();
         }
@@ -963,7 +976,7 @@
         changed_nat_data.config.networking_nat_loopback = JSON.parse(JSON.stringify(nat_data.config.networking_nat_loopback));     
       }
 
-      if (wan_data == "")
+      if (saved_changed_wan_data == "")
       {
         getWANData();
       }
@@ -973,7 +986,7 @@
       }
 
 
-      if (openvpn_data=="")
+      if (saved_changed_openvpn_data=="")
       {
         getOpenVPNData();
       }
@@ -1302,23 +1315,23 @@
 
     <td class="pl-5 pt-4" colspan="3"><div class="flex gap-4">
   <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={0} on:change={NewIncomingIfChanged}>LAN</Radio>
-{#if wan_data != "" && wan_data.config.networking_wan_port_switch==1}  
+{#if saved_changed_wan_data != "" && saved_changed_wan_data.config.networking_wan_port_switch==1}  
   <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={1} on:change={NewIncomingIfChanged}>Ethernet WAN</Radio>
 {/if}  
   <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={2} on:change={NewIncomingIfChanged}>Cellular WAN</Radio>
-{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
+{#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
 
-{#if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
+{#if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
   <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={3} on:change={NewIncomingIfChanged}>OpenVPN: {newPFW_Item[new_pfw_index].incomingTunAliasName}</Radio>
 
-{:else if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+{:else if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
   <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={3} on:change={NewIncomingIfChanged}>OpenVPN: </Radio>
 
 {#if newPFW_Item[new_pfw_index].incomingIf ==3}
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={newPFW_Item[new_pfw_index].incomingTunAliasName}>
 <option value="" disabled>Choose ...</option>
 
-{#each openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
+{#each saved_changed_openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
 <option value={client_conn.name}>{client_conn.name}</option>
 {/each}
 </select>
@@ -1352,8 +1365,8 @@
   <Radio value={0} disabled>LAN</Radio>
 {/if}
 
-{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
-{#if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
+{#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
+{#if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
 {#if newPFW_Item[new_pfw_index].incomingIf ==1 || newPFW_Item[new_pfw_index].incomingIf ==2}
   <Radio value={1} disabled>OpenVPN :{newPFW_Item[new_pfw_index].forwardingTunAliasName}</Radio>
 
@@ -1361,7 +1374,7 @@
   <Radio bind:group={newPFW_Item[new_pfw_index].forwardingIf} value={1} >OpenVPN: {newPFW_Item[new_pfw_index].forwardingTunAliasName}</Radio>
 
 {/if}
-{:else if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+{:else if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
 {#if newPFW_Item[new_pfw_index].incomingIf !=0}
   <Radio value={1} disabled>OpenVPN :</Radio>
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60 disabled:cursor-not-allowed disabled:opacity-50" disabled>
@@ -1371,7 +1384,7 @@
   <Radio bind:group={newPFW_Item[new_pfw_index].forwardingIf} value={1} >OpenVPN: </Radio>
   <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={newPFW_Item[new_pfw_index].forwardingTunAliasName}>
 <option value="" disabled>Choose ...</option>
-{#each openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
+{#each saved_changed_openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
 <option value={client_conn.name}>{client_conn.name}</option>
 {/each}
 </select>
@@ -1394,9 +1407,9 @@
 {#if newPFW_Item[new_pfw_index].forwardingIf !=-1 && (newPFW_Item[new_pfw_index].incomingIf ==0 || newPFW_Item[new_pfw_index].incomingIf ==3)}     
       <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={0}>Any</Radio>
 
-{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 && newPFW_Item[new_pfw_index].incomingIf ==3}
+{#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 && newPFW_Item[new_pfw_index].incomingIf ==3}
       <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1}>User Define :</Radio>
-{:else if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1 && newPFW_Item[new_pfw_index].incomingIf ==3}
+{:else if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1 && newPFW_Item[new_pfw_index].incomingIf ==3}
       <Radio value={1} disabled>User Define :</Radio>
 {:else if newPFW_Item[new_pfw_index].incomingIf ==0}
       <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1}>User Define :</Radio>
@@ -1522,11 +1535,11 @@
 {:else if newPFW_Item[new_pfw_index].forwardingIf == 1}
 
 
-{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 }
+{#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 }
 <Radio bind:group={newPFW_Item[new_pfw_index].redirectIp} value={1} >User Define :</Radio>
 <input type="text" bind:value={newPFW_Item[new_pfw_index].redirectIpUserDefined} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
-{:else if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+{:else if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
 
 <Radio value={1} disabled>User Define :</Radio>
 <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
@@ -1639,23 +1652,23 @@
 
     <td class="pl-5 pt-4" colspan="3"><div class="flex gap-4">
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={0} on:change={ModifyIncomingIfChanged}>LAN</Radio>
-{#if wan_data != "" && wan_data.config.networking_wan_port_switch==1}  
+{#if saved_changed_wan_data != "" && saved_changed_wan_data.config.networking_wan_port_switch==1}  
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={1} on:change={ModifyIncomingIfChanged}>Ethernet WAN</Radio>
 {/if}  
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={2} on:change={ModifyIncomingIfChanged}>Cellular WAN</Radio>
-{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
+{#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
 
-{#if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
+{#if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={3} on:change={ModifyIncomingIfChanged}>OpenVPN: {changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingTunAliasName}</Radio>
 
-{:else if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+{:else if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={3} on:change={ModifyIncomingIfChanged}>OpenVPN: </Radio>
 
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3}
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingTunAliasName}>
 <option value="" disabled>Choose ...</option>
 
-{#each openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
+{#each saved_changed_openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
 <option value={client_conn.name}>{client_conn.name}</option>
 {/each}
 </select>
@@ -1689,8 +1702,8 @@
   <Radio value={0} disabled>LAN</Radio>
 {/if}
 
-{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
-{#if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
+{#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
+{#if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==1 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==2}
   <Radio value={1} disabled>OpenVPN :{changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingTunAliasName}</Radio>
 
@@ -1698,7 +1711,7 @@
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf} value={1} >OpenVPN: {changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingTunAliasName}</Radio>
 
 {/if}
-{:else if openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+{:else if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf !=0}
   <Radio value={1} disabled>OpenVPN :</Radio>
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60 disabled:cursor-not-allowed disabled:opacity-50" disabled>
@@ -1708,7 +1721,7 @@
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf} value={1} >OpenVPN: </Radio>
   <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingTunAliasName}>
 <option value="" disabled>Choose ...</option>
-{#each openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
+{#each saved_changed_openvpn_data.config.vpn_openvpn_client_connection as client_conn,index}
 <option value={client_conn.name}>{client_conn.name}</option>
 {/each}
 </select>
@@ -1731,9 +1744,9 @@
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf !=-1 && (changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==0 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3)}     
       <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp} value={0} >Any</Radio>
 
-{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 && changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3}
+{#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 && changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3}
       <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp} value={1}>User Define :</Radio>
-{:else if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1 && changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3}
+{:else if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1 && changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3}
       <Radio value={1} disabled>User Define :</Radio>
 {:else if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==0}
       <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp} value={1}>User Define :</Radio>
@@ -1859,11 +1872,11 @@
 {:else if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf == 1}
 
 
-{#if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 }
+{#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 }
 <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectIp} value={1} >User Define :</Radio>
 <input type="text" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectIpUserDefined} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
-{:else if openvpn_data != "" && openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+{:else if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
 
 <Radio value={1} disabled>User Define :</Radio>
 <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>

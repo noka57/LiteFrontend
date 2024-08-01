@@ -16,7 +16,10 @@
     OpenVPN_Server_Advanced_PFW_ConfigChangedLog,
     OpenVPN_Server_Conn_ConfigChangedLog,
     OpenVPN_Basic_ConfigChangedLog,
-    ChangedOpenVPNConfig
+    ChangedOpenVPNConfig,
+    natConfig,
+    ChangedNATConfig,
+    NAT_VS_ConfigChangedLog
   } from "./configG.js"
 
   let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
@@ -43,6 +46,23 @@
   let openvpn_client_advanced_psk_changedValues=[];
   let openvpn_client_advanced_rna_changedValues=[];
   let openvpn_client_advanced_fo_changedValues=[];
+
+  let nat_data="";
+  let saved_changed_nat_data="";
+  let pfw_changedValues = [];
+
+
+  natConfig.subscribe(val => {
+        nat_data = val;
+  });
+
+  ChangedNATConfig.subscribe(val => {
+      saved_changed_nat_data = val;
+  });
+
+  NAT_VS_ConfigChangedLog.subscribe(val => {
+        pfw_changedValues = val;
+  });
 
   sessionidG.subscribe(val => {
     sessionid = val;
@@ -2351,9 +2371,36 @@
 
       compareBasicObjects(changed_openvpn_data.config.vpn_openvpn_basic, openvpn_data.config.vpn_openvpn_basic);
       OpenVPN_Basic_ConfigChangedLog.set(openvpn_basic_changedValues);
+      
+
+      if (changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==0 || changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole != saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
+      {
+        let tempForDelete=[];
+        for (let i = 0; i< saved_changed_nat_data.config.networking_port_forwarding.list.length; i++)
+        {
+          if (saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIf==3 ||
+          saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingIf==1)
+          {
+            saved_changed_nat_data.config.networking_port_forwarding.list[i].delete=true;
+            let changedstr="List No." + (i+1) + " item is changed: value of delete has changed to true";
+            pfw_changedValues=[...pfw_changedValues, changedstr];
+          }
+          else
+          {
+            tempForDelete=[...tempForDelete, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
+          }
+        }
+
+        saved_changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(tempForDelete));
+        NAT_VS_ConfigChangedLog.set(pfw_changedValues);
+        ChangedNATConfig.set(saved_changed_nat_data);
+      }
+
       saved_changed_openvpn_data.config.vpn_openvpn_basic=JSON.parse(JSON.stringify(changed_openvpn_data.config.vpn_openvpn_basic)); 
       ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
       console.log(openvpn_basic_changedValues);
+
+
     }
 
     function saveClientPSK()
@@ -2792,6 +2839,11 @@
     }
 
 
+  function extractNumber(str) {
+    const match = str.match(/openvpn(\d+)/);
+    return match ? parseInt(match[1], 10) : null;
+  }
+
 
 
     function saveClientConn()
@@ -3037,6 +3089,70 @@
         saved_changed_openvpn_data.config.vpn_openvpn_client_connection=JSON.parse(JSON.stringify(tempForDelete));
         changed_openvpn_data.config.vpn_openvpn_client_connection=JSON.parse(JSON.stringify(tempForDelete));
 
+
+        let tempForDelete=[];
+        for (let i = 0; i< saved_changed_nat_data.config.networking_port_forwarding.list.length; i++)
+        {
+          if (saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIf==3 ||
+          saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingIf==1)
+          {
+            let deleted=1;
+            let number=-1;
+            for (let j=0; j < saved_changed_openvpn_data.config.vpn_openvpn_client_connection.length; j++)
+            {
+              if (saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIf==3 && saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingTunAliasName == saved_changed_openvpn_data.config.vpn_openvpn_client_connection[j].name)
+              {
+                deleted=0;
+                number=extractNumber(saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingTun);
+                if (number && number != j)
+                {
+                    saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingTun="openvpn"+j;
+                    let changedstr="List No." + (i+1) + " item is changed: value of incomingTun has changed to "+"openvpn"+j;
+                    pfw_changedValues=[...pfw_changedValues, changedstr];
+
+                }
+
+                break;
+              }
+              else if (saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingIf ==1 &&
+              saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingTunAliasName== saved_changed_openvpn_data.config.vpn_openvpn_client_connection[j].name)
+              {
+                deleted=0;
+                number=extractNumber(saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingTun);
+                if (number && number != j)
+                {
+                    saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingTun="openvpn"+j;
+                    let changedstr="List No." + (i+1) + " item is changed: value of forwardingTun has changed to "+"openvpn"+j;
+                    pfw_changedValues=[...pfw_changedValues, changedstr];
+                }
+
+                break;
+              }
+              else
+              {
+                saved_changed_nat_data.config.networking_port_forwarding.list[i].delete=true;
+                let changedstr="List No." + (i+1) + " item is changed: value of delete has changed to true";
+                pfw_changedValues=[...pfw_changedValues, changedstr];
+                deleted=1;
+                break;
+              }
+            }
+
+            if (deleted==0)
+            {
+              tempForDelete=[...tempForDelete, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
+            }
+          }
+          else
+          {
+            tempForDelete=[...tempForDelete, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
+          }
+        }
+
+        saved_changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(tempForDelete));
+        NAT_VS_ConfigChangedLog.set(pfw_changedValues);
+        ChangedNATConfig.set(saved_changed_nat_data);
+      
 
         ChangedOpenVPNConfig.set(saved_changed_openvpn_data);
         OpenVPN_Client_Conn_ConfigChangedLog.set(openvpn_client_conn_changedValues);
@@ -3608,6 +3724,25 @@
   }
 
 
+  async function getNATData () {
+    const res = await fetch(window.location.origin+"/getNATdata", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      nat_data =await res.json();
+
+      natConfig.set(nat_data);
+
+      saved_changed_nat_data= JSON.parse(JSON.stringify(nat_data));
+ 
+      ChangedNATConfig.set(saved_changed_nat_data);
+
+      
+    }
+  }
 
   async function getOpenVPNData () {
     const res = await fetch(window.location.origin+"/getOPENvpndata", {
@@ -3655,6 +3790,16 @@
         getMachineCertificate();
         getCACertificate();
         getRemoteCertificate();
+
+        if (saved_changed_nat_data == "")
+        {
+          getNATData();
+        }
+        else
+        {
+          console.log("nat is already");
+        }
+
     }
     else if (sessionid && openvpn_data != "")
     {
@@ -3773,7 +3918,19 @@
         }
       }
 
+
+
+      if (saved_changed_nat_data == "")
+      {
+        getNATData();
+      }
+      else
+      {
+        console.log("nat is already");
+      }
     }
+
+
 
   });
 

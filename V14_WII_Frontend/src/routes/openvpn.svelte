@@ -2375,7 +2375,7 @@
 
       if (changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==0 || changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole != saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole)
       {
-        let tempForDelete=[];
+        let NonDeleteItem=[];
         for (let i = 0; i< saved_changed_nat_data.config.networking_port_forwarding.list.length; i++)
         {
           if (saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIf==3 ||
@@ -2387,11 +2387,11 @@
           }
           else
           {
-            tempForDelete=[...tempForDelete, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
+            NonDeleteItem=[...NonDeleteItem, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
           }
         }
 
-        saved_changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(tempForDelete));
+        saved_changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(NonDeleteItem));
         NAT_VS_ConfigChangedLog.set(pfw_changedValues);
         ChangedNATConfig.set(saved_changed_nat_data);
       }
@@ -3090,7 +3090,7 @@
         changed_openvpn_data.config.vpn_openvpn_client_connection=JSON.parse(JSON.stringify(tempForDelete));
 
 
-        let tempForDelete=[];
+        let NonDeleteItem=[];
         for (let i = 0; i< saved_changed_nat_data.config.networking_port_forwarding.list.length; i++)
         {
           if (saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIf==3 ||
@@ -3140,16 +3140,16 @@
 
             if (deleted==0)
             {
-              tempForDelete=[...tempForDelete, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
+              NonDeleteItem=[...NonDeleteItem, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
             }
           }
           else
           {
-            tempForDelete=[...tempForDelete, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
+            NonDeleteItem=[...NonDeleteItem, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
           }
         }
 
-        saved_changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(tempForDelete));
+        saved_changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(NonDeleteItem));
         NAT_VS_ConfigChangedLog.set(pfw_changedValues);
         ChangedNATConfig.set(saved_changed_nat_data);
       

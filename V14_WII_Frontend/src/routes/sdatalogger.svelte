@@ -17,7 +17,11 @@
     modbusConfig,
     ChangedModbusConfig,
     genericMQTTConfig,
-    ChangedGenericMQTTConfig
+    ChangedGenericMQTTConfig,
+    awsIoTcoreConfig,
+    ChangedAWSIoTcoreConfig,
+    azureConfig,
+    ChangedAzureConfig,
   } from "./configG.js"
 
 
@@ -34,6 +38,12 @@
   let generic_mqtt_data="";
   let saved_changed_generic_mqtt_data ="";
 
+  let awsIoT_core_data="";
+  let saved_changed_awsIoT_core_data ="";
+
+
+  let azure_data="";
+  let saved_changed_azure_data ="";
 
   let sdata_logger_general_changedValues = [];
   let sdata_logger_proxy_edge_changedValues = [];
@@ -107,6 +117,24 @@
       saved_changed_generic_mqtt_data = val;
   });
 
+
+  awsIoTcoreConfig.subscribe(val => {
+      awsIoT_core_data = val;
+  });
+
+  ChangedAWSIoTcoreConfig.subscribe(val => {
+      saved_changed_awsIoT_core_data = val;
+  });
+
+
+  azureConfig.subscribe(val => {
+      azure_data = val;
+  });
+
+  ChangedAzureConfig.subscribe(val => {
+      saved_changed_azure_data = val;
+  });
+
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
   let ViewerSelect;
   let PFormatUDefine="Hello";
@@ -147,6 +175,7 @@
 
 
   let CloudProfile=[];
+
 
   let dViewerCProfile=0;
   let dViewerDduration=0;
@@ -1258,6 +1287,76 @@
     }
   }
 
+  async function getAWSIotCoreData () {
+    const res = await fetch(window.location.origin+"/GetAWSiotCore", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      awsIoT_core_data =await res.json();
+      console.log(awsIoT_core_data);
+      awsIoTcoreConfig.set(awsIoT_core_data);
+
+      saved_changed_awsIoT_core_data= JSON.parse(JSON.stringify(awsIoT_core_data));
+      ChangedAWSIoTcoreConfig.set(saved_changed_awsIoT_core_data);
+
+      for (let i=0; i< saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile.length;i++)
+      {
+        let item="aws_"+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerHost+':'+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerPort;
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+
+      }
+
+    }
+  }
+
+
+  async function getAzureData() {
+    const res = await fetch(window.location.origin+"/PostGetAzuRe", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      azure_data =await res.json();
+      console.log(azure_data);
+      azureConfig.set(azure_data);
+
+      saved_changed_azure_data= JSON.parse(JSON.stringify(azure_data));
+      ChangedAzureConfig.set(saved_changed_azure_data);
+
+
+      for (let i=0; i< saved_changed_azure_data.config.cloud_azHub_profile.length;i++)
+      {
+        let item="hub_"+(i+1);
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+
+      }
+
+      for (let i=0; i< saved_changed_azure_data.config.cloud_azDPS_profile.length;i++)
+      {
+        let item="dps_"+(i+1);
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+
+      }
+
+      for (let i=0; i< saved_changed_azure_data.config.cloud_azCentral_profile.length;i++)
+      {
+        let item="central_"+(i+1);
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+
+      }
+
+    }
+  }
+
 
 
 
@@ -1295,6 +1394,51 @@
               let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
               let clouditem={"value":item, "name":item};
               CloudProfile=[...CloudProfile, clouditem];
+            }
+          }
+
+          if (saved_changed_awsIoT_core_data == "")
+          {
+            getAWSIotCoreData();
+          }
+          else
+          {
+            for (let i=0; i< saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile.length;i++)
+            {
+              let item="aws_"+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerHost+':'+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerPort;
+              let clouditem={"value":item, "name":item};
+              CloudProfile=[...CloudProfile, clouditem];
+              //console.log("++CloudProfile:", CloudProfile);
+            }
+          }
+
+          if (saved_changed_azure_data=="")
+          {
+            getAzureData();
+          }
+          else
+          {
+            for (let i=0; i< saved_changed_azure_data.config.cloud_azHub_profile.length;i++)
+            {
+              let item="hub_"+(i+1);
+              let clouditem={"value":item, "name":item};
+              CloudProfile=[...CloudProfile, clouditem];
+
+            }
+
+            for (let i=0; i< saved_changed_azure_data.config.cloud_azDPS_profile.length;i++)
+            {
+              let item="dps_"+(i+1);
+              let clouditem={"value":item, "name":item};
+              CloudProfile=[...CloudProfile, clouditem];
+            }
+
+            for (let i=0; i< saved_changed_azure_data.config.cloud_azCentral_profile.length;i++)
+            {
+              let item="central_"+(i+1);
+              let clouditem={"value":item, "name":item};
+              CloudProfile=[...CloudProfile, clouditem];
+
             }
           }
         }
@@ -1367,8 +1511,53 @@
  
       }
 
+      if (saved_changed_awsIoT_core_data == "")
+      {
+        getAWSIotCoreData();
+      }
+      else
+      {
+        for (let i=0; i< saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile.length;i++)
+        {
+          //console.log("****CloudProfile:", CloudProfile);
+          let item="aws_"+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerHost+':'+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerPort;
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
 
+          //console.log("!!!CloudProfile:", CloudProfile);
 
+        }
+      }
+
+      if (saved_changed_azure_data=="")
+      {
+        getAzureData();
+      }
+      else
+      {
+        for (let i=0; i< saved_changed_azure_data.config.cloud_azHub_profile.length;i++)
+        {
+          let item="hub_"+(i+1);
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+
+        }
+
+        for (let i=0; i< saved_changed_azure_data.config.cloud_azDPS_profile.length;i++)
+        {
+          let item="dps_"+(i+1);
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+        }
+
+        for (let i=0; i< saved_changed_azure_data.config.cloud_azCentral_profile.length;i++)
+        {
+          let item="central_"+(i+1);
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+
+        }
+      }
 
     }
 

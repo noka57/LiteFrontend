@@ -10,7 +10,11 @@
     ChangedAzureConfig,
     AzHub_ConfigChangedLog,
     AzHubDPS_ConfigChangedLog,
-    AzCentral_ConfigChangedLog
+    AzCentral_ConfigChangedLog,
+    sdataLoggerConfig,
+    ChangedSDataLoggerConfig,
+    SDatalogger_MonitorMode_Cloud_ConfigChangedLog,
+    SDatalogger_ProxyMode_Cloud_ConfigChangedLog, 
   } from "./configG.js"
 
 
@@ -20,6 +24,13 @@
 
    let trClass2='noborder bg-red dark:bg-gray-800 dark:border-gray-700';
    let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+
+  let sdata_logger_proxy_cloud_changedValues = [];
+  let sdata_logger_monitor_cloud_changedValues = [];
+
+  let sdata_logger_data="";
+  let saved_changed_sdata_logger_data="";  
+
 
   let azure_data="";
   let changed_azure_data = {};
@@ -49,7 +60,13 @@
   });
 
 
+  sdataLoggerConfig.subscribe(val => {
+      sdata_logger_data = val;
+  });
 
+  ChangedSDataLoggerConfig.subscribe(val => {
+      saved_changed_sdata_logger_data = val;
+  });
 
   azureConfig.subscribe(val => {
       azure_data = val;
@@ -73,6 +90,14 @@
       saved_changed_azure_data = val;
   });
 
+
+  SDatalogger_ProxyMode_Cloud_ConfigChangedLog.subscribe(val => {
+      sdata_logger_proxy_cloud_changedValues = val;
+  });
+
+  SDatalogger_MonitorMode_Cloud_ConfigChangedLog.subscribe(val => {
+      sdata_logger_monitor_cloud_changedValues = val;
+  });
 
   let modify_Modal=false;
   let modify_index;
@@ -1047,6 +1072,135 @@
 
     }
 
+    let deleteProxyCount=0;
+    let moveProxyProfile=0;
+    let deleteMonitorCount=0;
+    let moveMonitorCount=0;
+
+    for (let i=0; i < Math.min(changed_azure_data.config.cloud_azHub_profile.length, saved_changed_azure_data.config.cloud_azHub_profile.length); i++) 
+    {
+      deleteProxyCount=0;
+      moveProxyProfile=0;
+      deleteMonitorCount=0;
+      moveMonitorCount=0;
+
+      let item="hub_"+(i+1);
+
+      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length;j++)
+      {
+        console.log(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]);
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j] == item)
+        {
+
+          if (!saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete && changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete)
+          {
+            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
+            sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+
+            SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
+            deleteProxyCount+=1;
+
+            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]="";
+            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length != 0)
+            {
+              saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[j]="";
+            } 
+
+            if (j==0)
+            {
+              if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length==2)
+              {
+                moveProxyProfile=1;
+              }
+
+            }
+          }
+
+        }
+      }
+
+
+      if (moveProxyProfile==1 && deleteProxyCount==1)
+      {
+        console.log("delete saved_changed_sdata_logger_data:", saved_changed_sdata_logger_data);
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[1];
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length == 2)
+        {
+          saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[1];
+        }
+      }
+
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length-=deleteProxyCount;
+      }
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length-=deleteProxyCount;
+      }
+
+
+      ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length;j++)
+      {
+
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j] == item)
+        {
+          if (!saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete && changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete)
+          {
+            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
+            sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+
+           // console.log(changedstr);
+            SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
+            deleteMonitorCount+=1;
+
+            saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j]=""
+
+            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length !=0)
+            {
+              saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[j]="";
+            }
+            
+            if (j==0)
+            {
+              if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length==2)
+              {
+                moveMonitorCount=1;
+              }
+            }
+          }
+
+        }
+      }
+
+      if (moveMonitorCount==1 && deleteMonitorCount==1)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[1];
+
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length==2)
+        {
+          saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[1];
+        }
+      }
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length-=deleteMonitorCount;
+      }
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length-=deleteMonitorCount;
+      }
+
+      ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+    }
+
     saved_changed_azure_data.config.cloud_azHub_profile=JSON.parse(JSON.stringify(tempForDelete));
     changed_azure_data.config.cloud_azHub_profile=JSON.parse(JSON.stringify(tempForDelete));
 
@@ -1109,6 +1263,138 @@
 
     }
 
+    let deleteProxyCount=0;
+    let moveProxyProfile=0;
+    let deleteMonitorCount=0;
+    let moveMonitorCount=0;
+
+    for (let i=0; i < Math.min(changed_azure_data.config.cloud_azDPS_profile.length, saved_changed_azure_data.config.cloud_azDPS_profile.length); i++) 
+    {
+      deleteProxyCount=0;
+      moveProxyProfile=0;
+      deleteMonitorCount=0;
+      moveMonitorCount=0;
+
+      let item="dps_"+(i+1);
+
+      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length;j++)
+      {
+        console.log(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]);
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j] == item)
+        {
+
+          if (!saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete && changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete)
+          {
+            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
+            sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+
+            SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
+            deleteProxyCount+=1;
+
+            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]="";
+            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length != 0)
+            {
+              saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[j]="";
+            } 
+
+            if (j==0)
+            {
+              if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length==2)
+              {
+                moveProxyProfile=1;
+              }
+
+            }
+          }
+
+        }
+      }
+
+
+      if (moveProxyProfile==1 && deleteProxyCount==1)
+      {
+        console.log("delete saved_changed_sdata_logger_data:", saved_changed_sdata_logger_data);
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[1];
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length == 2)
+        {
+          saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[1];
+        }
+      }
+
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length-=deleteProxyCount;
+      }
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length-=deleteProxyCount;
+      }
+
+
+      ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length;j++)
+      {
+
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j] == item)
+        {
+          if (!saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete && changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete)
+          {
+            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
+            sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+
+           // console.log(changedstr);
+            SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
+            deleteMonitorCount+=1;
+
+            saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j]=""
+
+            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length !=0)
+            {
+              saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[j]="";
+            }
+            
+            if (j==0)
+            {
+              if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length==2)
+              {
+                moveMonitorCount=1;
+              }
+            }
+          }
+
+        }
+      }
+
+      if (moveMonitorCount==1 && deleteMonitorCount==1)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[1];
+
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length==2)
+        {
+          saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[1];
+        }
+      }
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length-=deleteMonitorCount;
+      }
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length-=deleteMonitorCount;
+      }
+
+      ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+    }
+
+
+
+
 
     AzHubDPS_ConfigChangedLog.set(azhubdps_changedValues);
     saved_changed_azure_data.config.cloud_azDPS_profile=JSON.parse(JSON.stringify(tempForDelete));
@@ -1155,6 +1441,7 @@
     }
 
 
+
     AzCentral_ConfigChangedLog.set(azcentral_changedValues);
 
     let tempForDelete=[];
@@ -1165,6 +1452,139 @@
         tempForDelete=[...tempForDelete, changed_azure_data.config.cloud_azCentral_profile[i]]
       }
     }
+
+    let deleteProxyCount=0;
+    let moveProxyProfile=0;
+    let deleteMonitorCount=0;
+    let moveMonitorCount=0;
+
+    for (let i=0; i < Math.min(changed_azure_data.config.cloud_azCentral_profile.length, saved_changed_azure_data.config.cloud_azCentral_profile.length); i++) 
+    {
+      deleteProxyCount=0;
+      moveProxyProfile=0;
+      deleteMonitorCount=0;
+      moveMonitorCount=0;
+
+      let item="central_"+(i+1);
+
+      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length;j++)
+      {
+        console.log(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]);
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j] == item)
+        {
+
+          if (!saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete && changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete)
+          {
+            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
+            sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+
+            SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
+            deleteProxyCount+=1;
+
+            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]="";
+            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length != 0)
+            {
+              saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[j]="";
+            } 
+
+            if (j==0)
+            {
+              if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length==2)
+              {
+                moveProxyProfile=1;
+              }
+
+            }
+          }
+
+        }
+      }
+
+
+      if (moveProxyProfile==1 && deleteProxyCount==1)
+      {
+        console.log("delete saved_changed_sdata_logger_data:", saved_changed_sdata_logger_data);
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[1];
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length == 2)
+        {
+          saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[1];
+        }
+      }
+
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length-=deleteProxyCount;
+      }
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length-=deleteProxyCount;
+      }
+
+
+      ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length;j++)
+      {
+
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j] == item)
+        {
+          if (!saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete && changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].delete)
+          {
+            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
+            sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+
+           // console.log(changedstr);
+            SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
+            deleteMonitorCount+=1;
+
+            saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j]=""
+
+            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length !=0)
+            {
+              saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[j]="";
+            }
+            
+            if (j==0)
+            {
+              if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length==2)
+              {
+                moveMonitorCount=1;
+              }
+            }
+          }
+
+        }
+      }
+
+      if (moveMonitorCount==1 && deleteMonitorCount==1)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[1];
+
+        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length==2)
+        {
+          saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[1];
+        }
+      }
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length-=deleteMonitorCount;
+      }
+
+      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length != 0)
+      {
+        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length-=deleteMonitorCount;
+      }
+
+      ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+    }
+
+
+
+
 
     saved_changed_azure_data.config.cloud_azCentral_profile=JSON.parse(JSON.stringify(tempForDelete));
     changed_azure_data.config.cloud_azCentral_profile=JSON.parse(JSON.stringify(tempForDelete));
@@ -1232,6 +1652,26 @@
   }
 
 
+  async function getSmartDataLoggerData() {
+        const res = await fetch(window.location.origin+"/GETSmartDataLogger", {
+            method: 'POST',
+            body: sessionBinary
+        })
+
+        if (res.status == 200)
+        {
+            sdata_logger_data =await res.json();
+            console.log(sdata_logger_data);
+            sdataLoggerConfig.set(sdata_logger_data);
+
+            saved_changed_sdata_logger_data= JSON.parse(JSON.stringify(sdata_logger_data));
+            ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+        }
+  }
+
+
+
   async function getAzureData() {
     const res = await fetch(window.location.origin+"/PostGetAzuRe", {
       method: 'POST',
@@ -1249,8 +1689,14 @@
       ChangedAzureConfig.set(saved_changed_azure_data);
       getDataReady=1;
 
+      if (saved_changed_sdata_logger_data=="")
+      {
+        getSmartDataLoggerData();
+      }
+
     }
   }
+
 
 
 
@@ -1296,6 +1742,13 @@
         {
           changed_azure_data.config.cloud_azCentral_profile = JSON.parse(JSON.stringify(azure_data.config.cloud_azCentral_profile));
         }
+
+
+        if (saved_changed_sdata_logger_data=="")
+        {
+          getSmartDataLoggerData();
+        }
+
     }
 
   });

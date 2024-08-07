@@ -1023,7 +1023,7 @@
 <Tabs style="underline">
 {#if hidden == 0}
 
-  <TabItem open title="General Status">
+  <TabItem title="General Status">
   <Table striped={true}>
   <TableHead>
     <TableHeadCell></TableHeadCell>
@@ -1100,10 +1100,6 @@
       <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.activeSim} {/if}</TableBodyCell>
       </TableBodyRow>
 
-      <TableBodyRow>
-      <TableBodyCell>Signal Strength</TableBodyCell>
-      <TableBodyCell>RSSI</TableBodyCell>
-      </TableBodyRow>
 
       <TableBodyRow>
       <TableBodyCell>RSSI/RSRP/RSRQ/SINR</TableBodyCell>
@@ -1633,29 +1629,27 @@
 
     <tr>
 
-    <td></td><td style="border-left:solid;border-color:#1762BC;"></td>
-              <td class="border-t-2 border-r-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
+    <td></td><td style="border-left:solid;border-bottom:solid;border-color:#1762BC;"></td>
+              <td style="border-bottom:solid;border-bottom-color:#1762BC;" class="border-t-2 border-r-2 border-t-zinc-400
+              border-solid border-r-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
               Roaming Service
               </td>
-              <td class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
+              <td style="border-bottom:solid;border-bottom-color:#1762BC;" class="border-t-2 border-l-2 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white" colspan="1">
 {#if getdataAlready}  
  <input type="checkbox" id="simCheck3" name="simCheck3" checked={!!changed_wan_data.config.networking_wan_cwan[0].gLink.checkParam.checkRule.roamingService.enable} on:click={EnableRoamingTimeout_Check}>
 {/if}
   <label for="simCheck3" class="font-medium">Once Roaming</label>
               </td>
+    <td style="border-bottom:solid;border-color:#1762BC;"></td>
+    <td style="border-bottom:solid;border-color:#1762BC;"></td>
+    <td style="border-bottom:solid;border-color:#1762BC;"></td>
 
-              <td>
-              </td>
-              <td>
-              </td>              
-
-              <td>
-              </td>
-              <td style="border-right:solid;border-color:#1762BC;">
-              </td>
+  
+    <td style="border-right:solid;border-bottom:solid;border-color:#1762BC;"></td> 
 
               </tr>
 
+{#if 0}
     <tr>
 
     <td></td>
@@ -1706,6 +1700,8 @@
     <td style="border-right:solid;border-bottom:solid;border-color:#1762BC;"></td> 
     </tr>
 
+
+{/if}
 
 {/if}
 

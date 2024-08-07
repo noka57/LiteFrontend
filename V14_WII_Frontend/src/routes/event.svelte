@@ -10242,7 +10242,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {:else if rule.firstTrigger.catalog ==7}WAN( {#if rule.firstTrigger.statusType == 0}C-WAN Link Down{:else if rule.firstTrigger.statusType == 1}C-WAN Link Up{:else if rule.firstTrigger.statusType == 2}WAN Link Down{:else if rule.firstTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.firstTrigger.statusType==4}WAN Failover{:else if rule.firstTrigger.statusType == 5}SIM Switch{/if})
 {:else if rule.firstTrigger.catalog ==8}LAN({#if rule.firstTrigger.statusType==0}Link Down{:else if rule.firstTrigger.statusType==1}Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9}Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
-{:else if rule.firstTrigger.catalog ==10}System({#if rule.firstTrigger.statusType==0}Cold Start{:else if rule.firstTrigger.statusType ==1}Firmware Upgrading{:else if rule.firstTrigger.statusType==2}Password Changed{:else if rule.firstTrigger.statusType==3}Reboot with reason{/if})
+{:else if rule.firstTrigger.catalog ==10}System({#if rule.firstTrigger.statusType==0}Cold Start{:else if rule.firstTrigger.statusType ==1}Firmware Upgrading{:else if rule.firstTrigger.statusType==2}Password Changed{:else if rule.firstTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 
 
@@ -10259,7 +10259,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {:else if rule.secondTrigger.catalog ==7},WAN( {#if rule.secondTrigger.statusType == 0}C-WAN Link Down{:else if rule.secondTrigger.statusType == 1}C-WAN Link Up{:else if rule.secondTrigger.statusType == 2}WAN Link Down{:else if rule.secondTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.secondTrigger.statusType==4}WAN Failover{:else if rule.secondTrigger.statusType == 5}SIM Switch{/if})
 {:else if rule.secondTrigger.catalog ==8},LAN({#if rule.secondTrigger.statusType==0}Link Down{:else if rule.secondTrigger.statusType==1}Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
-{:else if rule.secondTrigger.catalog ==10},System({#if rule.secondTrigger.statusType==0}Cold Start{:else if rule.secondTrigger.statusType ==1}Firmware Upgrading{:else if rule.secondTrigger.statusType==2}Password Changed{:else if rule.secondTrigger.statusType==3}Reboot with reason{/if})
+{:else if rule.secondTrigger.catalog ==10},System({#if rule.secondTrigger.statusType==0}Cold Start{:else if rule.secondTrigger.statusType ==1}Firmware Upgrading{:else if rule.secondTrigger.statusType==2}Password Changed{:else if rule.secondTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 {/if}
 
@@ -10277,7 +10277,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {:else if rule.thirdTrigger.catalog ==7},WAN( {#if rule.thirdTrigger.statusType == 0}C-WAN Link Down{:else if rule.thirdTrigger.statusType == 1}C-WAN Link Up{:else if rule.thirdTrigger.statusType == 2}WAN Link Down{:else if rule.thirdTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.thirdTrigger.statusType==4}WAN Failover{:else if rule.thirdTrigger.statusType == 5}SIM Switch{/if})
 {:else if rule.thirdTrigger.catalog ==8},LAN({#if rule.thirdTrigger.statusType==0}Link Down{:else if rule.thirdTrigger.statusType==1}Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
-{:else if rule.thirdTrigger.catalog ==10},System({#if rule.thirdTrigger.statusType==0}Cold Start{:else if rule.thirdTrigger.statusType ==1}Firmware Upgrading{:else if rule.thirdTrigger.statusType==2}Password Changed{:else if rule.thirdTrigger.statusType==3}Reboot with reason{/if})
+{:else if rule.thirdTrigger.catalog ==10},System({#if rule.thirdTrigger.statusType==0}Cold Start{:else if rule.thirdTrigger.statusType ==1}Firmware Upgrading{:else if rule.thirdTrigger.statusType==2}Password Changed{:else if rule.thirdTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 {/if}
 
@@ -10290,7 +10290,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       </td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-36 strikeout">
-      {rule.delaySecond}-second delay to execute {#if rule.actionOption==0}once {:else if rule.actionOption==1}repeatedly{/if} the action: {#if rule.actionCatalog==0}SMS({rule.actionProfile}){:else if rule.actionCatalog==1}DO({rule.actionProfile}){:else if rule.actionCatalog==2}Modbus({rule.actionProfile}){:else if rule.actionCatalog==3}({rule.actionProfile}){:else if rule.actionCatalog==4}MQTT({rule.actionProfile}){:else if rule.actionCatalog==5}LINE({rule.actionProfile}){:else if rule.actionCatalog==6}TCP Message({rule.actionProfile}){:else if rule.actionCatalog==7}System({#if rule.actionOperation==0}System Reboot{:else if rule.actionOperation==1}SysLog Server On{:else if rule.actionOperation==2}SysLog Server Off{:else if rule.actionOperation==3}SW Reset C-WAN module{:else if rule.actionOperation==4}HW Reset C-WAN module{:else if rule.actionOperation==5}WAN Backup Switch{:else if rule.actionOperation==6}C-WAN Power Cycle{:else if rule.actionOperation==7}SIM Switch{/if}){:else if rule.actionCatalog==8}MQTT API({#if rule.actionOperation==0}MQTT API Disable{:else if rule.actionOperation==1}MQTT API Enable{/if}){:else if rule.actionCatalog==9}REST API({#if rule.actionOperation==0}REST API Disable{:else if rule.actionOperation==1}REST API Enable{/if}){/if} {#if rule.actionOption==1} with a {rule.repeatInterval}-second interval.{/if}
+      {rule.delaySecond}-second delay to execute {#if rule.actionOption==0}once {:else if rule.actionOption==1}repeatedly{/if} the action: {#if rule.actionCatalog==0}SMS({rule.actionProfile}){:else if rule.actionCatalog==1}DO({rule.actionProfile}){:else if rule.actionCatalog==2}Modbus({rule.actionProfile}){:else if rule.actionCatalog==3}({rule.actionProfile}){:else if rule.actionCatalog==4}MQTT({rule.actionProfile}){:else if rule.actionCatalog==5}LINE({rule.actionProfile}){:else if rule.actionCatalog==6}TCP Message({rule.actionProfile}){:else if rule.actionCatalog==7}System({#if rule.actionOperation==0}System Reboot{:else if rule.actionOperation==1}SysLog Server On{:else if rule.actionOperation==2}SysLog Server Off{:else if rule.actionOperation==3}SW Reset C-WAN module{:else if rule.actionOperation==4}HW Reset C-WAN module{:else if rule.actionOperation==5}WAN Backup Switch{:else if rule.actionOperation==6}C-WAN Power Cycle{:else if rule.actionOperation==7}SIM Switch{:else if rule.actionOperation==8}Update Firmware{/if}){:else if rule.actionCatalog==8}MQTT API({#if rule.actionOperation==0}MQTT API Disable{:else if rule.actionOperation==1}MQTT API Enable{/if}){:else if rule.actionCatalog==9}REST API({#if rule.actionOperation==0}REST API Disable{:else if rule.actionOperation==1}REST API Enable{/if}){/if} {#if rule.actionOption==1} with a {rule.repeatInterval}-second interval.{/if}
 
 
       </td>
@@ -10343,7 +10343,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {:else if rule.firstTrigger.catalog ==7}WAN( {#if rule.firstTrigger.statusType == 0}C-WAN Link Down{:else if rule.firstTrigger.statusType == 1}C-WAN Link Up{:else if rule.firstTrigger.statusType == 2}WAN Link Down{:else if rule.firstTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.firstTrigger.statusType==4}WAN Failover{:else if rule.firstTrigger.statusType == 5}SIM Switch{/if})
 {:else if rule.firstTrigger.catalog ==8}LAN({#if rule.firstTrigger.statusType==0}Link Down{:else if rule.firstTrigger.statusType==1}Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9}Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
-{:else if rule.firstTrigger.catalog ==10}System({#if rule.firstTrigger.statusType==0}Cold Start{:else if rule.firstTrigger.statusType ==1}Firmware Upgrading{:else if rule.firstTrigger.statusType==2}Password Changed{:else if rule.firstTrigger.statusType==3}Reboot with reason{/if})
+{:else if rule.firstTrigger.catalog ==10}System({#if rule.firstTrigger.statusType==0}Cold Start{:else if rule.firstTrigger.statusType ==1}Firmware Upgrading{:else if rule.firstTrigger.statusType==2}Password Changed{:else if rule.firstTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 
 
@@ -10360,7 +10360,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {:else if rule.secondTrigger.catalog ==7},WAN( {#if rule.secondTrigger.statusType == 0}C-WAN Link Down{:else if rule.secondTrigger.statusType == 1}C-WAN Link Up{:else if rule.secondTrigger.statusType == 2}WAN Link Down{:else if rule.secondTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.secondTrigger.statusType==4}WAN Failover{:else if rule.secondTrigger.statusType == 5}SIM Switch{/if})
 {:else if rule.secondTrigger.catalog ==8},LAN({#if rule.secondTrigger.statusType==0}Link Down{:else if rule.secondTrigger.statusType==1}Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
-{:else if rule.secondTrigger.catalog ==10},System({#if rule.secondTrigger.statusType==0}Cold Start{:else if rule.secondTrigger.statusType ==1}Firmware Upgrading{:else if rule.secondTrigger.statusType==2}Password Changed{:else if rule.secondTrigger.statusType==3}Reboot with reason{/if})
+{:else if rule.secondTrigger.catalog ==10},System({#if rule.secondTrigger.statusType==0}Cold Start{:else if rule.secondTrigger.statusType ==1}Firmware Upgrading{:else if rule.secondTrigger.statusType==2}Password Changed{:else if rule.secondTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 {/if}
 
@@ -10378,7 +10378,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {:else if rule.thirdTrigger.catalog ==7},WAN( {#if rule.thirdTrigger.statusType == 0}C-WAN Link Down{:else if rule.thirdTrigger.statusType == 1}C-WAN Link Up{:else if rule.thirdTrigger.statusType == 2}WAN Link Down{:else if rule.thirdTrigger.statusType == 3}Dial Up failed 5 times{:else if rule.thirdTrigger.statusType==4}WAN Failover{:else if rule.thirdTrigger.statusType == 5}SIM Switch{/if})
 {:else if rule.thirdTrigger.catalog ==8},LAN({#if rule.thirdTrigger.statusType==0}Link Down{:else if rule.thirdTrigger.statusType==1}Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{:else if rule.firstTrigger.statusType==1}SSH Login Fail{/if})
-{:else if rule.thirdTrigger.catalog ==10},System({#if rule.thirdTrigger.statusType==0}Cold Start{:else if rule.thirdTrigger.statusType ==1}Firmware Upgrading{:else if rule.thirdTrigger.statusType==2}Password Changed{:else if rule.thirdTrigger.statusType==3}Reboot with reason{/if})
+{:else if rule.thirdTrigger.catalog ==10},System({#if rule.thirdTrigger.statusType==0}Cold Start{:else if rule.thirdTrigger.statusType ==1}Firmware Upgrading{:else if rule.thirdTrigger.statusType==2}Password Changed{:else if rule.thirdTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 {/if}
 
@@ -10607,6 +10607,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
+<option value={4}>New Firmware Release</option>
 {:else if NewRuleItem[new_rule_index].firstTrigger.catalog  == 1}
 <option value={0}>Low</option>
 <option value={1}>High</option>
@@ -10748,7 +10749,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
-
+<option value={4}>New Firmware Release</option>
 {:else if NewRuleItem[new_rule_index].secondTrigger.catalog  == 1}
 <option value={0}>Low</option>
 <option value={1}>High</option>
@@ -10885,7 +10886,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
-
+<option value={4}>New Firmware Release</option>
 
 {:else if NewRuleItem[new_rule_index].thirdTrigger.catalog  == 1}
 <option value={0}>Low</option>
@@ -11168,6 +11169,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <option value={5}>WAN Backup Switch</option>
 <option value={6}>C-WAN power cycle</option>
 <option value={7}>SIM Switch</option>
+<option value={8}>Update Firmware</option>
 </select>
 
 
@@ -11404,7 +11406,7 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
-
+<option value={4}>New Firmware Release</option>
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 1}
 <option value={0}>Low</option>
 <option value={1}>High</option>
@@ -11550,7 +11552,7 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
-
+<option value={4}>New Firmware Release</option>
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog  == 1}
 <option value={0}>Low</option>
 <option value={1}>High</option>
@@ -11688,7 +11690,7 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
 <option value={1}>Firmware Upgrading</option>
 <option value={2}>Password Changed</option>
 <option value={3}>Reboot with reason</option>
-
+<option value={4}>New Firmware Release</option>
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 1}
 <option value={0}>Low</option>
 <option value={1}>High</option>
@@ -12003,6 +12005,8 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
 
 </TabItem>
 
+
+{#if 0}
 <TabItem title="Simulator" on:click={ResetSimulator}>
 
 
@@ -12049,7 +12053,7 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
 
 </TabItem>
 
-
+{/if}
 
     <TabItem title="Log Viewer">
 

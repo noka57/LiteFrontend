@@ -1054,8 +1054,8 @@
     <TableHeadCell>Incoming Interface</TableHeadCell>
     <TableHeadCell>Forwarding Interface</TableHeadCell>    
     <TableHeadCell>Protocol</TableHeadCell>
-    <TableHeadCell>Source Port</TableHeadCell>
-    <TableHeadCell>Destination Port</TableHeadCell>
+    <TableHeadCell>Incoming Destination Port</TableHeadCell>
+    <TableHeadCell>Redirect Port</TableHeadCell>
   </TableHead>
   <TableBody>
 

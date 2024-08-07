@@ -4,6 +4,8 @@ export const dashboadData= writable("");
 export const VPNdashboad= writable("");
 export const ewanWebInputFlag=writable("");
 export const cwanWebInputFlag=writable("");
+export const fakeTimeMSecSince1970=writable("");
+export const fakeTimeString=writable("");
 
 export const awsIoTcoreConfig=writable("");
 export const azureConfig=writable("");

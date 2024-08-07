@@ -5,7 +5,9 @@
   import { sessionidG } from "./sessionG.js";
   import { operationConfig,
   OperationConfigChangedLog,
-  ChangedOperationConfig
+  ChangedOperationConfig,
+  fakeTimeMSecSince1970,
+  fakeTimeString
    } from "./configG.js"
 
 
@@ -25,8 +27,9 @@
     let WaitToReset=false;
     let hidden=1;
 
-    let timestamp = 0;
-    let dateString="";
+    let timestamp = "";
+    let dateTimeString="";
+    let interval;
 
     let timezone = 'Asia/Taipei';
 
@@ -47,9 +50,17 @@
 
     let sessionid;
     let sessionBinary;
-   sessionidG.subscribe(val => {
-     sessionid = val;
-   });
+    sessionidG.subscribe(val => {
+        sessionid = val;
+    });
+
+    fakeTimeMSecSince1970.subscribe(val => {
+        timestamp = val;
+    });
+
+    fakeTimeString.subscribe(val => {
+        dateTimeString = val;
+    });
 
     function update(ev) {
         console.log(ev.detail.timezone);
@@ -76,19 +87,6 @@
 
     let DateTimeContent="";
 
-    function formatDate(date) 
-    {   
-        console.log(date);
-        const utcDate=new Date(date);
-        const year = utcDate.getUTCFullYear();
-        const month = String(utcDate.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(utcDate.getUTCDate()).padStart(2, '0');
-        const hours = String(utcDate.getUTCHours()).padStart(2, '0');
-        const minutes = String(utcDate.getUTCMinutes()).padStart(2, '0');
-        const seconds = String(utcDate.getUTCSeconds()).padStart(2, '0');
-       
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    }
 
     async function PostSetDateTime () {
     const res = await fetch(window.location.origin+"/sETDatetime",  {
@@ -109,12 +107,17 @@
 
     function SyncWithBrowser()
     {
-        let currentTime = formatDate(new Date().toUTCString());
-        console.log(currentTime);
+        let NewDate = new Date();
+
+        let currentDate = NewDate.toLocaleDateString('en-CA'); 
+        let currentTime = NewDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+
+        let currentDateTime = `${currentDate} ${currentTime}`; 
+        console.log("currentDateTime: ", currentDateTime);
 
         const encoder = new TextEncoder();
 
-        const DateTimeBinary= encoder.encode(currentTime);
+        const DateTimeBinary= encoder.encode(currentDateTime);
 
         console.log("sessionBinary.length:");
         console.log(sessionBinary.length);
@@ -123,7 +126,7 @@
         DateTimeContent.set(DateTimeBinary, sessionBinary.length);
 
         PostSetDateTime();
-        console.log("adter set date time");
+        console.log("after set date time");
     }
 
 
@@ -212,28 +215,68 @@
     }
   }
 
-   async function getOperationData () {
-    const res = await fetch(window.location.origin+"/getOperationData", {
-        method: 'POST',
-        body: sessionBinary
-    })
-
-    if (res.status == 200)
+    function formatDateToCustomString() 
     {
-        operation_data =await res.json();
-        console.log(operation_data);
-        operationConfig.set(operation_data);
+        let date= new Date(timestamp);
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
 
 
-        changed_operation_data= JSON.parse(JSON.stringify(operation_data));
-        saved_changed_operation_data = JSON.parse(JSON.stringify(operation_data))
-        ChangedOperationConfig.set(saved_changed_operation_data);
-        timezone=changed_operation_data.config.system_operation_time.tz;
-      //  timestamp=changed_operation_data.config.system_operation_time.currTimestamp;
-        getDataReady=1;
-        console.log(timezone);
+        const year = date.getFullYear();
+        const month = monthNames[date.getMonth()]; 
+        const day = date.getDate();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        dateTimeString=`${month} ${day}, ${year} at ${hours}:${minutes}:${seconds}`;
+        fakeTimeString.set(dateTimeString);
+      //  console.log("dateTimeString: ", dateTimeString);
+
     }
-  }
+
+    function updateTimeStamp()
+    {
+        timestamp+=1000;
+        fakeTimeMSecSince1970.set(timestamp);
+        formatDateToCustomString();
+    }
+
+
+    const startInterval = () => {
+        interval = setInterval(updateTimeStamp, 1000); // update every second
+    };
+
+    const stopInterval = () => {
+        clearInterval(interval);
+    };
+
+    async function getOperationData () {
+        const res = await fetch(window.location.origin+"/getOperationData", {
+            method: 'POST',
+            body: sessionBinary
+        })
+
+        if (res.status == 200)
+        {
+            operation_data =await res.json();
+            console.log(operation_data);
+            operationConfig.set(operation_data);
+
+
+            changed_operation_data= JSON.parse(JSON.stringify(operation_data));
+            saved_changed_operation_data = JSON.parse(JSON.stringify(operation_data))
+            ChangedOperationConfig.set(saved_changed_operation_data);
+            timezone=changed_operation_data.config.system_operation_time.tz;
+            timestamp=changed_operation_data.config.system_operation_time.currTimestamp
+            fakeTimeMSecSince1970.set(timestamp);
+            formatDateToCustomString();
+            startInterval();
+            getDataReady=1;
+        }
+      }
 
   function AutoSyncTime()
   {
@@ -290,7 +333,6 @@
 
 
         timezone=changed_operation_data.config.system_operation_time.tz;
-
         getDataReady=1;
     }
 
@@ -304,9 +346,7 @@
     <tr>
     <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Current Local Date & Time</p></td>
     <td class="pl-5 pt-5">
-{#if getDataReady==1}
-{changed_operation_data.config.system_operation_time.currTimestamp}
-{/if}
+{dateTimeString}
     </td>
 
 

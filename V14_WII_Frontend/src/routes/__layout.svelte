@@ -896,11 +896,11 @@
 		if (res.status == 200)
 		{
 			const data =await res.arrayBuffer();
-			console.log("data tag pro flag");
-			console.log(data);
+			//console.log("data tag pro flag");
+			//console.log(data);
 			const uint8Array = new Uint8Array(data);
 			data_tag_pro_flag = parseInt(uint8Array, 16);
-			console.log(data_tag_pro_flag);
+			//console.log(data_tag_pro_flag);
 		}
     }
 
@@ -926,13 +926,13 @@
 		{
 			currentUri = window.location.href;
 
-			console.log("layout sessionid:");
+			//console.log("layout sessionid:");
 			sessionidG.set(currentUri.split('?')[1]);
 			sessionid=currentUri.split('?')[1];
-			console.log(sessionid);
+			//console.log(sessionid);
 			let host=currentUri.split('/')[0];
-			console.log("host");
-			console.log(host);
+			//console.log("host");
+			//console.log(host);
 		}
 
 		if (sessionid)

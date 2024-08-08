@@ -86,28 +86,33 @@
     if (selectedFile) 
     {
       defaultModal=true;
+      console.log("sessionBinary.length:", sessionBinary.length)
+      if (fileContent.length-sessionBinary.length <120)
+      {
+            CheckedConfigInvalid=1;
+      }
+      else
+      {
 
-      const res = await fetch(window.location.origin+"/uploadConfig", {
-      method: 'POST',
-      body: fileContent,
-          headers: {
-            'Content-Type': 'application/octet-stream',
-          },
-    })
+        const res = await fetch(window.location.origin+"/uploadConfig", {
+        method: 'POST',
+        body: fileContent,
+            headers: {
+              'Content-Type': 'application/octet-stream',
+            },
+        })
 
-    if (res.status == 200)
-    {
-      uploadconfigIsValid=1;
-      console.log("200 OK");
+        if (res.status == 200)
+        {
+          uploadconfigIsValid=1;
+          console.log("200 OK");
 
-    }
-    else
-    {
-      CheckedConfigInvalid=1;
-    }
-
-
-
+        }
+        else
+        {
+          CheckedConfigInvalid=1;
+        }
+      }
     }
   }
 
@@ -125,7 +130,7 @@
     if (response.status == 200)
     {
       const blob = await response.blob();
-      const export_filename = 'download.config';
+      const export_filename = 'EW50v.config';
 
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);

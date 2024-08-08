@@ -190,7 +190,9 @@
     }
   }
 
-
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
   async function getDashboardData() {
 
@@ -229,6 +231,8 @@
     catch (error) 
     {
       console.error('Error fetching dashboard data:', error);
+      await sleep(10000);
+
       stopInterval();
       RestartIntervalId = setInterval(sendPing, 1000);
     }
@@ -260,14 +264,14 @@
       sessionidG.set(currentUri.split('?')[1]);
       sessionid=currentUri.split('?')[1];
 
-      console.log("dashboard sessionid:")
-      console.log(sessionid);
+     // console.log("dashboard sessionid:")
+     // console.log(sessionid);
 
-      console.log("currentUri");
-      console.log(currentUri);
+     // console.log("currentUri");
+     // console.log(currentUri);
       let host=currentUri.split('/')[2];
-      console.log("host");
-      console.log(host);
+      //console.log("host");
+     // console.log(host);
 
       history.pushState({}, '', "/dashboard");
     }

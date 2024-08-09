@@ -548,7 +548,7 @@
   async function getSystemLog() {
     const res = await fetch(window.location.origin+"/getSystemlog", {
       method: 'POST',
-      body: SystemLogContent
+      body: sessionBinary
     })
 
     if (res.status == 200)
@@ -563,19 +563,7 @@
   }
 
   const RefreshSystemLog = () =>
-  {
-
-    const hexArray = sessionid.match(/.{1,2}/g); 
-    const byteValues = hexArray.map(hex => parseInt(hex, 16));
-    sessionBinary = new Uint8Array(byteValues);
-    let offset_string="offset="+SystemLog_Offset;
-    const bytesArray = Array.from(offset_string).map(char => char.charCodeAt(0));
-    let SystemLogBinary = new Uint8Array(bytesArray);
-    SystemLogContent=new Uint8Array(SystemLogBinary.length+sessionBinary.length);
-    SystemLogContent.set(sessionBinary,0);
-    SystemLogContent.set(SystemLogBinary, sessionBinary.length);
-
-    
+  {  
     getSystemLog();
 
   } 
@@ -596,6 +584,10 @@
     }
     else if (sessionid && maintenance_data != "")
     {
+      const hexArray = sessionid.match(/.{1,2}/g); 
+      const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      sessionBinary = new Uint8Array(byteValues);  
+
       if (maintenance_changedValues.length == 0)
       {
         changed_maintenance_data = JSON.parse(JSON.stringify(maintenance_data));

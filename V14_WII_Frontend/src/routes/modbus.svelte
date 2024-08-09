@@ -4031,6 +4031,51 @@
 
     }
 
+    let lines;
+    let ViewerResult;
+    let ViewerResultTimeStamp=[];
+    let ViewerResultStatus=[];
+    let ViewerResultReady=0;
+
+    async function getModbusViewer() {
+    const res = await fetch(window.location.origin+"/PostModBUsviEWer", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      ViewerResult =await res.text();
+      console.log(ViewerResult);
+      lines = ViewerResult.trim().split('\n');
+      for (let i=0; i< lines.length; i++)
+      {
+        ViewerResultTimeStamp=[...ViewerResultTimeStamp, lines[i].slice(0,19)];
+        ViewerResultStatus=[...ViewerResultStatus,lines[i].split(' INFO ')[1]]
+
+      }
+
+      ViewerResultReady=1;
+
+    }
+    else
+    {
+      console.log("error modbus viewer");
+
+    }
+  }
+
+
+
+  const RefreshViewer = () =>
+  { 
+    ViewerResultTimeStamp=[];
+    ViewerResultStatus=[];
+    ViewerResultReady=0; 
+    getModbusViewer();
+  } 
+
+
   async function getPortConnectionData() {
     const res = await fetch(window.location.origin+"/GeTPortConnection", {
       method: 'POST',
@@ -8015,13 +8060,13 @@
 </Accordion>
 </TabItem>
 
-<TabItem title="Viewer">
+<TabItem title="Viewer" on:click={RefreshViewer}>
 
 
 <Table shadow striped={true} tableNoWFull={true}>
 
   <TableHead>
-    <TableHeadCell>Data Model Name</TableHeadCell>
+    <TableHeadCell>TimeStamp</TableHeadCell>  
     <TableHeadCell>Status</TableHeadCell>
 
 
@@ -8029,22 +8074,22 @@
 
    <TableBody>
 
-   <TableBodyRow>
+{#if ViewerResultReady}
+
+{#each ViewerResultTimeStamp as TimeStamp, index}
 
 
-   </TableBodyRow>
+      <TableBodyRow>
+        <TableBodyCell class="w-18">{TimeStamp}</TableBodyCell>
+        <TableBodyCell class="w-18">{ViewerResultStatus[index]}</TableBodyCell>
 
 
-   <TableBodyRow>
+      </TableBodyRow>
+  
 
+{/each}
 
-   </TableBodyRow>
-
-
-    <TableBodyRow>
-   
-
-   </TableBodyRow>
+{/if}
 
      </TableBody>
   </Table>

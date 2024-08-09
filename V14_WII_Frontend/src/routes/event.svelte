@@ -1456,6 +1456,49 @@
     }
   }
 
+    let lines;
+    let ViewerResult;
+    let ViewerResultTimeStamp=[];
+    let ViewerResultStatus=[];
+    let ViewerResultReady=0;
+
+    async function getEvtLogViewer() {
+    const res = await fetch(window.location.origin+"/PostevtLOgviEWer", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      ViewerResult =await res.text();
+      console.log(ViewerResult);
+      lines = ViewerResult.trim().split('\n');
+      for (let i=0; i< lines.length; i++)
+      {
+        ViewerResultTimeStamp=[...ViewerResultTimeStamp, lines[i].slice(0,19)];
+        ViewerResultStatus=[...ViewerResultStatus,lines[i].split(' INFO ')[1]]
+
+      }
+
+      ViewerResultReady=1;
+
+    }
+    else
+    {
+      console.log("error event viewer");
+
+    }
+  }
+
+
+  const EvtLogRefreshViewer = () =>
+  { 
+    ViewerResultTimeStamp=[];
+    ViewerResultStatus=[];
+    ViewerResultReady=0; 
+    getEvtLogViewer();
+  } 
+
 
   onMount(() => {
 
@@ -4443,10 +4486,6 @@
 
   }
 
-  const RefreshEventLog= ()=>
-  {
-
-  }
 
 
   let openDetailStatusMMS = false;
@@ -12055,13 +12094,44 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
 
 {/if}
 
-    <TabItem title="Log Viewer">
+    <TabItem title="Log Viewer" on:click={EvtLogRefreshViewer}>
 
-<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full" on:click={RefreshEventLog}>Refresh</button>
+<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full" on:click={EvtLogRefreshViewer}>Refresh</button>
 
 <p class="pt-10"></p>
 
  <Table shadow striped={true} tableNoWFull={true}>
+
+ <TableHead>
+    <TableHeadCell>TimeStamp</TableHeadCell>  
+    <TableHeadCell>Status</TableHeadCell>
+
+
+  </TableHead>
+
+   <TableBody>
+
+{#if ViewerResultReady}
+
+{#each ViewerResultTimeStamp as TimeStamp, index}
+
+
+      <TableBodyRow>
+        <TableBodyCell class="w-18">{TimeStamp}</TableBodyCell>
+        <TableBodyCell class="w-18">{ViewerResultStatus[index]}</TableBodyCell>
+
+
+      </TableBodyRow>
+  
+
+{/each}
+
+{/if}
+
+     </TableBody>
+
+
+{#if 0}
   <TableHead>
 
     <TableHeadCell on:click={() => sortTable('tt')} style="cursor:pointer">Trigger Timestamp</TableHeadCell>
@@ -12089,6 +12159,7 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
 
 
   </TableBody>
+{/if}  
 </Table>
 </TabItem>
 

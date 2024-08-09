@@ -86,7 +86,7 @@
     if (selectedFile) 
     {
       defaultModal=true;
-      console.log("sessionBinary.length:", sessionBinary.length)
+     // console.log("sessionBinary.length:", sessionBinary.length)
       if (fileContent.length-sessionBinary.length <120)
       {
             CheckedConfigInvalid=1;

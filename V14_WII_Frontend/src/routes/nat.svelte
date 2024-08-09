@@ -642,7 +642,7 @@
       newPFW_Item[index].forwardingTun="";
       newPFW_Item[index].redirectIp=1;
       newPFW_Item[index].redirectIpUserDefined=""; 
-      newPFW_Item[index].protocol=0;
+      newPFW_Item[index].protocol=3;
       newPFW_Item[index].incomingDstPort=0;
       newPFW_Item[index].incomingDstPortRange.start=0;
       newPFW_Item[index].incomingDstPortRange.end=0;
@@ -654,6 +654,30 @@
       newformModalPFW = true;
 
    }
+
+   function ModifyInDestPortChanged()
+   {
+      if (changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort!=2)
+      {
+        if (changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol==0)
+        {
+          changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol=3;
+        }
+      }      
+
+   }
+
+   function NewInDestPortChanged()
+   {
+      if (newPFW_Item[new_pfw_index].incomingDstPort!=2)
+      {
+        if (newPFW_Item[new_pfw_index].protocol==0)
+        {
+          newPFW_Item[new_pfw_index].protocol=3;
+        }
+      }
+   }
+
 
    function NewIncomingIfChanged()
    {
@@ -672,6 +696,10 @@
         {
           newPFW_Item[new_pfw_index].forwardingIf=1;
           newPFW_Item[new_pfw_index].incomingSrcIp=0;
+          newPFW_Item[new_pfw_index].protocol=0;
+          newPFW_Item[new_pfw_index].incomingDstPort=2;
+          newPFW_Item[new_pfw_index].redirectIp=0;
+          newPFW_Item[new_pfw_index].redirectPort=2;
         }
         else
         {
@@ -681,6 +709,7 @@
      }
      else if (newPFW_Item[new_pfw_index].incomingIf==3)
      {
+        newPFW_Item[new_pfw_index].protocol=0;
         newPFW_Item[new_pfw_index].forwardingIf=0;
         newPFW_Item[new_pfw_index].incomingSrcIp=0;
         newPFW_Item[new_pfw_index].incomingDstPort=2;
@@ -1485,8 +1514,8 @@
   </td>
 
     <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
-  <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={2} >Any</Radio>
-  <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={0} >Single Port</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={2} on:change={NewInDestPortChanged}>Any</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={0} on:change={NewInDestPortChanged}>Single Port</Radio>
 {#if newPFW_Item[new_pfw_index].incomingDstPort==1}
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 {:else}
@@ -1494,7 +1523,7 @@
 {/if}
 
 
-  <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={1} >Port Range</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={1} on:change={NewInDestPortChanged}>Port Range</Radio>
 {#if newPFW_Item[new_pfw_index].incomingDstPort==0}
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 

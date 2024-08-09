@@ -337,6 +337,8 @@
   let cwanWebAccessChanged="";
   let RestartIntervalIdByWan;
   let RestartIntervalIdByLan;
+  let interval;
+  let redirect_to_new_ip=0;
 
   function closeModal()
   {
@@ -869,29 +871,45 @@
   }
 
 
- 	async function SetThenPostReboot () {
-    
-  const res = await fetch(window.location.origin+"/PostReboot", {
-      method: 'POST',
-      body: sessionBinary
-  })
+ 	async function SetThenPostReboot () 
+  {    
+    const res = await fetch(window.location.origin+"/PostReboot", {
+        method: 'POST',
+        body: sessionBinary
+    })
 
-  	if (res.status == 200)
-  	{
+    if (res.status == 200)
+    {
       console.log("reboot command sent\r\n");
-  	}
+    }
  }
 
   async function RestartLiteWeb()
   {
-    const res = await fetch(window.location.origin+"/RestartLITEweb", {
-      method: 'POST',
-      body: sessionBinary
-     })
-
-    if (res.status == 200)
+    try
     {
-      console.log("restart liteWeb OK\r\n");
+      const res = await fetch(window.location.origin+"/RestartLITEweb", {
+        method: 'POST',
+        body: sessionBinary
+       })
+
+      if (res.status == 200)
+      {
+        console.log("restart liteWeb OK\r\n");
+      }
+      else
+      {
+        window.location = "https://"+lan_data.config.networking_lan.ipStatic.ip;
+      }
+    }
+    catch (error) 
+    {
+      console.error('Restart LiteWebd:', error);
+
+      setTimeout(() => {
+          window.location = "https://"+lan_data.config.networking_lan.ipStatic.ip;
+      }, 3000); 
+  
     }
   }
 
@@ -913,10 +931,16 @@
         RestartCountOK++;
         if (RestartCountOK == RestartCount)
         {
-          AllRestartFinished=1;
+          if (redirect_to_new_ip!=1)
+          {
+            AllRestartFinished=1;
+          }
         }
 
-        RestartLiteWeb();
+        if (redirect_to_new_ip==1)
+        {
+          RestartLiteWeb();
+        }
 
       }
     }
@@ -943,12 +967,24 @@
       let applied_new_lan_data= JSON.parse(JSON.stringify(lan_data));
       lanConfig.set(applied_new_lan_data);
 
+      if (LANchangedValues.length !=0)
+      {
+          redirect_to_new_ip=0;
+          let origin_ip=window.location.href.split('/apply')[0];
+          console.log("origin_ip:", origin_ip);
+          let new_ip=lan_data.config.networking_lan.ipStatic.ip;
+          console.log("new_ip:", new_ip);
+          if (origin_ip != new_ip)
+          {
+            redirect_to_new_ip=1;
+          }
+      }
+
       LANchangedValues=[];
       dhcpServerChangedValues=[]
       LanConfigChangedLog.set(LANchangedValues);
       DHCPServerLANConfigLog.set(dhcpServerChangedValues);
       RestartLAN();
-
 	  }
 	};
 

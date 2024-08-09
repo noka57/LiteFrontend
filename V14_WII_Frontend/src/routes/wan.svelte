@@ -1203,10 +1203,6 @@
       <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.activeSim} {/if}</TableBodyCell>
       </TableBodyRow>
 
-      <TableBodyRow {trClass}>
-      <TableBodyCell class="text-right" colspan="2">Signal Strength</TableBodyCell>
-      <TableBodyCell class="text-left" colspan="3" {tdClass}>RSSI</TableBodyCell>
-      </TableBodyRow>
 
       <TableBodyRow {trClass}>
       <TableBodyCell class="text-right" colspan="2">RSSI/RSRP/RSRQ/SINR</TableBodyCell>

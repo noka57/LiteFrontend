@@ -303,7 +303,7 @@
     NewItem[index].enable=true;
     NewItem[index].delete=false;    
     NewItem[index].brokerHost=""
-    NewItem[index].brokerPort=0;
+    NewItem[index].brokerPort=1883;
     NewItem[index].tls=0;
     NewItem[index].brokerCaCert="";
     NewItem[index].clientCert="";

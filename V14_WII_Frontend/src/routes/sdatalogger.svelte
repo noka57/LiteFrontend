@@ -178,10 +178,6 @@
 
 
   let dViewerCProfile=0;
-  let dViewerDduration=0;
-  let durationDay=1;
-  let durationHour=1;
-  let durationMin=1
   let dViewerTargetCProfile="";
 
   function dViewerCProfile_Check()
@@ -198,59 +194,68 @@
 
   }
 
-  function dViewerDduration_Check()
-  {
 
-    if (dViewerDduration)
-    {
-      dViewerDduration=0;
-    }
-    else
-    {
-      dViewerDduration=1;
-    }
-
-  }
-
-
-  let dViewerContent;
   let dViewerResult;
+  let lines;
+  let ViewerResultTimeStamp=[];
+  let ViewerResultJsonObject=[];
+  let ViewerResultReady=0;
+  let ViewerResultCloudProfile=[];
 
 
   async function ExecuteViewer() {
     const res = await fetch(window.location.origin+"/PostdataLoggerViewer", {
       method: 'POST',
-      body: dViewerContent
+      body: sessionBinary
     })
 
     if (res.status == 200)
     {
-      dViewerResult =await res.json();
+      dViewerResult =await res.text();
       console.log(dViewerResult);
-      //StartPing=0;
-      //FinishPing=1;
+      lines = dViewerResult.trim().split('\n');
+      for (let i=0; i< lines.length; i++)
+      {
+        ViewerResultTimeStamp=[...ViewerResultTimeStamp, lines[i].slice(0,19)];
+        ViewerResultJsonObject=[...ViewerResultJsonObject,JSON.parse(lines[i].split(' INFO ')[1])]
+       // console.log(ViewerResultJsonObject[i].index);
+        let generic_mqtt_index=ViewerResultJsonObject[i].index-1;
+
+        let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[generic_mqtt_index].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[generic_mqtt_index].brokerPort;
+        ViewerResultCloudProfile=[...ViewerResultCloudProfile, item];
+        //console.log(ViewerResultCloudProfile)
+
+      }
+
+      ViewerResultReady=1;
+      //console.log("ViewerResultTimeStamp:", ViewerResultTimeStamp);
+     // console.log("ViewerResultJsonObject", ViewerResultJsonObject);
+
     }
     else
     {
       console.log("error data viewer");
-      //StartPing=0;
-     // FinishPing=1;
+
     }
   }
 
 
   function dViewerExecute()
   {
+    console.log("viewer");
 
-    console.log("dviewer execute==");
-    let dViewerExecuteStr="{\"CloudProfileEnable\":"+ dViewerCProfile+", \"SelectedProfile\":"+ "\""+dViewerTargetCProfile+"\""+",\"DataDurationEnable\":"+ dViewerDduration+",\"DurationDay\":"+durationDay+",\"DurationHour\":"+durationHour+",\"DurationMin\":"+ durationMin +"}"
-    const bytesArray = Array.from(dViewerExecuteStr).map(char => char.charCodeAt(0));
-    let dViewerBinary = new Uint8Array(bytesArray);
-    dViewerContent=new Uint8Array(dViewerBinary.length+sessionBinary.length);
-    dViewerContent.set(sessionBinary,0);
-    dViewerContent.set(dViewerBinary, sessionBinary.length);
+    if (!sessionBinary)
+    {
+      console.log("sessionBinary is null");
+      const hexArray = sessionid.match(/.{1,2}/g); 
+      const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      sessionBinary = new Uint8Array(byteValues);
+    }
+    ViewerResultReady=0;
+    ViewerResultTimeStamp=[];
+    ViewerResultJsonObject=[];
+    ViewerResultCloudProfile=[];
     ExecuteViewer();
-
   }
 
     let new_proxy_edge=[
@@ -3320,24 +3325,7 @@ Cloud Profile</label>
 
 </tr>
 
-<tr>
-    <td></td><td class="pt-5">
 
-
-    <label for="dviewerCP" class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center">
- <input class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600" type="checkbox" id="dviewerCP" name="dviewerCP" checked={!!dViewerDduration} on:click={dViewerDduration_Check}>
-Data Duration</label>
-
-
-    </td>
-
-    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Days" name="Days" type="text" label="Days" value={durationDay}/></td>
-    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Hours" name="Hours" type="text" label="Hours" value={durationHour}/></td>    
-    <td class="pl-4 pt-3"><FloatingLabelInput style="filled" id="Mins" name="Mins" type="text" label="Mins" value={durationMin}/></td>    
-
-
-
-</tr>
 
 
 <tr>
@@ -3364,29 +3352,37 @@ Data Duration</label>
     <TableHeadCell>Edge Data Alias Name</TableHeadCell>
     <TableHeadCell>Cloud Profile</TableHeadCell>
     <TableHeadCell>Content</TableHeadCell>
-    <TableHeadCell>Data Duration</TableHeadCell>  
+
 
   </TableHead>
-  <TableBody >
+  <TableBody>
 
-{#if 0}
-      <TableBodyRow>
-        <TableBodyCell class="w-18">2023/11/03 13:02:25</TableBodyCell>
-        <TableBodyCell class="w-18">Proxy Mode</TableBodyCell>
-        <TableBodyCell class="w-18">Proxy_EdgeData_</TableBodyCell>
-        <TableBodyCell class="w-18">MQTT Profile1, Azure Profile1</TableBodyCell>
-        <TableBodyCell class="w-18">LineCurrent A is larger than 1000</TableBodyCell>
-        <TableBodyCell class="w-18">3 days 10 hours 12 mins</TableBodyCell>
-      </TableBodyRow>
 
+{#if ViewerResultReady}
+
+{#each ViewerResultTimeStamp as TimeStamp, index}
+
+{#if dViewerCProfile==1 && ViewerResultCloudProfile[index] == dViewerTargetCProfile}
       <TableBodyRow>
-        <TableBodyCell class="w-18">2023/11/13 20:02:25</TableBodyCell>
-        <TableBodyCell class="w-18">Monitor Mode</TableBodyCell>
-        <TableBodyCell class="w-18">Monitor_EdgeData_</TableBodyCell>
-        <TableBodyCell class="w-18">MQTT Profile2, Azure Profile2</TableBodyCell>
-        <TableBodyCell class="w-18">LineCurrent B is larger than 1000</TableBodyCell>
-        <TableBodyCell class="w-18">2 days 20 hours 2 mins</TableBodyCell>
+        <TableBodyCell class="w-18">{TimeStamp}</TableBodyCell>
+        <TableBodyCell class="w-18">{ViewerResultJsonObject[index].mode}</TableBodyCell>
+        <TableBodyCell class="w-18">{ViewerResultJsonObject[index].alias_name}</TableBodyCell>
+        <TableBodyCell class="w-18">{ViewerResultCloudProfile[index]}</TableBodyCell>
+        <TableBodyCell class="w-18">{ViewerResultJsonObject[index].content}</TableBodyCell>
+
       </TableBodyRow>
+{:else if dViewerCProfile==0}
+      <TableBodyRow>
+        <TableBodyCell class="w-18">{TimeStamp}</TableBodyCell>
+        <TableBodyCell class="w-18">{ViewerResultJsonObject[index].mode}</TableBodyCell>
+        <TableBodyCell class="w-18">{ViewerResultJsonObject[index].alias_name}</TableBodyCell>
+        <TableBodyCell class="w-18">{ViewerResultCloudProfile[index]}</TableBodyCell>
+        <TableBodyCell class="w-18">{ViewerResultJsonObject[index].content}</TableBodyCell>
+
+      </TableBodyRow>
+{/if}      
+
+{/each}
 
 {/if}
 

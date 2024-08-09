@@ -185,14 +185,11 @@
     catch (error) 
     {
       console.error('Error fetching vpn data:', error);
-      //stopInterval();
+      //stopIntervalVPN();
       //RestartIntervalId = setInterval(sendPing, 1000);
     }
   }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
   async function getDashboardData() {
 
@@ -231,8 +228,6 @@ function sleep(ms) {
     catch (error) 
     {
       console.error('Error fetching dashboard data:', error);
-      await sleep(10000);
-
       stopInterval();
       RestartIntervalId = setInterval(sendPing, 1000);
     }

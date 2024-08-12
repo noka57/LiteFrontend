@@ -896,11 +896,11 @@
       if (res.status == 200)
       {
         console.log("restart liteWeb OK\r\n");
+        setTimeout(() => {
+            window.location = "https://"+lan_data.config.networking_lan.ipStatic.ip;
+        }, 3000); 
       }
-      else
-      {
-        window.location = "https://"+lan_data.config.networking_lan.ipStatic.ip;
-      }
+      
     }
     catch (error) 
     {
@@ -912,6 +912,28 @@
   
     }
   }
+
+
+  async function RestartOnlyDHCP()
+  {
+    const res = await fetch(window.location.origin+"/reStartONLyDhcP", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart only dhcp OK\r\n");
+      RestartCountOK++;
+
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
 
 
 
@@ -939,7 +961,9 @@
 
         if (redirect_to_new_ip==1)
         {
-          RestartLiteWeb();
+          setTimeout(() => {
+              window.location = "https://"+lan_data.config.networking_lan.ipStatic.ip;
+          }, 6000); 
         }
 
       }
@@ -966,6 +990,7 @@
 	  	SetCountOK++;
       let applied_new_lan_data= JSON.parse(JSON.stringify(lan_data));
       lanConfig.set(applied_new_lan_data);
+      let onlyRestartDHCP=0;
 
       if (LANchangedValues.length !=0)
       {
@@ -974,17 +999,28 @@
           console.log("origin_ip:", origin_ip);
           let new_ip=lan_data.config.networking_lan.ipStatic.ip;
           console.log("new_ip:", new_ip);
-          if (origin_ip != new_ip)
-          {
-            redirect_to_new_ip=1;
-          }
+
+          redirect_to_new_ip=1;
+          
+      }
+      else if (dhcpServerChangedValues.length!=0)
+      {
+        onlyRestartDHCP=1;
       }
 
       LANchangedValues=[];
       dhcpServerChangedValues=[]
       LanConfigChangedLog.set(LANchangedValues);
       DHCPServerLANConfigLog.set(dhcpServerChangedValues);
-      RestartLAN();
+
+      if (onlyRestartDHCP == 1)
+      {
+        RestartOnlyDHCP();
+      }
+      else
+      {
+        RestartLAN();
+      }
 	  }
 	};
 

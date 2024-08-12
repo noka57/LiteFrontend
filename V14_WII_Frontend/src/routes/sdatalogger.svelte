@@ -753,12 +753,12 @@
 
   const NPbtn3=() =>
   {
-    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$NAME_RAWREQUEST$";
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$<tag>_RAWREQUEST$";
   }
 
   const NPbtn4=() =>
   {
-    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$NAME_RAWREPLY$";
+    new_proxy_edge[new_proxy_edge_index].userDefineedData+="$<tag>_RAWREPLY$";
   }
 
 
@@ -2052,33 +2052,33 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
-    <Button size="xs" on:click={NPbtn1}>TIME</Button>
+    <Button size="xs" on:click={NPbtn1}>$TIME$</Button>
 {:else}
-    <Button size="xs" disabled>TIME</Button>
+    <Button size="xs" disabled>$TIME$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NPbtn2}>ARRAY</Button>
+<Button size="xs" on:click={NPbtn2}>$ARRAY$</Button>
 {:else}
-<Button size="xs" disabled>ARRAY</Button>
+<Button size="xs" disabled>$ARRAY$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NPbtn3}>NAME_RAWREQUEST</Button>
+<Button size="xs" on:click={NPbtn3}>$&lt;tag&gt;_RAWREQUEST$</Button>
 {:else}
-<Button size="xs" disabled>NAME_RAWREQUEST</Button>
+<Button size="xs" disabled>$&lt;tag&gt;_RAWREQUEST$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NPbtn4}>NAME_RAWREPLY</Button>
+<Button size="xs" on:click={NPbtn4}>$&lt;tag&gt;_RAWREPLY$</Button>
 {:else}
-<Button size="xs" disabled>NAME_RAWREPLY</Button>
+<Button size="xs" disabled>$&lt;tag&gt;_RAWREPLY$</Button>
 {/if}
 </li>
 

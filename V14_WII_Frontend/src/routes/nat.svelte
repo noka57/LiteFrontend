@@ -664,8 +664,30 @@
           changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol=3;
         }
       }      
+   }
+
+
+   function ModifyProtocolChanged()
+   {
+      if (changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol==0)
+      {
+          changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPort=2;
+          changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort=2;
+      }
 
    }
+
+   function NewProtocolChanged()
+   {
+      if (newPFW_Item[new_pfw_index].protocol==0)
+      {
+        newPFW_Item[new_pfw_index].incomingDstPort=2;
+        newPFW_Item[new_pfw_index].redirectPort=2;
+        newPFW_Item[new_pfw_index].redirectIp=0;
+      }
+
+   }
+
 
    function NewInDestPortChanged()
    {
@@ -677,7 +699,6 @@
         }
       }
    }
-
 
    function NewIncomingIfChanged()
    {
@@ -1499,10 +1520,10 @@
   </td>
 
     <td class="pl-5 pt-4" colspan="3"><div class="flex gap-4">
-  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={0} >ALL</Radio>
-  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={1} >TCP</Radio>
-  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={2} >UDP</Radio>
-  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={3} >TCP & UDP</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={0} on:change={NewProtocolChanged}>ALL</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={1} on:change={NewProtocolChanged}>TCP</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={2} on:change={NewProtocolChanged}>UDP</Radio>
+  <Radio bind:group={newPFW_Item[new_pfw_index].protocol} value={3} on:change={NewProtocolChanged}>TCP & UDP</Radio>
 </div></td>
 </tr>
 
@@ -1515,6 +1536,9 @@
 
     <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
   <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={2} on:change={NewInDestPortChanged}>Any</Radio>
+
+{#if newPFW_Item[new_pfw_index].protocol !=0}
+
   <Radio bind:group={newPFW_Item[new_pfw_index].incomingDstPort} value={0} on:change={NewInDestPortChanged}>Single Port</Radio>
 {#if newPFW_Item[new_pfw_index].incomingDstPort==1}
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
@@ -1530,6 +1554,12 @@
 
 {:else}
   <input type="number" bind:value={newPFW_Item[new_pfw_index].incomingDstPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newPFW_Item[new_pfw_index].incomingDstPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+{:else}
+ <Radio value={0} disabled>Single Port</Radio>
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+  <Radio value={1} disabled>Port Range</Radio>
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 {/if}
 
 
@@ -1604,18 +1634,15 @@
 
 
 
-
-
-
-
-
  <tr>
   <td><p class="pl-5 pt-4 text-lg font-light text-right">Redirect Port</p>
 
   </td>
 
     <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
-  <Radio bind:group={newPFW_Item[new_pfw_index].redirectPort} value={2} >Keep Origin Port</Radio>   
+  <Radio bind:group={newPFW_Item[new_pfw_index].redirectPort} value={2} >Keep Origin Port</Radio>
+
+{#if newPFW_Item[new_pfw_index].protocol !=0}
   <Radio bind:group={newPFW_Item[new_pfw_index].redirectPort} value={0} >Single Port</Radio>
 {#if newPFW_Item[new_pfw_index].redirectPort==1}
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
@@ -1632,8 +1659,12 @@
 {:else}
   <input type="number" bind:value={newPFW_Item[new_pfw_index].redirectPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={newPFW_Item[new_pfw_index].redirectPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
-
-
+{:else}
+  <Radio value={0} disabled>Single Port</Radio>
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+  <Radio value={1} disabled>Port Range</Radio>
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{/if}
 
 </div></td>
 </tr>
@@ -1836,10 +1867,10 @@
   </td>
 
     <td class="pl-5 pt-4" colspan="3"><div class="flex gap-4">
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={0} >ALL</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={1} >TCP</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={2} >UDP</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={3} >TCP & UDP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={0} on:change={ModifyProtocolChanged}>ALL</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={1} on:change={ModifyProtocolChanged}>TCP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={2} on:change={ModifyProtocolChanged}>UDP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={3} on:change={ModifyProtocolChanged}>TCP & UDP</Radio>
 </div></td>
 </tr>
 
@@ -1851,8 +1882,10 @@
   </td>
 
     <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={2} >Any</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={0} >Single Port</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={2} on:chagne={ModifyInDestPortChanged}>Any</Radio>
+
+{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol !=0}
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={0} on:chagne={ModifyInDestPortChanged}>Single Port</Radio>
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort==1}
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 {:else}
@@ -1860,13 +1893,20 @@
 {/if}
 
 
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={1} >Port Range</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={1} on:chagne={ModifyInDestPortChanged}>Port Range</Radio>
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort==0}
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 
 
 {:else}
   <input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{/if}
+
+{:else}
+  <Radio value={0} disabled>Single Port</Radio>
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+  <Radio value={1} disabled>Port Range</Radio>
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 {/if}
 
 
@@ -1944,6 +1984,8 @@
 
     <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPort} value={2} >Keep Origin Port</Radio>   
+{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol !=0}
+
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPort} value={0} >Single Port</Radio>
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPort==1}
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
@@ -1961,6 +2003,13 @@
   <input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
 
+
+{:else}
+  <Radio value={0} disabled>Single Port</Radio>
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+  <Radio value={1} disabled>Port Range</Radio>
+  <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+{/if}
 
 
 </div></td>

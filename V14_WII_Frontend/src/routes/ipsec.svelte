@@ -10,40 +10,17 @@
     IPsec_Initiator_Conn_General_ConfigChangedLog,
     IPsec_Initiator_Conn_Subnet_ConfigChangedLog,
     IPsec_Basic_ConfigChangedLog,
-    ChangedIPsecConfig
+    ChangedIPsecConfig,
+    natConfig,
+    ChangedNATConfig,
+    NAT_VS_ConfigChangedLog
   } from "./configG.js"
 
 
-let vpnnameList = [
-    {value:"test1", name: "test1"},
-    {value:"test2", name: "test2"},
-  ];
-let localList = [
-    {value:"aws", name: "AWS"},
-    {value:"azure", name: "Azure"},
-    {value:"self", name: "selfSign"},
-  ];
 
-let mc="aws";
-
-let MachineCList = [
-    {value:"aws", name: "AWS"},
-    {value:"azure", name: "Azure"},
-    {value:"ss", name: "Self-sign"},
-  ];
-
-
-  let rcac="azure";
-
-let RemoteCAList = [
-    {value:"aws", name: "AWS"},
-    {value:"azure", name: "Azure"},
-    {value:"ss", name: "Self-sign"},
-  ];
-
-
-
-
+  let nat_data="";
+  let saved_changed_nat_data="";
+  let pfw_changedValues = [];
 
     let tdClass = 'px-6 py-4 whitespace-nowrap font-light ';
     let trClass= 'noborder bg-white dark:bg-gray-800 dark:border-gray-700';
@@ -56,6 +33,12 @@ let RemoteCAList = [
     let newICG_index;
 
 
+    let responderConnGeneralModal=false;
+    let responderConnGeneralCurrentIndex;
+    let newRCG_Modal=false;
+    let newRCG_index;
+
+
     let responderConnSubnetModal=false;
     let responderConnSubnetCurrentIndex;
 
@@ -64,6 +47,7 @@ let RemoteCAList = [
 
 
     let Initiator_Conn_Selected="none";
+    let Responder_Conn_Selected="none";
 
     let initiatorConnSubnetModal=false;
     let initiatorConnSubnetCurrentIndex;
@@ -93,6 +77,17 @@ let RemoteCAList = [
       ipsec_data = val;
     });
 
+    natConfig.subscribe(val => {
+          nat_data = val;
+    });
+
+    ChangedNATConfig.subscribe(val => {
+        saved_changed_nat_data = val;
+    });
+
+    NAT_VS_ConfigChangedLog.subscribe(val => {
+          pfw_changedValues = val;
+    });
 
     IPsec_Responder_Conn_ConfigChangedLog.subscribe(val => {
       responder_conn_changedValues = val;
@@ -213,6 +208,30 @@ let RemoteCAList = [
       IPsec_Basic_ConfigChangedLog.set(basic_changedValues);
 
 
+      if (changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn==0 || changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole != saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole)
+      {
+        let NonDeleteItem=[];
+        for (let i = 0; i< saved_changed_nat_data.config.networking_port_forwarding.list.length; i++)
+        {
+          if (saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIf==4 ||
+          saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingIf==2)
+          {
+            saved_changed_nat_data.config.networking_port_forwarding.list[i].delete=true;
+            let changedstr="List No." + (i+1) + " item is changed: value of delete has changed to true";
+            pfw_changedValues=[...pfw_changedValues, changedstr];
+          }
+          else
+          {
+            NonDeleteItem=[...NonDeleteItem, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
+          }
+        }
+
+        saved_changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(NonDeleteItem));
+        NAT_VS_ConfigChangedLog.set(pfw_changedValues);
+        ChangedNATConfig.set(saved_changed_nat_data);
+      }
+
+
       saved_changed_ipsec_data.config.vpn_ipsec_basic=JSON.parse(JSON.stringify(changed_ipsec_data.config.vpn_ipsec_basic)); 
       ChangedIPsecConfig.set(saved_changed_ipsec_data);
     
@@ -249,24 +268,44 @@ let RemoteCAList = [
         saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn=JSON.parse(JSON.stringify(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn));
 
 
-        let tempForDelete=[];
-        for (let i = 0; i< changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet.length; i++)
+        let NonDeleteConnection=[];
+        
+        for (let i = 0; i< changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection.length; i++)
         {
-          if (!changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[i].delete)
+          if (!changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[i].delete)
           {
-            tempForDelete=[...tempForDelete, changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[i]]
+            NonDeleteConnection=[...NonDeleteConnection,changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[i]];
+            let NonDeleteSubnet=[];
+            for (let j=0; j< changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[i].tunnel_subnet.length;j++)
+            if (!changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[i].tunnel_subnet[j].delete)
+            {
+              NonDeleteSubnet=[...NonDeleteSubnet, changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[i].tunnel_subnet[j]];
+            }
+
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[i].tunnel_subnet=JSON.parse(JSON.stringify(NonDeleteSubnet));
+
+            changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[i].tunnel_subnet=JSON.parse(JSON.stringify(NonDeleteSubnet));
           }
 
         }
 
-        saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet=JSON.parse(JSON.stringify(tempForDelete));
-        changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet=JSON.parse(JSON.stringify(tempForDelete));
+        saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection=JSON.parse(JSON.stringify(NonDeleteConnection));
+        changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection=JSON.parse(JSON.stringify(NonDeleteConnection));
         ChangedIPsecConfig.set(saved_changed_ipsec_data);
     
         console.log(responder_conn_changedValues);
+        console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn);
       }
 
     }
+
+
+
+  function extractNumber(str) {
+    const match = str.match(/IPsecVPN(\d+)/);
+    return match ? parseInt(match[1], 10) : null;
+  }
+
 
     function saveInitiatorConnGeneral()
     {
@@ -484,6 +523,70 @@ let RemoteCAList = [
 
 
 
+        let NonDeleteItem=[];
+        for (let i = 0; i< saved_changed_nat_data.config.networking_port_forwarding.list.length; i++)
+        {
+          if (saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIf==4 ||
+          saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingIf==2)
+          {
+            let deleted=1;
+            let number=-1;
+            for (let j=0; j < saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length; j++)
+            {
+              if (saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIf==4 && saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIPsecAliasName == saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[j].name)
+              {
+                deleted=0;
+                number=extractNumber(saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIPsec);
+                if (number && number != j)
+                {
+                    saved_changed_nat_data.config.networking_port_forwarding.list[i].incomingIPsec="IPsecVPN"+j;
+                    let changedstr="List No." + (i+1) + " item is changed: value of incomingIPsec has changed to "+"IPsecVPN"+j;
+                    pfw_changedValues=[...pfw_changedValues, changedstr];
+
+                }
+
+                break;
+              }
+              else if (saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingIf ==2 &&
+              saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingIPsecAliasName== saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[j].name)
+              {
+                deleted=0;
+                number=extractNumber(saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingIPsec);
+                if (number && number != j)
+                {
+                    saved_changed_nat_data.config.networking_port_forwarding.list[i].forwardingIPsec="IPsecVPN"+j;
+                    let changedstr="List No." + (i+1) + " item is changed: value of forwardingIPsec has changed to "+"IPsecVPN"+j;
+                    pfw_changedValues=[...pfw_changedValues, changedstr];
+                }
+
+                break;
+              }
+              else
+              {
+                saved_changed_nat_data.config.networking_port_forwarding.list[i].delete=true;
+                let changedstr="List No." + (i+1) + " item is changed: value of delete has changed to true";
+                pfw_changedValues=[...pfw_changedValues, changedstr];
+                deleted=1;
+                break;
+              }
+            }
+
+            if (deleted==0)
+            {
+              NonDeleteItem=[...NonDeleteItem, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
+            }
+          }
+          else
+          {
+            NonDeleteItem=[...NonDeleteItem, saved_changed_nat_data.config.networking_port_forwarding.list[i]]
+          }
+        }
+
+        saved_changed_nat_data.config.networking_port_forwarding.list=JSON.parse(JSON.stringify(NonDeleteItem));
+        NAT_VS_ConfigChangedLog.set(pfw_changedValues);
+        ChangedNATConfig.set(saved_changed_nat_data);
+
+
         IPsec_Initiator_Conn_General_ConfigChangedLog.set(initiator_conn_general_changedValues);
         ChangedIPsecConfig.set(saved_changed_ipsec_data);
 
@@ -636,6 +739,144 @@ let RemoteCAList = [
         }
 
     }
+
+    let BackupRCG={
+        "enable":false,
+        "delete":false,
+        "remote_certificate": "",
+        "type": 0
+    };
+
+    let newRCG_item=[{
+            "enable":true,
+            "delete":false,
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "enable":true,
+            "delete":false,
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "enable":true,
+            "delete":false,
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "enable":true,
+            "delete":false,
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "enable":true,
+            "delete":false,
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "enable":true,
+            "delete":false,
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "enable":true,
+            "delete":false,
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "enable":true,
+            "delete":false,
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "enable":true,
+            "delete":false,
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        },
+        {
+            "enable":true,
+            "delete":false,
+            "remote_certificate": "",
+            "type": 0,
+            "tunnel_subnet":[]
+        }
+        ];
+
+
+    function deleteResponderConnection(index)
+    {
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].delete=true;
+    }
+
+
+    function RestoreDeleteResponderConnection(index)
+    {
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].delete=false;
+    }
+
+
+    function modalTriggerResponderConnGeneral(index){
+      responderConnGeneralModal = true;
+      responderConnGeneralCurrentIndex=index;
+      BackupRCG.enable=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].enable;
+      BackupRCG.delete=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].delete;
+      BackupRCG.remote_certificate=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].remote_certificate;
+      BackupRCG.type=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].type;
+
+    }
+
+    function NoModifyRCG(index){
+      responderConnGeneralModal = false;
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].enable=BackupRCG.enable;      
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].delete=BackupRCG.delete; 
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].remote_certificate=BackupRCG.remote_certificate;
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].type=BackupRCG.type;
+
+    }
+
+    function ModifyRCG(index){
+      responderConnGeneralModal = false;
+
+    }
+
+
+    function NewRCG_Item_Invoker(index){
+      newRCG_item[index].enable=true;
+      newRCG_item[index].delete=false;      
+      newRCG_item[index].remote_certificate="";
+      newRCG_item[index].type=0;
+      newRCG_index=index;
+      newRCG_Modal=true;
+
+    }
+
+    function AddRCG(index){
+
+        newRCG_Modal = false;
+
+        changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection=[...changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection,newRCG_item[index]];
+
+        //console.log(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection);
+
+    }
+
 
     let BackupICG={
         "enable":false,
@@ -886,13 +1127,13 @@ let RemoteCAList = [
 
     function RestoreDeleteResponderConnSubnet(index)
     {
-      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].delete=false
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[index].delete=false
     }
 
 
     function deleteResponderConnSubnet(index)
     {
-      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].delete=true;
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[index].delete=true;
     }
 
 
@@ -901,20 +1142,20 @@ let RemoteCAList = [
       responderConnSubnetModal=true;
       responderConnSubnetCurrentIndex=index;
 
-      BackupRCS.enable=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].enable;
-      BackupRCS.delete=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].delete;
-      BackupRCS.local_subnet=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].local_subnet;
-      BackupRCS.remote_subnet=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].remote_subnet;
+      BackupRCS.enable=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[index].enable;
+      BackupRCS.delete=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[index].delete;
+      BackupRCS.local_subnet=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[index].local_subnet;
+      BackupRCS.remote_subnet=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[index].remote_subnet;
 
     }
 
     function NoModifyRCS(index){
       
       responderConnSubnetModal=false;
-      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].enable=BackupRCS.enable;
-      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].delete=BackupRCS.delete;      
-      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].local_subnet=BackupRCS.local_subnet;
-      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[index].remote_subnet=BackupRCS.remote_subnet;
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[index].enable=BackupRCS.enable;
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[index].delete=BackupRCS.delete;      
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[index].local_subnet=BackupRCS.local_subnet;
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[index].remote_subnet=BackupRCS.remote_subnet;
 
     }
 
@@ -939,7 +1180,7 @@ let RemoteCAList = [
 
         newRCS_Modal = false;
 
-        changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet=[...changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet,newRCS_item[index]];
+        changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet=[...changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet,newRCS_item[index]];
     }
 
 
@@ -1712,7 +1953,25 @@ async function getIpsecStatus() {
     }
   }
 
+  async function getNATData () {
+    const res = await fetch(window.location.origin+"/getNATdata", {
+      method: 'POST',
+      body: sessionBinary
+    })
 
+    if (res.status == 200)
+    {
+      nat_data =await res.json();
+
+      natConfig.set(nat_data);
+
+      saved_changed_nat_data= JSON.parse(JSON.stringify(nat_data));
+ 
+      ChangedNATConfig.set(saved_changed_nat_data);
+
+      
+    }
+  }
 
    async function getIPsecData () {
     const res = await fetch(window.location.origin+"/getIPsecdata", {
@@ -1751,6 +2010,14 @@ async function getIpsecStatus() {
         getCACertificate();
         getRemoteCertificate();
         getIpsecStatus();
+        if (saved_changed_nat_data == "")
+        {
+          getNATData();
+        }
+        else
+        {
+          console.log("nat is already");
+        }
     }
     else if (sessionid && ipsec_data != "")
     {
@@ -1761,6 +2028,14 @@ async function getIpsecStatus() {
         getMachineCertificate();
         getCACertificate();
         getRemoteCertificate();
+        if (saved_changed_nat_data == "")
+        {
+          getNATData();
+        }
+        else
+        {
+          console.log("nat is already");
+        }
         getIpsecStatus();
         console.log(StringIpsecStatus);
         getDataReady=1;
@@ -2047,9 +2322,9 @@ async function getIpsecStatus() {
   <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.remote_certificate}</td>
   <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.local_certificate}</td>
 {#if initiatorConn.type==0}
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Tunnel</td>
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Site-To-Site</td>
 {:else if initiatorConn.type==1}
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Transport</td>
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Host-To-Host</td>
 {/if}
       </tr>
 
@@ -2091,9 +2366,9 @@ async function getIpsecStatus() {
                     <TableBodyCell class="w-18">{initiatorConn.remote_certificate}</TableBodyCell>
                     <TableBodyCell class="w-18">{initiatorConn.local_certificate}</TableBodyCell>
 {#if initiatorConn.type==0}
-                    <TableBodyCell class="w-18">Tunnel</TableBodyCell>
+                    <TableBodyCell class="w-18">Site-To-Site</TableBodyCell>
 {:else if initiatorConn.type==1}
-                    <TableBodyCell class="w-18">Transport</TableBodyCell>
+                    <TableBodyCell class="w-18">Host-To-Host</TableBodyCell>
 {/if}
 
 
@@ -2241,8 +2516,8 @@ async function getIpsecStatus() {
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
  <td class="pl-5 pt-5"><div class="flex gap-4">
 
-      <Radio bind:group={newICG_item[newICG_index].type} value={0}>Tunnel</Radio>
-  <Radio bind:group={newICG_item[newICG_index].type} value={1} >Transport</Radio>
+      <Radio bind:group={newICG_item[newICG_index].type} value={0}>Site-To-Site</Radio>
+  <Radio bind:group={newICG_item[newICG_index].type} value={1} >Host-To-Host</Radio>
 </div></td>
 
 
@@ -2355,8 +2630,8 @@ async function getIpsecStatus() {
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
  <td class="pl-5 pt-5"><div class="flex gap-4">
 
-      <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].type} value={0}>Tunnel</Radio>
-  <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].type} value={1} >Transport</Radio>
+      <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].type} value={0}>Site-To-Site</Radio>
+  <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].type} value={1} >Host-To-Host</Radio>
 </div></td>
 
 
@@ -2393,7 +2668,7 @@ async function getIpsecStatus() {
 
 
     <span slot="header" class="pl-4">
-    Tunnel Subnet
+    Site Subnet
     </span>
 
 
@@ -2419,8 +2694,8 @@ async function getIpsecStatus() {
     </TableHeadCell>
     <TableHeadCell class="w-10">Enable</TableHeadCell>    
     <TableHeadCell class="w-10">No</TableHeadCell>
-    <TableHeadCell class="w-18">Local Subnet</TableHeadCell>
-    <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
+    <TableHeadCell class="w-18">Initiator Subnet</TableHeadCell>
+    <TableHeadCell class="w-18">Responder Subnet</TableHeadCell>
 
   </TableHead>
   <TableBody>
@@ -2572,7 +2847,7 @@ async function getIpsecStatus() {
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Local Subnet
+Initiator Subnet
       </p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[initiatorConnSubnetCurrentIndex].local_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -2581,7 +2856,7 @@ Local Subnet
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Remote Subnet
+Responder Subnet
       </p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[initiatorConnSubnetCurrentIndex].remote_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -2623,7 +2898,7 @@ Remote Subnet
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Local Subnet
+Initiator Subnet
       </p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={newICS_item[Initiator_Conn_Selected][newICS_index].local_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -2632,7 +2907,7 @@ Local Subnet
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Remote Subnet
+Responder Subnet
       </p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={newICS_item[Initiator_Conn_Selected][newICS_index].remote_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -2676,7 +2951,7 @@ Remote Subnet
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Responder Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -2697,6 +2972,8 @@ Remote Subnet
     
 
     </td>
+
+
     <td class="pl-5 pt-1">
 <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -2706,10 +2983,184 @@ Remote Subnet
 
 </tr>
 
+
+</table>
+<p class="pt-10"></p>
+
+
+<Accordion>
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Allowed Initiator
+    </span>
+
+
+
+
+ <Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4 w-4">
+    </TableHeadCell>
+    <TableHeadCell class="w-10">Enable</TableHeadCell>    
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-18">Remote Certificate</TableHeadCell>
+    <TableHeadCell class="w-18">Type</TableHeadCell>
+
+
+  </TableHead>
+  
+  <TableBody>
+{#each changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection as Conn, index}
+
+{#if Conn.delete}
+
+
+    <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteResponderConnection(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={Conn.enable} disabled>
+
+      </td>
+
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Conn.remote_certificate}</td>
+{#if Conn.type==0}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Site-To-Site</td>
+{:else if Conn.type==1}
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Host-To-Host</td>
+{/if}
+      </tr>
+
+
+
+{:else}
+
+    <TableBodyRow>
+          <TableBodyCell class="!p-4 w-10">
+
+      </TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
+<button on:click={() => modalTriggerResponderConnGeneral(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </TableBodyCell>
+
+   <TableBodyCell class="!p-0 w-10">
+<button on:click={() => deleteResponderConnection(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+
+    </TableBodyCell>
+
+
+                    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={Conn.enable}>
+
+                    </TableBodyCell>
+                    <TableBodyCell class="w-10">{index+1}</TableBodyCell>
+                    <TableBodyCell class="w-18">{Conn.remote_certificate}</TableBodyCell>
+{#if Conn.type==0}
+                    <TableBodyCell class="w-18">Site-To-Site</TableBodyCell>
+{:else if Conn.type==1}
+                    <TableBodyCell class="w-18">Host-To-Host</TableBodyCell>
+{/if}
+
+
+    </TableBodyRow>
+
+{/if}
+
+
+{/each}
+
+
+<TableBodyRow>
+      <TableBodyCell class="!p-4 w-10">
+
+{#if changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection.length < 10}    
+<button on:click={() => NewRCG_Item_Invoker(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection.length)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+{/if}  
+ </TableBodyCell>
+      
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>      
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+
+    </TableBodyRow>
+
+
+  </TableBody>
+</Table>
+
+<Modal bind:open={newRCG_Modal} size="lg" class="w-full" autoclose>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={newRCG_item[newRCG_index].enable}>
+  Enable
+</label>
+
+<p class="mt-10"></p>
+
+<table>
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.remote_certificate}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={newRCG_item[newRCG_index].remote_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getRemoteCertReady== 1}
 {#each remoteCertList as remoteCert, index}
@@ -2734,8 +3185,8 @@ Remote Subnet
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
  <td class="pl-5 pt-5"><div class="flex gap-4">
 
-      <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.type} value={0}>Tunnel</Radio>
-  <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.type} value={1} >Transport</Radio>
+      <Radio bind:group={newRCG_item[newRCG_index].type} value={0}>Site-To-Site</Radio>
+  <Radio bind:group={newRCG_item[newRCG_index].type} value={1} >Host-To-Host</Radio>
 </div></td>
 
 
@@ -2743,19 +3194,122 @@ Remote Subnet
 
 
 
-</table>
-<p class="pt-10"></p>
 
-{#if changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.type == 0}
 
-<Accordion>
+
+
+       <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={AddRCG(newRCG_index)}>Add</Button></td>
+
+
+    </tr>
+
+  </table>
+</form>
+</Modal>
+
+
+<Modal bind:open={responderConnGeneralModal} size="lg" class="w-full" permanent={true}>
+
+  <form action="#">
+
+<label>
+  <input class="center" type=checkbox bind:checked={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[responderConnGeneralCurrentIndex].enable}>
+  Enable
+</label>
+
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyRCG(responderConnGeneralCurrentIndex)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+<table>
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
+    <td class= "pl-4 pt-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[responderConnGeneralCurrentIndex].remote_certificate}>
+<option disabled="" value="none">Choose Certificate ...</option>
+{#if getRemoteCertReady== 1}
+{#each remoteCertList as remoteCert, index}
+<option value={remoteCert}>{remoteCert}</option>
+{/each}
+{/if}
+</select>
+
+
+    </td>
+    <td class="pl-5 pt-1">
+<svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
+    </td>
+
+</tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
+ <td class="pl-5 pt-5"><div class="flex gap-4">
+
+      <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[responderConnGeneralCurrentIndex].type} value={0}>Site-To-Site</Radio>
+  <Radio bind:group={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[responderConnGeneralCurrentIndex].type} value={1} >Host-To-Host</Radio>
+</div></td>
+
+
+  </tr>
+
+
+
+
+
+            <tr>
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyRCG(responderConnGeneralCurrentIndex)}>Modify</Button></td>
+
+
+    </tr>
+
+  </table>
+</form>
+
+</Modal>
+
+
+
+
+    </AccordionItem>
+
+
 
   <AccordionItem {defaultClass}>
 
 
     <span slot="header" class="pl-4">
-    Tunnel Subnet
+    Site Subnet
     </span>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={Responder_Conn_Selected}>
+<option disabled="" value="none">Choose Connection ...</option>
+{#each saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection as Conn, index}
+{#if saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].type == 0}
+<option value={index}>{Conn.remote_certificate}</option>
+{/if}
+{/each}
+</select>
 
 
  <Table shadow striped={true} tableNoWFull={true}>
@@ -2769,12 +3323,16 @@ Remote Subnet
 
     <TableHeadCell class="w-10">Enable</TableHeadCell>    
     <TableHeadCell class="w-10">No</TableHeadCell>
-    <TableHeadCell class="w-18">Local Subnet</TableHeadCell>
-    <TableHeadCell class="w-18">Remote Subnet</TableHeadCell>
+    <TableHeadCell class="w-18">Responder Subnet</TableHeadCell>
+    <TableHeadCell class="w-18">Initiator Subnet</TableHeadCell>
 
   </TableHead>
   <TableBody>
-{#each changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet as tunnelSubnet, index}
+
+{#if Responder_Conn_Selected !="none" && Responder_Conn_Selected < changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection.length}
+
+
+{#each changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet as tunnelSubnet, index}
 
 {#if tunnelSubnet.delete}
  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
@@ -2856,8 +3414,8 @@ Remote Subnet
 {/each}
     <TableBodyRow>
       <TableBodyCell class="!p-4 w-10">
-{#if changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet.length < 10}  
-<button on:click={() => NewRCS_Item_Invoker(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet.length)}>
+{#if changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet.length < 10}  
+<button on:click={() => NewRCS_Item_Invoker(changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet.length)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
@@ -2878,7 +3436,7 @@ Remote Subnet
     </TableBodyRow>
 
 
-
+{/if}
 
   </TableBody>
 </Table>
@@ -2891,7 +3449,7 @@ Remote Subnet
   <form action="#">
 
 <label>
-  <input class="center" type=checkbox bind:checked={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[responderConnSubnetCurrentIndex].enable}>
+  <input class="center" type=checkbox bind:checked={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[responderConnSubnetCurrentIndex].enable}>
   Enable
 </label>
 
@@ -2907,18 +3465,18 @@ Remote Subnet
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Local Subnet
+Responder Subnet
       </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[responderConnSubnetCurrentIndex].local_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[responderConnSubnetCurrentIndex].local_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Remote Subnet
+Initiator Subnet
       </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.tunnel_subnet[responderConnSubnetCurrentIndex].remote_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[Responder_Conn_Selected].tunnel_subnet[responderConnSubnetCurrentIndex].remote_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
   </tr>
 
@@ -2958,7 +3516,7 @@ Remote Subnet
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Local Subnet
+Responder Subnet
       </p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={newRCS_item[newRCS_index].local_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -2967,7 +3525,7 @@ Local Subnet
 <tr>
       <td>
       <p class="pl-10 pt-4 text-lg font-light text-right">
-Remote Subnet
+Initiator Subnet
       </p></td>
       <td class="pl-5 pt-5"><input type="text" bind:value={newRCS_item[newRCS_index].remote_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -3000,7 +3558,6 @@ Remote Subnet
 <p class="mt-10"></p>
 
 
-{/if}
 
 <table>
      <tr>

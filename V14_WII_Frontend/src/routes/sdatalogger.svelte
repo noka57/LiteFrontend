@@ -716,12 +716,12 @@
 
   const NMbtn3=() =>
   {
-    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$NAME_RAWREQUEST$";
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$<tag>_RAWREQUEST$";
   }
 
   const NMbtn4=() =>
   {
-    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$NAME_RAWREPLY$";
+    new_monitor_edge[new_monitor_edge_index].userDefineedData+="$<tag>_RAWREPLY$";
   }
 
 
@@ -785,12 +785,12 @@
 
   const CPbtn3=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$NAME_RAWREQUEST$";
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$<tag>_RAWREQUEST$";
   }
 
   const CPbtn4=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$NAME_RAWREPLY$";
+    changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData+="$<tag>_RAWREPLY$";
   }
 
 
@@ -816,12 +816,12 @@
 
   const CMbtn3=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$NAME_RAWREQUEST$";
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$<tag>_RAWREQUEST$";
   }
 
   const CMbtn4=() =>
   {
-    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$NAME_RAWREPLY$";
+    changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].userDefineedData+="$<tag>_RAWREPLY$";
   }
 
 
@@ -1739,17 +1739,25 @@
 {#if ProxyEdgeData.dataType == 1}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
 {:else if ProxyEdgeData.dataType == 2}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Short</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt16</td>
 {:else if ProxyEdgeData.dataType == 3}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Short</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int16</td>
 {:else if ProxyEdgeData.dataType == 4}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Integer</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt32</td>
 {:else if ProxyEdgeData.dataType == 5}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Integer</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int32</td>
 {:else if ProxyEdgeData.dataType == 6}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
 {:else if ProxyEdgeData.dataType == 7}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
+{:else if ProxyEdgeData.dataType == 8}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt64</td>
+{:else if ProxyEdgeData.dataType == 9}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int64</td>
+{:else if ProxyEdgeData.dataType == 10}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt8</td>
+{:else if ProxyEdgeData.dataType == 11}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int8</td>
 {:else}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
 {/if}
@@ -1816,17 +1824,25 @@
 {#if ProxyEdgeData.dataType == 1}
         <TableBodyCell class="w-18">Boolean</TableBodyCell>
 {:else if ProxyEdgeData.dataType == 2}
-        <TableBodyCell class="w-18">Unsigned Short</TableBodyCell>
+        <TableBodyCell class="w-18">UInt16</TableBodyCell>
 {:else if ProxyEdgeData.dataType == 3}
-        <TableBodyCell class="w-18">Signed Short</TableBodyCell>
+        <TableBodyCell class="w-18">Int16</TableBodyCell>
 {:else if ProxyEdgeData.dataType == 4}
-      <TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
+      <TableBodyCell class="w-18">UInt32</TableBodyCell>
 {:else if ProxyEdgeData.dataType == 5}
-      <TableBodyCell class="w-18">Signed Integer</TableBodyCell>
+      <TableBodyCell class="w-18">Int32</TableBodyCell>
 {:else if ProxyEdgeData.dataType == 6}
       <TableBodyCell class="w-18">Float</TableBodyCell>
 {:else if ProxyEdgeData.dataType == 7}
       <TableBodyCell class="w-18">Double</TableBodyCell>
+{:else if ProxyEdgeData.dataType == 8}
+      <TableBodyCell class="w-18">UInt64</TableBodyCell>  
+{:else if ProxyEdgeData.dataType == 9}
+      <TableBodyCell class="w-18">Int64</TableBodyCell> 
+{:else if ProxyEdgeData.dataType == 10}
+      <TableBodyCell class="w-18">UInt8</TableBodyCell>  
+{:else if ProxyEdgeData.dataType == 11}
+      <TableBodyCell class="w-18">Int8</TableBodyCell>                        
 {:else}
       <TableBodyCell class="w-18"></TableBodyCell>
 {/if}
@@ -1979,10 +1995,14 @@
 <option disabled="" value="none">Choose Type ...</option>
 
 <option value={1}>Boolean</option>
-<option value={2}>Unsigned Short</option>
-<option value={3}>Signed Short</option>
-<option value={4}>Unsigned Integer</option>
-<option value={5}>Signed Integer</option>
+<option value={10}>UInt8</option>
+<option value={11}>Int8</option>
+<option value={2}>UInt16</option>
+<option value={3}>Int16</option>
+<option value={4}>UInt32</option>
+<option value={5}>Int32</option>
+<option value={8}>UInt64</option>
+<option value={9}>Int64</option>
 <option value={6}>Float</option>
 <option value={7}>Double</option>
 </select>
@@ -2177,12 +2197,15 @@
  <td class= "pl-4 pt-4">
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataType}>
 <option disabled="" value="none">Choose Type ...</option>
-
 <option value={1}>Boolean</option>
-<option value={2}>Unsigned Short</option>
-<option value={3}>Signed Short</option>
-<option value={4}>Unsigned Integer</option>
-<option value={5}>Signed Integer</option>
+<option value={10}>UInt8</option>
+<option value={11}>Int8</option>
+<option value={2}>UInt16</option>
+<option value={3}>Int16</option>
+<option value={4}>UInt32</option>
+<option value={5}>Int32</option>
+<option value={8}>UInt64</option>
+<option value={9}>Int64</option>
 <option value={6}>Float</option>
 <option value={7}>Double</option>
 </select>
@@ -2252,33 +2275,33 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
-    <Button size="xs" on:click={CPbtn1}>TIME</Button>
+    <Button size="xs" on:click={CPbtn1}>$TIME$</Button>
 {:else}
-    <Button size="xs" disabled>TIME</Button>
+    <Button size="xs" disabled>$TIME$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CPbtn2}>ARRAY</Button>
+<Button size="xs" on:click={CPbtn2}>$ARRAY$</Button>
 {:else}
-<Button size="xs" disabled>ARRAY</Button>
+<Button size="xs" disabled>$ARRAY$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CPbtn3}>NAME_RAWREQUEST</Button>
+<Button size="xs" on:click={CPbtn3}>$&lt;tag&gt;_RAWREQUEST$</Button>
 {:else}
-<Button size="xs" disabled>NAME_RAWREQUEST</Button>
+<Button size="xs" disabled>$&lt;tag&gt;_RAWREQUEST$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CPbtn4}>NAME_RAWREPLY</Button>
+<Button size="xs" on:click={CPbtn4}>$&lt;tag&gt;_RAWREPLY$</Button>
 {:else}
-<Button size="xs" disabled>NAME_RAWREPLY</Button>
+<Button size="xs" disabled>$&lt;tag&gt;_RAWREPLY$</Button>
 {/if}
 </li>
 
@@ -2568,17 +2591,25 @@
 {#if MonitorEdgeData.dataType == 1}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
 {:else if MonitorEdgeData.dataType == 2}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Short</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt16</td>
 {:else if MonitorEdgeData.dataType == 3}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Short</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int16</td>
 {:else if MonitorEdgeData.dataType == 4}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Integer</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt32</td>
 {:else if MonitorEdgeData.dataType == 5}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Integer</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int32</td>
 {:else if MonitorEdgeData.dataType == 6}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
 {:else if MonitorEdgeData.dataType == 7}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
+{:else if MonitorEdgeData.dataType == 8}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt64</td>
+{:else if MonitorEdgeData.dataType == 9}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int64</td>
+{:else if MonitorEdgeData.dataType == 10}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt8</td>
+{:else if MonitorEdgeData.dataType == 11}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int8</td>
 {:else}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
 {/if}
@@ -2635,17 +2666,25 @@
 {#if MonitorEdgeData.dataType == 1}
         <TableBodyCell class="w-18">Boolean</TableBodyCell>
 {:else if MonitorEdgeData.dataType == 2}
-        <TableBodyCell class="w-18">Unsigned Short</TableBodyCell>
+        <TableBodyCell class="w-18">UInt16</TableBodyCell>
 {:else if MonitorEdgeData.dataType == 3}
-        <TableBodyCell class="w-18">Signed Short</TableBodyCell>
+        <TableBodyCell class="w-18">Int16</TableBodyCell>
 {:else if MonitorEdgeData.dataType == 4}
-      <TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
+      <TableBodyCell class="w-18">UInt32</TableBodyCell>
 {:else if MonitorEdgeData.dataType == 5}
-      <TableBodyCell class="w-18">Signed Integer</TableBodyCell>
+      <TableBodyCell class="w-18">Int32</TableBodyCell>
 {:else if MonitorEdgeData.dataType == 6}
       <TableBodyCell class="w-18">Float</TableBodyCell>
 {:else if MonitorEdgeData.dataType == 7}
       <TableBodyCell class="w-18">Double</TableBodyCell>
+{:else if MonitorEdgeData.dataType == 8}
+      <TableBodyCell class="w-18">UInt64</TableBodyCell>  
+{:else if MonitorEdgeData.dataType == 9}
+      <TableBodyCell class="w-18">Int64</TableBodyCell> 
+{:else if MonitorEdgeData.dataType == 10}
+      <TableBodyCell class="w-18">UInt8</TableBodyCell>  
+{:else if MonitorEdgeData.dataType == 11}
+      <TableBodyCell class="w-18">Int8</TableBodyCell>      
 {:else}
       <TableBodyCell class="w-18"></TableBodyCell>
 {/if}
@@ -2782,12 +2821,15 @@
  <td class= "pl-4 pt-4">
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_monitor_edge[new_monitor_edge_index].dataType}>
 <option disabled="" value="none">Choose Type ...</option>
-
 <option value={1}>Boolean</option>
-<option value={2}>Unsigned Short</option>
-<option value={3}>Signed Short</option>
-<option value={4}>Unsigned Integer</option>
-<option value={5}>Signed Integer</option>
+<option value={10}>UInt8</option>
+<option value={11}>Int8</option>
+<option value={2}>UInt16</option>
+<option value={3}>Int16</option>
+<option value={4}>UInt32</option>
+<option value={5}>Int32</option>
+<option value={8}>UInt64</option>
+<option value={9}>Int64</option>
 <option value={6}>Float</option>
 <option value={7}>Double</option>
 </select>
@@ -2837,50 +2879,50 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
-    <Button size="xs" on:click={NMbtn1}>TIME</Button>
+    <Button size="xs" on:click={NMbtn1}>$TIME$</Button>
 {:else}
-    <Button size="xs" disabled>TIME</Button>
+    <Button size="xs" disabled>$TIME$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NMbtn2}>ARRAY</Button>
+<Button size="xs" on:click={NMbtn2}>$ARRAY$</Button>
 {:else}
-<Button size="xs" disabled>ARRAY</Button>
+<Button size="xs" disabled>$ARRAY$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NMbtn3}>NAME_RAWREQUEST</Button>
+<Button size="xs" on:click={NMbtn3}>$&lt;tag&gt;_RAWREQUEST$</Button>
 {:else}
-<Button size="xs" disabled>NAME_RAWREQUEST</Button>
+<Button size="xs" disabled>$&lt;tag&gt;_RAWREQUEST$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NMbtn4}>NAME_RAWREPLY</Button>
+<Button size="xs" on:click={NMbtn4}>$&lt;tag&gt;_RAWREPLY$</Button>
 {:else}
-<Button size="xs" disabled>NAME_RAWREPLY</Button>
+<Button size="xs" disabled>$&lt;tag&gt;_RAWREPLY$</Button>
 {/if}
 </li>
 
 
 <li class='pt-4'>
 {#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NMbtn5}>MODBUSREQ</Button>
+<Button size="xs" on:click={NMbtn5}>$MODBUSREQ$</Button>
 {:else}
-<Button size="xs" disabled>MODBUSREQ</Button>
+<Button size="xs" disabled>$MODBUSREQ$</Button>
 {/if}
 </li>
 
 <li class='pt-4'>
 {#if new_monitor_edge[new_monitor_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NMbtn6}>MODBUSRESP</Button>
+<Button size="xs" on:click={NMbtn6}>$MODBUSRESP$</Button>
 {:else}
-<Button size="xs" disabled>MODBUSRESP</Button>
+<Button size="xs" disabled>$MODBUSRESP$</Button>
 {/if}
 </li>
 
@@ -2975,12 +3017,15 @@
  <td class= "pl-4 pt-4">
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataType}>
 <option disabled="" value="none">Choose Type ...</option>
-
 <option value={1}>Boolean</option>
-<option value={2}>Unsigned Short</option>
-<option value={3}>Signed Short</option>
-<option value={4}>Unsigned Integer</option>
-<option value={5}>Signed Integer</option>
+<option value={10}>UInt8</option>
+<option value={11}>Int8</option>
+<option value={2}>UInt16</option>
+<option value={3}>Int16</option>
+<option value={4}>UInt32</option>
+<option value={5}>Int32</option>
+<option value={8}>UInt64</option>
+<option value={9}>Int64</option>
 <option value={6}>Float</option>
 <option value={7}>Double</option>
 </select>
@@ -3030,51 +3075,51 @@
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
-    <Button size="xs" on:click={CMbtn1}>TIME</Button>
+    <Button size="xs" on:click={CMbtn1}>$TIME$</Button>
 {:else}
-    <Button size="xs" disabled>TIME</Button>
+    <Button size="xs" disabled>$TIME$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CMbtn2}>ARRAY</Button>
+<Button size="xs" on:click={CMbtn2}>$ARRAY$</Button>
 {:else}
-<Button size="xs" disabled>ARRAY</Button>
+<Button size="xs" disabled>$ARRAY$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CMbtn3}>NAME_RAWREQUEST</Button>
+<Button size="xs" on:click={CMbtn3}>$&lt;tag&gt;_RAWREQUEST$</Button>
 {:else}
-<Button size="xs" disabled>NAME_RAWREQUEST</Button>
+<Button size="xs" disabled>$&lt;tag&gt;_RAWREQUEST$</Button>
 {/if}
 </li>
 
 <li class="pt-4">
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CMbtn4}>NAME_RAWREPLY</Button>
+<Button size="xs" on:click={CMbtn4}>$&lt;tag&gt;_RAWREPLY$</Button>
 {:else}
-<Button size="xs" disabled>NAME_RAWREPLY</Button>
+<Button size="xs" disabled>$&lt;tag&gt;_RAWREPLY$</Button>
 {/if}
 </li>
 
 
 <li class='pt-4'>
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CMbtn5}>MODBUSREQ</Button>
+<Button size="xs" on:click={CMbtn5}>$MODBUSREQ$</Button>
 {:else}
-<Button size="xs" disabled>MODBUSREQ</Button>
+<Button size="xs" disabled>$MODBUSREQ$</Button>
 {/if}
 </li>
 
 
 <li class='pt-4'>
 {#if changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CMbtn6}>MODBUSRESP</Button>
+<Button size="xs" on:click={CMbtn6}>$MODBUSRESP$</Button>
 {:else}
-<Button size="xs" disabled>MODBUSRESP</Button>
+<Button size="xs" disabled>$MODBUSRESP$</Button>
 {/if}
 </li>
 

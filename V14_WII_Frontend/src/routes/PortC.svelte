@@ -760,8 +760,9 @@
 
 </script>
 <Tabs style="underline">
-  <TabItem open title="LAN">
 
+{#if 0}
+  <TabItem open title="LAN">
 
 
  <Table shadow striped={true} tableNoWFull={true}>
@@ -863,7 +864,9 @@
 
   </TabItem>
 
-  <TabItem title="COM">
+{/if}  
+
+  <TabItem open title="COM">
 
 
 <Accordion>

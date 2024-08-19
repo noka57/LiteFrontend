@@ -5481,18 +5481,25 @@
 {#if TriggerModbus.dataType==1}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
 {:else if TriggerModbus.dataType ==2}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Short</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt16</td>
 {:else if TriggerModbus.dataType ==3}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed
-Short</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int16</td>
 {:else if TriggerModbus.dataType ==4}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Integer</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt32</td>
 {:else if TriggerModbus.dataType ==5}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Integer</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int32</td>
 {:else if TriggerModbus.dataType ==6}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
 {:else if TriggerModbus.dataType ==7}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
+{:else if TriggerModbus.dataType ==8}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt64</td>
+{:else if TriggerModbus.dataType ==9}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int64</td>
+{:else if TriggerModbus.dataType ==10}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt8</td>
+{:else if TriggerModbus.dataType ==11}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int8</td>
 {:else}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
 
@@ -5550,18 +5557,25 @@ Short</td>
 {#if TriggerModbus.dataType==1}
 <TableBodyCell class="w-18">Boolean</TableBodyCell>
 {:else if TriggerModbus.dataType ==2}
-<TableBodyCell class="w-18">Unsigned Short</TableBodyCell>
+<TableBodyCell class="w-18">UInt16</TableBodyCell>
 {:else if TriggerModbus.dataType ==3}
-<TableBodyCell class="w-18">Signed
-Short</TableBodyCell>
+<TableBodyCell class="w-18">Int16</TableBodyCell>
 {:else if TriggerModbus.dataType ==4}
-<TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
+<TableBodyCell class="w-18">UInt32</TableBodyCell>
 {:else if TriggerModbus.dataType ==5}
-<TableBodyCell class="w-18">Signed Integer</TableBodyCell>
+<TableBodyCell class="w-18">Int32</TableBodyCell>
 {:else if TriggerModbus.dataType ==6}
 <TableBodyCell class="w-18">Float</TableBodyCell>
 {:else if TriggerModbus.dataType ==7}
 <TableBodyCell class="w-18">Double</TableBodyCell>
+{:else if TriggerModbus.dataType ==8}
+<TableBodyCell class="w-18">UInt64</TableBodyCell>
+{:else if TriggerModbus.dataType ==9}
+<TableBodyCell class="w-18">Int64</TableBodyCell>
+{:else if TriggerModbus.dataType ==10}
+<TableBodyCell class="w-18">UInt8</TableBodyCell>
+{:else if TriggerModbus.dataType ==11}
+<TableBodyCell class="w-18">Int8</TableBodyCell>
 {:else}
 <TableBodyCell class="w-18"></TableBodyCell>
 
@@ -5686,15 +5700,25 @@ Short</TableBodyCell>
 
   </td>
 
-    <td class="pl-4 pt-4"><div>
-  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].dataType} value={1} >Boolean</Radio>
-  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].dataType} value={2} >Unsigned Short</Radio>
-  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].dataType} value={3} >Signed Short</Radio>
-  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].dataType} value={4} >Unsigned Integer</Radio>
-  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].dataType} value={5} >Signed Integer</Radio>
-  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].dataType} value={6} >Float</Radio>
-  <Radio class="pb-2" bind:group={NewTriggerModbus[new_trigger_modbus_index].dataType} value={7} >Double</Radio>
-</div></td>
+    <td class="pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewTriggerModbus[new_trigger_modbus_index].dataType}>
+<option disabled="" value="none">Choose Type ...</option>
+<option value={1}>Boolean</option>
+<option value={10}>UInt8</option>
+<option value={11}>Int8</option>
+<option value={2}>UInt16</option>
+<option value={3}>Int16</option>
+<option value={4}>UInt32</option>
+<option value={5}>Int32</option>
+<option value={8}>UInt64</option>
+<option value={9}>Int64</option>
+<option value={6}>Float</option>
+<option value={7}>Double</option>
+</select>
+
+
+</td>
 </tr>
 
 
@@ -5788,15 +5812,25 @@ Short</TableBodyCell>
 
   </td>
 
-    <td class="pl-4 pt-4"><div>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].dataType} value={1} >Boolean</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].dataType} value={2} >Unsigned Short</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].dataType} value={3} >Signed Short</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].dataType} value={4} >Unsigned Integer</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].dataType} value={5} >Signed Integer</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].dataType} value={6} >Float</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].dataType} value={7} >Double</Radio>
-</div></td>
+    <td class="pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].dataType}>
+<option disabled="" value="none">Choose Type ...</option>
+<option value={1}>Boolean</option>
+<option value={10}>UInt8</option>
+<option value={11}>Int8</option>
+<option value={2}>UInt16</option>
+<option value={3}>Int16</option>
+<option value={4}>UInt32</option>
+<option value={5}>Int32</option>
+<option value={8}>UInt64</option>
+<option value={9}>Int64</option>
+<option value={6}>Float</option>
+<option value={7}>Double</option>
+</select>
+
+
+</td>
 </tr>
 
 
@@ -8718,18 +8752,25 @@ on:click={handleClickMV} on:keydown={() => {}}>
 {#if Modbus.dataType==1}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
 {:else if Modbus.dataType ==2}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Short</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt16</td>
 {:else if Modbus.dataType ==3}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed
-Short</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int16</td>
 {:else if Modbus.dataType ==4}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Unsigned Integer</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt32</td>
 {:else if Modbus.dataType ==5}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Signed Integer</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int32</td>
 {:else if Modbus.dataType ==6}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
 {:else if Modbus.dataType ==7}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
+{:else if Modbus.dataType ==8}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt64</td>
+{:else if Modbus.dataType ==9}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int64</td>
+{:else if Modbus.dataType ==10}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt8</td>
+{:else if Modbus.dataType ==11}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int8</td>
 {:else}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
 
@@ -8771,18 +8812,25 @@ Short</td>
 {#if Modbus.dataType==1}
 <TableBodyCell class="w-18">Boolean</TableBodyCell>
 {:else if Modbus.dataType ==2}
-<TableBodyCell class="w-18">Unsigned Short</TableBodyCell>
+<TableBodyCell class="w-18">UInt16</TableBodyCell>
 {:else if Modbus.dataType ==3}
-<TableBodyCell class="w-18">Signed
-Short</TableBodyCell>
+<TableBodyCell class="w-18">Int16</TableBodyCell>
 {:else if Modbus.dataType ==4}
-<TableBodyCell class="w-18">Unsigned Integer</TableBodyCell>
+<TableBodyCell class="w-18">UInt32</TableBodyCell>
 {:else if Modbus.dataType ==5}
-<TableBodyCell class="w-18">Signed Integer</TableBodyCell>
+<TableBodyCell class="w-18">Int32</TableBodyCell>
 {:else if Modbus.dataType ==6}
 <TableBodyCell class="w-18">Float</TableBodyCell>
 {:else if Modbus.dataType ==7}
 <TableBodyCell class="w-18">Double</TableBodyCell>
+{:else if Modbus.dataType ==8}
+<TableBodyCell class="w-18">UInt64</TableBodyCell>
+{:else if Modbus.dataType ==9}
+<TableBodyCell class="w-18">Int64</TableBodyCell>
+{:else if Modbus.dataType ==10}
+<TableBodyCell class="w-18">UInt8</TableBodyCell>
+{:else if Modbus.dataType ==11}
+<TableBodyCell class="w-18">Int8</TableBodyCell>
 {:else}
 <TableBodyCell class="w-18"></TableBodyCell>
 
@@ -8902,15 +8950,24 @@ Short</TableBodyCell>
 
   </td>
 
-    <td class="pl-4 pt-4" colspan=""><div>
-  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].dataType} value={1} >Boolean</Radio>
-  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].dataType} value={2} >Unsigned Short</Radio>
-  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].dataType} value={3} >Signed Short</Radio>
-  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].dataType} value={4} >Unsigned Integer</Radio>
-  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].dataType} value={5} >Signed Integer</Radio>
-  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].dataType} value={6} >Float</Radio>
-  <Radio class="pb-2" bind:group={NewActionModbus[new_action_modbus_index].dataType} value={7} >Double</Radio>
-</div></td>
+    <td class="pl-4 pt-4" colspan="">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewActionModbus[new_action_modbus_index].dataType}>
+<option disabled="" value="none">Choose Type ...</option>
+<option value={1}>Boolean</option>
+<option value={10}>UInt8</option>
+<option value={11}>Int8</option>
+<option value={2}>UInt16</option>
+<option value={3}>Int16</option>
+<option value={4}>UInt32</option>
+<option value={5}>Int32</option>
+<option value={8}>UInt64</option>
+<option value={9}>Int64</option>
+<option value={6}>Float</option>
+<option value={7}>Double</option>
+</select>
+
+</td>
 </tr>
 
 
@@ -8986,15 +9043,24 @@ Short</TableBodyCell>
 
   </td>
 
-    <td class="pl-4 pt-4" colspan=""><div>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].dataType} value={1} >Boolean</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].dataType} value={2} >Unsigned Short</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].dataType} value={3} >Signed Short</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].dataType} value={4} >Unsigned Integer</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].dataType} value={5} >Signed Integer</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].dataType} value={6} >Float</Radio>
-  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].dataType} value={7} >Double</Radio>
-</div></td>
+    <td class="pl-4 pt-4" colspan="">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].dataType}>
+<option disabled="" value="none">Choose Type ...</option>
+<option value={1}>Boolean</option>
+<option value={10}>UInt8</option>
+<option value={11}>Int8</option>
+<option value={2}>UInt16</option>
+<option value={3}>Int16</option>
+<option value={4}>UInt32</option>
+<option value={5}>Int32</option>
+<option value={8}>UInt64</option>
+<option value={9}>Int64</option>
+<option value={6}>Float</option>
+<option value={7}>Double</option>
+</select>
+
+</td>
 </tr>
 
 

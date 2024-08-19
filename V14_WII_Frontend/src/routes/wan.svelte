@@ -1113,9 +1113,6 @@
       </TableBodyRow>
 
 
-
-
-
       <TableBodyRow>
       <TableBodyCell>Connect State</TableBodyCell>
       <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.connectState} {/if}</TableBodyCell>
@@ -1147,6 +1144,37 @@
       </TableBodyRow>
 
 
+      <TableBodyRow>
+      <TableBodyCell>IMSI</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.imsi} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow>
+      <TableBodyCell>MCC</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.mcc} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow>
+      <TableBodyCell>MNC</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.mnc} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow>
+      <TableBodyCell>CellID</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.cellId} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow>
+      <TableBodyCell>PCI</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.pcid} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow>
+      <TableBodyCell>TAC</TableBodyCell>
+      <TableBodyCell>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.tac} {/if}</TableBodyCell>
+      </TableBodyRow>
 
 
 
@@ -1248,6 +1276,36 @@
       <TableBodyCell class="text-right" colspan="2">Modem Firmware Version</TableBodyCell>
       <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.modemFwVer} {/if}</TableBodyCell>
       </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="2">MCC</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.mcc} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="2">MNC</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.mnc} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="2">CellID</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.cellId} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="2">PCI</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.pcid} {/if}</TableBodyCell>
+      </TableBodyRow>
+
+      <TableBodyRow {trClass}>
+      <TableBodyCell class="text-right" colspan="2">TAC</TableBodyCell>
+      <TableBodyCell class="text-left" colspan="3" {tdClass}>{#if getdataAlready}{lastest_readable_data.config.networking_wan_cwan[0].generalStatus.tac} {/if}</TableBodyCell>
+      </TableBodyRow>
+
 
 {/if}
 

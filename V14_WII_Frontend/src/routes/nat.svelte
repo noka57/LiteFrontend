@@ -5,7 +5,7 @@
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
   import {natConfig, ChangedNATConfig, NAT_LoopBack_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_Dmz_ConfigChangedLog,
-  ChangedWANConfig, wanConfig,ChangedOpenVPNConfig, openvpnConfig} from "./configG.js"
+  ChangedWANConfig, wanConfig,ChangedOpenVPNConfig, openvpnConfig,ipsecConfig,ChangedIPsecConfig} from "./configG.js"
 
    let formModalPFW = false;
    let newformModalPFW=false;
@@ -41,6 +41,18 @@
     let saved_changed_openvpn_data="";
     let wan_data="";
     let saved_changed_wan_data="";
+
+
+    let ipsec_data="";
+    let saved_changed_ipsec_data ="";
+
+    ipsecConfig.subscribe(val => {
+      ipsec_data = val;
+    });
+
+    ChangedIPsecConfig.subscribe(val => {
+      saved_changed_ipsec_data = val;
+    });
 
     openvpnConfig.subscribe(val => {
       openvpn_data = val;
@@ -308,11 +320,15 @@
       "delete": false,
       "incomingIf": 0,
       "incomingTun":"",
-      "incomingTunAliasName":"",      
+      "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
       "incomingSrcIp": 0,
       "incomingSrcIpUserDefined":"",
       "forwardingIf":0,
       "forwardingTun":"",
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
       "redirectIp": 0,
       "redirectIpUserDefined":"",
       "protocol": 0, 
@@ -364,203 +380,15 @@
       "delete": false,
       "incomingIf": 0,
       "incomingTun":"",
-      "incomingTunAliasName":"",      
+      "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
       "incomingSrcIp": 0,
       "incomingSrcIpUserDefined":"",
       "forwardingIf":0,
       "forwardingTun":"",
-      "forwardingTunAliasName":"",
-      "redirectIp": 0,
-      "redirectIpUserDefined":"",
-      "protocol": 0, 
-      "incomingDstPort": 0, 
-      "incomingDstPortRange": {
-        "start": 22222, 
-        "end": 22225
-      },
-      "redirectPort": 0, 
-      "redirectPortRange": {
-        "start": 22222, 
-        "end": 22225
-      }
-    },{
-      "enable": false, 
-      "delete": false,
-      "incomingIf": 0,
-      "incomingTun":"",
-      "incomingSrcIp": 0,
-      "incomingSrcIpUserDefined":"",
-      "forwardingIf":0,
-      "forwardingTun":"",
-      "forwardingTunAliasName":"",      
-      "redirectIp": 0,
-      "redirectIpUserDefined":"",
-      "protocol": 0, 
-      "incomingDstPort": 0, 
-      "incomingDstPortRange": {
-        "start": 22222, 
-        "end": 22225
-      },
-      "redirectPort": 0, 
-      "redirectPortRange": {
-        "start": 22222, 
-        "end": 22225
-      }
-    },{
-      "enable": false, 
-      "delete": false,
-      "incomingIf": 0,
-      "incomingTun":"",
-      "incomingTunAliasName":"",      
-      "incomingSrcIp": 0,
-      "incomingSrcIpUserDefined":"",
-      "forwardingIf":0,
-      "forwardingTun":"",
-      "forwardingTunAliasName":"",      
-      "redirectIp": 0,
-      "redirectIpUserDefined":"",
-      "protocol": 0, 
-      "incomingDstPort": 0, 
-      "incomingDstPortRange": {
-        "start": 22222, 
-        "end": 22225
-      },
-      "redirectPort": 0, 
-      "redirectPortRange": {
-        "start": 22222, 
-        "end": 22225
-      }
-    },{
-      "enable": false, 
-      "delete": false,
-      "incomingIf": 0,
-      "incomingTun":"",
-      "incomingTunAliasName":"",      
-      "incomingSrcIp": 0,
-      "incomingSrcIpUserDefined":"",
-      "forwardingIf":0,
-      "forwardingTun":"",
-      "forwardingTunAliasName":"",      
-      "redirectIp": 0,
-      "redirectIpUserDefined":"",
-      "protocol": 0, 
-      "incomingDstPort": 0, 
-      "incomingDstPortRange": {
-        "start": 22222, 
-        "end": 22225
-      },
-      "redirectPort": 0, 
-      "redirectPortRange": {
-        "start": 22222, 
-        "end": 22225
-      }
-    },{
-      "enable": false, 
-      "delete": false,
-      "incomingIf": 0,
-      "incomingTun":"",
-      "incomingTunAliasName":"",      
-      "incomingSrcIp": 0,
-      "incomingSrcIpUserDefined":"",
-      "forwardingIf":0,
-      "forwardingTun":"",
-      "forwardingTunAliasName":"",      
-      "redirectIp": 0,
-      "redirectIpUserDefined":"",
-      "protocol": 0, 
-      "incomingDstPort": 0, 
-      "incomingDstPortRange": {
-        "start": 22222, 
-        "end": 22225
-      },
-      "redirectPort": 0, 
-      "redirectPortRange": {
-        "start": 22222, 
-        "end": 22225
-      }
-    },{
-      "enable": false, 
-      "delete": false,
-      "incomingIf": 0,
-      "incomingTun":"",
-      "incomingTunAliasName":"",      
-      "incomingSrcIp": 0,
-      "incomingSrcIpUserDefined":"",
-      "forwardingIf":0,
-      "forwardingTun":"",
-      "forwardingTunAliasName":"",      
-      "redirectIp": 0,
-      "redirectIpUserDefined":"",
-      "protocol": 0, 
-      "incomingDstPort": 0, 
-      "incomingDstPortRange": {
-        "start": 22222, 
-        "end": 22225
-      },
-      "redirectPort": 0, 
-      "redirectPortRange": {
-        "start": 22222, 
-        "end": 22225
-      }
-    },{
-      "enable": false, 
-      "delete": false,
-      "incomingIf": 0,
-      "incomingTun":"",
-      "incomingTunAliasName":"",      
-      "incomingSrcIp": 0,
-      "incomingSrcIpUserDefined":"",
-      "forwardingIf":0,
-      "forwardingTun":"",
-      "forwardingTunAliasName":"",      
-      "redirectIp": 0,
-      "redirectIpUserDefined":"",
-      "protocol": 0, 
-      "incomingDstPort": 0, 
-      "incomingDstPortRange": {
-        "start": 22222, 
-        "end": 22225
-      },
-      "redirectPort": 0, 
-      "redirectPortRange": {
-        "start": 22222, 
-        "end": 22225
-      }
-    },{
-      "enable": false, 
-      "delete": false,
-      "incomingIf": 0,
-      "incomingTun":"",
-      "incomingTunAliasName":"",      
-      "incomingSrcIp": 0,
-      "incomingSrcIpUserDefined":"",
-      "forwardingIf":0,
-      "forwardingTun":"",
-      "forwardingTunAliasName":"",      
-      "redirectIp": 0,
-      "redirectIpUserDefined":"",
-      "protocol": 0, 
-      "incomingDstPort": 0, 
-      "incomingDstPortRange": {
-        "start": 22222, 
-        "end": 22225
-      },
-      "redirectPort": 0, 
-      "redirectPortRange": {
-        "start": 22222, 
-        "end": 22225
-      }
-    },{
-      "enable": false, 
-      "delete": false,
-      "incomingIf": 0,
-      "incomingTun":"",
-      "incomingTunAliasName":"",      
-      "incomingSrcIp": 0,
-      "incomingSrcIpUserDefined":"",
-      "forwardingIf":0,
-      "forwardingTun":"",
-      "forwardingTunAliasName":"",      
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
       "redirectIp": 0,
       "redirectIpUserDefined":"",
       "protocol": 0, 
@@ -580,11 +408,230 @@
       "incomingIf": 0,
       "incomingTun":"",
       "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
       "incomingSrcIp": 0,
       "incomingSrcIpUserDefined":"",
       "forwardingIf":0,
       "forwardingTun":"",
-      "forwardingTunAliasName":"",      
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
+      },
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
+      }
+    },{
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
+      },
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
+      }
+    },{
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
+      },
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
+      }
+    },{
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
+      },
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
+      }
+    },{
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
+      },
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
+      }
+    },{
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
+      },
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
+      }
+    },{
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
+      },
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
+      }
+    },{
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
+      "redirectIp": 0,
+      "redirectIpUserDefined":"",
+      "protocol": 0, 
+      "incomingDstPort": 0, 
+      "incomingDstPortRange": {
+        "start": 22222, 
+        "end": 22225
+      },
+      "redirectPort": 0, 
+      "redirectPortRange": {
+        "start": 22222, 
+        "end": 22225
+      }
+    },{
+      "enable": false, 
+      "delete": false,
+      "incomingIf": 0,
+      "incomingTun":"",
+      "incomingTunAliasName":"",
+      "incomingIPsec":"",
+      "incomingIPsecAliasName":"",      
+      "incomingSrcIp": 0,
+      "incomingSrcIpUserDefined":"",
+      "forwardingIf":0,
+      "forwardingTun":"",
+      "forwardingIPsec":"",
+      "forwardingIPsecAliasName":"",      
       "redirectIp": 0,
       "redirectIpUserDefined":"",
       "protocol": 0, 
@@ -635,11 +682,38 @@
       }
 
 
+      if (saved_changed_ipsec_data !="" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn==1)
+      { 
+        if (saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==0)
+        {
+          newPFW_Item[index].incomingIPsec="IPsecVPN0";
+          newPFW_Item[index].incomingIPsecAliasName="Responder"; 
+          newPFW_Item[index].forwardingIPsecAliasName="Responder";
+          newPFW_Item[index].forwardingIPsec="IPsecVPN0"; 
+        }
+        else if (saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==1)
+        {
+          newPFW_Item[index].incomingIPsec="";
+          newPFW_Item[index].incomingIPsecAliasName=""; 
+          newPFW_Item[index].forwardingIPsecAliasName="";
+          newPFW_Item[index].forwardingIPsec="";  
+        }
+      }
+      else if (saved_changed_ipsec_data !="")
+      {
+        newPFW_Item[index].incomingIPsec="";
+        newPFW_Item[index].incomingIPsecAliasName=""; 
+        newPFW_Item[index].forwardingIPsecAliasName="";
+        newPFW_Item[index].forwardingIPsec="";      
+      }
+
+
      
       newPFW_Item[index].incomingSrcIp=0;
       newPFW_Item[index].incomingSrcIpUserDefined="";
       newPFW_Item[index].forwardingIf=0;
       newPFW_Item[index].forwardingTun="";
+      newPFW_Item[index].forwardingIPSec="";
       newPFW_Item[index].redirectIp=1;
       newPFW_Item[index].redirectIpUserDefined=""; 
       newPFW_Item[index].protocol=3;
@@ -722,7 +796,16 @@
           newPFW_Item[new_pfw_index].redirectIp=0;
           newPFW_Item[new_pfw_index].redirectPort=2;
         }
-        else
+        else if (saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn==1)
+        {
+          newPFW_Item[new_pfw_index].forwardingIf=2;
+          newPFW_Item[new_pfw_index].incomingSrcIp=0;
+          newPFW_Item[new_pfw_index].protocol=0;
+          newPFW_Item[new_pfw_index].incomingDstPort=2;
+          newPFW_Item[new_pfw_index].redirectIp=0;
+          newPFW_Item[new_pfw_index].redirectPort=2;
+        }
+        else 
         {
           newPFW_Item[new_pfw_index].forwardingIf=-1;
           newPFW_Item[new_pfw_index].incomingSrcIp=0;
@@ -736,6 +819,15 @@
         newPFW_Item[new_pfw_index].incomingDstPort=2;
         newPFW_Item[new_pfw_index].redirectIp=0;
         newPFW_Item[new_pfw_index].redirectPort=2;
+     }
+     else if (newPFW_Item[new_pfw_index].incomingIf==4)
+     {
+        newPFW_Item[new_pfw_index].protocol=0;
+        newPFW_Item[new_pfw_index].forwardingIf=0;
+        newPFW_Item[new_pfw_index].incomingSrcIp=0;
+        newPFW_Item[new_pfw_index].incomingDstPort=2;
+        newPFW_Item[new_pfw_index].redirectIp=0;
+        newPFW_Item[new_pfw_index].redirectPort=2;     
      }
 
      console.log("incomingTunAliasName:" + newPFW_Item[new_pfw_index].incomingTunAliasName);
@@ -757,6 +849,11 @@
           changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf=1;
           changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp=0;
         }
+        else if (saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn==1)
+        {
+          changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf=2;
+          changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp=0;
+        }
         else
         {
           changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf=-1;
@@ -767,6 +864,10 @@
      {
         changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf=0;
      }
+     else if (changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf==4)
+     {
+        changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf=0;
+     }     
 
      console.log("incomingTunAliasName:" + changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingTunAliasName);
 
@@ -797,6 +898,28 @@
 
          }
       }
+      else if (changed_nat_data.config.networking_port_forwarding.list[index].forwardingIf ==2)
+      {
+        if (saved_changed_ipsec_data !="" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn==1)
+        { 
+          if (saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==0)
+          {
+            changed_nat_data.config.networking_port_forwarding.list[index].incomingIPsec="IPsecVPN0";
+          }
+          else if(saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==1)
+          {
+            for (let i=0; i < saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
+            {
+              if (saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name == changed_nat_data.config.networking_port_forwarding.list[index].forwardingIPsecAliasName)
+              {
+                changed_nat_data.config.networking_port_forwarding.list[index].forwardingIPsec="IPsecVPN"+i;
+              }
+            }
+          }
+        }
+      }
+
+
 
 
       if (changed_nat_data.config.networking_port_forwarding.list[index].incomingIf ==3)
@@ -817,6 +940,26 @@
 
          }  
       }
+      else if (changed_nat_data.config.networking_port_forwarding.list[index].incomingIf ==4)
+      {
+        if (saved_changed_ipsec_data !="" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn==1)
+        { 
+          if (saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==0)
+          {
+            changed_nat_data.config.networking_port_forwarding.list[index].incomingIPsec="IPsecVPN0"; 
+          }
+          else if(saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==1)
+          {
+            for (let i=0; i < saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
+            {
+              if (saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name == changed_nat_data.config.networking_port_forwarding.list[index].incomingIPsecAliasName)
+              {
+                changed_nat_data.config.networking_port_forwarding.list[index].incomingIPsec="IPsecVPN"+i;
+              }
+            }
+          }
+        }
+      }
 
    }
 
@@ -829,7 +972,9 @@
       changed_nat_data.config.networking_port_forwarding.list[index].delete= BackupPFWItem.delete;
       changed_nat_data.config.networking_port_forwarding.list[index].incomingIf= BackupPFWItem.incomingIf;
       changed_nat_data.config.networking_port_forwarding.list[index].incomingTun= BackupPFWItem.incomingTun; 
-      changed_nat_data.config.networking_port_forwarding.list[index].incomingTunAliasName= BackupPFWItem.incomingTunAliasName;         
+      changed_nat_data.config.networking_port_forwarding.list[index].incomingTunAliasName= BackupPFWItem.incomingTunAliasName;
+      changed_nat_data.config.networking_port_forwarding.list[index].incomingIPsec= BackupPFWItem.incomingIPsec; 
+      changed_nat_data.config.networking_port_forwarding.list[index].incomingIPsecAliasName= BackupPFWItem.incomingIPsecAliasName;                  
       changed_nat_data.config.networking_port_forwarding.list[index].incomingSrcIp= BackupPFWItem.incomingSrcIp;
       changed_nat_data.config.networking_port_forwarding.list[index].incomingSrcIpUserDefined= BackupPFWItem.incomingSrcIpUserDefined
       ;
@@ -838,6 +983,8 @@
       changed_nat_data.config.networking_port_forwarding.list[index].forwardingTun= BackupPFWItem.forwardingTun;
       changed_nat_data.config.networking_port_forwarding.list[index].forwardingTunAliasName= BackupPFWItem.forwardingTunAliasName;
 
+      changed_nat_data.config.networking_port_forwarding.list[index].forwardingIPsec= BackupPFWItem.forwardingIPsec;
+      changed_nat_data.config.networking_port_forwarding.list[index].forwardingIPsecAliasName= BackupPFWItem.forwardingIPsecAliasName;
 
       changed_nat_data.config.networking_port_forwarding.list[index].redirectIp= BackupPFWItem.redirectIp;
       changed_nat_data.config.networking_port_forwarding.list[index].redirectIpUserDefined= BackupPFWItem.redirectIpUserDefined;
@@ -877,8 +1024,30 @@
                 newPFW_Item[index].forwardingTun="openvpn"+i;
               }
             }
-
          }
+      }
+      else if (newPFW_Item[index].forwardingIf ==2)
+      {
+        if (saved_changed_ipsec_data !="" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn==1)
+        { 
+          if (saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==0)
+          {
+            newPFW_Item[index].incomingIPsec="IPsecVPN0";
+            newPFW_Item[index].incomingIPsecAliasName="Responder"; 
+            newPFW_Item[index].forwardingIPsecAliasName="Responder";
+            newPFW_Item[index].forwardingIPsec="IPsecVPN0"; 
+          }
+          else if(saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==1)
+          {
+            for (let i=0; i < saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
+            {
+              if (saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name == newPFW_Item[index].forwardingIPsecAliasName)
+              {
+                newPFW_Item[index].forwardingIPsec="IPsecVPN"+i;
+              }
+            }
+          }
+        }
       }
 
 
@@ -900,6 +1069,30 @@
 
          }  
       }
+      else if (newPFW_Item[index].incomingIf ==4)
+      {
+        if (saved_changed_ipsec_data !="" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn==1)
+        { 
+          if (saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==0)
+          {
+            newPFW_Item[index].incomingIPsec="IPsecVPN0";
+            newPFW_Item[index].incomingIPsecAliasName="Responder"; 
+            newPFW_Item[index].forwardingIPsecAliasName="Responder";
+            newPFW_Item[index].forwardingIPsec="IPsecVPN0"; 
+          }
+          else if(saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==1)
+          {
+            for (let i=0; i < saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn.length;i++)
+            {
+              if (saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].name == newPFW_Item[index].incomingIPsecAliasName)
+              {
+                newPFW_Item[index].incomingIPsec="IPsecVPN"+i;
+              }
+            }
+          }
+        }
+      }
+
 
       changed_nat_data.config.networking_port_forwarding.list=[...changed_nat_data.config.networking_port_forwarding.list,newPFW_Item[index]];
    }
@@ -945,7 +1138,7 @@
 
 
 
-  async function getOpenVPNData () {
+  async function getOpenVPNData() {
     const res = await fetch(window.location.origin+"/getOPENvpndata", {
       method: 'POST',
       body: sessionBinary
@@ -963,6 +1156,25 @@
 
     }
   }
+
+  async function getIPsecData() {
+    const res = await fetch(window.location.origin+"/getIPsecdata", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      ipsec_data =await res.json();
+      console.log(ipsec_data);
+      ipsecConfig.set(ipsec_data);
+
+
+      saved_changed_ipsec_data= JSON.parse(JSON.stringify(ipsec_data));
+      ChangedIPsecConfig.set(saved_changed_ipsec_data);
+    }
+  }
+
 
 
 
@@ -994,6 +1206,15 @@
         else
         {
           console.log("openvpn data already");
+        }
+
+        if (saved_changed_ipsec_data=="")
+        {
+          getIPsecData();
+        }
+        else
+        {
+          console.log("ipsec data already");
         }
 
     }
@@ -1043,6 +1264,16 @@
       else
       {
         console.log("openvpn data already");
+      }
+
+
+      if (saved_changed_ipsec_data=="")
+      {
+        getIPsecData();
+      }
+      else
+      {
+        console.log("ipsec data already");
       }
 
     }
@@ -1157,7 +1388,8 @@
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Cellular WAN</td>
 {:else if PFW.incomingIf==3}
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">OpenVPN</td>
-
+{:else if PFW.incomingIf==4}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">IPsec</td>
 
 {/if}
 
@@ -1167,6 +1399,8 @@
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">LAN</td>
 {:else if PFW.forwardingIf==1}
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">OpenVPN</td>
+{:else if PFW.forwardingIf==2}
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">IPsec</td>
 
 {/if}
 
@@ -1244,6 +1478,11 @@
 {:else if PFW.incomingIf==3}
 
       <TableBodyCell class="w-10">OpenVPN {#if PFW.incomingSrcIp==1}({PFW.incomingSrcIpUserDefined}){/if}</TableBodyCell>
+
+{:else if PFW.incomingIf==4}
+
+      <TableBodyCell class="w-10">IPsec {#if PFW.incomingSrcIp==1}({PFW.incomingSrcIpUserDefined}){/if}</TableBodyCell>
+   
 {/if}
 
 
@@ -1252,6 +1491,8 @@
       <TableBodyCell class="w-10">LAN {#if PFW.redirectIp==1}({PFW.redirectIpUserDefined}){/if}</TableBodyCell>
 {:else if PFW.forwardingIf==1}
       <TableBodyCell class="w-10">OpenVPN {#if PFW.redirectIp==1}({PFW.redirectIpUserDefined}){/if}</TableBodyCell>
+{:else if PFW.forwardingIf==2}
+      <TableBodyCell class="w-10">IPsec {#if PFW.redirectIp==1}({PFW.redirectIpUserDefined}){/if}</TableBodyCell>      
 {/if}
 
 
@@ -1393,9 +1634,34 @@
 
 {/if}
 
+{/if}
+
+{#if saved_changed_ipsec_data !="" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn==1}
+
+{#if saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==0}
+  <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={4} on:change={NewIncomingIfChanged}>IPsec: {newPFW_Item[new_pfw_index].incomingIPsecAliasName}</Radio>
+{:else if saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==1}
+
+<Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={4} on:change={NewIncomingIfChanged}>IPsec: </Radio>
+
+{#if newPFW_Item[new_pfw_index].incomingIf ==4}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={newPFW_Item[new_pfw_index].incomingIPsecAliasName}>
+<option value="" disabled>Choose ...</option>
+
+{#each saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn as client_conn,index}
+<option value={client_conn.name}>{client_conn.name}</option>
+{/each}
+</select>
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+<option value="" disabled>Choose ...</option>
+</select>
+{/if}
+
 
 {/if}
-  
+
+{/if}
 
 </div></td>
 </tr>
@@ -1417,7 +1683,7 @@
 
 {#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
 {#if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
-{#if newPFW_Item[new_pfw_index].incomingIf ==1 || newPFW_Item[new_pfw_index].incomingIf ==2}
+{#if newPFW_Item[new_pfw_index].incomingIf ==1 || newPFW_Item[new_pfw_index].incomingIf ==2 || newPFW_Item[new_pfw_index].incomingIf ==4}
   <Radio value={1} disabled>OpenVPN :{newPFW_Item[new_pfw_index].forwardingTunAliasName}</Radio>
 
 {:else}
@@ -1442,6 +1708,38 @@
 
 {/if}
 {/if}
+
+
+{#if saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1}  
+{#if saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 0}
+{#if newPFW_Item[new_pfw_index].incomingIf ==1 || newPFW_Item[new_pfw_index].incomingIf ==2 || newPFW_Item[new_pfw_index].incomingIf ==3}
+  <Radio value={1} disabled>IPsec :{newPFW_Item[new_pfw_index].forwardingIPsecAliasName}</Radio>
+
+{:else}
+  <Radio bind:group={newPFW_Item[new_pfw_index].forwardingIf} value={2} >IPsec :{newPFW_Item[new_pfw_index].forwardingIPsecAliasName}</Radio>
+
+{/if}
+{:else if saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 1}
+
+{#if newPFW_Item[new_pfw_index].incomingIf !=0}
+  <Radio value={2} disabled>IPsec :</Radio>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+<option value="" disabled>Choose ...</option>
+</select>
+{:else}
+  <Radio bind:group={newPFW_Item[new_pfw_index].forwardingIf} value={2} >IPsec: </Radio>
+  <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={newPFW_Item[new_pfw_index].forwardingIPsecAliasName}>
+<option value="" disabled>Choose ...</option>
+{#each saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn as client_conn,index}
+<option value={client_conn.name}>{client_conn.name}</option>
+{/each}
+</select>
+{/if}
+
+
+{/if}
+{/if}
+
 </div></td>
 </tr>
 
@@ -1454,13 +1752,19 @@
 
 
 
-{#if newPFW_Item[new_pfw_index].forwardingIf !=-1 && (newPFW_Item[new_pfw_index].incomingIf ==0 || newPFW_Item[new_pfw_index].incomingIf ==3)}     
+{#if newPFW_Item[new_pfw_index].forwardingIf !=-1 && (newPFW_Item[new_pfw_index].incomingIf ==0 || newPFW_Item[new_pfw_index].incomingIf ==3 || newPFW_Item[new_pfw_index].incomingIf ==4)}     
       <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={0}>Any</Radio>
 
 {#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 && newPFW_Item[new_pfw_index].incomingIf ==3}
       <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1}>User Define :</Radio>
+{:else if saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1 &&
+saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 0 && newPFW_Item[new_pfw_index].incomingIf ==4}
+      <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1}>User Define :</Radio>
 {:else if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1 && newPFW_Item[new_pfw_index].incomingIf ==3}
       <Radio value={1} disabled>User Define :</Radio>
+{:else if saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1 &&
+saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 1 && newPFW_Item[new_pfw_index].incomingIf ==4}
+      <Radio value={1} disabled>User Define :</Radio>      
 {:else if newPFW_Item[new_pfw_index].incomingIf ==0}
       <Radio bind:group={newPFW_Item[new_pfw_index].incomingSrcIp} value={1}>User Define :</Radio>
 {/if}
@@ -1583,7 +1887,7 @@
     <Radio bind:group={newPFW_Item[new_pfw_index].redirectIp} value={0} >Any</Radio>
 {/if}
 
-{#if newPFW_Item[new_pfw_index].forwardingIf == 0 && (newPFW_Item[new_pfw_index].incomingIf ==1 || newPFW_Item[new_pfw_index].incomingIf ==2 || newPFW_Item[new_pfw_index].incomingIf ==3)}
+{#if newPFW_Item[new_pfw_index].forwardingIf == 0 && (newPFW_Item[new_pfw_index].incomingIf ==1 || newPFW_Item[new_pfw_index].incomingIf ==2 || newPFW_Item[new_pfw_index].incomingIf ==3 || newPFW_Item[new_pfw_index].incomingIf ==4)}
       <Radio bind:group={newPFW_Item[new_pfw_index].redirectIp} value={1} >User Define :</Radio>
       <input type="text" bind:value={newPFW_Item[new_pfw_index].redirectIpUserDefined} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if newPFW_Item[new_pfw_index].forwardingIf == -1}
@@ -1599,6 +1903,20 @@
 <input type="text" bind:value={newPFW_Item[new_pfw_index].redirectIpUserDefined} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 {:else if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
+
+<Radio value={1} disabled>User Define :</Radio>
+<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+{/if}
+
+{:else if newPFW_Item[new_pfw_index].forwardingIf == 2}
+{#if saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1 &&
+saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 0}
+<Radio bind:group={newPFW_Item[new_pfw_index].redirectIp} value={1} >User Define :</Radio>
+<input type="text" bind:value={newPFW_Item[new_pfw_index].redirectIpUserDefined} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+{:else if saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1 &&
+saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole ==1}
 
 <Radio value={1} disabled>User Define :</Radio>
 <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
@@ -1711,18 +2029,18 @@
   </td>
 
     <td class="pl-5 pt-4" colspan="3"><div class="flex gap-4">
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={0} on:change={ModifyIncomingIfChanged}>LAN</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={0} on:change={NewIncomingIfChanged}>LAN</Radio>
 {#if saved_changed_wan_data != "" && saved_changed_wan_data.config.networking_wan_port_switch==1}  
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={1} on:change={ModifyIncomingIfChanged}>Ethernet WAN</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={1} on:change={NewIncomingIfChanged}>Ethernet WAN</Radio>
 {/if}  
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={2} on:change={ModifyIncomingIfChanged}>Cellular WAN</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={2} on:change={NewIncomingIfChanged}>Cellular WAN</Radio>
 {#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
 
 {#if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={3} on:change={ModifyIncomingIfChanged}>OpenVPN: {changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingTunAliasName}</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={3} on:change={NewIncomingIfChanged}>OpenVPN: {changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingTunAliasName}</Radio>
 
 {:else if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1}
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={3} on:change={ModifyIncomingIfChanged}>OpenVPN: </Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={3} on:change={NewIncomingIfChanged}>OpenVPN: </Radio>
 
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3}
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingTunAliasName}>
@@ -1740,9 +2058,34 @@
 
 {/if}
 
+{/if}
+
+{#if saved_changed_ipsec_data !="" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn==1}
+
+{#if saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==0}
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={4} on:change={NewIncomingIfChanged}>IPsec: {changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIPsecAliasName}</Radio>
+{:else if saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole==1}
+
+<Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={4} on:change={NewIncomingIfChanged}>IPsec: </Radio>
+
+{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==4}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIPsecAliasName}>
+<option value="" disabled>Choose ...</option>
+
+{#each saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn as client_conn,index}
+<option value={client_conn.name}>{client_conn.name}</option>
+{/each}
+</select>
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+<option value="" disabled>Choose ...</option>
+</select>
+{/if}
+
 
 {/if}
-  
+
+{/if}
 
 </div></td>
 </tr>
@@ -1764,7 +2107,7 @@
 
 {#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
 {#if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
-{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==1 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==2}
+{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==1 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==2 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==4}
   <Radio value={1} disabled>OpenVPN :{changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingTunAliasName}</Radio>
 
 {:else}
@@ -1789,6 +2132,38 @@
 
 {/if}
 {/if}
+
+
+{#if saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1}  
+{#if saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 0}
+{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==1 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==2 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3}
+  <Radio value={1} disabled>IPsec :{changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIPsecAliasName}</Radio>
+
+{:else}
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf} value={2} >IPsec :{changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIPsecAliasName}</Radio>
+
+{/if}
+{:else if saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 1}
+
+{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf !=0}
+  <Radio value={2} disabled>IPsec :</Radio>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+<option value="" disabled>Choose ...</option>
+</select>
+{:else}
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf} value={2} >IPsec: </Radio>
+  <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-60" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIPsecAliasName}>
+<option value="" disabled>Choose ...</option>
+{#each saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn as client_conn,index}
+<option value={client_conn.name}>{client_conn.name}</option>
+{/each}
+</select>
+{/if}
+
+
+{/if}
+{/if}
+
 </div></td>
 </tr>
 
@@ -1801,13 +2176,19 @@
 
 
 
-{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf !=-1 && (changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==0 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3)}     
-      <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp} value={0} >Any</Radio>
+{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf !=-1 && (changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==0 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==4)}     
+      <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp} value={0}>Any</Radio>
 
 {#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 && changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3}
       <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp} value={1}>User Define :</Radio>
+{:else if saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1 &&
+saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 0 && changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==4}
+      <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp} value={1}>User Define :</Radio>
 {:else if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn==1 && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 1 && changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3}
       <Radio value={1} disabled>User Define :</Radio>
+{:else if saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1 &&
+saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 1 && changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==4}
+      <Radio value={1} disabled>User Define :</Radio>      
 {:else if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==0}
       <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingSrcIp} value={1}>User Define :</Radio>
 {/if}
@@ -1867,10 +2248,10 @@
   </td>
 
     <td class="pl-5 pt-4" colspan="3"><div class="flex gap-4">
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={0} on:change={ModifyProtocolChanged}>ALL</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={1} on:change={ModifyProtocolChanged}>TCP</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={2} on:change={ModifyProtocolChanged}>UDP</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={3} on:change={ModifyProtocolChanged}>TCP & UDP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={0} on:change={NewProtocolChanged}>ALL</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={1} on:change={NewProtocolChanged}>TCP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={2} on:change={NewProtocolChanged}>UDP</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol} value={3} on:change={NewProtocolChanged}>TCP & UDP</Radio>
 </div></td>
 </tr>
 
@@ -1882,10 +2263,11 @@
   </td>
 
     <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={2} on:chagne={ModifyInDestPortChanged}>Any</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={2} on:change={NewInDestPortChanged}>Any</Radio>
 
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol !=0}
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={0} on:chagne={ModifyInDestPortChanged}>Single Port</Radio>
+
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={0} on:change={NewInDestPortChanged}>Single Port</Radio>
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort==1}
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 {:else}
@@ -1893,7 +2275,7 @@
 {/if}
 
 
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={1} on:chagne={ModifyInDestPortChanged}>Port Range</Radio>
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort} value={1} on:change={NewInDestPortChanged}>Port Range</Radio>
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPort==0}
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 
@@ -1901,9 +2283,8 @@
 {:else}
   <input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingDstPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
-
 {:else}
-  <Radio value={0} disabled>Single Port</Radio>
+ <Radio value={0} disabled>Single Port</Radio>
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
   <Radio value={1} disabled>Port Range</Radio>
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
@@ -1930,7 +2311,7 @@
     <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectIp} value={0} >Any</Radio>
 {/if}
 
-{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf == 0 && (changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==1 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==2 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3)}
+{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf == 0 && (changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==1 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==2 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==3 || changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf ==4)}
       <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectIp} value={1} >User Define :</Radio>
       <input type="text" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectIpUserDefined} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
 {:else if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf == -1}
@@ -1951,6 +2332,22 @@
 <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 
 {/if}
+
+{:else if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].forwardingIf == 2}
+{#if saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1 &&
+saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole == 0}
+<Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectIp} value={1} >User Define :</Radio>
+<input type="text" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectIpUserDefined} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+{:else if saved_changed_ipsec_data != "" && saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecServiceEn == 1 &&
+saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole ==1}
+
+<Radio value={1} disabled>User Define :</Radio>
+<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+{/if}
+
+
 
 {/if}
 
@@ -1977,15 +2374,17 @@
 
   </tr>
 
+
+
  <tr>
   <td><p class="pl-5 pt-4 text-lg font-light text-right">Redirect Port</p>
 
   </td>
 
     <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPort} value={2} >Keep Origin Port</Radio>   
-{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol !=0}
+  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPort} value={2} >Keep Origin Port</Radio>
 
+{#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].protocol !=0}
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPort} value={0} >Single Port</Radio>
 {#if changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPort==1}
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
@@ -2002,8 +2401,6 @@
 {:else}
   <input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPortRange.start} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2">-</p><input type="number" bind:value={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].redirectPortRange.end} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
 {/if}
-
-
 {:else}
   <Radio value={0} disabled>Single Port</Radio>
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
@@ -2011,9 +2408,9 @@
   <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
 {/if}
 
-
 </div></td>
 </tr>
+
 
       <tr>
     <td></td>

@@ -385,7 +385,13 @@ NA
 
 <p class="text-xl font-bold">
 {#if hidden == 0}
-{#if dashboard_data!=""}{parseFloat(dashboard_data.config.dashboard.gpsInfo.lat).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.long).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.alt).toFixed(2)}{/if}
+{#if dashboard_data!=""}
+{#if dashboard_data.config.dashboard.gpsInfo.lat!="--"}
+{parseFloat(dashboard_data.config.dashboard.gpsInfo.lat).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.long).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.alt).toFixed(2)}
+{:else}
+--,--,--
+{/if}
+{/if}
 {/if}
 {#if hidden ==1}
 NA

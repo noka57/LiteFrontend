@@ -51,7 +51,7 @@
   }
 
   let disabledOpenVPNTunnel=[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
-
+  let disabledIPsecTunnel=[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
 
   let RestartIntervalId;
   let RestartReady=0;
@@ -818,6 +818,8 @@ NA
 {/if}
   </p>
 {/if}
+
+
 </div>
 <div class="px-1 pt-1">
 {#if vpn_dashboard.openvpn[1] == 0}
@@ -855,8 +857,54 @@ NA
 
 
 
+{#if vpn_dashboard != ""}
+<div class="flex">
+<div class="px-10">
+{#if vpn_dashboard.ipsec[0] == 0}
+      <p class="text-black text-lg">IPsec Disable</p>
+{/if}
+{#if vpn_dashboard.ipsec[0] == 1}
+  <p class="text-black text-lg">IPsec
+
+{#if vpn_dashboard.ipsec[1] == 0} Responder
+
+{:else if vpn_dashboard.ipsec[1] == 1} Initiator
+
+{/if}
+  </p>
+{/if}
+</div>
+<div class="px-1 pt-1">
+{#if vpn_dashboard.ipsec[1] == 0}
+
+  {#if vpn_dashboard.ipsec[2] == 0}
+    <Badge large color="red">Failed</Badge>
+  {:else if vpn_dashboard.ipsec[2] == 1}
+    <Badge large color="green">Listening</Badge>
+  {/if}
+
+{:else if vpn_dashboard.ipsec[1] == 1}
+  {#each vpn_dashboard.ipsec[2] as ipsecS, index}
+    {#if ipsecS}
+    <Badge large color="green">{index+1}</Badge>
+    {:else}
+    <Badge large color="red">{index+1}</Badge>
+    {/if}
+  {/each}
+
+{#each disabledIPsecTunnel as disabledT, index}
+  {#if index >= vpn_dashboard.ipsec[2].length}
+  <Badge large color="dark">{index+1}</Badge>
+  {/if}
+{/each}
+  {/if}
+</div>
+</div>
+{/if}
+
 
                       </TableBodyCell>
+
         </TableBodyRow>
 
 

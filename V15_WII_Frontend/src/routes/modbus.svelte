@@ -743,6 +743,7 @@
     };
 
     let new_tag_profile="";
+    let modify_tag_profile="";
 
 
     let new_tag=[
@@ -1099,12 +1100,34 @@
         if (new_tag_profile[0]=='T')
         {
             new_tag[new_tag_index].slaveId=-1;
+            new_tag[new_tag_index].pollingRate=1000;
 
         }
         else if(new_tag_profile[0]=='R')
         {
             new_tag[new_tag_index].pollingRate=-1;
+            new_tag[new_tag_index].slaveId=1;
         }
+
+    }
+
+    function ModifyMasterProfileChanged()
+    {
+        if (modify_tag_profile[0]=='T')
+        {
+            changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].slaveId=-1;
+            changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].pollingRate=1000;
+        }
+        else if(modify_tag_profile[0]=='R')
+        {
+            changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].pollingRate=-1;
+            changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].slaveId=1;
+        }
+
+    }
+
+    function saveTag()
+    {
 
     }
 
@@ -1118,7 +1141,7 @@
 
     function extractTCPNumber(str) 
     {
-        const match = str.match(/^R_(\d+)$/);
+        const match = str.match(/^T_(\d+)$/);
         return match ? parseInt(match[1], 10) : null;
     }
 
@@ -1143,6 +1166,108 @@
 
         new_tag_modal=false;
     }
+
+    let modify_tag_modal=false;
+    let modify_tag_index;
+
+    function deleteTag(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].delete=true;
+    }
+
+    function RestoreDeleteTag(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].delete=false;
+    }
+
+
+    function TriggerModifyTag(index)
+    {        
+        backup_tag.enable=changed_modbus_data.config.fieldManagement_modbus_tag[index].enable;
+        backup_tag.delete=changed_modbus_data.config.fieldManagement_modbus_tag[index].delete;        
+        backup_tag.tagName=changed_modbus_data.config.fieldManagement_modbus_tag[index].tagName;
+        backup_tag.masterProfile=changed_modbus_data.config.fieldManagement_modbus_tag[index].masterProfile;
+        backup_tag.slaveId=changed_modbus_data.config.fieldManagement_modbus_tag[index].slaveId;
+        backup_tag.pointType=changed_modbus_data.config.fieldManagement_modbus_tag[index].pointType;
+        backup_tag.address=changed_modbus_data.config.fieldManagement_modbus_tag[index].address;
+        backup_tag.quantity=changed_modbus_data.config.fieldManagement_modbus_tag[index].quantity;
+        backup_tag.byteOrder=changed_modbus_data.config.fieldManagement_modbus_tag[index].byteOrder;
+        backup_tag.dataType=changed_modbus_data.config.fieldManagement_modbus_tag[index].dataType;
+        backup_tag.postprocessingEnable=changed_modbus_data.config.fieldManagement_modbus_tag[index].postprocessingEnable;
+        backup_tag.postprocessingOperator=changed_modbus_data.config.fieldManagement_modbus_tag[index].postprocessingOperator;
+        backup_tag.postprocessingValue=changed_modbus_data.config.fieldManagement_modbus_tag[index].postprocessingValue;
+        backup_tag.responseTimeout=changed_modbus_data.config.fieldManagement_modbus_tag[index].responseTimeout;
+        backup_tag.pollingRate=changed_modbus_data.config.fieldManagement_modbus_tag[index].pollingRate;       
+
+        modify_tag_profile="";
+
+        for (let i=0; i< saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master.length;i++)
+        {
+            if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName == changed_modbus_data.config.fieldManagement_modbus_tag[index].masterProfile)
+            {
+                modify_tag_profile="R_"+i;
+                break;
+            }
+
+        }
+
+        if (modify_tag_profile == "")
+        {
+            for (let i=0; i< saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master.length;i++)
+            {
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName == changed_modbus_data.config.fieldManagement_modbus_tag[index].masterProfile)
+                {
+                    modify_tag_profile="T_"+i;
+                    break;
+                }
+            }        
+        }
+
+        modify_tag_index=index;
+        modify_tag_modal=true;
+    }
+
+    function NoModifyTag(index)
+    {
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].enable=backup_tag.enable;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].delete=backup_tag.delete;       
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].tagName=backup_tag.tagName;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].masterProfile=backup_tag.masterProfile;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].slaveId=backup_tag.slaveId;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].pointType=backup_tag.pointType;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].address=backup_tag.address;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].quantity=backup_tag.quantity;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].byteOrder=backup_tag.byteOrder;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].dataType=backup_tag.dataType;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].postprocessingEnable=backup_tag.postprocessingEnable;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].postprocessingOperator=backup_tag.postprocessingOperator;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].postprocessingValue=backup_tag.postprocessingValue;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].responseTimeout=backup_tag.responseTimeout;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].pollingRate=backup_tag.pollingRate;
+
+
+        modify_tag_modal=false;
+    }
+
+    function ModifyTag()
+    {
+
+        if (modify_tag_profile[0]=='T')
+        {
+            let TCPMasterProfile_index=extractTCPNumber(modify_tag_profile);
+            changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].masterProfile=saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[TCPMasterProfile_index].aliasName;
+        }
+        else if (modify_tag_profile[0] == 'R')
+        {
+            let RTUMasterProfile_index=extractRTUNumber(modify_tag_profile);
+            changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].masterProfile=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[RTUMasterProfile_index].aliasName;
+        }
+
+
+        modify_tag_modal=false;  
+    }
+
+
 
 
     let new_data_model_master_modal=false;
@@ -2417,21 +2542,21 @@
           compareObjects(changed_modbus_data.config.fieldManagement_modbus_rtu.master[i], modbus_data.config.fieldManagement_modbus_rtu.master[i], 9, 1,i+1);
 
 
-            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master.length; j++)
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_tag.length; j++)
             {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName 
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[j].masterProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName 
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName != "")
                 {
 
                     if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].delete)
                     {
-                        changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile= changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName;
+                        changed_modbus_data.config.fieldManagement_modbus_tag[j].masterProfile= changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].aliasName;
                        
                     }
                     else
                     {
-                        changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile="";
+                        changed_modbus_data.config.fieldManagement_modbus_tag[j].masterProfile="";
                     }
 
 
@@ -2782,19 +2907,19 @@
             compareObjects(changed_modbus_data.config.fieldManagement_modbus_tcp.master[i], modbus_data.config.fieldManagement_modbus_tcp.master[i], 7, 1,i+1);
 
 
-            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master.length; j++)
+            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_tag.length; j++)
             {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName 
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[j].masterProfile == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName 
                 &&
                 saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName != "")
                 {
                     if (!changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].delete)
                     {
-                        changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
+                        changed_modbus_data.config.fieldManagement_modbus_tag[j].masterProfile= changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].aliasName;
                     }
                     else
                     {
-                        changed_modbus_data.config.fieldManagement_modbus_data_model.master[j].profile="";
+                        changed_modbus_data.config.fieldManagement_modbus_tag[j].masterProfile="";
                     }    
                     needSaveDataModelMaster=1;
                 }
@@ -5833,9 +5958,10 @@
     <TableHeadCell >Point Type</TableHeadCell>
     <TableHeadCell >Address</TableHeadCell>
     <TableHeadCell >Quantity</TableHeadCell>
-    <TableHeadCell>Date Type</TableHeadCell>
+    <TableHeadCell class="!p-1">Date Type</TableHeadCell>
     <TableHeadCell>Byte Order</TableHeadCell>
     <TableHeadCell>Response Timeout</TableHeadCell>
+    <TableHeadCell>Post Processing</TableHeadCell>
   </TableHead>
 
   <TableBody>
@@ -5845,16 +5971,16 @@
 {#each changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
 {#if TagItem.delete}
 
-
 <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
 
 <td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
-<button >
+<button on:click={()=>RestoreDeleteTag(index)}>
 <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
   <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 </button>
 </td>
+
 
 
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
@@ -5877,13 +6003,110 @@
 
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout"> 
 <input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={TagItem.enable} disabled></td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1 w-4 strikeout"> 
+{index+1}
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-3">{TagItem.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">{TagItem.masterProfile}
+{#if TagItem.slaveId != -1} (Slave ID: {TagItem.slaveId}){/if}
+  </td>
+{#if TagItem.pointType == 0}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">Coil</td>
+{:else if TagItem.pointType == 1}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">Discrete Input</td>
+{:else if TagItem.pointType == 2}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">Input Registers</td>
+{:else if TagItem.pointType == 3}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">Holding Registers</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white"></td>
+{/if}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">{TagItem.address}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">{TagItem.quantity}</td>
+
+
+{#if TagItem.dataType == 1}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">Boolean</td>
+{:else if TagItem.dataType == 2}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">UInt16</td>
+{:else if TagItem.dataType == 3}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">Int16</td>
+{:else if TagItem.dataType == 4}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">UInt32</td>
+{:else if TagItem.dataType == 5}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">Int32</td>
+{:else if TagItem.dataType == 6}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">Float</td>
+{:else if TagItem.dataType == 7}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">Double</td>
+{:else if TagItem.dataType == 8}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">UInt64</td>  
+{:else if TagItem.dataType == 9}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">Int64</td> 
+{:else if TagItem.dataType == 10}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">UInt8</td>  
+{:else if TagItem.dataType == 11}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">Int8</td>  
+{:else if TagItem.dataType == 12}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">ASCII</td>  
+{:else if TagItem.dataType == 13}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">BITMAP</td>  
+{:else if TagItem.dataType == 14}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">STR32</td> 
+{:else if TagItem.dataType == 15}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">String</td>
+{:else if TagItem.dataType == 16}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1">RAW</td>                    
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1"></td>
+{/if}
+
+
+{#if TagItem.byteOrder==0} 
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">Big Endian</td>
+{:else if TagItem.byteOrder==1}   
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">Little Endian</td>
+{:else if TagItem.byteOrder==2}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">Big Endian Byte Swap</td>
+{:else if TagItem.byteOrder==3}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">Little Endian Byte Swap</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white"></td>
+{/if}
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">{TagItem.responseTimeout} ms
+{#if TagItem.pollingRate!=-1} (Interval: {TagItem.pollingRate} ms)
+{/if }
+
+  </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
+{#if TagItem.postprocessingEnable}
+{#if TagItem.postprocessingOperator == 1}+
+{:else if TagItem.postprocessingOperator == 2}-
+{:else if TagItem.postprocessingOperator == 3}*
+{:else if TagItem.postprocessingOperator == 4}/
+{/if}
+{TagItem.postprocessingValue}
+{:else}
+    Disable
+{/if}
+
+      </td>
+
+
+
 </tr>
 
 {:else}
  <TableBodyRow>
    <TableBodyCell class="!p-4 w-10"></TableBodyCell>
   <TableBodyCell class="!p-0 w-10">
-<button >
+<button on:click={()=>TriggerModifyTag(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
@@ -5892,7 +6115,7 @@
 
        </TableBodyCell>
     <TableBodyCell class="!p-0 w-10">
-<button >    
+<button on:click={()=>deleteTag(index)}>    
     <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
   <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
@@ -5924,39 +6147,39 @@
 
 
 {#if TagItem.dataType == 1}
-        <TableBodyCell >Boolean</TableBodyCell>
+        <TableBodyCell class="!p-1">Boolean</TableBodyCell>
 {:else if TagItem.dataType == 2}
-        <TableBodyCell >UInt16</TableBodyCell>
+        <TableBodyCell class="!p-1">UInt16</TableBodyCell>
 {:else if TagItem.dataType == 3}
-        <TableBodyCell >Int16</TableBodyCell>
+        <TableBodyCell class="!p-1">Int16</TableBodyCell>
 {:else if TagItem.dataType == 4}
-      <TableBodyCell >UInt32</TableBodyCell>
+      <TableBodyCell class="!p-1">UInt32</TableBodyCell>
 {:else if TagItem.dataType == 5}
-      <TableBodyCell >Int32</TableBodyCell>
+      <TableBodyCell class="!p-1">Int32</TableBodyCell>
 {:else if TagItem.dataType == 6}
-      <TableBodyCell >Float</TableBodyCell>
+      <TableBodyCell class="!p-1">Float</TableBodyCell>
 {:else if TagItem.dataType == 7}
-      <TableBodyCell >Double</TableBodyCell>
+      <TableBodyCell class="!p-1">Double</TableBodyCell>
 {:else if TagItem.dataType == 8}
-      <TableBodyCell >UInt64</TableBodyCell>  
+      <TableBodyCell class="!p-1">UInt64</TableBodyCell>  
 {:else if TagItem.dataType == 9}
-      <TableBodyCell >Int64</TableBodyCell> 
+      <TableBodyCell class="!p-1">Int64</TableBodyCell> 
 {:else if TagItem.dataType == 10}
-      <TableBodyCell >UInt8</TableBodyCell>  
+      <TableBodyCell class="!p-1">UInt8</TableBodyCell>  
 {:else if TagItem.dataType == 11}
-      <TableBodyCell >Int8</TableBodyCell>  
+      <TableBodyCell class="!p-1">Int8</TableBodyCell>  
 {:else if TagItem.dataType == 12}
-      <TableBodyCell >ASCII</TableBodyCell>  
+      <TableBodyCell class="!p-1">ASCII</TableBodyCell>  
 {:else if TagItem.dataType == 13}
-      <TableBodyCell >BITMAP</TableBodyCell>  
+      <TableBodyCell class="!p-1">BITMAP</TableBodyCell>  
 {:else if TagItem.dataType == 14}
-      <TableBodyCell >STR32</TableBodyCell> 
+      <TableBodyCell class="!p-1">STR32</TableBodyCell> 
 {:else if TagItem.dataType == 15}
-      <TableBodyCell >String</TableBodyCell>
+      <TableBodyCell class="!p-1">String</TableBodyCell>
 {:else if TagItem.dataType == 16}
-      <TableBodyCell >RAW</TableBodyCell>                    
+      <TableBodyCell class="!p-1">RAW</TableBodyCell>                    
 {:else}
-      <TableBodyCell ></TableBodyCell>
+      <TableBodyCell class="!p-1"></TableBodyCell>
 {/if}
 
 
@@ -5965,7 +6188,7 @@
 {:else if TagItem.byteOrder==1}   
         <TableBodyCell >Little Endian</TableBodyCell>
 {:else if TagItem.byteOrder==2}
-    <TableBodyCell c>Big Endian Byte Swap</TableBodyCell>
+    <TableBodyCell >Big Endian Byte Swap</TableBodyCell>
 {:else if TagItem.byteOrder==3}
         <TableBodyCell >Little Endian Byte Swap</TableBodyCell>
 {:else}
@@ -5978,6 +6201,21 @@
 {/if }
 
   </TableBodyCell>
+
+
+      <TableBodyCell>
+{#if TagItem.postprocessingEnable}
+{#if TagItem.postprocessingOperator == 1}+
+{:else if TagItem.postprocessingOperator == 2}-
+{:else if TagItem.postprocessingOperator == 3}*
+{:else if TagItem.postprocessingOperator == 4}/
+{/if}
+{TagItem.postprocessingValue}
+{:else}
+    Disable
+{/if}
+
+      </TableBodyCell>
 
 
 
@@ -6017,10 +6255,10 @@
       <TableBodyCell> </TableBodyCell>
       <TableBodyCell></TableBodyCell>
       <TableBodyCell></TableBodyCell>
+      <TableBodyCell class="!p-1"></TableBodyCell>
       <TableBodyCell></TableBodyCell>
       <TableBodyCell></TableBodyCell>
       <TableBodyCell></TableBodyCell>
-
     </TableBodyRow>
 
 
@@ -6044,7 +6282,7 @@
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-4 pt-4"><Button color="blue" pill={true} ><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-4 pt-4"><Button color="blue" pill={true} on:click={saveTag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -6206,6 +6444,35 @@
 </div></td>
 </tr>
 
+
+
+<tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Post Processing</p>
+
+  </td>
+
+    <td class="pl-4 pt-5" colspan="5">
+    <div class="flex gap-2">
+
+<Toggle class="p-2.5 mt-2 mb-4" bind:checked={new_tag[new_tag_index].postprocessingEnable}></Toggle>
+
+{#if new_tag[new_tag_index].postprocessingEnable}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2 mt-1 mb-3 w-20" bind:value={new_tag[new_tag_index].postprocessingOperator}>
+
+<option value={1}>+</option>
+<option value={2}>-</option>
+<option value={3}>*</option>
+<option value={4}>/</option>
+</select>
+
+
+ <FloatingLabelInput class="p-2 mt-1 mb-3" style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_tag[new_tag_index].postprocessingValue}>
+  </FloatingLabelInput> 
+
+{/if}
+</div></td>
+</tr>
+
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
       <input type="number" bind:value={new_tag[new_tag_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
@@ -6270,6 +6537,247 @@
 </form>
 </Modal>
 
+
+<Modal bind:open={modify_tag_modal} size="lg" class="w-full" permanent={true}>
+<form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].enable}>
+{/if}
+  Enable
+</label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTag(modify_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
+
+
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Master Profile</p></td>
+    <td class= "pl-4 pt-4">
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={modify_tag_profile} on:change={ModifyMasterProfileChanged}>
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RMaster, index}
+<option value="R_{index}">{RMaster.aliasName}</option>
+{/each}
+
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TMaster, index}
+<option value="T_{index}">{TMaster.aliasName}</option>
+{/each}
+
+</select>
+
+
+
+
+    </td>
+
+</tr>
+
+{#if modify_tag_profile[0] =='R'}
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+{:else}
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled></td>
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+
+{/if}
+
+<tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Point Type</p>
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].pointType} value={0} >Coil</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].pointType} value={1} >Discrete Input</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].pointType} value={2} >Input Register</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].pointType} value={3} >Holding Register</Radio>
+</div></td>
+</tr>
+
+
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].quantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+
+  </tr>
+<tr>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
+
+  </td>
+
+    <td class="pl-4 pt-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].dataType}>
+<option value={1}>Boolean</option>
+<option value={10}>UInt8</option>
+<option value={11}>Int8</option>
+<option value={2}>UInt16</option>
+<option value={3}>Int16</option>
+<option value={4}>UInt32</option>
+<option value={5}>Int32</option>
+<option value={8}>UInt64</option>
+<option value={9}>Int64</option>
+<option value={6}>Float</option>
+<option value={7}>Double</option>
+<option value={12}>ASCII</option>
+<option value={13}>BITMAP</option>
+<option value={14}>STR32</option>
+<option value={15}>string</option>
+<option value={16}>RAW</option>
+</select>
+
+</td>
+</tr>
+
+
+  <tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Byte Order</p>
+
+  </td>
+
+    <td class="pl-4 pt-5" colspan="5"><div class="flex gap-2">
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].byteOrder} value={0} >Big Endian</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].byteOrder} value={1} >Little Endian</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].byteOrder} value={2} >Big Endian Byte Swap</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].byteOrder} value={3} >Little Endian Byte Swap</Radio>
+</div></td>
+</tr>
+
+
+
+<tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Post Processing</p>
+
+  </td>
+
+    <td class="pl-4 pt-5" colspan="5">
+    <div class="flex gap-2">
+
+<Toggle class="p-2.5 mt-2 mb-4" bind:checked={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].postprocessingEnable}></Toggle>
+
+{#if changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].postprocessingEnable}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2 mt-1 mb-3 w-20" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].postprocessingOperator}>
+
+<option value={1}>+</option>
+<option value={2}>-</option>
+<option value={3}>*</option>
+<option value={4}>/</option>
+</select>
+
+
+ <FloatingLabelInput class="p-2 mt-1 mb-3" style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].postprocessingValue}>
+  </FloatingLabelInput> 
+
+{/if}
+</div></td>
+</tr>
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
+      <input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+{#if modify_tag_profile[0] =='T'}
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
+      <input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].pollingRate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+{:else}
+
+  <tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
+      <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pl-1 pt-4">ms</p></div></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+{/if}  
+
+
+
+
+      <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={ModifyTag}>Modify</Button></td>
+
+
+    </tr>
+</table>
+
+
+</form>
+</Modal>
 
 
 </TabItem>

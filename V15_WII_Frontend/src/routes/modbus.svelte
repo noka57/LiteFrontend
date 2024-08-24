@@ -742,6 +742,8 @@
         pollingRate: 1000
     };
 
+    let new_tag_profile="";
+
 
     let new_tag=[
     {
@@ -1094,12 +1096,12 @@
 
     function NewMasterProfileChanged()
     {
-        if (new_tag[new_tag_index].masterProfile[0]=='T')
+        if (new_tag_profile[0]=='T')
         {
             new_tag[new_tag_index].slaveId=-1;
 
         }
-        else if(new_tag[new_tag_index].masterProfile[0]=='R')
+        else if(new_tag_profile[0]=='R')
         {
             new_tag[new_tag_index].pollingRate=-1;
         }
@@ -1107,11 +1109,39 @@
     }
 
 
+    function extractRTUNumber(str) 
+    {
+        const match = str.match(/^R_(\d+)$/);
+        return match ? parseInt(match[1], 10) : null;
+    }
+
+
+    function extractTCPNumber(str) 
+    {
+        const match = str.match(/^R_(\d+)$/);
+        return match ? parseInt(match[1], 10) : null;
+    }
+
     function add_new_tag(index)
     {
-        new_tag_modal=false;
+
+        if (new_tag_profile[0]=='T')
+        {
+            let TCPMasterProfile_index=extractTCPNumber(new_tag_profile);
+            new_tag[index].masterProfile=saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[TCPMasterProfile_index].aliasName;
+        }
+        else if (new_tag_profile[0] == 'R')
+        {
+            let RTUMasterProfile_index=extractRTUNumber(new_tag_profile);
+            new_tag[index].masterProfile=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[RTUMasterProfile_index].aliasName;
+        }
+
+
+
         console.log(new_tag[index]);
         changed_modbus_data.config.fieldManagement_modbus_tag=[...changed_modbus_data.config.fieldManagement_modbus_tag,new_tag[index]];
+
+        new_tag_modal=false;
     }
 
 
@@ -6056,7 +6086,7 @@
     <td class= "pl-4 pt-4">
 
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_tag[new_tag_index].masterProfile} on:change={NewMasterProfileChanged}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_tag_profile} on:change={NewMasterProfileChanged}>
 
 {#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RMaster, index}
 <option value="R_{index}">{RMaster.aliasName}</option>
@@ -6075,7 +6105,7 @@
 
 </tr>
 
-{#if new_tag[new_tag_index].masterProfile[0] =='R'}
+{#if new_tag_profile[0] =='R'}
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="number" bind:value={new_tag[new_tag_index].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
@@ -6186,7 +6216,7 @@
 
   </tr>
 
-{#if new_tag[new_tag_index].masterProfile[0] =='T'}
+{#if new_tag_profile[0] =='T'}
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">

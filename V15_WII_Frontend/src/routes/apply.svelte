@@ -92,6 +92,7 @@
 	    ModbusGateway_TtT_ConfigChangedLog,
 	    ModbusDataModel_Slave_ConfigChangedLog,
 	    ModbusDataModel_Master_ConfigChangedLog,
+      ModbusTag_ConfigChangedLog,
 	    ModbusTCP_Slave_ConfigChangedLog,
 	    ModbusTCP_Master_ConfigChangedLog,
 	    ModbusRTU_Slave_ConfigChangedLog,
@@ -280,6 +281,7 @@
 
   let modbus_data_model_master_changedValues=[];
   let modbus_data_model_slave_changedValues=[];
+  let modbus_tag_changedValues=[];
   let modbus_tcp_master_changedValues=[];
   let modbus_tcp_slave_changedValues=[];
   let modbus_rtu_master_changedValues=[];
@@ -605,6 +607,11 @@
   ModbusDataModel_Master_ConfigChangedLog.subscribe(val => {
       modbus_data_model_master_changedValues = val;
   });
+
+  ModbusTag_ConfigChangedLog.subscribe(val => {
+      modbus_tag_changedValues = val;
+  });
+
 
   ModbusTCP_Slave_ConfigChangedLog.subscribe(val => {
       modbus_tcp_slave_changedValues = val;
@@ -2002,6 +2009,7 @@
       modbus_gateway_RtR_changedValues=[];
       modbus_gateway_TtT_changedValues=[];
 
+      modbus_tag_changedValues=[];
       modbus_data_model_master_changedValues=[];
       modbus_data_model_slave_changedValues=[];
       modbus_tcp_master_changedValues=[];
@@ -2015,6 +2023,7 @@
       ModbusGateway_TtT_ConfigChangedLog.set(modbus_gateway_TtT_changedValues);
       ModbusDataModel_Slave_ConfigChangedLog.set(modbus_data_model_slave_changedValues);
       ModbusDataModel_Master_ConfigChangedLog.set(modbus_data_model_master_changedValues);
+      ModbusTag_ConfigChangedLog.set(modbus_tag_changedValues);
       ModbusTCP_Slave_ConfigChangedLog.set(modbus_tcp_slave_changedValues);
       ModbusTCP_Master_ConfigChangedLog.set(modbus_tcp_master_changedValues);
       ModbusRTU_Slave_ConfigChangedLog.set(modbus_rtu_slave_changedValues);
@@ -2368,6 +2377,7 @@
 		    modbus_gateway_TtT_changedValues.length !=0 ||
 		    modbus_data_model_master_changedValues.length !=0 ||
 		    modbus_data_model_slave_changedValues.length !=0 ||
+        modbus_tag_changedValues.length !=0 ||
 		    modbus_tcp_master_changedValues.length !=0 ||
 		    modbus_tcp_slave_changedValues.length !=0 ||
 		    modbus_rtu_master_changedValues.length !=0 ||
@@ -2672,6 +2682,7 @@
 										    modbus_gateway_TtT_changedValues.length !=0 ||
 										    modbus_data_model_master_changedValues.length !=0 ||
 										    modbus_data_model_slave_changedValues.length !=0 ||
+                        modbus_tag_changedValues.length !=0 ||
 										    modbus_tcp_master_changedValues.length !=0 ||
 										    modbus_tcp_slave_changedValues.length !=0 ||
 										    modbus_rtu_master_changedValues.length !=0 ||
@@ -3345,6 +3356,7 @@ event_engine_action_do_changeValues.length != 0 ||
 										    modbus_gateway_TtT_changedValues.length !=0 ||
 										    modbus_data_model_master_changedValues.length !=0 ||
 										    modbus_data_model_slave_changedValues.length !=0 ||
+                        modbus_tag_changedValues.length !=0 ||
 										    modbus_tcp_master_changedValues.length !=0 ||
 										    modbus_tcp_slave_changedValues.length !=0 ||
 										    modbus_rtu_master_changedValues.length !=0 ||
@@ -3408,6 +3420,18 @@ event_engine_action_do_changeValues.length != 0 ||
   </List>
   </Li>
 {/if}
+
+{#if modbus_tag_changedValues.length !=0}
+<Li>Tag
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+{#each modbus_tag_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+ </List>
+
+</Li>
+{/if}
+
 
 
 {#if modbus_data_model_master_changedValues.length !=0 || modbus_data_model_slave_changedValues.length !=0}

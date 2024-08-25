@@ -1,4 +1,5 @@
 <script>
+  	import './global.css';
 	import '../app.css';
 	import { page } from '$app/stores';
 	import { Hamburger } from 'svelte-hamburgers';
@@ -58,6 +59,7 @@
 	    ModbusGateway_TtT_ConfigChangedLog,
 	    ModbusDataModel_Slave_ConfigChangedLog,
 	    ModbusDataModel_Master_ConfigChangedLog,
+	    ModbusTag_ConfigChangedLog,
 	    ModbusTCP_Slave_ConfigChangedLog,
 	    ModbusTCP_Master_ConfigChangedLog,
 	    ModbusRTU_Slave_ConfigChangedLog,
@@ -234,6 +236,7 @@
 
     let modbus_data_model_master_changedValues=[];
     let modbus_data_model_slave_changedValues=[];
+    let modbus_tag_changedValues=[];
     let modbus_tcp_master_changedValues=[];
     let modbus_tcp_slave_changedValues=[];
     let modbus_rtu_master_changedValues=[];
@@ -337,6 +340,7 @@
 		    modbus_tcp_slave_changedValues.length !=0 ||
 		    modbus_rtu_master_changedValues.length !=0 ||
 		    modbus_rtu_slave_changedValues.length !=0 ||
+		    modbus_tag_changedValues.length !=0 ||
   			certificate_settings_changedValues.length !=0 ||
   			port_connection_lan_changedValues.length !=0 ||
   			port_connection_com_changedValues.length !=0 ||
@@ -732,6 +736,11 @@
     ModbusDataModel_Master_ConfigChangedLog.subscribe(val => {
         modbus_data_model_master_changedValues = val;
        	JudgeChangedOrNot();
+    });
+
+     ModbusTag_ConfigChangedLog.subscribe(val => {
+        modbus_tag_changedValues = val;
+        JudgeChangedOrNot();
     });
 
     ModbusTCP_Slave_ConfigChangedLog.subscribe(val => {

@@ -2,7 +2,7 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button, Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Fileupload, FloatingLabelInput, Helper, StepIndicator } from 'flowbite-svelte';
 
  import { writable } from 'svelte/store';
-
+  import './global.css';
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
@@ -2554,8 +2554,7 @@
     enable: false,
     delete: false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   };
 
@@ -2577,8 +2576,7 @@
     BackupActionModbus.enable=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].enable;
     BackupActionModbus.delete=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].delete;
     BackupActionModbus.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].aliasName;  
-    BackupActionModbus.modbusDataModel=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].modbusDataModel;
-    BackupActionModbus.dataType=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].dataType;
+    BackupActionModbus.modbusTag=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].modbusTag;
     BackupActionModbus.assignment=changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].assignment;
 
 
@@ -2592,8 +2590,7 @@
     changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].enable=BackupActionModbus.enable;
     changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].delete=BackupActionModbus.delete;
     changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].aliasName=BackupActionModbus.aliasName;  
-    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].modbusDataModel=BackupActionModbus.modbusDataModel;
-    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].dataType=BackupActionModbus.dataType;
+    changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].modbusTag=BackupActionModbus.modbusTag;
     changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[index].assignment=BackupActionModbus.assignment;
   }
 
@@ -2609,80 +2606,70 @@
     enable: false,
     delete:false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   },
   {
     enable: false,
     delete:false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   },
   {
     enable: false,
     delete:false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   },
   {
     enable: false,
     delete:false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   },
   {
     enable: false,
     delete:false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   },
   {
     enable: false,
     delete:false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   },
   {
     enable: false,
     delete:false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   },
   {
     enable: false,
     delete:false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   },
   {
     enable: false,
     delete:false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   },
   {
     enable: false,
     delete:false,
     aliasName: "",
-    modbusDataModel: "",
-    dataType: 0,
+    modbusTag: "",
     assignment: 2000
   }
 
@@ -2694,9 +2681,8 @@
     NewActionModbus[index].enable=true;
     NewActionModbus[index].delete=false;    
     NewActionModbus[index].aliasName="";
-    NewActionModbus[index].modbusDataModel="";
-    NewActionModbus[index].dataType;
-    NewActionModbus[index].assignment;  
+    NewActionModbus[index].modbusTag="";
+    NewActionModbus[index].assignment=""; 
 
     new_action_modbus_index=index;
     new_action_modbus_modal=true;
@@ -3918,8 +3904,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "",
       comparison: 1,
       comparisonValue: 1
   };
@@ -3940,8 +3925,7 @@
     BackupTriggerModbus.delete=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].delete;    
     BackupTriggerModbus.aliasName=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].aliasName;
  
-    BackupTriggerModbus.modbusDataModel=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].modbusDataModel;
-    BackupTriggerModbus.dataType=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].dataType;
+    BackupTriggerModbus.modbusTag=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].modbusTag;
 
     BackupTriggerModbus.comparison=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].comparison;
     BackupTriggerModbus.comparisonValue=changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].comparisonValue;
@@ -3957,8 +3941,7 @@
     changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].delete=BackupTriggerModbus.delete;    
     changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].aliasName=BackupTriggerModbus.aliasName;
  
-    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].modbusDataModel=BackupTriggerModbus.modbusDataModel;
-    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].dataType=BackupTriggerModbus.dataType;
+    changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].modbusTag=BackupTriggerModbus.modbusTag;
 
     changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].comparison=BackupTriggerModbus.comparison;
     changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[index].comparisonValue=BackupTriggerModbus.comparisonValue;
@@ -3977,8 +3960,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "",
       comparison: 1,
       comparisonValue: 1
   },
@@ -3986,8 +3968,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "",
       comparison: 1,
       comparisonValue: 1
   },
@@ -3995,8 +3976,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "",
       comparison: 1,
       comparisonValue: 1
   },
@@ -4004,8 +3984,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "",
       comparison: 1,
       comparisonValue: 1
   },
@@ -4013,8 +3992,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "", 
       comparison: 1,
       comparisonValue: 1
   },
@@ -4022,8 +4000,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "",
       comparison: 1,
       comparisonValue: 1
   },
@@ -4031,8 +4008,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "",
       comparison: 1,
       comparisonValue: 1
   },
@@ -4040,8 +4016,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "",
       comparison: 1,
       comparisonValue: 1
   },
@@ -4049,8 +4024,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "",
       comparison: 1,
       comparisonValue: 1
   },
@@ -4058,8 +4032,7 @@
       enable: false,
       delete: false,
       aliasName: "",
-      modbusDataModel: "",
-      dataType: 0, 
+      modbusTag: "",
       comparison: 1,
       comparisonValue: 1
   }
@@ -4070,8 +4043,7 @@
       NewTriggerModbus[index].enable=true;
       NewTriggerModbus[index].delete=false;      
       NewTriggerModbus[index].aliasName="";
-      NewTriggerModbus[index].modbusDataModel="";
-      NewTriggerModbus[index].dataType=1;
+      NewTriggerModbus[index].modbusTag="";
       NewTriggerModbus[index].comparison=1;
       NewTriggerModbus[index].comparisonValue=1;
       new_trigger_modbus_index=index;
@@ -4598,36 +4570,6 @@
 
  </script>
 
-
-<style>
- 
-.strikeout {
-  text-decoration: line-through;
-  color: #999; /* Adjust color for deleted text */
-  position: relative;
-}
-
-.strikeout:before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  border-bottom: 1px solid #111; /* Adjust strikeout line color */
-  transform: translateY(-50%);
-}
-
-.strikeout:after {
-  content: "\00B7"; /* Unicode dot character */
-  font-size: 1px; /* Adjust dot size */
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
-}
-
-</style>
 
 
  <Tabs style="underline">
@@ -5431,8 +5373,7 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-18">Modbus Data Model</TableHeadCell>
-    <TableHeadCell class="w-18">Data Type</TableHeadCell>
+    <TableHeadCell class="w-18">Modbus Tag</TableHeadCell>
     <TableHeadCell class="w-18">Comparison</TableHeadCell>
 
   </TableHead>
@@ -5477,33 +5418,7 @@
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerModbus.aliasName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerModbus.modbusDataModel}</td>
-{#if TriggerModbus.dataType==1}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
-{:else if TriggerModbus.dataType ==2}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt16</td>
-{:else if TriggerModbus.dataType ==3}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int16</td>
-{:else if TriggerModbus.dataType ==4}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt32</td>
-{:else if TriggerModbus.dataType ==5}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int32</td>
-{:else if TriggerModbus.dataType ==6}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
-{:else if TriggerModbus.dataType ==7}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
-{:else if TriggerModbus.dataType ==8}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt64</td>
-{:else if TriggerModbus.dataType ==9}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int64</td>
-{:else if TriggerModbus.dataType ==10}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt8</td>
-{:else if TriggerModbus.dataType ==11}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int8</td>
-{:else}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
-
-{/if}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{TriggerModbus.modbusTag}</td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
 {#if TriggerModbus.comparison==1}
@@ -5553,33 +5468,8 @@
 
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{TriggerModbus.aliasName}</TableBodyCell>
-      <TableBodyCell class="w-18">{TriggerModbus.modbusDataModel}</TableBodyCell>
-{#if TriggerModbus.dataType==1}
-<TableBodyCell class="w-18">Boolean</TableBodyCell>
-{:else if TriggerModbus.dataType ==2}
-<TableBodyCell class="w-18">UInt16</TableBodyCell>
-{:else if TriggerModbus.dataType ==3}
-<TableBodyCell class="w-18">Int16</TableBodyCell>
-{:else if TriggerModbus.dataType ==4}
-<TableBodyCell class="w-18">UInt32</TableBodyCell>
-{:else if TriggerModbus.dataType ==5}
-<TableBodyCell class="w-18">Int32</TableBodyCell>
-{:else if TriggerModbus.dataType ==6}
-<TableBodyCell class="w-18">Float</TableBodyCell>
-{:else if TriggerModbus.dataType ==7}
-<TableBodyCell class="w-18">Double</TableBodyCell>
-{:else if TriggerModbus.dataType ==8}
-<TableBodyCell class="w-18">UInt64</TableBodyCell>
-{:else if TriggerModbus.dataType ==9}
-<TableBodyCell class="w-18">Int64</TableBodyCell>
-{:else if TriggerModbus.dataType ==10}
-<TableBodyCell class="w-18">UInt8</TableBodyCell>
-{:else if TriggerModbus.dataType ==11}
-<TableBodyCell class="w-18">Int8</TableBodyCell>
-{:else}
-<TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18">{TriggerModbus.modbusTag}</TableBodyCell>
 
-{/if}
 
       <TableBodyCell class="w-18">
 {#if TriggerModbus.comparison==1}
@@ -5680,13 +5570,13 @@
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Tag</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewTriggerModbus[new_trigger_modbus_index].modbusDataModel}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewTriggerModbus[new_trigger_modbus_index].modbusTag}>
 <option disabled="" value="">Choose ...</option>
 {#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
-<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as ModbusTag, index}
+<option value={ModbusTag.tagName}>{ModbusTag.tagName}</option>
 {/each}
 {/if}
 </select>
@@ -5695,31 +5585,6 @@
 
 </tr>
 
-<tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
-
-  </td>
-
-    <td class="pl-4 pt-4">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewTriggerModbus[new_trigger_modbus_index].dataType}>
-<option disabled="" value="none">Choose Type ...</option>
-<option value={1}>Boolean</option>
-<option value={10}>UInt8</option>
-<option value={11}>Int8</option>
-<option value={2}>UInt16</option>
-<option value={3}>Int16</option>
-<option value={4}>UInt32</option>
-<option value={5}>Int32</option>
-<option value={8}>UInt64</option>
-<option value={9}>Int64</option>
-<option value={6}>Float</option>
-<option value={7}>Double</option>
-</select>
-
-
-</td>
-</tr>
 
 
 <tr>
@@ -5788,13 +5653,13 @@
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Tag</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].modbusDataModel}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].modbusTag}>
 <option disabled="" value="">Choose ...</option>
 {#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
-<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as ModbusTag, index}
+<option value={ModbusTag.tagName}>{ModbusTag.tagName}</option>
 {/each}
 {/if}
 </select>
@@ -5805,32 +5670,6 @@
     </td>
 
 
-</tr>
-
-<tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
-
-  </td>
-
-    <td class="pl-4 pt-4">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[modify_trigger_modbus_index].dataType}>
-<option disabled="" value="none">Choose Type ...</option>
-<option value={1}>Boolean</option>
-<option value={10}>UInt8</option>
-<option value={11}>Int8</option>
-<option value={2}>UInt16</option>
-<option value={3}>Int16</option>
-<option value={4}>UInt32</option>
-<option value={5}>Int32</option>
-<option value={8}>UInt64</option>
-<option value={9}>Int64</option>
-<option value={6}>Float</option>
-<option value={7}>Double</option>
-</select>
-
-
-</td>
 </tr>
 
 
@@ -5884,28 +5723,27 @@
 
 <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
 on:click={handleClickMV} on:keydown={() => {}}>
-    Modbus Data Model
-    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus data model. Please go to modbus page for detailed setting.</p>
+    Modbus Tag
+    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus tag. Please go to modbus page for detailed setting.</p>
   </caption>
 {#if openDetailStatusMV}
 <TableHead>
     <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell class="!p-2">No</TableHeadCell>
-    <TableHeadCell class="">Data Model Name</TableHeadCell>
-    <TableHeadCell class="w-18">Master Profile</TableHeadCell>
-    <TableHeadCell class="w-18">Slave ID</TableHeadCell>
-    <TableHeadCell class="w-18">Point Type</TableHeadCell>
-    <TableHeadCell class="w-18">Address (DEC)</TableHeadCell>
-    <TableHeadCell>Quantity</TableHeadCell>
-    <TableHeadCell>Response Timeout</TableHeadCell>
-    <TableHeadCell class="w-18">Polling Rate</TableHeadCell>
-    <TableHeadCell>Delay Between Polls</TableHeadCell>
+    <TableHeadCell class="!p-1">No</TableHeadCell>
+    <TableHeadCell class="!p-3">Tag Name</TableHeadCell>
+    <TableHeadCell class="!p-1">Master Profile</TableHeadCell>
+    <TableHeadCell >Point Type</TableHeadCell>
+    <TableHeadCell >Address</TableHeadCell>
+    <TableHeadCell >Quantity</TableHeadCell>
+    <TableHeadCell class="!p-1">Date Type</TableHeadCell>
     <TableHeadCell>Byte Order</TableHeadCell>
+    <TableHeadCell>Response Timeout</TableHeadCell>
+    <TableHeadCell>Post Processing</TableHeadCell>
   </TableHead>
   <TableBody>
 
 {#if getDataReady == 1}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as DataModelMasterItem, index}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
    
 
  <TableBodyRow>
@@ -5913,41 +5751,100 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
     <TableBodyCell class="w-10">
-<input type="checkbox"  bind:checked={DataModelMasterItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+<input type="checkbox"  bind:checked={TagItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
     </TableBodyCell>
 
-      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
-  <TableBodyCell class="w-18">{DataModelMasterItem.dataModelName}</TableBodyCell>
-  <TableBodyCell class="w-10">{DataModelMasterItem.profile}</TableBodyCell>
-  <TableBodyCell class="w-18">{DataModelMasterItem.slaveId}</TableBodyCell>
-{#if DataModelMasterItem.pointType == 0}
-    <TableBodyCell class="w-10">Coil</TableBodyCell>
-{:else if DataModelMasterItem.pointType == 1}
-    <TableBodyCell class="w-10">Discrete Input</TableBodyCell>
-{:else if DataModelMasterItem.pointType == 2}
-    <TableBodyCell class="w-10">Input Registers</TableBodyCell>
-{:else if DataModelMasterItem.pointType == 3}
-    <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
-{:else}
-  <TableBodyCell class="w-10"></TableBodyCell>
-{/if}
-  <TableBodyCell class="w-18">{DataModelMasterItem.address}</TableBodyCell>
-  <TableBodyCell class="w-10">{DataModelMasterItem.quantity}</TableBodyCell>
-  <TableBodyCell class="w-18">{DataModelMasterItem.responseTimeout} ms</TableBodyCell>
-<TableBodyCell class="w-18">{DataModelMasterItem.pollingRate} ms</TableBodyCell>
-    <TableBodyCell class="w-18">{DataModelMasterItem.delayBetweenPolls} ms</TableBodyCell>
 
-{#if DataModelMasterItem.byteOrder==0} 
-    <TableBodyCell class="w-18">Big Endian</TableBodyCell>
-{:else if DataModelMasterItem.byteOrder==1}   
-        <TableBodyCell class="w-18">Little Endian</TableBodyCell>
-{:else if DataModelMasterItem.byteOrder==2}
-    <TableBodyCell class="w-18">Big Endian Byte Swap</TableBodyCell>
-{:else if DataModelMasterItem.byteOrder==3}
-        <TableBodyCell class="w-18">Little Endian Byte Swap</TableBodyCell>
+      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
+  <TableBodyCell class="!p-3">{TagItem.tagName}</TableBodyCell>
+  <TableBodyCell class="!p-1">{TagItem.masterProfile}
+{#if TagItem.slaveId != -1} (Slave ID: {TagItem.slaveId}){/if}
+  </TableBodyCell>
+{#if TagItem.pointType == 0}
+    <TableBodyCell >Coil</TableBodyCell>
+{:else if TagItem.pointType == 1}
+    <TableBodyCell >Discrete Input</TableBodyCell>
+{:else if TagItem.pointType == 2}
+    <TableBodyCell >Input Registers</TableBodyCell>
+{:else if TagItem.pointType == 3}
+    <TableBodyCell >Holding Registers</TableBodyCell>
 {:else}
-    <TableBodyCell class="w-18"></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
 {/if}
+  <TableBodyCell >{TagItem.address}</TableBodyCell>
+  <TableBodyCell >{TagItem.quantity}</TableBodyCell>
+
+
+{#if TagItem.dataType == 1}
+        <TableBodyCell class="!p-1">Boolean</TableBodyCell>
+{:else if TagItem.dataType == 2}
+        <TableBodyCell class="!p-1">UInt16</TableBodyCell>
+{:else if TagItem.dataType == 3}
+        <TableBodyCell class="!p-1">Int16</TableBodyCell>
+{:else if TagItem.dataType == 4}
+      <TableBodyCell class="!p-1">UInt32</TableBodyCell>
+{:else if TagItem.dataType == 5}
+      <TableBodyCell class="!p-1">Int32</TableBodyCell>
+{:else if TagItem.dataType == 6}
+      <TableBodyCell class="!p-1">Float</TableBodyCell>
+{:else if TagItem.dataType == 7}
+      <TableBodyCell class="!p-1">Double</TableBodyCell>
+{:else if TagItem.dataType == 8}
+      <TableBodyCell class="!p-1">UInt64</TableBodyCell>  
+{:else if TagItem.dataType == 9}
+      <TableBodyCell class="!p-1">Int64</TableBodyCell> 
+{:else if TagItem.dataType == 10}
+      <TableBodyCell class="!p-1">UInt8</TableBodyCell>  
+{:else if TagItem.dataType == 11}
+      <TableBodyCell class="!p-1">Int8</TableBodyCell>  
+{:else if TagItem.dataType == 12}
+      <TableBodyCell class="!p-1">ASCII</TableBodyCell>  
+{:else if TagItem.dataType == 13}
+      <TableBodyCell class="!p-1">BITMAP</TableBodyCell>  
+{:else if TagItem.dataType == 14}
+      <TableBodyCell class="!p-1">STR32</TableBodyCell> 
+{:else if TagItem.dataType == 15}
+      <TableBodyCell class="!p-1">String</TableBodyCell>
+{:else if TagItem.dataType == 16}
+      <TableBodyCell class="!p-1">RAW</TableBodyCell>                    
+{:else}
+      <TableBodyCell class="!p-1"></TableBodyCell>
+{/if}
+
+
+{#if TagItem.byteOrder==0} 
+    <TableBodyCell >Big Endian</TableBodyCell>
+{:else if TagItem.byteOrder==1}   
+        <TableBodyCell >Little Endian</TableBodyCell>
+{:else if TagItem.byteOrder==2}
+    <TableBodyCell >Big Endian Byte Swap</TableBodyCell>
+{:else if TagItem.byteOrder==3}
+        <TableBodyCell >Little Endian Byte Swap</TableBodyCell>
+{:else}
+    <TableBodyCell ></TableBodyCell>
+{/if}
+
+
+  <TableBodyCell>{TagItem.responseTimeout} ms
+{#if TagItem.pollingRate!=-1} (Interval: {TagItem.pollingRate} ms)
+{/if }
+
+  </TableBodyCell>
+
+
+      <TableBodyCell>
+{#if TagItem.postprocessingEnable}
+{#if TagItem.postprocessingOperator == 1}+
+{:else if TagItem.postprocessingOperator == 2}-
+{:else if TagItem.postprocessingOperator == 3}*
+{:else if TagItem.postprocessingOperator == 4}/
+{/if}
+{TagItem.postprocessingValue}
+{:else}
+    Disable
+{/if}
+
+      </TableBodyCell>
 
     </TableBodyRow>
 {/each}
@@ -8697,8 +8594,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Alias Name</TableHeadCell>
-    <TableHeadCell class="w-18">Modbus Data Model</TableHeadCell>
-    <TableHeadCell class="w-18">Data Type</TableHeadCell>
+    <TableHeadCell class="w-18">Modbus Tag</TableHeadCell>
     <TableHeadCell class="w-18">Assignment</TableHeadCell>
 
   </TableHead>
@@ -8748,33 +8644,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Modbus.aliasName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Modbus.modbusDataModel}</td>
-{#if Modbus.dataType==1}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
-{:else if Modbus.dataType ==2}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt16</td>
-{:else if Modbus.dataType ==3}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int16</td>
-{:else if Modbus.dataType ==4}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt32</td>
-{:else if Modbus.dataType ==5}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int32</td>
-{:else if Modbus.dataType ==6}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
-{:else if Modbus.dataType ==7}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
-{:else if Modbus.dataType ==8}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt64</td>
-{:else if Modbus.dataType ==9}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int64</td>
-{:else if Modbus.dataType ==10}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt8</td>
-{:else if Modbus.dataType ==11}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int8</td>
-{:else}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
-
-{/if}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Modbus.modbusTag}</td>
 
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Modbus.assignment}</td>
@@ -8808,33 +8678,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
 
       <TableBodyCell class="w-18">{Modbus.aliasName}</TableBodyCell>
-      <TableBodyCell class="w-18">{Modbus.modbusDataModel}</TableBodyCell>
-{#if Modbus.dataType==1}
-<TableBodyCell class="w-18">Boolean</TableBodyCell>
-{:else if Modbus.dataType ==2}
-<TableBodyCell class="w-18">UInt16</TableBodyCell>
-{:else if Modbus.dataType ==3}
-<TableBodyCell class="w-18">Int16</TableBodyCell>
-{:else if Modbus.dataType ==4}
-<TableBodyCell class="w-18">UInt32</TableBodyCell>
-{:else if Modbus.dataType ==5}
-<TableBodyCell class="w-18">Int32</TableBodyCell>
-{:else if Modbus.dataType ==6}
-<TableBodyCell class="w-18">Float</TableBodyCell>
-{:else if Modbus.dataType ==7}
-<TableBodyCell class="w-18">Double</TableBodyCell>
-{:else if Modbus.dataType ==8}
-<TableBodyCell class="w-18">UInt64</TableBodyCell>
-{:else if Modbus.dataType ==9}
-<TableBodyCell class="w-18">Int64</TableBodyCell>
-{:else if Modbus.dataType ==10}
-<TableBodyCell class="w-18">UInt8</TableBodyCell>
-{:else if Modbus.dataType ==11}
-<TableBodyCell class="w-18">Int8</TableBodyCell>
-{:else}
-<TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18">{Modbus.modbusTag}</TableBodyCell>
 
-{/if}
 
 
       <TableBodyCell class="w-18">{Modbus.assignment}</TableBodyCell>
@@ -8925,15 +8770,15 @@ on:click={handleClickMV} on:keydown={() => {}}>
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Tag</p></td>
     <td class= "pl-4 pt-4">
 
 
-    <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewActionModbus[new_action_modbus_index].modbusDataModel}>
+    <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewActionModbus[new_action_modbus_index].modbusTag}>
 <option disabled="" value="">Choose ...</option>
 {#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
-<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
 {/each}
 {/if}
 </select>
@@ -8944,31 +8789,6 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 </tr>
 
-<tr>
-
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
-
-  </td>
-
-    <td class="pl-4 pt-4" colspan="">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewActionModbus[new_action_modbus_index].dataType}>
-<option disabled="" value="none">Choose Type ...</option>
-<option value={1}>Boolean</option>
-<option value={10}>UInt8</option>
-<option value={11}>Int8</option>
-<option value={2}>UInt16</option>
-<option value={3}>Int16</option>
-<option value={4}>UInt32</option>
-<option value={5}>Int32</option>
-<option value={8}>UInt64</option>
-<option value={9}>Int64</option>
-<option value={6}>Float</option>
-<option value={7}>Double</option>
-</select>
-
-</td>
-</tr>
 
 
 <tr>
@@ -9022,13 +8842,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Tag</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].modbusDataModel}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].modbusTag}>
 <option disabled="" value="">Choose ...</option>
 {#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
-<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
 {/each}
 {/if}
 </select>
@@ -9037,31 +8857,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 </tr>
 
-<tr>
 
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
-
-  </td>
-
-    <td class="pl-4 pt-4" colspan="">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[modify_action_modbus_index].dataType}>
-<option disabled="" value="none">Choose Type ...</option>
-<option value={1}>Boolean</option>
-<option value={10}>UInt8</option>
-<option value={11}>Int8</option>
-<option value={2}>UInt16</option>
-<option value={3}>Int16</option>
-<option value={4}>UInt32</option>
-<option value={5}>Int32</option>
-<option value={8}>UInt64</option>
-<option value={9}>Int64</option>
-<option value={6}>Float</option>
-<option value={7}>Double</option>
-</select>
-
-</td>
-</tr>
 
 
 <tr>
@@ -9093,76 +8889,133 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <p class="mt-8">
-
 <Table shadow striped={true}>
 
 
 <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
 on:click={handleClickMV} on:keydown={() => {}}>
-    Modbus Data Model
-    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus data model. Please go to modbus page for detailed setting.</p>
+    Modbus Tag
+    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus tag. Please go to modbus page for detailed setting.</p>
   </caption>
 {#if openDetailStatusMV}
 <TableHead>
     <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell class="!p-2">No</TableHeadCell>
-    <TableHeadCell class="">Data Model Name</TableHeadCell>
-    <TableHeadCell class="w-18">Master Profile</TableHeadCell>
-    <TableHeadCell class="w-18">Slave ID</TableHeadCell>
-    <TableHeadCell class="w-18">Point Type</TableHeadCell>
-    <TableHeadCell class="w-18">Address (DEC)</TableHeadCell>
-    <TableHeadCell>Quantity</TableHeadCell>
-    <TableHeadCell>Response Timeout</TableHeadCell>
-    <TableHeadCell class="w-18">Polling Rate</TableHeadCell>
-    <TableHeadCell>Delay Between Polls</TableHeadCell>
+    <TableHeadCell class="!p-1">No</TableHeadCell>
+    <TableHeadCell class="!p-3">Tag Name</TableHeadCell>
+    <TableHeadCell class="!p-1">Master Profile</TableHeadCell>
+    <TableHeadCell >Point Type</TableHeadCell>
+    <TableHeadCell >Address</TableHeadCell>
+    <TableHeadCell >Quantity</TableHeadCell>
+    <TableHeadCell class="!p-1">Date Type</TableHeadCell>
     <TableHeadCell>Byte Order</TableHeadCell>
+    <TableHeadCell>Response Timeout</TableHeadCell>
+    <TableHeadCell>Post Processing</TableHeadCell>
   </TableHead>
   <TableBody>
 
 {#if getDataReady == 1}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as DataModelMasterItem, index}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
    
 
  <TableBodyRow>
 
 
-    <TableBodyCell class="w-2">
-<input type="checkbox"  bind:checked={DataModelMasterItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={TagItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
     </TableBodyCell>
 
 
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
-  <TableBodyCell class="w-18">{DataModelMasterItem.dataModelName}</TableBodyCell>
-  <TableBodyCell class="w-10">{DataModelMasterItem.profile}</TableBodyCell>
-  <TableBodyCell class="w-18">{DataModelMasterItem.slaveId}</TableBodyCell>
-{#if DataModelMasterItem.pointType == 0}
-    <TableBodyCell class="w-10">Coil</TableBodyCell>
-{:else if DataModelMasterItem.pointType == 1}
-    <TableBodyCell class="w-10">Discrete Input</TableBodyCell>
-{:else if DataModelMasterItem.pointType == 2}
-    <TableBodyCell class="w-10">Input Registers</TableBodyCell>
-{:else if DataModelMasterItem.pointType == 3}
-    <TableBodyCell class="w-10">Holding Registers</TableBodyCell>
+  <TableBodyCell class="!p-3">{TagItem.tagName}</TableBodyCell>
+  <TableBodyCell class="!p-1">{TagItem.masterProfile}
+{#if TagItem.slaveId != -1} (Slave ID: {TagItem.slaveId}){/if}
+  </TableBodyCell>
+{#if TagItem.pointType == 0}
+    <TableBodyCell >Coil</TableBodyCell>
+{:else if TagItem.pointType == 1}
+    <TableBodyCell >Discrete Input</TableBodyCell>
+{:else if TagItem.pointType == 2}
+    <TableBodyCell >Input Registers</TableBodyCell>
+{:else if TagItem.pointType == 3}
+    <TableBodyCell >Holding Registers</TableBodyCell>
 {:else}
-  <TableBodyCell class="w-10"></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
 {/if}
-  <TableBodyCell class="w-18">{DataModelMasterItem.address}</TableBodyCell>
-  <TableBodyCell class="w-10">{DataModelMasterItem.quantity}</TableBodyCell>
-  <TableBodyCell class="w-18">{DataModelMasterItem.responseTimeout} ms</TableBodyCell>
-<TableBodyCell class="w-18">{DataModelMasterItem.pollingRate} ms</TableBodyCell>
-    <TableBodyCell class="w-18">{DataModelMasterItem.delayBetweenPolls} ms</TableBodyCell>
+  <TableBodyCell >{TagItem.address}</TableBodyCell>
+  <TableBodyCell >{TagItem.quantity}</TableBodyCell>
 
-{#if DataModelMasterItem.byteOrder==0} 
-    <TableBodyCell class="w-18">Big Endian</TableBodyCell>
-{:else if DataModelMasterItem.byteOrder==1}   
-        <TableBodyCell class="w-18">Little Endian</TableBodyCell>
-{:else if DataModelMasterItem.byteOrder==2}
-    <TableBodyCell class="w-18">Big Endian Byte Swap</TableBodyCell>
-{:else if DataModelMasterItem.byteOrder==3}
-        <TableBodyCell class="w-18">Little Endian Byte Swap</TableBodyCell>
+
+{#if TagItem.dataType == 1}
+        <TableBodyCell class="!p-1">Boolean</TableBodyCell>
+{:else if TagItem.dataType == 2}
+        <TableBodyCell class="!p-1">UInt16</TableBodyCell>
+{:else if TagItem.dataType == 3}
+        <TableBodyCell class="!p-1">Int16</TableBodyCell>
+{:else if TagItem.dataType == 4}
+      <TableBodyCell class="!p-1">UInt32</TableBodyCell>
+{:else if TagItem.dataType == 5}
+      <TableBodyCell class="!p-1">Int32</TableBodyCell>
+{:else if TagItem.dataType == 6}
+      <TableBodyCell class="!p-1">Float</TableBodyCell>
+{:else if TagItem.dataType == 7}
+      <TableBodyCell class="!p-1">Double</TableBodyCell>
+{:else if TagItem.dataType == 8}
+      <TableBodyCell class="!p-1">UInt64</TableBodyCell>  
+{:else if TagItem.dataType == 9}
+      <TableBodyCell class="!p-1">Int64</TableBodyCell> 
+{:else if TagItem.dataType == 10}
+      <TableBodyCell class="!p-1">UInt8</TableBodyCell>  
+{:else if TagItem.dataType == 11}
+      <TableBodyCell class="!p-1">Int8</TableBodyCell>  
+{:else if TagItem.dataType == 12}
+      <TableBodyCell class="!p-1">ASCII</TableBodyCell>  
+{:else if TagItem.dataType == 13}
+      <TableBodyCell class="!p-1">BITMAP</TableBodyCell>  
+{:else if TagItem.dataType == 14}
+      <TableBodyCell class="!p-1">STR32</TableBodyCell> 
+{:else if TagItem.dataType == 15}
+      <TableBodyCell class="!p-1">String</TableBodyCell>
+{:else if TagItem.dataType == 16}
+      <TableBodyCell class="!p-1">RAW</TableBodyCell>                    
 {:else}
-    <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="!p-1"></TableBodyCell>
 {/if}
+
+
+{#if TagItem.byteOrder==0} 
+    <TableBodyCell >Big Endian</TableBodyCell>
+{:else if TagItem.byteOrder==1}   
+        <TableBodyCell >Little Endian</TableBodyCell>
+{:else if TagItem.byteOrder==2}
+    <TableBodyCell >Big Endian Byte Swap</TableBodyCell>
+{:else if TagItem.byteOrder==3}
+        <TableBodyCell >Little Endian Byte Swap</TableBodyCell>
+{:else}
+    <TableBodyCell ></TableBodyCell>
+{/if}
+
+
+  <TableBodyCell>{TagItem.responseTimeout} ms
+{#if TagItem.pollingRate!=-1} (Interval: {TagItem.pollingRate} ms)
+{/if }
+
+  </TableBodyCell>
+
+
+      <TableBodyCell>
+{#if TagItem.postprocessingEnable}
+{#if TagItem.postprocessingOperator == 1}+
+{:else if TagItem.postprocessingOperator == 2}-
+{:else if TagItem.postprocessingOperator == 3}*
+{:else if TagItem.postprocessingOperator == 4}/
+{/if}
+{TagItem.postprocessingValue}
+{:else}
+    Disable
+{/if}
+
+      </TableBodyCell>
 
     </TableBodyRow>
 {/each}

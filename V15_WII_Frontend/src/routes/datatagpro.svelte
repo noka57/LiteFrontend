@@ -3,7 +3,7 @@
 
  import { writable } from 'svelte/store';
 import { DateInput } from 'date-picker-svelte'
-
+  import './global.css';
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
@@ -3252,36 +3252,6 @@ async function getDataTagPro () {
 
 </script>
 
-
-<style>
- 
-.strikeout {
-  text-decoration: line-through;
-  color: #999; /* Adjust color for deleted text */
-  position: relative;
-}
-
-.strikeout:before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  border-bottom: 1px solid #111; /* Adjust strikeout line color */
-  transform: translateY(-50%);
-}
-
-.strikeout:after {
-  content: "\00B7"; /* Unicode dot character */
-  font-size: 1px; /* Adjust dot size */
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
-}
-
-</style>
  <Tabs style="underline">
 <TabItem open title="General">
 

@@ -25,6 +25,10 @@
   } from "./configG.js"
 
 
+  let currentStep = 1;
+  let steps = ['Step 1', 'Step 2', 'Step 3'];
+  let modalElement;
+
   let sdata_logger_data="";
   let changed_sdata_logger_data = {};
   let saved_changed_sdata_logger_data ={};
@@ -194,6 +198,25 @@
 
   }
 
+  let openDetailStatusMMS = false;
+  let openDetailStatusMMT = false;
+  let openDetailStatusMV = false;
+
+
+  function handleClickMMS() {
+        openDetailStatusMMS=!openDetailStatusMMS;
+  }
+
+
+  function handleClickMMT() {
+        openDetailStatusMMT=!openDetailStatusMMT;
+  }
+
+
+  function handleClickMV() {
+        openDetailStatusMV=!openDetailStatusMV;
+  }
+
 
   let dViewerResult;
   let lines;
@@ -258,126 +281,358 @@
     ExecuteViewer();
   }
 
+
     let new_proxy_edge=[
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
     },
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
     },
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
     },
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
     },
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
     },
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
     },
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
     },
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
     },
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
     },
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
     }
 
 
@@ -386,18 +641,70 @@
     let new_proxy_edge_modal=false;
     let new_proxy_edge_index;
 
+    function New_ProxyEdge_Modal_Page1()
+    {
+      currentStep=1;
+    }
+
+    function New_ProxyEdge_Modal_Page2()
+    {
+      currentStep=2;
+    }
+
+    function New_ProxyEdge_Modal_Page3()
+    {
+      currentStep=3;
+    }
+
+    function New_ProxyEdge_Modal_Finish()
+    {
+      new_proxy_edge_modal = false;
+      currentStep=1;
+    }
+
+    function NewProxyEdge()
+    {
+      currentStep=1;
+      new_proxy_edge_modal = true;
+    }
+
+
     function new_proxy_edge_trigger(index)
     {
         new_proxy_edge[index].enable=true;
         new_proxy_edge[index].delete=false;
-        new_proxy_edge[index].tagName="";
-        new_proxy_edge[index].modbusDataModel="";
-        new_proxy_edge[index].dataType=2;
-        new_proxy_edge[index].postprocessing=0;
-        new_proxy_edge[index].postprocessingValue=1;
-        new_proxy_edge[index].postprocessedDisplay=1;
-        new_proxy_edge[index].dataLogFormat=0;
-        new_proxy_edge[index].userDefineedData="";
+        new_proxy_edge[index].samplingCondition=0;
+        new_proxy_edge[index].periodMS=1000;
+        new_proxy_edge[index].changePercentage=10;
+        new_proxy_edge[index].modbusTag=[];
+        new_proxy_edge[index].cloud=[
+          {
+            profile:"",
+            topic:[
+              {
+                type: 0,
+                name:""
+              }
+            ],
+            dataLogFormat: 0,
+            alternativeFormatCloudIndex:0, 
+            userDefineedData: ""
+          },
+          {
+            profile:"",
+            topic:[
+              {
+                type: 0,
+                name:""
+              }
+            ],
+            dataLogFormat: 0,
+            alternativeFormatCloudIndex:1, 
+            userDefineedData: ""
+          }
+        ];
+
+
 
         new_proxy_edge_index=index;
         new_proxy_edge_modal=true;
@@ -417,14 +724,38 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:1,
-      postprocessing:1,
-      postprocessingValue:1,
-      postprocessedDisplay:0,
-      dataLogFormat:0,
-      userDefineedData:""
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
     };
 
     function deletePE(index)
@@ -444,14 +775,10 @@
         modify_proxy_edge_index=index;
         BackupProxyEdge.enable=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].enable;
         BackupProxyEdge.delete=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].delete;      
-        BackupProxyEdge.tagName=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].tagName;
-        BackupProxyEdge.modbusDataModel=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusDataModel;
-        BackupProxyEdge.dataType=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataType;
-        BackupProxyEdge.postprocessing=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessing;
-        BackupProxyEdge.postprocessingValue=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessingValue;
-        BackupProxyEdge.postprocessedDisplay=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessedDisplay;
-        BackupProxyEdge.dataFormat=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataLogFormat;
-        BackupProxyEdge.userDefineedData=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].userDefineedData;
+        BackupProxyEdge.samplingCondition=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].samplingCondition;
+        BackupProxyEdge.periodMS=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].periodMS;
+        BackupProxyEdge.modbusTag=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag));
+        BackupProxyEdge.cloud=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].cloud));
 
     }
 
@@ -462,21 +789,10 @@
 
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].enable=BackupProxyEdge.enable;
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].delete=BackupProxyEdge.delete;
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].tagName=BackupProxyEdge.tagName;
-
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusDataModel=BackupProxyEdge.modbusDataModel;
-
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataType=BackupProxyEdge.dataType;
-
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessing=BackupProxyEdge.postprocessing;
-
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessingValue=BackupProxyEdge.postprocessingValue;
-
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].postprocessedDisplay=BackupProxyEdge.postprocessedDisplay;
-
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].dataLogFormat=BackupProxyEdge.dataLogFormat;
-
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].userDefineedData=BackupProxyEdge.userDefineedData;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].samplingCondition=BackupProxyEdge.samplingCondition;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].periodMS=BackupProxyEdge.periodMS;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag==JSON.parse(JSON.stringify(BackupProxyEdge.modbusTag));
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].cloud=JSON.parse(JSON.stringify(BackupProxyEdge.cloud));
 
     }
 
@@ -1657,12 +1973,9 @@
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-18">Modbus Data Model</TableHeadCell>
-    <TableHeadCell class="w-18">Data Type</TableHeadCell>
-    <TableHeadCell class="w-18">Postprocessing</TableHeadCell>
-    <TableHeadCell class="w-18">Postprocessed Display</TableHeadCell>
-    <TableHeadCell class="w-36">Data Log Format</TableHeadCell>
+    <TableHeadCell class="w-18">Modbus Tag</TableHeadCell>
+    <TableHeadCell class="w-18">Sampling Condition</TableHeadCell>
+    <TableHeadCell class="w-18">Cloud Setting</TableHeadCell>
   </TableHead>
 
 <TableBody>
@@ -1705,60 +2018,6 @@
       </td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{ProxyEdgeData.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{ProxyEdgeData.modbusDataModel}</td>
-{#if ProxyEdgeData.dataType == 1}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
-{:else if ProxyEdgeData.dataType == 2}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt16</td>
-{:else if ProxyEdgeData.dataType == 3}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int16</td>
-{:else if ProxyEdgeData.dataType == 4}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt32</td>
-{:else if ProxyEdgeData.dataType == 5}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int32</td>
-{:else if ProxyEdgeData.dataType == 6}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
-{:else if ProxyEdgeData.dataType == 7}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
-{:else if ProxyEdgeData.dataType == 8}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt64</td>
-{:else if ProxyEdgeData.dataType == 9}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int64</td>
-{:else if ProxyEdgeData.dataType == 10}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt8</td>
-{:else if ProxyEdgeData.dataType == 11}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int8</td>
-{:else}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
-{/if}
-
-
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
-{#if ProxyEdgeData.postprocessing == 1}+
-{:else if ProxyEdgeData.postprocessing == 2}-
-{:else if ProxyEdgeData.postprocessing == 3}*
-{:else if ProxyEdgeData.postprocessing == 4}/
-{/if}
-{ProxyEdgeData.postprocessingValue}
-      </td>
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
-  {#if ProxyEdgeData.postprocessedDisplay == 0}Hexadecimal
-{:else if ProxyEdgeData.postprocessedDisplay == 1}Decimal
-{:else if ProxyEdgeData.postprocessedDisplay == 2}Binary
-{/if}  
-       
-
-       </td>
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-36 strikeout">{#if ProxyEdgeData.dataLogFormat==0}<div class="flex gap-2">
-      Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg></div>
-<Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip>
-
-{:else if ProxyEdgeData.dataLogFormat==1}User Defined{/if}
-</td>
-    
 
 
 
@@ -1790,59 +2049,7 @@
 </TableBodyCell>
 
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
-      <TableBodyCell class="w-18">{ProxyEdgeData.tagName}</TableBodyCell>
-      <TableBodyCell class="w-18">{ProxyEdgeData.modbusDataModel}</TableBodyCell>
-{#if ProxyEdgeData.dataType == 1}
-        <TableBodyCell class="w-18">Boolean</TableBodyCell>
-{:else if ProxyEdgeData.dataType == 2}
-        <TableBodyCell class="w-18">UInt16</TableBodyCell>
-{:else if ProxyEdgeData.dataType == 3}
-        <TableBodyCell class="w-18">Int16</TableBodyCell>
-{:else if ProxyEdgeData.dataType == 4}
-      <TableBodyCell class="w-18">UInt32</TableBodyCell>
-{:else if ProxyEdgeData.dataType == 5}
-      <TableBodyCell class="w-18">Int32</TableBodyCell>
-{:else if ProxyEdgeData.dataType == 6}
-      <TableBodyCell class="w-18">Float</TableBodyCell>
-{:else if ProxyEdgeData.dataType == 7}
-      <TableBodyCell class="w-18">Double</TableBodyCell>
-{:else if ProxyEdgeData.dataType == 8}
-      <TableBodyCell class="w-18">UInt64</TableBodyCell>  
-{:else if ProxyEdgeData.dataType == 9}
-      <TableBodyCell class="w-18">Int64</TableBodyCell> 
-{:else if ProxyEdgeData.dataType == 10}
-      <TableBodyCell class="w-18">UInt8</TableBodyCell>  
-{:else if ProxyEdgeData.dataType == 11}
-      <TableBodyCell class="w-18">Int8</TableBodyCell>                        
-{:else}
-      <TableBodyCell class="w-18"></TableBodyCell>
-{/if}
 
-
-      <TableBodyCell class="w-18">
-{#if ProxyEdgeData.postprocessing == 1}+
-{:else if ProxyEdgeData.postprocessing == 2}-
-{:else if ProxyEdgeData.postprocessing == 3}*
-{:else if ProxyEdgeData.postprocessing == 4}/
-{/if}
-{ProxyEdgeData.postprocessingValue}
-      </TableBodyCell>
-      <TableBodyCell class="w-18">
-  {#if ProxyEdgeData.postprocessedDisplay == 0}Hexadecimal
-{:else if ProxyEdgeData.postprocessedDisplay == 1}Decimal
-{:else if ProxyEdgeData.postprocessedDisplay == 2}Binary
-{/if}  
-       
-
-       </TableBodyCell>
-      <TableBodyCell class="w-36">{#if ProxyEdgeData.dataLogFormat==0}<div class="flex gap-2">
-      Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg></div>
-<Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip>
-
-{:else if ProxyEdgeData.dataLogFormat==1}User Defined{/if}
-</TableBodyCell>
     
 
 
@@ -1911,104 +2118,87 @@
 
 
 
-<Modal bind:open={new_proxy_edge_modal}  size="lg" class="w-full" permanent={true}>
-  <form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox"  bind:checked={new_proxy_edge[new_proxy_edge_index].enable}>
-{/if}
-  Enable
-</label>
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddProxyEdge(new_proxy_edge_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<Modal bind:open={new_proxy_edge_modal} autoclose={false} size="lg" class="w-full">
 
-<p class="mt-10"></p>
+<StepIndicator {currentStep} {steps} glow />
 
-<table>
 
+<table bind:this={modalElement}>
+
+{#if currentStep == 1}
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Tag Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={new_proxy_edge[new_proxy_edge_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
+  <input class="center" type="checkbox" bind:checked={new_proxy_edge[new_proxy_edge_index].enable}></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
-    <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_proxy_edge[new_proxy_edge_index].modbusDataModel}>
-<option disabled="" value="">Choose ...</option>
-{#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
-<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
-{/each}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave as SlaveDataModel, index}
-<option value={SlaveDataModel.dataModelName}>{SlaveDataModel.dataModelName}</option>
-{/each}
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Sampling Condition</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<div class="flex gap-4">
+
+  <Radio class="pb-1" bind:group={new_proxy_edge[new_proxy_edge_index].samplingCondition} value={0}>Period</Radio>
+
+{#if new_proxy_edge[new_proxy_edge_index].samplingCondition==0}
+
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500" bind:value={new_proxy_edge[new_proxy_edge_index].periodMS}> <p class="pt-2">ms</p>
+{:else}
+
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled> <p class="pt-2">ms</p>
 {/if}
-</select>
+
+  <Radio class="pb-1" bind:group={new_proxy_edge[new_proxy_edge_index].samplingCondition} value={1}>Once Change</Radio>
+
+{#if new_proxy_edge[new_proxy_edge_index].samplingCondition==1}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500" bind:value={new_proxy_edge[new_proxy_edge_index].changePercentage}> <p class="pt-2">%</p>
+
+{:else}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled> <p class="pt-2">%</p>
 
 
+{/if}
 
-
-    
+</div>    
     </td>
-
+    <td></td>
+    <td></td>
 
 </tr>
 
 <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Modbus Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<button color="blue" type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-full w-48">Choose Tag<svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg></button>
+</td>
+   <td></td>
+    <td></td>
 
-  </td>
-
- <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_proxy_edge[new_proxy_edge_index].dataType}>
-<option disabled="" value="none">Choose Type ...</option>
-
-<option value={1}>Boolean</option>
-<option value={10}>UInt8</option>
-<option value={11}>Int8</option>
-<option value={2}>UInt16</option>
-<option value={3}>Int16</option>
-<option value={4}>UInt32</option>
-<option value={5}>Int32</option>
-<option value={8}>UInt64</option>
-<option value={9}>Int64</option>
-<option value={6}>Float</option>
-<option value={7}>Double</option>
-</select>
-
- 
-
-
- </td>
 </tr>
+<tr>
+
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Postprocessing</p></td>
-
- <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-16" bind:value={new_proxy_edge[new_proxy_edge_index].postprocessing}>
-<option disabled="" value="none">Choose Operator ...</option>
-
-<option value={1}>+</option>
-<option value={2}>-</option>
-<option value={3}>*</option>
-<option value={4}>/</option>
-</select>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page2}>Next</Button></td>
 
 
-   
- <FloatingLabelInput style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_proxy_edge[new_proxy_edge_index].postprocessingValue}>
-  </FloatingLabelInput> 
-  </div>
-  </td>
-  </tr>
+    </tr>
+
+{:else if currentStep ==2}
+
+
+{:else if currentStep ==3}
+
+
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Postprocessed Display</p>
+  <td><p class="pl-20 pt-4 text-lg font-light text-right">Display</p>
 
   </td>
 
@@ -2110,9 +2300,10 @@
 
     </tr>
 
+{/if}    
+
 
 </table>
-</form>
 </Modal>
 
 
@@ -2321,163 +2512,268 @@
 
   </Table>
 
-</AccordionItem>
 
-  <AccordionItem {defaultClass}>
+<p class="mt-8"></p>
+
+<Table shadow striped={true}>
 
 
-    <span slot="header" class="pl-4">
-    Cloud Settings
-    </span>
+<caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
+on:click={handleClickMV} on:keydown={() => {}}>
+    Modbus Tag
+    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus tag. Please go to modbus page for detailed setting.</p>
+  </caption>
+{#if openDetailStatusMV}
+<TableHead>
+    <TableHeadCell>Enable</TableHeadCell>
+    <TableHeadCell class="!p-1">No</TableHeadCell>
+    <TableHeadCell class="!p-3">Tag Name</TableHeadCell>
+    <TableHeadCell class="!p-1">Master Profile</TableHeadCell>
+    <TableHeadCell >Point Type</TableHeadCell>
+    <TableHeadCell >Address</TableHeadCell>
+    <TableHeadCell >Quantity</TableHeadCell>
+    <TableHeadCell class="!p-1">Date Type</TableHeadCell>
+    <TableHeadCell>Byte Order</TableHeadCell>
+    <TableHeadCell>Response Timeout</TableHeadCell>
+    <TableHeadCell>Post Processing</TableHeadCell>
+  </TableHead>
+  <TableBody>
 
 {#if getDataReady == 1}
-<table>
-   <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
-      <td class="pl-5 pt-5">
-<div class="flex gap-4">
-  <Radio bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushInterval} value={0} >Right Away</Radio>
-  <Radio bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushInterval} value={1} > User Defined (mins): </Radio>
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushInterval == 0}
-  <input type="number" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+   
 
+ <TableBodyRow>
+
+
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={TagItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+    </TableBodyCell>
+
+
+      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
+  <TableBodyCell class="!p-3">{TagItem.tagName}</TableBodyCell>
+  <TableBodyCell class="!p-1">{TagItem.masterProfile}
+{#if TagItem.slaveId != -1} (Slave ID: {TagItem.slaveId}){/if}
+  </TableBodyCell>
+{#if TagItem.pointType == 0}
+    <TableBodyCell >Coil</TableBodyCell>
+{:else if TagItem.pointType == 1}
+    <TableBodyCell >Discrete Input</TableBodyCell>
+{:else if TagItem.pointType == 2}
+    <TableBodyCell >Input Registers</TableBodyCell>
+{:else if TagItem.pointType == 3}
+    <TableBodyCell >Holding Registers</TableBodyCell>
 {:else}
-  <input type="number" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+  <TableBodyCell ></TableBodyCell>
 {/if}
-</div>
-
-      </td>
-
-</tr>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Link Lost Retransmit:</p></td>
-    <td class="pl-5 pt-5">
-<div class="flex gap-4">
-      <input type="number" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.linkLostRetransmit} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
-</div>
-    </td>
-</tr>
+  <TableBodyCell >{TagItem.address}</TableBodyCell>
+  <TableBodyCell >{TagItem.quantity}</TableBodyCell>
 
 
-<tr>
-<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Priority</p></td>
-      <td class="pl-5 pt-5">
-
-<div class="flex gap-4">
-  <Radio bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPriority} value={0} >Latest First</Radio>
-  <Radio bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPriority} value={1} > First In, First Out </Radio>
-
-</div>
-
-
-
-</td>
-
-
-</tr>
-
-
-<tr>
-
-
-<td><p class="pl-20 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
-<td class= "pl-4 pt-4">
-<MultiSelect items={CloudProfile} bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile} />
-
-    </td>
-
-
-</tr>
-
-
-
-
-
-  <tr>
-    <td></td>
-    <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveProxyCloud}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>Save</Button></td>
-
-
-    </tr>
-
-</table>
-
-
+{#if TagItem.dataType == 1}
+        <TableBodyCell class="!p-1">Boolean</TableBodyCell>
+{:else if TagItem.dataType == 2}
+        <TableBodyCell class="!p-1">UInt16</TableBodyCell>
+{:else if TagItem.dataType == 3}
+        <TableBodyCell class="!p-1">Int16</TableBodyCell>
+{:else if TagItem.dataType == 4}
+      <TableBodyCell class="!p-1">UInt32</TableBodyCell>
+{:else if TagItem.dataType == 5}
+      <TableBodyCell class="!p-1">Int32</TableBodyCell>
+{:else if TagItem.dataType == 6}
+      <TableBodyCell class="!p-1">Float</TableBodyCell>
+{:else if TagItem.dataType == 7}
+      <TableBodyCell class="!p-1">Double</TableBodyCell>
+{:else if TagItem.dataType == 8}
+      <TableBodyCell class="!p-1">UInt64</TableBodyCell>  
+{:else if TagItem.dataType == 9}
+      <TableBodyCell class="!p-1">Int64</TableBodyCell> 
+{:else if TagItem.dataType == 10}
+      <TableBodyCell class="!p-1">UInt8</TableBodyCell>  
+{:else if TagItem.dataType == 11}
+      <TableBodyCell class="!p-1">Int8</TableBodyCell>  
+{:else if TagItem.dataType == 12}
+      <TableBodyCell class="!p-1">ASCII</TableBodyCell>  
+{:else if TagItem.dataType == 13}
+      <TableBodyCell class="!p-1">BITMAP</TableBodyCell>  
+{:else if TagItem.dataType == 14}
+      <TableBodyCell class="!p-1">STR32</TableBodyCell> 
+{:else if TagItem.dataType == 15}
+      <TableBodyCell class="!p-1">String</TableBodyCell>
+{:else if TagItem.dataType == 16}
+      <TableBodyCell class="!p-1">RAW</TableBodyCell>                    
+{:else}
+      <TableBodyCell class="!p-1"></TableBodyCell>
 {/if}
-</AccordionItem>
 
 
-  <AccordionItem {defaultClass}>
+{#if TagItem.byteOrder==0} 
+    <TableBodyCell >Big Endian</TableBodyCell>
+{:else if TagItem.byteOrder==1}   
+        <TableBodyCell >Little Endian</TableBodyCell>
+{:else if TagItem.byteOrder==2}
+    <TableBodyCell >Big Endian Byte Swap</TableBodyCell>
+{:else if TagItem.byteOrder==3}
+        <TableBodyCell >Little Endian Byte Swap</TableBodyCell>
+{:else}
+    <TableBodyCell ></TableBodyCell>
+{/if}
 
 
-    <span slot="header" class="pl-4">
-    Topic Settings
-    </span>
+  <TableBodyCell>{TagItem.responseTimeout} ms
+{#if TagItem.pollingRate!=-1} (Interval: {TagItem.pollingRate} ms)
+{/if }
+
+  </TableBodyCell>
 
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={Proxy_CloudTopic_Target_Index}>
-<option disabled="" value="none">Choose Cloud Profile ...</option>
+      <TableBodyCell>
+{#if TagItem.postprocessingEnable}
+{#if TagItem.postprocessingOperator == 1}+
+{:else if TagItem.postprocessingOperator == 2}-
+{:else if TagItem.postprocessingOperator == 3}*
+{:else if TagItem.postprocessingOperator == 4}/
+{/if}
+{TagItem.postprocessingValue}
+{:else}
+    Disable
+{/if}
 
-{#each saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile as TargetProfile,index}
-<option value={index}>{TargetProfile}</option>
+      </TableBodyCell>
+
+    </TableBodyRow>
 {/each}
-</select>
+{/if}
 
-<p class="pt-4"></p>
+  </TableBody>
+      {/if}
+</Table>   
 
-{#if Proxy_CloudTopic_Target_Index != "none"}
+<p class="mt-4"></p>
 
-<table>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Topic</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[Proxy_CloudTopic_Target_Index]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
-
+<Table shadow striped={true}>
 
 
-  </tr>
-
-  <tr>
-    <td></td>
-    <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveProxyTopic}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>Save</Button></td>
+  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMS} on:keydown={() => {}}>
+    Modbus RTU Master Profile
+    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus master in RTU mode. Please go to modbus page for detailed setting.</p>
+  </caption>
 
 
+{#if openDetailStatusMMS}
 
-</table>
+  <TableHead>
+    <TableHeadCell class="w-10">Enable</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-10">Alias Name</TableHeadCell>
+    <TableHeadCell class="w-10">Serial Profile</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>     
+  </TableHead>
+  <TableBody>
 
 
+
+
+{#if getDataReady == 1}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RTUMasterItem, index}
+
+    <TableBodyRow>
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={RTUMasterItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+    </TableBodyCell>
+
+
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{RTUMasterItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{RTUMasterItem.serialProfile}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>      
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell> 
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>      
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>       
+    </TableBodyRow>
+
+{/each}
+{/if}
+
+  
+
+  </TableBody>
+  {/if}
+</Table>
+
+<p class="mt-4"></p>
+
+<Table shadow striped={true} >
+
+  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMT} on:keydown={() => {}}>
+    Modbus TCP Master Profile
+    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus master in TCP mode. Please go to modbus page for detailed setting.</p>
+  </caption>
+
+{#if openDetailStatusMMT}
+  <TableHead>
+     <TableHeadCell class="w-10">Enable</TableHeadCell>
+    <TableHeadCell class="w-10">No</TableHeadCell>
+    <TableHeadCell class="w-10">LAN Profile</TableHeadCell>   
+    <TableHeadCell class="w-10">Alias Name</TableHeadCell>
+    <TableHeadCell class="w-10">Remote Server IP</TableHeadCell>
+    <TableHeadCell class="w-10">Remote Port</TableHeadCell>
+    <TableHeadCell class="w-10">Connection Timeout</TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell>  
+    <TableHeadCell class="w-10"></TableHeadCell>
+    <TableHeadCell class="w-10"></TableHeadCell> 
+  </TableHead>
+  <TableBody>
+
+
+{#if getDataReady == 1}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TCPMasterItem, index}
+   
+    <TableBodyRow>
+
+
+
+    <TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={TCPMasterItem.enable} class="disabled:cursor-not-allowed disabled:opacity-50 bg-gray-300" disabled>
+    </TableBodyCell>
+
+      <TableBodyCell class="!p-6 w-10">{index+1}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.lanProfile}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.aliasName}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{TCPMasterItem.remoteServerIp}</TableBodyCell>
+      <TableBodyCell class="w-10">{TCPMasterItem.remotePort}</TableBodyCell>
+      <TableBodyCell class="w-10">{TCPMasterItem.connectionTimeout} ms</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>       
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>  
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell> 
+    </TableBodyRow>
+{/each}
 {/if}
 
 
-</AccordionItem>
 
+  </TableBody>
+    {/if}
+</Table>
+
+
+</AccordionItem>
 
 </Accordion>
 

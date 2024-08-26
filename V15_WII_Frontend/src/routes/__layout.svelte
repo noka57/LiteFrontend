@@ -1,5 +1,4 @@
 <script>
-  	import './global.css';
 	import '../app.css';
 	import { page } from '$app/stores';
 	import { Hamburger } from 'svelte-hamburgers';

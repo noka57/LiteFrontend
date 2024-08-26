@@ -2412,7 +2412,10 @@
             modbus_tag_changedValues=[];
         }
 
-         for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_tag.length, modbus_data.config.fieldManagement_modbus_tag.length); i++) 
+
+        console.log(changed_modbus_data.config.fieldManagement_modbus_tag);
+
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_tag.length, modbus_data.config.fieldManagement_modbus_tag.length); i++) 
         {
           compareObjects(changed_modbus_data.config.fieldManagement_modbus_tag[i], modbus_data.config.fieldManagement_modbus_tag[i], 10, 1,i+1);
 
@@ -6919,8 +6922,10 @@
 </select>
 
 
- <FloatingLabelInput class="p-2 mt-1 mb-3" style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_tag[new_tag_index].postprocessingValue}>
-  </FloatingLabelInput> 
+
+
+<div class="relative"><input id="operand_value" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={new_tag[new_tag_index].postprocessingValue}> <label for="operand_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">operand_value</label></div>
+
 
 {/if}
 </div></td>
@@ -7163,8 +7168,9 @@
 </select>
 
 
- <FloatingLabelInput class="p-2 mt-1 mb-3" style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].postprocessingValue}>
-  </FloatingLabelInput> 
+<div class="relative"><input id="operand_value" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].postprocessingValue}> <label for="operand_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">operand_value</label></div>
+
+
 
 {/if}
 </div></td>

@@ -111,7 +111,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   };
 
   let NewItem=[
@@ -124,7 +128,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
     enable: false,
@@ -135,7 +143,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
     enable: false,
@@ -146,7 +158,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
     enable: false,
@@ -157,7 +173,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
     enable: false,
@@ -168,7 +188,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
 
   },
   {
@@ -180,7 +204,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
     enable: false,
@@ -191,7 +219,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
 
   },
   {
@@ -203,7 +235,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
 
   },
   {
@@ -215,7 +251,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
     enable: false,
@@ -226,7 +266,11 @@
     modelID:"",
     attestation:0,
     machineCAcert:"",
-    machineCert:""
+    machineCert:"",
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   }
   ];
 
@@ -245,6 +289,12 @@
     NewItem[index].attestation=0;
     NewItem[index].machineCAcert="";
     NewItem[index].machineCert="";
+    NewItem[index].dataPushInterval=0;
+    NewItem[index].dataPushIntervalValue=15;
+    NewItem[index].linkLostRetransmit=0;
+    NewItem[index].dataPriority=0;
+
+
     new_item_index=index;
     NewHubConnectionStringEnable=false;
     NewHubConnectionString="";
@@ -446,6 +496,12 @@
     BackupItem.machineCAcert=changed_azure_data.config.cloud_azHub_profile[index].machineCAcert;
     BackupItem.machineCert=changed_azure_data.config.cloud_azHub_profile[index].machineCert;
 
+    BackupItem.dataPushInterval=changed_azure_data.config.cloud_azHub_profile[index].dataPushInterval;
+    BackupItem.dataPushIntervalValue=changed_azure_data.config.cloud_azHub_profile[index].dataPushIntervalValue;
+    BackupItem.linkLostRetransmit=changed_azure_data.config.cloud_azHub_profile[index].linkLostRetransmit;
+    BackupItem.dataPriority=changed_azure_data.config.cloud_azHub_profile[index].dataPriority;
+
+
   }
 
   function NoModifyAZhub(index)
@@ -459,7 +515,13 @@
     changed_azure_data.config.cloud_azHub_profile[index].modelID= BackupItem.modelID;
     changed_azure_data.config.cloud_azHub_profile[index].attestation= BackupItem.attestation;
     changed_azure_data.config.cloud_azHub_profile[index].machineCAcert= BackupItem.machineCAcert;
-    changed_azure_data.config.cloud_azHub_profile[index].machineCert= BackupItem.machineCert;    
+    changed_azure_data.config.cloud_azHub_profile[index].machineCert= BackupItem.machineCert;
+
+    changed_azure_data.config.cloud_azHub_profile[index].dataPushInterval=BackupItem.dataPushInterval;
+    changed_azure_data.config.cloud_azHub_profile[index].dataPushIntervalValue=BackupItem.dataPushIntervalValue;
+    changed_azure_data.config.cloud_azHub_profile[index].linkLostRetransmit=BackupItem.linkLostRetransmit;
+    changed_azure_data.config.cloud_azHub_profile[index].dataPriority=BackupItem.dataPriority;
+
 
   }
 
@@ -479,7 +541,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0        
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0        
   };
 
   let NewItemDPS=[
@@ -493,7 +559,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0  
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0  
   },
   {
     enable: false,
@@ -505,7 +575,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0     
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0     
   },
   {
     enable: false,
@@ -517,7 +591,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0     
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0     
   },
   {
     enable: false,
@@ -529,7 +607,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0     
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0     
   },
   {
     enable: false,
@@ -541,7 +623,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0    
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0    
   },
   {
     enable: false,
@@ -553,7 +639,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0   
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0   
   },
   {
     enable: false,
@@ -565,7 +655,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0    
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0    
   },
   {
     enable: false,
@@ -577,7 +671,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0    
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0    
   },
   {
     enable: false,
@@ -589,7 +687,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0     
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0     
   },
   {
     enable: false,
@@ -601,7 +703,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0     
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0     
   }
 
 
@@ -626,7 +732,12 @@
     NewItemDPS[index].attestation=0;
     NewItemDPS[index].machineCAcert="";
     NewItemDPS[index].machineCert="";
-    NewItemDPS[index].enrollment=0;    
+    NewItemDPS[index].enrollment=0;
+    NewItemDPS[index].dataPushInterval=0;
+    NewItemDPS[index].dataPushIntervalValue=15;
+    NewItemDPS[index].linkLostRetransmit=0;
+    NewItemDPS[index].dataPriority=0;
+
     new_item_dps_index=index;
     new_modal_dps = true;
   }
@@ -664,6 +775,13 @@
     BackupItemDPS.machineCAcert=changed_azure_data.config.cloud_azDPS_profile[index].machineCAcert;
     BackupItemDPS.machineCert=changed_azure_data.config.cloud_azDPS_profile[index].machineCert;    
     BackupItemDPS.enrollment=changed_azure_data.config.cloud_azDPS_profile[index].enrollment;
+
+
+    BackupItemDPS.dataPushInterval=changed_azure_data.config.cloud_azDPS_profile[index].dataPushInterval;
+    BackupItemDPS.dataPushIntervalValue=changed_azure_data.config.cloud_azDPS_profile[index].dataPushIntervalValue;
+    BackupItemDPS.linkLostRetransmit=changed_azure_data.config.cloud_azDPS_profile[index].linkLostRetransmit
+    BackupItemDPS.dataPriority=changed_azure_data.config.cloud_azDPS_profile[index].dataPriority;
+
   }
 
   function NoModifyAZhubDPS(index)
@@ -678,7 +796,13 @@
     changed_azure_data.config.cloud_azDPS_profile[index].attestation= BackupItemDPS.attestation;
     changed_azure_data.config.cloud_azDPS_profile[index].machineCAcert= BackupItemDPS.machineCAcert;
     changed_azure_data.config.cloud_azDPS_profile[index].machineCert= BackupItemDPS.machineCert;    
-    changed_azure_data.config.cloud_azDPS_profile[index].enrollment= BackupItemDPS.enrollment;  
+    changed_azure_data.config.cloud_azDPS_profile[index].enrollment= BackupItemDPS.enrollment; 
+
+    changed_azure_data.config.cloud_azDPS_profile[index].dataPushInterval=BackupItemDPS.dataPushInterval;
+    changed_azure_data.config.cloud_azDPS_profile[index].dataPushIntervalValue=BackupItemDPS.dataPushIntervalValue;
+    changed_azure_data.config.cloud_azDPS_profile[index].linkLostRetransmit=BackupItemDPS.linkLostRetransmit;
+    changed_azure_data.config.cloud_azDPS_profile[index].dataPriority=BackupItemDPS.dataPriority;
+
   }
 
   function ModifyAZhubDPS(index)
@@ -698,7 +822,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0      
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0         
   };
 
   let NewItemCentral=[
@@ -713,7 +841,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0      
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0         
   },
   {
     enable: false,
@@ -726,7 +858,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0      
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0      
   },
   {
     enable: false,
@@ -739,7 +875,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0      
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0      
   },
   {
     enable: false,
@@ -752,7 +892,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0    
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0      
   },
   {
     enable: false,
@@ -765,7 +909,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0    
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0       
   },
   {
     enable: false,
@@ -778,7 +926,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0    
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0       
   },
   {
     enable: false,
@@ -791,7 +943,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0    
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0       
   },
   {
     enable: false,
@@ -804,7 +960,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0    
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0    
   },
   {
     enable: false,
@@ -817,7 +977,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0    
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0       
   },
   {
     enable: false,
@@ -830,7 +994,11 @@
     attestation:0,
     machineCAcert:"",
     machineCert:"",
-    enrollment:0    
+    enrollment:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0   
   }
 
 
@@ -857,6 +1025,12 @@
     NewItemCentral[index].machineCAcert="";
     NewItemCentral[index].machineCert="";
     NewItemCentral[index].enrollment=0;
+    NewItemCentral[index].dataPushInterval=0;
+    NewItemCentral[index].dataPushIntervalValue=15;
+    NewItemCentral[index].linkLostRetransmit=0;
+    NewItemCentral[index].dataPriority=0;
+
+
     new_item_central_index=index;
     new_modal_central = true;
   }
@@ -897,6 +1071,13 @@
     BackupItemCentral.machineCert=changed_azure_data.config.cloud_azCentral_profile[index].machineCert;
     BackupItemCentral.enrollment=changed_azure_data.config.cloud_azCentral_profile[index].enrollment;
 
+
+    BackupItemCentral.dataPushInterval=changed_azure_data.config.cloud_azCentral_profile[index].dataPushInterval;
+    BackupItemCentral.dataPushIntervalValue=changed_azure_data.config.cloud_azCentral_profile[index].dataPushIntervalValue;
+    BackupItemCentral.linkLostRetransmit=changed_azure_data.config.cloud_azCentral_profile[index].linkLostRetransmit;
+    BackupItemCentral.dataPriority=changed_azure_data.config.cloud_azCentral_profile[index].dataPriority;
+
+
   }
 
   function NoModifyAZCentral(index)
@@ -912,7 +1093,13 @@
     changed_azure_data.config.cloud_azCentral_profile[index].attestation=BackupItemCentral.attestation;
     changed_azure_data.config.cloud_azCentral_profile[index].machineCAcert=BackupItemCentral.machineCAcert;
     changed_azure_data.config.cloud_azCentral_profile[index].machineCert=BackupItemCentral.machineCert;    
-    changed_azure_data.config.cloud_azCentral_profile[index].enrollment=BackupItemCentral.enrollment; 
+    changed_azure_data.config.cloud_azCentral_profile[index].enrollment=BackupItemCentral.enrollment;
+
+    changed_azure_data.config.cloud_azCentral_profile[index].dataPushInterval=BackupItemCentral.dataPushInterval;
+    changed_azure_data.config.cloud_azCentral_profile[index].dataPushIntervalValue=BackupItemCentral.dataPushIntervalValue;
+    changed_azure_data.config.cloud_azCentral_profile[index].linkLostRetransmit=BackupItemCentral.linkLostRetransmit;
+    changed_azure_data.config.cloud_azCentral_profile[index].dataPriority=BackupItemCentral.dataPriority;
+
   }
 
   function ModifyAZCentral(index)
@@ -1774,7 +1961,11 @@
     <TableHeadCell class="w-18">Hub Name</TableHeadCell>
     <TableHeadCell class="w-18">Device ID</TableHeadCell>
     <TableHeadCell class="w-18">Attestation</TableHeadCell>        
-    <TableHeadCell class="w-18">Model ID</TableHeadCell>       
+    <TableHeadCell class="w-18">Model ID</TableHeadCell>
+    <TableHeadCell class="w-10">Data Push Interval</TableHeadCell>
+    <TableHeadCell class="w-10">Link Lost Retransmit</TableHeadCell>
+    <TableHeadCell class="w-10">Data Priority</TableHeadCell>    
+
      </TableHead>
   <TableBody>
 
@@ -1830,6 +2021,24 @@
 {/if}
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azHub.modelID}</td>
 
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">
+{#if azHub.dataPushInterval == 0}Right Away
+{:else if azHub.dataPushInterval == 1} {azHub.dataPushIntervalValue} min(s)
+{/if}
+</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">
+{azHub.linkLostRetransmit} delay second(s)
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">
+{#if azHub.dataPriority==0} Latest First
+{:else if azHub.dataPriority==1} First In First Out
+{/if}
+</td>
+
 </tr>
 
 {:else}
@@ -1875,6 +2084,25 @@
 
      
        <TableBodyCell class="w-18">{azHub.modelID}</TableBodyCell>
+
+
+<TableBodyCell class="w-10">
+{#if azHub.dataPushInterval == 0}Right Away
+{:else if azHub.dataPushInterval == 1} {azHub.dataPushIntervalValue} min(s)
+{/if}
+</TableBodyCell>
+
+<TableBodyCell class="w-10">
+{azHub.linkLostRetransmit} delay second(s)
+</TableBodyCell>
+
+
+<TableBodyCell class="w-10">
+{#if azHub.dataPriority==0} Latest First
+{:else if azHub.dataPriority==1} First In First Out
+{/if}
+</TableBodyCell>
+
     </TableBodyRow>
 
 {/if}
@@ -1907,6 +2135,10 @@
        <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
          <TableBodyCell class="w-18"></TableBodyCell>
+       <TableBodyCell class="w-10"></TableBodyCell>
+       <TableBodyCell class="w-10"></TableBodyCell>
+       <TableBodyCell class="w-10"></TableBodyCell>  
+
 </TableBodyRow>
 
 <tr class="pt-5">
@@ -2081,6 +2313,54 @@
 </tr>
 
 {/if}
+
+
+
+
+ <tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5" colspan="3">
+<div class="flex gap-4">
+  <Radio bind:group={changed_azure_data.config.cloud_azHub_profile[modify_index].dataPushInterval} value={0} >Right Away</Radio>
+  <Radio bind:group={changed_azure_data.config.cloud_azHub_profile[modify_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
+{#if changed_azure_data.config.cloud_azHub_profile[modify_index].dataPushInterval==0}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>
+
+{:else}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].dataPushIntervalValue}>
+{/if}
+</div>
+
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4">
+<div class="flex gap-4">
+      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={changed_azure_data.config.cloud_azHub_profile[modify_index].linkLostRetransmit}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
+</div>
+    </td>
+</tr>
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4">
+
+<div class="flex gap-4">
+  <Radio bind:group={changed_azure_data.config.cloud_azHub_profile[modify_index].dataPriority} value={0} >Latest First</Radio>
+  <Radio bind:group={changed_azure_data.config.cloud_azHub_profile[modify_index].dataPriority} value={1} >First In, First Out </Radio>
+
+</div>
+
+
+
+</td>
+
+
+</tr>
 
   <tr>
     <td></td>
@@ -2269,13 +2549,13 @@
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
       <td class="pl-5 pt-5" colspan="3">
 <div class="flex gap-4">
-  <Radio  value='Now' >Right Away</Radio>
-  <Radio  value='UserDefine' > User Defined (mins): </Radio>
-{#if 0}
+  <Radio bind:group={NewItem[new_item_index].dataPushInterval} value={0} >Right Away</Radio>
+  <Radio bind:group={NewItem[new_item_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
+{#if NewItem[new_item_index].dataPushInterval==0}
   <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>
 
 {:else}
-  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16">
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16" bind:value={NewItem[new_item_index].dataPushIntervalValue}>
 {/if}
 </div>
 
@@ -2287,20 +2567,19 @@
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
     <td class="pl-4 pt-4">
 <div class="flex gap-4">
-      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={NewItem[new_item_index].linkLostRetransmit}>
       <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
 </div>
     </td>
 </tr>
-
 
 <tr>
 <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
       <td class="pl-4 pt-4">
 
 <div class="flex gap-4">
-  <Radio  value='Latest' >Latest First</Radio>
-  <Radio  value='FIFO' > First In, First Out </Radio>
+  <Radio bind:group={NewItem[new_item_index].dataPriority} value={0} >Latest First</Radio>
+  <Radio bind:group={NewItem[new_item_index].dataPriority} value={1} > First In, First Out </Radio>
 
 </div>
 
@@ -2359,7 +2638,9 @@
     <TableHeadCell class="w-18">Enrollment</TableHeadCell>  
     <TableHeadCell class="w-18">Attestation</TableHeadCell>      
     <TableHeadCell class="w-18">Model ID</TableHeadCell> 
-
+    <TableHeadCell class="w-10">Data Push Interval</TableHeadCell>
+    <TableHeadCell class="w-10">Link Lost Retransmit</TableHeadCell>
+    <TableHeadCell class="w-10">Data Priority</TableHeadCell>    
 
      </TableHead>
   <TableBody>
@@ -2426,6 +2707,25 @@
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azDPS.modelID}</td>
 
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">
+{#if azDPS.dataPushInterval == 0}Right Away
+{:else if azDPS.dataPushInterval == 1} {azDPS.dataPushIntervalValue} min(s)
+{/if}
+</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">
+{azDPS.linkLostRetransmit} delay second(s)
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">
+{#if azDPS.dataPriority==0} Latest First
+{:else if azDPS.dataPriority==1} First In First Out
+{/if}
+</td>
+
 </tr>
 
 
@@ -2477,6 +2777,25 @@
 
 
   <TableBodyCell class="w-18">{azDPS.modelID}</TableBodyCell>
+
+
+<TableBodyCell class="w-10">
+{#if azDPS.dataPushInterval == 0}Right Away
+{:else if azDPS.dataPushInterval == 1} {azDPS.dataPushIntervalValue} min(s)
+{/if}
+</TableBodyCell>
+
+<TableBodyCell class="w-10">
+{azDPS.linkLostRetransmit} delay second(s)
+</TableBodyCell>
+
+
+<TableBodyCell class="w-10">
+{#if azDPS.dataPriority==0} Latest First
+{:else if azDPS.dataPriority==1} First In First Out
+{/if}
+</TableBodyCell>
+
     </TableBodyRow>
 
 {/if}
@@ -2510,7 +2829,11 @@
        <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
        <TableBodyCell class="w-18"></TableBodyCell>
-       <TableBodyCell class="w-18"></TableBodyCell>       
+       <TableBodyCell class="w-18"></TableBodyCell>
+       <TableBodyCell class="w-10"></TableBodyCell>
+       <TableBodyCell class="w-10"></TableBodyCell>
+       <TableBodyCell class="w-10"></TableBodyCell>  
+
 </TableBodyRow>
 
 <tr class="pt-5">
@@ -2685,6 +3008,56 @@
 
 
 
+
+ <tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5" colspan="3">
+<div class="flex gap-4">
+  <Radio bind:group={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPushInterval} value={0} >Right Away</Radio>
+  <Radio bind:group={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
+{#if changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPushInterval==0}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>
+
+{:else}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16" bind:value={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPushIntervalValue}>
+{/if}
+</div>
+
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4">
+<div class="flex gap-4">
+      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].linkLostRetransmit}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
+</div>
+    </td>
+</tr>
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4">
+
+<div class="flex gap-4">
+  <Radio bind:group={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPriority} value={0} >Latest First</Radio>
+  <Radio bind:group={changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPriority} value={1} > First In, First Out </Radio>
+
+</div>
+
+
+
+</td>
+
+
+</tr>
+
+
+
+
+
   <tr>
     <td></td>
     <td></td>
@@ -2844,18 +3217,17 @@
 
 {/if}
 
-
  <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
-      <td class="pl-5 pt-5">
+      <td class="pl-5 pt-5" colspan="3">
 <div class="flex gap-4">
-  <Radio  value='Now' >Right Away</Radio>
-  <Radio  value='UserDefine' > User Defined (mins): </Radio>
-{#if 0}
+  <Radio bind:group={NewItemDPS[new_item_dps_index].dataPushInterval} value={0} >Right Away</Radio>
+  <Radio bind:group={NewItemDPS[new_item_dps_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
+{#if NewItemDPS[new_item_dps_index].dataPushInterval==0}
   <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>
 
 {:else}
-  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16">
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16" bind:value={NewItemDPS[new_item_dps_index].dataPushIntervalValue}>
 {/if}
 </div>
 
@@ -2867,20 +3239,19 @@
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
     <td class="pl-4 pt-4">
 <div class="flex gap-4">
-      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={NewItemDPS[new_item_dps_index].linkLostRetransmit}>
       <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
 </div>
     </td>
 </tr>
-
 
 <tr>
 <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
       <td class="pl-4 pt-4">
 
 <div class="flex gap-4">
-  <Radio  value='Latest' >Latest First</Radio>
-  <Radio  value='FIFO' > First In, First Out </Radio>
+  <Radio bind:group={NewItemDPS[new_item_dps_index].dataPriority} value={0} >Latest First</Radio>
+  <Radio bind:group={NewItemDPS[new_item_dps_index].dataPriority} value={1} >First In, First Out </Radio>
 
 </div>
 
@@ -2890,7 +3261,6 @@
 
 
 </tr>
-
 
 
   <tr>
@@ -2942,7 +3312,11 @@
     <TableHeadCell class="w-18">Device ID</TableHeadCell>
     <TableHeadCell class="w-18">Enrollment</TableHeadCell>  
     <TableHeadCell class="w-18">Attestation</TableHeadCell>    
-    <TableHeadCell class="w-18">Model ID</TableHeadCell>             
+    <TableHeadCell class="w-18">Model ID</TableHeadCell> 
+    <TableHeadCell class="w-10">Data Push Interval</TableHeadCell>
+    <TableHeadCell class="w-10">Link Lost Retransmit</TableHeadCell>
+    <TableHeadCell class="w-10">Data Priority</TableHeadCell>    
+
      </TableHead>
   <TableBody>
 
@@ -3008,6 +3382,23 @@
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{azCentral.modelID}</td>
 
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">
+{#if azCentral.dataPushInterval == 0}Right Away
+{:else if azCentral.dataPushInterval == 1} {azCentral.dataPushIntervalValue} min(s)
+{/if}
+</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">
+{azCentral.linkLostRetransmit} delay second(s)
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white w-10 strikeout">
+{#if azCentral.dataPriority==0} Latest First
+{:else if azCentral.dataPriority==1} First In First Out
+{/if}
+</td>
+
 
       </tr>
 
@@ -3062,6 +3453,25 @@
 
 
  <TableBodyCell class="w-18">{azCentral.modelID}</TableBodyCell>
+
+
+<TableBodyCell class="w-10">
+{#if azCentral.dataPushInterval == 0}Right Away
+{:else if azCentral.dataPushInterval == 1} {azCentral.dataPushIntervalValue} min(s)
+{/if}
+</TableBodyCell>
+
+<TableBodyCell class="w-10">
+{azCentral.linkLostRetransmit} delay second(s)
+</TableBodyCell>
+
+
+<TableBodyCell class="w-10">
+{#if azCentral.dataPriority==0} Latest First
+{:else if azCentral.dataPriority==1} First In First Out
+{/if}
+</TableBodyCell>
+
     </TableBodyRow>
 
 {/if}
@@ -3277,6 +3687,50 @@
 
 {/if}
 
+ <tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5" colspan="3">
+<div class="flex gap-4">
+  <Radio bind:group={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPushInterval} value={0} >Right Away</Radio>
+  <Radio bind:group={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
+{#if changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPushInterval==0}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>
+
+{:else}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16" bind:value={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPushIntervalValue}>
+{/if}
+</div>
+
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4">
+<div class="flex gap-4">
+      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].linkLostRetransmit}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
+</div>
+    </td>
+</tr>
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4">
+
+<div class="flex gap-4">
+  <Radio bind:group={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPriority} value={0} >Latest First</Radio>
+  <Radio bind:group={changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPriority} value={1} >First In, First Out </Radio>
+
+</div>
+
+
+
+</td>
+
+
+</tr>
 
 
 
@@ -3444,18 +3898,17 @@
 
 {/if}
 
-
  <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
-      <td class="pl-5 pt-5">
+      <td class="pl-5 pt-5" colspan="3">
 <div class="flex gap-4">
-  <Radio  value='Now' >Right Away</Radio>
-  <Radio  value='UserDefine' > User Defined (mins): </Radio>
-{#if 0}
+  <Radio bind:group={NewItemCentral[new_item_central_index].dataPushInterval} value={0} >Right Away</Radio>
+  <Radio bind:group={NewItemCentral[new_item_central_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
+{#if NewItemCentral[new_item_central_index].dataPushInterval==0}
   <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>
 
 {:else}
-  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16">
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16" bind:value={NewItemCentral[new_item_central_index].dataPushIntervalValue}>
 {/if}
 </div>
 
@@ -3467,20 +3920,19 @@
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
     <td class="pl-4 pt-4">
 <div class="flex gap-4">
-      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={NewItemCentral[new_item_central_index].linkLostRetransmit}>
       <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
 </div>
     </td>
 </tr>
-
 
 <tr>
 <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
       <td class="pl-4 pt-4">
 
 <div class="flex gap-4">
-  <Radio  value='Latest' >Latest First</Radio>
-  <Radio  value='FIFO' > First In, First Out </Radio>
+  <Radio bind:group={NewItemCentral[new_item_central_index].dataPriority} value={0} >Latest First</Radio>
+  <Radio bind:group={NewItemCentral[new_item_central_index].dataPriority} value={1} >First In, First Out </Radio>
 
 </div>
 

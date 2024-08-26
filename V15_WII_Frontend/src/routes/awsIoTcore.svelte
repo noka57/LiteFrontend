@@ -112,8 +112,8 @@
   let modify_Modal=false;
   let modify_index;
 
-  let BackupItem={
-    enable: false,
+   let BackupItem={
+    enable: true,
     delete: false,
     brokerHost: "",
     brokerPort: 12345,
@@ -126,45 +126,17 @@
     qos: "",
     keepAliveInterval: 60,
     dataCompression: 0,
-    retained:0
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   };
 
   let NewItem=[
   {
-    enable: false,
-    delete: false,   
-    brokerHost: "",
-    brokerPort: 12345,
-    tls: 0,
-    brokerCaCert: "testca.cert",
-    clientCert: "testClient.cert",
-    clientId: "",
-    account: "",
-    password: "",
-    qos: "",
-    keepAliveInterval: 60,
-    dataCompression: 0,
-    retained:0
-  },
-  {
-    enable: false,
+    enable: true,
     delete: false,
-    brokerHost: "",   
-    brokerPort: 12345,
-    tls: 0,
-    brokerCaCert: "testca.cert",
-    clientCert: "testClient.cert",
-    clientId: "",
-    account: "",
-    password: "",
-    qos: "",
-    keepAliveInterval: 60,
-    dataCompression: 0,
-    retained:0
-  },
-  {
-    enable: false,
-    delete: false,    
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -176,11 +148,15 @@
     qos: "",
     keepAliveInterval: 60,
     dataCompression: 0,
-    retained:0
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
-    enable: false,
-    delete: false,    
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -192,11 +168,15 @@
     qos: "",
     keepAliveInterval: 60,
     dataCompression: 0,
-    retained:0
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
-    enable: false,
-    delete: false,    
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -208,11 +188,15 @@
     qos: "",
     keepAliveInterval: 60,
     dataCompression: 0,
-    retained:0
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
-    enable: false,
-    delete: false,    
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -224,11 +208,55 @@
     qos: "",
     keepAliveInterval: 60,
     dataCompression: 0,
-    retained:0
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
+  },
+  {
+    enable: true,
+    delete: false,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0,
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
+  },
+  {
+    enable: true,
+    delete: false,
+    brokerHost: "",
+    brokerPort: 12345,
+    tls: 0,
+    brokerCaCert: "testca.cert",
+    clientCert: "testClient.cert",
+    clientId: "",
+    account: "",
+    password: "",
+    qos: "",
+    keepAliveInterval: 60,
+    dataCompression: 0,
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   }
   ,{
-    enable: false,
-    delete: false,    
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -240,11 +268,15 @@
     qos: "",
     keepAliveInterval: 60,
     dataCompression: 0,
-    retained:0
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
-    enable: false,
-    delete: false,    
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -256,11 +288,15 @@
     qos: "",
     keepAliveInterval: 60,
     dataCompression: 0,
-    retained:0
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
-    enable: false,
-    delete: false,    
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -272,11 +308,15 @@
     qos: "",
     keepAliveInterval: 60,
     dataCompression: 0,
-    retained:0
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   },
   {
-    enable: false,
-    delete: false,    
+    enable: true,
+    delete: false,
     brokerHost: "",
     brokerPort: 12345,
     tls: 0,
@@ -288,7 +328,11 @@
     qos: "",
     keepAliveInterval: 60,
     dataCompression: 0,
-    retained:0
+    retained:0,
+    dataPushInterval: 0,
+    dataPushIntervalValue: 15,
+    linkLostRetransmit: 0,
+    dataPriority: 0
   }
 
 
@@ -314,6 +358,11 @@
     NewItem[index].keepAliveInterval=60;    
     NewItem[index].dataCompression=0;        
     NewItem[index].retained=0;
+    NewItem[index].dataPushInterval=1;
+    NewItem[index].dataPushIntervalValue=15;
+    NewItem[index].linkLostRetransmit=0;
+    NewItem[index].dataPriority=0;
+
     new_item_index=index;
     new_modal = true;
   }
@@ -356,7 +405,11 @@
     BackupItem.qos=changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].qos;
     BackupItem.keepAliveInterval=changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].keepAliveInterval;    
     BackupItem.dataCompression=changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].dataCompression;   
-    BackupItem.retained=changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].retained;   
+    BackupItem.retained=changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].retained;  
+    BackupItem.dataPushInterval=changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].dataPushInterval; 
+    BackupItem.dataPushIntervalValue=changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].dataPushIntervalValue; 
+    BackupItem.linkLostRetransmit=changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].linkLostRetransmit;
+    BackupItem.dataPriority=changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].dataPriority;     
 
   }
 
@@ -377,7 +430,10 @@
     changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].keepAliveInterval=BackupItem.keepAliveInterval;    
     changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].dataCompression=BackupItem.dataCompression;
     changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].retained=BackupItem.retained;
-
+    changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].dataPushInterval=BackupItem.dataPushInterval;
+    changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].dataPushIntervalValue=BackupItem.dataPushIntervalValue; 
+    changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].linkLostRetransmit=BackupItem.linkLostRetransmit;
+    changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[index].dataPriority=BackupItem.dataPriority;  
   }
 
   function ModifyMQTT(index)
@@ -917,14 +973,16 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell class="!p-1">No</TableHeadCell>
     <TableHeadCell class="w-18">Broker Host</TableHeadCell>
-    <TableHeadCell class="w-18">Broker Port</TableHeadCell>
     <TableHeadCell class="!p-1">TLS</TableHeadCell>
     <TableHeadCell>Client ID</TableHeadCell>
     <TableHeadCell>Account</TableHeadCell>
-    <TableHeadCell>QoS</TableHeadCell>
-    <TableHeadCell>Retained</TableHeadCell>    
-    <TableHeadCell class="w-18">Keep Alive Interval (sec)</TableHeadCell>
-    <TableHeadCell class="w-18">Data Compression</TableHeadCell>
+    <TableHeadCell class="!p-1 w-4">QoS</TableHeadCell>
+    <TableHeadCell class="!p-1 w-4">Retained</TableHeadCell>    
+    <TableHeadCell class="!p-3 w-18">Keep Alive Interval</TableHeadCell>
+    <TableHeadCell class="!p-3 w-10">Data Compression</TableHeadCell>
+    <TableHeadCell class="w-10">Data Push Interval</TableHeadCell>
+    <TableHeadCell class="w-10">Link Lost Retransmit</TableHeadCell>
+    <TableHeadCell class="w-10">Data Priority</TableHeadCell>    
      </TableHead>
   <TableBody>
 
@@ -934,7 +992,6 @@
 
 
 {#if gMQTT.delete}
-
 
     <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
 
@@ -970,8 +1027,7 @@
 
       </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-4 strikeout !p-1">{index+1}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{gMQTT.brokerHost}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{gMQTT.brokerPort}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{gMQTT.brokerHost}:{gMQTT.brokerPort}</td>
 {#if gMQTT.tls == 0}
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-4 strikeout !p-1">No</td>
 {:else if gMQTT.tls==1}
@@ -979,25 +1035,41 @@
 {/if}
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{gMQTT.clientId}</td>
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{gMQTT.account}</td>
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{gMQTT.qos}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-1 w-4 strikeout">{gMQTT.qos}</td>
 {#if gMQTT.retained ==0}
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">No</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-1 w-4 strikeout">No</td>
 {:else if gMQTT.retained ==1}
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Yes</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-1 w-4 strikeout">Yes</td>
 {/if}
 
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{gMQTT.keepAliveInterval}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-3 w-18 strikeout">{gMQTT.keepAliveInterval} s</td>
 {#if gMQTT.dataCompression == 0}
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">None</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-3 w-10 strikeout">None</td>
 {:else if gMQTT.dataCompression == 1}
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">gzip</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-3 w-10 strikeout">gzip</td>
 {/if}
 
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-3 w-10 strikeout">
+{#if gMQTT.dataPushInterval == 0}Right Away
+{:else if gMQTT.dataPushInterval == 1} {gMQTT.dataPushIntervalValue} min(s)
+{/if}
+</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-3 w-10 strikeout">
+{gMQTT.linkLostRetransmit} delay second(s)
+</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-3 w-10 strikeout">
+{#if gMQTT.dataPriority==0} Latest First
+{:else if gMQTT.dataPriority==1} First In First Out
+{/if}
+</td>
       </tr>
 
 
 {:else}
-   <TableBodyRow>
+  <TableBodyRow>
     <TableBodyCell class="!p-1 w-10"></TableBodyCell>
       <TableBodyCell class="!p-0 w-10">
 <button on:click={() => TriggerModifyMQTT(index)}>
@@ -1024,8 +1096,7 @@
                <TableBodyCell class="w-4"><input type="checkbox"  bind:checked={gMQTT.enable}></TableBodyCell>
 
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
-      <TableBodyCell class="w-18">{gMQTT.brokerHost}</TableBodyCell>
-      <TableBodyCell class="w-18">{gMQTT.brokerPort}</TableBodyCell>
+      <TableBodyCell class="w-18">{gMQTT.brokerHost}:{gMQTT.brokerPort}</TableBodyCell>
 {#if gMQTT.tls == 0}
       <TableBodyCell class="w-4 !p-1">No</TableBodyCell>
 {:else if gMQTT.tls==1}
@@ -1033,26 +1104,43 @@
 {/if}
       <TableBodyCell class="w-10">{gMQTT.clientId}</TableBodyCell>
       <TableBodyCell class="w-10">{gMQTT.account}</TableBodyCell>
-      <TableBodyCell class="w-10">{gMQTT.qos}</TableBodyCell>
+      <TableBodyCell class="!p-1 w-4">{gMQTT.qos}</TableBodyCell>
 {#if gMQTT.retained ==0}
-      <TableBodyCell class="w-10">No</TableBodyCell>
+      <TableBodyCell class="!p-1 w-4">No</TableBodyCell>
 {:else if gMQTT.retained ==1}
-      <TableBodyCell class="w-10">Yes</TableBodyCell>
+      <TableBodyCell class="!p-1 w-4">Yes</TableBodyCell>
 {/if}
 
-      <TableBodyCell class="w-18">{gMQTT.keepAliveInterval}</TableBodyCell>
+      <TableBodyCell class="!p-3 w-18">{gMQTT.keepAliveInterval} s</TableBodyCell>
 {#if gMQTT.dataCompression == 0}
-      <TableBodyCell class="w-18">None</TableBodyCell>
+      <TableBodyCell class="!p-3 w-10">None</TableBodyCell>
 {:else if gMQTT.dataCompression == 1}
-      <TableBodyCell class="w-18">gzip</TableBodyCell>
+      <TableBodyCell class="!p-3 w-10">gzip</TableBodyCell>
 {/if}
+
+<TableBodyCell class="!p-3 w-10">
+{#if gMQTT.dataPushInterval == 0}Right Away
+{:else if gMQTT.dataPushInterval == 1} {gMQTT.dataPushIntervalValue} min(s)
+{/if}
+
+</TableBodyCell>
+
+<TableBodyCell class="!p-3 w-10">
+{gMQTT.linkLostRetransmit} delay second(s)
+</TableBodyCell>
+
+<TableBodyCell class="!p-3 w-10">
+{#if gMQTT.dataPriority==0} Latest First
+{:else if gMQTT.dataPriority==1} First In First Out
+{/if}
+</TableBodyCell>
+
     </TableBodyRow>
 
 {/if}
 
 {/each}
 {/if}
-
 
  <TableBodyRow>
     <TableBodyCell class="!p-1 w-10">
@@ -1074,15 +1162,15 @@
 
     <TableBodyCell class="w-4"></TableBodyCell>
       <TableBodyCell class="!p-1 w-4"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-4 !p-1"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-10"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
-       <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="!p-1 w-4"></TableBodyCell>
+      <TableBodyCell class="!p-3 w-18"></TableBodyCell>
+      <TableBodyCell class="!p-3 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-3 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-3 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-3 w-10"></TableBodyCell>
 </TableBodyRow>
 
 <tr class="pt-5">
@@ -1097,7 +1185,12 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true} on:click={saveMQTT}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="pl-1"><Button color="blue" pill={true} on:click={saveMQTT}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -1108,7 +1201,7 @@
 
  </TableBody>
 
-<Modal bind:open={modify_Modal} size="lg" class="w-full" permanent={true}>
+<Modal bind:open={modify_Modal} size="xl" class="w-full" permanent={true}>
 <form action="#">
 <label>
 {#if getDataReady == 1}
@@ -1122,34 +1215,56 @@
 
 <table>
 
+
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].brokerHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Host</p></td><td class="pl-5 pt-5">
+<div class="flex gap-2">
+      <input type="text" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].brokerHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2 font-medium">:</p>
+<input type="number" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].brokerPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+</div>
+      </td>
 
 
 
   </tr>
 
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].brokerPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">TLS</p>
+  <td><p class="pl-20 pt-3 text-lg font-light text-right h-10">TLS</p>
 
   </td>
 
-    <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].tls} value={1} >Yes</Radio>
-  <Radio class="pb-2" bind:group={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].tls} value={0} >No</Radio>
+    <td class="pl-4 pt-4" ><div class="flex gap-2">
+  <Radio class="pb-2 pt-2 h-10" bind:group={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].tls} value={0} >No</Radio>
+  <Radio class="pb-2 pt-2 h-10" bind:group={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].tls} value={1} >Yes</Radio>
+{#if changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].tls == 1}
+ <p class="pl-2 pt-3 pb-2 font-medium">Broker CA Certificate:</p>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-60" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].brokerCaCert}>
+{#if getCaCertReady == 1}
+{#each caCertList as caCert, index}
+<option value={caCert}>{caCert}</option>
+{/each}
+{/if}
+</select>
+ <p class="pl-2 pt-3 pb-2 font-medium">Local Certificate:</p>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-48" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].clientCert}>
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
 
-</div></td>
+{/if}
+
+</div>
+</td>
 </tr>
 
+
+{#if 0}
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker CA Certificate</p></td>
@@ -1158,6 +1273,7 @@
 {#if changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].tls == 0}    
   None
 {:else if changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].tls == 1}
+ 
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].brokerCaCert}>
 <option disabled="" value="none">Choose Certificate ...</option>
@@ -1169,7 +1285,6 @@
 </select>
 
 
- 
 {/if}
 
     </td>
@@ -1182,6 +1297,8 @@
 {#if changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].tls == 0}   
  None
 {:else if changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].tls == 1}
+
+
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].clientCert}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getMachineCertReady== 1}
@@ -1191,7 +1308,6 @@
 {/if}
 </select>
 
-
    
 {/if}
 
@@ -1200,9 +1316,11 @@
 
   </tr>
 
+{/if}
+
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Client ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].clientId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Client ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].clientId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -1211,21 +1329,20 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Account</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Account</p></td><td class="pl-5 pt-5">
+      <input type="text" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">QoS</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].qos} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">QoS</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].qos} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
-
-
 
 <tr class="pt-4">
   <td><p class="pl-20 pt-4 text-lg font-light text-right">Retained</p>
@@ -1241,8 +1358,11 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Keep Alive Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].keepAliveInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
-
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Keep Alive Interval</p></td><td class="pl-5 pt-5">
+<div class="flex gap-2">
+<input type="number" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].keepAliveInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-2 pt-2 text-lg"> second(s)</p>
+</div>
+</td>
 </tr>
 
 
@@ -1265,6 +1385,54 @@
 </tr>
 
 
+ <tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5">
+<div class="flex gap-4">
+  <Radio bind:group={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].dataPushInterval} value={0} >Right Away</Radio>
+  <Radio bind:group={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
+{#if changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].dataPushInterval==0}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>
+
+{:else}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].dataPushIntervalValue}>
+{/if}
+</div>
+
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4">
+<div class="flex gap-4">
+      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].linkLostRetransmit}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
+</div>
+    </td>
+</tr>
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4">
+
+<div class="flex gap-4">
+  <Radio bind:group={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].dataPriority} value={0}>Latest First</Radio>
+  <Radio bind:group={changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[modify_index].dataPriority} value={1}>First In, First Out </Radio>
+
+</div>
+
+
+
+</td>
+
+
+</tr>
+
+
+
   <tr>
     <td></td>
     <td></td>
@@ -1282,7 +1450,7 @@
 
   </form>
 </Modal>
-<Modal bind:open={new_modal} size="lg" class="w-full" autoclose>
+<Modal bind:open={new_modal} size="xl" class="w-full" autoclose>
 
 <label>
   <input type="checkbox"  bind:checked={NewItem[new_item_index].enable}>
@@ -1296,69 +1464,39 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].brokerHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Host</p></td><td class="pl-5 pt-5">
+<div class="flex gap-2">
+      <input type="text" bind:value={NewItem[new_item_index].brokerHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pt-2 font-medium">:</p>
+<input type="number" bind:value={NewItem[new_item_index].brokerPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+</div>
+      </td>
 
 
 
   </tr>
 
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewItem[new_item_index].brokerPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">TLS</p>
+  <td><p class="pl-20 pt-3 text-lg font-light text-right h-10">TLS</p>
 
   </td>
 
-    <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={NewItem[new_item_index].tls} value={1} >Yes</Radio>
-  <Radio class="pb-2" bind:group={NewItem[new_item_index].tls} value={0} >No</Radio>
-
-</div></td>
-</tr>
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Broker CA Certificate</p></td>
-    <td class= "pl-4 pt-4">
-
-{#if NewItem[new_item_index].tls == 0}    
-  None
-{:else if NewItem[new_item_index].tls == 1}
- 
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItem[new_item_index].brokerCaCert}>
-<option disabled="" value="none">Choose Certificate ...</option>
+    <td class="pl-4 pt-4" ><div class="flex gap-2">
+  <Radio class="pb-2 pt-2 h-10" bind:group={NewItem[new_item_index].tls} value={0} >No</Radio>
+  <Radio class="pb-2 pt-2 h-10" bind:group={NewItem[new_item_index].tls} value={1} >Yes</Radio>
+{#if NewItem[new_item_index].tls == 1}
+ <p class="pl-2 pt-3 pb-2 font-medium">Broker CA Certificate:</p>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-60" bind:value={NewItem[new_item_index].brokerCaCert}>
 {#if getCaCertReady == 1}
 {#each caCertList as caCert, index}
 <option value={caCert}>{caCert}</option>
 {/each}
 {/if}
 </select>
-
-
-{/if}
-
-    </td>
-
-</tr>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
-    <td class= "pl-4 pt-4">
-{#if NewItem[new_item_index].tls == 0}   
- None
-{:else if NewItem[new_item_index].tls == 1}
-
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={NewItem[new_item_index].clientCert}>
-<option disabled="" value="none">Choose Certificate ...</option>
+ <p class="pl-2 pt-3 pb-2 font-medium">Local Certificate:</p>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-48" bind:value={NewItem[new_item_index].clientCert}>
 {#if getMachineCertReady== 1}
 {#each machineCertList as machineCert, index}
 <option value={machineCert}>{machineCert}</option>
@@ -1366,36 +1504,37 @@
 {/if}
 </select>
 
-   
 {/if}
 
-    </td>
+</div>
+</td>
+</tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Client ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].clientId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
 
 
   </tr>
 
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Client ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].clientId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Account</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Account</p></td><td class="pl-5 pt-5">
+      <input type="text" bind:value={NewItem[new_item_index].account} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].password} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">QoS</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewItem[new_item_index].qos} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">QoS</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewItem[new_item_index].qos} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
 
@@ -1413,8 +1552,11 @@
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Keep Alive Interval</p></td><td class="pl-5 pt-5"><input type="number" bind:value={NewItem[new_item_index].keepAliveInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> second(s)</p></td>
-
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Keep Alive Interval</p></td><td class="pl-5 pt-5">
+<div class="flex gap-2">
+<input type="number" bind:value={NewItem[new_item_index].keepAliveInterval} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-2 pt-2 text-lg"> second(s)</p>
+</div>
+</td>
 </tr>
 
 
@@ -1436,6 +1578,52 @@
 
 </tr>
 
+
+ <tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5">
+<div class="flex gap-4">
+  <Radio bind:group={NewItem[new_item_index].dataPushInterval} value={0} >Right Away</Radio>
+  <Radio bind:group={NewItem[new_item_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
+{#if NewItem[new_item_index].dataPushInterval==0}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>
+
+{:else}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16" bind:value={NewItem[new_item_index].dataPushIntervalValue}>
+{/if}
+</div>
+
+      </td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4">
+<div class="flex gap-4">
+      <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={NewItem[new_item_index].linkLostRetransmit}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
+</div>
+    </td>
+</tr>
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4">
+
+<div class="flex gap-4">
+  <Radio bind:group={NewItem[new_item_index].dataPriority} value={0}>Latest First</Radio>
+  <Radio bind:group={NewItem[new_item_index].dataPriority} value={1}>First In, First Out </Radio>
+
+</div>
+
+
+
+</td>
+
+
+</tr>
 
   <tr>
     <td></td>

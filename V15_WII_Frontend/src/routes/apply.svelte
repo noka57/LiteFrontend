@@ -1356,6 +1356,22 @@
 	} 
 
   let WanRestartContent;
+  let ewanChangeIp=false;
+  let ewanChangeConnectionType=false;
+
+  async function PostChangeEWANip() 
+  {
+    const res = await fetch(window.location.origin+"/resetIPsecCausedWANipChange", {
+        method: 'POST',
+        body: sessionBinary
+    })
+
+      if (res.status == 200)
+      {
+        console.log("post ewan ip changed ok\r\n");
+
+      }
+  }
 
 
   async function RestartWAN()
@@ -1368,6 +1384,7 @@
         body: WanRestartContent
       })
 
+
       if (res.status == 200)
       {
         console.log("restart wan OK\r\n");
@@ -1376,10 +1393,19 @@
         {
           AllRestartFinished=1;
         }
+
+        if (ewanChangeIp || ewanChangeConnectionType)
+        {
+          PostChangeEWANip();
+        }
       }
     }
     catch (error) 
     {
+      if (ewanChangeIp || ewanChangeConnectionType)
+      {
+        PostChangeEWANip();
+      }
       console.error('Error fetching resTarTWan data:', error);
       RestartIntervalIdByWan = setInterval(sendPingbyRwan, 15000);
     }
@@ -1463,9 +1489,6 @@
 
   }
 
-
-
-
 	async function SetWanData()
 	{
 	  const res = await fetch(window.location.origin+"/SetWandata", {
@@ -1481,6 +1504,8 @@
 
       let applied_new_wan_data= JSON.parse(JSON.stringify(wan_data));
       wanConfig.set(applied_new_wan_data);
+      ewanChangeIp = ewan1_basic_changedValues.some(str => str.includes('ip'));
+      ewanChangeConnectionType = ewan1_basic_changedValues.some(str => str.includes('connectionType'));
 
       cwan1_basic_changedValues = [];
       cwan1_advanced_changedValues = [];
@@ -4262,6 +4287,7 @@ event_engine_action_do_changeValues.length != 0 ||
 		    modbus_tcp_slave_changedValues.length !=0 ||
 		    modbus_rtu_master_changedValues.length !=0 ||
 		    modbus_rtu_slave_changedValues.length !=0 ||
+        modbus_tag_changedValues.length != 0 ||
 				LANchangedValues.length != 0 ||
         dhcpServerChangedValues.length !=0 ||
   			NAT_loopback_changedValues.length != 0 ||

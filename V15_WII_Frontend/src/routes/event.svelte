@@ -4463,6 +4463,11 @@
   let openDetailStatusMMS = false;
   let openDetailStatusMMT = false;
   let openDetailStatusMV = false;
+
+  let openDetailStatusMMS2 = false;
+  let openDetailStatusMMT2 = false;
+  let openDetailStatusMV2 = false;
+
   let openDetailStatusRule = false;
   let finishSimulate=false;
 
@@ -4490,6 +4495,22 @@
 
   function handleClickMV() {
         openDetailStatusMV=!openDetailStatusMV;
+  }
+
+
+
+  function handleClickMMS2() {
+        openDetailStatusMMS2=!openDetailStatusMMS2;
+  }
+
+
+  function handleClickMMT2() {
+        openDetailStatusMMT2=!openDetailStatusMMT2;
+  }
+
+
+  function handleClickMV2() {
+        openDetailStatusMV2=!openDetailStatusMV2;
   }
 
 
@@ -8893,11 +8914,11 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
-on:click={handleClickMV} on:keydown={() => {}}>
+on:click={handleClickMV2} on:keydown={() => {}}>
     Modbus Tag
     <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus tag. Please go to modbus page for detailed setting.</p>
   </caption>
-{#if openDetailStatusMV}
+{#if openDetailStatusMV2}
 <TableHead>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell class="!p-1">No</TableHeadCell>
@@ -9030,13 +9051,13 @@ on:click={handleClickMV} on:keydown={() => {}}>
 <Table shadow striped={true}>
 
 
-  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMS} on:keydown={() => {}}>
+  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMS2} on:keydown={() => {}}>
     Modbus RTU Master Profile
     <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus master in RTU mode. Please go to modbus page for detailed setting.</p>
   </caption>
 
 
-{#if openDetailStatusMMS}
+{#if openDetailStatusMMS2}
 
   <TableHead>
     <TableHeadCell class="w-10">Enable</TableHeadCell>
@@ -9092,12 +9113,12 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <Table shadow striped={true} >
 
-  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMT} on:keydown={() => {}}>
+  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMT2} on:keydown={() => {}}>
     Modbus TCP Master Profile
     <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Click to show configuration for modbus master in TCP mode. Please go to modbus page for detailed setting.</p>
   </caption>
 
-{#if openDetailStatusMMT}
+{#if openDetailStatusMMT2}
   <TableHead>
      <TableHeadCell class="w-10">Enable</TableHeadCell>
     <TableHeadCell class="w-10">No</TableHeadCell>

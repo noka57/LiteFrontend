@@ -21,7 +21,7 @@
     DataTagPro_TagRuleTOU_ConfigChangedLog,
     DataTagPro_TagRuleAccumulated_ConfigChangedLog,
     DataTagPro_TagRuleCalculation_ConfigChangedLog,
-    DataTagPro_TagRuleModbus_ConfigChangedLog,
+    DataTagPro_TagRuleC2D_ConfigChangedLog,
     DataTagPro_General_ConfigChangedLog
   } from "./configG.js"
 
@@ -54,7 +54,7 @@
 
 
   let data_tag_pro_general_changedValues = [];
-  let data_tag_pro_tag_modbus_changedValues = [];
+  let data_tag_pro_tag_c2d_changedValues = [];
   let data_tag_pro_tag_calculation_changedValues = [];
   let data_tag_pro_tag_accumulated_changedValues = [];  
   let data_tag_pro_tag_tou_changedValues = [];
@@ -146,8 +146,8 @@
       data_tag_pro_tag_calculation_changedValues = val;
   });
 
-  DataTagPro_TagRuleModbus_ConfigChangedLog.subscribe(val => {
-      data_tag_pro_tag_modbus_changedValues = val;
+  DataTagPro_TagRuleC2D_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_c2d_changedValues = val;
   });
   
   DataTagPro_General_ConfigChangedLog.subscribe(val => {
@@ -251,7 +251,7 @@
                   let changedstr="Add "+addedCount+" item(s) to "+ key;
                   if (type == 0)
                   {
-                    data_tag_pro_tag_modbus_changedValues=[...data_tag_pro_tag_modbus_changedValues, changedstr];
+                    data_tag_pro_tag_c2d_changedValues=[...data_tag_pro_tag_c2d_changedValues, changedstr];
                   }
                   else if (type == 1)
                   {
@@ -289,7 +289,7 @@
               let changedstr="Delete "+deletedCount+" item(s) from "+ key;
                 if (type == 0)
                 {
-                  data_tag_pro_tag_modbus_changedValues=[...data_tag_pro_tag_modbus_changedValues, changedstr];
+                  data_tag_pro_tag_c2d_changedValues=[...data_tag_pro_tag_c2d_changedValues, changedstr];
                 }
                 else if (type == 1)
                 {
@@ -355,7 +355,7 @@
 
           if (type == 0)
           {
-            data_tag_pro_tag_modbus_changedValues=[...data_tag_pro_tag_modbus_changedValues, changedstr];
+            data_tag_pro_tag_c2d_changedValues=[...data_tag_pro_tag_c2d_changedValues, changedstr];
           }
           else if (type == 1)
           {
@@ -771,6 +771,59 @@
     console.log(data_tag_pro_tag_accumulated_changedValues);
   } 
 
+  function saveC2DTag()
+  {
+    console.log("save c2d tag");
+    if (data_tag_pro_tag_c2d_changedValues.length !=0)
+    {
+      data_tag_pro_tag_c2d_changedValues=[];
+    }
+
+    for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length, data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length); i++) 
+    {
+
+      compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[i], data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[i],0,1,i+1,"cloud2DeviceTag");
+    }
+
+
+    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length > data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length)
+    {
+      let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length-data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length;
+
+      for (let k=data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length; k < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length;k++)
+      {
+        if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[k].delete)
+        {
+          addedCount--;
+        }
+
+      }
+
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to Cloud To Device Tag List";
+        data_tag_pro_tag_c2d_changedValues=[...data_tag_pro_tag_c2d_changedValues, changedstr];
+      }
+    }
+
+    DataTagPro_TagRuleC2D_ConfigChangedLog.set(data_tag_pro_tag_c2d_changedValues);
+    let tempForDelete=[];
+    for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length; i++)
+    {
+      if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[i]]
+      }
+
+    }
+
+    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag=JSON.parse(JSON.stringify(tempForDelete));
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag=JSON.parse(JSON.stringify(tempForDelete));
+
+    ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+    console.log(data_tag_pro_tag_c2d_changedValues);
+  }
+
 
   function saveCTag()
   {
@@ -832,8 +885,6 @@
     ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
     
     console.log(data_tag_pro_tag_calculation_changedValues);
-
-
   }
 
 
@@ -884,7 +935,7 @@
   let modify_calculation_tag_modal=false;
   let modify_calculation_tag_index;
 
-  let BackupTriggerCTag=
+  let BackupCTag=
   {
     enable:false,
     delete:false,
@@ -897,20 +948,20 @@
   {
     modify_calculation_tag_index=index;
 
-    BackupTriggerCTag.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].enable;
-    BackupTriggerCTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].delete;
-    BackupTriggerCTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName;
-    BackupTriggerCTag.calculationFormula=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula;
+    BackupCTag.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].enable;
+    BackupCTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].delete;
+    BackupCTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName;
+    BackupCTag.calculationFormula=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula;
 
     modify_calculation_tag_modal=true;
   }
 
   function no_modify_calculation_tag()
   {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].enable=BackupTriggerCTag.enable;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].delete=BackupTriggerCTag.delete;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName=BackupTriggerCTag.tagName;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula=BackupTriggerCTag.calculationFormula;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].enable=BackupCTag.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].delete=BackupCTag.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName=BackupCTag.tagName;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula=BackupCTag.calculationFormula;
 
     modify_calculation_tag_modal=false;
   }
@@ -1455,7 +1506,6 @@
     new_event_tag[index].actionOperationValue=1;
     new_event_tag[index].actionTarget="";
 
-
     new_event_tag_index=index;
     new_event_tag_modal=true;
 
@@ -1560,6 +1610,16 @@
   ];
 
 
+  function RestoreDeleteC2Dtag(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].delete=false;
+  }
+
+  function DeleteC2Dtag(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].delete=true;
+  }
+
   function NoAddC2D(index)
   {
     new_c2d_tag_modal=false;
@@ -1568,7 +1628,6 @@
 
   function new_c2d_tag_trigger(index)
   {
-
     new_c2d_tag[index].enable=true;
     new_c2d_tag[index].delete=false;
     new_c2d_tag[index].tagName="";
@@ -1582,6 +1641,62 @@
 
   }
 
+  let modify_c2d_tag_modal=false;
+  let modify_c2d_tag_index;
+
+  let BackupC2DTag=
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  };
+
+
+
+  function TriggerModifyC2DTag(index)
+  {
+    BackupC2DTag.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].enable;
+    BackupC2DTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].delete;
+    BackupC2DTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].tagName;
+    BackupC2DTag.cloudProfile=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].cloudProfile;
+    BackupC2DTag.subscribeTopic=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].subscribeTopic;
+    BackupC2DTag.targetTag=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].targetTag;
+    BackupC2DTag.publishEnable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].publishEnable;
+    BackupC2DTag.publishTopic=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].publishTopic;
+    modify_c2d_tag_index=index;
+    modify_c2d_tag_modal=true;
+  }
+
+  function no_modify_c2d_tag(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].enable=BackupC2DTag.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].delete=BackupC2DTag.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].tagName=BackupC2DTag.tagName;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].cloudProfile=BackupC2DTag.cloudProfile;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].subscribeTopic=BackupC2DTag.subscribeTopic;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].targetTag=BackupC2DTag.targetTag;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].publishEnable=BackupC2DTag.publishEnable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[index].publishTopic=BackupC2DTag.publishTopic;
+
+    modify_c2d_tag_modal=false;
+  }
+
+  function modify_c2d_tag(index)
+  {
+    modify_c2d_tag_modal=false;
+  }
+
+
+  function add_new_c2d_tag(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag,new_c2d_tag[index]];
+    new_c2d_tag_modal=false; 
+  }
 
 
   let new_scada_tag_modal=false;
@@ -2281,7 +2396,6 @@
 
   function add_new_calculation_tag(index)
   {
-    console.log("add new calculation_tag");
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag,new_calculation_tag[index]];
     new_calculation_tag_modal=false;
   }
@@ -2535,6 +2649,11 @@ async function getDataTagPro () {
       {
         changed_data_tag_pro_data.config.service_dataTagPro_general=JSON.parse(JSON.stringify(data_tag_pro_data.config.service_dataTagPro_general));
 
+      }
+
+      if (data_tag_pro_tag_c2d_changedValues.length ==0)
+      {
+        changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag=JSON.parse(JSON.stringify(data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag));
       }
 
       if (data_tag_pro_tag_calculation_changedValues.length ==0)
@@ -2941,7 +3060,7 @@ on:click={onPageClick}></textarea>
   Enable
 </label>
 
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={no_modify_calculation_tag(modify_calculation_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={()=>no_modify_calculation_tag(modify_calculation_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
 <table bind:this={modalElement}>
@@ -3086,7 +3205,7 @@ on:click={onPageClick}></textarea>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
+    <TableHeadCell>Tag Name</TableHeadCell>
     <TableHeadCell>Cloud Profile</TableHeadCell>    
     <TableHeadCell>Subscribe Topic</TableHeadCell>
     <TableHeadCell>Target Tag</TableHeadCell> 
@@ -3096,6 +3215,92 @@ on:click={onPageClick}></textarea>
   </TableHead>
 
 <TableBody>
+
+
+{#if getDataReady == 1}
+{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag as C2Dtag, index}
+{#if C2Dtag.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteC2Dtag(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 strikeout" type="checkbox" bind:checked={C2Dtag.enable}>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{C2Dtag.tagName}</td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{C2Dtag.cloudProfile}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{C2Dtag.subscribeTopic}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{C2Dtag.targetTag}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{#if C2Dtag.publishEnable}Enable (Topic: {C2Dtag.publishTopic}){:else}Disable{/if}</td>
+
+
+
+   </tr>
+
+{:else}   
+
+
+ <TableBodyRow>
+      <TableBodyCell class="!p-1 w-10"></TableBodyCell>
+  <TableBodyCell class="!p-0 w-10">
+<button on:click={()=>TriggerModifyC2DTag(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => DeleteC2Dtag(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+    <TableBodyCell>
+<input class="mb-1" type="checkbox"  bind:checked={C2Dtag.enable}>
+    </TableBodyCell>
+
+    <TableBodyCell>{index+1}</TableBodyCell>
+ <TableBodyCell>{C2Dtag.tagName}</TableBodyCell>
+ <TableBodyCell>{C2Dtag.cloudProfile}</TableBodyCell>
+ <TableBodyCell>{C2Dtag.subscribeTopic}</TableBodyCell>
+ <TableBodyCell>{C2Dtag.targetTag}</TableBodyCell>
+ <TableBodyCell>{#if C2Dtag.publishEnable}Enable (Topic: {C2Dtag.publishTopic}){:else}Disable{/if}</TableBodyCell>
+
+
+ </TableBodyRow>
+
+
+{/if}
+{/each}
+{/if}
+
 
 
   <TableBodyRow>
@@ -3111,8 +3316,46 @@ on:click={onPageClick}></textarea>
       </button>
 
  </TableBodyCell>
+ {:else}
+ <TableBodyCell class="!p-4 w-16"></TableBodyCell>
  {/if}
+
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+
+      <TableBodyCell class="!p-4"></TableBodyCell>
+
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+
+  <TableBodyCell ></TableBodyCell>
+
+  <TableBodyCell ></TableBodyCell>
+
   </TableBodyRow>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveC2DTag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
 
 </TableBody>
 
@@ -3209,10 +3452,8 @@ on:click={onPageClick}></textarea>
 
 {#if new_c2d_tag[new_c2d_tag_index].publishEnable}
 
-
-
-<div class="relative"><input  class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3"  placeholder=" " type="text" bind:value={new_c2d_tag[new_c2d_tag_index].publishTopic}> <label for="operand_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">publish topic</label></div>
-
+<div class="relative">
+<input id="publish_topic" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="publish_topic" placeholder=" " type="text" bind:value={new_c2d_tag[new_c2d_tag_index].publishTopic}> <label for="publish_topic" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">publish_topic</label></div>
 
 
 {/if}
@@ -3233,10 +3474,134 @@ on:click={onPageClick}></textarea>
     <td></td>
     <td></td>
     <td>
-<Button color="dark" pill={true} >Add</Button></td>
+<Button color="dark" pill={true} on:click={()=>add_new_c2d_tag(new_c2d_tag_index)}>Add</Button></td>
 
 
 </table>
+</form>
+</Modal>
+
+
+<Modal bind:open={modify_c2d_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[modify_c2d_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={()=>no_modify_c2d_tag(modify_c2d_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[modify_c2d_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[modify_c2d_tag_index].cloudProfile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Subscribe Topic</p></td>
+      <td class="pl-4 pt-5">
+
+
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[modify_c2d_tag_index].subscribeTopic}>
+
+
+</td>
+
+
+</tr>
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[modify_c2d_tag_index].targetTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+
+<tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Publish Topic For Acknowledge</p>
+
+  </td>
+
+    <td class="pl-4 pt-5" colspan="5">
+    <div class="flex gap-2">
+
+<Toggle class="p-2.5 mt-2 mb-4" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[modify_c2d_tag_index].publishEnable}></Toggle>
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[modify_c2d_tag_index].publishEnable}
+
+
+
+<div class="relative">
+<input id="publish_topic" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="publish_topic" placeholder=" " type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag[modify_c2d_tag_index].publishTopic}> <label for="publish_topic" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">publish_topic</label></div>
+
+
+{/if}
+</div></td>
+</tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={()=>modify_c2d_tag(modify_c2d_tag_index)}>Modify</Button></td>
+
+
+</table>
+
 </form>
 </Modal>
 

@@ -94,7 +94,7 @@
 	    DataTagPro_TagRuleTOU_ConfigChangedLog,
 	    DataTagPro_TagRuleAccumulated_ConfigChangedLog,
 	    DataTagPro_TagRuleCalculation_ConfigChangedLog,
-	    DataTagPro_TagRuleModbus_ConfigChangedLog,
+	    DataTagPro_TagRuleC2D_ConfigChangedLog,
 	    DataTagPro_General_ConfigChangedLog,    	
     	VPNdashboad,
     	dashboadData
@@ -270,7 +270,7 @@
   	let event_engine_action_line_changeValues=[];
 
   	let data_tag_pro_general_changedValues = [];
-  	let data_tag_pro_tag_modbus_changedValues = [];
+  	let data_tag_pro_tag_c2d_changedValues = [];
   	let data_tag_pro_tag_calculation_changedValues = [];
   	let data_tag_pro_tag_accumulated_changedValues = [];  
   	let data_tag_pro_tag_tou_changedValues = [];
@@ -299,7 +299,7 @@
   	function JudgeChangedOrNot()
   	{
   		if (data_tag_pro_general_changedValues.length !=0 ||
-  			data_tag_pro_tag_modbus_changedValues.length !=0 ||
+  			data_tag_pro_tag_c2d_changedValues.length !=0 ||
   			data_tag_pro_tag_calculation_changedValues.length !=0 ||
   			data_tag_pro_tag_accumulated_changedValues.length !=0 ||
   			data_tag_pro_tag_tou_changedValues.length !=0 ||
@@ -447,8 +447,8 @@
       	JudgeChangedOrNot();
   	});
 
-  	DataTagPro_TagRuleModbus_ConfigChangedLog.subscribe(val => {
-      	data_tag_pro_tag_modbus_changedValues = val;
+  	DataTagPro_TagRuleC2D_ConfigChangedLog.subscribe(val => {
+      	data_tag_pro_tag_c2d_changedValues = val;
       	JudgeChangedOrNot();
   	});
   

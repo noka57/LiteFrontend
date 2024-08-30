@@ -134,7 +134,7 @@
       DataTagPro_TagRuleTOU_ConfigChangedLog,
       DataTagPro_TagRuleAccumulated_ConfigChangedLog,
       DataTagPro_TagRuleCalculation_ConfigChangedLog,
-      DataTagPro_TagRuleModbus_ConfigChangedLog,
+      DataTagPro_TagRuleC2D_ConfigChangedLog,
       DataTagPro_General_ConfigChangedLog
 			} from "./configG.js"
 	let color="text-blue-600 dark:text-gray-400";
@@ -303,7 +303,7 @@
   let ContentDatatagPro;
   let DatatagProBinary=null;
   let data_tag_pro_general_changedValues = [];
-  let data_tag_pro_tag_modbus_changedValues = [];
+  let data_tag_pro_tag_c2d_changedValues = [];
   let data_tag_pro_tag_calculation_changedValues = [];
   let data_tag_pro_tag_accumulated_changedValues = [];  
   let data_tag_pro_tag_tou_changedValues = [];
@@ -477,8 +477,8 @@
       data_tag_pro_tag_calculation_changedValues = val;
   });
 
-  DataTagPro_TagRuleModbus_ConfigChangedLog.subscribe(val => {
-      data_tag_pro_tag_modbus_changedValues = val;
+  DataTagPro_TagRuleC2D_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_c2d_changedValues = val;
   });
   
   DataTagPro_General_ConfigChangedLog.subscribe(val => {
@@ -2236,7 +2236,7 @@
       datatagproConfig.set(applied_new_data_tag_pro);
 
       data_tag_pro_general_changedValues = [];
-      data_tag_pro_tag_modbus_changedValues = [];
+      data_tag_pro_tag_c2d_changedValues = [];
       data_tag_pro_tag_calculation_changedValues = [];
       data_tag_pro_tag_accumulated_changedValues = [];  
       data_tag_pro_tag_tou_changedValues = [];
@@ -2252,7 +2252,7 @@
       DataTagPro_TagRuleTOU_ConfigChangedLog.set(data_tag_pro_tag_tou_changedValues);
       DataTagPro_TagRuleAccumulated_ConfigChangedLog.set(data_tag_pro_tag_accumulated_changedValues);
       DataTagPro_TagRuleCalculation_ConfigChangedLog.set(data_tag_pro_tag_calculation_changedValues);
-      DataTagPro_TagRuleModbus_ConfigChangedLog.set(data_tag_pro_tag_modbus_changedValues);
+      DataTagPro_TagRuleC2D_ConfigChangedLog.set(data_tag_pro_tag_c2d_changedValues);
       DataTagPro_General_ConfigChangedLog.set(data_tag_pro_general_changedValues);
 
       RestartDataTagPro();  
@@ -2448,7 +2448,7 @@
 
     if (data_tag_pro_data != "" && (
         data_tag_pro_general_changedValues.length !=0 ||
-        data_tag_pro_tag_modbus_changedValues.length !=0 ||
+        data_tag_pro_tag_c2d_changedValues.length !=0 ||
         data_tag_pro_tag_calculation_changedValues.length !=0 ||
         data_tag_pro_tag_accumulated_changedValues.length !=0 ||
         data_tag_pro_tag_tou_changedValues.length !=0 ||
@@ -2772,7 +2772,7 @@
 
         if (data_tag_pro_data != "" && (
           data_tag_pro_general_changedValues.length !=0 ||
-          data_tag_pro_tag_modbus_changedValues.length !=0 ||
+          data_tag_pro_tag_c2d_changedValues.length !=0 ||
           data_tag_pro_tag_calculation_changedValues.length !=0 ||
           data_tag_pro_tag_accumulated_changedValues.length !=0 ||
           data_tag_pro_tag_tou_changedValues.length !=0 ||
@@ -2805,7 +2805,7 @@
 
 
 
-{#if data_tag_pro_general_changedValues.length !=0 || data_tag_pro_tag_modbus_changedValues.length !=0 || 
+{#if data_tag_pro_general_changedValues.length !=0 || data_tag_pro_tag_c2d_changedValues.length !=0 || 
           data_tag_pro_tag_calculation_changedValues.length !=0 ||
           data_tag_pro_tag_accumulated_changedValues.length !=0 ||
           data_tag_pro_tag_tou_changedValues.length !=0 ||
@@ -2827,7 +2827,7 @@
 </Li>
 {/if}
 
-{#if  data_tag_pro_tag_modbus_changedValues.length !=0 || 
+{#if  data_tag_pro_tag_c2d_changedValues.length !=0 || 
           data_tag_pro_tag_calculation_changedValues.length !=0 ||
           data_tag_pro_tag_accumulated_changedValues.length !=0 ||
           data_tag_pro_tag_tou_changedValues.length !=0 ||
@@ -2835,11 +2835,11 @@
           data_tag_pro_tag_scada_changedValues.length !=0 ||
           data_tag_pro_tag_event_changedValues.length !=0 }
 <Li>Tag Rule
-{#if  data_tag_pro_tag_modbus_changedValues.length !=0}
+{#if  data_tag_pro_tag_c2d_changedValues.length !=0}
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
- <Li> Modbus
+ <Li> Cloud To Device Tag
 <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
-  {#each data_tag_pro_tag_modbus_changedValues as item}
+  {#each data_tag_pro_tag_c2d_changedValues as item}
       <Li>{item}</Li>
    {/each}
 
@@ -4246,7 +4246,7 @@ event_engine_action_do_changeValues.length != 0 ||
 <div class="pt-10 pl-10 text-center">
 
 {#if    data_tag_pro_general_changedValues.length !=0 ||
-        data_tag_pro_tag_modbus_changedValues.length !=0 ||
+        data_tag_pro_tag_c2d_changedValues.length !=0 ||
         data_tag_pro_tag_calculation_changedValues.length !=0 ||
         data_tag_pro_tag_accumulated_changedValues.length !=0 ||
         data_tag_pro_tag_tou_changedValues.length !=0 ||

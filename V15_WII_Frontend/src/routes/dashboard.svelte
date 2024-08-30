@@ -1,4 +1,5 @@
 <script>
+  import './global.css';
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge } from 'flowbite-svelte';
   import { onMount} from 'svelte';
   import { sessionidG } from "./sessionG.js";

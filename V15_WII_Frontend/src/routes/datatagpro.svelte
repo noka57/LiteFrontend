@@ -1,8 +1,8 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button, Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Fileupload, FloatingLabelInput, Helper, StepIndicator,MultiSelect, Dropdown, DropdownItem } from 'flowbite-svelte';
 
- import { writable } from 'svelte/store';
-import { DateInput } from 'date-picker-svelte'
+  import { writable } from 'svelte/store';
+  import { DateInput } from 'date-picker-svelte'
   import './global.css';
 
   import { onMount } from 'svelte';
@@ -81,6 +81,8 @@ import { DateInput } from 'date-picker-svelte'
   let openDetailStatusMProcess=false;
   let ModbusTagModifyModal=false;
 
+  let modalElement;
+
 
   let group_test=0;
   let generic_mqtt_data="";
@@ -151,6 +153,74 @@ import { DateInput } from 'date-picker-svelte'
   DataTagPro_General_ConfigChangedLog.subscribe(val => {
       data_tag_pro_general_changedValues = val;
   });
+
+
+
+    let pos = { x: 0, y: 0 }
+    let menu = { h: 0, w: 0 }
+    let browser = { h: 0, y: 0 }
+    let showMenu = false;
+    let content
+    let rect;
+
+    function rightClickContextMenu(e){
+        showMenu = true
+        browser = {
+            w: window.innerWidth,
+            h: window.innerHeight
+        };
+        pos = {
+            x: e.clientX,
+            y: e.clientY
+        };
+
+        if (modalElement)
+        {
+
+            if (modalElement instanceof HTMLElement) 
+            {
+                rect = modalElement.getBoundingClientRect();
+                //console.log('Modal position:', rect);
+                //console.log('Top:', rect.top, 'Left:', rect.left);
+            } else {
+                console.error('modalElement is not an HTMLElement');
+            }
+
+        }
+
+
+        // If bottom part of context menu will be displayed
+        // after right-click, then change the position of the
+        // context menu. This position is controlled by `top` and `left`
+        // at inline style. 
+        // Instead of context menu is displayed from top left of cursor position
+        // when right-click occur, it will be displayed from bottom left.
+        if (browser.h -  pos.y < menu.h)
+            pos.y = pos.y - menu.h
+        if (browser.w -  pos.x < menu.w)
+            pos.x = pos.x - menu.w
+
+            pos.x= pos.x-rect.left+30
+            pos.y=pos.y-rect.top+100
+  
+    }
+    function onPageClick(e)
+    {
+        showMenu = false;
+    }
+    function getContextMenuDimension(node){
+        // This function will get context menu dimension
+        // when navigation is shown => showMenu = true
+        let height = node.offsetHeight
+        let width = node.offsetWidth
+        menu = {
+            h: height,
+            w: width
+        }
+
+
+    }
+
 
     function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex, ArrayName) 
     {
@@ -318,6 +388,7 @@ import { DateInput } from 'date-picker-svelte'
         }
       }
     }
+
 
 
   function saveULRule()
@@ -765,57 +836,6 @@ import { DateInput } from 'date-picker-svelte'
 
   }
 
-  function saveModbus()
-  {
-    console.log("save modbus tag");
-    if (data_tag_pro_tag_modbus_changedValues.length !=0)
-    {
-      data_tag_pro_tag_modbus_changedValues=[];
-    }
-
-
-    compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag, data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag,0,0,0,"modbusTag");
-    DataTagPro_TagRuleModbus_ConfigChangedLog.set(data_tag_pro_tag_modbus_changedValues);
-
-
-
-    let tempForDelete=[];
-    for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length; i++)
-    {
-      if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[i].delete)
-      {
-        tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[i]]
-      }
-
-    }
-
-    let tempForDelete2=[];
-    for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing.length; i++)
-    {
-      if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[i].delete)
-      {
-        tempForDelete2=[...tempForDelete2, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[i]]
-      }
-
-    }
-
-    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile));
-
-
-    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile));
-
-    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter=JSON.parse(JSON.stringify(tempForDelete));
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter=JSON.parse(JSON.stringify(tempForDelete));
-
-
-    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing=JSON.parse(JSON.stringify(tempForDelete2));
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing=JSON.parse(JSON.stringify(tempForDelete2));
-
-    ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
-    
-    console.log(data_tag_pro_tag_modbus_changedValues);
-
-  }
 
   function saveGeneral()
   {
@@ -859,114 +879,39 @@ import { DateInput } from 'date-picker-svelte'
   }
 
 
-  let modify_com_modal=false;
-  let modify_com_index;
-  function TriggerModifyCOM(index)
-  {
-    modify_com_modal=true;
-    modify_com_index=index;
-  }
 
-  function NoModifyCOM(index)
-  {
-    modify_com_modal=false;
-
-  }
-
-  function ModifyRTUMaster()
-  {
-    modify_com_modal=false;  
-  }
-
-
-
-  let Modify_TCP_Master_Modal=false;
-  let Modify_TCP_Master_index;
-
-  function TriggerModifyTCPMaster(index)
-  {
-    Modify_TCP_Master_Modal=true;
-    Modify_TCP_Master_index=index;
-
-  }
-
-  function NoModifyTCPMaster(index)
-  {
-    Modify_TCP_Master_Modal=false;
-
-  }
-
-
-  function ModifyModbusTCPMaster(index)
-  {
-    Modify_TCP_Master_Modal=false;  
-  }
-
-
-
-  let modify_modbus_parameter_modal=false;
-  let modify_modbus_parameter_index;
-  
-  function DeleteModbusParameter(index)
-  {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[index].delete=true;
-  }
-
-  function RestoreDeleteModbusParameter(index)
-  {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[index].delete=false;
-  }
-
-  function TriggerModifyModbusParameter(index)
-  {
-    modify_modbus_parameter_index=index;
-    modify_modbus_parameter_modal=true;
-
-  }
-
-  function no_modify_modbus_parameter()
-  {
-    modify_modbus_parameter_modal=false;
-  }
-
-  function modify_modbus_parameter()
-  {
-    modify_modbus_parameter_modal=false;
-  }
-
-  let modify_mtag_processing_modal=false;
-  let modify_mtag_processing_index;
-
-  function TriggerMtagProcessing(index)
-  {
-    modify_mtag_processing_index=index;
-    modify_mtag_processing_modal=true;
-
-  }
-
-
-  function no_modify_mtag_processing()
-  {
-    modify_mtag_processing_modal=false;
-  }
-
-  function modify_mtag_processing()
-  {
-    modify_mtag_processing_modal=false;
-  }
 
   let modify_calculation_tag_modal=false;
   let modify_calculation_tag_index;
 
+  let BackupTriggerCTag=
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    calculationFormula:""
+  };
+
+
   function TriggerModifyCTag(index)
   {
-
     modify_calculation_tag_index=index;
+
+    BackupTriggerCTag.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].enable;
+    BackupTriggerCTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].delete;
+    BackupTriggerCTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName;
+    BackupTriggerCTag.calculationFormula=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula;
+
     modify_calculation_tag_modal=true;
   }
 
   function no_modify_calculation_tag()
   {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].enable=BackupTriggerCTag.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].delete=BackupTriggerCTag.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName=BackupTriggerCTag.tagName;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula=BackupTriggerCTag.calculationFormula;
+
     modify_calculation_tag_modal=false;
   }
 
@@ -1517,6 +1462,127 @@ import { DateInput } from 'date-picker-svelte'
   }
 
 
+  let new_c2d_tag_modal=false;
+  let new_c2d_tag_index;
+
+  let new_c2d_tag=[
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  }              
+
+  ];
+
+
+  function NoAddC2D(index)
+  {
+    new_c2d_tag_modal=false;
+  }
+
+
+  function new_c2d_tag_trigger(index)
+  {
+
+    new_c2d_tag[index].enable=true;
+    new_c2d_tag[index].delete=false;
+    new_c2d_tag[index].tagName="";
+    new_c2d_tag[index].cloudProfile="";
+    new_c2d_tag[index].subscribeTopic="";
+    new_c2d_tag[index].targetTag="";
+    new_c2d_tag[index].publishEnable=false;
+    new_c2d_tag[index].publishTopic="";    
+    new_c2d_tag_index=index;
+    new_c2d_tag_modal=true;
+
+  }
+
+
 
   let new_scada_tag_modal=false;
   let new_scada_tag_index;
@@ -1615,9 +1681,6 @@ import { DateInput } from 'date-picker-svelte'
     }
 
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag,new_scada_tag[index]];
-
-
-
     new_scada_tag_modal=false;
   }
 
@@ -1652,60 +1715,70 @@ import { DateInput } from 'date-picker-svelte'
     enable:false,
     delete:false,
     tagName:"",
+    cloudProfile:"",
     targetTag:""
   },
   {
     enable:false,
     delete:false,
     tagName:"",
+    cloudProfile:"",
     targetTag:""
   },
   {
     enable:false,
     delete:false,
     tagName:"",
+    cloudProfile:"",
     targetTag:""
   },
   {
     enable:false,
     delete:false,
     tagName:"",
+    cloudProfile:"",
     targetTag:""
   },
   {
     enable:false,
     delete:false,
     tagName:"",
+    cloudProfile:"",
     targetTag:""
   },
   {
     enable:false,
     delete:false,
     tagName:"",
+    cloudProfile:"",
     targetTag:""
   },
   {
     enable:false,
     delete:false,
     tagName:"",
+    cloudProfile:"",
     targetTag:""
   },
   {
     enable:false,
     delete:false,
     tagName:"",
+    cloudProfile:"",
     targetTag:""
   },
   {
     enable:false,
     delete:false,
     tagName:"",
+    cloudProfile:"",
     targetTag:""
   },
   {
     enable:false,
     delete:false,
     tagName:"",
+    cloudProfile:"",
     targetTag:""
   }      
   ];
@@ -1741,7 +1814,7 @@ import { DateInput } from 'date-picker-svelte'
     new_DM_tag[index].delete=false;
     new_DM_tag[index].tagName="";
     new_DM_tag[index].targetTag="";
-
+    new_DM_tag[index].cloudProfile="";
     new_DM_tag_index=index;
     new_DM_tag_modal=true;
 
@@ -1982,8 +2055,8 @@ import { DateInput } from 'date-picker-svelte'
     new_accumulated_tag[index].delete=false;
     new_accumulated_tag[index].tagName="";
     new_accumulated_tag[index].targetTag="";
-    new_accumulated_tag[index].startTime="2024-01-01 00:00:00";
-    new_accumulated_tag[index].endTime="2024-01-01 00:00:00";
+    new_accumulated_tag[index].startTime="00:00";
+    new_accumulated_tag[index].endTime="00:00";
 
     start_time_object= new Date(new_accumulated_tag[index].startTime);
     end_time_object= new Date(new_accumulated_tag[index].endTime);
@@ -2025,390 +2098,65 @@ import { DateInput } from 'date-picker-svelte'
   let new_calculation_tag_index;
 
   let new_calculation_tag=[
-  {
-    enable:false,
-    delete:false,
-    tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
-  },
     {
-
     enable:false,
     delete:false,
     tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
-  },
-    {
-
-    enable:false,
-    delete:false,
-    tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
-  },
-    {
-
-    enable:false,
-    delete:false,
-    tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
+    calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
-  },
-    {
-
-    enable:false,
-    delete:false,
-    tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
-  },
-    {
-
-    enable:false,
-    delete:false,
-    tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
+    calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
+    calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
+    calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    updateCondition:0,
-    updatePeriod:100,
-    referenceParameter:
-    [
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      },
-      {
-        enable:true,
-        usage:0,
-        tagName:"",
-        constantValue:1
-      }
-          
-    ],
-    calculationFormula:"",
-    spanHigh:1000,
-    spanLow:0
+    calculationFormula:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    calculationFormula:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    calculationFormula:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    calculationFormula:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    calculationFormula:""
+  },
+    {
+    enable:false,
+    delete:false,
+    tagName:"",
+    calculationFormula:""
   }
 
   ];
@@ -2418,32 +2166,8 @@ import { DateInput } from 'date-picker-svelte'
   {
     new_calculation_tag[index].enable=true;
     new_calculation_tag[index].delete=false;
-    new_calculation_tag[index].tagName="";
-    new_calculation_tag[index].spanHigh=1000;
-    new_calculation_tag[index].spanLow=0;    
-    new_calculation_tag[index].updateCondition=1;
-    new_calculation_tag[index].updatePeriod=100;
-    new_calculation_tag[index].referenceParameter[0].enable=true;
-    new_calculation_tag[index].referenceParameter[1].enable=true;
-    new_calculation_tag[index].referenceParameter[2].enable=true;
-    new_calculation_tag[index].referenceParameter[3].enable=true;
-
-
-    new_calculation_tag[index].referenceParameter[0].usage=0;
-    new_calculation_tag[index].referenceParameter[1].usage=0;
-    new_calculation_tag[index].referenceParameter[2].usage=0;
-    new_calculation_tag[index].referenceParameter[3].usage=0;
-
-    new_calculation_tag[index].referenceParameter[0].tagName="";
-    new_calculation_tag[index].referenceParameter[1].tagName="";
-    new_calculation_tag[index].referenceParameter[2].tagName="";
-    new_calculation_tag[index].referenceParameter[3].tagName="";
-
-
-    new_calculation_tag[index].referenceParameter[0].constantValue=1;
-    new_calculation_tag[index].referenceParameter[1].constantValue=1;
-    new_calculation_tag[index].referenceParameter[2].constantValue=1;
-    new_calculation_tag[index].referenceParameter[3].constantValue=1;
+    new_calculation_tag[index].tagName="";   
+    new_calculation_tag[index].calculationFormula="return "
 
 
     new_calculation_tag_index=index;
@@ -2453,23 +2177,7 @@ import { DateInput } from 'date-picker-svelte'
 
   function modify_calculation_tag_fomula(index, type)
   {
-    if (type ==0)
-    {
-      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+=new_calculation_tag[index].referenceParameter[0].tagName;
-    }
-    else if (type ==1)
-    {
-      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].referenceParameter[1].tagName;    
-    }
-    else if (type ==2)
-    {
-      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].referenceParameter[2].tagName;
-    }
-    else if (type ==3)
-    {
-      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].referenceParameter[3].tagName;    
-    }
-    else if (type ==4)
+    if (type ==4)
     {
       changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula+="Max()";
     }
@@ -2573,8 +2281,9 @@ import { DateInput } from 'date-picker-svelte'
 
   function add_new_calculation_tag(index)
   {
-    new_calculation_tag_modal=false;
+    console.log("add new calculation_tag");
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag,new_calculation_tag[index]];
+    new_calculation_tag_modal=false;
   }
 
   function RestoreDeleteCtag(index)
@@ -2585,404 +2294,6 @@ import { DateInput } from 'date-picker-svelte'
   function DeleteCtag(index)
   {
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].delete=true;
-  }
-
-  let new_mtag_processing_modal=false;
-  let new_mtag_processing_index;
-
-  let new_mtag_processing=[
-  {
-    enable:false,
-    delete:false,
-    tagName:"",
-    pollingRate:0,
-    pollingRateMS:100,
-    realTimePublishing:0,
-    access:0,
-    dataType:0,
-    scaleFactor:{
-      operator:0,
-      value:1,
-      unit:0
-    },
-    sbir:{
-      enable:false,
-      registerAddress:1,
-      writeIndexContent:1
-    }
-  },
-    {
-    enable:false,
-    delete:false,
-    tagName:"",
-    pollingRate:0,
-    pollingRateMS:100,
-    realTimePublishing:0,
-    access:0,
-    dataType:0,
-    scaleFactor:{
-      operator:0,
-      value:1,
-      unit:0
-    },
-    sbir:{
-      enable:false,
-      registerAddress:1,
-      writeIndexContent:1
-    }
-  },
-    {
-    enable:false,
-    delete:false,
-    tagName:"",
-    pollingRate:0,
-    pollingRateMS:100,
-    realTimePublishing:0,
-    access:0,
-    dataType:0,
-    scaleFactor:{
-      operator:0,
-      value:1,
-      unit:0
-    },
-    sbir:{
-      enable:false,
-      registerAddress:1,
-      writeIndexContent:1
-    }
-  },
-    {
-    enable:false,
-    delete:false,
-    tagName:"",
-    pollingRate:0,
-    pollingRateMS:100,
-    realTimePublishing:0,
-    access:0,
-    dataType:0,
-    scaleFactor:{
-      operator:0,
-      value:1,
-      unit:0
-    },
-    sbir:{
-      enable:false,
-      registerAddress:1,
-      writeIndexContent:1
-    }
-  },
-    {
-    enable:false,
-    delete:false,
-    tagName:"",
-    pollingRate:0,
-    pollingRateMS:100,
-    realTimePublishing:0,
-    access:0,
-    dataType:0,
-    scaleFactor:{
-      operator:0,
-      value:1,
-      unit:0
-    },
-    sbir:{
-      enable:false,
-      registerAddress:1,
-      writeIndexContent:1
-    }
-  },
-    {
-    enable:false,
-    delete:false,
-    tagName:"",
-    pollingRate:0,
-    pollingRateMS:100,
-    realTimePublishing:0,
-    access:0,
-    dataType:0,
-    scaleFactor:{
-      operator:0,
-      value:1,
-      unit:0
-    },
-    sbir:{
-      enable:false,
-      registerAddress:1,
-      writeIndexContent:1
-    }
-  },
-    {
-    enable:false,
-    delete:false,
-    tagName:"",
-    pollingRate:0,
-    pollingRateMS:100,
-    realTimePublishing:0,
-    access:0,
-    dataType:0,
-    scaleFactor:{
-      operator:0,
-      value:1,
-      unit:0
-    },
-    sbir:{
-      enable:false,
-      registerAddress:1,
-      writeIndexContent:1
-    }
-  },
-    {
-    enable:false,
-    delete:false,
-    tagName:"",
-    pollingRate:0,
-    pollingRateMS:100,
-    realTimePublishing:0,
-    access:0,
-    dataType:0,
-    scaleFactor:{
-      operator:0,
-      value:1,
-      unit:0
-    },
-    sbir:{
-      enable:false,
-      registerAddress:1,
-      writeIndexContent:1
-    }
-  },
-    {
-    enable:false,
-    delete:false,
-    tagName:"",
-    pollingRate:0,
-    pollingRateMS:100,
-    realTimePublishing:0,
-    access:0,
-    dataType:0,
-    scaleFactor:{
-      operator:0,
-      value:1,
-      unit:0
-    },
-    sbir:{
-      enable:false,
-      registerAddress:1,
-      writeIndexContent:1
-    }
-  },
-    {
-    enable:false,
-    delete:false,
-    tagName:"",
-    pollingRate:0,
-    pollingRateMS:100,
-    realTimePublishing:0,
-    access:0,
-    dataType:0,
-    scaleFactor:{
-      operator:0,
-      value:1,
-      unit:0
-    },
-    sbir:{
-      enable:false,
-      registerAddress:1,
-      writeIndexContent:1
-    }
-  }
-
-  ];
-
-  function RestoreDeleteMTagProcess(index)
-  {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[index].delete=false;
-  }
-
-  function DeleteMTagProcess(index)
-  {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[index].delete=true;
-  }
-
-  function new_mtag_processing_trigger(index)
-  {
-    new_mtag_processing[index].enable=true;
-    new_mtag_processing[index].delete=false;
-    new_mtag_processing[index].tagName="";
-    new_mtag_processing[index].pollingRate=0;
-    new_mtag_processing[index].pollingRateMS=100;
-    new_mtag_processing[index].realTimePublishing=0;
-    new_mtag_processing[index].access=0;
-    new_mtag_processing[index].dataType=0;
-    new_mtag_processing[index].scaleFactor.operator=0;
-    new_mtag_processing[index].scaleFactor.value=1;
-    new_mtag_processing[index].scaleFactor.unit=0;
-    new_mtag_processing[index].sbir.enable=false;
-    new_mtag_processing[index].sbir.registerAddress=1;
-    new_mtag_processing[index].sbir.writeIndexContent=1;
-
-    new_mtag_processing_index=index;
-    new_mtag_processing_modal=true;
-    
-  }
-
-  function add_new_mtag_processing(index)
-  {
-    new_mtag_processing_modal=false;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing,new_mtag_processing[index]];
-
-  }
-
-  let new_modbus_parameter_modal=false;
-  let new_modbus_parameter_index;
-
-
-    let new_modbus_parameter=[
-    {
-        enable: false,
-        delete: false,
-        protocol: 0,
-        tagName: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000
-    },
-    {
-        enable: false,
-        delete: false,
-        protocol: 0,
-        tagName: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000
-    },
-    {
-        enable: false,
-        delete: false,
-        protocol: 0,
-        tagName: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000
-    },
-    {
-        enable: false,
-        delete: false,
-        protocol: 0,
-        tagName: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000
-    },
-    {
-        enable: false,
-        delete: false,
-        protocol: 0,
-        tagName: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000
-    },
-    {
-        enable: false,
-        delete: false,
-        protocol: 0,
-        tagName: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000
-    },
-    {
-        enable: false,
-        delete: false,
-        protocol: 0,
-        tagName: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000
-    },
-    {
-        enable: false,
-        delete: false,
-        protocol: 0,
-        tagName: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000
-    },
-    {
-        enable: false,
-        delete: false,
-        protocol: 0,
-        tagName: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000
-    },
-    {
-        enable: false,
-        delete: false,
-        protocol: 0,
-        tagName: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000
-    }
-    ];
-
-  function new_modbus_parameter_trigger(index)
-  {
-    new_modbus_parameter[index].enable=true;
-    new_modbus_parameter[index].delete=false;
-    new_modbus_parameter[index].protocol=0;
-    new_modbus_parameter[index].tagName="";
-    new_modbus_parameter[index].slaveId=2;
-    new_modbus_parameter[index].pointType=3;
-    new_modbus_parameter[index].address=0;
-    new_modbus_parameter[index].quantity=1;
-    new_modbus_parameter[index].byteOrder=0;
-    new_modbus_parameter[index].responseTimeout=1000;
-    new_modbus_parameter_index=index;
-    new_modbus_parameter_modal=true;
-
-  }
-
-
-  function add_new_modbus_parameter(index)
-  {
-    new_modbus_parameter_modal=false;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter,new_modbus_parameter[index]];
-
   }
 
 
@@ -3045,6 +2356,11 @@ async function getDataTagPro () {
           let clouditem={"value":item, "name":item};
           CloudProfile=[...CloudProfile, clouditem];
         }
+      }
+
+      if (saved_changed_modbus_data == "")
+      {
+        getModbusData();
       }
     }
   }
@@ -3164,6 +2480,35 @@ async function getDataTagPro () {
 
 
 
+    function AddTagName(triggerSource, Tagtype, tagIndex)
+    {
+      console.log("add tag to fomula");
+      console.log("AddTagName==", triggerSource, Tagtype, tagIndex);
+      if (Tagtype == 0)
+      {
+        //ctag
+        console.log("calculation Tag");
+        if (triggerSource == 0)
+        {//new
+          console.log("new");
+          new_calculation_tag[new_calculation_tag_index].calculationFormula+="$";
+          new_calculation_tag[new_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
+          new_calculation_tag[new_calculation_tag_index].calculationFormula+="$";
+        }
+        else if(triggerSource == 1)
+        {
+          console.log("modify");
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
+        }
+
+      }
+
+    }
+
+
+
 
   onMount(() => {
 
@@ -3180,7 +2525,7 @@ async function getDataTagPro () {
     }
     else if (sessionid && data_tag_pro_data != "")
     {
-      getDataReady=1;
+
       const hexArray = sessionid.match(/.{1,2}/g); 
       const byteValues = hexArray.map(hex => parseInt(hex, 16));
       sessionBinary = new Uint8Array(byteValues);
@@ -3190,11 +2535,6 @@ async function getDataTagPro () {
       {
         changed_data_tag_pro_data.config.service_dataTagPro_general=JSON.parse(JSON.stringify(data_tag_pro_data.config.service_dataTagPro_general));
 
-      }
-
-      if (data_tag_pro_tag_modbus_changedValues.length ==0)
-      {
-        changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag=JSON.parse(JSON.stringify(data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag));
       }
 
       if (data_tag_pro_tag_calculation_changedValues.length ==0)
@@ -3245,6 +2585,13 @@ async function getDataTagPro () {
               CloudProfile=[...CloudProfile, clouditem];
         }
       }
+
+      if (saved_changed_modbus_data == "")
+      {
+        getModbusData();
+      }
+
+      getDataReady=1;
     }
 
 
@@ -3292,1459 +2639,7 @@ async function getDataTagPro () {
    
 <TabItem title="Tag Rule">
 <Accordion>
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    Modbus Tag
-    </span>
-
-<Table shadow striped={true}>
-<caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
-on:click={handleClickMMS} on:keydown={() => {}}>
-    Modbus RTU Master Profile
-    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Please set rtu master configuration first.</p>
-  </caption>
-
-{#if openDetailStatusMMS}
-<TableHead>    
-  <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell class="w-10">Enable</TableHeadCell>
-    <TableHeadCell class="w-10">No</TableHeadCell>
-    <TableHeadCell class="w-10">Serial Profile</TableHeadCell>
-    <TableHeadCell class="w-10">Interface</TableHeadCell>
-    <TableHeadCell class="w-10">Baudrate</TableHeadCell>
-    <TableHeadCell class="w-10">Parity</TableHeadCell>
-    <TableHeadCell class="w-10">Data Bits</TableHeadCell>
-    <TableHeadCell class="w-18">Stop Bits</TableHeadCell>
-    <TableHeadCell class="w-10"></TableHeadCell>    
-    <TableHeadCell class="w-10"></TableHeadCell> 
-  </TableHead>
-  <TableBody>
-
- <TableBodyRow>
-      <TableBodyCell class="!p-1 w-4">
-<button on:click={() => TriggerModifyCOM(1)}>
-
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-
-
-      </button>
-
-       </TableBodyCell>
-
-    <TableBodyCell class="w-4">
-<input class="mb-1" type="checkbox" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.enable}>
-    </TableBodyCell>
-
-    <TableBodyCell>1</TableBodyCell>
- <TableBodyCell>{changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.serialProfile}</TableBodyCell>
-
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.interface == 0}
-      <TableBodyCell>RS 485</TableBodyCell>
-{:else}
-      <TableBodyCell>Unknown</TableBodyCell>
-{/if}
-
-
- <TableBodyCell>{changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.baudrate}</TableBodyCell>
-
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.parity == 0}
-      <TableBodyCell class="w-10">None</TableBodyCell>
-{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.parity == 1}
-      <TableBodyCell class="w-10">Even</TableBodyCell>
-{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.parity == 2}
-      <TableBodyCell class="w-10">Odd</TableBodyCell>
-{/if}
-
-   <TableBodyCell>{changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.dataBits}</TableBodyCell>
-    <TableBodyCell>{changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.stopBits}</TableBodyCell>
-
- </TableBodyRow>
-  </TableBody>
-{/if}  
-
-  
-<Modal bind:open={modify_com_modal} size="md" class="w-full" permanent={true}>
-<form action="#">
-<label>
-  <input type="checkbox" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.enable} >
-  Enable
-</label>
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyCOM(modify_com_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-<p class="mt-10"></p>
-<table>
-  
-<tr>
-  <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
-
-      <td class="pl-5 pt-5">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.serialProfile}>
-<option disabled="" value="none">Choose Profile ...</option>
-
-
-<option value="S1">S1</option>
-<option value="S2">S2</option>
-</select>
-
-      </td>
-
-</tr>
-
-<tr>
-  <td><p class="pl-4 pt-4 text-lg font-light text-right">Interface</p>
-
-  </td>
-
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.interface} value={0}>RS 485</Radio>
-</div></td>
-</tr>
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.baudrate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Parity</p></td>
-
-
-    <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.parity} value={0} >None</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.parity} value={1} >Even</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.parity} value={2} >Odd</Radio>
-</div></td>
-
-
-
-  </tr>
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="text"  bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.dataBits} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-<tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="text"  
-      bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.rtuMasterProfile.stopBits} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-  
-  </tr>
-      <tr>
-    <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyRTUMaster}>Modify</Button></td>
-    </tr>
-</table>
-  </form>
-</Modal>
-
-</Table>
-
-
-<p class="mt-8"></p>  
-
-
-<Table shadow striped={true} >
-
-  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMMT} on:keydown={() => {}}>
-    Modbus TCP Master Profile
-    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Please set tcp master configuration first.</p>
-  </caption>
-
-{#if openDetailStatusMMT}
-  <TableHead>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-     <TableHeadCell class="w-10">Enable</TableHeadCell>
-    <TableHeadCell class="w-10">No</TableHeadCell>  
-    <TableHeadCell class="w-10">Remote Server IP</TableHeadCell>
-    <TableHeadCell class="w-10">Remote Port</TableHeadCell>
-    <TableHeadCell class="w-10">Connection Timeout</TableHeadCell>
-    <TableHeadCell class="w-36"></TableHeadCell> 
-    <TableHeadCell class="w-18"></TableHeadCell> 
-    <TableHeadCell class="w-18"></TableHeadCell> 
-  </TableHead>
-  <TableBody>
-
- <TableBodyRow>
-      <TableBodyCell class="!p-1 w-4">
-<button on:click={() => TriggerModifyTCPMaster(1)}>
-
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-
-
-      </button>
-
-       </TableBodyCell>
-
-
-    <TableBodyCell class="w-4">
-<input class="mb-1" type="checkbox" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile.enable}>
-    </TableBodyCell>
-<TableBodyCell>1</TableBodyCell>
-<TableBodyCell>{changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile.remoteServerIp}</TableBodyCell>
- <TableBodyCell>{changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile.remotePort}</TableBodyCell>
-  <TableBodyCell>{changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile.connectionTimeout} ms</TableBodyCell>
- </TableBodyRow>
-  </TableBody>
-{/if} 
-
-
-
-
-   <Modal bind:open={Modify_TCP_Master_Modal} size="lg" class="w-full" permanent={true}>
-<form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile.enable}>
-{/if}
-  Enable
-</label>
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyTCPMaster(Modify_TCP_Master_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-<p class="mt-10"></p>
-
-<table>
-
-
-
-<tr>
-      <td><p class="pl-10 pt-4 text-lg font-light text-right">Remote Server IP</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile.remoteServerIp} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-<tr>
-      <td><p class="pl-10 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="text" 
-      bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile.remotePort} 
-      class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-10 pt-4 text-lg font-light text-right">Connection Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tcpMasterProfile.connectionTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"> </td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
-
-
-
-  </tr>
-
-      <tr>
-    <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-
-            <td></td>
-    <td></td>
-    <td class="pl-20"><Button color="dark" pill={true} on:click={ModifyModbusTCPMaster}>Modify</Button></td>
-
-
-    </tr>
-</table>
-</form>
-</Modal>
-
-</Table>
-<p class="mt-8"></p>  
-
-
-<Table shadow striped={true}>
-  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-    Modbus Parameter
-    </caption>
-  
-<TableHead>
-    <TableHeadCell class="!p-1">
-    </TableHeadCell>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell class="!p-4 w-4">
-    </TableHeadCell>
-    <TableHeadCell class="!p-4">Enable</TableHeadCell>
-    <TableHeadCell class="!p-1 w-2">No</TableHeadCell>
-    <TableHeadCell class="!p-4 w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="!p-2 w-10">Protocol</TableHeadCell>
-    <TableHeadCell class="!p-1 w-10">Slave ID</TableHeadCell>
-    <TableHeadCell class="!p-4 w-18">Point Type</TableHeadCell>
-    <TableHeadCell class="!p-2 w-18">Address (DEC)</TableHeadCell>
-    <TableHeadCell class="!p-2 w-10">Quantity</TableHeadCell>
-    <TableHeadCell class="!p-1 w-10">Response Timeout</TableHeadCell>
-    <TableHeadCell class="!p-2 w-10">Byte Order</TableHeadCell>
-  </TableHead>
-
-<TableBody>
-{#if getDataReady == 1}
-
-{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter, index}
-{#if deviceParameter.delete}
-
-<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
-<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
-<button on:click={() => RestoreDeleteModbusParameter(index)}>
-<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</button>
-   </td>
-
-
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
-<button class="disabled:cursor-not-allowed" disabled>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
-<button class="disabled:cursor-not-allowed" disabled>    
-    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</button>
-    </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 strikeout" type="checkbox" bind:checked={deviceParameter.enable}>
-    </td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-1 w-4 strikeout">{index+1}</td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-4 strikeout">{deviceParameter.tagName}</td>      
-{#if deviceParameter.protocol == 0}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">RTU</td>
-{:else if deviceParameter.protocol == 1}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">TCP</td>
-{:else}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Unknown</td>
-{/if}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">{deviceParameter.slaveId}</td>
-
-
-
-{#if deviceParameter.pointType ==0}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Coil</td>
-{:else if deviceParameter.pointType ==1}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Discrete Input</td>
-{:else if deviceParameter.pointType ==2}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Input Register</td>
-{:else if deviceParameter.pointType ==3}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Holding Register</td>
-{:else}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Unknown</td>
-{/if}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">{deviceParameter.address}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">{deviceParameter.quantity}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">{deviceParameter.responseTimeout} ms</td>
-
-{#if deviceParameter.byteOrder ==0}  
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Big Endian</td>
-{:else if deviceParameter.byteOrder ==1}  
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Little Endian</td>
-{:else if deviceParameter.byteOrder ==2}  
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Big Endian Byte Swap</td>
-{:else if deviceParameter.byteOrder ==3}  
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Little Endian Byte Swap</td>
-{:else}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">Unknown</td>
-{/if}
-
-    </tr>
-
-
-
-
-{:else}
-<TableBodyRow>
-   <TableBodyCell class="!p-1 w-10"></TableBodyCell>
-  <TableBodyCell class="!p-0 w-10">
-<button on:click={() => TriggerModifyModbusParameter(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </TableBodyCell>
-    <TableBodyCell class="!p-0 w-10">
-<button on:click={() => DeleteModbusParameter(index)}>    
-    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</button>
-    </TableBodyCell>
-    <TableBodyCell>
-<input class="mb-1" type="checkbox" bind:checked={deviceParameter.enable}>
-    </TableBodyCell>
-      <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
-  <TableBodyCell class="!p-4">{deviceParameter.tagName}</TableBodyCell>      
-{#if deviceParameter.protocol == 0}
-  <TableBodyCell>RTU</TableBodyCell>
-{:else if deviceParameter.protocol == 1}
-  <TableBodyCell>TCP</TableBodyCell>
-{:else}
-  <TableBodyCell>Unknown</TableBodyCell>
-{/if}
-  <TableBodyCell>{deviceParameter.slaveId}</TableBodyCell>
-
-
-
-{#if deviceParameter.pointType ==0}
-  <TableBodyCell>Coil</TableBodyCell>
-{:else if deviceParameter.pointType ==1}
-  <TableBodyCell>Discrete Input</TableBodyCell>
-{:else if deviceParameter.pointType ==2}
-  <TableBodyCell>Input Register</TableBodyCell>
-{:else if deviceParameter.pointType ==3}
-  <TableBodyCell>Holding Register</TableBodyCell>
-{:else}
-  <TableBodyCell>Unknown</TableBodyCell>
-{/if}
-  <TableBodyCell>{deviceParameter.address}</TableBodyCell>
-  <TableBodyCell>{deviceParameter.quantity}</TableBodyCell>
-  <TableBodyCell>{deviceParameter.responseTimeout} ms</TableBodyCell>
-
-{#if deviceParameter.byteOrder ==0}  
-  <TableBodyCell>Big Endian</TableBodyCell>
-{:else if deviceParameter.byteOrder ==1}  
-  <TableBodyCell>Little Endian</TableBodyCell>
-{:else if deviceParameter.byteOrder ==2}  
-  <TableBodyCell>Big Endian Byte Swap</TableBodyCell>
-{:else if deviceParameter.byteOrder ==3}  
-  <TableBodyCell>Little Endian Byte Swap</TableBodyCell>
-{:else}
-    <TableBodyCell>Unknown</TableBodyCell>
-{/if}
-
-
-    </TableBodyRow>
-{/if}
-
-{/each}
-{/if}
-
-
-  <TableBodyRow>
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length < 10}
-
- <TableBodyCell class="!p-4 w-10">
-
-<button on:click={() =>new_modbus_parameter_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length)}>
-    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-
-  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
- </TableBodyCell>
-{:else}
- <TableBodyCell class="!p-4 w-16"></TableBodyCell>
-{/if}
-      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
-      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
-
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-
-  <TableBodyCell ></TableBodyCell>
-
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-
-    </TableBodyRow>
-
-
-
-  </TableBody>
-
-
-  <Modal bind:open={new_modbus_parameter_modal}  size="lg" class="w-full" autoclose>
-  <form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox"  bind:checked={new_modbus_parameter[new_modbus_parameter_index].enable}>
-{/if}
-  Enable
-</label>
-
-<p class="mt-10"></p>
-
-<table>
-
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={new_modbus_parameter[new_modbus_parameter_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
-
-
-
-  <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Protocol</p></td>
-    <td class= "pl-4 pt-4">
- <div class="flex gap-4">
-  <Radio bind:group={new_modbus_parameter[new_modbus_parameter_index].protocol} value={0} >RTU</Radio>
-  <Radio bind:group={new_modbus_parameter[new_modbus_parameter_index].protocol} value={1} >TCP</Radio>
-</div></td>
-
-
-</tr>
-
-
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_modbus_parameter[new_modbus_parameter_index].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-<td></td>
-<td></td>
-<td></td>
-
-
-  </tr>
-
-<tr>
-  <td><p class="pl-2 pt-4 text-lg font-light text-right">Point Type</p>
-
-  </td>
-
-    <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
-  <Radio bind:group={new_modbus_parameter[new_modbus_parameter_index].pointType} value={2} >Input Register</Radio>
-  <Radio bind:group={new_modbus_parameter[new_modbus_parameter_index].pointType} value={3} >Holding Register</Radio>
-</div></td>
-</tr>
-
-
-
-
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_modbus_parameter[new_modbus_parameter_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-<td></td>
-<td></td>
-<td></td>
-
-  </tr>
-
-
-  <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_modbus_parameter[new_modbus_parameter_index].quantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-<td></td>
-<td></td>
-<td></td>
-
-
-  </tr>
-
-
-
-  <tr>
-  <td><p class="pl-2 pt-4 text-lg font-light text-right">Byte Order</p>
-
-  </td>
-
-    <td class="pl-4 pt-5" colspan="5"><div class="flex gap-2">
-  <Radio bind:group={new_modbus_parameter[new_modbus_parameter_index].byteOrder} value={0} >Big Endian</Radio>
-  <Radio bind:group={new_modbus_parameter[new_modbus_parameter_index].byteOrder} value={1} >Little Endian</Radio>
-  <Radio bind:group={new_modbus_parameter[new_modbus_parameter_index].byteOrder} value={2} >Big Endian Byte Swap</Radio>
-  <Radio bind:group={new_modbus_parameter[new_modbus_parameter_index].byteOrder} value={3} >Little Endian Byte Swap</Radio>
-</div></td>
-</tr>
-
-  <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
-      <input type="text" bind:value={new_modbus_parameter[new_modbus_parameter_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
-
-<td></td>
-<td></td>
-<td></td>
-
-  </tr>
-
-
-      <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>
-<Button color="dark" pill={true} on:click={add_new_modbus_parameter(new_modbus_parameter_index)}>Add</Button></td>
-
-
-    </tr>
-
-</table>
-
-
-</form>
-</Modal>
-
-<Modal bind:open={modify_modbus_parameter_modal} size="lg" class="w-full" permanent={true}>
-<form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].enable}>
-{/if}
-  Enable
-</label>
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={no_modify_modbus_parameter}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-<p class="mt-10"></p>
-
-<table>
-
-
-     
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
-
-
-
-  <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Protocol</p></td>
-    <td class= "pl-4 pt-4">
- <div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].protocol} value={0} >RTU</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].protocol} value={1} >TCP</Radio>
-</div></td>
-
-
-</tr>
-
-
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].slaveId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-<td></td>
-<td></td>
-<td></td>
-
-
-  </tr>
-
-<tr>
-  <td><p class="pl-2 pt-4 text-lg font-light text-right">Point Type</p>
-
-  </td>
-
-    <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].pointType} value={2} >Input Register</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].pointType} value={3} >Holding Register</Radio>
-</div></td>
-</tr>
-
-
-
-
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-<td></td>
-<td></td>
-<td></td>
-
-  </tr>
-
-
-  <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Quantity</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].quantity} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-<td></td>
-<td></td>
-<td></td>
-
-
-  </tr>
-
-
-
-  <tr>
-  <td><p class="pl-2 pt-4 text-lg font-light text-right">Byte Order</p>
-
-  </td>
-
-    <td class="pl-4 pt-5" colspan="5"><div class="flex gap-2">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].byteOrder} value={0} >Big Endian</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].byteOrder} value={1} >Little Endian</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].byteOrder} value={2} >Big Endian Byte Swap</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].byteOrder} value={3} >Little Endian Byte Swap</Radio>
-</div></td>
-</tr>
-
-  <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
-      <input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter[modify_modbus_parameter_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
-
-<td></td>
-<td></td>
-<td></td>
-
-  </tr>
-
-
-      <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td class="pl-10"><Button color="dark" pill={true} on:click={modify_modbus_parameter}>Modify</Button></td>
-
-
-    </tr>
-
-
-</table>
-</form>
-</Modal>
-
-
- </Table> 
-
-
-<p class="mt-4"></p>
-
-
-<Table shadow striped={true} >
-
-  <caption class="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800" on:click={handleClickMP} on:keydown={() => {}}>
-    Process Parameter
-    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Please set process parameter.</p>
-  </caption>
-
-{#if openDetailStatusMProcess}
-  <TableHead>
-    <TableHeadCell class="!p-1">
-    </TableHeadCell>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell class="!p-4 w-4">
-    </TableHeadCell>
-     <TableHeadCell class="w-10">Enable</TableHeadCell>
-    <TableHeadCell class="w-10">No</TableHeadCell>  
-    <TableHeadCell class="w-10">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-10">Polling Rate</TableHeadCell>
-    <TableHeadCell class="w-10">Realtime Push</TableHeadCell>
-    <TableHeadCell class="w-10">Access</TableHeadCell> 
-    <TableHeadCell class="w-10">Data Type</TableHeadCell> 
-    <TableHeadCell class="w-10">Scale</TableHeadCell> 
-    <TableHeadCell class="w-10">SBIR</TableHeadCell>     
-  </TableHead>
-  <TableBody>
-
-
-{#if getDataReady == 1}
-
-{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing as tagProcessing, index}
-{#if tagProcessing.delete}
-
-<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
-<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
-<button on:click={() => RestoreDeleteMTagProcess(index)}>
-<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</button>
-   </td>
-
-
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
-<button class="disabled:cursor-not-allowed" disabled>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
-<button class="disabled:cursor-not-allowed" disabled>    
-    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</button>
-    </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 strikeout" type="checkbox" bind:checked={tagProcessing.enable}>
-    </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
-
-
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{tagProcessing.tagName}</td>
-
-{#if tagProcessing.pollingRate ==0}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">None</td>
-{:else if tagProcessing.pollingRate ==1}
-
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{tagProcessing.pollingRateMS}</td>
-{:else}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
-{/if}
-
-{#if tagProcessing.realTimePublishing==0}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">No</td>
-{:else if tagProcessing.realTimePublishing==1}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Yes</td>
-{:else}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
-{/if}
-
-
-{#if tagProcessing.access==0}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Read Only</td>
-{:else if tagProcessing.access==1}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Write Only</td>
-{:else if tagProcessing.access==2}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Read and Write</td>
-{:else}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
-{/if}
-
-
-
-{#if tagProcessing.dataType==0}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Signed Integer 16</td>
-
-{:else if tagProcessing.dataType==1}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unsigned Integer 16</td>
-{:else if tagProcessing.dataType==2}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Signed Integer 32</td>
-{:else if tagProcessing.dataType==3}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unsigned Integer 32</td>
-{:else if tagProcessing.dataType==4}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Signed Integer 64</td>
-{:else if tagProcessing.dataType==5}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unsigned Integer 64</td>
-{:else if tagProcessing.dataType==6}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Float 32</td>
-{:else if tagProcessing.dataType==7}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Float 64</td>
-{:else if tagProcessing.dataType==8}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Ascii</td>
-{:else if tagProcessing.dataType==9}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Bitmap</td>
-{:else if tagProcessing.dataType==10}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Str32</td>
-{:else if tagProcessing.dataType==11}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">String</td>
-{:else if tagProcessing.dataType==12}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">RAW</td>
-{:else if tagProcessing.dataType==13}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Bool</td>
-
-{:else}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
-{/if}
-
-
-{#if tagProcessing.scaleFactor.operator==0}
- <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">None</td>
-{:else if tagProcessing.scaleFactor.operator==1}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">+ {tagProcessing.scaleFactor.value}</td>
-{:else if tagProcessing.scaleFactor.operator==2}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">- {tagProcessing.scaleFactor.value}</td> 
-{:else if tagProcessing.scaleFactor.operator==3}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">* {tagProcessing.scaleFactor.value}</td> 
-{:else if tagProcessing.scaleFactor.operator==4}
-   <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">/ {tagProcessing.scaleFactor.value}</td> 
-{:else}
-  <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
-{/if}
-
-
-{#if !tagProcessing.sbir.enable}
- <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Disable</td>
-{:else}
- <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">({tagProcessing.sbir.registerAddress}, {tagProcessing.sbir.writeIndexContent})</td>
-{/if}
-
-
-
-   </tr>
-
-{:else}
- <TableBodyRow>
-      <TableBodyCell class="!p-1 w-10"></TableBodyCell>
-  <TableBodyCell class="!p-0 w-10">
-<button on:click={()=>TriggerMtagProcessing(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </TableBodyCell>
-    <TableBodyCell class="!p-0 w-10">
-<button on:click={() => DeleteMTagProcess(index)}>    
-    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</button>
-    </TableBodyCell>
-    <TableBodyCell>
-<input class="mb-1" type="checkbox"  bind:checked={tagProcessing.enable}>
-    </TableBodyCell>
-
-    <TableBodyCell>{index+1}</TableBodyCell>
- <TableBodyCell>{tagProcessing.tagName}</TableBodyCell>
-
-{#if tagProcessing.pollingRate ==0}
-  <TableBodyCell>None</TableBodyCell>
-{:else if tagProcessing.pollingRate ==1}
-
-  <TableBodyCell>{tagProcessing.pollingRateMS}</TableBodyCell>
-{:else}
-  <TableBodyCell>Unknown</TableBodyCell>
-{/if}
-
-{#if tagProcessing.realTimePublishing==0}
-  <TableBodyCell>No</TableBodyCell>
-{:else if tagProcessing.realTimePublishing==1}
-  <TableBodyCell>Yes</TableBodyCell>
-{:else}
-  <TableBodyCell>Unknown</TableBodyCell>
-{/if}
-
-
-{#if tagProcessing.access==0}
-  <TableBodyCell>Read Only</TableBodyCell>
-{:else if tagProcessing.access==1}
-  <TableBodyCell>Write Only</TableBodyCell>
-{:else if tagProcessing.access==2}
-  <TableBodyCell>Read and Write</TableBodyCell>
-{:else}
-  <TableBodyCell>Unknown</TableBodyCell>
-{/if}
-
-
-
-{#if tagProcessing.dataType==0}
-  <TableBodyCell>Signed Integer 16</TableBodyCell>
-
-{:else if tagProcessing.dataType==1}
-   <TableBodyCell>Unsigned Integer 16</TableBodyCell>
-{:else if tagProcessing.dataType==2}
-   <TableBodyCell>Signed Integer 32</TableBodyCell>
-{:else if tagProcessing.dataType==3}
-   <TableBodyCell>Unsigned Integer 32</TableBodyCell>
-{:else if tagProcessing.dataType==4}
-   <TableBodyCell>Signed Integer 64</TableBodyCell>
-{:else if tagProcessing.dataType==5}
-   <TableBodyCell>Unsigned Integer 64</TableBodyCell>
-{:else if tagProcessing.dataType==6}
-   <TableBodyCell>Float 32</TableBodyCell>
-{:else if tagProcessing.dataType==7}
-   <TableBodyCell>Float 64</TableBodyCell>
-{:else if tagProcessing.dataType==8}
-   <TableBodyCell>Ascii</TableBodyCell>
-{:else if tagProcessing.dataType==9}
-   <TableBodyCell>Bitmap</TableBodyCell>
-{:else if tagProcessing.dataType==10}
-   <TableBodyCell>Str32</TableBodyCell>
-{:else if tagProcessing.dataType==11}
-   <TableBodyCell>String</TableBodyCell>
-{:else if tagProcessing.dataType==12}
-   <TableBodyCell>RAW</TableBodyCell>
-{:else if tagProcessing.dataType==13}
-   <TableBodyCell>Bool</TableBodyCell>
-
-{:else}
-  <TableBodyCell>Unknown</TableBodyCell>
-{/if}
-
-
-{#if tagProcessing.scaleFactor.operator==0}
- <TableBodyCell>None</TableBodyCell>
-{:else if tagProcessing.scaleFactor.operator==1}
-   <TableBodyCell>+ {tagProcessing.scaleFactor.value}</TableBodyCell>
-{:else if tagProcessing.scaleFactor.operator==2}
-   <TableBodyCell>- {tagProcessing.scaleFactor.value}</TableBodyCell> 
-{:else if tagProcessing.scaleFactor.operator==3}
-   <TableBodyCell>* {tagProcessing.scaleFactor.value}</TableBodyCell> 
-{:else if tagProcessing.scaleFactor.operator==4}
-   <TableBodyCell>/ {tagProcessing.scaleFactor.value}</TableBodyCell> 
-{:else}
-  <TableBodyCell>Unknown</TableBodyCell>
-{/if}
-
-
-{#if !tagProcessing.sbir.enable}
- <TableBodyCell>Disable</TableBodyCell>
-{:else}
- <TableBodyCell>({tagProcessing.sbir.registerAddress}, {tagProcessing.sbir.writeIndexContent})</TableBodyCell>
-{/if}
-
-
-
- </TableBodyRow>
-
-{/if}
-
-{/each}
-{/if}
-
-
  
-  <TableBodyRow>
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing.length < 10}
-
- <TableBodyCell class="!p-4 w-10">
-
-<button on:click={() =>new_mtag_processing_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing.length)}>
-    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-
-  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
- </TableBodyCell>
-{:else}
- <TableBodyCell class="!p-4 w-16"></TableBodyCell>
-{/if}
-      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
-      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
-
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-
-  <TableBodyCell ></TableBodyCell>
-
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-
-    </TableBodyRow>
-
-
-  </TableBody>
-{/if} 
-
- <Modal bind:open={new_mtag_processing_modal}  size="lg" class="w-full" autoclose>
-  <form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox"  bind:checked={new_mtag_processing[new_mtag_processing_index].enable}>
-{/if}
-  Enable
-</label>
-
-<p class="mt-10"></p>
-
-<table>
-
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
-      <td class="pl-5 pt-5">
-
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={new_mtag_processing[new_mtag_processing_index].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-
-
-      </td>
-
-
-
-  </tr>
-
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].pollingRate} value={0} >None</Radio>
-  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].pollingRate} value={1} >User Define:</Radio>
-{#if new_mtag_processing[new_mtag_processing_index].pollingRate==0}
-
-<input type="text" bind:value={new_mtag_processing[new_mtag_processing_index].pollingRateMS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
-{:else}
-<input type="text" bind:value={new_mtag_processing[new_mtag_processing_index].pollingRateMS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-{/if}
-</div></td>
-
-    </tr>
-
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Realtime Publish</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].realTimePublishing} value={0} >No</Radio>
-  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].realTimePublishing} value={1} >Yes</Radio>
-</div></td>
-
-    </tr>
-
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Access</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].access} value={0} >Read Only</Radio>
-  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].access} value={1} >Write Only</Radio>
-  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].access} value={2} >Read and Write</Radio>
-</div></td>
-
-    </tr>
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Data Type</p></td>
-    <td class="pl-5 pt-5">  
-
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={new_mtag_processing[new_mtag_processing_index].dataType}>
-<option disabled="" value="none">Choose ...</option>
-
-
-<option value={0}>Signed Integer 16</option>
-<option value={1}>Unsigned Integer 16</option>
-<option value={2}>Signed Integer 32</option>
-<option value={3}>Unsigned Integer 32</option>
-<option value={4}>Signed Integer 64</option>
-<option value={5}>Unsigned Integer 64</option>
-<option value={6}>Float 32</option>
-<option value={7}>Float 64</option>
-<option value={8}>Ascii</option>
-<option value={9}>Bitmap</option>
-<option value={10}>Str32</option>
-<option value={11}>String</option>
-<option value={12}>Raw</option>
-<option value={13}>Bool</option>
-</select>
-
-  </td>
-
-    </tr>
-
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Scale</p></td>
-    <td class="pl-5 pt-5">
-<div class="flex gap-4">
-    <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={new_mtag_processing[new_mtag_processing_index].scaleFactor.operator}>
-<option disabled="" value="none">Choose ...</option>
-<option value={0}>None</option>
-<option value={1}>+</option>
-<option value={2}>-</option>
-<option value={3}>*</option>
-<option value={4}>/</option>
-
-</select>
-
-{#if new_mtag_processing[new_mtag_processing_index].scaleFactor.operator ==0}
- <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_mtag_processing[new_mtag_processing_index].scaleFactor.value} disabled>
-  </FloatingLabelInput> 
-
-{:else}
- <FloatingLabelInput style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_mtag_processing[new_mtag_processing_index].scaleFactor.value}>
-  </FloatingLabelInput> 
-{/if}
-
-  </div>
-
-</td>
-
-    </tr>
-
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">SBIR</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].sbir.enable} value={false} >Disable</Radio>
-  <Radio bind:group={new_mtag_processing[new_mtag_processing_index].sbir.enable} value={true} >Enable:</Radio>
-{#if !new_mtag_processing[new_mtag_processing_index].sbir.enable}
-
- <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="Register Address" name="Register Address" type="number" label="Register Address" bind:value={new_mtag_processing[new_mtag_processing_index].sbir.registerAddress} disabled>
-  </FloatingLabelInput>
-
- <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="Write Index Content" name="Write Index Content" type="number" label="Write Index Content" bind:value={new_mtag_processing[new_mtag_processing_index].sbir.writeIndexContent} disabled>
-  </FloatingLabelInput>
-
-{:else}
- <FloatingLabelInput style="outlined" id="Register Address" name="Register Address" type="number" label="Register Address" bind:value={new_mtag_processing[new_mtag_processing_index].sbir.registerAddress}>
-  </FloatingLabelInput>
-
- <FloatingLabelInput style="outlined" id="Write Index Content" name="Write Index Content" type="number" label="Write Index Content" bind:value={new_mtag_processing[new_mtag_processing_index].sbir.writeIndexContent}>
-  </FloatingLabelInput>
-
-{/if}
-</div></td>
-
-    </tr>
-
-
-
-
-      <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>
-<Button color="dark" pill={true} on:click={add_new_mtag_processing(new_mtag_processing_index)}>Add</Button></td>
-
-</table>
-</form>
-</Modal>
-
-<Modal bind:open={modify_mtag_processing_modal} size="lg" class="w-full" permanent={true}>
-<form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].enable}>
-{/if}
-  Enable
-</label>
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={no_modify_mtag_processing}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-<p class="mt-10"></p>
-
-<table>
-
-
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
-      <td class="pl-5 pt-5">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-      </td>
-
-
-  </tr>
-
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].pollingRate} value={0} >None</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].pollingRate} value={1} >User Define:</Radio>
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].pollingRate==0}
-
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].pollingRateMS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled>
-{:else}
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].pollingRateMS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-{/if}
-</div></td>
-
-    </tr>
-
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Realtime Publish</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].realTimePublishing} value={0} >No</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].realTimePublishing} value={1} >Yes</Radio>
-</div></td>
-
-    </tr>
-
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Access</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].access} value={0} >Read Only</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].access} value={1} >Write Only</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].access} value={2} >Read and Write</Radio>
-</div></td>
-
-    </tr>
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Data Type</p></td>
-    <td class="pl-5 pt-5">  
-
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].dataType}>
-<option disabled="" value="none">Choose ...</option>
-
-
-<option value={0}>Signed Integer 16</option>
-<option value={1}>Unsigned Integer 16</option>
-<option value={2}>Signed Integer 32</option>
-<option value={3}>Unsigned Integer 32</option>
-<option value={4}>Signed Integer 64</option>
-<option value={5}>Unsigned Integer 64</option>
-<option value={6}>Float 32</option>
-<option value={7}>Float 64</option>
-<option value={8}>Ascii</option>
-<option value={9}>Bitmap</option>
-<option value={10}>Str32</option>
-<option value={11}>String</option>
-<option value={12}>Raw</option>
-<option value={13}>Bool</option>
-</select>
-
-  </td>
-
-    </tr>
-
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Scale</p></td>
-    <td class="pl-5 pt-5">
-<div class="flex gap-4">
-    <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].scaleFactor.operator}>
-<option disabled="" value="none">Choose ...</option>
-<option value={0}>None</option>
-<option value={1}>+</option>
-<option value={2}>-</option>
-<option value={3}>*</option>
-<option value={4}>/</option>
-
-</select>
-
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].scaleFactor.operator ==0}
- <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].scaleFactor.value} disabled>
-  </FloatingLabelInput> 
-
-{:else}
- <FloatingLabelInput style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].scaleFactor.value}>
-  </FloatingLabelInput> 
-{/if}
-
-  </div>
-
-</td>
-
-    </tr>
-
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">SBIR</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.enable} value={false} >Disable</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.enable} value={true} >Enable:</Radio>
-{#if !changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.enable}
-
- <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="Register Address" name="Register Address" type="number" label="Register Address" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.registerAddress} disabled>
-  </FloatingLabelInput>
-
- <FloatingLabelInput class="disabled:cursor-not-allowed disabled:opacity-50" style="outlined" id="Write Index Content" name="Write Index Content" type="number" label="Write Index Content" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.writeIndexContent} disabled>
-  </FloatingLabelInput>
-
-{:else}
- <FloatingLabelInput style="outlined" id="Register Address" name="Register Address" type="number" label="Register Address" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.registerAddress}>
-  </FloatingLabelInput>
-
- <FloatingLabelInput style="outlined" id="Write Index Content" name="Write Index Content" type="number" label="Write Index Content" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.tagProcessing[modify_mtag_processing_index].sbir.writeIndexContent}>
-  </FloatingLabelInput>
-
-{/if}
-</div></td>
-
-    </tr>
-
-
-      <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td class="pl-10"><Button color="dark" pill={true} on:click={modify_mtag_processing}>Modify</Button></td>
-
-
-    </tr>
-</table>
-</form>
-</Modal>
-
-
-</Table>
-
-
-<p class="mt-2"></p>
-
-<table>
-
-  <tr>
-    <td class="w-18"></td>
-    <td class="w-18"></td>
-    <td class="w-18"></td>
-    <td class="w-18"></td>
-    <td class="w-18"></td>
-    <td class="w-18"></td>
-    <td class="w-10"></td>
-    <td class="w-10"></td>
-    <td class="w-10"></td>    
-
-    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveModbus}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>Save</Button></td>
-
-
-    </tr>
-    </table>
-
-
-  </AccordionItem>
-
   <AccordionItem {defaultClass}>
 
 
@@ -4765,8 +2660,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-18">Span High/Low</TableHeadCell>
-    <TableHeadCell class="w-80">Update Condition</TableHeadCell>    
+    <TableHeadCell class="w-80">Calculation Formula</TableHeadCell>    
 
   </TableHead>
 
@@ -4805,16 +2699,9 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.spanHigh}/{Ctag.spanLow}</td>
 
-{#if Ctag.updateCondition==0}
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Update per {Ctag.updatePeriod} ms with the formula: {Ctag.calculationFormula}</td>
-{:else if Ctag.updateCondition==1}
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Update will be trigger by reference tags ({Ctag.referenceParameter[0].tagName},{Ctag.referenceParameter[1].tagName},{Ctag.referenceParameter[2].tagName},{Ctag.referenceParameter[3].tagName}) with the formula: {Ctag.calculationFormula}</td>
-{:else}
 
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Unknown</td>
-{/if}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.calculationFormula}</td>
 
 
 
@@ -4848,17 +2735,8 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
     <TableBodyCell>{index+1}</TableBodyCell>
  <TableBodyCell>{Ctag.tagName}</TableBodyCell>
- <TableBodyCell>{Ctag.spanHigh}/{Ctag.spanLow}</TableBodyCell>
 
-{#if Ctag.updateCondition==0}
-    <TableBodyCell>Update per {Ctag.updatePeriod} ms with the formula: {Ctag.calculationFormula}</TableBodyCell>
-{:else if Ctag.updateCondition==1}
-    <TableBodyCell>Update will be trigger by reference tags ({Ctag.referenceParameter[0].tagName},{Ctag.referenceParameter[1].tagName},{Ctag.referenceParameter[2].tagName},{Ctag.referenceParameter[3].tagName}) with the formula: {Ctag.calculationFormula}</TableBodyCell>
-{:else}
-
-  <TableBodyCell>Unknown</TableBodyCell>
-{/if}
-
+    <TableBodyCell>{Ctag.calculationFormula}</TableBodyCell>
 
 
 
@@ -4935,13 +2813,13 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 <p class="mt-10"></p>
 
-<table>
+<table bind:this={modalElement}>
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
       <td class="pl-5 pt-5">
 
-<input type="text" bind:value={new_calculation_tag[new_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="text" bind:value={new_calculation_tag[new_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
       </td>
@@ -4950,132 +2828,12 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
   </tr>
 
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Span High</p></td>
-    <td class="pl-5 pt-5">
-<input type="number" bind:value={new_calculation_tag[new_calculation_tag_index].spanHigh} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-</td>
-
-    </tr>
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Span Low</p></td>
-    <td class="pl-5 pt-5">
-<input type="number" bind:value={new_calculation_tag[new_calculation_tag_index].spanLow} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-</td>
-
-    </tr>
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Update</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={new_calculation_tag[new_calculation_tag_index].updateCondition} value={1} >When Ref Tag is updated</Radio>
-  <Radio bind:group={new_calculation_tag[new_calculation_tag_index].updateCondition} value={0} >Period:</Radio>
-{#if new_calculation_tag[new_calculation_tag_index].updateCondition==1}
-
-<input type="text" bind:value={new_calculation_tag[new_calculation_tag_index].updatePeriod} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pl-1 pt-1 text-lg">ms</p>
-{:else}
-<input type="text" bind:value={new_calculation_tag[new_calculation_tag_index].updatePeriod} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-1 text-lg">ms</p>
-{/if}
-</div></td>
-
-    </tr>
-
-
-<tr>
-      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 1</p></td>
-      <td class="pl-5 pt-2">
-
-<div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_calculation_tag[new_calculation_tag_index].referenceParameter[0].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-</select>
-    <Button size="xs" class="my-2" on:click={new_calculation_tag_fomula(new_calculation_tag_index,0)}>Ref Tag 1</Button>
-</div>
-
-      </td>
-
-
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 2</p></td>
-      <td class="pl-5 pt-2">
-
-<div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_calculation_tag[new_calculation_tag_index].referenceParameter[1].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-</select>
-    <Button size="xs" class="my-2" on:click={new_calculation_tag_fomula(new_calculation_tag_index,1)}>Ref Tag 2</Button>
-</div>
-
-      </td>
-
-
-
-  </tr>
-
-<tr>
-      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 3</p></td>
-      <td class="pl-5 pt-2">
-
-<div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_calculation_tag[new_calculation_tag_index].referenceParameter[2].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-
-</select>
-    <Button size="xs" class="my-2" on:click={new_calculation_tag_fomula(new_calculation_tag_index,2)}>Ref Tag 3</Button>
-</div>
-      </td>
-
-
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 4</p></td>
-      <td class="pl-5 pt-2" >
-
-<div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_calculation_tag[new_calculation_tag_index].referenceParameter[3].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-
-</select>
-    <Button size="xs" class="my-2" on:click={new_calculation_tag_fomula(new_calculation_tag_index,3)}>Ref Tag 4</Button>
-</div>
-      </td>
-  </tr>
 
 
 
 
 <tr>
-      <td class="pt-2"><div><p class="pl-10 pt-1 mb-4 text-lg font-light text-right">Calculation</p>
+      <td class="pt-2"><div><p class="pl-10 pt-1 mb-4 text-lg font-light text-right">Formula</p>
 
 
   <ul style="list-style-type:none;" class="py-1">
@@ -5115,10 +2873,40 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
       </td>
-      <td class="pl-5 pt-2">
-<Textarea id="Formula" placeholder="User Defined Formula" rows="12" name="message" bind:value={new_calculation_tag[new_calculation_tag_index].calculationFormula} />
+      <td class="pl-5 pt-2" colspan="10">
+
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+{#if saved_changed_modbus_data!=""}
+
+        {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>AddTagName(0,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+        {/each}
+{/if}
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" bind:value={new_calculation_tag[new_calculation_tag_index].calculationFormula} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
 
       </td>
+
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+
   </tr>
 
 
@@ -5130,12 +2918,12 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     <td></td>
     <td></td>
     <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
     <td></td>
     <td></td>
-    <td></td>
-    <td></td>
-    <td>
-<Button color="dark" pill={true} on:click={add_new_calculation_tag(new_calculation_tag_index)}>Add</Button></td>
+    <td >
+<Button color="dark" pill={true} on:click={()=>add_new_calculation_tag(new_calculation_tag_index)}>Add</Button></td>
 
 
 </table>
@@ -5156,14 +2944,13 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={no_modify_calculation_tag(modify_calculation_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
-
-<table>
+<table bind:this={modalElement}>
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
       <td class="pl-5 pt-5">
 
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
       </td>
@@ -5172,163 +2959,43 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
   </tr>
 
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Span High</p></td>
-    <td class="pl-5 pt-5">
-<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].spanHigh} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-</td>
-
-    </tr>
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Span Low</p></td>
-    <td class="pl-5 pt-5">
-<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].spanLow} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-</td>
-
-    </tr>
-
-<tr>
-    <td><p class="pl-2 pt-4 text-lg font-light text-right">Update</p></td>
-    <td class="pl-5 pt-5"><div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].updateCondition} value={1} >When Ref Tag is updated</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].updateCondition} value={0} >Period:</Radio>
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].updateCondition==1}
-
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].updatePeriod} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled><p class="pl-1 pt-1 text-lg">ms</p>
-{:else}
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].updatePeriod} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-1 text-lg">ms</p>
-{/if}
-</div></td>
-
-    </tr>
-
-
-<tr>
-      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 1</p></td>
-      <td class="pl-5 pt-2">
-
-<div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].referenceParameter[0].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-</select>
-    <Button size="xs" class="my-2" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,0)}>Ref Tag 1</Button>
-</div>
-
-      </td>
-
-
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 2</p></td>
-      <td class="pl-5 pt-2">
-
-<div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].referenceParameter[1].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-</select>
-    <Button size="xs" class="my-2" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,1)}>Ref Tag 2</Button>
-</div>
-
-      </td>
-
-
-
-  </tr>
-
-<tr>
-      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 3</p></td>
-      <td class="pl-5 pt-2">
-
-<div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].referenceParameter[2].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-
-</select>
-    <Button size="xs" class="my-2" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,2)}>Ref Tag 3</Button>
-</div>
-      </td>
-
-
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-2 pt-1 text-lg font-light text-right">Ref Tag 4</p></td>
-      <td class="pl-5 pt-2" >
-
-<div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].referenceParameter[3].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-
-</select>
-    <Button size="xs" class="my-2" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,3)}>Ref Tag 4</Button>
-</div>
-      </td>
-  </tr>
 
 
 
 
 <tr>
-      <td class="pt-2"><div><p class="pl-10 pt-1 mb-4 text-lg font-light text-right">Calculation</p>
+      <td class="pt-2"><div><p class="pl-10 pt-1 mb-4 text-lg font-light text-right">Formula</p>
 
 
   <ul style="list-style-type:none;" class="py-1">
 <li class="pt-2 text-right">
 
-    <Button size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,4)}>Max()</Button>
-    <Button class="pl-2" size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,5)}>Min()</Button>
+    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,4)}>Max()</Button>
+    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,5)}>Min()</Button>
 </li>
 
 <li class="pt-2 text-right">
 
-    <Button size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,6)}>Avg()</Button>
-    <Button class="pl-2" size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,7)}>Abs()</Button>
+    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,6)}>Avg()</Button>
+    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,7)}>Abs()</Button>
 
 </li>
 
 <li class="pt-2 text-right">
 
-    <Button size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,8)}>Add()</Button>
-    <Button class="pl-2" size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,9)}>Sub()</Button>
+    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,8)}>Add()</Button>
+    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,9)}>Sub()</Button>
 </li>
 
 <li class="pt-2 text-right">
 
-    <Button size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,10)}>Mul()</Button>
-    <Button class="pl-2" size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,11)}>Div()</Button>
+    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,10)}>Mul()</Button>
+    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,11)}>Div()</Button>
 
 </li>
 <li class="pt-2 text-right">
 
-    <Button size="xs" on:click={modify_calculation_tag_fomula(modify_calculation_tag_index,12)}>Reminder()</Button>
+    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,12)}>Reminder()</Button>
 
 </li>
 
@@ -5337,10 +3004,39 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
       </td>
-      <td class="pl-5 pt-2">
-<Textarea id="Formula" placeholder="User Defined Formula" rows="12" name="message" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula} />
+      <td class="pl-5 pt-2" colspan="5">
+
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+{#if saved_changed_modbus_data!=""}
+
+        {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>AddTagName(1,0,TagItem.tagName)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+        {/each}
+{/if}
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
 
       </td>
+
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
   </tr>
 
 
@@ -5352,8 +3048,8 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     <td></td>
     <td></td>
     <td></td>
-    <td></td>
-    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
     <td></td>
     <td></td>
     <td>
@@ -5372,6 +3068,182 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
   </AccordionItem>
+
+<AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Cloud To Device Tag
+    </span>
+
+<Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell>Enable</TableHeadCell>
+    <TableHeadCell>No</TableHeadCell>
+    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
+    <TableHeadCell>Cloud Profile</TableHeadCell>    
+    <TableHeadCell>Subscribe Topic</TableHeadCell>
+    <TableHeadCell>Target Tag</TableHeadCell> 
+    <TableHeadCell>Publish Topic For Acknowledge</TableHeadCell>
+
+
+  </TableHead>
+
+<TableBody>
+
+
+  <TableBodyRow>
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length < 10}
+
+ <TableBodyCell class="!p-4 w-10">
+
+<button on:click={() =>new_c2d_tag_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length)}>
+    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+ </TableBodyCell>
+ {/if}
+  </TableBodyRow>
+
+</TableBody>
+
+</Table>
+
+
+<Modal bind:open={new_c2d_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_c2d_tag[new_c2d_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={()=>NoAddC2D(new_c2d_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={new_c2d_tag[new_c2d_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_c2d_tag[new_c2d_tag_index].cloudProfile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Subscribe Topic</p></td>
+      <td class="pl-4 pt-5">
+
+
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={new_c2d_tag[new_c2d_tag_index].subscribeTopic}>
+
+
+</td>
+
+
+</tr>
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_c2d_tag[new_c2d_tag_index].targetTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+
+<tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Publish Topic For Acknowledge</p>
+
+  </td>
+
+    <td class="pl-4 pt-5" colspan="5">
+    <div class="flex gap-2">
+
+<Toggle class="p-2.5 mt-2 mb-4" bind:checked={new_c2d_tag[new_c2d_tag_index].publishEnable}></Toggle>
+
+{#if new_c2d_tag[new_c2d_tag_index].publishEnable}
+
+
+
+<div class="relative"><input  class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3"  placeholder=" " type="text" bind:value={new_c2d_tag[new_c2d_tag_index].publishTopic}> <label for="operand_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">publish topic</label></div>
+
+
+
+{/if}
+</div></td>
+</tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} >Add</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+
+</AccordionItem>
+
 
 
   <AccordionItem {defaultClass}>
@@ -5574,31 +3446,34 @@ on:click={handleClickMMS} on:keydown={() => {}}>
   </tr>
 
 
+
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
-      <td class="pl-5 pt-5">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_accumulated_tag[new_accumulated_tag_index].targetTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_accumulated_tag[new_accumulated_tag_index].targetTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
 {/each}
-{/if}
 
 </select>
+</td>
+   <td></td>
+    <td></td>
 
-      </td>
+</tr>
 
-
-
-  </tr>
 
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
       <td class="pl-5 pt-5">
+<div class="flex gap-4">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
-<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={start_time_object} />
+<p class="pt-3">:</p>
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+      </div>
 
       </td>
   </tr>
@@ -5609,11 +3484,16 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">End Time</p></td>
       <td class="pl-5 pt-5">
 
-<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={end_time_object} />
+<div class="flex gap-4">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
+<p class="pt-3">:</p>
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+      </div>
       </td>
   </tr>
-<p class="pt-48"></p>
+
 <p class="pt-5"></p>
 
 
@@ -5669,31 +3549,33 @@ on:click={handleClickMMS} on:keydown={() => {}}>
   </tr>
 
 
+
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
-      <td class="pl-5 pt-5">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].targetTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].targetTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
 {/each}
-{/if}
 
 </select>
+</td>
+   <td></td>
+    <td></td>
 
-      </td>
-
-
-
-  </tr>
+</tr>
 
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
       <td class="pl-5 pt-5">
+<div class="flex gap-4">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
-<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={start_time_object} />
+<p class="pt-3">:</p>
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+      </div>
 
       </td>
   </tr>
@@ -5704,11 +3586,16 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">End Time</p></td>
       <td class="pl-5 pt-5">
 
-<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={end_time_object} />
+<div class="flex gap-4">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
+<p class="pt-3">:</p>
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+      </div>
       </td>
   </tr>
-<p class="pt-48"></p>
+
 <p class="pt-5"></p>
 
 
@@ -5898,7 +3785,9 @@ on:click={handleClickMMS} on:keydown={() => {}}>
         <td></td>
         <td></td>
         <td></td>
-
+        <td></td>
+        <td></td>
+        <td></td>
     <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveTouTag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
@@ -5939,32 +3828,33 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
   </tr>
 
-
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
-      <td class="pl-5 pt-5">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_tou_tag[new_tou_tag_index].targetTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
+    <td class= "pl-5 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_tou_tag[new_tou_tag_index].targetTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
 {/each}
-{/if}
 
 </select>
+</td>
+   <td></td>
+    <td></td>
 
-      </td>
+</tr>
 
-
-
-  </tr>
 
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
       <td class="pl-5 pt-5">
+<div class="flex gap-4">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
-<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={start_time_object} />
+<p class="pt-3">:</p>
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+      </div>
 
       </td>
   </tr>
@@ -5975,16 +3865,22 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">End Time</p></td>
       <td class="pl-5 pt-5">
 
-<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={end_time_object} />
+<div class="flex gap-4">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
+<p class="pt-3">:</p>
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+      </div>
       </td>
   </tr>
+
 <p class="pt-5"></p>
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Rate</p></td>
       <td class="pl-5 pt-5">
 
-<input type="text" bind:value={new_tou_tag[new_tou_tag_index].rate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={new_tou_tag[new_tou_tag_index].rate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
       </td>
@@ -5993,7 +3889,6 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
   </tr>
 
-<p class="pt-48"></p>
 <p class="pt-5"></p>
 
 
@@ -6048,30 +3943,31 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
-      <td class="pl-5 pt-5">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].targetTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].targetTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
 {/each}
-{/if}
 
 </select>
+</td>
+   <td></td>
+    <td></td>
 
-      </td>
-
-
-
-  </tr>
+</tr>
 
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
       <td class="pl-5 pt-5">
+<div class="flex gap-4">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
-<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={start_time_object} />
+<p class="pt-3">:</p>
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+      </div>
 
       </td>
   </tr>
@@ -6082,16 +3978,22 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">End Time</p></td>
       <td class="pl-5 pt-5">
 
-<DateInput format="yyyy/MM/dd HH:mm:ss" bind:value={end_time_object} />
+<div class="flex gap-4">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
+<p class="pt-3">:</p>
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+      </div>
       </td>
   </tr>
+
 <p class="pt-5"></p>
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Rate</p></td>
       <td class="pl-5 pt-5">
 
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].rate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].rate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
       </td>
@@ -6149,6 +4051,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
+    <TableHeadCell class="w-18">Cloud Profile</TableHeadCell>
     <TableHeadCell class="w-18">Tag Name</TableHeadCell>
     <TableHeadCell class="w-18">Target Tag</TableHeadCell>    
 
@@ -6322,25 +4225,39 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
   </tr>
 
-
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
-      <td class="pl-5 pt-5">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_DM_tag[new_DM_tag_index].targetTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_DM_tag[new_DM_tag_index].cloudProfile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
 {/each}
-{/if}
 
 </select>
+</td>
+   <td></td>
+    <td></td>
 
-      </td>
+</tr>
 
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_DM_tag[new_DM_tag_index].targetTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
+{/each}
 
+</select>
+</td>
+   <td></td>
+    <td></td>
 
-  </tr>
+</tr>
+
 
 
  <tr>
@@ -6393,25 +4310,38 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
   </tr>
 
-
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
-      <td class="pl-5 pt-5">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].targetTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_DM_tag[new_DM_tag_index].cloudProfile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
 {/each}
-{/if}
 
 </select>
+</td>
+   <td></td>
+    <td></td>
 
-      </td>
+</tr>
 
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].targetTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
+{/each}
 
+</select>
+</td>
+   <td></td>
+    <td></td>
 
-  </tr>
+</tr>
 
 
  <tr>
@@ -6634,18 +4564,20 @@ on:click={handleClickMMS} on:keydown={() => {}}>
   </tr>
 
 
+
+
+
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
       <td class="pl-5 pt-5">
 <Button>Select Target <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg></Button>
 <Dropdown class="w-44 p-3 space-y-3 text-sm">
 
-
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter,index}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
   <li>
 <label class="pl-2">
   <input type="checkbox" bind:checked={scada_target_tag[index]}>
-  {deviceParameter.tagName}
+  {TagItem.tagName}
 </label>
   </li>
 {/each}
@@ -6709,19 +4641,17 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
   </tr>
 
-
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
       <td class="pl-5 pt-5">
 <Button>Select Target <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg></Button>
 <Dropdown class="w-44 p-3 space-y-3 text-sm">
 
-
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter,index}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
   <li>
 <label class="pl-2">
   <input type="checkbox" bind:checked={scada_target_tag[index]}>
-  {deviceParameter.tagName}
+  {TagItem.tagName}
 </label>
   </li>
 {/each}
@@ -6733,6 +4663,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
   </tr>
+
 
 
  <tr>
@@ -7009,23 +4940,20 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Trigger Tag</p></td>
-      <td class="pl-5 pt-5">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_event_tag[new_event_tag_index].triggerTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Trigger Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_event_tag[new_event_tag_index].triggerTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
 {/each}
-{/if}
 
 </select>
-      </td>
+</td>
+   <td></td>
+    <td></td>
 
+</tr>
 
-
-  </tr>
 
 
 <tr>
@@ -7055,7 +4983,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td>
       <td class="pl-5 pt-5">
 <div class="flex gap-4">
-<input type="number" bind:value={new_event_tag[new_event_tag_index].pollingRateS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={new_event_tag[new_event_tag_index].pollingRateS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
      <p class="pt-1 text-lg">s</p>
@@ -7076,9 +5004,9 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_event_tag[new_event_tag_index].actionTarget}>
 <option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
 {/each}
 {/if}
 
@@ -7144,23 +5072,20 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Trigger Tag</p></td>
-      <td class="pl-5 pt-5">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Trigger Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
 {/each}
-{/if}
 
 </select>
-      </td>
+</td>
+   <td></td>
+    <td></td>
 
+</tr>
 
-
-  </tr>
 
 
 <tr>
@@ -7190,7 +5115,7 @@ on:click={handleClickMMS} on:keydown={() => {}}>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td>
       <td class="pl-5 pt-5">
 <div class="flex gap-4">
-<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].pollingRateS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].pollingRateS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
       <p class="pt-1 text-lg"> s</p>
@@ -7211,9 +5136,9 @@ on:click={handleClickMMS} on:keydown={() => {}}>
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionTarget}>
 <option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
 {/each}
 {/if}
 

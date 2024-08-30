@@ -28,6 +28,8 @@
   let currentStep = 1;
   let steps = ['Step 1', 'Step 2', 'Step 3'];
   let modalElement;
+  let tagsArray;
+
 
   let sdata_logger_data="";
   let changed_sdata_logger_data = {};
@@ -56,6 +58,76 @@
   let sdata_logger_monitor_edge_changedValues = [];
   let sdata_logger_monitor_cloud_changedValues = [];
   let sdata_logger_monitor_topic_changedValues = [];
+
+
+
+    let pos = { x: 0, y: 0 }
+    let menu = { h: 0, w: 0 }
+    let browser = { h: 0, y: 0 }
+    let showMenu = false;
+    let content
+    let rect;
+
+    function rightClickContextMenu(e){
+        showMenu = true
+        browser = {
+            w: window.innerWidth,
+            h: window.innerHeight
+        };
+        pos = {
+            x: e.clientX,
+            y: e.clientY
+        };
+
+        if (modalElement)
+        {
+
+            if (modalElement instanceof HTMLElement) 
+            {
+                rect = modalElement.getBoundingClientRect();
+                //console.log('Modal position:', rect);
+                //console.log('Top:', rect.top, 'Left:', rect.left);
+            } else {
+                console.error('modalElement is not an HTMLElement');
+            }
+
+        }
+
+
+        // If bottom part of context menu will be displayed
+        // after right-click, then change the position of the
+        // context menu. This position is controlled by `top` and `left`
+        // at inline style. 
+        // Instead of context menu is displayed from top left of cursor position
+        // when right-click occur, it will be displayed from bottom left.
+        if (browser.h -  pos.y < menu.h)
+            pos.y = pos.y - menu.h
+        if (browser.w -  pos.x < menu.w)
+            pos.x = pos.x - menu.w
+
+            pos.x= pos.x-rect.left+30
+            pos.y=pos.y-rect.top+100
+  
+    }
+    function onPageClick(e)
+    {
+        showMenu = false;
+    }
+    function getContextMenuDimension(node){
+        // This function will get context menu dimension
+        // when navigation is shown => showMenu = true
+        let height = node.offsetHeight
+        let width = node.offsetWidth
+        menu = {
+            h: height,
+            w: width
+        }
+
+
+    }
+
+
+
 
 
   let getDataReady=0;    
@@ -198,10 +270,17 @@
 
   }
 
+
+  let openTagList=false;
   let openDetailStatusMMS = false;
   let openDetailStatusMMT = false;
   let openDetailStatusMV = false;
 
+
+  function handleClickTagList()
+  {
+        openTagList=!openTagList;
+  }
 
   function handleClickMMS() {
         openDetailStatusMMS=!openDetailStatusMMS;
@@ -300,6 +379,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -312,6 +392,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -324,7 +405,7 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],
+      modbusTag: [],     
       cloud:
       [
         {
@@ -335,6 +416,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -347,6 +429,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -359,7 +442,7 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],
+      modbusTag: [],   
       cloud:
       [
         {
@@ -370,6 +453,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -382,6 +466,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -394,7 +479,7 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],
+      modbusTag: [],    
       cloud:
       [
         {
@@ -405,6 +490,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -417,6 +503,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -429,7 +516,7 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],
+      modbusTag: [],      
       cloud:
       [
         {
@@ -440,6 +527,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -452,6 +540,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -464,7 +553,7 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],
+      modbusTag: [],     
       cloud:
       [
         {
@@ -475,6 +564,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -487,6 +577,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -499,7 +590,7 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],
+      modbusTag: [],    
       cloud:
       [
         {
@@ -510,6 +601,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -522,6 +614,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -534,7 +627,7 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],
+      modbusTag: [],     
       cloud:
       [
         {
@@ -545,6 +638,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -557,6 +651,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -569,7 +664,7 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],
+      modbusTag: [],    
       cloud:
       [
         {
@@ -580,6 +675,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -592,6 +688,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -604,7 +701,7 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],
+      modbusTag: [],    
       cloud:
       [
         {
@@ -615,6 +712,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -627,6 +725,7 @@
               name:""
             }
           ],
+          tagDisplay:0,
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -641,6 +740,95 @@
     let new_proxy_edge_modal=false;
     let new_proxy_edge_index;
 
+
+
+    function NewTimeClick(index)
+    {
+      new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
+    }
+
+    function NewArrayClick(index)
+    {
+      new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
+    }
+
+    function NewTagRawRequest(CloudIndex, TagIndex)
+    {
+      if (new_proxy_edge[new_proxy_edge_index].samplingCondition==1)
+      {
+        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"
+      }
+      else if (new_proxy_edge[new_proxy_edge_index].samplingCondition==0)
+      {
+          if (tagsArray.length > TagIndex)
+          {
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"   
+          }
+      }
+
+    }
+
+    function NewTagRawReply(CloudIndex, TagIndex)
+    {
+      if (new_proxy_edge[new_proxy_edge_index].samplingCondition==1)
+      {
+        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"
+      }
+      else if (new_proxy_edge[new_proxy_edge_index].samplingCondition==0)
+      {
+          if (tagsArray.length > TagIndex)
+          {
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"   
+          }
+      }
+    }
+
+
+    function NewTagStatus(CloudIndex, TagIndex)
+    {
+      if (new_proxy_edge[new_proxy_edge_index].samplingCondition==1)
+      {
+        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+      }
+      else if (new_proxy_edge[new_proxy_edge_index].samplingCondition==0)
+      {
+          if (tagsArray.length > TagIndex)
+          {
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"   
+          }
+      }   
+    }
+
+
+    function NewCloudFormatChange(current_cloud_index, other_cloud_index)
+    {
+
+      if (new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].dataLogFormat==2)
+      {
+        new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].alternativeFormatCloudIndex=other_cloud_index;
+        new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].userDefineedData=new_proxy_edge[new_proxy_edge_index].cloud[other_cloud_index].userDefineedData;
+
+      }
+      else if (new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].dataLogFormat==1)
+      {
+        new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].userDefineedData="";
+      }
+
+    }
+
+
     function New_ProxyEdge_Modal_Page1()
     {
       currentStep=1;
@@ -648,25 +836,49 @@
 
     function New_ProxyEdge_Modal_Page2()
     {
+      tagsArray = Array.from(selectedNewTags);
+      showMenu=false;
       currentStep=2;
     }
 
     function New_ProxyEdge_Modal_Page3()
     {
+      showMenu=false;
       currentStep=3;
     }
 
-    function New_ProxyEdge_Modal_Finish()
+
+
+    let New_SingleCheckedTag= null;
+
+    function handleSingleCheckboxChange(tagName, isChecked) 
     {
-      new_proxy_edge_modal = false;
-      currentStep=1;
+      if (isChecked) 
+      {
+        New_SingleCheckedTag = tagName;
+      } 
+      else if (New_SingleCheckedTag === tagName) 
+      {
+        New_SingleCheckedTag = null; 
+      }
     }
 
-    function NewProxyEdge()
+
+    let selectedNewTags = new Set();
+    function handleMultipleCheckboxChange(tagName, isChecked) 
     {
-      currentStep=1;
-      new_proxy_edge_modal = true;
+      if (isChecked) 
+      {
+        selectedNewTags.add(tagName);
+      } 
+      else 
+      {
+        selectedNewTags.delete(tagName);
+      }
+
+      console.log("++selectedTags:", selectedNewTags);
     }
+
 
 
     function new_proxy_edge_trigger(index)
@@ -686,6 +898,7 @@
                 name:""
               }
             ],
+            tagDisplay:1,
             dataLogFormat: 0,
             alternativeFormatCloudIndex:0, 
             userDefineedData: ""
@@ -698,6 +911,7 @@
                 name:""
               }
             ],
+            tagDisplay:1,  
             dataLogFormat: 0,
             alternativeFormatCloudIndex:1, 
             userDefineedData: ""
@@ -705,7 +919,11 @@
         ];
 
 
-
+        selectedNewTags.clear();
+        New_SingleCheckedTag=null;
+        currentStep=1;
+        openTagList=false;
+        tagsArray=[];
         new_proxy_edge_index=index;
         new_proxy_edge_modal=true;
 
@@ -713,8 +931,20 @@
 
     function add_new_proxy_edge(index)
     {
-        new_proxy_edge_modal=false;
+        if (new_proxy_edge[index].samplingCondition==1)
+        {
+          new_proxy_edge[index].modbusTag[0]=New_SingleCheckedTag;
+
+        }
+        else if (new_proxy_edge[index].samplingCondition==0)
+        {
+          new_proxy_edge[index].modbusTag=JSON.parse(JSON.stringify(tagsArray));
+        }
+
+
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData=[...changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData,new_proxy_edge[index]];
+
+        new_proxy_edge_modal=false;
     }    
 
 
@@ -727,7 +957,7 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],
+      modbusTag: [],     
       cloud:
       [
         {
@@ -738,6 +968,7 @@
               name:""
             }
           ],
+          tagDisplay:0, 
           dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
@@ -750,6 +981,7 @@
               name:""
             }
           ],
+          tagDisplay:0, 
           dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
@@ -769,36 +1001,163 @@
     }
 
 
+    function ModifyTimeClick(index)
+    {
+      changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
+    }
+
+    function ModifyArrayClick(index)
+    {
+      changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
+    }
+
+    function ModifyTagRawRequest(CloudIndex, TagIndex)
+    {
+      if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1)
+      {
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"
+      }
+      else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0)
+      {
+          if (tagsArray.length > TagIndex)
+          {
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"   
+          }
+      }
+
+    }
+
+    function ModifyTagRawReply(CloudIndex, TagIndex)
+    {
+      if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1)
+      {
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"
+      }
+      else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0)
+      {
+          if (tagsArray.length > TagIndex)
+          {
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"   
+          }
+      }
+    }
+
+
+    function ModifyTagStatus(CloudIndex, TagIndex)
+    {
+      if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1)
+      {
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+      }
+      else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0)
+      {
+          if (tagsArray.length > TagIndex)
+          {
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"   
+          }
+      }   
+    }
+
+
+    function ModifyCloudFormatChange(current_cloud_index, other_cloud_index)
+    {
+
+      if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].dataLogFormat==2)
+      {
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].alternativeFormatCloudIndex=other_cloud_index;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].userDefineedData=new_proxy_edge[new_proxy_edge_index].cloud[other_cloud_index].userDefineedData;
+
+      }
+      else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].dataLogFormat==1)
+      {
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].userDefineedData="";
+      }
+
+    }
+
+
     function TriggerModifyProxyEdge(index)
     {
-        modify_proxy_edge_modal=true;
+
         modify_proxy_edge_index=index;
         BackupProxyEdge.enable=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].enable;
         BackupProxyEdge.delete=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].delete;      
         BackupProxyEdge.samplingCondition=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].samplingCondition;
         BackupProxyEdge.periodMS=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].periodMS;
+        BackupProxyEdge.changePercentage=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].changePercentage;
+ 
         BackupProxyEdge.modbusTag=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag));
         BackupProxyEdge.cloud=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].cloud));
+
+
+        selectedNewTags.clear();
+        New_SingleCheckedTag=null;
+        currentStep=1;
+        openTagList=false;
+        tagsArray=[];
+
+        if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].samplingCondition==0)
+        {
+          for (let i=0; i < changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag.length; i++)
+          {
+            selectedNewTags.add(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag[i])
+          }
+        }
+        else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].samplingCondition==1)
+        {
+          New_SingleCheckedTag=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag[0];
+        }
+
+        modify_proxy_edge_modal=true;
 
     }
 
     function NoModifyProxyEdge(index)
     {
 
-        modify_proxy_edge_modal=false;
-
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].enable=BackupProxyEdge.enable;
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].delete=BackupProxyEdge.delete;
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].samplingCondition=BackupProxyEdge.samplingCondition;
+
+
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].periodMS=BackupProxyEdge.periodMS;
+
+
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].changePercentage=BackupProxyEdge.changePercentage;
+
+
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag==JSON.parse(JSON.stringify(BackupProxyEdge.modbusTag));
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].cloud=JSON.parse(JSON.stringify(BackupProxyEdge.cloud));
 
+        modify_proxy_edge_modal=false;
     }
 
 
     function ModifyProxyEdge()
     {
+        if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1)
+        {
+          let SingleItemArray=[];
+          SingleItemArray=[...SingleItemArray, New_SingleCheckedTag];
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTag=JSON.parse(JSON.stringify(SingleItemArray));
+
+        }
+        else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0)
+        {
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTag=JSON.parse(JSON.stringify(tagsArray));
+        }
         modify_proxy_edge_modal=false;
     }
 
@@ -810,9 +1169,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -820,9 +1177,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -830,9 +1185,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -840,9 +1193,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -850,9 +1201,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -860,9 +1209,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -870,9 +1217,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -880,9 +1225,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -890,9 +1233,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -900,9 +1241,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -914,9 +1253,7 @@
     {
         new_monitor_edge[index].enable=true;
         new_monitor_edge[index].delete=false;
-        new_monitor_edge[index].tagName="";
-        new_monitor_edge[index].modbusDataModel="";
-        new_monitor_edge[index].dataType=2;
+        new_monitor_edge[index].modbusTag="";
         new_monitor_edge[index].display=1;
         new_monitor_edge[index].dataLogFormat=0;
         new_monitor_edge[index].userDefineedData="";
@@ -947,9 +1284,7 @@
     {
       enable: false,
       delete: false,
-      tagName: "",
-      modbusDataModel:"",
-      dataType:2,
+      modbusTag:"",
       display:0,
       dataLogFormat:0,
       userDefineedData:""
@@ -978,9 +1313,7 @@
         modify_monitor_edge_index=index;
         BackupMonitorEdge.enable=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].enable;
         BackupMonitorEdge.delete=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].delete;        
-        BackupMonitorEdge.tagName=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].tagName;
-        BackupMonitorEdge.modbusDataModel=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].modbusDataModel;
-        BackupMonitorEdge.dataType=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataType;
+        BackupMonitorEdge.modbusTag=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].modbusTag;
         BackupMonitorEdge.display=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].display;
         BackupMonitorEdge.dataLogFormat=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataLogFormat;
         BackupMonitorEdge.userDefineedData=changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].userDefineedData;
@@ -994,9 +1327,8 @@
         changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].enable=BackupMonitorEdge.enable;
         changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].delete=BackupMonitorEdge.delete;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].tagName=BackupMonitorEdge.tagName;
 
-        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].modbusDataModel=BackupMonitorEdge.modbusDataModel;
+        changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].modbusTag=BackupMonitorEdge.modbusTag;
 
         changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[index].dataType=BackupMonitorEdge.dataType;
 
@@ -1164,27 +1496,189 @@
           {
             if (key != 'cloudTopic')
             {
-              for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+              if (key == 'modbusTag')
               {
-                compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
-              }
-
-              if (obj1[key].length > obj2[key].length) 
-              {
-                let addedCount=obj1[key].length-obj2[key].length;
-                for (let j=obj2[key].length; j <obj1[key].length; j++)
+                if (obj1[key].length > obj2[key].length) 
                 {
-                  if (obj1[key][j]["delete"])
+                  let addedCount=obj1[key].length-obj2[key].length;
+                  for (let j=obj2[key].length; j <obj1[key].length; j++)
                   {
-                    addedCount--;
+                    if (obj1[key][j]["delete"])
+                    {
+                      addedCount--;
+                    }
+
                   }
 
+                  if (addedCount >0)
+                  {
+
+                    let changedstr="Edge Data No."+ArrayIndex +", Add "+addedCount+" item(s) to "+ key;
+                    if (type == 3)
+                    {
+                      sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                    }
+                    else if (type == 2)
+                    {
+                      sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+                    }
+                    else if (type == 1)
+                    {
+                      sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+                    }
+                    else if (type == 0)
+                    {
+                      sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                    }
+                  }
+                }
+                else if (obj1[key].length < obj2[key].length)
+                {
+                  let deletedCount=obj2[key].length-obj1[key].length;
+                  let changedstr="Edge Data No."+ArrayIndex +", Delete "+deletedCount+" item(s) from "+ key;
+                  if (type == 3)
+                  {
+                    sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                  }
+                  else if (type == 2)
+                  {
+                    sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+                  }
+                  else if (type == 1)
+                  {
+                    sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+                  }
+                  else if (type == 0)
+                  {
+                    sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                  }
+                }
+                else if (obj1[key].length == obj2[key].length)
+                {
+                  for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+                  {
+                    if (obj1[key][i] != obj2[key][i])
+                    {
+                      let changedstr="Edge Data No."+ArrayIndex +",Modbus Tag List No."+(i+1)+" item is changed to "+obj1[key][i];
+                      if (type == 3)
+                      {
+                        sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                      }
+                      else if (type == 2)
+                      {
+                        sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+                      }
+                      else if (type == 1)
+                      {
+                        sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+                      }
+                      else if (type == 0)
+                      {
+                        sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                      }
+                    }
+                  }
+                }
+              }
+              else if (key == 'cloud')
+              {
+                for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+                {
+                  for (const key2 in obj1[key][i])
+                  {
+                    if (key2=='topic') 
+                    { 
+                      if (obj1[key][i][key2][0]['name'] != obj2[key][i][key2][0]['name'])
+                      {
+                        let changedstr="Edge Data No."+ArrayIndex +",Cloud No."+(i+1)+" item is changed: "+ "value of topic has changed to "+obj1[key][i][key2][0]['name'];
+                        if (type == 3)
+                        {
+                          sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                        }
+                        else if (type == 2)
+                        {
+                          sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+                        }
+                        else if (type == 1)
+                        {
+                          sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+                        }
+                        else if (type == 0)
+                        {
+                          sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                        }
+                      }
+
+                    }
+                    else if (obj1[key][i][key2] != obj2[key][i][key2])
+                    {
+                      let changedstr="Edge Data No."+ArrayIndex +",Cloud No."+(i+1)+" item is changed: "+ "value of "+key2+" has changed to "+obj1[key][i][key2];
+
+                      if (type == 3)
+                      {
+                        sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                      }
+                      else if (type == 2)
+                      {
+                        sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+                      }
+                      else if (type == 1)
+                      {
+                        sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+                      }
+                      else if (type == 0)
+                      {
+                        sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                      }
+                    }
+                  }
+                }
+              }
+              else
+              {
+                for (let i = 0; i < Math.min(obj1[key].length, obj2[key].length); i++) 
+                {
+                  compareObjects(obj1[key][i], obj2[key][i], type, 1,i+1);
                 }
 
-                if (addedCount >0)
+                if (obj1[key].length > obj2[key].length) 
                 {
+                  let addedCount=obj1[key].length-obj2[key].length;
+                  for (let j=obj2[key].length; j <obj1[key].length; j++)
+                  {
+                    if (obj1[key][j]["delete"])
+                    {
+                      addedCount--;
+                    }
 
-                  let changedstr="Add "+addedCount+" item(s) to "+ key;
+                  }
+
+                  if (addedCount >0)
+                  {
+
+                    let changedstr="Add "+addedCount+" item(s) to "+ key;
+                    if (type == 3)
+                    {
+                      sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
+                    }
+                    else if (type == 2)
+                    {
+                      sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
+                    }
+                    else if (type == 1)
+                    {
+                      sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
+                    }
+                    else if (type == 0)
+                    {
+                      sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                    }
+                  }
+                }
+                else if (obj1[key].length < obj2[key].length)
+                {
+                  let deletedCount=obj2[key].length-obj1[key].length;
+                  let changedstr="Delete "+deletedCount+" item(s) from "+ key;
                   if (type == 3)
                   {
                     sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
@@ -1203,27 +1697,6 @@
                   }
                 }
               }
-              else if (obj1[key].length < obj2[key].length)
-              {
-                let deletedCount=obj2[key].length-obj1[key].length;
-                let changedstr="Delete "+deletedCount+" item(s) from "+ key;
-                if (type == 3)
-                {
-                  sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                }
-                else if (type == 2)
-                {
-                  sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                }
-                else if (type == 1)
-                {
-                  sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-                }
-                else if (type == 0)
-                {
-                  sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
-                }
-              }
             }
           }
           else
@@ -1240,7 +1713,14 @@
           }
           else
           {
-            changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+            if (type !=0)
+            {
+              changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+            }
+            else
+            {
+              changedstr="Edge Data No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
+            }
           }
           
           if (type == 3)
@@ -1880,6 +2360,8 @@
         }
       }
 
+      console.log("CloudProfile: ", CloudProfile);
+
     }
 
   });
@@ -1975,7 +2457,7 @@
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Modbus Tag</TableHeadCell>
     <TableHeadCell class="w-18">Sampling Condition</TableHeadCell>
-    <TableHeadCell class="w-18">Cloud Setting</TableHeadCell>
+    <TableHeadCell >Cloud Setting</TableHeadCell>
   </TableHead>
 
 <TableBody>
@@ -2018,8 +2500,23 @@
       </td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{#each ProxyEdgeData.modbusTag as Tag, index}
+{#if index!=0} ,{/if}{Tag}
+{/each}
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
+{#if ProxyEdgeData.samplingCondition==0}
+per {ProxyEdgeData.periodMS} ms
+{:else if ProxyEdgeData.samplingCondition==1}
+once change ({ProxyEdgeData.changePercentage}%)
+{/if}
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">
+{#each ProxyEdgeData.cloud as Cloud, index}
+{#if index!=0}/{/if} {Cloud.profile}({Cloud.topic[0].name}, {#if Cloud.tagDisplay==0}Hex,{:else if Cloud.tagDisplay==1}Decimal,{:else if Cloud.tagDisplay==2}Binary,{/if}{#if Cloud.dataLogFormat==0}Default{:else if Cloud.dataLogFormat==1}User Defined{:else if Cloud.dataLogFormat} Use others{/if})
 
-
+{/each}
+</td>
 
 </tr>
 
@@ -2048,11 +2545,30 @@
 
 </TableBodyCell>
 
-      <TableBodyCell class="w-10">{index+1}</TableBodyCell>
-
-    
+<TableBodyCell class="w-10">{index+1}</TableBodyCell>
 
 
+
+<TableBodyCell class="w-18">
+{#each ProxyEdgeData.modbusTag as Tag, index}
+{#if index!=0} ,{/if}{Tag}
+{/each}
+</TableBodyCell>
+<TableBodyCell class="w-18"> 
+{#if ProxyEdgeData.samplingCondition==0}
+per {ProxyEdgeData.periodMS} ms
+{:else if ProxyEdgeData.samplingCondition==1}
+once change ({ProxyEdgeData.changePercentage}%)
+{/if}
+</TableBodyCell>
+
+<TableBodyCell>
+{#each ProxyEdgeData.cloud as Cloud, index}
+{#if index!=0}/{/if} {Cloud.profile}({Cloud.topic[0].name}, {#if Cloud.tagDisplay==0}Hex,{:else if Cloud.tagDisplay==1}Decimal,{:else if Cloud.tagDisplay==2}Binary,{/if}{#if Cloud.dataLogFormat==0}Default{:else if Cloud.dataLogFormat==1}User Defined{:else if Cloud.dataLogFormat} Use others{/if})
+
+{/each}
+
+</TableBodyCell>
     </TableBodyRow>
 
 {/if}
@@ -2139,17 +2655,17 @@
     <td class= "pl-4 pt-4" colspan="3">
 <div class="flex gap-4">
 
-  <Radio class="pb-1" bind:group={new_proxy_edge[new_proxy_edge_index].samplingCondition} value={0}>Period</Radio>
+  <Radio class="pb-1" bind:group={new_proxy_edge[new_proxy_edge_index].samplingCondition} value={0} >Period</Radio>
 
 {#if new_proxy_edge[new_proxy_edge_index].samplingCondition==0}
 
-  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500" bind:value={new_proxy_edge[new_proxy_edge_index].periodMS}> <p class="pt-2">ms</p>
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 dark:bg-gray-700 dark:border-green-500" bind:value={new_proxy_edge[new_proxy_edge_index].periodMS}> <p class="pt-2">ms</p>
 {:else}
 
-  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled> <p class="pt-2">ms</p>
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled> <p class="pt-2">ms</p>
 {/if}
 
-  <Radio class="pb-1" bind:group={new_proxy_edge[new_proxy_edge_index].samplingCondition} value={1}>Once Change</Radio>
+  <Radio class="pb-1" bind:group={new_proxy_edge[new_proxy_edge_index].samplingCondition} value={1} >Once Change</Radio>
 
 {#if new_proxy_edge[new_proxy_edge_index].samplingCondition==1}
   <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500" bind:value={new_proxy_edge[new_proxy_edge_index].changePercentage}> <p class="pt-2">%</p>
@@ -2170,14 +2686,70 @@
 <tr>
 <td><p class="pl-4 pt-4 text-lg font-light text-right">Modbus Tag</p></td>
     <td class= "pl-4 pt-4" colspan="3">
-<button color="blue" type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-full w-48">Choose Tag<svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg></button>
+<button color="blue" type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-full w-48" on:click={handleClickTagList} on:keydown={() => {}}>Choose Tag
+{#if openTagList}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron up outline" viewBox="-8 -8 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path></svg>
+{:else}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg>
+{/if}
+
+</button>
 </td>
    <td></td>
     <td></td>
 
 </tr>
-<tr>
 
+
+{#if openTagList}
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right"></td>
+<td class= "pl-4" colspan="3">
+<div role="tooltip" tabindex="-1" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg border-gray-100 dark:border-gray-600 divide-gray-100 dark:divide-gray-600 shadow-md divide-y z-50 w-48" > 
+<ul class="w-44 p-3 space-y-3 text-sm">
+{#if getDataReady == 1}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+{#if new_proxy_edge[new_proxy_edge_index].samplingCondition==0}
+<li><label class="text-sm rtl:text-right font-medium text-gray-900 dark:text-gray-300 flex items-center">
+<input type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-600 dark:border-gray-500 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" on:change="{(e) => handleMultipleCheckboxChange(TagItem.tagName, e.target.checked)}" checked={selectedNewTags.has(TagItem.tagName)}> 
+<p class="pl-2">{TagItem.tagName}</p>
+</label>
+</li>
+{:else if new_proxy_edge[new_proxy_edge_index].samplingCondition==1}
+
+
+
+<li>
+      <label class="text-sm rtl:text-right font-medium text-gray-900 dark:text-gray-300 flex items-center">
+        <input
+          type="checkbox"
+          class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-600 dark:border-gray-500 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
+          on:change={(e) => handleSingleCheckboxChange(TagItem.tagName, e.target.checked)}
+          checked={TagItem.tagName === New_SingleCheckedTag}
+          disabled={New_SingleCheckedTag && TagItem.tagName !== New_SingleCheckedTag}
+        >
+        <p class="pl-2">{TagItem.tagName}</p>
+      </label>
+</li>
+
+
+{/if}
+
+
+{/each}
+{/if}
+
+</ul>  
+
+</div>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+{/if}
 
 
 <tr>
@@ -2191,92 +2763,166 @@
 
 {:else if currentStep ==2}
 
+<tr>
+      <td></td>
+      <td class="pl-4 pt-4">
+<p class="text-center pt-4 text-lg font-bold">1st Cloud</p>
+      </td>
 
-{:else if currentStep ==3}
+      <td></td>
+    <td></td>
+    </tr>
 
 
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_proxy_edge[new_proxy_edge_index].cloud[0].profile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
+      <td class="pl-4 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={new_proxy_edge[new_proxy_edge_index].cloud[0].topic[0].type} value={0} >Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={new_proxy_edge[new_proxy_edge_index].cloud[0].topic[0].name}>
+</div>
+
+</td>
+
+
+</tr>
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Display</p>
+  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
 
   </td>
 
     <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].postprocessedDisplay} value={0} >Hexadecimal</Radio>
-  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].postprocessedDisplay} value={1} >Decimal</Radio>
-  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].postprocessedDisplay} value={2} >Binary</Radio>
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].cloud[0].tagDisplay} value={0} >Hexadecimal</Radio>
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].cloud[0].tagDisplay} value={1} >Decimal</Radio>
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].cloud[0].tagDisplay} value={2} >Binary</Radio>
 
 </div></td>
 </tr>
+
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Log Format</p>
+  <td><p class="pl-4 pt-5 text-lg font-light text-right">Data Log Format</p>
 
   </td>
 
-    <td class="pl-4 pt-8" ><div class="flex gap-6">
-  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].dataLogFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].cloud[0].dataLogFormat} value={0} on:change={()=>NewCloudFormatChange(0,1)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
-<Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip></Radio>
-  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].dataLogFormat} value={1} >User Defined:</Radio>
+<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Radio class="pb-2"  bind:group={new_proxy_edge[new_proxy_edge_index].cloud[0].dataLogFormat} value={2} on:change={()=>NewCloudFormatChange(0,1)}>Use 2nd Cloud Setting</Radio>
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].cloud[0].dataLogFormat} value={1} on:change={()=>NewCloudFormatChange(0,1)}>User Defined:</Radio>
+
 
 
 </div></td>
 </tr>
 
+
+
 <tr>
   <td class="text-right" >
-  <div>
-  <ul style="list-style-type:none;" class="py-1">
-<li class="pt-4">
-{#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
-    <Button size="xs" on:click={NPbtn1}>$TIME$</Button>
-{:else}
-    <Button size="xs" disabled>$TIME$</Button>
-{/if}
-</li>
+  
 
-<li class="pt-4">
-{#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NPbtn2}>$ARRAY$</Button>
-{:else}
-<Button size="xs" disabled>$ARRAY$</Button>
-{/if}
-</li>
-
-<li class="pt-4">
-{#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NPbtn3}>$&lt;tag&gt;_RAWREQUEST$</Button>
-{:else}
-<Button size="xs" disabled>$&lt;tag&gt;_RAWREQUEST$</Button>
-{/if}
-</li>
-
-<li class="pt-4">
-{#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={NPbtn4}>$&lt;tag&gt;_RAWREPLY$</Button>
-{:else}
-<Button size="xs" disabled>$&lt;tag&gt;_RAWREPLY$</Button>
-{/if}
-</li>
-
-
-</ul>
-  </div>
   </td>
 
-    <td class="pl-4 pt-4">
-{#if new_proxy_edge[new_proxy_edge_index].dataLogFormat == 1}
-
-<Textarea id="textarea-id" placeholder="Data Log Format" rows="12" name="message" bind:value={new_proxy_edge[new_proxy_edge_index].userDefineedData} />
+    <td class="pl-4 pt-4" colspan="5">
 
 
+{#if new_proxy_edge[new_proxy_edge_index].cloud[0].dataLogFormat == 1}
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTimeClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewArrayClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+              <hr>
 
-{:else}
-<Textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled/>
+              {#if new_proxy_edge[new_proxy_edge_index].samplingCondition==1}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawRequest(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREQUEST$</button></li>
+              <hr>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawReply(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREPLY$</button></li>
+
+              <hr>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagStatus(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_STATUS$</button></li>
+
+              {:else if new_proxy_edge[new_proxy_edge_index].samplingCondition==0}
+
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawRequest(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_RAWREQUEST$</button></li>
+
+
+            {/each}
+            <hr>
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawReply(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_RAWREPLY$</button></li>
+
+
+            {/each}
+
+            <hr>
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagStatus(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_STATUS$</button></li>
+
+
+            {/each}
+
+            {/if}
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={new_proxy_edge[new_proxy_edge_index].cloud[0].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
+
+
+
+
+{:else if new_proxy_edge[new_proxy_edge_index].cloud[0].dataLogFormat == 0}
+<textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
+
+
+
+{:else if new_proxy_edge[new_proxy_edge_index].cloud[0].dataLogFormat == 2}
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={new_proxy_edge[new_proxy_edge_index].cloud[0].userDefineedData}></textarea>
+
 {/if}
 
 
@@ -2286,19 +2932,211 @@
 
 
 </tr>
-            <tr>
+
+
+
+<tr>
     <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-            <td></td>
-    <td></td>
-    <td class="pl-10"><Button color="dark" pill={true} on:click={add_new_proxy_edge(new_proxy_edge_index)}>Add</Button></td>
+    <td class="pl-10"></td>
+    <td class="pl-10"></td>
+    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page1}>Back</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page3}>Next</Button></td>
 
 
     </tr>
+
+
+
+
+{:else if currentStep ==3}
+
+
+
+<tr>
+      <td></td>
+      <td class="pl-4 pt-4">
+<p class="text-center pt-4 text-lg font-bold">2nd Cloud</p>
+      </td>
+
+      <td></td>
+    <td></td>
+    </tr>
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_proxy_edge[new_proxy_edge_index].cloud[1].profile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
+      <td class="pl-4 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={new_proxy_edge[new_proxy_edge_index].cloud[1].topic[0].type} value={0} >Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={new_proxy_edge[new_proxy_edge_index].cloud[1].topic[0].name}>
+</div>
+
+</td>
+
+
+</tr>
+
+
+<tr class="pt-4">
+  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].cloud[1].tagDisplay} value={0} >Hexadecimal</Radio>
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].cloud[1].tagDisplay} value={1} >Decimal</Radio>
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].cloud[1].tagDisplay} value={2} >Binary</Radio>
+
+</div></td>
+</tr>
+
+
+
+<tr class="pt-4">
+  <td><p class="pl-4 pt-5 text-lg font-light text-right">Data Log Format</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].cloud[1].dataLogFormat} value={0} on:change={()=>NewCloudFormatChange(1,0)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Radio class="pb-2"  bind:group={new_proxy_edge[new_proxy_edge_index].cloud[1].dataLogFormat} value={2} on:change={()=>NewCloudFormatChange(1,0)}>Use 1st Cloud Setting</Radio>
+  <Radio class="pb-2" bind:group={new_proxy_edge[new_proxy_edge_index].cloud[1].dataLogFormat} value={1} on:change={()=>NewCloudFormatChange(1,0)}>User Defined:</Radio>
+
+
+
+</div></td>
+</tr>
+
+
+
+<tr>
+  <td class="text-right" >
+  
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5">
+
+
+{#if new_proxy_edge[new_proxy_edge_index].cloud[1].dataLogFormat == 1}
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTimeClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewArrayClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+              <hr>
+
+              {#if new_proxy_edge[new_proxy_edge_index].samplingCondition==1}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawRequest(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREQUEST$</button></li>
+              <hr>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawReply(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREPLY$</button></li>
+
+              <hr>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagStatus(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_STATUS$</button></li>
+
+              {:else if new_proxy_edge[new_proxy_edge_index].samplingCondition==0}
+
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawRequest(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_RAWREQUEST$</button></li>
+
+
+            {/each}
+            <hr>
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawReply(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_RAWREPLY$</button></li>
+
+
+            {/each}
+
+            <hr>
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagStatus(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_STATUS$</button></li>
+
+
+            {/each}
+
+            {/if}
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12"  class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={new_proxy_edge[new_proxy_edge_index].cloud[1].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
+
+
+
+
+{:else if new_proxy_edge[new_proxy_edge_index].cloud[1].dataLogFormat == 0}
+<textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
+
+
+
+{:else if new_proxy_edge[new_proxy_edge_index].cloud[1].dataLogFormat == 2}
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={new_proxy_edge[new_proxy_edge_index].cloud[1].userDefineedData}></textarea>
+
+{/if}
+
+
+    </td>
+
+
+
+
+</tr>
+
+
+
+<tr>
+    <td></td>
+    <td class="pl-10"></td>
+    <td class="pl-10"></td>
+    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page2}>Back</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>add_new_proxy_edge(new_proxy_edge_index)}>Add</Button></td>
+
+
+    </tr>
+
+
+
+
 
 {/if}    
 
@@ -2309,178 +3147,296 @@
 
 
 
-<Modal bind:open={modify_proxy_edge_modal} size="lg" class="w-full" permanent={true}>
+<Modal bind:open={modify_proxy_edge_modal} autoclose={false} size="lg" class="w-full">
 <form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox"  bind:checked={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].enable}>
-{/if}
-  Enable
-</label>
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyProxyEdge(modify_proxy_edge_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-<p class="mt-10"></p>
+<StepIndicator {currentStep} {steps} glow />
 
-<table>
 
+<table bind:this={modalElement}>
+
+{#if currentStep == 1}
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Tag Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
+  <input class="center" type="checkbox" bind:checked={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].enable}></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
-    <td class= "pl-4 pt-4">
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Sampling Condition</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<div class="flex gap-4">
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusDataModel}>
-<option disabled="" value="">Choose ...</option>
-{#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
-<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
-{/each}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave as SlaveDataModel, index}
-<option value={SlaveDataModel.dataModelName}>{SlaveDataModel.dataModelName}</option>
+  <Radio class="pb-1" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition} value={0} >Period</Radio>
+
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0}
+
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 dark:bg-gray-700 dark:border-green-500" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].periodMS}> <p class="pt-2">ms</p>
+{:else}
+
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled> <p class="pt-2">ms</p>
+{/if}
+
+  <Radio class="pb-1" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition} value={1} >Once Change</Radio>
+
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].changePercentage}> <p class="pt-2">%</p>
+
+{:else}
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled> <p class="pt-2">%</p>
+
+
+{/if}
+
+</div>    
+    </td>
+    <td></td>
+    <td></td>
+
+</tr>
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Modbus Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<button color="blue" type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-full w-48" on:click={handleClickTagList} on:keydown={() => {}}>Choose Tag
+{#if openTagList}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron up outline" viewBox="-8 -8 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path></svg>
+{:else}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg>
+{/if}
+
+</button>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+{#if openTagList}
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right"></td>
+<td class= "pl-4" colspan="3">
+<div role="tooltip" tabindex="-1" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg border-gray-100 dark:border-gray-600 divide-gray-100 dark:divide-gray-600 shadow-md divide-y z-50 w-48" > 
+<ul class="w-44 p-3 space-y-3 text-sm">
+{#if getDataReady == 1}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0}
+<li><label class="text-sm rtl:text-right font-medium text-gray-900 dark:text-gray-300 flex items-center">
+<input type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-600 dark:border-gray-500 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" on:change="{(e) => handleMultipleCheckboxChange(TagItem.tagName, e.target.checked)}" checked={selectedNewTags.has(TagItem.tagName)}> 
+<p class="pl-2">{TagItem.tagName}</p>
+</label>
+</li>
+{:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1}
+
+
+
+<li>
+      <label class="text-sm rtl:text-right font-medium text-gray-900 dark:text-gray-300 flex items-center">
+        <input
+          type="checkbox"
+          class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-600 dark:border-gray-500 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
+          on:change={(e) => handleSingleCheckboxChange(TagItem.tagName, e.target.checked)}
+          checked={TagItem.tagName === New_SingleCheckedTag}
+          disabled={New_SingleCheckedTag && TagItem.tagName !== New_SingleCheckedTag}
+        >
+        <p class="pl-2">{TagItem.tagName}</p>
+      </label>
+</li>
+
+
+{/if}
+
+
 {/each}
 {/if}
-</select>
 
+</ul>  
 
-    </td>
-
+</div>
+</td>
+   <td></td>
+    <td></td>
 
 </tr>
 
+{/if}
+
+
 <tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page2}>Next</Button></td>
 
-  </td>
 
- <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataType}>
-<option disabled="" value="none">Choose Type ...</option>
-<option value={1}>Boolean</option>
-<option value={10}>UInt8</option>
-<option value={11}>Int8</option>
-<option value={2}>UInt16</option>
-<option value={3}>Int16</option>
-<option value={4}>UInt32</option>
-<option value={5}>Int32</option>
-<option value={8}>UInt64</option>
-<option value={9}>Int64</option>
-<option value={6}>Float</option>
-<option value={7}>Double</option>
+    </tr>
+
+{:else if currentStep ==2}
+
+<tr>
+      <td></td>
+      <td class="pl-4 pt-4">
+<p class="text-center pt-4 text-lg font-bold">1st Cloud</p>
+      </td>
+
+      <td></td>
+    <td></td>
+    </tr>
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].profile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
 </select>
+</td>
+   <td></td>
+    <td></td>
 
- 
-
-
- </td>
 </tr>
 
 
+
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Postprocessing</p></td>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
+      <td class="pl-4 pt-5">
 
- <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-16" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].postprocessing}>
-<option disabled="" value="none">Choose Operator ...</option>
+<div class="flex gap-4">
+  <Radio bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].topic[0].type} value={0} >Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].topic[0].name}>
+</div>
 
-<option value={1}>+</option>
-<option value={2}>-</option>
-<option value={3}>*</option>
-<option value={4}>/</option>
-</select>
+</td>
 
 
-   
- <FloatingLabelInput style="outlined" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].postprocessingValue}>
-  </FloatingLabelInput> 
-  </div>
-  </td>
-  </tr>
+</tr>
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Postprocessed Display</p>
+  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
 
   </td>
 
     <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].postprocessedDisplay} value={0} >Hexadecimal</Radio>
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].postprocessedDisplay} value={1} >Decimal</Radio>
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].postprocessedDisplay} value={2} >Binary</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].tagDisplay} value={0} >Hexadecimal</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].tagDisplay} value={1} >Decimal</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].tagDisplay} value={2} >Binary</Radio>
 
 </div></td>
 </tr>
+
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Log Format</p>
+  <td><p class="pl-4 pt-5 text-lg font-light text-right">Data Log Format</p>
 
   </td>
 
-    <td class="pl-4 pt-8" ><div class="flex gap-6">
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].dataLogFormat} value={0} on:change={()=>ModifyCloudFormatChange(0,1)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
-<Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip></Radio>
-  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat} value={1} >User Defined:</Radio>
+<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Radio class="pb-2"  bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].dataLogFormat} value={2} on:change={()=>ModifyCloudFormatChange(0,1)}>Use 2nd Cloud Setting</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].dataLogFormat} value={1} on:change={()=>ModifyCloudFormatChange(0,1)}>User Defined:</Radio>
+
 
 
 </div></td>
 </tr>
 
+
+
 <tr>
   <td class="text-right" >
-  <div>
-  <ul style="list-style-type:none;" class="py-1">
-<li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
-    <Button size="xs" on:click={CPbtn1}>$TIME$</Button>
-{:else}
-    <Button size="xs" disabled>$TIME$</Button>
-{/if}
-</li>
+  
 
-<li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CPbtn2}>$ARRAY$</Button>
-{:else}
-<Button size="xs" disabled>$ARRAY$</Button>
-{/if}
-</li>
-
-<li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CPbtn3}>$&lt;tag&gt;_RAWREQUEST$</Button>
-{:else}
-<Button size="xs" disabled>$&lt;tag&gt;_RAWREQUEST$</Button>
-{/if}
-</li>
-
-<li class="pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
-<Button size="xs" on:click={CPbtn4}>$&lt;tag&gt;_RAWREPLY$</Button>
-{:else}
-<Button size="xs" disabled>$&lt;tag&gt;_RAWREPLY$</Button>
-{/if}
-</li>
-
-
-</ul>
-  </div>
   </td>
 
-    <td class="pl-4 pt-4">
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].dataLogFormat == 1}
-
-<Textarea id="textarea-id" placeholder="Data Log Format" rows="12" name="message" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].userDefineedData} />
+    <td class="pl-4 pt-4" colspan="5">
 
 
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].dataLogFormat == 1}
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTimeClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyArrayClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+              <hr>
 
-{:else}
-<Textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled/>
+              {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawRequest(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREQUEST$</button></li>
+              <hr>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawReply(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREPLY$</button></li>
+
+              <hr>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagStatus(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_STATUS$</button></li>
+
+              {:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0}
+
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawRequest(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_RAWREQUEST$</button></li>
+
+
+            {/each}
+            <hr>
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawReply(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_RAWREPLY$</button></li>
+
+
+            {/each}
+
+            <hr>
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagStatus(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_STATUS$</button></li>
+
+
+            {/each}
+
+            {/if}
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
+
+
+
+
+{:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].dataLogFormat == 0}
+<textarea id="textarea-id" placeholder="Disabled" rows="12"  class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
+
+
+
+{:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].dataLogFormat == 2}
+<textarea id="textarea-id" rows="12"  class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].userDefineedData}></textarea>
+
 {/if}
 
 
@@ -2490,24 +3446,220 @@
 
 
 </tr>
-            <tr>
+
+
+
+<tr>
     <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-            <td></td>
-    <td></td>
-    <td class="pl-10"><Button color="dark" pill={true} on:click={ModifyProxyEdge}>Modify</Button></td>
+    <td class="pl-10"></td>
+    <td class="pl-10"></td>
+    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page1}>Back</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page3}>Next</Button></td>
 
 
     </tr>
 
 
+
+
+{:else if currentStep ==3}
+
+
+
+<tr>
+      <td></td>
+      <td class="pl-4 pt-4">
+<p class="text-center pt-4 text-lg font-bold">2nd Cloud</p>
+      </td>
+
+      <td></td>
+    <td></td>
+    </tr>
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].profile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
+      <td class="pl-4 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].topic[0].type} value={0} >Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].topic[0].name}>
+</div>
+
+</td>
+
+
+</tr>
+
+
+<tr class="pt-4">
+  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].tagDisplay} value={0} >Hexadecimal</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].tagDisplay} value={1} >Decimal</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].tagDisplay} value={2} >Binary</Radio>
+
+</div></td>
+</tr>
+
+
+
+<tr class="pt-4">
+  <td><p class="pl-4 pt-5 text-lg font-light text-right">Data Log Format</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].dataLogFormat} value={0} on:change={()=>ModifyCloudFormatChange(1,0)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Radio class="pb-2"  bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].dataLogFormat} value={2} on:change={()=>ModifyCloudFormatChange(1,0)}>Use 1st Cloud Setting</Radio>
+  <Radio class="pb-2" bind:group={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].dataLogFormat} value={1} on:change={()=>ModifyCloudFormatChange(1,0)}>User Defined:</Radio>
+
+
+
+</div></td>
+</tr>
+
+
+
+<tr>
+  <td class="text-right" >
+  
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5">
+
+
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].dataLogFormat == 1}
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTimeClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyArrayClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+              <hr>
+
+              {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawRequest(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREQUEST$</button></li>
+              <hr>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawReply(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREPLY$</button></li>
+
+              <hr>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagStatus(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_STATUS$</button></li>
+
+              {:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0}
+
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawRequest(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_RAWREQUEST$</button></li>
+
+
+            {/each}
+            <hr>
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawReply(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_RAWREPLY$</button></li>
+
+
+            {/each}
+
+            <hr>
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagStatus(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}_STATUS$</button></li>
+
+
+            {/each}
+
+            {/if}
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12"  class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
+
+
+
+
+{:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].dataLogFormat == 0}
+<textarea id="textarea-id" placeholder="Disabled" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
+
+
+
+{:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].dataLogFormat == 2}
+<textarea id="textarea-id" rows="12"  class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].userDefineedData}></textarea>
+
+{/if}
+
+
+    </td>
+
+
+
+
+</tr>
+
+
+
+<tr>
+    <td></td>
+    <td class="pl-10"></td>
+    <td class="pl-10"></td>
+    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page2}>Back</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>ModifyProxyEdge(modify_proxy_edge_index)}>Modify</Button></td>
+
+
+    </tr>
+
+
+
+
+
+{/if}    
+
+
 </table>
 </form>
 </Modal>
+
+
 
 
   </Table>
@@ -2801,9 +3953,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-18">Modbus Data Model</TableHeadCell>
-    <TableHeadCell class="w-18">Data Type</TableHeadCell>
+    <TableHeadCell class="w-18">Modbus Tag</TableHeadCell>
     <TableHeadCell class="w-18">Display</TableHeadCell>
     <TableHeadCell class="w-18">Data Log Format</TableHeadCell>
   </TableHead>
@@ -2853,33 +4003,7 @@ on:click={handleClickMV} on:keydown={() => {}}>
       </td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"> {MonitorEdgeData.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MonitorEdgeData.modbusDataModel}</td>
-{#if MonitorEdgeData.dataType == 1}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Boolean</td>
-{:else if MonitorEdgeData.dataType == 2}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt16</td>
-{:else if MonitorEdgeData.dataType == 3}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int16</td>
-{:else if MonitorEdgeData.dataType == 4}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt32</td>
-{:else if MonitorEdgeData.dataType == 5}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int32</td>
-{:else if MonitorEdgeData.dataType == 6}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Float</td>
-{:else if MonitorEdgeData.dataType == 7}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Double</td>
-{:else if MonitorEdgeData.dataType == 8}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt64</td>
-{:else if MonitorEdgeData.dataType == 9}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int64</td>
-{:else if MonitorEdgeData.dataType == 10}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">UInt8</td>
-{:else if MonitorEdgeData.dataType == 11}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Int8</td>
-{:else}
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout"></td>
-{/if}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{MonitorEdgeData.modbusTag}</td>
 
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
@@ -2928,33 +4052,8 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
       <TableBodyCell class="w-10">{index+1}</TableBodyCell>
-      <TableBodyCell class="w-18">{MonitorEdgeData.tagName}</TableBodyCell>
-      <TableBodyCell class="w-18">{MonitorEdgeData.modbusDataModel}</TableBodyCell>
-{#if MonitorEdgeData.dataType == 1}
-        <TableBodyCell class="w-18">Boolean</TableBodyCell>
-{:else if MonitorEdgeData.dataType == 2}
-        <TableBodyCell class="w-18">UInt16</TableBodyCell>
-{:else if MonitorEdgeData.dataType == 3}
-        <TableBodyCell class="w-18">Int16</TableBodyCell>
-{:else if MonitorEdgeData.dataType == 4}
-      <TableBodyCell class="w-18">UInt32</TableBodyCell>
-{:else if MonitorEdgeData.dataType == 5}
-      <TableBodyCell class="w-18">Int32</TableBodyCell>
-{:else if MonitorEdgeData.dataType == 6}
-      <TableBodyCell class="w-18">Float</TableBodyCell>
-{:else if MonitorEdgeData.dataType == 7}
-      <TableBodyCell class="w-18">Double</TableBodyCell>
-{:else if MonitorEdgeData.dataType == 8}
-      <TableBodyCell class="w-18">UInt64</TableBodyCell>  
-{:else if MonitorEdgeData.dataType == 9}
-      <TableBodyCell class="w-18">Int64</TableBodyCell> 
-{:else if MonitorEdgeData.dataType == 10}
-      <TableBodyCell class="w-18">UInt8</TableBodyCell>  
-{:else if MonitorEdgeData.dataType == 11}
-      <TableBodyCell class="w-18">Int8</TableBodyCell>      
-{:else}
-      <TableBodyCell class="w-18"></TableBodyCell>
-{/if}
+      <TableBodyCell class="w-18">{MonitorEdgeData.modbusTag}</TableBodyCell>
+
 
 
       <TableBodyCell class="w-18">
@@ -3050,62 +4149,21 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <table>
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Tag Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={new_monitor_edge[new_monitor_edge_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
-
-
-
-  </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Tag</p></td>
     <td class= "pl-4 pt-4">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_monitor_edge[new_monitor_edge_index].modbusDataModel}>
-<option disabled="" value="">Choose ...</option>
-{#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
-<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
-{/each}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave as SlaveDataModel, index}
-<option value={SlaveDataModel.dataModelName}>{SlaveDataModel.dataModelName}</option>
-{/each}
-{/if}
-</select>
-
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_monitor_edge[new_monitor_edge_index].modbusTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
     
-
+{/each}
     </td>
 
 
 </tr>
 
-<tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
 
-  </td>
-
- <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_monitor_edge[new_monitor_edge_index].dataType}>
-<option disabled="" value="none">Choose Type ...</option>
-<option value={1}>Boolean</option>
-<option value={10}>UInt8</option>
-<option value={11}>Int8</option>
-<option value={2}>UInt16</option>
-<option value={3}>Int16</option>
-<option value={4}>UInt32</option>
-<option value={5}>Int32</option>
-<option value={8}>UInt64</option>
-<option value={9}>Int64</option>
-<option value={6}>Float</option>
-<option value={7}>Double</option>
-</select>
-
- 
-
-
- </td>
-</tr>
 
 
 
@@ -3249,58 +4307,23 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 <table>
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Tag Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
-
-
-  </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Data Model</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Modbus Tag</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].modbusDataModel}>
-<option disabled="" value="">Choose ...</option>
-{#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master as MasterDataModel, index}
-<option value={MasterDataModel.dataModelName}>{MasterDataModel.dataModelName}</option>
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].modbusTag}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
+    
 {/each}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave as SlaveDataModel, index}
-<option value={SlaveDataModel.dataModelName}>{SlaveDataModel.dataModelName}</option>
-{/each}
-{/if}
-</select>
+
 
     </td>
 
 
-</tr>
-
-<tr>
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Type</p>
-
-  </td>
-
- <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[modify_monitor_edge_index].dataType}>
-<option disabled="" value="none">Choose Type ...</option>
-<option value={1}>Boolean</option>
-<option value={10}>UInt8</option>
-<option value={11}>Int8</option>
-<option value={2}>UInt16</option>
-<option value={3}>Int16</option>
-<option value={4}>UInt32</option>
-<option value={5}>Int32</option>
-<option value={8}>UInt64</option>
-<option value={9}>Int64</option>
-<option value={6}>Float</option>
-<option value={7}>Double</option>
-</select>
-
- 
-
-
- </td>
 </tr>
 
 

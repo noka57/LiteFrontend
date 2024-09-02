@@ -1180,15 +1180,16 @@
 
   let BackupScada=       
   {
-      enable:false,
-      tagName:"",
-      targetTag:[]
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   };
 
   function TriggerModifyScadaTag(index)
   {
-
-
     selectedNewTags.clear();
     openTagList=false;
     tagsArray=[];
@@ -1197,14 +1198,27 @@
     {
       selectedNewTags.add(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[index].targetTag[i])
     }
-
-
     modify_scada_tag_index=index;
+    BackupScada.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].enable;
+    BackupScada.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].delete;
+    BackupScada.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].tagName;
+    BackupScada.targetTag=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].targetTag));
+    BackupScada.tcpSlaveProfileName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].tcpSlaveProfileName;
+    BackupScada.holdingRegisterAddress=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].holdingRegisterAddress;
+
+
     modify_scada_tag_modal=true;
   }
 
   function NoModifyScada()
   {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].enable=BackupScada.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].delete=BackupScada.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].tagName=BackupScada.tagName;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].targetTag=JSON.parse(JSON.stringify(BackupScada.targetTag));
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].tcpSlaveProfileName=BackupScada.tcpSlaveProfileName;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].holdingRegisterAddress=BackupScada.holdingRegisterAddress;
+
     modify_scada_tag_modal=false;
 
   }
@@ -1874,61 +1888,81 @@
     enable:false,
     delete:false,
     tagName:"",
-    targetTag:[]
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   },
   {
     enable:false,
     delete:false,
     tagName:"",
-    targetTag:[]
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   },
   {
     enable:false,
     delete:false,
     tagName:"",
-    targetTag:[]
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   },
   {
     enable:false,
     delete:false,
     tagName:"",
-    targetTag:[]
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   },
   {
     enable:false,
     delete:false,
     tagName:"",
-    targetTag:[]
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   },
   {
     enable:false,
     delete:false,
     tagName:"",
-    targetTag:[]
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   },
   {
     enable:false,
     delete:false,
     tagName:"",
-    targetTag:[]
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   },
   {
     enable:false,
     delete:false,
     tagName:"",
-    targetTag:[]
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   },
   {
     enable:false,
     delete:false,
     tagName:"",
-    targetTag:[]
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   },
   {
     enable:false,
     delete:false,
     tagName:"",
-    targetTag:[]
+    targetTag:[],
+    tcpSlaveProfileName:"",
+    holdingRegisterAddress:1000
   }                
 
   ];
@@ -1970,7 +2004,8 @@
     new_scada_tag[index].delete=false;
     new_scada_tag[index].tagName="";
     new_scada_tag[index].targetTag=[];
-
+    new_scada_tag[index].tcpSlaveProfileName="";
+    new_scada_tag[index].holdingRegisterAddress=1000;
 
     openTagList=false;
     selectedNewTags.clear();
@@ -4799,7 +4834,7 @@ on:click={onPageClick}></textarea>
     <td></td>
     <td>
 <Button color="dark" pill={true} on:click={modify_tou_tag}>Modify</Button></td>
-
+</tr>
 
 </table>
 </form>
@@ -5139,7 +5174,7 @@ on:click={onPageClick}></textarea>
     <td></td>
     <td>
 <Button color="dark" pill={true} on:click={modify_DM_tag}>Modify</Button></td>
-
+</tr>
 
 </table>
 </form>
@@ -5172,8 +5207,9 @@ on:click={onPageClick}></textarea>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Tag Name</TableHeadCell>
+    <TableHeadCell class="w-18">TCP Slave Profile</TableHeadCell>  
+    <TableHeadCell class="w-18">Holding Register Address</TableHeadCell>      
     <TableHeadCell class="w-18">Target Tag Number</TableHeadCell>    
-
     <TableHeadCell class="w-18"></TableHeadCell>
     <TableHeadCell class="w-18"></TableHeadCell>
     <TableHeadCell class="w-18"></TableHeadCell>
@@ -5221,6 +5257,8 @@ on:click={onPageClick}></textarea>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScadaTag.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScadaTag.tcpSlaveProfileName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScadaTag.holdingRegisterAddress}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScadaTag.targetTag.length}</td>
 
 </tr>
@@ -5252,6 +5290,8 @@ on:click={onPageClick}></textarea>
 
       <TableBodyCell>{index+1}</TableBodyCell>
       <TableBodyCell>{ScadaTag.tagName}</TableBodyCell>
+      <TableBodyCell>{ScadaTag.tcpSlaveProfileName}</TableBodyCell>
+      <TableBodyCell>{ScadaTag.holdingRegisterAddress}</TableBodyCell> 
       <TableBodyCell>{ScadaTag.targetTag.length}</TableBodyCell>
 
 
@@ -5289,6 +5329,11 @@ on:click={onPageClick}></textarea>
       <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+
     </TableBodyRow>
 
 
@@ -5345,6 +5390,36 @@ on:click={onPageClick}></textarea>
   </tr>
 
 
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_scada_tag[new_scada_tag_index].tcpSlaveProfileName}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TCPSlaveItem, index}
+<option value={TCPSlaveItem.aliasName}>{TCPSlaveItem.aliasName}</option>
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Holding Register Address</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="number" bind:value={new_scada_tag[new_scada_tag_index].holdingRegisterAddress} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>  
 
 
 <tr>
@@ -5432,6 +5507,8 @@ on:click={onPageClick}></textarea>
 
 <table>
 
+
+
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
       <td class="pl-5 pt-5">
@@ -5446,6 +5523,36 @@ on:click={onPageClick}></textarea>
   </tr>
 
 
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].tcpSlaveProfileName}>
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TCPSlaveItem, index}
+<option value={TCPSlaveItem.aliasName}>{TCPSlaveItem.aliasName}</option>
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Holding Register Address</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].holdingRegisterAddress} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>  
 
 
 <tr>
@@ -5494,9 +5601,6 @@ on:click={onPageClick}></textarea>
 
 {/if}
 
-
-
-
  <tr>
     <td></td>
     <td></td>
@@ -5511,7 +5615,7 @@ on:click={onPageClick}></textarea>
     <td></td>
     <td>
 <Button color="dark" pill={true} on:click={modify_scada_tag}>Modify</Button></td>
-
+</tr>
 
 </table>
 </form>

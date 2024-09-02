@@ -14,6 +14,8 @@
     ChangedGenericMQTTConfig,
     datatagproConfig,
     ChangedDataTagProConfig,
+    azureConfig,
+    ChangedAzureConfig,
     DataTagPro_ULRule_ConfigChangedLog,
     DataTagPro_TagRuleEvent_ConfigChangedLog,
     DataTagPro_TagRuleSCADA_ConfigChangedLog,
@@ -25,9 +27,17 @@
     DataTagPro_General_ConfigChangedLog
   } from "./configG.js"
 
-  let start_time_object=null;
-  let end_time_object =null;
+
   let getDataReady=0;
+
+  let start_time_hh='';
+  let start_time_mm='';
+  let end_time_hh='';
+  let end_time_mm='';
+
+  let openTagList=false;
+  let selectedNewTags = new Set();
+  let tagsArray;
 
   let sessionid;
   let sessionBinary;
@@ -88,6 +98,9 @@
   let generic_mqtt_data="";
   let saved_changed_generic_mqtt_data ="";
 
+  let azure_data="";
+  let saved_changed_azure_data ="";
+
 
   let CloudProfile=[];
 
@@ -97,6 +110,15 @@
 
   ChangedGenericMQTTConfig.subscribe(val => {
       saved_changed_generic_mqtt_data = val;
+  });
+
+
+  azureConfig.subscribe(val => {
+      azure_data = val;
+  });
+
+  ChangedAzureConfig.subscribe(val => {
+      saved_changed_azure_data = val;
   });
 
   modbusConfig.subscribe(val => {
@@ -153,6 +175,25 @@
   DataTagPro_General_ConfigChangedLog.subscribe(val => {
       data_tag_pro_general_changedValues = val;
   });
+
+  function handleClickTagList()
+  {
+        openTagList=!openTagList;
+  }
+
+    function handleMultipleCheckboxChange(tagName, isChecked) 
+    {
+      if (isChecked) 
+      {
+        selectedNewTags.add(tagName);
+      } 
+      else 
+      {
+        selectedNewTags.delete(tagName);
+      }
+
+      console.log("selectedTags:", selectedNewTags);
+    }
 
 
 
@@ -974,10 +1015,34 @@
   let modify_accumulated_tag_modal=false;
   let modify_accumulated_tag_index;
 
+  let BackupAccumulatedTag=
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:""
+  };
+
   function TriggerModifyATag(index)
   {
-    start_time_object= new Date(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].startTime);
-    end_time_object= new Date(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].endTime);
+    const [hours, minutes] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].startTime.split(':');
+    start_time_hh = parseInt(hours, 10) || 0; 
+    start_time_mm = parseInt(minutes, 10) || 0; 
+
+    const [hours2, minutes2] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].endTime.split(':');
+
+    end_time_hh = parseInt(hours2, 10) || 0;  
+    end_time_mm = parseInt(minutes2, 10) || 0; 
+
+    BackupAccumulatedTag.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].enable;
+    BackupAccumulatedTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].delete;
+    BackupAccumulatedTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].tagName;
+    BackupAccumulatedTag.targetTag=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].targetTag;
+    BackupAccumulatedTag.startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].startTime;
+    BackupAccumulatedTag.endTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].endTime;
+
     modify_accumulated_tag_index=index;
     modify_accumulated_tag_modal=true;
 
@@ -985,23 +1050,59 @@
 
   function no_modify_accumulated_tag()
   {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].enable=BackupAccumulatedTag.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].delete=BackupAccumulatedTag.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].tagName=BackupAccumulatedTag.tagName;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].targetTag=BackupAccumulatedTag.targetTag;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startTime=BackupAccumulatedTag.startTime;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].endTime=BackupAccumulatedTag.endTime;
+
     modify_accumulated_tag_modal=false;
   }
 
   function modify_accumulated_tag()
   {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startTime=formatDate(start_time_object);
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].endTime=formatDate(end_time_object);
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startTime=`${start_time_hh}:${start_time_mm}`;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].endTime=`${end_time_hh}:${end_time_mm}`;
+
     modify_accumulated_tag_modal=false;
   }
 
   let modify_tou_tag_modal=false;
   let modify_tou_tag_index;
+  let BackupTouTag=
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    targetTag:"",
+    startTime:"",
+    endTime:"",
+    rate:1
+  };
+
 
   function TriggerModifyTouTag(index)
   {
-    start_time_object= new Date(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].startTime);
-    end_time_object= new Date(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].endTime);
+    const [hours, minutes] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].startTime.split(':');
+    start_time_hh = parseInt(hours, 10) || 0; 
+    start_time_mm = parseInt(minutes, 10) || 0; 
+
+    const [hours2, minutes2] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].endTime.split(':');
+
+    end_time_hh = parseInt(hours2, 10) || 0;  
+    end_time_mm = parseInt(minutes2, 10) || 0; 
+
+
+    BackupTouTag.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].enable;
+    BackupTouTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].delete;
+    BackupTouTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].tagName;
+    BackupTouTag.targetTag=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].targetTag;
+    BackupTouTag.startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].startTime;
+    BackupTouTag.endTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].endTime;
+    BackupTouTag.rate=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].rate;
+
+
     modify_tou_tag_index=index;
     modify_tou_tag_modal=true;
 
@@ -1009,13 +1110,22 @@
 
   function no_modify_tou_tag()
   {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].enable=BackupTouTag.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].delete=BackupTouTag.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].tagName=BackupTouTag.tagName;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].targetTag=BackupTouTag.targetTag;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].startTime=BackupTouTag.startTime;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].endTime=BackupTouTag.endTime;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].rate=BackupTouTag.rate;
+
     modify_tou_tag_modal=false;
   }
 
   function modify_tou_tag()
   {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].startTime=formatDate(start_time_object);
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].endTime=formatDate(end_time_object);
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].startTime=`${start_time_hh}:${start_time_mm}`;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[modify_tou_tag_index].endTime=`${end_time_hh}:${end_time_mm}`;
+
     modify_tou_tag_modal=false;
   }
 
@@ -1023,14 +1133,36 @@
   let modify_DM_tag_modal=false;
   let modify_DM_tag_index;
 
+  let BackupDM_tag=
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    targetTag:""
+  
+  }
+
   function TriggerModifyDMTag(index)
   {
     modify_DM_tag_index=index;
+    BackupDM_tag.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].enable;
+    BackupDM_tag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].delete;
+    BackupDM_tag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].tagName;
+    BackupDM_tag.cloudProfile=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].cloudProfile;    
+    BackupDM_tag.targetTag=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].targetTag;  
+
     modify_DM_tag_modal=true;
   }
 
   function NoModifyDM()
   {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].enable=BackupDM_tag.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].delete=BackupDM_tag.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].tagName=BackupDM_tag.tagName;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].cloudProfile=BackupDM_tag.cloudProfile;  
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].targetTag=BackupDM_tag.targetTag;  
+
     modify_DM_tag_modal=false;
 
   }
@@ -1046,21 +1178,26 @@
   let modify_scada_tag_modal=false;
   let modify_scada_tag_index;
 
+  let BackupScada=       
+  {
+      enable:false,
+      tagName:"",
+      targetTag:[]
+  };
+
   function TriggerModifyScadaTag(index)
   {
-    scada_target_tag=[];
 
-    for (let i=0; i < saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length;i++)
+
+    selectedNewTags.clear();
+    openTagList=false;
+    tagsArray=[];
+
+    for (let i=0; i < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[index].targetTag.length; i++)
     {
-      scada_target_tag=[...scada_target_tag,false];
+      selectedNewTags.add(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[index].targetTag[i])
     }
 
-    for (let j=0; j < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[index].targetTag.length; j++)
-    {
-        scada_target_tag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[index].targetTag[j]]=true;
-    } 
-
-    
 
     modify_scada_tag_index=index;
     modify_scada_tag_modal=true;
@@ -1075,16 +1212,8 @@
 
   function modify_scada_tag()
   {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].targetTag=[];
-
-    for(let i=0; i < saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length;i++)
-    {
-      if (scada_target_tag[i])
-      {
-        changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].targetTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].targetTag, i];
-      }
-
-    }
+    tagsArray = Array.from(selectedNewTags);
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].targetTag=JSON.parse(JSON.stringify(tagsArray));
 
     modify_scada_tag_modal=false;
   }
@@ -1092,15 +1221,53 @@
   let modify_event_tag_modal=false;
   let modify_event_tag_index;
 
+  let BackupEventTag=
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    triggerTag:"",
+    triggerConditionOperand:0,
+    triggerConditionValue:1,
+    pollingRateS:1,
+    actionOperation:0,
+    actionOperationValue:1,
+    actionTarget:""
+  }
+
 
   function TriggerModifyEventTag(index)
   {
+
     modify_event_tag_index=index;
+    BackupEventTag.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].enable;
+    BackupEventTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].delete;
+    BackupEventTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].tagName;
+    BackupEventTag.triggerTag=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerTag;
+    BackupEventTag.triggerConditionOperand=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionOperand;
+    BackupEventTag.triggerConditionValue=    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionValue;  
+    BackupEventTag.pollingRateS=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].pollingRateS;
+    BackupEventTag.actionOperation=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperation;
+    BackupEventTag.actionOperationValue=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperationValue; 
+    BackupEventTag.actionTarget=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionTarget;
+
     modify_event_tag_modal=true;
   }
 
   function NoModifyEventTag()
   {
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].enable=BackupEventTag.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].delete=BackupEventTag.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].tagName=BackupEventTag.tagName;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerTag=BackupEventTag.triggerTag;    
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionOperand=BackupEventTag.triggerConditionOperand;  
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionValue=BackupEventTag.triggerConditionValue;  
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].pollingRateS=BackupEventTag.pollingRateS;  
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperation=BackupEventTag.actionOperation;  
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperationValue=BackupEventTag.actionOperationValue;  
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionTarget=BackupEventTag.actionTarget;  
+
     modify_event_tag_modal=false;
 
   }
@@ -1785,17 +1952,11 @@
 
   function add_new_scada_tag(index)
   {
-
-    for(let i=0; i < saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length;i++)
-    {
-      if (scada_target_tag[i])
-      {
-        new_scada_tag[index].targetTag=[...new_scada_tag[index].targetTag, i];
-      }
-
-    }
+    tagsArray = Array.from(selectedNewTags);
+    new_scada_tag[index].targetTag=JSON.parse(JSON.stringify(tagsArray));
 
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag,new_scada_tag[index]];
+    openTagList=false;
     new_scada_tag_modal=false;
   }
 
@@ -1810,14 +1971,13 @@
     new_scada_tag[index].tagName="";
     new_scada_tag[index].targetTag=[];
 
+
+    openTagList=false;
+    selectedNewTags.clear();
+    tagsArray=[];
     new_scada_tag_index=index;
     new_scada_tag_modal=true;
 
-    scada_target_tag=[];
-    for(let i=0; i < saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter.length;i++)
-    {
-     scada_target_tag=[...scada_target_tag, false];
-    }
 
   }
 
@@ -2036,13 +2196,15 @@
     new_tou_tag[index].delete=false;
     new_tou_tag[index].tagName="";
     new_tou_tag[index].targetTag="";
-    new_tou_tag[index].startTime="2024-01-01 00:00:00";
-    new_tou_tag[index].endTime="2024-01-01 00:00:00";
+    new_tou_tag[index].startTime="0:0";
+    new_tou_tag[index].endTime="0:0";
     new_tou_tag[index].rate=1;
 
-    start_time_object= new Date(new_tou_tag[index].startTime);
-    end_time_object= new Date(new_tou_tag[index].endTime);
 
+    start_time_hh='';
+    start_time_mm='';
+    end_time_hh='';
+    end_time_mm='';
     new_tou_tag_index=index;
     new_tou_tag_modal=true;
 
@@ -2058,9 +2220,8 @@
 
   function add_new_tou_tag(index)
   {
-    new_tou_tag[index].startTime=formatDate(start_time_object);
-    new_tou_tag[index].endTime=formatDate(end_time_object);
-
+    new_tou_tag[index].startTime=`${start_time_hh}:${start_time_mm}`;
+    new_tou_tag[index].endTime=`${end_time_hh}:${end_time_mm}`;
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag,new_tou_tag[index]];
 
     new_tou_tag_modal=false;
@@ -2076,6 +2237,7 @@
   {
       changed_data_tag_pro_data.config.service_dataTagPro_tagRule.touTag[index].delete=true;
   }
+
 
 
   let new_accumulated_tag_modal=false;
@@ -2170,11 +2332,13 @@
     new_accumulated_tag[index].delete=false;
     new_accumulated_tag[index].tagName="";
     new_accumulated_tag[index].targetTag="";
-    new_accumulated_tag[index].startTime="00:00";
-    new_accumulated_tag[index].endTime="00:00";
+    new_accumulated_tag[index].startTime="0:0";
+    new_accumulated_tag[index].endTime="0:0";
 
-    start_time_object= new Date(new_accumulated_tag[index].startTime);
-    end_time_object= new Date(new_accumulated_tag[index].endTime);
+    start_time_hh='';
+    start_time_mm='';
+    end_time_hh='';
+    end_time_mm='';
 
     new_accumulated_tag_index=index;
     new_accumulated_tag_modal=true;
@@ -2191,10 +2355,12 @@
 
   function add_new_accumulated_tag(index)
   {
-    new_accumulated_tag[index].startTime=formatDate(start_time_object);
-    new_accumulated_tag[index].endTime=formatDate(end_time_object);
-    new_accumulated_tag_modal=false;
+    new_accumulated_tag[index].startTime=`${start_time_hh}:${start_time_mm}`;
+    new_accumulated_tag[index].endTime=`${end_time_hh}:${end_time_mm}`;
+
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag,new_accumulated_tag[index]];
+
+    new_accumulated_tag_modal=false;
   }
 
 
@@ -2206,6 +2372,149 @@
   function DeleteAtag(index)
   {
       changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].delete=true;
+  }
+
+
+  let new_schedule_tag_modal=false;
+  let new_schedule_tag_index;
+
+  let new_schedule_tag=[
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:"",
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:"",
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:"",
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:"",
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:"",
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:"",
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:"",
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:"",
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:"",
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:1,
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  }              
+  ];
+
+  function new_schedule_tag_trigger(index)
+  {
+    new_schedule_tag[index].enable=true;
+    new_schedule_tag[index].delete=false;
+    new_schedule_tag[index].tagName="";
+    new_schedule_tag[index].scheduleTime="";
+    new_schedule_tag[index].actionType=0;
+    new_schedule_tag[index].actionTargetTag="";
+    new_schedule_tag[index].actionTargetTagValue=1
+    new_schedule_tag[index].actionTimeSyncFormatType=0;
+    new_schedule_tag[index].actionTimeSyncFormatUserDefine="";
+
+
+    start_time_hh='';
+    start_time_mm='';
+
+    new_schedule_tag_index=index;
+    new_schedule_tag_modal=true;
+
+  }
+
+  function NoAddSchedule(index)
+  {
+     new_schedule_tag_modal=false;
   }
 
 
@@ -2440,7 +2749,51 @@
   }
 
 
-async function getDataTagPro () {
+  async function getAzureData() {
+    const res = await fetch(window.location.origin+"/PostGetAzuRe", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      azure_data =await res.json();
+      console.log(azure_data);
+      azureConfig.set(azure_data);
+
+      saved_changed_azure_data= JSON.parse(JSON.stringify(azure_data));
+      ChangedAzureConfig.set(saved_changed_azure_data);
+
+
+      for (let i=0; i< saved_changed_azure_data.config.cloud_azHub_profile.length;i++)
+      {
+        let item="hub_"+(i+1);
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+
+      }
+
+      for (let i=0; i< saved_changed_azure_data.config.cloud_azDPS_profile.length;i++)
+      {
+        let item="dps_"+(i+1);
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+
+      }
+
+      for (let i=0; i< saved_changed_azure_data.config.cloud_azCentral_profile.length;i++)
+      {
+        let item="central_"+(i+1);
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+
+      }
+
+    }
+  }
+
+
+  async function getDataTagPro () {
     const res = await fetch(window.location.origin+"/getDATatagPRo", {
       method: 'POST',
       body: sessionBinary
@@ -2475,6 +2828,37 @@ async function getDataTagPro () {
       if (saved_changed_modbus_data == "")
       {
         getModbusData();
+      }
+
+
+      if (saved_changed_azure_data=="")
+      {
+        getAzureData();
+      }
+      else
+      {
+        for (let i=0; i< saved_changed_azure_data.config.cloud_azHub_profile.length;i++)
+        {
+          let item="hub_"+(i+1);
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+
+        }
+
+        for (let i=0; i< saved_changed_azure_data.config.cloud_azDPS_profile.length;i++)
+        {
+          let item="dps_"+(i+1);
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+        }
+
+        for (let i=0; i< saved_changed_azure_data.config.cloud_azCentral_profile.length;i++)
+        {
+          let item="central_"+(i+1);
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+
+        }
       }
     }
   }
@@ -2709,6 +3093,37 @@ async function getDataTagPro () {
       {
         getModbusData();
       }
+
+      if (saved_changed_azure_data=="")
+      {
+        getAzureData();
+      }
+      else
+      {
+        for (let i=0; i< saved_changed_azure_data.config.cloud_azHub_profile.length;i++)
+        {
+          let item="hub_"+(i+1);
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+
+        }
+
+        for (let i=0; i< saved_changed_azure_data.config.cloud_azDPS_profile.length;i++)
+        {
+          let item="dps_"+(i+1);
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+        }
+
+        for (let i=0; i< saved_changed_azure_data.config.cloud_azCentral_profile.length;i++)
+        {
+          let item="central_"+(i+1);
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+
+        }
+      }
+
 
       getDataReady=1;
     }
@@ -3833,10 +4248,10 @@ on:click={onPageClick}></textarea>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
       <td class="pl-5 pt-5">
 <div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_hh}>
 
 <p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_mm}>
 
       </div>
 
@@ -3850,10 +4265,10 @@ on:click={onPageClick}></textarea>
       <td class="pl-5 pt-5">
 
 <div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={end_time_hh}>
 
 <p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={end_time_mm}>
 
       </div>
       </td>
@@ -3935,10 +4350,10 @@ on:click={onPageClick}></textarea>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
       <td class="pl-5 pt-5">
 <div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_hh}>
 
 <p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_mm}>
 
       </div>
 
@@ -3952,10 +4367,10 @@ on:click={onPageClick}></textarea>
       <td class="pl-5 pt-5">
 
 <div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={end_time_hh}>
 
 <p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={end_time_mm}>
 
       </div>
       </td>
@@ -4214,10 +4629,10 @@ on:click={onPageClick}></textarea>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
       <td class="pl-5 pt-5">
 <div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_hh}>
 
 <p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_mm}>
 
       </div>
 
@@ -4231,10 +4646,10 @@ on:click={onPageClick}></textarea>
       <td class="pl-5 pt-5">
 
 <div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={end_time_hh}>
 
 <p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={end_time_mm}>
 
       </div>
       </td>
@@ -4327,10 +4742,10 @@ on:click={onPageClick}></textarea>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
       <td class="pl-5 pt-5">
 <div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_hh}>
 
 <p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_mm}>
 
       </div>
 
@@ -4344,10 +4759,10 @@ on:click={onPageClick}></textarea>
       <td class="pl-5 pt-5">
 
 <div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={end_time_hh}>
 
 <p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={end_time_mm}>
 
       </div>
       </td>
@@ -4367,7 +4782,6 @@ on:click={onPageClick}></textarea>
 
   </tr>
 
-<p class="pt-48"></p>
 <p class="pt-5"></p>
 
 
@@ -4416,8 +4830,8 @@ on:click={onPageClick}></textarea>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Cloud Profile</TableHeadCell>
     <TableHeadCell class="w-18">Tag Name</TableHeadCell>
+    <TableHeadCell class="w-18">Cloud Profile</TableHeadCell>
     <TableHeadCell class="w-18">Target Tag</TableHeadCell>    
 
   </TableHead>
@@ -4461,6 +4875,7 @@ on:click={onPageClick}></textarea>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{DMtag.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{DMtag.cloudProfile}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{DMtag.targetTag}</td>
 
 </tr>
@@ -4492,6 +4907,7 @@ on:click={onPageClick}></textarea>
 
       <TableBodyCell>{index+1}</TableBodyCell>
       <TableBodyCell>{DMtag.tagName}</TableBodyCell>
+      <TableBodyCell>{DMtag.cloudProfile}</TableBodyCell>      
       <TableBodyCell>{DMtag.targetTag}</TableBodyCell>
 
 
@@ -4678,7 +5094,7 @@ on:click={onPageClick}></textarea>
 <tr>
 <td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
     <td class= "pl-4 pt-4" colspan="3">
-<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_DM_tag[new_DM_tag_index].cloudProfile}>
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.directMethodTag[modify_DM_tag_index].cloudProfile}>
 
 {#each CloudProfile as Cloud}
 
@@ -4931,29 +5347,52 @@ on:click={onPageClick}></textarea>
 
 
 
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<button color="blue" type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-full w-48" on:click={handleClickTagList} on:keydown={() => {}}>Choose Tag
+{#if openTagList}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron up outline" viewBox="-8 -8 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path></svg>
+{:else}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg>
+{/if}
+
+</button>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+{#if openTagList}
 
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
-      <td class="pl-5 pt-5">
-<Button>Select Target <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg></Button>
-<Dropdown class="w-44 p-3 space-y-3 text-sm">
-
+<td><p class="pl-4 pt-4 text-lg font-light text-right"></td>
+<td class= "pl-4" colspan="3">
+<div role="tooltip" tabindex="-1" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg border-gray-100 dark:border-gray-600 divide-gray-100 dark:divide-gray-600 shadow-md divide-y z-50 w-48" > 
+<ul class="w-44 p-3 space-y-3 text-sm">
+{#if getDataReady == 1}
 {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-  <li>
-<label class="pl-2">
-  <input type="checkbox" bind:checked={scada_target_tag[index]}>
-  {TagItem.tagName}
+<li><label class="text-sm rtl:text-right font-medium text-gray-900 dark:text-gray-300 flex items-center">
+<input type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-600 dark:border-gray-500 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" on:change="{(e) => handleMultipleCheckboxChange(TagItem.tagName, e.target.checked)}" checked={selectedNewTags.has(TagItem.tagName)}> 
+<p class="pl-2">{TagItem.tagName}</p>
 </label>
-  </li>
+</li>
 {/each}
+{/if}
 
-</Dropdown>
+</ul>  
 
-      </td>
+</div>
+</td>
+   <td></td>
+    <td></td>
 
+</tr>
 
+{/if}
 
-  </tr>
 
 
  <tr>
@@ -5006,28 +5445,55 @@ on:click={onPageClick}></textarea>
 
   </tr>
 
+
+
+
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Target Tag</p></td>
-      <td class="pl-5 pt-5">
-<Button>Select Target <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg></Button>
-<Dropdown class="w-44 p-3 space-y-3 text-sm">
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<button color="blue" type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-full w-48" on:click={handleClickTagList} on:keydown={() => {}}>Choose Tag
+{#if openTagList}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron up outline" viewBox="-8 -8 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path></svg>
+{:else}
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 w-6 h-6 ms-2 text-white dark:text-white" role="img" aria-label="chevron down outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"></path></svg>
+{/if}
 
+</button>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+{#if openTagList}
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right"></td>
+<td class= "pl-4" colspan="3">
+<div role="tooltip" tabindex="-1" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg border-gray-100 dark:border-gray-600 divide-gray-100 dark:divide-gray-600 shadow-md divide-y z-50 w-48" > 
+<ul class="w-44 p-3 space-y-3 text-sm">
+{#if getDataReady == 1}
 {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-  <li>
-<label class="pl-2">
-  <input type="checkbox" bind:checked={scada_target_tag[index]}>
-  {TagItem.tagName}
+<li><label class="text-sm rtl:text-right font-medium text-gray-900 dark:text-gray-300 flex items-center">
+<input type="checkbox" class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 me-2 dark:bg-gray-600 dark:border-gray-500 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600" on:change="{(e) => handleMultipleCheckboxChange(TagItem.tagName, e.target.checked)}" checked={selectedNewTags.has(TagItem.tagName)}> 
+<p class="pl-2">{TagItem.tagName}</p>
 </label>
-  </li>
+</li>
 {/each}
+{/if}
 
-</Dropdown>
+</ul>  
 
-      </td>
+</div>
+</td>
+   <td></td>
+    <td></td>
 
+</tr>
 
+{/if}
 
-  </tr>
 
 
 
@@ -5055,6 +5521,246 @@ on:click={onPageClick}></textarea>
 
 
   </AccordionItem>
+
+<AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Schedule Tag
+    </span>
+
+<Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell>Enable</TableHeadCell>
+    <TableHeadCell>No</TableHeadCell>
+    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
+    <TableHeadCell class="w-18">Schedule Time</TableHeadCell>    
+    <TableHeadCell class="w-36">Action</TableHeadCell> 
+ 
+
+  </TableHead>
+
+  <TableBody>
+
+
+ <TableBodyRow>
+
+ {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length < 10}
+
+ <TableBodyCell class="!p-4 w-10">
+
+<button on:click={()=>new_schedule_tag_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length)}>
+    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+ </TableBodyCell>
+{:else}
+
+ <TableBodyCell class="!p-4 w-16"> </TableBodyCell>
+{/if}
+
+
+      <TableBodyCell class="!p-0 w-10">
+
+
+
+       </TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+
+
+    <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-10"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-18"></TableBodyCell>
+      <TableBodyCell class="w-36"></TableBodyCell>
+   
+
+    </TableBodyRow>
+
+
+  <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} ><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+
+</TableBody>
+
+
+</Table>
+
+
+
+
+<Modal bind:open={new_schedule_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_schedule_tag[new_schedule_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddSchedule(new_schedule_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={new_schedule_tag[new_schedule_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Schedule Time</p></td>
+      <td class="pl-5 pt-5">
+<div class="flex gap-4">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_hh}>
+
+<p class="pt-3">:</p>
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_mm}>
+
+      </div>
+
+      </td>
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Action</p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+
+  <Radio bind:group={new_schedule_tag[new_schedule_tag_index].actionType} value={0}>Write</Radio>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64 h-10" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+<p class="pt-4"> with </p>
+<div class="relative"><input id="operand_value" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTagValue}> 
+<label for="operand_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">operand_value</label>
+</div>
+
+ </div>
+  </td>
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+
+  <Radio bind:group={new_schedule_tag[new_schedule_tag_index].actionType} value={1}>Time Sync</Radio>
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_schedule_tag[new_schedule_tag_index].actionTimeSyncFormatType}>
+<option disabled="" value="none">Choose ...</option>
+
+<option value={0}>Epoch Seconds</option>
+<option value={1}>by filed</option>
+<option value={2}>Schneider</option>
+<option value={3}>User Define</option>
+</select>
+
+  </div>
+  </td>
+
+  </tr>
+
+
+
+
+<tr>
+  <td class="text-right" >
+  
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5">
+{#if new_schedule_tag[new_schedule_tag_index].actionType==1 && new_schedule_tag[new_schedule_tag_index].actionTimeSyncFormatType==3}
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={new_schedule_tag[new_schedule_tag_index].actionTimeSyncFormatUserDefine}></textarea>
+
+{:else}
+<textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
+
+{/if}
+
+
+    </td>
+
+
+    </tr>
+
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} >Add</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+</AccordionItem>
+
+
 
 
   <AccordionItem {defaultClass}>
@@ -5337,9 +6043,9 @@ on:click={onPageClick}></textarea>
 </select>
 
 
-   
- <FloatingLabelInput style="outlined" class="mt-1" id="compared_value" name="compared_value" type="number" label="compared_value" bind:value={new_event_tag[new_event_tag_index].triggerConditionValue}>
-  </FloatingLabelInput> 
+<div class="relative"><input id="compared_value" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={new_event_tag[new_event_tag_index].triggerConditionValue}> <label for="compared_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">compared_value</label></div>
+
+
   </div>
   </td>
   </tr>
@@ -5378,8 +6084,10 @@ on:click={onPageClick}></textarea>
 </select>
 
 <p class="pt-5"> with </p>
- <FloatingLabelInput style="outlined" class="mt-1" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={new_event_tag[new_event_tag_index].actionOperationValue}>
-  </FloatingLabelInput> 
+
+<div class="relative"><input id="operand_value" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={new_event_tag[new_event_tag_index].actionOperationValue}> <label for="operand_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">operand_value</label></div>
+
+
  </div>
   </td>
   </tr>
@@ -5467,11 +6175,12 @@ on:click={onPageClick}></textarea>
 <option value={0}>=</option>
 
 </select>
+ 
+
+<div class="relative"><input id="compared_value" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionValue}> <label for="compared_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">compared_value</label></div>
 
 
-   
- <FloatingLabelInput style="outlined" class="mt-1" id="compared_value" name="compared_value" type="number" label="compared_value" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionValue}>
-  </FloatingLabelInput> 
+
   </div>
   </td>
   </tr>
@@ -5510,8 +6219,10 @@ on:click={onPageClick}></textarea>
 </select>
 
 <p class="pt-5"> with </p>
- <FloatingLabelInput style="outlined" class="mt-1" id="operand_value" name="operand_value" type="number" label="operand_value" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperationValue}>
-  </FloatingLabelInput> 
+
+<div class="relative"><input id="operand_value" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperationValue}> <label for="operand_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">operand_value</label></div>
+
+
  </div>
   </td>
   </tr>

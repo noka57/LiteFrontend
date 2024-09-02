@@ -2275,11 +2275,6 @@
           changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData=JSON.parse(JSON.stringify(sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData)); 
       }
       
-      if (sdata_logger_proxy_cloud_changedValues.length==0)
-      {
-          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings=JSON.parse(JSON.stringify(sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings)); 
-      }
-      
 
       if (sdata_logger_monitor_edge_changedValues.length==0)
       {
@@ -2410,6 +2405,8 @@
 
 {/if}
 {/if}
+
+
 
 <p class="pt-5"></p>
 

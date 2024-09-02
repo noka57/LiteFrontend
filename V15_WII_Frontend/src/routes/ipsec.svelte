@@ -1929,6 +1929,21 @@
   let StringIpsecStatus='';
   let binaryData;
 
+
+  async function RestartIPsec()
+  {
+
+   const res = await fetch(window.location.origin+"/reStArtiPSec", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart ipsec OK\r\n");
+    }
+  }
+
 async function getIpsecStatus() {
     const res = await fetch(window.location.origin+"/geTIpsecStatus", {
       method: 'POST',
@@ -1993,6 +2008,7 @@ async function getIpsecStatus() {
     
     }
   }
+
 
 
     onMount(() => {

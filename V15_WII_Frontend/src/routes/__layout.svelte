@@ -89,6 +89,7 @@
     	EventEngine_Rule_ConfigChangedLog,
 	    DataTagPro_ULRule_ConfigChangedLog,
 	    DataTagPro_TagRuleEvent_ConfigChangedLog,
+	    DataTagPro_TagRuleSchedule_ConfigChangedLog,
 	    DataTagPro_TagRuleSCADA_ConfigChangedLog,
 	    DataTagPro_TagRuleDM_ConfigChangedLog,
 	    DataTagPro_TagRuleTOU_ConfigChangedLog,
@@ -277,6 +278,7 @@
   	let data_tag_pro_tag_dm_changedValues = [];
   	let data_tag_pro_tag_scada_changedValues = [];
   	let data_tag_pro_tag_event_changedValues = [];
+  	let data_tag_pro_tag_schedule_changedValues=[];
   	let data_tag_pro_ul_changedValues = [];
 
 
@@ -306,6 +308,7 @@
   			data_tag_pro_tag_dm_changedValues.length !=0 ||
   			data_tag_pro_tag_scada_changedValues.length !=0 ||
   			data_tag_pro_tag_event_changedValues.length !=0 ||
+  			data_tag_pro_tag_schedule_changedValues.length !=0 ||
   			data_tag_pro_ul_changedValues.length !=0 ||
   			event_engine_action_line_changeValues.length !=0 ||
   			event_engine_action_mqtt_changeValues.length !=0 ||
@@ -416,6 +419,10 @@
       	JudgeChangedOrNot();
   	});
 
+  	DataTagPro_TagRuleSchedule_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_schedule_changedValues = val;
+      JudgeChangedOrNot();
+  	});
 
   	DataTagPro_TagRuleEvent_ConfigChangedLog.subscribe(val => {
       	data_tag_pro_tag_event_changedValues = val;

@@ -62,6 +62,7 @@ export const ChangedEventEngineConfig=writable("");
 
 export const DataTagPro_ULRule_ConfigChangedLog=writable("");
 export const DataTagPro_TagRuleEvent_ConfigChangedLog=writable("");
+export const DataTagPro_TagRuleSchedule_ConfigChangedLog=writable("");
 export const DataTagPro_TagRuleSCADA_ConfigChangedLog=writable("");
 export const DataTagPro_TagRuleDM_ConfigChangedLog=writable("");
 export const DataTagPro_TagRuleTOU_ConfigChangedLog=writable("");

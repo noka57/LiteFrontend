@@ -67,6 +67,8 @@
     let showMenu = false;
     let content
     let rect;
+    let cursorPosition=-1;
+    let beforeCursor; 
 
     function rightClickContextMenu(e){
         showMenu = true
@@ -107,6 +109,9 @@
 
             pos.x= pos.x-rect.left+30
             pos.y=pos.y-rect.top+100
+
+        const textarea = e.target;
+        cursorPosition = textarea.selectionStart;
   
     }
     function onPageClick(e)
@@ -744,29 +749,116 @@
 
     function NewTimeClick(index)
     {
-      new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
+      if (cursorPosition !=-1)
+      {
+        if (new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData.length < cursorPosition)
+        {
+          new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
+        }
+        else
+        {
+          let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData.slice(0, cursorPosition);
+          let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData.slice(cursorPosition);
+          console.log("b:", beforeCursorString);
+          console.log("a:", afterCursorString);
+          new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData=`${beforeCursorString}`;
+          new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
+          new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+=`${afterCursorString}`;
+        }
+
+      }
+      else
+      {
+        new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
+      }
+
     }
 
     function NewArrayClick(index)
     {
-      new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
+      if (cursorPosition !=-1)
+      {
+        if (new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData.length < cursorPosition)
+        {
+          new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
+        }
+        else
+        {
+          let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData.slice(0, cursorPosition);
+          let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData.slice(cursorPosition);
+          new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData=`${beforeCursorString}`;
+          new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
+          new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+=`${afterCursorString}`;
+        }
+
+      }
+      else
+      {
+          new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
+      }
     }
 
     function NewTagRawRequest(CloudIndex, TagIndex)
     {
       if (new_proxy_edge[new_proxy_edge_index].samplingCondition==1)
       {
-        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
-        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
-        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"
+
+        if (cursorPosition != -1)
+        {
+          if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+          }
+          else
+          {
+            let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+        }  
       }
       else if (new_proxy_edge[new_proxy_edge_index].samplingCondition==0)
       {
           if (tagsArray.length > TagIndex)
           {
+            if (cursorPosition != -1)
+            {
+              if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+              {
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"
+              }
+              else
+              {
+                let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+                let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+              }
+            }
+            else
+            {
               new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
               new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
-              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"   
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"
+            }   
           }
       }
 
@@ -776,17 +868,64 @@
     {
       if (new_proxy_edge[new_proxy_edge_index].samplingCondition==1)
       {
-        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
-        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
-        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"
+
+        if (cursorPosition !=-1)
+        {
+          if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"
+          }
+          else
+          {
+            let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+
+          }
+        }
+        else
+        {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"        
+        }
       }
       else if (new_proxy_edge[new_proxy_edge_index].samplingCondition==0)
       {
           if (tagsArray.length > TagIndex)
           {
+
+            if (cursorPosition !=-1)
+            {
+              if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+              {
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"
+              }
+              else
+              {
+                let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+                let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+              }
+            }
+            else
+            {
               new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
               new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
-              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"   
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"
+            }   
           }
       }
     }
@@ -796,17 +935,62 @@
     {
       if (new_proxy_edge[new_proxy_edge_index].samplingCondition==1)
       {
-        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
-        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
-        new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+        if (cursorPosition !=-1)
+        {
+          if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }
+          else
+          {
+            let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+
+          }
+        }
+        else
+        {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"        
+        }
       }
       else if (new_proxy_edge[new_proxy_edge_index].samplingCondition==0)
       {
           if (tagsArray.length > TagIndex)
           {
+            if (cursorPosition !=-1)
+            {
+              if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+              {
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+              }
+              else
+              {
+                let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+                let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+              }
+            }
+            else
+            {
               new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
               new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
-              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"   
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }     
           }
       }   
     }
@@ -819,12 +1003,15 @@
       {
         new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].alternativeFormatCloudIndex=other_cloud_index;
         new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].userDefineedData=new_proxy_edge[new_proxy_edge_index].cloud[other_cloud_index].userDefineedData;
-
       }
       else if (new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].dataLogFormat==1)
       {
         new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].userDefineedData="";
       }
+      else if (new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].dataLogFormat==0)
+      {
+        new_proxy_edge[new_proxy_edge_index].cloud[current_cloud_index].userDefineedData="";
+      }      
 
     }
 
@@ -834,16 +1021,53 @@
       currentStep=1;
     }
 
-    function New_ProxyEdge_Modal_Page2()
+    function New_ProxyEdge_Modal_Page2(type)
     {
       tagsArray = Array.from(selectedNewTags);
       showMenu=false;
+      if (type == 0)
+      {
+        if (new_proxy_edge[new_proxy_edge_index].cloud[0].dataLogFormat==2)
+        {
+          let other_cloud_index=new_proxy_edge[new_proxy_edge_index].cloud[0].alternativeFormatCloudIndex;
+          new_proxy_edge[new_proxy_edge_index].cloud[0].userDefineedData=new_proxy_edge[new_proxy_edge_index].cloud[other_cloud_index].userDefineedData;
+        }
+
+      }
+      else if (type==1)
+      {
+        if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].dataLogFormat==2)
+        {
+          let other_cloud_index=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].alternativeFormatCloudIndex;
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].userDefineedData=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[other_cloud_index].userDefineedData;
+        }
+      }
+
       currentStep=2;
     }
 
-    function New_ProxyEdge_Modal_Page3()
+    function New_ProxyEdge_Modal_Page3(type)
     {
       showMenu=false;
+
+      if (type == 0)
+      {
+        if (new_proxy_edge[new_proxy_edge_index].cloud[1].dataLogFormat==2)
+        {
+          let other_cloud_index=new_proxy_edge[new_proxy_edge_index].cloud[1].alternativeFormatCloudIndex;
+          new_proxy_edge[new_proxy_edge_index].cloud[1].userDefineedData=new_proxy_edge[new_proxy_edge_index].cloud[other_cloud_index].userDefineedData;
+        }
+
+      }
+      else if (type==1)
+      {
+        if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].dataLogFormat==2)
+        {
+          let other_cloud_index=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].alternativeFormatCloudIndex;
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].userDefineedData=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[other_cloud_index].userDefineedData;
+        }
+      }
+
       currentStep=3;
     }
 
@@ -1003,29 +1227,116 @@
 
     function ModifyTimeClick(index)
     {
-      changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
+      if (cursorPosition !=-1)
+      {
+        if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData.length < cursorPosition)
+        {
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
+        }
+        else
+        {
+          let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData.slice(0, cursorPosition);
+          let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData.slice(cursorPosition);
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData=`${beforeCursorString}`;
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+=`${afterCursorString}`;
+        }
+
+      }
+      else
+      {
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
+      }
     }
 
     function ModifyArrayClick(index)
     {
-      changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
+
+      if (cursorPosition !=-1)
+      {
+        if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData.length < cursorPosition)
+        {
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
+        }
+        else
+        {
+          let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData.slice(0, cursorPosition);
+          let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData.slice(cursorPosition);
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData=`${beforeCursorString}`;
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
+          changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+=`${afterCursorString}`;
+        }
+
+      }
+      else
+      {
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
+      }
+
     }
 
     function ModifyTagRawRequest(CloudIndex, TagIndex)
     {
+
       if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1)
       {
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"
+
+        if (cursorPosition !=-1)
+        {
+          if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+          }
+          else
+          {
+            let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+        }  
       }
       else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0)
       {
           if (tagsArray.length > TagIndex)
           {
+            if (cursorPosition !=-1)
+            {
+              if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+              {
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"
+              }
+              else
+              {
+                let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+                let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+              }
+            }
+            else
+            {
               changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
               changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
-              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"   
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$"
+            }   
           }
       }
 
@@ -1033,41 +1344,137 @@
 
     function ModifyTagRawReply(CloudIndex, TagIndex)
     {
+
       if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1)
       {
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"
+
+        if (cursorPosition !=-1)
+        {
+          if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+          }
+          else
+          {
+            let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+        }  
       }
       else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0)
       {
           if (tagsArray.length > TagIndex)
           {
+            if (cursorPosition !=-1)
+            {
+              if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+              {
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"
+              }
+              else
+              {
+                let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+                let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+              }
+            }
+            else
+            {
               changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
               changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
-              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"   
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$"
+            }   
           }
       }
+
     }
 
 
     function ModifyTagStatus(CloudIndex, TagIndex)
     {
+
+
       if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1)
       {
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+
+        if (cursorPosition !=-1)
+        {
+          if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+          }
+          else
+          {
+            let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+        }  
       }
       else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0)
       {
           if (tagsArray.length > TagIndex)
           {
+            if (cursorPosition !=-1)
+            {
+              if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+              {
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+              }
+              else
+              {
+                let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+                let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+              }
+            }
+            else
+            {
               changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
               changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
-              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"   
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }   
           }
-      }   
+      } 
     }
 
 
@@ -1077,10 +1484,14 @@
       if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].dataLogFormat==2)
       {
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].alternativeFormatCloudIndex=other_cloud_index;
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].userDefineedData=new_proxy_edge[new_proxy_edge_index].cloud[other_cloud_index].userDefineedData;
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].userDefineedData=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].userDefineedData;
 
       }
       else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].dataLogFormat==1)
+      {
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].userDefineedData="";
+      }
+      else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].dataLogFormat==0)
       {
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[current_cloud_index].userDefineedData="";
       }
@@ -2753,7 +3164,7 @@ once change ({ProxyEdgeData.changePercentage}%)
     <td></td>
     <td class="pl-40"></td>
     <td class="pl-40"></td>
-    <td class="pt-4 pl-40"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page2}>Next</Button></td>
+    <td class="pt-4 pl-40"><Button color="dark" pill={true} on:click={()=>New_ProxyEdge_Modal_Page2(0)}>Next</Button></td>
 
 
     </tr>
@@ -2937,7 +3348,7 @@ on:click={onPageClick}></textarea>
     <td class="pl-10"></td>
     <td class="pl-10"></td>
     <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page1}>Back</Button></td>
-    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page3}>Next</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>New_ProxyEdge_Modal_Page3(0)}>Next</Button></td>
 
 
     </tr>
@@ -3125,7 +3536,7 @@ on:click={onPageClick}></textarea>
     <td></td>
     <td class="pl-10"></td>
     <td class="pl-10"></td>
-    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page2}>Back</Button></td>
+    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={()=>New_ProxyEdge_Modal_Page2(0)}>Back</Button></td>
     <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>add_new_proxy_edge(new_proxy_edge_index)}>Add</Button></td>
 
 
@@ -3267,7 +3678,7 @@ on:click={onPageClick}></textarea>
     <td></td>
     <td class="pl-40"></td>
     <td class="pl-40"></td>
-    <td class="pt-4 pl-40"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page2}>Next</Button></td>
+    <td class="pt-4 pl-40"><Button color="dark" pill={true} on:click={()=>New_ProxyEdge_Modal_Page2(1)}>Next</Button></td>
 
 
     </tr>
@@ -3451,7 +3862,7 @@ on:click={onPageClick}></textarea>
     <td class="pl-10"></td>
     <td class="pl-10"></td>
     <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page1}>Back</Button></td>
-    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page3}>Next</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>New_ProxyEdge_Modal_Page3(1)}>Next</Button></td>
 
 
     </tr>
@@ -3639,7 +4050,7 @@ on:click={onPageClick}></textarea>
     <td></td>
     <td class="pl-10"></td>
     <td class="pl-10"></td>
-    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={New_ProxyEdge_Modal_Page2}>Back</Button></td>
+    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={()=>New_ProxyEdge_Modal_Page2(1)}>Back</Button></td>
     <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>ModifyProxyEdge(modify_proxy_edge_index)}>Modify</Button></td>
 
 

@@ -18,6 +18,7 @@
     ChangedAzureConfig,
     DataTagPro_ULRule_ConfigChangedLog,
     DataTagPro_TagRuleEvent_ConfigChangedLog,
+    DataTagPro_TagRuleSchedule_ConfigChangedLog,
     DataTagPro_TagRuleSCADA_ConfigChangedLog,
     DataTagPro_TagRuleDM_ConfigChangedLog,
     DataTagPro_TagRuleTOU_ConfigChangedLog,
@@ -26,6 +27,11 @@
     DataTagPro_TagRuleC2D_ConfigChangedLog,
     DataTagPro_General_ConfigChangedLog
   } from "./configG.js"
+
+
+  let currentStep = 1;
+  let steps = ['Step 1', 'Step 2', 'Step 3'];
+  let modalElement;
 
 
   let getDataReady=0;
@@ -70,6 +76,7 @@
   let data_tag_pro_tag_tou_changedValues = [];
   let data_tag_pro_tag_dm_changedValues = [];
   let data_tag_pro_tag_scada_changedValues = [];
+  let data_tag_pro_tag_schedule_changedValues=[];
   let data_tag_pro_tag_event_changedValues = [];
   let data_tag_pro_ul_changedValues = [];
 
@@ -90,8 +97,6 @@
   let openDetailStatusMV = false;
   let openDetailStatusMProcess=false;
   let ModbusTagModifyModal=false;
-
-  let modalElement;
 
 
   let group_test=0;
@@ -171,6 +176,10 @@
   DataTagPro_TagRuleC2D_ConfigChangedLog.subscribe(val => {
       data_tag_pro_tag_c2d_changedValues = val;
   });
+
+  DataTagPro_TagRuleSchedule_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_schedule_changedValues = val;
+  });
   
   DataTagPro_General_ConfigChangedLog.subscribe(val => {
       data_tag_pro_general_changedValues = val;
@@ -195,8 +204,8 @@
       console.log("selectedTags:", selectedNewTags);
     }
 
-
-
+    let cursorPosition=-1;
+    let beforeCursor; 
     let pos = { x: 0, y: 0 }
     let menu = { h: 0, w: 0 }
     let browser = { h: 0, y: 0 }
@@ -243,6 +252,9 @@
 
             pos.x= pos.x-rect.left+30
             pos.y=pos.y-rect.top+100
+
+        const textarea = e.target;
+        cursorPosition = textarea.selectionStart;
   
     }
     function onPageClick(e)
@@ -321,6 +333,10 @@
                   else if (type == 7)
                   {
                     data_tag_pro_ul_changedValues=[...data_tag_pro_ul_changedValues, changedstr];
+                  }
+                  else if (type ==8)
+                  {
+                    data_tag_pro_tag_schedule_changedValues=[...data_tag_pro_tag_schedule_changedValues, changedstr];
                   } 
               }                                   
             }
@@ -359,7 +375,12 @@
                 else if (type == 7)
                 {
                   data_tag_pro_ul_changedValues=[...data_tag_pro_ul_changedValues, changedstr];
-                }      
+                }
+                else if (type ==8)
+                {
+                  data_tag_pro_tag_schedule_changedValues=[...data_tag_pro_tag_schedule_changedValues, changedstr];
+                } 
+
             }
           }
           else
@@ -426,9 +447,76 @@
           {
             data_tag_pro_ul_changedValues=[...data_tag_pro_ul_changedValues, changedstr];
           } 
+          else if (type == 8)
+          {
+            data_tag_pro_tag_schedule_changedValues=[...data_tag_pro_tag_schedule_changedValues, changedstr];
+          } 
+
         }
       }
     }
+
+
+  
+  function saveScheduleTag()
+  {
+    if (data_tag_pro_tag_schedule_changedValues.length !=0)
+    {
+      data_tag_pro_tag_schedule_changedValues=[];
+    }
+
+    for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length, data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length); i++) 
+    {
+
+      compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[i], data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[i],8,1,i+1,"ScheduleTag");
+    }
+
+    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length > data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length)
+    {
+      let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length-data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length;
+
+      for (let k=data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length; k < changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length;k++)
+      {
+        if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[k].delete)
+        {
+          addedCount--;
+        }
+
+      }
+
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to Schedule Tag List";
+        data_tag_pro_tag_schedule_changedValues=[...data_tag_pro_tag_schedule_changedValues, changedstr];
+      }
+    }
+
+
+
+    DataTagPro_TagRuleSchedule_ConfigChangedLog.set(data_tag_pro_tag_schedule_changedValues);
+
+    let NonDelete=[];
+    for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length; i++)
+    {
+      if (!changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[i].delete)
+      {
+        NonDelete=[...NonDelete, changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[i]]
+      }
+
+    }
+
+
+
+    saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag=JSON.parse(JSON.stringify(NonDelete));
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag=JSON.parse(JSON.stringify(NonDelete));
+
+
+    ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+    
+    console.log(data_tag_pro_tag_schedule_changedValues);
+
+
+  } 
 
 
 
@@ -440,57 +528,55 @@
       data_tag_pro_ul_changedValues=[];
     }
 
-      for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length, data_tag_pro_data.config.service_dataTagPro_ulRule.length); i++) 
+    for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length, data_tag_pro_data.config.service_dataTagPro_ulRule.length); i++) 
+    {
+
+      compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_ulRule[i], data_tag_pro_data.config.service_dataTagPro_ulRule[i],7,1,i+1,"UL Rule");
+    }
+
+    if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length > data_tag_pro_data.config.service_dataTagPro_ulRule.length)
+    {
+      let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length-data_tag_pro_data.config.service_dataTagPro_ulRule.length;
+
+      for (let k=data_tag_pro_data.config.service_dataTagPro_ulRule.length; k < changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length;k++)
       {
-
-        compareObjects(changed_data_tag_pro_data.config.service_dataTagPro_ulRule[i], data_tag_pro_data.config.service_dataTagPro_ulRule[i],7,1,i+1,"UL Rule");
-      }
-
-
-
-      if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length > data_tag_pro_data.config.service_dataTagPro_ulRule.length)
-      {
-        let addedCount=changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length-data_tag_pro_data.config.service_dataTagPro_ulRule.length;
-
-        for (let k=data_tag_pro_data.config.service_dataTagPro_ulRule.length; k < changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length;k++)
+        if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[k].delete)
         {
-          if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[k].delete)
-          {
-            addedCount--;
-          }
-
-        }
-
-        if (addedCount > 0)
-        {
-          let changedstr="Add "+addedCount+" item(s) to UL Rule List";
-          data_tag_pro_ul_changedValues=[...data_tag_pro_ul_changedValues, changedstr];
-        }
-      }
-
-
-
-      DataTagPro_ULRule_ConfigChangedLog.set(data_tag_pro_ul_changedValues);
-
-      let tempForDelete=[];
-      for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length; i++)
-      {
-        if (!changed_data_tag_pro_data.config.service_dataTagPro_ulRule[i].delete)
-        {
-          tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_ulRule[i]]
+          addedCount--;
         }
 
       }
 
+      if (addedCount > 0)
+      {
+        let changedstr="Add "+addedCount+" item(s) to UL Rule List";
+        data_tag_pro_ul_changedValues=[...data_tag_pro_ul_changedValues, changedstr];
+      }
+    }
 
 
-      saved_changed_data_tag_pro_data.config.service_dataTagPro_ulRule=JSON.parse(JSON.stringify(tempForDelete));
-      changed_data_tag_pro_data.config.service_dataTagPro_ulRule=JSON.parse(JSON.stringify(tempForDelete));
+
+    DataTagPro_ULRule_ConfigChangedLog.set(data_tag_pro_ul_changedValues);
+
+    let tempForDelete=[];
+    for (let i = 0; i< changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length; i++)
+    {
+      if (!changed_data_tag_pro_data.config.service_dataTagPro_ulRule[i].delete)
+      {
+        tempForDelete=[...tempForDelete, changed_data_tag_pro_data.config.service_dataTagPro_ulRule[i]]
+      }
+
+    }
 
 
-      ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
-      
-      console.log(data_tag_pro_ul_changedValues);
+
+    saved_changed_data_tag_pro_data.config.service_dataTagPro_ulRule=JSON.parse(JSON.stringify(tempForDelete));
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule=JSON.parse(JSON.stringify(tempForDelete));
+
+
+    ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
+    
+    console.log(data_tag_pro_ul_changedValues);
 
 
   }
@@ -1293,43 +1379,253 @@
   }
 
 
-  let MultiSelectedCloudProfile=[];
-  let Cloud1Topic=[];
-  let Cloud2Topic=[];
-
 
   let modify_ul_rule_modal=false;
   let modify_ul_rule_index;
 
+  let BackupULRule=
+  {
+    enable:false,
+    delete:false,
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
+  }
+
   function TriggerModifyULRule(index)
   {
-    MultiSelectedCloudProfile=[];
-    for (let i=0; i<changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].cloudProfile.length; i++)
-    {
-
-      MultiSelectedCloudProfile=[...MultiSelectedCloudProfile,changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].cloudProfile[i].cloudTarget];
-
-    }
-
-
     modify_ul_rule_index=index;
+    BackupULRule.enable=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].enable;
+    BackupULRule.delete=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].delete;
+    BackupULRule.ruleName=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].ruleName;
+    BackupULRule.cloud=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud));
+
+    currentStep=1;
+    openTagList=false;
+
+
     modify_ul_rule_modal=true;
   }
 
-  function NoModifyULRule()
+  function NoModifyULRule(index)
   {
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].enable=BackupULRule.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].delete=BackupULRule.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].ruleName=BackupULRule.ruleName;
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].cloud=JSON.parse(JSON.stringify(BackupULRule.cloud));
+
     modify_ul_rule_modal=false;
   }
 
   function modify_ul_rule()
   {
 
-    for (let i=0; i<MultiSelectedCloudProfile.length; i++)
-    {
-      changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[i].cloudTarget=MultiSelectedCloudProfile[i];
-    }
     modify_ul_rule_modal=false;  
   }
+
+
+    function ModifyTimeClick(index)
+    {
+      if (cursorPosition !=-1)
+      {
+        if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.length < cursorPosition)
+        {
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+        }
+        else
+        {
+          let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.slice(0, cursorPosition);
+          let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.slice(cursorPosition);
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData=`${beforeCursorString}`;
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+=`${afterCursorString}`;
+        }
+
+      }
+      else
+      {
+        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+      }
+
+    }
+
+    function ModifyArrayClick(index)
+    {
+      if (cursorPosition !=-1)
+      {
+        if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.length < cursorPosition)
+        {
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
+        }
+        else
+        {
+          let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.slice(0, cursorPosition);
+          let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.slice(cursorPosition);
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData=`${beforeCursorString}`;
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+=`${afterCursorString}`;
+        }
+
+      }
+      else
+      {
+        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
+      }
+    }
+
+    function ModifyTagRawRequest(CloudIndex, TagIndex)
+    {
+
+      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
+      {
+        if (cursorPosition !=-1)
+        {
+          if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+          }
+          else
+          {
+            let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+        }  
+      }
+    }
+
+    function ModifyTagRawReply(CloudIndex, TagIndex)
+    {
+      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
+      {
+        if (cursorPosition !=-1)
+        {
+          if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+          }
+          else
+          {
+            let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+        }  
+      }
+      
+    }
+
+
+    function ModifyTagStatus(CloudIndex, TagIndex)
+    {
+
+      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
+      {
+        if (cursorPosition !=-1)
+        {
+          if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+          }
+          else
+          {
+            let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+        }  
+      }
+         
+    }
+
+
+    function ModifyCloudFormatChange(current_cloud_index, other_cloud_index)
+    {
+
+      if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].dataLogFormat==2)
+      {
+        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].alternativeFormatCloudIndex=other_cloud_index;
+        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].userDefineedData=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[other_cloud_index].userDefineedData;
+
+      }
+      else if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].dataLogFormat==1)
+      {
+        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].userDefineedData="";
+      }
+      else if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].dataLogFormat==0)
+      {
+        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].userDefineedData="";
+      }      
+
+    }
+
 
 
   let new_ul_rule_modal=false;
@@ -1338,122 +1634,352 @@
   {
     enable:false,
     delete:false,
-    tagName:"",        
-    dataPushInterval: 0,
-    dataPushIntervalValue: 15,
-    linkLostRetransmit: 0, 
-    dataPriority: 0, 
-    cloudProfile: [],
-    contentFormat: 0,
-    userDefineedData: ""
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
   },   
   {
     enable:false,
     delete:false,
-    tagName:"",        
-    dataPushInterval: 0,
-    dataPushIntervalValue: 15,
-    linkLostRetransmit: 0, 
-    dataPriority: 0, 
-    cloudProfile: [],
-    contentFormat: 0,
-    userDefineedData: ""
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
   },   
   {
     enable:false,
     delete:false,
-    tagName:"",        
-    dataPushInterval: 0,
-    dataPushIntervalValue: 15,
-    linkLostRetransmit: 0, 
-    dataPriority: 0, 
-    cloudProfile: [],
-    contentFormat: 0,
-    userDefineedData: ""
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
   },   
   {
     enable:false,
     delete:false,
-    tagName:"",        
-    dataPushInterval: 0,
-    dataPushIntervalValue: 15,
-    linkLostRetransmit: 0, 
-    dataPriority: 0, 
-    cloudProfile: [],
-    contentFormat: 0,
-    userDefineedData: ""
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
   },   
   {
     enable:false,
     delete:false,
-    tagName:"",        
-    dataPushInterval: 0,
-    dataPushIntervalValue: 15,
-    linkLostRetransmit: 0, 
-    dataPriority: 0, 
-    cloudProfile: [],
-    contentFormat: 0,
-    userDefineedData: ""
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
   },       
   {
     enable:false,
     delete:false,
-    tagName:"",        
-    dataPushInterval: 0,
-    dataPushIntervalValue: 15,
-    linkLostRetransmit: 0, 
-    dataPriority: 0, 
-    cloudProfile: [],
-    contentFormat: 0,
-    userDefineedData: ""
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
   },   
   {
     enable:false,
     delete:false,
-    tagName:"",        
-    dataPushInterval: 0,
-    dataPushIntervalValue: 15,
-    linkLostRetransmit: 0, 
-    dataPriority: 0, 
-    cloudProfile: [],
-    contentFormat: 0,
-    userDefineedData: ""
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
   },   
   {
     enable:false,
     delete:false,
-    tagName:"",        
-    dataPushInterval: 0,
-    dataPushIntervalValue: 15,
-    linkLostRetransmit: 0, 
-    dataPriority: 0, 
-    cloudProfile: [],
-    contentFormat: 0,
-    userDefineedData: ""
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
   },   
   {
     enable:false,
     delete:false,
-    tagName:"",        
-    dataPushInterval: 0,
-    dataPushIntervalValue: 15,
-    linkLostRetransmit: 0, 
-    dataPriority: 0, 
-    cloudProfile: [],
-    contentFormat: 0,
-    userDefineedData: ""
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
   },   
   {
     enable:false,
     delete:false,
-    tagName:"",        
-    dataPushInterval: 0,
-    dataPushIntervalValue: 15,
-    linkLostRetransmit: 0, 
-    dataPriority: 0, 
-    cloudProfile: [],
-    contentFormat: 0,
-    userDefineedData: ""
+    ruleName:"",        
+    cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
   }
   ];
 
@@ -1472,28 +1998,246 @@
       changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].delete=true;
   }
 
+  function New_UL_Rule_Modal_Page1()
+  {
+    currentStep=1;
+  }
+
+  function New_UL_Rule_Modal_Page2()
+  {
+    showMenu=false;
+
+    if (type == 0)
+    {
+      if (new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat==2)
+      {
+        let other_cloud_index=new_ul_rule[new_ul_rule_index].cloud[0].alternativeFormatCloudIndex;
+        new_ul_rule[new_ul_rule_index].cloud[0].userDefineedData=new_ul_rule[new_ul_rule_index].cloud[other_cloud_index].userDefineedData;
+      }
+
+    }
+    else if (type==1)
+    {
+      if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat==2)
+      {
+        let other_cloud_index=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].alternativeFormatCloudIndex;
+        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].userDefineedData=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[other_cloud_index].userDefineedData;
+      }
+    }
+
+
+    currentStep=2;
+  }
+
+  function New_UL_Rule_Modal_Page3()
+  {
+    showMenu=false;
+
+    if (type == 0)
+    {
+      if (new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat==2)
+      {
+        let other_cloud_index=new_ul_rule[new_ul_rule_index].cloud[1].alternativeFormatCloudIndex;
+        new_ul_rule[new_ul_rule_index].cloud[1].userDefineedData=new_ul_rule[new_ul_rule_index].cloud[other_cloud_index].userDefineedData;
+      }
+
+    }
+    else if (type==1)
+    {
+      if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat==2)
+      {
+        let other_cloud_index=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].alternativeFormatCloudIndex;
+        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].userDefineedData=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[other_cloud_index].userDefineedData;
+      }
+    }
+
+
+    currentStep=3;
+  }
+
+
+
+
+    function NewTimeClick(index)
+    {
+      if (cursorPosition !=-1)
+      {
+        if (new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.length < cursorPosition)
+        {
+          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+        }
+        else
+        {
+          let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.slice(0, cursorPosition);
+          let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.slice(cursorPosition);
+          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData=`${beforeCursorString}`;
+          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+=`${afterCursorString}`;
+        }
+
+      }
+      else
+      {
+        new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+      }
+      
+    }
+
+    function NewArrayClick(index)
+    {
+      if (cursorPosition != -1)
+      {
+        if (new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.length < cursorPosition)
+        {
+          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
+        }
+        else
+        {
+          let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.slice(0, cursorPosition);
+          let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.slice(cursorPosition);
+          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData=`${beforeCursorString}`;
+          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
+          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+=`${afterCursorString}`;
+        }
+
+      }
+      else
+      {
+          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
+      }
+    }
+
+    function NewTagRawRequest(CloudIndex, TagIndex)
+    {
+
+      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
+      {
+        if (cursorPosition !=-1)
+        {
+          if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+          }
+          else
+          {
+            let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+        }  
+      }
+      
+
+    }
+
+    function NewTagRawReply(CloudIndex, TagIndex)
+    {
+
+      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
+      {
+        if (cursorPosition !=-1)
+        {
+          if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+          }
+          else
+          {
+            let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+        }    
+      }
+      
+    }
+
+
+    function NewTagStatus(CloudIndex, TagIndex)
+    {
+
+      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
+      {
+        if (cursorPosition != -1)
+        {
+          if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+          }
+          else
+          {
+            let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
+          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+        }     
+      }
+         
+    }
+
+
+    function NewCloudFormatChange(current_cloud_index, other_cloud_index)
+    {
+
+      if (new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].dataLogFormat==2)
+      {
+        new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].alternativeFormatCloudIndex=other_cloud_index;
+        new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].userDefineedData=new_ul_rule[new_ul_rule_index].cloud[other_cloud_index].userDefineedData;
+
+      }
+      else if (new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].dataLogFormat==1)
+      {
+        new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].userDefineedData="";
+      }
+      else if (new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].dataLogFormat==0)
+      {
+        new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].userDefineedData="";
+      }
+
+    }
+
 
   function add_new_ul_rule(index)
   {
-    for (let i=0; i<MultiSelectedCloudProfile.length; i++)
-    {
-      let cloudItem={
-        cloudTarget:"", 
-        cloudTopic:[]
-      }
-      cloudItem.cloudTarget=MultiSelectedCloudProfile[i];
-      if (i==0)
-      {
-        cloudItem.cloudTopic=Cloud1Topic;
-      }
-      else if (i==1)
-      {
-        cloudItem.cloudTopic=Cloud2Topic;
-      }
-
-      new_ul_rule[index].cloudProfile=[...new_ul_rule[index].cloudProfile, cloudItem];
-    }
-
     changed_data_tag_pro_data.config.service_dataTagPro_ulRule=[...changed_data_tag_pro_data.config.service_dataTagPro_ulRule,new_ul_rule[index]];
     
     new_ul_rule_modal=false;
@@ -1504,17 +2248,43 @@
   {
     new_ul_rule[index].enable=true;
     new_ul_rule[index].delete=false;
-    new_ul_rule[index].tagName="";
-    new_ul_rule[index].dataPushInterval=0;
-    new_ul_rule[index].dataPushIntervalValue=15;
-    new_ul_rule[index].linkLostRetransmit=0;
-    new_ul_rule[index].dataPriority=0;
-    new_ul_rule[index].cloudProfile=[];
-    new_ul_rule[index].contentFormat=0;
-    new_ul_rule[index].userDefineedData="";
-    MultiSelectedCloudProfile=[];
-    Cloud1Topic=["","",""];
-    Cloud2Topic=["","",""];
+    new_ul_rule[index].ruleName="";
+    new_ul_rule[index].cloud=[
+          {
+            profile:"",
+            topic:[
+              {
+                type: 0,
+                name:""
+              }
+            ],
+            tagDisplay:1,
+            dataLogFormat: 0,
+            alternativeFormatCloudIndex:0, 
+            userDefineedData: ""
+          },
+          {
+            profile:"",
+            topic:[
+              {
+                type: 0,
+                name:""
+              }
+            ],
+            tagDisplay:1,  
+            dataLogFormat: 0,
+            alternativeFormatCloudIndex:1, 
+            userDefineedData: ""
+          }
+        ];
+
+
+
+
+    currentStep=1;
+    openTagList=false;
+
+
     new_ul_rule_index=index;
     new_ul_rule_modal=true;
 
@@ -1878,6 +2648,7 @@
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag,new_c2d_tag[index]];
     new_c2d_tag_modal=false; 
   }
+
 
 
   let new_scada_tag_modal=false;
@@ -2409,6 +3180,81 @@
       changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].delete=true;
   }
 
+  let modify_schedule_tag_modal=false;
+  let modify_schedule_tag_index;
+  let BackupScheduleTag=
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    scheduleTime:"",
+    actionType:0,
+    actionTargetTag:"",
+    actionTargetTagValue:"",
+    actionTimeSyncFormatType:0,
+    actionTimeSyncFormatUserDefine:""
+  }
+
+  function RestoreDeleteScheduleTag(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[index].delete=false;
+  }
+
+  function DeleteScheduleTag(index)
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[index].delete=true;
+  }
+
+
+
+  function TriggerModifyScheduleTag(index)
+  {
+    modify_schedule_tag_index=index;
+    BackupScheduleTag.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].enable;
+    BackupScheduleTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].delete;
+    BackupScheduleTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].tagName;
+
+    BackupScheduleTag.scheduleTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].scheduleTime;
+
+    BackupScheduleTag.actionType=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType;
+
+    BackupScheduleTag.actionTargetTag=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTag;
+
+    BackupScheduleTag.actionTimeSyncFormatType=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatType;
+
+
+    BackupScheduleTag.actionTimeSyncFormatUserDefine=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatUserDefine;
+
+    modify_schedule_tag_modal=true;
+  }
+
+
+  function NoModifyScheduleTag()
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].enable=BackupScheduleTag.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].delete=BackupScheduleTag.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].tagName=BackupScheduleTag.tagName;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].scheduleTime=BackupScheduleTag.scheduleTime;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType=BackupScheduleTag.actionType;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTag= BackupScheduleTag.actionTargetTag;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatType=BackupScheduleTag.actionTimeSyncFormatType;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatUserDefine=BackupScheduleTag.actionTimeSyncFormatUserDefine;
+
+    modify_schedule_tag_modal=false;
+  }
+
+  function ModifyScheduleTag()
+  {
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startTime=`${start_time_hh}:${start_time_mm}`;
+    modify_schedule_tag_modal=false;
+  }
+
 
   let new_schedule_tag_modal=false;
   let new_schedule_tag_index;
@@ -2551,6 +3397,17 @@
   {
      new_schedule_tag_modal=false;
   }
+
+
+  function AddScheduleTag(index)
+  {
+    new_schedule_tag[index].scheduleTime=`${start_time_hh}:${start_time_mm}`;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag=[...
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag,new_schedule_tag[index]];
+    new_schedule_tag_modal=false;
+  }
+
 
 
   let new_calculation_tag_modal=false;
@@ -2989,27 +3846,7 @@
     }
   }
 
-  const NPbtn1=() =>
-  {
-    console.log("NPbtn1");
-    new_ul_rule[new_ul_rule_index].userDefineedData+="$TIME$";
-  }
 
-
-  const NPbtn2=() =>
-  {
-    new_ul_rule[new_ul_rule_index].userDefineedData+="$ARRAY$";
-  }
-
-  const NPbtn3=() =>
-  {
-    new_ul_rule[new_ul_rule_index].userDefineedData+="$NAME_RAWREQUEST$";
-  }
-
-  const NPbtn4=() =>
-  {
-    new_ul_rule[new_ul_rule_index].userDefineedData+="$NAME_RAWREPLY$";
-  }
 
 
 
@@ -3020,20 +3857,73 @@
       if (Tagtype == 0)
       {
         //ctag
-        console.log("calculation Tag");
+        //console.log("calculation Tag");
         if (triggerSource == 0)
         {//new
           console.log("new");
-          new_calculation_tag[new_calculation_tag_index].calculationFormula+="$";
-          new_calculation_tag[new_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
-          new_calculation_tag[new_calculation_tag_index].calculationFormula+="$";
+          
+          if (cursorPosition !=-1)
+          {
+            if (new_calculation_tag[new_calculation_tag_index].calculationFormula.length < cursorPosition)
+            {
+              new_calculation_tag[new_calculation_tag_index].calculationFormula+="$";
+              new_calculation_tag[new_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
+              new_calculation_tag[new_calculation_tag_index].calculationFormula+="$";
+
+            }
+            else
+            {
+              let beforeCursorString=new_calculation_tag[new_calculation_tag_index].calculationFormula.slice(0, cursorPosition);
+              let afterCursorString=new_calculation_tag[new_calculation_tag_index].calculationFormula.slice(cursorPosition);
+              new_calculation_tag[new_calculation_tag_index].calculationFormula=`${beforeCursorString}`;
+              new_calculation_tag[new_calculation_tag_index].calculationFormula+="$";
+              new_calculation_tag[new_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
+              new_calculation_tag[new_calculation_tag_index].calculationFormula+="$";
+              new_calculation_tag[new_calculation_tag_index].calculationFormula+=`${afterCursorString}`;
+            }
+
+          }
+          else
+          {
+            new_calculation_tag[new_calculation_tag_index].calculationFormula+="$";
+            new_calculation_tag[new_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
+            new_calculation_tag[new_calculation_tag_index].calculationFormula+="$";
+          }
         }
         else if(triggerSource == 1)
         {
           console.log("modify");
-          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
-          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
-          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
+
+          if (cursorPosition != -1)
+          {
+
+            if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula.length < cursorPosition)
+            {
+              changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
+            }
+            else
+            {
+              let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula.slice(0, cursorPosition);
+              let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula.slice(cursorPosition);
+              changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula=`${beforeCursorString}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
+              nchanged_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+=`${afterCursorString}`;
+
+            }
+
+
+          }
+          else
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
+          }
+
         }
 
       }
@@ -3103,6 +3993,11 @@
       if (data_tag_pro_tag_event_changedValues.length ==0)
       {
         changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag=JSON.parse(JSON.stringify(data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag));
+      }
+
+      if (data_tag_pro_tag_schedule_changedValues.length==0)
+      {
+       changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag=JSON.parse(JSON.stringify(data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag));     
       }
 
       if (data_tag_pro_ul_changedValues.length == 0)
@@ -3264,7 +4159,7 @@
 </button>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 strikeout" type="checkbox" bind:checked={Ctag.enable}>
+<input class="mb-1 disabled:cursor-not-allowed strikeout" type="checkbox" bind:checked={Ctag.enable} disabled>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.tagName}</td>
@@ -3697,7 +4592,7 @@ on:click={onPageClick}></textarea>
 </button>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 strikeout" type="checkbox" bind:checked={C2Dtag.enable}>
+<input class="mb-1 disabled:cursor-not-allowed strikeout" type="checkbox" bind:checked={C2Dtag.enable} disabled>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{C2Dtag.tagName}</td>
@@ -4122,7 +5017,7 @@ on:click={onPageClick}></textarea>
 </button>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 strikeout" type="checkbox" bind:checked={Atag.enable}>
+<input class="mb-1 strikeout disabled:cursor-not-allowed" type="checkbox" bind:checked={Atag.enable} disabled>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.tagName}</td>
@@ -4503,7 +5398,7 @@ on:click={onPageClick}></textarea>
 </button>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 strikeout" type="checkbox" bind:checked={TOUtag.enable}>
+<input class="mb-1 strikeout disabled:cursor-not-allowed" type="checkbox" bind:checked={TOUtag.enable} disabled>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{TOUtag.tagName}</td>
@@ -4906,7 +5801,7 @@ on:click={onPageClick}></textarea>
 </button>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 strikeout" type="checkbox" bind:checked={DMtag.enable}>
+<input class="mb-1 strikeout disabled:cursor-not-allowed" type="checkbox" bind:checked={DMtag.enable} disabled>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{DMtag.tagName}</td>
@@ -5253,7 +6148,7 @@ on:click={onPageClick}></textarea>
 </button>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 strikeout" type="checkbox" bind:checked={ScadaTag.enable}>
+<input class="mb-1 strikeout disabled:cursor-not-allowed" type="checkbox" bind:checked={ScadaTag.enable} disabled>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScadaTag.tagName}</td>
@@ -5653,6 +6548,100 @@ on:click={onPageClick}></textarea>
   <TableBody>
 
 
+{#if getDataReady == 1}
+{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag as ScheduleTag, index}
+{#if ScheduleTag.delete}
+
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteScheduleTag(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 strikeout disabled:cursor-not-allowed" type="checkbox" bind:checked={ScheduleTag.enable} disabled>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScheduleTag.tagName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScheduleTag.scheduleTime}</td>
+
+
+{#if ScheduleTag.actionType==0}
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Write {ScheduleTag.actionTargetTag} with {ScheduleTag.actionTargetTagValue}</td>
+{:else if ScheduleTag.actionType==1}
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Time Sync with {ScheduleTag.actionTargetTag}</td>
+{:else}
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout"></td>
+{/if}
+
+</tr>
+
+
+{:else}
+
+ <TableBodyRow>
+ <TableBodyCell class="!p-4"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10">
+<button on:click={()=>TriggerModifyScheduleTag(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+       </TableBodyCell>
+ <TableBodyCell class="!p-0 w-10">
+<button on:click={() => DeleteScheduleTag(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+
+
+    <TableBodyCell><input class="mb-1" type="checkbox" bind:checked={ScheduleTag.enable}></TableBodyCell>
+
+
+      <TableBodyCell>{index+1}</TableBodyCell>
+      <TableBodyCell>{ScheduleTag.tagName}</TableBodyCell>
+      <TableBodyCell>{ScheduleTag.scheduleTime}</TableBodyCell>
+{#if ScheduleTag.actionType==0}
+      <TableBodyCell>Write {ScheduleTag.actionTargetTag} with {ScheduleTag.actionTargetTagValue}</TableBodyCell>
+{:else if ScheduleTag.actionType==1}
+      <TableBodyCell>Time Sync with {ScheduleTag.actionTargetTag}</TableBodyCell>
+{:else}
+      <TableBodyCell></TableBodyCell>
+{/if}
+
+
+ </TableBodyRow>
+
+{/if}
+{/each}
+{/if}
+
+
+
  <TableBodyRow>
 
  {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag.length < 10}
@@ -5704,7 +6693,7 @@ on:click={onPageClick}></textarea>
         <td></td>
         <td></td>
         <td></td>
-    <td class="pl-10 pt-4"><Button color="blue" pill={true} ><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveScheduleTag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -5772,8 +6761,8 @@ on:click={onPageClick}></textarea>
  <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
 
   <Radio bind:group={new_schedule_tag[new_schedule_tag_index].actionType} value={0}>Write</Radio>
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64 h-10" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTag}>
+{#if new_schedule_tag[new_schedule_tag_index].actionType==0}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTag}>
 <option disabled="" value="none">Choose ...</option>
 {#if saved_changed_modbus_data != ""}
 {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
@@ -5783,8 +6772,13 @@ on:click={onPageClick}></textarea>
 
 </select>
 
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
+
+{/if}
+
 <p class="pt-4"> with </p>
-<div class="relative"><input id="operand_value" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTagValue}> 
+<div class="relative"><input id="operand_value" class="block w-36 text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTagValue}> 
 <label for="operand_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">operand_value</label>
 </div>
 
@@ -5801,7 +6795,7 @@ on:click={onPageClick}></textarea>
   <Radio bind:group={new_schedule_tag[new_schedule_tag_index].actionType} value={1}>Time Sync</Radio>
 
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_schedule_tag[new_schedule_tag_index].actionTimeSyncFormatType}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-36" bind:value={new_schedule_tag[new_schedule_tag_index].actionTimeSyncFormatType}>
 <option disabled="" value="none">Choose ...</option>
 
 <option value={0}>Epoch Seconds</option>
@@ -5809,6 +6803,23 @@ on:click={onPageClick}></textarea>
 <option value={2}>Schneider</option>
 <option value={3}>User Define</option>
 </select>
+
+<p class="pt-4"> with </p>
+
+{#if new_schedule_tag[new_schedule_tag_index].actionType==1}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
+{/each}
+{/if}
+
+</select>
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
+
+{/if}
 
   </div>
   </td>
@@ -5854,12 +6865,179 @@ on:click={onPageClick}></textarea>
     <td></td>
     <td></td>
     <td>
-<Button color="dark" pill={true} >Add</Button></td>
+<Button color="dark" pill={true} on:click={()=>AddScheduleTag(new_schedule_tag_index)}>Add</Button></td>
 
 
 </table>
 </form>
 </Modal>
+
+
+<Modal bind:open={modify_schedule_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyScheduleTag}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+
+<table>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Schedule Time</p></td>
+      <td class="pl-5 pt-5">
+<div class="flex gap-4">
+<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_hh}>
+
+<p class="pt-3">:</p>
+<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_mm}>
+
+      </div>
+
+      </td>
+  </tr>
+
+
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Action</p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType} value={0}>Write</Radio>
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType==0}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
+{/each}
+{/if}
+
+</select>
+
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
+
+{/if}
+
+<p class="pt-4"> with </p>
+<div class="relative"><input id="operand_value" class="block w-36 text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTagValue}> 
+<label for="operand_value" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">operand_value</label>
+</div>
+
+ </div>
+  </td>
+  </tr>
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType} value={1}>Time Sync</Radio>
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-36" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatType}>
+<option disabled="" value="none">Choose ...</option>
+
+<option value={0}>Epoch Seconds</option>
+<option value={1}>by filed</option>
+<option value={2}>Schneider</option>
+<option value={3}>User Define</option>
+</select>
+
+<p class="pt-4"> with </p>
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType==1}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTag}>
+<option disabled="" value="none">Choose ...</option>
+{#if saved_changed_modbus_data != ""}
+{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<option value={TagItem.tagName}>{TagItem.tagName}</option>
+{/each}
+{/if}
+
+</select>
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
+
+{/if}
+
+  </div>
+  </td>
+
+  </tr>
+
+
+
+
+<tr>
+  <td class="text-right" >
+  
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5">
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType==1 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatType==3}
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatUserDefine}></textarea>
+
+{:else}
+<textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
+
+{/if}
+
+
+    </td>
+
+
+    </tr>
+
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={ModifyScheduleTag}>Modify</Button></td>
+
+
+</table>
+
+</form>
+</Modal>
+
 
 
 </AccordionItem>
@@ -5930,7 +7108,7 @@ on:click={onPageClick}></textarea>
 </button>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 strikeout" type="checkbox" bind:checked={EventTag.enable}>
+<input class="mb-1 strikeout disabled:cursor-not-allowed" type="checkbox" bind:checked={EventTag.enable} disabled>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">{EventTag.tagName}</td>
@@ -6501,12 +7679,8 @@ on:click={onPageClick}></textarea>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-18">Data Push Interval</TableHeadCell>    
-    <TableHeadCell class="w-18">Link Lost Retransmit</TableHeadCell>
-    <TableHeadCell class="w-18">Data Priority</TableHeadCell> 
-    <TableHeadCell class="w-18">Cloud Profile</TableHeadCell>
-    <TableHeadCell class="w-18">Content Format</TableHeadCell>
+    <TableHeadCell class="w-18">Rule Name</TableHeadCell>
+    <TableHeadCell class="w-18"></TableHeadCell>    
     <TableHeadCell class="w-18"></TableHeadCell>
     <TableHeadCell class="w-18"></TableHeadCell>    
 
@@ -6550,50 +7724,12 @@ on:click={onPageClick}></textarea>
 <input class="mb-1 strikeout" type="checkbox" bind:checked={ulRule.enable}>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">{ulRule.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
-{#if ulRule.dataPushInterval==0}
-Right Away
-{:else if ulRule.dataPushInterval==1}
-{ulRule.dataPushIntervalValue} min(s)
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">{ulRule.ruleName}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">
+{#each ulRule.cloud as Cloud, index}
+{#if index!=0}/{/if} {Cloud.profile}({Cloud.topic[0].name}, {#if Cloud.tagDisplay==0}Hex,{:else if Cloud.tagDisplay==1}Decimal,{:else if Cloud.tagDisplay==2}Binary,{/if}{#if Cloud.dataLogFormat==0}Default{:else if Cloud.dataLogFormat==1}User Defined{:else if Cloud.dataLogFormat} Use others{/if})
 
-{/if}
-</td>
-
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
-{ulRule.linkLostRetransmit} Delay Seconds
-</td>
-
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
-{#if ulRule.dataPriority==0}
-Latest First
-{:else if ulRule.dataPriority==1}
-First In, First Out
-{/if}
-</td>
-
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
-{#each ulRule.cloudProfile as cloudProfile, index2}
-{cloudProfile.cloudTarget}(
-{#each cloudProfile.cloudTopic as cloudTopic,index3}
-{cloudTopic}{#if index3 != cloudProfile.cloudTopic.length-1},{/if}
 {/each}
-)
-<p class="pl-2"></p>
-{#if index2 != ulRule.cloudProfile.length-1},{/if}
-{/each}
-
-</td>
-
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
-{#if ulRule.contentFormat==0}<div class="flex gap-2">
-      Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg></div>
-<Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip>
-
-{:else if ulRule.contentFormat==1}User Defined{/if}
-
 </td>
 
 </tr>
@@ -6622,51 +7758,14 @@ First In, First Out
 
 
       <TableBodyCell>{index+1}</TableBodyCell>
-      <TableBodyCell class="w-18">{ulRule.tagName}</TableBodyCell>
-      <TableBodyCell class="w-18">
-{#if ulRule.dataPushInterval==0}
-Right Away
-{:else if ulRule.dataPushInterval==1}
-{ulRule.dataPushIntervalValue} min(s)
+      <TableBodyCell class="w-18">{ulRule.ruleName}</TableBodyCell>
+<TableBodyCell>
+{#each ulRule.cloud as Cloud, index}
+{#if index!=0}/{/if} {Cloud.profile}({Cloud.topic[0].name}, {#if Cloud.tagDisplay==0}Hex,{:else if Cloud.tagDisplay==1}Decimal,{:else if Cloud.tagDisplay==2}Binary,{/if}{#if Cloud.dataLogFormat==0}Default{:else if Cloud.dataLogFormat==1}User Defined{:else if Cloud.dataLogFormat} Use others{/if})
 
-{/if}
-      </TableBodyCell>
-      <TableBodyCell class="w-18">
-{ulRule.linkLostRetransmit} Delay Seconds
-      </TableBodyCell>
-      <TableBodyCell class="w-18">
-{#if ulRule.dataPriority==0}
-Latest First
-{:else if ulRule.dataPriority==1}
-First In, First Out
-{/if}
-
-      </TableBodyCell>
-
-
-      <TableBodyCell class="w-18">
-{#each ulRule.cloudProfile as cloudProfile, index2}
-{cloudProfile.cloudTarget}(
-{#each cloudProfile.cloudTopic as cloudTopic,index3}
-{cloudTopic}{#if index3 != cloudProfile.cloudTopic.length-1},{/if}
-{/each}
-)
-<p class="pl-2"></p>
-{#if index2 != ulRule.cloudProfile.length-1},{/if}
 {/each}
 
-      </TableBodyCell>
-      <TableBodyCell class="w-18">
-{#if ulRule.contentFormat==0}<div class="flex gap-2">
-      Default  <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg></div>
-<Tooltip trigger="click" triggeredBy="#click">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip>
-
-{:else if ulRule.contentFormat==1}User Defined{/if}
-
-
-      </TableBodyCell>
+</TableBodyCell>
 
 
  </TableBodyRow>
@@ -6736,36 +7835,24 @@ First In, First Out
 
 
 
-<Modal bind:open={new_ul_rule_modal}  size="xl" class="w-full" permanent={true}>
-  <form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox"  bind:checked={new_ul_rule[new_ul_rule_index].enable}>
-{/if}
-  Enable
-</label>
+<Modal bind:open={new_ul_rule_modal}  size="lg" class="w-full" autoclose={false}>
 
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddULRule(new_ul_rule_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<StepIndicator {currentStep} {steps} glow />
 
-<p class="mt-10"></p>
 
-<table>
+<table bind:this={modalElement}>
+
+{#if currentStep == 1}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
+  <input class="center" type="checkbox" bind:checked={new_ul_rule[new_ul_rule_index].enable}></td>
+
+
+
+  </tr>
 
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
-      <td class="pl-5 pt-5">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_ul_rule[new_ul_rule_index].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-
-</select>
-
-      </td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Rule Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={new_ul_rule[new_ul_rule_index].ruleName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -6773,187 +7860,162 @@ First In, First Out
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
-      <td class="pl-5 pt-5">
-<div class="flex gap-4">
-  <Radio bind:group={new_ul_rule[new_ul_rule_index].dataPushInterval} value={0} >Right Away</Radio>
-  <Radio bind:group={new_ul_rule[new_ul_rule_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
-{#if new_ul_rule[new_ul_rule_index].dataPushInterval == 0}
-  <input type="number" bind:value={new_ul_rule[new_ul_rule_index].dataPushIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"><Button color="dark" pill={true} on:click={()=>New_UL_Rule_Modal_Page2(0)}>Next</Button></td>
 
-{:else}
-  <input type="number" bind:value={new_ul_rule[new_ul_rule_index].dataPushIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-{/if}
-</div>
 
+    </tr>
+{:else if currentStep ==2}
+
+<tr>
+      <td></td>
+      <td class="pl-4 pt-4">
+<p class="text-center pt-4 text-lg font-bold">1st Cloud</p>
       </td>
 
-</tr>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
-    <td class="pl-5 pt-5">
-<div class="flex gap-4">
-      <input type="number" bind:value={new_ul_rule[new_ul_rule_index].linkLostRetransmit} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
-</div>
-    </td>
-</tr>
+      <td></td>
+    <td></td>
+    </tr>
 
 
 <tr>
-<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Priority</p></td>
-      <td class="pl-5 pt-5">
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_ul_rule[new_ul_rule_index].cloud[0].profile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
+      <td class="pl-4 pt-5">
 
 <div class="flex gap-4">
-  <Radio bind:group={new_ul_rule[new_ul_rule_index].dataPriority} value={0} >Latest First</Radio>
-  <Radio bind:group={new_ul_rule[new_ul_rule_index].dataPriority} value={1} >First In, First Out </Radio>
-
+  <Radio bind:group={new_ul_rule[new_ul_rule_index].cloud[0].topic[0].type} value={0} >Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={new_ul_rule[new_ul_rule_index].cloud[0].topic[0].name}>
 </div>
-
-
 
 </td>
 
 
 </tr>
 
-<tr>
 
+<tr class="pt-4">
+  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
 
-<td><p class="pl-20 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
-<td class= "pl-4 pt-4">
-<MultiSelect items={CloudProfile} bind:value={MultiSelectedCloudProfile} />
+  </td>
 
-    </td>
-<td class= "pl-4 pt-4">
-</td>
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[0].tagDisplay} value={0} >Hexadecimal</Radio>
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[0].tagDisplay} value={1} >Decimal</Radio>
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[0].tagDisplay} value={2} >Binary</Radio>
 
-<td class= "pl-4 pt-4">
-</td>
-
+</div></td>
 </tr>
-
-<p class="pt-10"></p>
-
-
-{#if MultiSelectedCloudProfile.length==1}
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[0]} Topic</p></td>
-      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
-<input type="text" bind:value={Cloud1Topic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-
-<input type="text" bind:value={Cloud1Topic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-<input type="text" bind:value={Cloud1Topic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-</div>
-      </td>
-
-</tr>
-  
-
-{:else if MultiSelectedCloudProfile.length==2}
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[0]} Topic</p></td>
-      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
-<input type="text" bind:value={Cloud1Topic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-
-<input type="text" bind:value={Cloud1Topic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-<input type="text" bind:value={Cloud1Topic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-</div>
-      </td>
-
-</tr>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[1]} Topic</p></td>
- <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
-<input type="text" bind:value={Cloud2Topic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-
-<input type="text" bind:value={Cloud2Topic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-<input type="text" bind:value={Cloud2Topic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-</div>
-      </td>
-
-</tr>
-{/if}
-
 
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Content Format</p>
+  <td><p class="pl-4 pt-5 text-lg font-light text-right">Data Log Format</p>
 
   </td>
 
-    <td class="pl-4 pt-8" ><div class="flex gap-6">
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].contentFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat} value={0} on:change={()=>NewCloudFormatChange(0,1)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
-<Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip></Radio>
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].contentFormat} value={1} >User Defined:</Radio>
+<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Radio class="pb-2"  bind:group={new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat} value={2} on:change={()=>NewCloudFormatChange(0,1)}>Use 2nd Cloud Setting</Radio>
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat} value={1} on:change={()=>NewCloudFormatChange(0,1)}>User Defined:</Radio>
+
 
 
 </div></td>
 </tr>
 
+
+
 <tr>
   <td class="text-right" >
-  <div>
-  <ul style="list-style-type:none;" class="py-1">
-<li class="pt-4">
-{#if new_ul_rule[new_ul_rule_index].contentFormat == 1}
-    <Button size="xs" on:click={NPbtn1}>TIME</Button>
-{:else}
-    <Button size="xs" disabled>TIME</Button>
-{/if}
-</li>
+  
 
-<li class="pt-4">
-{#if new_ul_rule[new_ul_rule_index].contentFormat == 1}
-<Button size="xs" on:click={NPbtn2}>ARRAY</Button>
-{:else}
-<Button size="xs" disabled>ARRAY</Button>
-{/if}
-</li>
-
-<li class="pt-4">
-{#if new_ul_rule[new_ul_rule_index].contentFormat == 1}
-<Button size="xs" on:click={NPbtn3}>NAME_RAWREQUEST</Button>
-{:else}
-<Button size="xs" disabled>NAME_RAWREQUEST</Button>
-{/if}
-</li>
-
-<li class="pt-4">
-{#if new_ul_rule[new_ul_rule_index].contentFormat == 1}
-<Button size="xs" on:click={NPbtn4}>NAME_RAWREPLY</Button>
-{:else}
-<Button size="xs" disabled>NAME_RAWREPLY</Button>
-{/if}
-</li>
-
-
-</ul>
-  </div>
   </td>
 
-    <td class="pl-4 pt-4">
-{#if new_ul_rule[new_ul_rule_index].contentFormat == 1}
-
-<Textarea id="textarea-id" placeholder="Content Format" rows="12" name="message" bind:value={new_ul_rule[new_ul_rule_index].userDefineedData} />
+    <td class="pl-4 pt-4" colspan="5">
 
 
+{#if new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat == 1}
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTimeClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewArrayClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+              <hr>
 
-{:else}
-<Textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled/>
+
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawRequest(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREQUEST$</button></li>
+
+
+            {/each}
+            <hr>
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawReply(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREPLY$</button></li>
+
+
+            {/each}
+
+            <hr>
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagStatus(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+
+            {/each}
+
+
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={new_ul_rule[new_ul_rule_index].cloud[0].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
+
+
+
+
+{:else if new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat == 0}
+<textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
+
+
+
+{:else if new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat == 2}
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={new_ul_rule[new_ul_rule_index].cloud[0].userDefineedData}></textarea>
+
 {/if}
 
 
@@ -6965,58 +8027,220 @@ First In, First Out
 </tr>
 
 
- <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>
-<Button color="dark" pill={true} on:click={add_new_ul_rule(new_ul_rule_index)}>Add</Button></td>
 
+<tr>
+    <td></td>
+    <td class="pl-10"></td>
+    <td class="pl-10"></td>
+    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={New_UL_Rule_Modal_Page1}>Back</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>New_UL_Rule_Modal_Page3(0)}>Next</Button></td>
+
+
+    </tr>
+
+
+
+
+{:else if currentStep ==3}
+
+
+
+<tr>
+      <td></td>
+      <td class="pl-4 pt-4">
+<p class="text-center pt-4 text-lg font-bold">2nd Cloud</p>
+      </td>
+
+      <td></td>
+    <td></td>
+    </tr>
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_ul_rule[new_ul_rule_index].cloud[1].profile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
+      <td class="pl-4 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={new_ul_rule[new_ul_rule_index].cloud[1].topic[0].type} value={0} >Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={new_ul_rule[new_ul_rule_index].cloud[1].topic[0].name}>
+</div>
+
+</td>
+
+
+</tr>
+
+
+<tr class="pt-4">
+  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[1].tagDisplay} value={0} >Hexadecimal</Radio>
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[1].tagDisplay} value={1} >Decimal</Radio>
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[1].tagDisplay} value={2} >Binary</Radio>
+
+</div></td>
+</tr>
+
+
+
+<tr class="pt-4">
+  <td><p class="pl-4 pt-5 text-lg font-light text-right">Data Log Format</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat} value={0} on:change={()=>NewCloudFormatChange(1,0)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Radio class="pb-2"  bind:group={new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat} value={2} on:change={()=>NewCloudFormatChange(1,0)}>Use 1st Cloud Setting</Radio>
+  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat} value={1} on:change={()=>NewCloudFormatChange(1,0)}>User Defined:</Radio>
+
+
+
+</div></td>
+</tr>
+
+
+
+<tr>
+  <td class="text-right" >
+  
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5">
+
+
+{#if new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat == 1}
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTimeClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewArrayClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+              <hr>
+
+
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawRequest(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREQUEST$</button></li>
+
+
+            {/each}
+            <hr>
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawReply(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREPLY$</button></li>
+
+
+            {/each}
+
+            <hr>
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagStatus(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+
+            {/each}
+
+
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12"  class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={new_ul_rule[new_ul_rule_index].cloud[1].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
+
+
+
+
+{:else if new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat == 0}
+<textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
+
+
+
+{:else if new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat == 2}
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={new_ul_rule[new_ul_rule_index].cloud[1].userDefineedData}></textarea>
+
+{/if}
+
+
+    </td>
+
+
+
+
+</tr>
+
+
+
+<tr>
+    <td></td>
+    <td class="pl-10"></td>
+    <td class="pl-10"></td>
+    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={()=>New_UL_Rule_Modal_Page2(0)}>Back</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>add_new_ul_rule(new_ul_rule_index)}>Add</Button></td>
+
+
+    </tr>
+{/if}
 
 </table>
-</form>
+
 </Modal>
 
 
 
-<Modal bind:open={modify_ul_rule_modal}  size="xl" class="w-full" permanent={true}>
-  <form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].enable}>
-{/if}
-  Enable
-</label>
 
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyULRule}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<Modal bind:open={modify_ul_rule_modal}  size="lg" class="w-full" autoclose={false}>
+<form action="#">
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={()=>NoModifyULRule(modify_ul_rule_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<StepIndicator {currentStep} {steps} glow />
 
-<p class="mt-10"></p>
 
-<table>
+<table bind:this={modalElement}>
+
+{#if currentStep == 1}
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
+  <input class="center" type="checkbox" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].enable}></td>
+
+
+
+  </tr>
 
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
-      <td class="pl-5 pt-5">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].tagName}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_data_tag_pro_data != ""}
-{#each saved_changed_data_tag_pro_data.config.service_dataTagPro_tagRule.modbusTag.deviceParameter as deviceParameter}
-<option value={deviceParameter.tagName}>{deviceParameter.tagName}</option>
-{/each}
-{/if}
-
-</select>
-
-      </td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Rule Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].ruleName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
 
 
 
@@ -7024,187 +8248,161 @@ First In, First Out
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
-      <td class="pl-5 pt-5">
-<div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPushInterval} value={0} >Right Away</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
-{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPushInterval == 0}
-  <input type="number" bind:value={new_ul_rule[new_ul_rule_index].dataPushIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"><Button color="dark" pill={true} on:click={()=>New_UL_Rule_Modal_Page2(1)}>Next</Button></td>
 
-{:else}
-  <input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPushIntervalValue} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-{/if}
-</div>
 
+    </tr>
+{:else if currentStep ==2}
+<tr>
+      <td></td>
+      <td class="pl-4 pt-4">
+<p class="text-center pt-4 text-lg font-bold">1st Cloud</p>
       </td>
 
-</tr>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
-    <td class="pl-5 pt-5">
-<div class="flex gap-4">
-      <input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].linkLostRetransmit} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p>
-</div>
-    </td>
-</tr>
+      <td></td>
+    <td></td>
+    </tr>
 
 
 <tr>
-<td><p class="pl-20 pt-4 text-lg font-light text-right">Data Priority</p></td>
-      <td class="pl-5 pt-5">
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].profile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
+      <td class="pl-4 pt-5">
 
 <div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPriority} value={0} >Latest First</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].dataPriority} value={1} >First In, First Out </Radio>
-
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].topic[0].type} value={0} >Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].topic[0].name}>
 </div>
-
-
 
 </td>
 
 
 </tr>
 
-<tr>
 
+<tr class="pt-4">
+  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
 
-<td><p class="pl-20 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
-<td class= "pl-4 pt-4">
-<MultiSelect items={CloudProfile} bind:value={MultiSelectedCloudProfile} />
+  </td>
 
-    </td>
-<td class= "pl-4 pt-4">
-</td>
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].tagDisplay} value={0} >Hexadecimal</Radio>
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].tagDisplay} value={1} >Decimal</Radio>
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].tagDisplay} value={2} >Binary</Radio>
 
-<td class= "pl-4 pt-4">
-</td>
-
+</div></td>
 </tr>
-
-<p class="pt-10"></p>
-
-
-{#if MultiSelectedCloudProfile.length==1}
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[0]} Topic</p></td>
-      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-</div>
-      </td>
-
-</tr>
-  
-
-{:else if MultiSelectedCloudProfile.length==2}
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[0]} Topic</p></td>
-      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[0].cloudTopic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-</div>
-      </td>
-
-</tr>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">{MultiSelectedCloudProfile[1]} Topic</p></td>
- <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[1].cloudTopic[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[1].cloudTopic[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloudProfile[1].cloudTopic[2]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 p-2.5 dark:bg-gray-700 dark:border-green-500">
-</div>
-      </td>
-
-</tr>
-{/if}
-
 
 
 
 <tr class="pt-4">
-  <td><p class="pl-20 pt-4 text-lg font-light text-right">Content Format</p>
+  <td><p class="pl-4 pt-5 text-lg font-light text-right">Data Log Format</p>
 
   </td>
 
-    <td class="pl-4 pt-8" ><div class="flex gap-6">
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat} value={0} >Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat} value={0} on:change={()=>NewCloudFormatChange(0,1)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
-<Tooltip triggeredBy="#hover">&#123;&quot;Device&quot;:&quot;EW50-V&quot;,&quot;TimeStamp&quot;:$TIME$,$ARRAY$&#125;</Tooltip></Radio>
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat} value={1} >User Defined:</Radio>
+<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Radio class="pb-2"  bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat} value={2} on:change={()=>NewCloudFormatChange(0,1)}>Use 2nd Cloud Setting</Radio>
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat} value={1} on:change={()=>NewCloudFormatChange(0,1)}>User Defined:</Radio>
+
 
 
 </div></td>
 </tr>
 
+
+
 <tr>
   <td class="text-right" >
-  <div>
-  <ul style="list-style-type:none;" class="py-1">
-<li class="pt-4">
-{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat == 1}
-    <Button size="xs" on:click={NPbtn1}>TIME</Button>
-{:else}
-    <Button size="xs" disabled>TIME</Button>
-{/if}
-</li>
+  
 
-<li class="pt-4">
-{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat == 1}
-<Button size="xs" on:click={NPbtn2}>ARRAY</Button>
-{:else}
-<Button size="xs" disabled>ARRAY</Button>
-{/if}
-</li>
-
-<li class="pt-4">
-{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat == 1}
-<Button size="xs" on:click={NPbtn3}>NAME_RAWREQUEST</Button>
-{:else}
-<Button size="xs" disabled>NAME_RAWREQUEST</Button>
-{/if}
-</li>
-
-<li class="pt-4">
-{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat == 1}
-<Button size="xs" on:click={NPbtn4}>NAME_RAWREPLY</Button>
-{:else}
-<Button size="xs" disabled>NAME_RAWREPLY</Button>
-{/if}
-</li>
-
-
-</ul>
-  </div>
   </td>
 
-    <td class="pl-4 pt-4">
-{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].contentFormat == 1}
-
-<Textarea id="textarea-id" placeholder="Content Format" rows="12" name="message" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].userDefineedData} />
+    <td class="pl-4 pt-4" colspan="5">
 
 
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat == 1}
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTimeClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyArrayClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+              <hr>
 
-{:else}
-<Textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="disabled:cursor-not-allowed disabled:opacity-50 p-2.5" disabled/>
+
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawRequest(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREQUEST$</button></li>
+
+
+            {/each}
+            <hr>
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawReply(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREPLY$</button></li>
+
+
+            {/each}
+
+            <hr>
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagStatus(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+
+            {/each}
+
+
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
+
+
+
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat == 0}
+<textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
+
+
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat == 2}
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].userDefineedData}></textarea>
+
 {/if}
 
 
@@ -7216,21 +8414,190 @@ First In, First Out
 </tr>
 
 
- <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>
-<Button color="dark" pill={true} on:click={modify_ul_rule}>Modify</Button></td>
 
+<tr>
+    <td></td>
+    <td class="pl-10"></td>
+    <td class="pl-10"></td>
+    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={New_UL_Rule_Modal_Page1}>Back</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>New_UL_Rule_Modal_Page3(1)}>Next</Button></td>
+
+
+    </tr>
+
+{:else if currentStep ==3}
+
+
+<tr>
+      <td></td>
+      <td class="pl-4 pt-4">
+<p class="text-center pt-4 text-lg font-bold">2nd Cloud</p>
+      </td>
+
+      <td></td>
+    <td></td>
+    </tr>
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].profile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+
+<tr>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
+      <td class="pl-4 pt-5">
+
+<div class="flex gap-4">
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].topic[0].type} value={0} >Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].topic[0].name}>
+</div>
+
+</td>
+
+
+</tr>
+
+
+<tr class="pt-4">
+  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" ><div class="flex gap-2">
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].tagDisplay} value={0} >Hexadecimal</Radio>
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].tagDisplay} value={1} >Decimal</Radio>
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].tagDisplay} value={2} >Binary</Radio>
+
+</div></td>
+</tr>
+
+
+
+<tr class="pt-4">
+  <td><p class="pl-4 pt-5 text-lg font-light text-right">Data Log Format</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat} value={0} on:change={()=>NewCloudFormatChange(1,0)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
+<Radio class="pb-2"  bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat} value={2} on:change={()=>NewCloudFormatChange(1,0)}>Use 1st Cloud Setting</Radio>
+  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat} value={1} on:change={()=>NewCloudFormatChange(1,0)}>User Defined:</Radio>
+
+
+
+</div></td>
+</tr>
+
+
+
+<tr>
+  <td class="text-right" >
+  
+
+  </td>
+
+    <td class="pl-4 pt-4" colspan="5">
+
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat == 1}
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTimeClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyArrayClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+              <hr>
+
+
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawRequest(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREQUEST$</button></li>
+
+
+            {/each}
+            <hr>
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawReply(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREPLY$</button></li>
+
+
+            {/each}
+
+            <hr>
+            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagStatus(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+
+            {/each}
+
+
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12"  class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
+
+
+
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat == 0}
+<textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
+
+
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat == 2}
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].userDefineedData}></textarea>
+
+{/if}
+
+
+    </td>
+
+
+
+
+</tr>
+
+
+
+<tr>
+    <td></td>
+    <td class="pl-10"></td>
+    <td class="pl-10"></td>
+    <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={()=>New_UL_Rule_Modal_Page2(1)}>Back</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>modify_ul_rule(modify_ul_rule_index)}>Add</Button></td>
+
+
+    </tr>
+
+{/if}
 
 </table>
 </form>

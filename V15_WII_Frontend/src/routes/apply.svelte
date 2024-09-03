@@ -129,6 +129,7 @@
       ChangedDataTagProConfig,
       DataTagPro_ULRule_ConfigChangedLog,
       DataTagPro_TagRuleEvent_ConfigChangedLog,
+      DataTagPro_TagRuleSchedule_ConfigChangedLog,
       DataTagPro_TagRuleSCADA_ConfigChangedLog,
       DataTagPro_TagRuleDM_ConfigChangedLog,
       DataTagPro_TagRuleTOU_ConfigChangedLog,
@@ -310,6 +311,7 @@
   let data_tag_pro_tag_dm_changedValues = [];
   let data_tag_pro_tag_scada_changedValues = [];
   let data_tag_pro_tag_event_changedValues = [];
+  let data_tag_pro_tag_schedule_changedValues =[];
   let data_tag_pro_ul_changedValues = [];
 
   let ContentEventEngine;
@@ -481,6 +483,10 @@
       data_tag_pro_tag_c2d_changedValues = val;
   });
   
+  DataTagPro_TagRuleSchedule_ConfigChangedLog.subscribe(val => {
+      data_tag_pro_tag_schedule_changedValues = val;
+  });
+
   DataTagPro_General_ConfigChangedLog.subscribe(val => {
       data_tag_pro_general_changedValues = val;
   });
@@ -2237,6 +2243,7 @@
 
       data_tag_pro_general_changedValues = [];
       data_tag_pro_tag_c2d_changedValues = [];
+      data_tag_pro_tag_schedule_changedValues=[];
       data_tag_pro_tag_calculation_changedValues = [];
       data_tag_pro_tag_accumulated_changedValues = [];  
       data_tag_pro_tag_tou_changedValues = [];
@@ -2253,6 +2260,8 @@
       DataTagPro_TagRuleAccumulated_ConfigChangedLog.set(data_tag_pro_tag_accumulated_changedValues);
       DataTagPro_TagRuleCalculation_ConfigChangedLog.set(data_tag_pro_tag_calculation_changedValues);
       DataTagPro_TagRuleC2D_ConfigChangedLog.set(data_tag_pro_tag_c2d_changedValues);
+      DataTagPro_TagRuleSchedule_ConfigChangedLog.set(data_tag_pro_tag_schedule_changedValues);
+
       DataTagPro_General_ConfigChangedLog.set(data_tag_pro_general_changedValues);
 
       RestartDataTagPro();  
@@ -2449,6 +2458,7 @@
     if (data_tag_pro_data != "" && (
         data_tag_pro_general_changedValues.length !=0 ||
         data_tag_pro_tag_c2d_changedValues.length !=0 ||
+        data_tag_pro_tag_schedule_changedValues.length !=0 ||
         data_tag_pro_tag_calculation_changedValues.length !=0 ||
         data_tag_pro_tag_accumulated_changedValues.length !=0 ||
         data_tag_pro_tag_tou_changedValues.length !=0 ||
@@ -2773,6 +2783,7 @@
         if (data_tag_pro_data != "" && (
           data_tag_pro_general_changedValues.length !=0 ||
           data_tag_pro_tag_c2d_changedValues.length !=0 ||
+          data_tag_pro_tag_schedule_changedValues.length !=0 ||
           data_tag_pro_tag_calculation_changedValues.length !=0 ||
           data_tag_pro_tag_accumulated_changedValues.length !=0 ||
           data_tag_pro_tag_tou_changedValues.length !=0 ||
@@ -2812,6 +2823,7 @@
           data_tag_pro_tag_dm_changedValues.length !=0 ||
           data_tag_pro_tag_scada_changedValues.length !=0 ||
           data_tag_pro_tag_event_changedValues.length !=0 ||
+          data_tag_pro_tag_schedule_changedValues.length !=0 ||
           data_tag_pro_ul_changedValues.length !=0}
 <Li>Data Tag Pro
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
@@ -2833,7 +2845,8 @@
           data_tag_pro_tag_tou_changedValues.length !=0 ||
           data_tag_pro_tag_dm_changedValues.length !=0 ||
           data_tag_pro_tag_scada_changedValues.length !=0 ||
-          data_tag_pro_tag_event_changedValues.length !=0 }
+          data_tag_pro_tag_event_changedValues.length !=0 ||
+          data_tag_pro_tag_schedule_changedValues.length !=0 }
 <Li>Tag Rule
 {#if  data_tag_pro_tag_c2d_changedValues.length !=0}
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
@@ -2848,6 +2861,24 @@
  </Li>
  </List>
 {/if}
+
+
+{#if data_tag_pro_tag_schedule_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+ <Li> Schedule Tag
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each data_tag_pro_tag_schedule_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+ </Li>
+ </List>
+
+{/if}
+
+
 
 {#if  data_tag_pro_tag_calculation_changedValues.length !=0}
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
@@ -4252,6 +4283,7 @@ event_engine_action_do_changeValues.length != 0 ||
         data_tag_pro_tag_tou_changedValues.length !=0 ||
         data_tag_pro_tag_dm_changedValues.length !=0 ||
         data_tag_pro_tag_scada_changedValues.length !=0 ||
+        data_tag_pro_tag_schedule_changedValues.length !=0 ||
         data_tag_pro_tag_event_changedValues.length !=0 ||
         data_tag_pro_ul_changedValues.length !=0 ||
         event_engine_action_line_changeValues.length != 0 ||

@@ -53,7 +53,6 @@
 
   let sdata_logger_general_changedValues = [];
   let sdata_logger_proxy_edge_changedValues = [];
-  let sdata_logger_proxy_cloud_changedValues = [];
   let sdata_logger_proxy_topic_changedValues = [];  
   let sdata_logger_monitor_edge_changedValues = [];
   let sdata_logger_monitor_cloud_changedValues = [];
@@ -155,9 +154,6 @@
       sdata_logger_proxy_edge_changedValues = val;
   });
 
-  SDatalogger_ProxyMode_Cloud_ConfigChangedLog.subscribe(val => {
-      sdata_logger_proxy_cloud_changedValues = val;
-  });
 
   SDatalogger_ProxyMode_Topic_ConfigChangedLog.subscribe(val => {
       sdata_logger_proxy_topic_changedValues = val;
@@ -737,8 +733,1491 @@
         }
 
       ]
-    }
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],   
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],      
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
 
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],   
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],      
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],   
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],      
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],   
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],      
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],     
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+    },
+    {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTag: [],    
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+
+      ]
+    }                
 
     ];
 
@@ -772,6 +2251,8 @@
         new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
       }
 
+      showMenu=false;
+
     }
 
     function NewArrayClick(index)
@@ -796,6 +2277,8 @@
       {
           new_proxy_edge[new_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
       }
+
+      showMenu=false;
     }
 
     function NewTagRawRequest(CloudIndex, TagIndex)
@@ -862,6 +2345,8 @@
           }
       }
 
+
+      showMenu=false;
     }
 
     function NewTagRawReply(CloudIndex, TagIndex)
@@ -928,6 +2413,9 @@
             }   
           }
       }
+
+      showMenu=false;
+
     }
 
 
@@ -992,7 +2480,9 @@
               new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
             }     
           }
-      }   
+      }
+
+      showMenu=false;   
     }
 
 
@@ -1247,6 +2737,8 @@
       {
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$TIME$"
       }
+
+      showMenu=false;
     }
 
     function ModifyArrayClick(index)
@@ -1272,6 +2764,8 @@
       {
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[index].userDefineedData+="$ARRAY$"
       }
+
+      showMenu=false;
 
     }
 
@@ -1340,6 +2834,8 @@
           }
       }
 
+      showMenu=false;
+
     }
 
     function ModifyTagRawReply(CloudIndex, TagIndex)
@@ -1406,6 +2902,8 @@
             }   
           }
       }
+
+      showMenu=false;
 
     }
 
@@ -1474,7 +2972,10 @@
               changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
             }   
           }
-      } 
+      }
+
+
+      showMenu=false; 
     }
 
 
@@ -1933,10 +3434,6 @@
                     {
                       sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
                     }
-                    else if (type == 1)
-                    {
-                      sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-                    }
                     else if (type == 0)
                     {
                       sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
@@ -1954,10 +3451,6 @@
                   else if (type == 2)
                   {
                     sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                  }
-                  else if (type == 1)
-                  {
-                    sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
                   }
                   else if (type == 0)
                   {
@@ -1978,10 +3471,6 @@
                       else if (type == 2)
                       {
                         sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                      }
-                      else if (type == 1)
-                      {
-                        sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
                       }
                       else if (type == 0)
                       {
@@ -2010,10 +3499,6 @@
                         {
                           sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
                         }
-                        else if (type == 1)
-                        {
-                          sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-                        }
                         else if (type == 0)
                         {
                           sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
@@ -2032,10 +3517,6 @@
                       else if (type == 2)
                       {
                         sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                      }
-                      else if (type == 1)
-                      {
-                        sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
                       }
                       else if (type == 0)
                       {
@@ -2076,10 +3557,6 @@
                     {
                       sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
                     }
-                    else if (type == 1)
-                    {
-                      sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-                    }
                     else if (type == 0)
                     {
                       sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
@@ -2097,10 +3574,6 @@
                   else if (type == 2)
                   {
                     sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                  }
-                  else if (type == 1)
-                  {
-                    sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
                   }
                   else if (type == 0)
                   {
@@ -2142,10 +3615,7 @@
           {
             sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
           }
-          else if (type == 1)
-          {
-            sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-          }
+
           else if (type == 0)
           {
             sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
@@ -2240,34 +3710,6 @@
         console.log(sdata_logger_proxy_edge_changedValues);    
     }
 
-
-    function saveProxyCloud()
-    {
-        console.log("save proxy cloud");
-        if (sdata_logger_proxy_cloud_changedValues.length !=0)
-        {
-            sdata_logger_proxy_cloud_changedValues=[];
-        }
-
-        compareObjects(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings, sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings, 1, 0,0);       
-
-        SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
-
-
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushInterval=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushInterval;
-
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushIntervalValue=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPushIntervalValue;
-
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.linkLostRetransmit=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.linkLostRetransmit;
-
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPriority=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.dataPriority;
-
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile));
-
-
-        ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-        console.log(sdata_logger_proxy_cloud_changedValues);    
-    }
 
 
     function saveProxyTopic()
@@ -2988,7 +4430,7 @@ once change ({ProxyEdgeData.changePercentage}%)
   <TableBodyRow>
 
 {#if getDataReady == 1}
-{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length < 10}
+{#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length < 50}
  <TableBodyCell class="!p-4 w-10">
 <button on:click={() => new_proxy_edge_trigger(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">

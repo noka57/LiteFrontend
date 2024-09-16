@@ -25,7 +25,8 @@
     DataTagPro_TagRuleAccumulated_ConfigChangedLog,
     DataTagPro_TagRuleCalculation_ConfigChangedLog,
     DataTagPro_TagRuleC2D_ConfigChangedLog,
-    DataTagPro_General_ConfigChangedLog
+    DataTagPro_General_ConfigChangedLog,
+    enableDataTagEnginePROall
   } from "./configG.js"
 
 
@@ -44,6 +45,8 @@
   let openTagList=false;
   let selectedNewTags = new Set();
   let tagsArray;
+  let data_tag_pro_flag;
+
 
   let sessionid;
   let sessionBinary;
@@ -184,6 +187,12 @@
   DataTagPro_General_ConfigChangedLog.subscribe(val => {
       data_tag_pro_general_changedValues = val;
   });
+
+
+  enableDataTagEnginePROall.subscribe(val => {
+      data_tag_pro_flag = val;
+  });
+
 
   function handleClickTagList()
   {
@@ -1079,7 +1088,7 @@
     BackupCTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].delete;
     BackupCTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName;
     BackupCTag.calculationFormula=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula;
-
+    showMenu=false;
     modify_calculation_tag_modal=true;
   }
 
@@ -1475,6 +1484,8 @@
         changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
       }
 
+      showMenu=false; 
+
     }
 
     function ModifyArrayClick(index)
@@ -1499,6 +1510,8 @@
       {
         changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
       }
+
+      showMenu=false;
     }
 
     function ModifyTagRawRequest(CloudIndex, TagIndex)
@@ -1533,6 +1546,8 @@
           changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
         }  
       }
+
+      showMenu=false;
     }
 
     function ModifyTagRawReply(CloudIndex, TagIndex)
@@ -1567,6 +1582,7 @@
         }  
       }
       
+      showMenu=false;
     }
 
 
@@ -1602,6 +1618,8 @@
           changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
         }  
       }
+
+      showMenu=false;
          
     }
 
@@ -2080,6 +2098,8 @@
       {
         new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
       }
+
+      showMenu=false;
       
     }
 
@@ -2105,6 +2125,8 @@
       {
           new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
       }
+
+      showMenu=false;
     }
 
     function NewTagRawRequest(CloudIndex, TagIndex)
@@ -2140,7 +2162,7 @@
         }  
       }
       
-
+      showMenu=false;
     }
 
     function NewTagRawReply(CloudIndex, TagIndex)
@@ -2175,6 +2197,8 @@
           new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
         }    
       }
+
+      showMenu=false;
       
     }
 
@@ -2211,6 +2235,9 @@
           new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
         }     
       }
+
+
+      showMenu=false;
          
     }
 
@@ -2556,7 +2583,417 @@
     targetTag:"",
     publishEnable:false,
     publishTopic:""
-  }              
+  },  
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },  
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },  
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },  
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  },  
+  {
+    enable:false,
+    delete:false,
+    tagName:"",
+    cloudProfile:"",
+    subscribeTopic:"",
+    targetTag:"",
+    publishEnable:false,
+    publishTopic:""
+  }                        
 
   ];
 
@@ -3485,13 +3922,13 @@
     new_calculation_tag[index].tagName="";   
     new_calculation_tag[index].calculationFormula="return "
 
-
+    showMenu=false;
     new_calculation_tag_index=index;
     new_calculation_tag_modal=true;    
   }
 
 
-  function modify_calculation_tag_fomula(index, type)
+  function modify_calculation_tag_formula(index, type)
   {
     if (type ==4)
     {
@@ -3532,8 +3969,7 @@
   }
 
 
-
-  function new_calculation_tag_fomula(index, type)
+  function new_calculation_tag_formula(index, type)
   {
     if (type ==0)
     {
@@ -3906,11 +4342,17 @@
             else
             {
               let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula.slice(0, cursorPosition);
+
               let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula.slice(cursorPosition);
+
               changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula=`${beforeCursorString}`;
+
               changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
-              nchanged_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
+
+              changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[tagIndex].tagName}`;
+
               changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+="$";
+
               changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula+=`${afterCursorString}`;
 
             }
@@ -3928,6 +4370,7 @@
 
       }
 
+      showMenu=false;
     }
 
 
@@ -4069,7 +4512,7 @@
 <table>
 
     <tr>
-    <td class="w-36"><p class="pl-5 pt-5 text-lg font-light text-left">Data Tag Pro</p></td>
+    <td class="w-48"><p class="pl-5 pt-5 text-lg font-light text-left">Data Tag Engine PRO</p></td>
 <td class="pl-5 pt-5">
 {#if getDataReady == 1}
 <Toggle bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_general.enable}></Toggle>
@@ -4090,7 +4533,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true} on:click={saveGeneral} ><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-40"><Button color="blue" pill={true} on:click={saveGeneral} ><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -4104,434 +4547,7 @@
 <TabItem title="Tag Rule">
 <Accordion>
  
-  <AccordionItem {defaultClass}>
 
-
-    <span slot="header" class="pl-4">
-    Calculation Tag
-    </span>
-
-
-
-<Table shadow striped={true} tableNoWFull={true}>
-  <TableHead>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-80">Calculation Formula</TableHeadCell>    
-
-  </TableHead>
-
-<TableBody>
-{#if getDataReady == 1}
-{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag as Ctag, index}
-{#if Ctag.delete}
-
-<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
-<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
-<button on:click={() => RestoreDeleteCtag(index)}>
-<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</button>
-   </td>
-
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
-<button class="disabled:cursor-not-allowed" disabled>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
-<button class="disabled:cursor-not-allowed" disabled>    
-    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</button>
-    </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 disabled:cursor-not-allowed strikeout" type="checkbox" bind:checked={Ctag.enable} disabled>
-    </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.tagName}</td>
-
-
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.calculationFormula}</td>
-
-
-
-
-   </tr>
-
-{:else}   
-
-
- <TableBodyRow>
-      <TableBodyCell class="!p-1 w-10"></TableBodyCell>
-  <TableBodyCell class="!p-0 w-10">
-<button on:click={()=>TriggerModifyCTag(index)}>
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
-
-       </TableBodyCell>
-    <TableBodyCell class="!p-0 w-10">
-<button on:click={() => DeleteCtag(index)}>    
-    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-</button>
-    </TableBodyCell>
-    <TableBodyCell>
-<input class="mb-1" type="checkbox"  bind:checked={Ctag.enable}>
-    </TableBodyCell>
-
-    <TableBodyCell>{index+1}</TableBodyCell>
- <TableBodyCell>{Ctag.tagName}</TableBodyCell>
-
-    <TableBodyCell>{Ctag.calculationFormula}</TableBodyCell>
-
-
-
- </TableBodyRow>
-
-
-{/if}
-{/each}
-{/if}
-
-
-  <TableBodyRow>
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length < 10}
-
- <TableBodyCell class="!p-4 w-10">
-
-<button on:click={() =>new_calculation_tag_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length)}>
-    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
-
-  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
-</svg>
-      </button>
-
- </TableBodyCell>
-{:else}
- <TableBodyCell class="!p-4 w-16"></TableBodyCell>
-{/if}
-      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
-      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
-
-      <TableBodyCell class="!p-4"></TableBodyCell>
-
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-  <TableBodyCell ></TableBodyCell>
-
-  <TableBodyCell ></TableBodyCell>
-
-  <TableBodyCell ></TableBodyCell>
-
-
-    </TableBodyRow>
-
-  <tr>
-    <td></td>
-    <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-
-
-    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveCTag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>Save</Button></td>
-
-
-    </tr>
-
-
-</TableBody>
-
-
-<Modal bind:open={new_calculation_tag_modal}  size="lg" class="w-full" permanent={true}>
-  <form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox"  bind:checked={new_calculation_tag[new_calculation_tag_index].enable}>
-{/if}
-  Enable
-</label>
-
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddCalculation(new_calculation_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-
-<p class="mt-10"></p>
-
-<table bind:this={modalElement}>
-
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
-      <td class="pl-5 pt-5">
-
-<input type="text" bind:value={new_calculation_tag[new_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-
-      </td>
-
-
-
-  </tr>
-
-
-
-
-
-<tr>
-      <td class="pt-2"><div><p class="pl-10 pt-1 mb-4 text-lg font-light text-right">Formula</p>
-
-
-  <ul style="list-style-type:none;" class="py-1">
-<li class="pt-2 text-right">
-
-    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,4)}>Max()</Button>
-    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,5)}>Min()</Button>
-</li>
-
-<li class="pt-2 text-right">
-
-    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,6)}>Avg()</Button>
-    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,7)}>Abs()</Button>
-
-</li>
-
-<li class="pt-2 text-right">
-
-    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,8)}>Add()</Button>
-    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,9)}>Sub()</Button>
-</li>
-
-<li class="pt-2 text-right">
-
-    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,10)}>Mul()</Button>
-    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,11)}>Div()</Button>
-
-</li>
-<li class="pt-2 text-right">
-
-    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,12)}>Reminder()</Button>
-
-</li>
-
-</ul>
-  </div>
-
-
-      </td>
-      <td class="pl-5 pt-2" colspan="10">
-
-{#if showMenu}
-<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
-    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
-        <ul style="margin: 6px;">
-{#if saved_changed_modbus_data!=""}
-
-        {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>AddTagName(0,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
-        {/each}
-{/if}
-        </ul>
-    </div>
-</nav>
-{/if}
-
-<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" bind:value={new_calculation_tag[new_calculation_tag_index].calculationFormula} on:contextmenu|preventDefault={rightClickContextMenu} 
-on:click={onPageClick}></textarea>
-
-      </td>
-
-    <td></td>
-    <td></td>
-
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-
-
-  </tr>
-
-
- <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td class="pl-40"></td>
-    <td class="pl-40"></td>
-    <td></td>
-    <td></td>
-    <td >
-<Button color="dark" pill={true} on:click={()=>add_new_calculation_tag(new_calculation_tag_index)}>Add</Button></td>
-
-
-</table>
-</form>
-</Modal>
-
-
-
-<Modal bind:open={modify_calculation_tag_modal}  size="lg" class="w-full" permanent={true}>
-  <form action="#">
-<label>
-{#if getDataReady == 1}
-  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].enable}>
-{/if}
-  Enable
-</label>
-
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={()=>no_modify_calculation_tag(modify_calculation_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-
-<p class="mt-10"></p>
-<table bind:this={modalElement}>
-
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
-      <td class="pl-5 pt-5">
-
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-
-      </td>
-
-
-
-  </tr>
-
-
-
-
-
-<tr>
-      <td class="pt-2"><div><p class="pl-10 pt-1 mb-4 text-lg font-light text-right">Formula</p>
-
-
-  <ul style="list-style-type:none;" class="py-1">
-<li class="pt-2 text-right">
-
-    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,4)}>Max()</Button>
-    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,5)}>Min()</Button>
-</li>
-
-<li class="pt-2 text-right">
-
-    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,6)}>Avg()</Button>
-    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,7)}>Abs()</Button>
-
-</li>
-
-<li class="pt-2 text-right">
-
-    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,8)}>Add()</Button>
-    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,9)}>Sub()</Button>
-</li>
-
-<li class="pt-2 text-right">
-
-    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,10)}>Mul()</Button>
-    <Button class="pl-2" size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,11)}>Div()</Button>
-
-</li>
-<li class="pt-2 text-right">
-
-    <Button size="xs" on:click={new_calculation_tag_fomula(new_calculation_tag_index,12)}>Reminder()</Button>
-
-</li>
-
-</ul>
-  </div>
-
-
-      </td>
-      <td class="pl-5 pt-2" colspan="5">
-
-{#if showMenu}
-<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
-    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
-        <ul style="margin: 6px;">
-{#if saved_changed_modbus_data!=""}
-
-        {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>AddTagName(1,0,TagItem.tagName)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
-        {/each}
-{/if}
-        </ul>
-    </div>
-</nav>
-{/if}
-
-<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula} on:contextmenu|preventDefault={rightClickContextMenu} 
-on:click={onPageClick}></textarea>
-
-      </td>
-
-    <td></td>
-    <td></td>
-
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-
-  </tr>
-
-
- <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td class="pl-40"></td>
-    <td class="pl-40"></td>
-    <td></td>
-    <td></td>
-    <td>
-<Button color="dark" pill={true} on:click={modify_calculation_tag(modify_calculation_tag_index)}>Modify</Button></td>
-
-
-</table>
-</form>
-</Modal>
-
-
-
-
-</Table>
-
-
-
-  </AccordionItem>
 
 <AccordionItem {defaultClass}>
 
@@ -4649,7 +4665,7 @@ on:click={onPageClick}></textarea>
 
 
   <TableBodyRow>
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length < 10}
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.cloud2DeviceTag.length < 50}
 
  <TableBodyCell class="!p-4 w-10">
 
@@ -4954,7 +4970,436 @@ on:click={onPageClick}></textarea>
 
 </AccordionItem>
 
+{#if data_tag_pro_flag==1}
 
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Calculation Tag
+    </span>
+
+
+
+<Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell class="!p-4">
+    </TableHeadCell>
+    <TableHeadCell>Enable</TableHeadCell>
+    <TableHeadCell>No</TableHeadCell>
+    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
+    <TableHeadCell class="w-80">Calculation Formula</TableHeadCell>    
+
+  </TableHead>
+
+<TableBody>
+{#if getDataReady == 1}
+{#each changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag as Ctag, index}
+{#if Ctag.delete}
+
+<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+<td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
+<button on:click={() => RestoreDeleteCtag(index)}>
+<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+   </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+<button class="disabled:cursor-not-allowed" disabled>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
+<input class="mb-1 disabled:cursor-not-allowed strikeout" type="checkbox" bind:checked={Ctag.enable} disabled>
+    </td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.tagName}</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.calculationFormula}</td>
+
+
+
+
+   </tr>
+
+{:else}   
+
+
+ <TableBodyRow>
+      <TableBodyCell class="!p-1 w-10"></TableBodyCell>
+  <TableBodyCell class="!p-0 w-10">
+<button on:click={()=>TriggerModifyCTag(index)}>
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+<path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+
+       </TableBodyCell>
+    <TableBodyCell class="!p-0 w-10">
+<button on:click={() => DeleteCtag(index)}>    
+    <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+  <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+    </TableBodyCell>
+    <TableBodyCell>
+<input class="mb-1" type="checkbox"  bind:checked={Ctag.enable}>
+    </TableBodyCell>
+
+    <TableBodyCell>{index+1}</TableBodyCell>
+ <TableBodyCell>{Ctag.tagName}</TableBodyCell>
+
+    <TableBodyCell>{Ctag.calculationFormula}</TableBodyCell>
+
+
+
+ </TableBodyRow>
+
+
+{/if}
+{/each}
+{/if}
+
+
+  <TableBodyRow>
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length < 10}
+
+ <TableBodyCell class="!p-4 w-10">
+
+<button on:click={() =>new_calculation_tag_trigger(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag.length)}>
+    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
+
+  <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
+</svg>
+      </button>
+
+ </TableBodyCell>
+{:else}
+ <TableBodyCell class="!p-4 w-16"></TableBodyCell>
+{/if}
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
+
+      <TableBodyCell class="!p-4"></TableBodyCell>
+
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+  <TableBodyCell ></TableBodyCell>
+
+  <TableBodyCell ></TableBodyCell>
+
+  <TableBodyCell ></TableBodyCell>
+
+
+    </TableBodyRow>
+
+  <tr>
+    <td></td>
+    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+
+
+    <td class="pl-10 pt-4"><Button color="blue" pill={true} on:click={saveCTag}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+
+</TableBody>
+
+
+<Modal bind:open={new_calculation_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={new_calculation_tag[new_calculation_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddCalculation(new_calculation_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+
+<table bind:this={modalElement}>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={new_calculation_tag[new_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+
+
+
+<tr>
+      <td class="pt-2"><div><p class="pl-10 pt-1 mb-4 text-lg font-light text-right">Formula</p>
+
+
+  <ul style="list-style-type:none;" class="py-1">
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={()=>new_calculation_tag_formula(new_calculation_tag_index,4)}>Max()</Button>
+    <Button class="pl-2" size="xs" on:click={()=>new_calculation_tag_formula(new_calculation_tag_index,5)}>Min()</Button>
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={()=>new_calculation_tag_formula(new_calculation_tag_index,6)}>Avg()</Button>
+    <Button class="pl-2" size="xs" on:click={()=>new_calculation_tag_formula(new_calculation_tag_index,7)}>Abs()</Button>
+
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={()=>new_calculation_tag_formula(new_calculation_tag_index,8)}>Add()</Button>
+    <Button class="pl-2" size="xs" on:click={()=>new_calculation_tag_formula(new_calculation_tag_index,9)}>Sub()</Button>
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={()=>new_calculation_tag_formula(new_calculation_tag_index,10)}>Mul()</Button>
+    <Button class="pl-2" size="xs" on:click={()=>new_calculation_tag_formula(new_calculation_tag_index,11)}>Div()</Button>
+
+</li>
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={()=>new_calculation_tag_formula(new_calculation_tag_index,12)}>Reminder()</Button>
+
+</li>
+
+</ul>
+  </div>
+
+
+      </td>
+      <td class="pl-5 pt-2" colspan="10">
+
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+{#if saved_changed_modbus_data!=""}
+
+        {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>AddTagName(0,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+        {/each}
+{/if}
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" bind:value={new_calculation_tag[new_calculation_tag_index].calculationFormula} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
+
+      </td>
+
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+
+  </tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td></td>
+    <td></td>
+    <td >
+<Button color="dark" pill={true} on:click={()=>add_new_calculation_tag(new_calculation_tag_index)}>Add</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+
+<Modal bind:open={modify_calculation_tag_modal}  size="lg" class="w-full" permanent={true}>
+  <form action="#">
+<label>
+{#if getDataReady == 1}
+  <input type="checkbox"  bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].enable}>
+{/if}
+  Enable
+</label>
+
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={()=>no_modify_calculation_tag(modify_calculation_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
+<p class="mt-10"></p>
+<table bind:this={modalElement}>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
+      <td class="pl-5 pt-5">
+
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+
+      </td>
+
+
+
+  </tr>
+
+
+
+
+
+<tr>
+      <td class="pt-2"><div><p class="pl-10 pt-1 mb-4 text-lg font-light text-right">Formula</p>
+
+
+  <ul style="list-style-type:none;" class="py-1">
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={()=>modify_calculation_tag_formula(modify_calculation_tag_index,4)}>Max()</Button>
+    <Button class="pl-2" size="xs" on:click={()=>modify_calculation_tag_formula(modify_calculation_tag_index,5)}>Min()</Button>
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={()=>modify_calculation_tag_formula(modify_calculation_tag_index,6)}>Avg()</Button>
+    <Button class="pl-2" size="xs" on:click={()=>modify_calculation_tag_formula(modify_calculation_tag_index,7)}>Abs()</Button>
+
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={()=>modify_calculation_tag_formula(modify_calculation_tag_index,8)}>Add()</Button>
+    <Button class="pl-2" size="xs" on:click={()=>modify_calculation_tag_formula(modify_calculation_tag_index,9)}>Sub()</Button>
+</li>
+
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={()=>modify_calculation_tag_formula(modify_calculation_tag_index,10)}>Mul()</Button>
+    <Button class="pl-2" size="xs" on:click={()=>modify_calculation_tag_formula(modify_calculation_tag_index,11)}>Div()</Button>
+
+</li>
+<li class="pt-2 text-right">
+
+    <Button size="xs" on:click={()=>modify_calculation_tag_formula(modify_calculation_tag_index,12)}>Reminder()</Button>
+
+</li>
+
+</ul>
+  </div>
+
+
+      </td>
+      <td class="pl-5 pt-2" colspan="10">
+
+{#if showMenu}
+<nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+        <ul style="margin: 6px;">
+{#if saved_changed_modbus_data!=""}
+
+        {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>AddTagName(1,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+        {/each}
+{/if}
+        </ul>
+    </div>
+</nav>
+{/if}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula} on:contextmenu|preventDefault={rightClickContextMenu} 
+on:click={onPageClick}></textarea>
+
+      </td>
+
+    <td></td>
+    <td></td>
+
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+  </tr>
+
+
+ <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td></td>
+    <td></td>
+    <td>
+<Button color="dark" pill={true} on:click={modify_calculation_tag(modify_calculation_tag_index)}>Modify</Button></td>
+
+
+</table>
+</form>
+</Modal>
+
+
+
+
+</Table>
+
+
+
+  </AccordionItem>
 
   <AccordionItem {defaultClass}>
 
@@ -7535,136 +7980,14 @@ on:click={onPageClick}></textarea>
 
 
   </AccordionItem>
-{#if 0}
 
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    Schedule Tag
-    </span>
-
-
-
-
-<Table shadow striped={true} tableNoWFull={true}>
-  <TableHead>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell class="!p-4">
-    </TableHeadCell>
-    <TableHeadCell>Enable</TableHeadCell>
-    <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>    
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell> 
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>    
-
-  </TableHead>
-
-<TableBody>
-
-
-
-
-
-</TableBody>
-
-</Table>
-
-  </AccordionItem>
-
-  {/if}
-
-{#if 0}
-
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    Tag Rule Import/Export
-    </span>
-
-
-
-<table>
-
-    <tr>
-    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Export Tag Rule</p></td>
-
-<td class="pl-5 pt-5"><Button on:click={exportTR}>Export</Button></td>
-  </tr>
-
-
-<tr>
-
-<td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Import Tag Rule</p></td>
-<td class="pl-5 pt-5">
-
-<input type="file" id="configUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleFileUpload}>
-
-</td>
-<td class="pl-5 pt-5">
-  <Button on:click={importTR}>Import</Button>
-
-</td>
-
-</tr>
-
-
-
-<Modal bind:open={modalAuthExportTR} size="lg" class="w-full" permanent={true}>
-<form action="#">
-
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={CancelETRAuth}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
-<p class="mt-10"></p>
-
-<table>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Please Enter Password:</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
-
-
-
-  </tr>
-
-
-
-
-            <tr>
-    <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-            <td></td>
-    <td></td>
-    <td class="pl-10"><Button color="dark" pill={true}>Submit</Button></td>
-
-
-    </tr>
-
-
-</table>
-</form>
-</Modal>
-
-</table>
-
-  </AccordionItem>
 {/if}
 
 
 </Accordion>
 
 </TabItem>
+{#if data_tag_pro_flag==1}
 
 <TabItem title="UL Rule">
 
@@ -8610,6 +8933,8 @@ on:click={onPageClick}></textarea>
 
 </TabItem>
 
+{/if}
+
 {#if 0}
 
 <TabItem title="DL Rule">
@@ -8678,64 +9003,7 @@ on:click={onPageClick}></textarea>
 
 {/if}
 
-{#if 0}
-<TabItem title="Simulator">
 
-
-
-<Accordion>
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    Down Link
-    </span>
-
-
-<p>Select Tag: </p><select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" >
-<option disabled="" value="">None</option>
-<option value="1" >modbusTest</option>
-
-</select>
-
-
-<p class="pt-5">Value: </p><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500">
-
-
-
-<p class="pt-5"></p>
-<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full" >Simulate</button>
-
-  </AccordionItem>
-
-
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    Up Link
-    </span>
-
-<p>Select Tag: </p><select class="block w-80 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2">
-<option disabled="" value="">None</option>
-<option value="1" >modbusTest</option>
-
-</select>
-
-
-<p class="pt-5">Value: </p><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500">
-
-<p class="pt-5"></p>
-<button type="button" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 rounded-full" >Simulate</button>
-
-  </AccordionItem>
-</Accordion>
-
-
-
- </TabItem>
-
- {/if}
 
 
  </Tabs>

@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem,Toggle,Button, Spinner, Modal} from 'flowbite-svelte';
+  import { Tabs, TabItem,AccordionItem, Accordion,Toggle,Button, Spinner, Modal} from 'flowbite-svelte';
 
   import { sessionidG } from "./sessionG.js";
   import { onMount } from 'svelte';
@@ -13,13 +13,14 @@
   let sessionid;
   let fileContent; 
   let sessionBinary;
+  let overwriteLAN=false;
 
   let configuration_data="";
   let changed_configuration_data = {};
   let saved_changed_configuration_data = {};
   let getDataReady=0;
   let configuration_p2e_changedValues = [];
-
+  let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
 
   let defaultModal = false;
   let uploadconfigIsValid =0;
@@ -94,25 +95,58 @@
       else
       {
 
-        const res = await fetch(window.location.origin+"/uploadConfig", {
-        method: 'POST',
-        body: fileContent,
-            headers: {
-              'Content-Type': 'application/octet-stream',
-            },
-        })
-
-        if (res.status == 200)
+        if (overwriteLAN)
         {
-          uploadconfigIsValid=1;
-          console.log("200 OK");
+          console.log("overwriteLAN: ", overwriteLAN);
 
+          const res = await fetch(window.location.origin+"/uploadConfig", {
+          method: 'POST',
+          body: fileContent,
+              headers: {
+                'Content-Type': 'application/octet-stream',
+              },
+          })
+
+          if (res.status == 200)
+          {
+            uploadconfigIsValid=1;
+            console.log("200 OK (overwrite lan)");
+
+          }
+          else
+          {
+            CheckedConfigInvalid=1;
+          }
         }
         else
         {
-          CheckedConfigInvalid=1;
+          console.log("overwriteLAN: ", overwriteLAN);
+
+          const res = await fetch(window.location.origin+"/uploadCONfigNonLAN", {
+          method: 'POST',
+          body: fileContent,
+              headers: {
+                'Content-Type': 'application/octet-stream',
+              },
+          })
+
+          if (res.status == 200)
+          {
+            uploadconfigIsValid=1;
+            console.log("200 OK (non overwrite lan");
+
+          }
+          else
+          {
+            CheckedConfigInvalid=1;
+          }
+
         }
       }
+    }
+    else
+    {
+      console.log("non selected file");
     }
   }
 
@@ -130,7 +164,7 @@
     if (response.status == 200)
     {
       const blob = await response.blob();
-      const export_filename = 'EW50v.config';
+      const export_filename = 'EW50V.config';
 
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
@@ -227,30 +261,57 @@
 
 <Tabs style="underline">
   <TabItem open title="Local">
+
+
+<Accordion>
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Export Configuration
+    </span>  
+
 <table>
 
     <tr>
-    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Backup Current Configuration</p></td>
+    <td class="w-85"><p class="pl-10 pt-1 text-lg font-light text-right">Backup Current Configuration</p></td>
 
-<td class="pl-5 pt-5"><Button on:click={downloadFile}>Download</Button></td>
+<td class="pl-5 pt-1"><Button on:click={downloadFile}>Export</Button></td>
   </tr>
 
+  </table>
+
+</AccordionItem>
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    Import Configuration
+    </span> 
+
+<table>
 
 <tr>
 
-<td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Restore Configuration</p></td>
+<td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Configuration File</p></td>
 <td class="pl-5 pt-5">
 
 <input type="file" id="configUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleFileUpload}>
 
 </td>
 <td class="pl-5 pt-5">
-  <Button on:click={uploadFile}>Upload</Button>
+  <Button on:click={uploadFile}>Import</Button>
 
 </td>
 
 </tr>
-
+<tr>
+    <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Overwrite LAN Configuration</p></td>
+    <td class="pl-5 pt-5">
+<Toggle bind:checked={overwriteLAN}></Toggle>
+</td>
+</tr>
 </table>
 
 
@@ -301,7 +362,8 @@
 </table>
 </Modal>
 
-
+</AccordionItem>
+</Accordion>
 </TabItem>
 
   <TabItem title="P2E">

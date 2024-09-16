@@ -12,7 +12,6 @@
     ModbusGateway_RtR_ConfigChangedLog,
     ModbusGateway_TtT_ConfigChangedLog,
     ModbusDataModel_Slave_ConfigChangedLog,
-    ModbusDataModel_Master_ConfigChangedLog,
     ModbusTag_ConfigChangedLog,
     ModbusTCP_Slave_ConfigChangedLog,
     ModbusTCP_Master_ConfigChangedLog,
@@ -111,9 +110,6 @@
         modbus_data_model_slave_changedValues = val;
     });
 
-    ModbusDataModel_Master_ConfigChangedLog.subscribe(val => {
-        modbus_data_model_master_changedValues = val;
-    });
 
     ModbusTag_ConfigChangedLog.subscribe(val => {
         modbus_tag_changedValues = val;
@@ -901,6 +897,686 @@
         responseTimeout: 1000, 
         pollingRate: 1000
     },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },
+    {
+        enable: false,
+        delete: false,
+        tagName:"",
+        masterProfile:"",
+        slaveId:1, 
+        pointType: 0, 
+        address: 0, 
+        quantity: 1, 
+        byteOrder: 0, 
+        dataType: 0,
+        postprocessingEnable:false,
+        postprocessingOperator: 0, 
+        postprocessingValue: 1, 
+        responseTimeout: 1000, 
+        pollingRate: 1000
+    },                            
     {
         enable: false,
         delete: false,
@@ -4246,459 +4922,7 @@
         console.log(modbus_data_model_slave_changedValues);    
     }
 
-    function saveDataModelMaster()
-    {
-        console.log("save v Master");
-        if (modbus_data_model_master_changedValues.length !=0)
-        {
-            modbus_data_model_master_changedValues=[];
-        }
-        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_data_model.master.length, modbus_data.config.fieldManagement_modbus_data_model.master.length); i++) 
-        {
-          compareObjects(changed_modbus_data.config.fieldManagement_modbus_data_model.master[i], modbus_data.config.fieldManagement_modbus_data_model.master[i], 4, 1,i+1);
 
-          if (changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName != saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName)
-          {
-  
-            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel ==saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel="";
-                    }
-
-                    if (sdata_logger_proxy_edge_changedValues.length !=0)
-                    {
-                        sdata_logger_proxy_edge_changedValues=[];
-                    }
-
-
-                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
-
-                    SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
-
-                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-                }
-            }
-
-            for (let j=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel ==saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel="";
-                    }
-                }
-            }
-
-
-            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel ==saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
-                    }
-
-                    if (sdata_logger_monitor_edge_changedValues.length !=0)
-                    {
-                        sdata_logger_monitor_edge_changedValues=[];
-                    }
-
-
-                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], 2, 1,j+1);
-
-                    SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
-
-                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-                }
-            }
-
-            for (let j=sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel ==saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
-                    }
-                }
-            }
-
-
-            for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";
-                    }
-
-
-                    if (event_engine_trigger_modbus_changeValues.length !=0)
-                    {
-                        event_engine_trigger_modbus_changeValues=[];
-                    }
-
-                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
-                    event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
-
-                    EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
-                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                }
-
-            }
-
-            for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";   
-                    }
-                }
-
-            }
-
-
-            for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
-                    }
-
-                    if (event_engine_action_modbus_changeValues.length !=0)
-                    {
-                        event_engine_action_modbus_changeValues=[];
-                    }
-
-                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
-                    event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
-
-                    EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
-                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                }
-
-            }
-
-            for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
-                    }
-                }
-            }
-
-          }
-        }
-
-        for (let i=modbus_data.config.fieldManagement_modbus_data_model.master.length; i< saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master.length;i++)
-        {
-
-          if (changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName != saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName)
-          {
-  
-            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel ==saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=""; 
-                    }
-
-                    if (sdata_logger_proxy_edge_changedValues.length !=0)
-                    {
-                        sdata_logger_proxy_edge_changedValues=[];
-                    }
-
-
-                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
-
-                    SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
-
-                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-                }
-            }
-
-            for (let j=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel ==saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel="";
-                    }
-                }
-            }
-
-
-            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel ==saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;                   
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
-                    }
-
-                    if (sdata_logger_monitor_edge_changedValues.length !=0)
-                    {
-                        sdata_logger_monitor_edge_changedValues=[];
-                    }
-
-
-                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], 2, 1,j+1);
-
-                    SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
-
-                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-                }
-            }
-
-            for (let j=sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel ==saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusDataModel="";
-                    }
-
-                }
-            }
-
-
-            for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";
-                    }
-
-
-                    if (event_engine_trigger_modbus_changeValues.length !=0)
-                    {
-                        event_engine_trigger_modbus_changeValues=[];
-                    }
-
-                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
-                    event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
-
-                    EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
-                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                }
-
-            }
-
-            for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusDataModel="";
-                    }
-                }
-
-            }
-
-
-            for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
-                    }
-
-
-
-                    if (event_engine_action_modbus_changeValues.length !=0)
-                    {
-                        event_engine_action_modbus_changeValues=[];
-                    }
-
-                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
-                    event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
-
-                    
-                    EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
-                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                }
-
-            }
-
-            for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel && saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].dataModelName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusDataModel="";
-                    }
-                }
-            }
-          }
-
-        }
-
-        if (changed_modbus_data.config.fieldManagement_modbus_data_model.master.length > modbus_data.config.fieldManagement_modbus_data_model.master.length)
-        {
-          let addedCount=changed_modbus_data.config.fieldManagement_modbus_data_model.master.length-modbus_data.config.fieldManagement_modbus_data_model.master.length;
-
-          for (let k=modbus_data.config.fieldManagement_modbus_data_model.master.length;k<changed_modbus_data.config.fieldManagement_modbus_data_model.master.length;k++)
-          {
-            if (changed_modbus_data.config.fieldManagement_modbus_data_model.master[k].delete)
-            {
-                addedCount--;
-            }
-          }
-
-            if (addedCount > 0)
-            {
-                let changedstr="Add "+addedCount+" item(s) to Modbus Data Model Master List";
-                modbus_data_model_master_changedValues=[...modbus_data_model_master_changedValues, changedstr];
-            }
-        }
-
-        if (changed_modbus_data.config.fieldManagement_modbus_data_model.master.length < modbus_data.config.fieldManagement_modbus_data_model.master.length)
-        {
-            let deletedCount=modbus_data.config.fieldManagement_modbus_data_model.master.length-changed_modbus_data.config.fieldManagement_modbus_data_model.master.length;
-
-            let changedstr="Delete "+deleteCount+" item(s) from Modbus Data Model Master List";
-            modbus_data_model_master_changedValues=[...modbus_data_model_master_changedValues, changedstr];
-        }
-
-
-        ModbusDataModel_Master_ConfigChangedLog.set(modbus_data_model_master_changedValues);
-
-
-
-        let tempForDelete=[];
-        for (let i = 0; i< changed_modbus_data.config.fieldManagement_modbus_data_model.master.length; i++)
-        {
-            if (!changed_modbus_data.config.fieldManagement_modbus_data_model.master[i].delete)
-            {
-                tempForDelete=[...tempForDelete, changed_modbus_data.config.fieldManagement_modbus_data_model.master[i]]
-            }
-        }
-
-        saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master=JSON.parse(JSON.stringify(tempForDelete));
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master=JSON.parse(JSON.stringify(tempForDelete));
-        //saved_changed_modbus_data.config.fieldManagement_modbus_data_model.master=JSON.parse(JSON.stringify(changed_modbus_data.config.fieldManagement_modbus_data_model.master));
-
-        ChangedModbusConfig.set(saved_changed_modbus_data);
-        console.log(modbus_data_model_master_changedValues);    
-    }
 
     function saveGatewayT2R()
     {
@@ -6704,7 +6928,7 @@
 
 
      <TableBodyRow>
-{#if changed_modbus_data.config.fieldManagement_modbus_tag.length < 10}        
+{#if changed_modbus_data.config.fieldManagement_modbus_tag.length < 50}        
      <TableBodyCell class="!p-4 w-10">
   
     <button on:click={() =>new_tag_trigger(changed_modbus_data.config.fieldManagement_modbus_tag.length)}>

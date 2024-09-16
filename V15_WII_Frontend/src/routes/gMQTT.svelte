@@ -13,7 +13,7 @@
     sdataLoggerConfig,
     ChangedSDataLoggerConfig,
     SDatalogger_MonitorMode_Cloud_ConfigChangedLog,
-    SDatalogger_ProxyMode_Cloud_ConfigChangedLog, 
+    SDatalogger_ProxyMode_Edge_ConfigChangedLog, 
     genericMQTTConfig,
     GenericMQTTConfigChangedLog,
     ChangedGenericMQTTConfig
@@ -37,7 +37,7 @@
 
 
 
-  let sdata_logger_proxy_cloud_changedValues = [];
+  let sdata_logger_proxy_edge_changedValues = [];
   let sdata_logger_monitor_cloud_changedValues = [];
 
   let sdata_logger_data="";
@@ -91,8 +91,8 @@
   });
 
 
-  SDatalogger_ProxyMode_Cloud_ConfigChangedLog.subscribe(val => {
-      sdata_logger_proxy_cloud_changedValues = val;
+  SDatalogger_ProxyMode_Edge_ConfigChangedLog.subscribe(val => {
+      sdata_logger_proxy_edge_changedValues = val;
   });
 
   SDatalogger_MonitorMode_Cloud_ConfigChangedLog.subscribe(val => {
@@ -550,47 +550,38 @@
 
       let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
 
-      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length;j++)
+      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
       {
-        console.log(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]);
-        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j] == item)
+        console.log(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j]);
+        for (let m=0; m <saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].cloud.length;m++)
         {
-          if (!changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete &&(changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
-          changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort))
+          if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].cloud[m].profile == item)
           {
-            let new_item= changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
-
-            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]=new_item;
-
-            let changedstr="CloudProfile No. "+ (j+1)+ " is changed to "+ new_item;
-            sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-            //console.log(changedstr);
-            SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
-            //ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data); 
-          }
-
-
-
-          if (!saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete && changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete)
-          {
-            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
-            sdata_logger_proxy_cloud_changedValues=[...sdata_logger_proxy_cloud_changedValues, changedstr];
-
-            SDatalogger_ProxyMode_Cloud_ConfigChangedLog.set(sdata_logger_proxy_cloud_changedValues);
-            deleteProxyCount+=1;
-
-            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[j]="";
-            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length != 0)
+            if (!changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete &&(changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost ||
+            changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort != saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort))
             {
-              saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[j]="";
-            } 
+              let new_item= changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
 
-            if (j==0)
+              saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].cloud[m].profile=new_item;
+
+              let changedstr="Edge Data No. "+ (j+1)+ ", Cloud No. "+(m+1)+ " profile is changed to "+ new_item;
+              sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr];
+              //console.log(changedstr);
+              SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
+              //ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data); 
+            }
+
+
+
+            if (!saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete && changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].delete)
             {
-              if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length==2)
-              {
-                moveProxyProfile=1;
-              }
+              let changedstr="Edge Data No. "+ (j+1)+ ", Cloud No. "+(m+1)+ " profile is deleted";
+              sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr];
+
+              SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
+              deleteProxyCount+=1;
+
+              saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].cloud[m].profile="";
 
             }
           }
@@ -598,25 +589,7 @@
         }
       }
 
-      if (moveProxyProfile==1 && deleteProxyCount==1)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile[1];
-        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length == 2)
-        {
-          saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic[1];
-        }
 
-      }
-
-      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length != 0)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudProfile.length-=deleteProxyCount;
-      }
-
-      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length != 0)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.cloudSettings.cloudTopic.length-=deleteProxyCount;
-      }
       ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
 
       for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length;j++)

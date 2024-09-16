@@ -91,7 +91,6 @@
 	    ModbusGateway_RtR_ConfigChangedLog,
 	    ModbusGateway_TtT_ConfigChangedLog,
 	    ModbusDataModel_Slave_ConfigChangedLog,
-	    ModbusDataModel_Master_ConfigChangedLog,
       ModbusTag_ConfigChangedLog,
 	    ModbusTCP_Slave_ConfigChangedLog,
 	    ModbusTCP_Master_ConfigChangedLog,
@@ -610,9 +609,6 @@
       modbus_data_model_slave_changedValues = val;
   });
 
-  ModbusDataModel_Master_ConfigChangedLog.subscribe(val => {
-      modbus_data_model_master_changedValues = val;
-  });
 
   ModbusTag_ConfigChangedLog.subscribe(val => {
       modbus_tag_changedValues = val;
@@ -1510,12 +1506,14 @@
 
       let applied_new_wan_data= JSON.parse(JSON.stringify(wan_data));
       wanConfig.set(applied_new_wan_data);
-      ewanChangeIp = ewan1_basic_changedValues.some(str => str.includes('ip'));
-      ewanChangeConnectionType = ewan1_basic_changedValues.some(str => str.includes('connectionType'));
 
-      cwan1_basic_changedValues = [];
-      cwan1_advanced_changedValues = [];
-      cwan1_simpolicy_changedValues = [];
+      if (ewan1_basic_changedValues.length !=0)
+      {
+        ewanChangeIp = ewan1_basic_changedValues.some(str => str.includes('ip'));
+        ewanChangeConnectionType = ewan1_basic_changedValues.some(str => str.includes('connectionType'));
+      }
+
+
 
       ewan1_basic_changedValues = [];
       ewan1_ewlap_changedValues = [];
@@ -1524,7 +1522,7 @@
       port_switch_changedValues = [];  
 
 
-      if (cwan1_glink_changedValues.length !=0)
+      if (cwan1_glink_changedValues.length !=0 || cwan1_basic_changedValues.length !=0 || cwan1_advanced_changedValues.length !=0 || cwan1_simpolicy_changedValues.length !=0)
       {
         WanRestartContent=new Uint8Array(sessionBinary.length+1);
         WanRestartContent.set(sessionBinary);
@@ -1539,6 +1537,9 @@
       }
 
       console.log(WanRestartContent);
+      cwan1_basic_changedValues = [];
+      cwan1_advanced_changedValues = [];
+      cwan1_simpolicy_changedValues = [];
       cwan1_glink_changedValues = [];
       WAN_CWAN1_GLink_ConfigChangedLog.set(cwan1_glink_changedValues);
 
@@ -2053,7 +2054,6 @@
       ModbusGateway_RtR_ConfigChangedLog.set(modbus_gateway_RtR_changedValues);
       ModbusGateway_TtT_ConfigChangedLog.set(modbus_gateway_TtT_changedValues);
       ModbusDataModel_Slave_ConfigChangedLog.set(modbus_data_model_slave_changedValues);
-      ModbusDataModel_Master_ConfigChangedLog.set(modbus_data_model_master_changedValues);
       ModbusTag_ConfigChangedLog.set(modbus_tag_changedValues);
       ModbusTCP_Slave_ConfigChangedLog.set(modbus_tcp_slave_changedValues);
       ModbusTCP_Master_ConfigChangedLog.set(modbus_tcp_master_changedValues);

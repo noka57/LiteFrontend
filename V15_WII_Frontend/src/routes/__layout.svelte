@@ -58,7 +58,6 @@
 	    ModbusGateway_RtR_ConfigChangedLog,
 	    ModbusGateway_TtT_ConfigChangedLog,
 	    ModbusDataModel_Slave_ConfigChangedLog,
-	    ModbusDataModel_Master_ConfigChangedLog,
 	    ModbusTag_ConfigChangedLog,
 	    ModbusTCP_Slave_ConfigChangedLog,
 	    ModbusTCP_Master_ConfigChangedLog,
@@ -96,7 +95,8 @@
 	    DataTagPro_TagRuleAccumulated_ConfigChangedLog,
 	    DataTagPro_TagRuleCalculation_ConfigChangedLog,
 	    DataTagPro_TagRuleC2D_ConfigChangedLog,
-	    DataTagPro_General_ConfigChangedLog,    	
+	    DataTagPro_General_ConfigChangedLog,
+	    enableDataTagEnginePROall,    	
     	VPNdashboad,
     	dashboadData
   	} from "./configG.js"
@@ -740,12 +740,8 @@
     	JudgeChangedOrNot();
     });
 
-    ModbusDataModel_Master_ConfigChangedLog.subscribe(val => {
-        modbus_data_model_master_changedValues = val;
-       	JudgeChangedOrNot();
-    });
 
-     ModbusTag_ConfigChangedLog.subscribe(val => {
+    ModbusTag_ConfigChangedLog.subscribe(val => {
         modbus_tag_changedValues = val;
         JudgeChangedOrNot();
     });
@@ -902,6 +898,10 @@
         vpn_dashboard = val;
     });
 
+    enableDataTagEnginePROall.subscribe(val => {
+        data_tag_pro_flag = val;
+    });
+
     async function getDataTagProFlag(){
 		const res = await fetch(window.location.origin+"/GEtdaTatagProFLAg", 
     	{
@@ -916,6 +916,7 @@
 			//console.log(data);
 			const uint8Array = new Uint8Array(data);
 			data_tag_pro_flag = parseInt(uint8Array, 16);
+			enableDataTagEnginePROall.set(data_tag_pro_flag);
 			//console.log(data_tag_pro_flag);
 		}
     }
@@ -1166,8 +1167,8 @@ const topMenuList = [{ href: '/apply', id: 0 },
 
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
 
-{#if data_tag_pro_flag ==1}
-        			    <SidebarDropdownItem label="Data Tag Pro" href='/datatagpro' active={activeUrl === '/datatagpro'}/>
+{#if data_tag_pro_flag==1}
+        			    <SidebarDropdownItem label="Data Tag Engine PRO" href='/datatagpro' active={activeUrl === '/datatagpro'}/>
 {/if}
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
 						<SidebarDropdownItem label="Docker Engine" href='/docker' active={activeUrl === '/docker'}/>

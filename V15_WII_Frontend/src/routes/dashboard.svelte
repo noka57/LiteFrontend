@@ -600,8 +600,6 @@ NA
 <div class="px-40">
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.ip}{/if}</p>
 
-        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.gateway}{/if}</p>
-
 </div>
 </div>
                       </TableBodyCell>

@@ -7,6 +7,7 @@ export const cwanWebInputFlag=writable("");
 export const fakeTimeMSecSince1970=writable("");
 export const fakeTimeString=writable("");
 export const enableDataTagEnginePROall=writable("");
+export const wholeConfigVersion=writable("");
 
 export const awsIoTcoreConfig=writable("");
 export const azureConfig=writable("");

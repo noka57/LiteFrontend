@@ -3,7 +3,7 @@
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { maintenanceConfig,
+  import { dashboadData,maintenanceConfig,
   ChangedMaintenanceConfig,
   MaintenanceConfigChangedLog
   } from "./configG.js"
@@ -15,6 +15,8 @@
   let saved_changed_maintenance_data = {};
   let getDataReady=0;
   let maintenance_changedValues = [];
+
+  let dashboard_data="";
 
   let selectedFwr = null;
   let fwrContent; 
@@ -45,6 +47,10 @@
   let sessionBinary;
   sessionidG.subscribe(val => {
      sessionid = val;
+  });
+
+  dashboadData.subscribe(val => {
+        dashboard_data = val;
   });
 
 
@@ -84,6 +90,14 @@
 
   let StartTraceroute=0;
   let FinishTraceroute=0;
+
+  let major=0;
+  let minor=0;
+  let patch=0;
+
+  let fileMajor=0;
+  let fileMinor=0;
+  let filePatch=0
 
 
 
@@ -256,6 +270,10 @@
     }
   }
 
+  function parseVersion(version) {
+    return version.split('.').map(Number);
+  }
+
 
   function sendPing() 
   {
@@ -302,8 +320,18 @@
       }
 
 
+
       if (magicValid == 1)
-      {
+      {      
+        let versionArray=fwrContent.subarray(sessionBinary.length+12, sessionBinary.length+20)
+        const trimmedLength = Array.from(versionArray).reverse().findIndex(byte => byte !== 0);
+        let trimmedArray = versionArray.subarray(0, 8-trimmedLength);
+
+        const decoder = new TextDecoder('utf-8');
+        const version = decoder.decode(trimmedArray);
+        console.log("version: ", version);
+        [fileMajor, fileMinor, filePatch] = parseVersion(version);
+        console.log(fileMajor,fileMinor,filePatch);
 
         defaultModal=true;
 
@@ -353,7 +381,6 @@
             CheckedFwrInvalid=1;
           }        
         }
-
       }
 
 
@@ -568,6 +595,9 @@
 
   } 
 
+
+
+
   onMount(() => {
 
     console.log("maintenance sessionid: ");
@@ -576,11 +606,19 @@
 
     if (sessionid && maintenance_data == "")
     {
-        const hexArray = sessionid.match(/.{1,2}/g); 
-        const byteValues = hexArray.map(hex => parseInt(hex, 16));
-        sessionBinary = new Uint8Array(byteValues);
+      const hexArray = sessionid.match(/.{1,2}/g); 
+      const byteValues = hexArray.map(hex => parseInt(hex, 16));
+      sessionBinary = new Uint8Array(byteValues);
 
-        getMaintenanceData();
+      getMaintenanceData();
+      if (dashboard_data != "")
+      {
+        [major, minor, patch] = parseVersion(dashboard_data.config.dashboard.systemInfo.firmwareVersion);
+        console.log("major: ", major);
+        console.log("minor: ", minor);
+        console.log("patch: ", patch);
+      }
+
     }
     else if (sessionid && maintenance_data != "")
     {
@@ -596,7 +634,19 @@
       {
         changed_maintenance_data = JSON.parse(JSON.stringify(saved_changed_maintenance_data));
       }
+
+
+      if (dashboard_data != "")
+      {
+        [major, minor, patch] = parseVersion(dashboard_data.config.dashboard.systemInfo.firmwareVersion);
+        console.log("major: ", major);
+        console.log("minor: ", minor);
+        console.log("patch: ", patch);
+      }
+
       getDataReady=1;
+
+
     }
 
   });

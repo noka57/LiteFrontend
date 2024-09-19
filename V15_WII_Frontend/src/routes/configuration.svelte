@@ -3,7 +3,9 @@
 
   import { sessionidG } from "./sessionG.js";
   import { onMount } from 'svelte';
-  import { configurationConfig,
+  import { 
+        wholeConfigVersion,
+        configurationConfig,
         ConfigurationP2EConfigChangedLog,
         ChangedConfigurationConfig
    } from "./configG.js"
@@ -14,6 +16,7 @@
   let fileContent; 
   let sessionBinary;
   let overwriteLAN=false;
+  let whole_config_version="";
 
   let configuration_data="";
   let changed_configuration_data = {};
@@ -31,6 +34,9 @@
    });
 
 
+   wholeConfigVersion.subscribe(val => {
+        whole_config_version = val;
+    });
 
     configurationConfig.subscribe(val => {
         configuration_data = val;
@@ -179,6 +185,23 @@
     }
   }
 
+  async function getWConfigVersion() {
+    const res = await fetch(window.location.origin+"/GetConfigWhOLEveRsion", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      const data =await res.arrayBuffer();
+      const uint8Array = new Uint8Array(data);
+      whole_config_version = parseInt(uint8Array, 16);
+      wholeConfigVersion.set(whole_config_version);
+      console.log("whole_config_version:", whole_config_version);
+
+    }
+  }
+
 
    async function getConfigurationData() {
     const res = await fetch(window.location.origin+"/getconFiguraTionData", {
@@ -198,6 +221,7 @@
       getDataReady=1;
     }
   }
+
 
 
 
@@ -251,6 +275,11 @@
         }
 
         getDataReady=1;
+    }
+
+    if (whole_config_version == "")
+    {
+      getWConfigVersion();
     }
 
   });

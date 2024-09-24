@@ -16,6 +16,8 @@
     ChangedDataTagProConfig,
     azureConfig,
     ChangedAzureConfig,
+    awsIoTcoreConfig,
+    ChangedAWSIoTcoreConfig,
     DataTagPro_ULRule_ConfigChangedLog,
     DataTagPro_TagRuleEvent_ConfigChangedLog,
     DataTagPro_TagRuleSchedule_ConfigChangedLog,
@@ -109,6 +111,9 @@
   let azure_data="";
   let saved_changed_azure_data ="";
 
+  let awsIoT_core_data="";
+  let saved_changed_awsIoT_core_data ="";
+
 
   let CloudProfile=[];
 
@@ -120,6 +125,14 @@
       saved_changed_generic_mqtt_data = val;
   });
 
+
+  awsIoTcoreConfig.subscribe(val => {
+      awsIoT_core_data = val;
+  });
+
+  ChangedAWSIoTcoreConfig.subscribe(val => {
+      saved_changed_awsIoT_core_data = val;
+  });
 
   azureConfig.subscribe(val => {
       azure_data = val;
@@ -4282,6 +4295,32 @@
     }
   }
 
+  async function getAWSIotCoreData () {
+    const res = await fetch(window.location.origin+"/GetAWSiotCore", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      awsIoT_core_data =await res.json();
+      console.log(awsIoT_core_data);
+      awsIoTcoreConfig.set(awsIoT_core_data);
+
+      saved_changed_awsIoT_core_data= JSON.parse(JSON.stringify(awsIoT_core_data));
+      ChangedAWSIoTcoreConfig.set(saved_changed_awsIoT_core_data);
+
+      for (let i=0; i< saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile.length;i++)
+      {
+        let item="aws_"+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerHost+':'+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerPort;
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+
+      }
+
+    }
+  }
+
 
 
 
@@ -4461,6 +4500,23 @@
               CloudProfile=[...CloudProfile, clouditem];
         }
       }
+
+
+      if (saved_changed_awsIoT_core_data == "")
+      {
+        getAWSIotCoreData();
+      }
+      else
+      {
+        for (let i=0; i< saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile.length;i++)
+        {
+          let item="aws_"+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerHost+':'+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerPort;
+          let clouditem={"value":item, "name":item};
+          CloudProfile=[...CloudProfile, clouditem];
+          //console.log("++CloudProfile:", CloudProfile);
+        }
+      }
+
 
       if (saved_changed_modbus_data == "")
       {

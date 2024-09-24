@@ -109,6 +109,9 @@ export const ChangedPortConnectionConfig=writable("");
 
 
 export const RemoteServiceConfigChangedLog=writable("");
+export const RemoteServiceConfigRemoteControlChangedLog=writable("");
+export const RemoteServiceConfigMqttChangedLog=writable("");
+export const RemoteServiceConfigRestfulChangedLog=writable("");
 export const ChangedRemoteServiceConfig=writable("");
 
 export const GenericMQTTConfigChangedLog=writable("");

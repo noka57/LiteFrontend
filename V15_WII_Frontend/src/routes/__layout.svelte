@@ -48,7 +48,9 @@
     	AzHubDPS_ConfigChangedLog,
     	AzCentral_ConfigChangedLog,
     	AWSIoTcoreConfigChangedLog,
-	    RemoteServiceConfigChangedLog,
+    	RemoteServiceConfigRemoteControlChangedLog,
+    	RemoteServiceConfigMqttChangedLog,
+    	RemoteServiceConfigRestfulChangedLog,
 	    PortConnection_LAN_ConfigChangedLog,
     	PortConnection_COM_ConfigChangedLog,
     	PortConnection_Transparent_ConfigChangedLog,
@@ -225,7 +227,11 @@
   	let azcentral_changedValues=[];
   	let awsIoT_core_changedValues=[];  	
 
-    let remote_service_changedValues = [];
+
+  	let remote_service_mqtt_changedValues = [];
+  	let remote_service_restful_changedValues = [];
+  	let remote_service_remote_control_changedValues = [];
+
     let port_connection_lan_changedValues = [];
     let port_connection_com_changedValues = [];
     let port_connection_transparent_changedValues=[];    
@@ -348,7 +354,9 @@
   			port_connection_lan_changedValues.length !=0 ||
   			port_connection_com_changedValues.length !=0 ||
   			port_connection_transparent_changedValues.length !=0 ||
-  			remote_service_changedValues.length !=0 ||
+  			remote_service_mqtt_changedValues.length !=0 ||
+  			remote_service_restful_changedValues.length !=0 ||
+  			remote_service_remote_control_changedValues.length !=0 ||
   			generic_mqtt_changedValues.length !=0 ||
   			azhub_changedValues.length != 0 ||
   			azhubdps_changedValues.length != 0 ||
@@ -686,10 +694,22 @@
 	  	JudgeChangedOrNot();
 	});
 
-  	RemoteServiceConfigChangedLog.subscribe(val => {
-      	remote_service_changedValues = val;
-        JudgeChangedOrNot();
-    });
+	RemoteServiceConfigMqttChangedLog.subscribe(val => {
+    	remote_service_mqtt_changedValues = val;
+    	JudgeChangedOrNot();
+  	});
+
+
+  	RemoteServiceConfigRestfulChangedLog.subscribe(val => {
+    	remote_service_restful_changedValues = val;
+    	JudgeChangedOrNot();
+  	});
+
+  	RemoteServiceConfigRemoteControlChangedLog.subscribe(val => {
+    	remote_service_remote_control_changedValues = val;
+    	JudgeChangedOrNot();
+  	});
+
 
     PortConnection_LAN_ConfigChangedLog.subscribe(val => {
       	port_connection_lan_changedValues = val;

@@ -3065,6 +3065,7 @@
       delete: false,
       aliasName: "",
       smsPhoneNumber:"",
+      smsContentType:0,
       smsContent:""
   };
 
@@ -3087,6 +3088,7 @@
     BackupActionSMS.aliasName=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].aliasName
     BackupActionSMS.smsPhoneNumber=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsPhoneNumber;
     BackupActionSMS.smsContent=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsContent;
+    BackupActionSMS.smsContentType=changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsContentType;
     
     modify_action_sms_index=index;
     modify_action_sms_modal=true;
@@ -3102,6 +3104,9 @@
     changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].aliasName=BackupActionSMS.aliasName;
     changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsPhoneNumber=BackupActionSMS.smsPhoneNumber;
     changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsContent=BackupActionSMS.smsContent;
+
+    changed_event_engine_data.config.service_eventEngine_actionProfile.sms[index].smsContentType=BackupActionSMS.smsContentType;
+
 
   }
 
@@ -3119,6 +3124,39 @@
       delete: false,
       aliasName: "",
       smsPhoneNumber:"",
+      smsContentType:0,
+      smsContent:""
+  },
+    {
+      enable: false,
+      delete: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContentType:0,
+      smsContent:""
+  },
+    {
+      enable: false,
+      delete: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContentType:0,
+      smsContent:""
+  },
+    {
+      enable: false,
+      delete: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContentType:0,
+      smsContent:""
+  },
+    {
+      enable: false,
+      delete: false,
+      aliasName: "",
+      smsPhoneNumber:"",
+      smsContentType:0,
       smsContent:""
   },
     {
@@ -3133,6 +3171,7 @@
       delete: false,
       aliasName: "",
       smsPhoneNumber:"",
+      smsContentType:0,
       smsContent:""
   },
     {
@@ -3140,6 +3179,7 @@
       delete: false,
       aliasName: "",
       smsPhoneNumber:"",
+      smsContentType:0,
       smsContent:""
   },
     {
@@ -3147,6 +3187,7 @@
       delete: false,
       aliasName: "",
       smsPhoneNumber:"",
+      smsContentType:0,
       smsContent:""
   },
     {
@@ -3154,34 +3195,7 @@
       delete: false,
       aliasName: "",
       smsPhoneNumber:"",
-      smsContent:""
-  },
-    {
-      enable: false,
-      delete: false,
-      aliasName: "",
-      smsPhoneNumber:"",
-      smsContent:""
-  },
-    {
-      enable: false,
-      delete: false,
-      aliasName: "",
-      smsPhoneNumber:"",
-      smsContent:""
-  },
-    {
-      enable: false,
-      delete: false,
-      aliasName: "",
-      smsPhoneNumber:"",
-      smsContent:""
-  },
-    {
-      enable: false,
-      delete: false,
-      aliasName: "",
-      smsPhoneNumber:"",
+      smsContentType:0,
       smsContent:""
   }
 
@@ -3193,11 +3207,41 @@
       NewActionSMS[index].delete=false;      
       NewActionSMS[index].aliasName="";
       NewActionSMS[index].smsPhoneNumber="";
-      NewActionSMS[index].smsContent="";
+      NewActionSMS[index].smsContentType=0;
+      NewActionSMS[index].smsContent="New F/W is available! Please check www.etherwan.com for release note. To upgrade F/W, reply with OTP to activate F/W upgrade. THANK YOU.";
 
       new_action_sms_index=index;
       new_action_sms_modal=true;
 
+  }
+
+  function SMSContentTypeChange(modal_type)
+  {
+
+    if (modal_type ==0)
+    {
+      if (NewActionSMS[new_action_sms_index].smsContentType==0)
+      {
+        NewActionSMS[new_action_sms_index].smsContent="New F/W is available! Please check www.etherwan.com for release note. To upgrade F/W, reply with OTP to activate F/W upgrade. THANK YOU."
+      }
+      else if (NewActionSMS[new_action_sms_index].smsContentType==1)
+      {
+        NewActionSMS[new_action_sms_index].smsContent="";
+      }
+
+    }
+    else if (modal_type ==1)
+    {
+
+      if (changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContentType==0)
+      {
+        changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContent="New version F/W update info.\nPlease check www.etherwan.com to get the complete new F/W release note.\nStart to do F/W upgrade, please reply this message with key in OTP code to activate EW50-V new F/W upgrade. Thank you."
+      }
+      else if (changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContentType==1)
+      {
+        changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContent="";
+      }
+    }
   }
 
 
@@ -7593,14 +7637,36 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewActionSMS[new_action_sms_index].smsContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Content</p></td>
 
 
+<td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
+  <Radio class="pb-2" bind:group={NewActionSMS[new_action_sms_index].smsContentType} value={0} on:change={()=>SMSContentTypeChange(0)}>Firmware Release Notification  </Radio>
+  <Radio class="pb-2" bind:group={NewActionSMS[new_action_sms_index].smsContentType} value={1} on:change={()=>SMSContentTypeChange(0)}>User Defined:</Radio>
+
+</div>
+      </td>
 
   </tr>
 
+<tr>  <td class="text-right" >
+  
 
+  </td>
+      <td class="pl-4 pt-4" colspan="5">
 
+{#if NewActionSMS[new_action_sms_index].smsContentType == 0}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={NewActionSMS[new_action_sms_index].smsContent}></textarea>
+
+{:else if NewActionSMS[new_action_sms_index].smsContentType == 1}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" bind:value={NewActionSMS[new_action_sms_index].smsContent}></textarea>
+
+{/if}
+      </td>
+
+  </tr>
 
 
 
@@ -7662,9 +7728,34 @@ on:click={handleClickMV} on:keydown={() => {}}>
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Content</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContent} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SMS Content</p></td>
 
 
+<td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContentType} value={0} on:change={()=>SMSContentTypeChange(1)}>Firmware Release Notification  </Radio>
+  <Radio class="pb-2" bind:group={changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContentType} value={1} on:change={()=>SMSContentTypeChange(1)}>User Defined:</Radio>
+
+</div>
+      </td>
+
+  </tr>
+
+<tr>  <td class="text-right" >
+  
+
+  </td>
+      <td class="pl-4 pt-4" colspan="5">
+
+{#if changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContentType == 0}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContent}></textarea>
+
+{:else if changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContentType == 1}
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" bind:value={changed_event_engine_data.config.service_eventEngine_actionProfile.sms[modify_action_sms_index].smsContent}></textarea>
+
+{/if}
+      </td>
 
   </tr>
 

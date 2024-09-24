@@ -2281,6 +2281,75 @@
       showMenu=false;
     }
 
+  function NewTagClick(CloudIndex, TagIndex)
+    {
+      if (new_proxy_edge[new_proxy_edge_index].samplingCondition==1)
+      {
+
+        if (cursorPosition != -1)
+        {
+          if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$" 
+          }
+          else
+          {
+            let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$" 
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$" 
+        }  
+      }
+      else if (new_proxy_edge[new_proxy_edge_index].samplingCondition==0)
+      {
+          if (tagsArray.length > TagIndex)
+          {
+            if (cursorPosition != -1)
+            {
+              if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+              {
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$"
+              }
+              else
+              {
+                let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+                let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$" 
+                new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+              }
+            }
+            else
+            {
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$"
+            }   
+          }
+      }
+
+      showMenu=false;
+    }
+
+
+
     function NewTagRawRequest(CloudIndex, TagIndex)
     {
       if (new_proxy_edge[new_proxy_edge_index].samplingCondition==1)
@@ -2768,6 +2837,77 @@
       showMenu=false;
 
     }
+
+
+    function ModifyTagClick(CloudIndex, TagIndex)
+    {
+
+      if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1)
+      {
+
+        if (cursorPosition !=-1)
+        {
+          if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$" 
+          }
+          else
+          {
+            let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+            let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$" 
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+          }
+
+        }
+        else
+        {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${New_SingleCheckedTag}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$" 
+        }  
+      }
+      else if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0)
+      {
+          if (tagsArray.length > TagIndex)
+          {
+            if (cursorPosition !=-1)
+            {
+              if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+              {
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$"
+              }
+              else
+              {
+                let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+                let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$" 
+                changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+              }
+            }
+            else
+            {
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${tagsArray[TagIndex]}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$"
+            }   
+          }
+      }
+
+      showMenu=false;
+
+    }
+
 
     function ModifyTagRawRequest(CloudIndex, TagIndex)
     {
@@ -4716,6 +4856,10 @@ once change ({ProxyEdgeData.changePercentage}%)
 
               {#if new_proxy_edge[new_proxy_edge_index].samplingCondition==1}
 
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagClick(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}$</button></li>
+              <hr>
               <li style="display: block;list-style-type: none;width: 1fr;">
                     <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawRequest(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREQUEST$</button></li>
               <hr>
@@ -4727,7 +4871,14 @@ once change ({ProxyEdgeData.changePercentage}%)
                     <button class="ContextMenu" on:click|preventDefault={()=>NewTagStatus(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_STATUS$</button></li>
 
               {:else if new_proxy_edge[new_proxy_edge_index].samplingCondition==0}
+            {#each tagsArray as item, index}
 
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagClick(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}$</button></li>
+
+
+            {/each}
+            <hr>
             {#each tagsArray as item, index}
 
               <li style="display: block;list-style-type: none;width: 1fr;">
@@ -4904,6 +5055,9 @@ on:click={onPageClick}></textarea>
               <hr>
 
               {#if new_proxy_edge[new_proxy_edge_index].samplingCondition==1}
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagClick(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}$</button></li>
+              <hr>
 
               <li style="display: block;list-style-type: none;width: 1fr;">
                     <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawRequest(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREQUEST$</button></li>
@@ -4916,7 +5070,14 @@ on:click={onPageClick}></textarea>
                     <button class="ContextMenu" on:click|preventDefault={()=>NewTagStatus(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_STATUS$</button></li>
 
               {:else if new_proxy_edge[new_proxy_edge_index].samplingCondition==0}
+            {#each tagsArray as item, index}
 
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagClick(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}$</button></li>
+
+
+            {/each}
+            <hr>
             {#each tagsArray as item, index}
 
               <li style="display: block;list-style-type: none;width: 1fr;">
@@ -5229,6 +5390,9 @@ on:click={onPageClick}></textarea>
               <hr>
 
               {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1}
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagClick(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}$</button></li>
+              <hr>
 
               <li style="display: block;list-style-type: none;width: 1fr;">
                     <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawRequest(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREQUEST$</button></li>
@@ -5241,6 +5405,14 @@ on:click={onPageClick}></textarea>
                     <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagStatus(0,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_STATUS$</button></li>
 
               {:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0}
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagClick(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}$</button></li>
+
+
+            {/each}
+            <hr>
 
             {#each tagsArray as item, index}
 
@@ -5418,6 +5590,9 @@ on:click={onPageClick}></textarea>
               <hr>
 
               {#if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==1}
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagClick(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}$</button></li>
+              <hr>
 
               <li style="display: block;list-style-type: none;width: 1fr;">
                     <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawRequest(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_RAWREQUEST$</button></li>
@@ -5430,6 +5605,15 @@ on:click={onPageClick}></textarea>
                     <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagStatus(1,0)}><i style="padding: 0px 15px 0px 10px;"></i>${New_SingleCheckedTag}_STATUS$</button></li>
 
               {:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].samplingCondition==0}
+
+            {#each tagsArray as item, index}
+
+              <li style="display: block;list-style-type: none;width: 1fr;">
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagClick(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${item}$</button></li>
+
+
+            {/each}
+            <hr>
 
             {#each tagsArray as item, index}
 

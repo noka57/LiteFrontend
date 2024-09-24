@@ -75,7 +75,9 @@
       AWSIoTcoreConfigChangedLog,
       ChangedAWSIoTcoreConfig,
       remoteServiceConfig,
-    	RemoteServiceConfigChangedLog,
+      RemoteServiceConfigRemoteControlChangedLog,
+      RemoteServiceConfigMqttChangedLog,
+      RemoteServiceConfigRestfulChangedLog,
     	ChangedRemoteServiceConfig,
       portConnectionConfig,
     	PortConnection_LAN_ConfigChangedLog,
@@ -259,7 +261,9 @@
 
   let ContentRemoteService;
   let RemoteServiceBinary=null;
-  let remote_service_changedValues=[];
+  let remote_service_mqtt_changedValues = [];
+  let remote_service_restful_changedValues = [];
+  let remote_service_remote_control_changedValues = [];
 
 
   let ContentPortConnection;
@@ -642,8 +646,19 @@
     port_connection_transparent_changedValues = val;
   });    
 
-  RemoteServiceConfigChangedLog.subscribe(val => {
-      remote_service_changedValues = val;
+
+
+  RemoteServiceConfigMqttChangedLog.subscribe(val => {
+    remote_service_mqtt_changedValues = val;
+  });
+
+
+  RemoteServiceConfigRestfulChangedLog.subscribe(val => {
+    remote_service_restful_changedValues = val;
+  });
+
+  RemoteServiceConfigRemoteControlChangedLog.subscribe(val => {
+    remote_service_remote_control_changedValues = val;
   });
 
 
@@ -1879,8 +1894,13 @@
 
       let applied_new_remoteS_data= JSON.parse(JSON.stringify(remote_service_data));
       remoteServiceConfig.set(applied_new_remoteS_data);
-      remote_service_changedValues=[];
-      RemoteServiceConfigChangedLog.set(remote_service_changedValues);
+      remote_service_mqtt_changedValues=[];
+      remote_service_restful_changedValues = [];
+      remote_service_remote_control_changedValues=[];
+
+      RemoteServiceConfigRestfulChangedLog.set(remote_service_restful_changedValues);
+      RemoteServiceConfigMqttChangedLog.set(remote_service_mqtt_changedValues);
+      RemoteServiceConfigRemoteControlChangedLog.set(remote_service_remote_control_changedValues);
       RestartRemoteService();
 
 	  }		
@@ -2386,7 +2406,9 @@
       RestartCount++;
     }
 
-		if (remote_service_data != "" && remote_service_changedValues.length!=0)
+		if (remote_service_data != "" && (remote_service_mqtt_changedValues.length!=0||
+                                      remote_service_restful_changedValues.length !=0 ||
+                                      remote_service_remote_control_changedValues.length !=0) )
 		{
 			SetCount++;	
       RestartCount++;		
@@ -2677,7 +2699,9 @@
 
 
 
-				if (remote_service_data != "" && remote_service_changedValues.length!=0)
+				if (remote_service_data != "" && (remote_service_mqtt_changedValues.length!=0||
+                                      remote_service_restful_changedValues.length !=0 ||
+                                      remote_service_remote_control_changedValues.length !=0))
 				{
 					let RemoteServiceString = JSON.stringify(remote_service_data, null, 0);
 					const bytesArray = Array.from(RemoteServiceString).map(char => char.charCodeAt(0));
@@ -3646,13 +3670,50 @@ event_engine_action_do_changeValues.length != 0 ||
 
 {/if}
 
-{#if remote_service_changedValues.length !=0}
+{#if remote_service_mqtt_changedValues.length !=0 || remote_service_restful_changedValues.length !=0 || remote_service_remote_control_changedValues.length !=0}
 	<Li>Remote Service
+ 
+
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-  {#each remote_service_changedValues as item}
+
+{#if remote_service_restful_changedValues.length !=0}
+      <Li>REST
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each remote_service_restful_changedValues as item}
       <Li>{item}</Li>
    {/each}
+
   </List>
+  </Li>
+{/if}
+
+
+{#if remote_service_mqtt_changedValues.length !=0}
+      <Li>MQTT
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each remote_service_mqtt_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+
+{#if remote_service_remote_control_changedValues.length !=0}
+      <Li>Remote Control
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each remote_service_remote_control_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+
+
+  </List>
+
+
 	</Li>
 {/if}
 
@@ -4362,7 +4423,9 @@ event_engine_action_do_changeValues.length != 0 ||
         azhubdps_changedValues.length !=0 || 
         azcentral_changedValues.length !=0 ||
         awsIoT_core_changedValues.length !=0 ||
-  			remote_service_changedValues.length !=0 ||
+        remote_service_mqtt_changedValues.length!=0||
+        remote_service_restful_changedValues.length !=0 ||
+        remote_service_remote_control_changedValues.length !=0 ||
   			port_connection_lan_changedValues.length !=0 ||
   			port_connection_com_changedValues.length !=0 ||
         port_connection_transparent_changedValues.length !=0 ||

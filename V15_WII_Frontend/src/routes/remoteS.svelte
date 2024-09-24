@@ -5,8 +5,14 @@
   import { sessionidG } from "./sessionG.js";
 
   import { 
+    genericMQTTConfig,
+    ChangedGenericMQTTConfig,
+    awsIoTcoreConfig,
+    ChangedAWSIoTcoreConfig,
     remoteServiceConfig,
-    RemoteServiceConfigChangedLog,
+    RemoteServiceConfigRemoteControlChangedLog,
+    RemoteServiceConfigMqttChangedLog,
+    RemoteServiceConfigRestfulChangedLog,
     ChangedRemoteServiceConfig
   } from "./configG.js"
 
@@ -15,8 +21,16 @@
   let changed_remote_service_data = {};
   let saved_changed_remote_service_data = {};
   let getDataReady=0;
-  let remote_service_changedValues = [];
+  let remote_service_mqtt_changedValues = [];
+  let remote_service_restful_changedValues = [];
+  let remote_service_remote_control_changedValues = [];
+  let CloudProfile=[];
 
+  let generic_mqtt_data="";
+  let saved_changed_generic_mqtt_data ="";
+
+  let awsIoT_core_data="";
+  let saved_changed_awsIoT_core_data ="";
 
 
   let sessionid;
@@ -29,14 +43,42 @@
     remote_service_data = val;
   });
 
-  RemoteServiceConfigChangedLog.subscribe(val => {
-    remote_service_changedValues = val;
+
+
+  RemoteServiceConfigMqttChangedLog.subscribe(val => {
+    remote_service_mqtt_changedValues = val;
   });
+
+
+  RemoteServiceConfigRestfulChangedLog.subscribe(val => {
+    remote_service_restful_changedValues = val;
+  });
+
+  RemoteServiceConfigRemoteControlChangedLog.subscribe(val => {
+    remote_service_remote_control_changedValues = val;
+  });
+
 
   ChangedRemoteServiceConfig.subscribe(val => {
     saved_changed_remote_service_data = val;
   });
 
+  genericMQTTConfig.subscribe(val => {
+      generic_mqtt_data = val;
+  });
+
+  ChangedGenericMQTTConfig.subscribe(val => {
+      saved_changed_generic_mqtt_data = val;
+  });
+
+
+  awsIoTcoreConfig.subscribe(val => {
+      awsIoT_core_data = val;
+  });
+
+  ChangedAWSIoTcoreConfig.subscribe(val => {
+      saved_changed_awsIoT_core_data = val;
+  });
 
   
   function compareObjects(obj1, obj2, type, isArrayItem, ArrayIndex) 
@@ -56,13 +98,29 @@
             {
               let addedCount=obj1[key].length-obj2[key].length;
               let changedstr="Add "+addedCount+" item(s) to "+ key;
-              remote_service_changedValues=[...remote_service_changedValues, changedstr];
+
+              if (type == 0)
+              {
+                remote_service_mqtt_changedValues=[...remote_service_mqtt_changedValues, changedstr];
+              }
+              else if (type == 1)
+              {
+                remote_service_remote_control_changedValues=[...remote_service_remote_control_changedValues, changedstr];
+              }
+
             }
             else if (obj1[key].length < obj2[key].length)
             {
               let deletedCount=obj2[key].length-obj1[key].length;
               let changedstr="Delete "+deletedCount+" item(s) from "+ key;
-              remote_service_changedValues=[...remote_service_changedValues, changedstr];
+              if (type == 0)
+              {
+                remote_service_mqtt_changedValues=[...remote_service_mqtt_changedValues, changedstr];
+              }
+              else if (type == 1)
+              {
+                remote_service_remote_control_changedValues=[...remote_service_remote_control_changedValues, changedstr];
+              }
             }
           }
           else
@@ -82,33 +140,58 @@
             changedstr="List No."+ArrayIndex+" item is changed: "+ "value of "+key+" has changed to "+obj1[key];
           }
           
-          remote_service_changedValues=[...remote_service_changedValues, changedstr];
+          if (type == 0)
+          {
+            remote_service_mqtt_changedValues=[...remote_service_mqtt_changedValues, changedstr];
+          }
+          else if (type == 1)
+          {
+            remote_service_remote_control_changedValues=[...remote_service_remote_control_changedValues, changedstr];
+          }
+
 
         }
       }
   }    
 
-  function saveRemoteService()
+ function saveRemoteServiceRestful()
   {
-    console.log("save Remote Service");
-    if (remote_service_changedValues.length != 0)
+    console.log("save Remote Service Restful");
+    if (remote_service_restful_changedValues.length != 0)
     {
-        remote_service_changedValues=[];
+        remote_service_restful_changedValues=[];
     }
 
     if (changed_remote_service_data.config.service_remoteService.restful_api_en != remote_service_data.config.service_remoteService.restful_api_en)
     {
         saved_changed_remote_service_data.config.service_remoteService.restful_api_en=changed_remote_service_data.config.service_remoteService.restful_api_en;
         let changedStr="Restful API is changed to " + changed_remote_service_data.config.service_remoteService.restful_api_en;
-        remote_service_changedValues=[...remote_service_changedValues, changedStr];
+        remote_service_restful_changedValues=[...remote_service_restful_changedValues, changedStr];
     }
+
+
+    RemoteServiceConfigRestfulChangedLog.set(remote_service_restful_changedValues);
+    ChangedRemoteServiceConfig.set(saved_changed_remote_service_data);
+    console.log(remote_service_restful_changedValues);
+
+  }
+
+
+  function saveRemoteServiceMQTT()
+  {
+    console.log("save Remote Service MQTT");
+    if (remote_service_mqtt_changedValues.length != 0)
+    {
+        remote_service_mqtt_changedValues=[];
+    }
+
 
 
     if (changed_remote_service_data.config.service_remoteService.mqtt_api_en != remote_service_data.config.service_remoteService.mqtt_api_en)
     {
         saved_changed_remote_service_data.config.service_remoteService.mqtt_api_en=changed_remote_service_data.config.service_remoteService.mqtt_api_en;
         let changedStr="MQTT API is changed to " + changed_remote_service_data.config.service_remoteService.mqtt_api_en;
-        remote_service_changedValues=[...remote_service_changedValues, changedStr];
+        remote_service_mqtt_changedValues=[...remote_service_mqtt_changedValues, changedStr];
 
     }
 
@@ -122,11 +205,47 @@
     saved_changed_remote_service_data.config.service_remoteService.mqtt_api_param=JSON.parse(JSON.stringify(changed_remote_service_data.config.service_remoteService.mqtt_api_param));
 
 
-    RemoteServiceConfigChangedLog.set(remote_service_changedValues);
+    RemoteServiceConfigMqttChangedLog.set(remote_service_mqtt_changedValues);
     ChangedRemoteServiceConfig.set(saved_changed_remote_service_data);
-    console.log(remote_service_changedValues);
+    console.log(remote_service_mqtt_changedValues);
 
   }
+
+
+  function saveRemoteServiceRemoteControl()
+  {
+    console.log("save Remote Service remote control");
+    if (remote_service_remote_control_changedValues.length != 0)
+    {
+        remote_service_remote_control_changedValues=[];
+    }
+
+
+
+    if (changed_remote_service_data.config.service_remoteService.remote_control_en != remote_service_data.config.service_remoteService.remote_control_en)
+    {
+        saved_changed_remote_service_data.config.service_remoteService.remote_control_en=changed_remote_service_data.config.service_remoteService.remote_control_en;
+        let changedStr="Remote Control is changed to " + changed_remote_service_data.config.service_remoteService.remote_control_en;
+        remote_service_remote_control_changedValues=[...remote_service_remote_control_changedValues, changedStr];
+
+    }
+
+
+    for (let i = 0; i < Math.min(changed_remote_service_data.config.service_remoteService.remote_control_param.length, remote_service_data.config.service_remoteService.remote_control_param.length); i++) 
+    {
+      compareObjects(changed_remote_service_data.config.service_remoteService.remote_control_param[i], remote_service_data.config.service_remoteService.remote_control_param[i], 1, 1,i+1);
+    }
+
+
+    saved_changed_remote_service_data.config.service_remoteService.remote_control_param=JSON.parse(JSON.stringify(changed_remote_service_data.config.service_remoteService.remote_control_param));
+
+
+    RemoteServiceConfigRemoteControlChangedLog.set(remote_service_remote_control_changedValues);
+    ChangedRemoteServiceConfig.set(saved_changed_remote_service_data);
+    console.log(remote_service_remote_control_changedValues);
+
+  }
+
 
   let modify_Modal=false;
   let modify_index;
@@ -267,6 +386,62 @@
   }
 
 
+  async function getGenericMQTTData () {
+    const res = await fetch(window.location.origin+"/getGenericMQTTData", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      console.log("get gMQTT data");
+      generic_mqtt_data =await res.json();
+      console.log(generic_mqtt_data);
+      genericMQTTConfig.set(generic_mqtt_data);
+
+
+      saved_changed_generic_mqtt_data= JSON.parse(JSON.stringify(generic_mqtt_data));
+      ChangedGenericMQTTConfig.set(saved_changed_generic_mqtt_data);
+
+
+      for (let i=0; i< saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length;i++)
+      {
+        let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+
+      }
+
+    }
+  }
+
+  async function getAWSIotCoreData () {
+    const res = await fetch(window.location.origin+"/GetAWSiotCore", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      awsIoT_core_data =await res.json();
+      console.log(awsIoT_core_data);
+      awsIoTcoreConfig.set(awsIoT_core_data);
+
+      saved_changed_awsIoT_core_data= JSON.parse(JSON.stringify(awsIoT_core_data));
+      ChangedAWSIoTcoreConfig.set(saved_changed_awsIoT_core_data);
+
+      for (let i=0; i< saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile.length;i++)
+      {
+        let item="aws_"+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerHost+':'+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerPort;
+        let clouditem={"value":item, "name":item};
+        CloudProfile=[...CloudProfile, clouditem];
+
+      }
+
+    }
+  }
+
+
 
   onMount(() => {
 
@@ -290,16 +465,63 @@
         const hexArray = sessionid.match(/.{1,2}/g); 
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
-        getDataReady=1;
-        if (remote_service_changedValues.length != 0)
+
+        changed_remote_service_data = JSON.parse(JSON.stringify(saved_changed_remote_service_data));
+    
+        if (remote_service_restful_changedValues.length ==0)
         {
-          changed_remote_service_data = JSON.parse(JSON.stringify(saved_changed_remote_service_data));
+          changed_remote_service_data.config.service_remoteService.restful_api_en=remote_service_data.config.service_remoteService.restful_api_en;
+        }
+
+        if (remote_service_mqtt_changedValues.length==0)
+        {
+          changed_remote_service_data.config.service_remoteService.mqtt_api_en=remote_service_data.config.service_remoteService.mqtt_api_en;
+
+          changed_remote_service_data.config.service_remoteService.mqtt_api_param=JSON.parse(JSON.stringify(remote_service_data.config.service_remoteService.mqtt_api_param));
+
+        }
+
+        if (remote_service_remote_control_changedValues.length ==0)
+        {
+          changed_remote_service_data.config.service_remoteService.remote_control_en=remote_service_data.config.service_remoteService.remote_control_en;
+
+          changed_remote_service_data.config.service_remoteService.remote_control_param=JSON.parse(JSON.stringify(remote_service_data.config.service_remoteService.remote_control_param));
+
+        }
+
+        console.log("changed_remote_service_data.config.service_remoteService: ", changed_remote_service_data.config.service_remoteService);
+
+
+        if (saved_changed_generic_mqtt_data == "")
+        {
+          getGenericMQTTData();
         }
         else
         {
-          changed_remote_service_data = JSON.parse(JSON.stringify(remote_service_data));        
+          for (let i=0; i< saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile.length;i++)
+          {
+              let item=saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerHost+':'+saved_changed_generic_mqtt_data.config.cloud_genericMqtt_profile[i].brokerPort;
+              let clouditem={"value":item, "name":item};
+              CloudProfile=[...CloudProfile, clouditem];
+          }
         }
 
+        if (saved_changed_awsIoT_core_data == "")
+        {
+          getAWSIotCoreData();
+        }
+        else
+        {
+          for (let i=0; i< saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile.length;i++)
+          {
+            let item="aws_"+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerHost+':'+saved_changed_awsIoT_core_data.config.cloud_awsIoTcore_profile[i].brokerPort;
+            let clouditem={"value":item, "name":item};
+            CloudProfile=[...CloudProfile, clouditem];
+          }
+        }
+
+
+        getDataReady=1;
         getMachineCertificate();
         getCACertificate();
         getRemoteCertificate();
@@ -311,20 +533,47 @@
 
   </script>
 
-
+<Tabs style="underline">
+  <TabItem open title="REST">
 
   <table>
 {#if getDataReady == 1}
     <tr>
-    <td class="w-36"><p class="pl-5 pt-5 text-lg font-light text-left">REST API</p></td>
+    <td class="w-36"><p class="pl-10 pt-5 text-lg font-light text-right">REST API</p></td>
 <td class="pl-5 pt-5"><Toggle bind:checked={changed_remote_service_data.config.service_remoteService.restful_api_en}></Toggle></td>
 <td></td>
 
     </tr>
+{/if}
+
+</table>
 
 
+<p class="pt-10"></p>
+
+<table>
+<tr class="pt-5">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="blue" pill={true} on:click={saveRemoteServiceRestful}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+</table>
+
+
+</TabItem>
+  <TabItem title="MQTT">
+
+  <table>
+{#if getDataReady == 1}
         <tr>
-    <td class="w-36"><p class="pl-5 pt-5 text-lg font-light text-left">MQTT API</p></td>
+    <td class="w-36"><p class="pl-10 pt-5 text-lg font-light text-right">MQTT API</p></td>
 <td class="pl-5 pt-5"><Toggle bind:checked={changed_remote_service_data.config.service_remoteService.mqtt_api_en}></Toggle></td>
 <td></td>
 
@@ -414,7 +663,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true} on:click={saveRemoteService}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-20"><Button color="blue" pill={true} on:click={saveRemoteServiceMQTT}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -583,3 +832,118 @@
 
   </form>
 </Modal>
+</TabItem>
+<TabItem title="Remote Control">
+
+  <table>
+{#if getDataReady == 1}
+    <tr>
+    <td class="w-36"><p class="pl-1 pt-5 text-lg font-light text-right">Remote Control</p></td>
+<td class="pl-5 pt-5"><Toggle bind:checked={changed_remote_service_data.config.service_remoteService.remote_control_en}></Toggle></td>
+<td></td>
+
+    </tr>
+{/if}    
+</table>
+{#if getDataReady == 1}
+{#if changed_remote_service_data.config.service_remoteService.remote_control_en}
+
+  <table>
+<tr>
+<td class="w-60"></td>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Cloud Profile</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_remote_service_data.config.service_remoteService.remote_control_param[0].cloudProfile}>
+
+{#each CloudProfile as Cloud}
+
+<option value={Cloud.value}>{Cloud.name}</option>
+
+{/each}
+
+</select>
+</td>
+   <td></td>
+    <td></td>
+
+</tr>
+
+
+  <tr>
+  <td class="w-60"></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
+      <input type="number" bind:value={changed_remote_service_data.config.service_remoteService.remote_control_param[0].responseTimeoutMS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
+
+<td></td>
+<td></td>
+<td></td>
+
+  </tr>
+
+<tr>
+<td class="w-60"></td>
+<td><p class="pl-4 pt-4 text-lg font-light text-right">Subscribe Topic</p></td>
+      <td class="pl-4 pt-5">
+
+
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={changed_remote_service_data.config.service_remoteService.remote_control_param[0].subscribeTopic}>
+
+
+</td>
+
+
+</tr>
+
+
+
+
+
+
+<tr>
+<td></td>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Publish Topic For Acknowledge</p>
+
+  </td>
+
+    <td class="pl-4 pt-5" colspan="5">
+    <div class="flex gap-2">
+
+<Toggle class="p-2.5 mt-2 mb-4" bind:checked={changed_remote_service_data.config.service_remoteService.remote_control_param[0].publishEnable}></Toggle>
+
+{#if changed_remote_service_data.config.service_remoteService.remote_control_param[0].publishEnable}
+
+<div class="relative">
+<input id="publish_topic" class="block w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="publish_topic" placeholder=" " type="text" bind:value={changed_remote_service_data.config.service_remoteService.remote_control_param[0].publishTopic}> <label for="publish_topic" class="absolute text-sm duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 text-gray-500 dark:text-gray-400 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 top-2">publish_topic</label></div>
+
+
+{/if}
+</div></td>
+</tr>
+
+</table>
+{/if}
+
+{/if}
+
+
+<p class="pt-10"></p>
+
+<table>
+<tr class="pt-5">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="pl-20"><Button color="blue" pill={true} on:click={saveRemoteServiceRemoteControl}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+</table>
+
+
+
+</TabItem>
+</Tabs>

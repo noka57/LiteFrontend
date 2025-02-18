@@ -424,7 +424,7 @@
     NewItem[index].keepAliveInterval=60;    
     NewItem[index].dataCompression=0;        
     NewItem[index].retained=0;
-    NewItem[index].dataPushInterval=1;
+    NewItem[index].dataPushInterval=0;
     NewItem[index].dataPushIntervalValue=15;
     NewItem[index].linkLostRetransmit=0;
     NewItem[index].dataPriority=0;
@@ -1728,7 +1728,34 @@
 </td>
 </tr>
 
+{#if 0}
 
+<tr class="pt-4">
+  <td><p class="pl-20 pt-3 text-lg font-light text-right h-10">Application Signature</p></td>
+
+
+
+    <td class="pl-4 pt-4" ><div class="flex gap-2">
+  <Radio class="pb-2 pt-2 h-10"  value={0} >No</Radio>
+  <Radio class="pb-2 pt-2 h-10"  value={1} >Yes</Radio>
+
+
+  <p class="pl-2 pt-3 pb-2 font-medium">Local Certificate:</p>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-48">
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+</div>
+</td>
+
+
+</tr>
+
+{/if}
 
 
 <tr>

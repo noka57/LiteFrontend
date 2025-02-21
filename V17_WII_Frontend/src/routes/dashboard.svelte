@@ -272,8 +272,6 @@
       history.pushState({}, '', "/dashboard");
     }
 
-
-
     if (sessionid && dashboard_data=="")
     {
       const hexArray = sessionid.match(/.{1,2}/g); 
@@ -350,7 +348,7 @@
 
 </div>
 <div class="w-full">
-<p class="text-sm font-light">Internet Uptime</p>
+<p class="pt-2 text-sm font-light">Internet Uptime</p>
 <p class="text-xl font-bold">{#if hidden == 0}{#if dashboard_data!=""}{dashboard_data.config.dashboard.internetUptime} {/if}{/if}
 {#if hidden == 1}
 NA

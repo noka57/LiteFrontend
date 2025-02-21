@@ -70,6 +70,10 @@
 
   let certificateData="";
 
+  let fileMachineCertName="No file chosen";
+  let fileCACertName="No file chosen";
+  let fileRemoteCertName="No file chosen";
+
 
 
   let getRemoteCertReady=0;
@@ -148,6 +152,7 @@
     const machineCert = event.target.files[0];
     if (machineCert) 
     {
+      fileMachineCertName=machineCert.name;
       selectedMachineCert = machineCert;
       if (sessionid) 
       {
@@ -369,6 +374,7 @@
     const caCert = event.target.files[0];
     if (caCert) 
     {
+      fileCACertName=caCert.name;
       selectedCACert = caCert;
       if (sessionid) 
       {
@@ -647,6 +653,7 @@
     if (remoteCert) 
     {
       selectedRemoteCert = remoteCert;
+      fileRemoteCertName= remoteCert.name;
       if (sessionid) 
       {
         const hexArray = sessionid.match(/.{1,2}/g); 
@@ -748,18 +755,21 @@
 
   const RefreshMachineCert = () =>
   {
+      fileMachineCertName="No file chosen";
       getMachineCertificate();
 
   }
 
   const RefreshCACert = () =>
   {
+      fileCACertName="No file chosen";
       getCACertificate();
 
   } 
 
   const RefreshRemoteCert = () =>
   {
+      fileRemoteCertName="No file chosen";
       getRemoteCertificate();
 
   } 
@@ -897,7 +907,12 @@
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-64"><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alias Name" bind:value={MachineCertAliasName}/></TableBodyCell>
       <TableBodyCell class="w-64"><FloatingLabelInput style="filled" id="floating_filled2" name="floating_filled2" type="text" label="PKCS#12 Password" bind:value={MachineCertP12Password}/></TableBodyCell>
-      <TableBodyCell class="w-96"><input type="file" id="RemoteCertUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleMachineCertUpload}></TableBodyCell>
+      <TableBodyCell class="w-96">
+      <label for="MachineCertUpload" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg" >Choose File</label>
+
+      <input type="file" id="MachineCertUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"  style="display: none;" on:change={handleMachineCertUpload}>
+      <span class="pl-4">{fileMachineCertName}</span>
+      </TableBodyCell>
       <TableBodyCell class="w-36"><Button color="dark" on:click={uploadMachineCert}>Upload</Button></TableBodyCell>
       <TableBodyCell></TableBodyCell>
       <TableBodyCell></TableBodyCell>
@@ -944,7 +959,12 @@
       </TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-64"><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alias Name" bind:value={CACertAliasName}/></TableBodyCell>
-      <TableBodyCell class="w-96"><input type="file" id="RemoteCertUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleCACertUpload}></TableBodyCell>
+      <TableBodyCell class="w-96">
+      <label for="CACertUpload" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg" >Choose File</label>
+      <input type="file" id="CACertUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"  style="display: none;" on:change={handleCACertUpload}>
+      <span class="pl-4">{fileCACertName}</span>
+
+      </TableBodyCell>
       <TableBodyCell class="w-36"><Button color="dark" on:click={uploadCaCert}>Upload</Button></TableBodyCell>
       <TableBodyCell></TableBodyCell>
       <TableBodyCell></TableBodyCell>
@@ -994,7 +1014,13 @@
       </TableBodyCell>
       <TableBodyCell class="w-10"></TableBodyCell>
       <TableBodyCell class="w-64"><FloatingLabelInput style="filled" id="floating_filled" name="floating_filled" type="text" label="Alias Name" bind:value={RemoteCertAliasName}/></TableBodyCell>
-      <TableBodyCell class="w-96"><input type="file" id="RemoteCertUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleRemoteCertUpload}>
+      <TableBodyCell class="w-96">
+
+      <label for="RemoteCertUpload" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg" >Choose File</label>
+      <input type="file" id="RemoteCertUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"  style="display: none;" on:change={handleRemoteCertUpload}>
+      <span class="pl-4">{fileRemoteCertName}</span>
+
+
 </TableBodyCell>
       <TableBodyCell class="w-36"><Button color="dark" on:click={uploadRemoteCert}>Upload</Button></TableBodyCell>
       <TableBodyCell></TableBodyCell>

@@ -320,7 +320,7 @@
       for (let i=0; i< lines.length; i++)
       {
         ViewerResultTimeStamp=[...ViewerResultTimeStamp, lines[i].slice(0,19)];
-        ViewerResultJsonObject=[...ViewerResultJsonObject,JSON.parse(lines[i].split(' INFO ')[1])]
+        ViewerResultJsonObject=[...ViewerResultJsonObject,JSON.parse(lines[i].slice(25))]
        // console.log(ViewerResultJsonObject[i].index);
         let generic_mqtt_index=ViewerResultJsonObject[i].index-1;
 

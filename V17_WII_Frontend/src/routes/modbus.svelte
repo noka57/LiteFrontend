@@ -5179,7 +5179,7 @@
       for (let i=0; i< lines.length; i++)
       {
         ViewerResultTimeStamp=[...ViewerResultTimeStamp, lines[i].slice(0,19)];
-        ViewerResultStatus=[...ViewerResultStatus,lines[i].split(' INFO ')[1]]
+        ViewerResultStatus=[...ViewerResultStatus,lines[i].slice(25)]
 
       }
 

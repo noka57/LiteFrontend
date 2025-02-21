@@ -148,13 +148,13 @@
 		'block py-2 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:py-0 pl-1 pr-1 text-lg dark:text-white bg-yellow-400';
 
 	let asideClass =
-		'absolute w-auto border-r-2 shadow-lg z-50 bg-white h-screen overflow-scroll dark:bg-gray-900 dark:text-white';
+		'absolute w-auto border-r-2 shadow-lg z-50 bg-white dark:bg-gray-900 dark:text-white';
 
 	let spanClass =
 		'pl-20 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white';
 
 	// Nav component
-	let navClass = 'py-1 px-1 text-lg';
+	let navClass = 'py-1 px-1 text-lg overflow-scroll';
 
 	let navDivClass = 'pb-8';
 
@@ -983,8 +983,9 @@
 	});
 
 
-const topMenuList = [{ href: '/apply', id: 0 },
-					{href: '/logout', id: 1 }];
+const topMenuList = [{ href: '/dashboard', id: 0 },
+					{ href: '/apply', id: 1 },
+					{href: '/logout', id: 2 }];
 
 
 
@@ -1048,22 +1049,6 @@ const topMenuList = [{ href: '/apply', id: 0 },
 </script>
 
 
-
-<DarkMode {btnClass} />
-
-
-{#if activeUrl == '/dashboard' || activeUrl.substring(0,16)=='/EDashboard.html'}
-<button aria-label="RefreshDB"
-  type="button" on:click={RefreshDB}
-  class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 fixed right-2 top-36 z-50">
-  <span class="">
-    <slot name="ReloadIcon">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2c-5.288 0-9.649 3.914-10.377 9h-3.123l4 5.917 4-5.917h-2.847c.711-3.972 4.174-7 8.347-7 4.687 0 8.5 3.813 8.5 8.5s-3.813 8.5-8.5 8.5c-3.015 0-5.662-1.583-7.171-3.957l-1.2 1.775c1.916 2.536 4.948 4.182 8.371 4.182 5.797 0 10.5-4.702 10.5-10.5s-4.703-10.5-10.5-10.5z"/></svg>
-
-    </slot>
-  </span>
-</button>
-{/if}
 <Responsive />
 <Side
 	{logo}
@@ -1221,11 +1206,11 @@ const topMenuList = [{ href: '/apply', id: 0 },
 </Side>
 
 {#if open}
-<main class="dark:text-white" style="padding-top: 115px;padding-left: 286px;padding-right: 76px;">
+<main class="dark:text-white" style="padding-top: 115px;padding-left: 286px;padding-right: 10px;">
 	<slot />
 </main>
 {:else}
-<main class="dark:text-white" style="padding-left: 84px;padding-top: 115px;padding-right: 64px;">
+<main class="dark:text-white" style="padding-left: 48px;padding-top: 115px;padding-right: 10px;">
 	<slot />
 </main>
 {/if}
@@ -1234,6 +1219,6 @@ const topMenuList = [{ href: '/apply', id: 0 },
 	<title>Etherwan</title>
 	<meta
 		name="description"
-		content="Flowbite-Svelte, Dark mode activated."
+		content="Flowbite-Svelte"
 	/>
 </svelte:head>

@@ -80,7 +80,9 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       dataPushInterval: 0,
       dataPushIntervalValue: 15,
       linkLostRetransmit: 0,
-      dataPriority: 0
+      dataPriority: 0,
+      appSignature: 0,
+      appSignatureCert: ""
     },
     {
       enable: true,
@@ -100,7 +102,9 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       dataPushInterval: 0,
       dataPushIntervalValue: 15,
       linkLostRetransmit: 0,
-      dataPriority: 0
+      dataPriority: 0,
+      appSignature: 0,
+      appSignatureCert: ""
     },
     {
       enable: true,
@@ -120,7 +124,9 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       dataPushInterval: 0,
       dataPushIntervalValue: 15,
       linkLostRetransmit: 0,
-      dataPriority: 0
+      dataPriority: 0,
+      appSignature: 0,
+      appSignatureCert: ""
     },
     {
       enable: true,
@@ -140,7 +146,9 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       dataPushInterval: 0,
       dataPushIntervalValue: 15,
       linkLostRetransmit: 0,
-      dataPriority: 0
+      dataPriority: 0,
+      appSignature: 0,
+      appSignatureCert: ""
     },
     {
       enable: true,
@@ -160,7 +168,9 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       dataPushInterval: 0,
       dataPushIntervalValue: 15,
       linkLostRetransmit: 0,
-      dataPriority: 0
+      dataPriority: 0,
+      appSignature: 0,
+      appSignatureCert: ""
     },
     {
       enable: true,
@@ -180,7 +190,9 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       dataPushInterval: 0,
       dataPushIntervalValue: 15,
       linkLostRetransmit: 0,
-      dataPriority: 0
+      dataPriority: 0,
+      appSignature: 0,
+      appSignatureCert: ""
     },
     {
       enable: true,
@@ -200,7 +212,9 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       dataPushInterval: 0,
       dataPushIntervalValue: 15,
       linkLostRetransmit: 0,
-      dataPriority: 0
+      dataPriority: 0,
+      appSignature: 0,
+      appSignatureCert: ""
     },
     {
       enable: true,
@@ -220,7 +234,9 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       dataPushInterval: 0,
       dataPushIntervalValue: 15,
       linkLostRetransmit: 0,
-      dataPriority: 0
+      dataPriority: 0,
+      appSignature: 0,
+      appSignatureCert: ""
     },
     {
       enable: true,
@@ -240,7 +256,9 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       dataPushInterval: 0,
       dataPushIntervalValue: 15,
       linkLostRetransmit: 0,
-      dataPriority: 0
+      dataPriority: 0,
+      appSignature: 0,
+      appSignatureCert: ""
     },
     {
       enable: true,
@@ -260,7 +278,9 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       dataPushInterval: 0,
       dataPushIntervalValue: 15,
       linkLostRetransmit: 0,
-      dataPriority: 0
+      dataPriority: 0,
+      appSignature: 0,
+      appSignatureCert: ""
     }
   ];
   let new_item_index;
@@ -308,6 +328,11 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
                           return `TLS`;
                         }
                       })}
+    ${validate_component(TableHeadCell, "TableHeadCell").$$render($$result, { class: "w-10" }, {}, {
+                        default: () => {
+                          return `App Signature`;
+                        }
+                      })}
     ${validate_component(TableHeadCell, "TableHeadCell").$$render($$result, {}, {}, {
                         default: () => {
                           return `Client ID`;
@@ -336,11 +361,6 @@ const GMQTT = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     ${validate_component(TableHeadCell, "TableHeadCell").$$render($$result, { class: "!p-3 w-10" }, {}, {
                         default: () => {
                           return `Data Compression`;
-                        }
-                      })}
-    ${validate_component(TableHeadCell, "TableHeadCell").$$render($$result, { class: "w-10" }, {}, {
-                        default: () => {
-                          return `Data Push Interval`;
                         }
                       })}
     ${validate_component(TableHeadCell, "TableHeadCell").$$render($$result, { class: "w-10" }, {}, {
@@ -482,6 +502,53 @@ ${changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].tls =
 <select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-48"}">${``}</select>` : ``}</div></td></tr>
 
 
+<tr class="${"pt-4"}"><td><p class="${"pl-20 pt-3 text-lg font-light text-right h-10"}">Application Signature</p></td>
+
+
+
+    <td class="${"pl-4 pt-4"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+                          $$result,
+                          {
+                            class: "pb-2 pt-2 h-10",
+                            value: 0,
+                            group: changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].appSignature
+                          },
+                          {
+                            group: ($$value) => {
+                              changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].appSignature = $$value;
+                              $$settled = false;
+                            }
+                          },
+                          {
+                            default: () => {
+                              return `No`;
+                            }
+                          }
+                        )}
+  ${validate_component(Radio, "Radio").$$render(
+                          $$result,
+                          {
+                            class: "pb-2 pt-2 h-10",
+                            value: 1,
+                            group: changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].appSignature
+                          },
+                          {
+                            group: ($$value) => {
+                              changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].appSignature = $$value;
+                              $$settled = false;
+                            }
+                          },
+                          {
+                            default: () => {
+                              return `Yes`;
+                            }
+                          }
+                        )}
+${changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].appSignature == 1 ? `<p class="${"pl-2 pt-3 pb-2 font-medium"}">Local Certificate:</p>
+<select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-48"}">${``}</select>` : ``}</div></td></tr>
+
+
+
 <tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Client ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].clientId, 0)}></td></tr>
 
 
@@ -578,44 +645,6 @@ ${changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].tls =
                         )}</div></td></tr>
 
 
- <tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Push Interval</p></td>
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
-                          $$result,
-                          {
-                            value: 0,
-                            group: changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataPushInterval
-                          },
-                          {
-                            group: ($$value) => {
-                              changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataPushInterval = $$value;
-                              $$settled = false;
-                            }
-                          },
-                          {
-                            default: () => {
-                              return `Right Away`;
-                            }
-                          }
-                        )}
-  ${validate_component(Radio, "Radio").$$render(
-                          $$result,
-                          {
-                            value: 1,
-                            group: changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataPushInterval
-                          },
-                          {
-                            group: ($$value) => {
-                              changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataPushInterval = $$value;
-                              $$settled = false;
-                            }
-                          },
-                          {
-                            default: () => {
-                              return `User Defined (mins): `;
-                            }
-                          }
-                        )}
-${changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataPushInterval == 0 ? `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16"}" disabled>` : `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"}"${add_attribute("value", changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
 
 <tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Link Lost Retransmit</p></td>
     <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].linkLostRetransmit, 0)}>
@@ -751,7 +780,54 @@ ${NewItem[new_item_index].tls == 1 ? `<p class="${"pl-2 pt-3 pb-2 font-medium"}"
  <p class="${"pl-2 pt-3 pb-2 font-medium"}">Local Certificate:</p>
 <select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-48"}">${``}</select>` : ``}</div></td></tr>
 
-${``}
+
+
+<tr class="${"pt-4"}"><td><p class="${"pl-20 pt-3 text-lg font-light text-right h-10"}">Application Signature</p></td>
+
+
+
+    <td class="${"pl-4 pt-4"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+                          $$result,
+                          {
+                            class: "pb-2 pt-2 h-10",
+                            value: 0,
+                            group: NewItem[new_item_index].appSignature
+                          },
+                          {
+                            group: ($$value) => {
+                              NewItem[new_item_index].appSignature = $$value;
+                              $$settled = false;
+                            }
+                          },
+                          {
+                            default: () => {
+                              return `No`;
+                            }
+                          }
+                        )}
+  ${validate_component(Radio, "Radio").$$render(
+                          $$result,
+                          {
+                            class: "pb-2 pt-2 h-10",
+                            value: 1,
+                            group: NewItem[new_item_index].appSignature
+                          },
+                          {
+                            group: ($$value) => {
+                              NewItem[new_item_index].appSignature = $$value;
+                              $$settled = false;
+                            }
+                          },
+                          {
+                            default: () => {
+                              return `Yes`;
+                            }
+                          }
+                        )}
+${NewItem[new_item_index].appSignature == 1 ? `<p class="${"pl-2 pt-3 pb-2 font-medium"}">Local Certificate:</p>
+<select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-48"}">${``}</select>` : ``}</div></td></tr>
+
+
 
 
 <tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Client ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItem[new_item_index].clientId, 0)}></td></tr>
@@ -849,45 +925,6 @@ ${``}
                           }
                         )}</div></td></tr>
 
-
- <tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Push Interval</p></td>
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
-                          $$result,
-                          {
-                            value: 0,
-                            group: NewItem[new_item_index].dataPushInterval
-                          },
-                          {
-                            group: ($$value) => {
-                              NewItem[new_item_index].dataPushInterval = $$value;
-                              $$settled = false;
-                            }
-                          },
-                          {
-                            default: () => {
-                              return `Right Away`;
-                            }
-                          }
-                        )}
-  ${validate_component(Radio, "Radio").$$render(
-                          $$result,
-                          {
-                            value: 1,
-                            group: NewItem[new_item_index].dataPushInterval
-                          },
-                          {
-                            group: ($$value) => {
-                              NewItem[new_item_index].dataPushInterval = $$value;
-                              $$settled = false;
-                            }
-                          },
-                          {
-                            default: () => {
-                              return `User Defined (mins): `;
-                            }
-                          }
-                        )}
-${NewItem[new_item_index].dataPushInterval == 0 ? `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16"}" disabled>` : `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"}"${add_attribute("value", NewItem[new_item_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
 
 <tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Link Lost Retransmit</p></td>
     <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItem[new_item_index].linkLostRetransmit, 0)}>

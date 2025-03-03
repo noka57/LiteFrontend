@@ -2,6 +2,6 @@ import * as module from '../entries/pages/staticR.svelte.js';
 
 export { module };
 export const index = 27;
-export const file = '_app/immutable/pages/staticR.svelte-a9dde7cc.js';
-export const imports = ["_app/immutable/pages/staticR.svelte-a9dde7cc.js","_app/immutable/chunks/index-37477684.js","_app/immutable/chunks/Indicator.svelte_svelte_type_style_lang-a281e7b7.js","_app/immutable/chunks/index-744c10a2.js","_app/immutable/chunks/Button-4b5393cf.js","_app/immutable/chunks/Radio-4ee9ba4c.js","_app/immutable/chunks/Modal-0925c139.js","_app/immutable/chunks/Frame-f9df5eb6.js","_app/immutable/chunks/CloseButton-fa414382.js","_app/immutable/chunks/Table-88186101.js","_app/immutable/chunks/TableBodyRow-e94a7e03.js","_app/immutable/chunks/TableHeadCell-b43d40fe.js","_app/immutable/chunks/configG-9163882e.js"];
+export const file = '_app/immutable/pages/staticR.svelte-d206a618.js';
+export const imports = ["_app/immutable/pages/staticR.svelte-d206a618.js","_app/immutable/chunks/index-1ab591d7.js","_app/immutable/chunks/Indicator.svelte_svelte_type_style_lang-28f07d2f.js","_app/immutable/chunks/index-6fbc3f26.js","_app/immutable/chunks/Button-fa4fdcb7.js","_app/immutable/chunks/Radio-932a263b.js","_app/immutable/chunks/Modal-2b5e9f7e.js","_app/immutable/chunks/Frame-dd7b0839.js","_app/immutable/chunks/CloseButton-0fa5738b.js","_app/immutable/chunks/Table-8bee18f9.js","_app/immutable/chunks/TableBodyRow-1cd4c869.js","_app/immutable/chunks/TableHeadCell-12b54869.js","_app/immutable/chunks/configG-d8cbd39c.js"];
 export const stylesheets = ["_app/immutable/assets/global-1d79c4d1.css","_app/immutable/assets/Indicator-1d121e74.css"];

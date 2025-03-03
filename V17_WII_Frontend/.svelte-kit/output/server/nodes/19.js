@@ -2,6 +2,6 @@ import * as module from '../entries/pages/logout.svelte.js';
 
 export { module };
 export const index = 19;
-export const file = '_app/immutable/pages/logout.svelte-df78722b.js';
-export const imports = ["_app/immutable/pages/logout.svelte-df78722b.js","_app/immutable/chunks/index-37477684.js"];
+export const file = '_app/immutable/pages/logout.svelte-cdd2efce.js';
+export const imports = ["_app/immutable/pages/logout.svelte-cdd2efce.js","_app/immutable/chunks/index-1ab591d7.js"];
 export const stylesheets = [];

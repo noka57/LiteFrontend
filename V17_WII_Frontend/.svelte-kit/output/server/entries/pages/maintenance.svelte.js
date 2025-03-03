@@ -1,4 +1,4 @@
-import { c as create_ssr_component, v as validate_component, i as add_attribute, e as escape } from "../../_app/immutable/chunks/index-a89b87ed.js";
+import { c as create_ssr_component, v as validate_component, e as escape, i as add_attribute } from "../../_app/immutable/chunks/index-a89b87ed.js";
 import { A as Accordion, a as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-4c27590e.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
@@ -20,6 +20,7 @@ const Maintenance = create_ssr_component(($$result, $$props, $$bindings, slots) 
   let changed_maintenance_data = {};
   let defaultModal = false;
   let localUpdateKeepConfig = 1;
+  let fileFwName = "No file chosen";
   let PingType = 0;
   let PingHost = "";
   let TracerouteType = 0;
@@ -53,7 +54,9 @@ const Maintenance = create_ssr_component(($$result, $$props, $$bindings, slots) 
                   },
                   default: () => {
                     return `<table><tr><td class="${"w-85"}"><p class="${"pl-10 pt-5 text-lg font-light text-right"}">Update Local Firmware</p></td>
-<td class="${"pl-5 pt-5"}" colspan="${"2"}"><input type="${"file"}" id="${"FwrUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}"></td>
+<td class="${"pl-5 pt-5"}" colspan="${"2"}"><label for="${"FwrUpload"}" class="${"text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg"}">Choose File</label>
+<input type="${"file"}" id="${"FwrUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}" style="${"display: none;"}">
+<span class="${"pl-4"}">${escape(fileFwName)}</span></td>
 <td class="${"pl-5 pt-5"}">${validate_component(Button, "Button").$$render($$result, {}, {}, {
                       default: () => {
                         return `Update`;

@@ -180,7 +180,7 @@ const Dashboard = create_ssr_component(($$result, $$props, $$bindings, slots) =>
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { tdStyle, tdClass }, {}, {
                 default: () => {
                   return `<div class="${"flex"}"><div class="${""}"><svg class="${"w-16 h-16"}" xmlns="${"http://www.w3.org/2000/svg"}" viewBox="${"0 -3 24 24"}"><circle fill="${"#1A87C9"}" cx="${"9"}" cy="${"9"}" r="${"9"}"></circle><path fill="${"#FFFFFF"}" d="${"M13.5,9.8H9C8.6,9.8,8.2,9.4,8.2,9V3c0-0.4,0.3-0.8,0.8-0.8S9.8,2.6,9.8,3v5.2h3.8c0.4,0,0.8,0.3,0.8,0.8\n    S13.9,9.8,13.5,9.8z"}"></path></svg></div>
-<div class="${"w-full"}"><p class="${"text-sm font-light"}">Internet Uptime</p>
+<div class="${"w-full"}"><p class="${"pt-2 text-sm font-light"}">Internet Uptime</p>
 <p class="${"text-xl font-bold"}">${`${dashboard_data != "" ? `${escape(dashboard_data.config.dashboard.internetUptime)} ` : ``}`}
 ${``}</p></div></div>`;
                 }

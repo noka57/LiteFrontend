@@ -1,4 +1,4 @@
-import { c as create_ssr_component, v as validate_component } from "../../_app/immutable/chunks/index-a89b87ed.js";
+import { c as create_ssr_component, v as validate_component, e as escape } from "../../_app/immutable/chunks/index-a89b87ed.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
 /* empty css                                                                            */import { F as FloatingLabelInput } from "../../_app/immutable/chunks/FloatingLabelInput-81886b3d.js";
@@ -26,6 +26,9 @@ const Certificate = create_ssr_component(($$result, $$props, $$bindings, slots) 
   let crlAliasName = "";
   let MachineCertAliasName = "";
   let MachineCertP12Password = "";
+  let fileMachineCertName = "No file chosen";
+  let fileCACertName = "No file chosen";
+  let fileRemoteCertName = "No file chosen";
   let $$settled;
   let $$rendered;
   do {
@@ -128,7 +131,10 @@ ${validate_component(TableBodyRow, "TableBodyRow").$$render($$result, {}, {}, {
                             })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-96" }, {}, {
                               default: () => {
-                                return `<input type="${"file"}" id="${"RemoteCertUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}">`;
+                                return `<label for="${"MachineCertUpload"}" class="${"text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg"}">Choose File</label>
+
+      <input type="${"file"}" id="${"MachineCertUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}" style="${"display: none;"}">
+      <span class="${"pl-4"}">${escape(fileMachineCertName)}</span>`;
                               }
                             })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-36" }, {}, {
@@ -217,7 +223,9 @@ ${validate_component(TableBodyRow, "TableBodyRow").$$render($$result, {}, {}, {
                           })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-96" }, {}, {
                             default: () => {
-                              return `<input type="${"file"}" id="${"RemoteCertUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}">`;
+                              return `<label for="${"CACertUpload"}" class="${"text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg"}">Choose File</label>
+      <input type="${"file"}" id="${"CACertUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}" style="${"display: none;"}">
+      <span class="${"pl-4"}">${escape(fileCACertName)}</span>`;
                             }
                           })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-36" }, {}, {
@@ -306,7 +314,9 @@ ${validate_component(TableBodyRow, "TableBodyRow").$$render($$result, {}, {}, {
                           })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-96" }, {}, {
                             default: () => {
-                              return `<input type="${"file"}" id="${"RemoteCertUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}">`;
+                              return `<label for="${"RemoteCertUpload"}" class="${"text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg"}">Choose File</label>
+      <input type="${"file"}" id="${"RemoteCertUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}" style="${"display: none;"}">
+      <span class="${"pl-4"}">${escape(fileRemoteCertName)}</span>`;
                             }
                           })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-36" }, {}, {

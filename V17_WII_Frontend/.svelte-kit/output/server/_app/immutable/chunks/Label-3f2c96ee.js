@@ -2,10 +2,11 @@ import { c as create_ssr_component, b as compute_rest_props, d as spread, f as e
 import classNames from "classnames";
 const Label = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let labelClass;
-  let $$restProps = compute_rest_props($$props, ["color", "defaultClass", "show"]);
+  let $$restProps = compute_rest_props($$props, ["color", "defaultClass", "show", "styleSpecial"]);
   let { color = "gray" } = $$props;
   let { defaultClass = "text-sm font-medium block" } = $$props;
   let { show = true } = $$props;
+  let { styleSpecial = false } = $$props;
   let node;
   const colorClasses = {
     gray: "text-gray-900 dark:text-gray-300",
@@ -19,6 +20,8 @@ const Label = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.defaultClass(defaultClass);
   if ($$props.show === void 0 && $$bindings.show && show !== void 0)
     $$bindings.show(show);
+  if ($$props.styleSpecial === void 0 && $$bindings.styleSpecial && styleSpecial !== void 0)
+    $$bindings.styleSpecial(styleSpecial);
   {
     {
       const control = node == null ? void 0 : node.control;
@@ -27,7 +30,16 @@ const Label = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   }
   labelClass = classNames(defaultClass, colorClasses[color], $$props.class);
   return `${show ? `
-  <label${spread(
+  ${styleSpecial ? `<label${spread(
+    [
+      escape_object($$restProps),
+      {
+        class: escape_attribute_value(labelClass)
+      },
+      { style: "padding-top:2.3rem" }
+    ],
+    {}
+  )}${add_attribute("this", node, 0)}>${slots.default ? slots.default({}) : ``}</label>` : `<label${spread(
     [
       escape_object($$restProps),
       {
@@ -35,7 +47,7 @@ const Label = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       }
     ],
     {}
-  )}${add_attribute("this", node, 0)}>${slots.default ? slots.default({}) : ``}</label>` : `${slots.default ? slots.default({}) : ``}`}`;
+  )}${add_attribute("this", node, 0)}>${slots.default ? slots.default({}) : ``}</label>`}` : `${slots.default ? slots.default({}) : ``}`}`;
 });
 export {
   Label as L

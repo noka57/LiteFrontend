@@ -2,7 +2,7 @@ import { c as create_ssr_component, v as validate_component, i as add_attribute,
 import { A as Accordion, a as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-4c27590e.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
-/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-a38204dd.js";
+/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-7d3f7bdf.js";
 import { M as Modal } from "../../_app/immutable/chunks/Modal-ea7df515.js";
 import { T as Table } from "../../_app/immutable/chunks/Table-724d6c25.js";
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-3dfdaf75.js";
@@ -13,7 +13,7 @@ import { sessionidG } from "../endpoints/sessionG.js";
 import { ModbusTCP_Slave_ConfigChangedLog, ModbusTCP_Master_ConfigChangedLog, ModbusRTU_Slave_ConfigChangedLog, ModbusRTU_Master_ConfigChangedLog, ChangedModbusConfig, modbusConfig, portConnectionConfig, PortConnection_LAN_ConfigChangedLog, PortConnection_COM_ConfigChangedLog, PortConnection_Transparent_ConfigChangedLog, ChangedPortConnectionConfig } from "../endpoints/configG.js";
 import "../../_app/immutable/chunks/index-b74adbb6.js";
 import "../../_app/immutable/chunks/Frame-cafee768.js";
-import "../../_app/immutable/chunks/Label-a273673c.js";
+import "../../_app/immutable/chunks/Label-3f2c96ee.js";
 import "../../_app/immutable/chunks/CloseButton-88212a62.js";
 let defaultClass = "flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl";
 const PortC = create_ssr_component(($$result, $$props, $$bindings, slots) => {

@@ -2,8 +2,8 @@ import { c as create_ssr_component, v as validate_component, i as add_attribute,
 import { A as Accordion, a as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-4c27590e.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
-/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-a38204dd.js";
-import { T as Toggle } from "../../_app/immutable/chunks/Toggle-31f82fc3.js";
+/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-7d3f7bdf.js";
+import { T as Toggle } from "../../_app/immutable/chunks/Toggle-a89bbb21.js";
 import { M as Modal } from "../../_app/immutable/chunks/Modal-ea7df515.js";
 import { T as Table } from "../../_app/immutable/chunks/Table-724d6c25.js";
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-3dfdaf75.js";
@@ -15,7 +15,7 @@ import { sessionidG } from "../endpoints/sessionG.js";
 /* empty css                                           */import { sdataLoggerConfig, ChangedSDataLoggerConfig, eventEngineConfig, ChangedEventEngineConfig, ModbusGateway_TtR_ConfigChangedLog, ModbusGateway_RtT_ConfigChangedLog, ModbusGateway_RtR_ConfigChangedLog, ModbusGateway_TtT_ConfigChangedLog, ModbusDataModel_Slave_ConfigChangedLog, ModbusTag_ConfigChangedLog, ModbusTCP_Slave_ConfigChangedLog, ModbusTCP_Master_ConfigChangedLog, ModbusRTU_Slave_ConfigChangedLog, ModbusRTU_Master_ConfigChangedLog, SDatalogger_ProxyMode_Edge_ConfigChangedLog, SDatalogger_MonitorMode_Edge_ConfigChangedLog, EventEngine_TriggerModbus_ConfigChangedLog, EventEngine_ActionModbus_ConfigChangedLog, modbusConfig, ChangedModbusConfig, ChangedPortConnectionConfig, portConnectionConfig } from "../endpoints/configG.js";
 import "../../_app/immutable/chunks/index-b74adbb6.js";
 import "../../_app/immutable/chunks/Frame-cafee768.js";
-import "../../_app/immutable/chunks/Label-a273673c.js";
+import "../../_app/immutable/chunks/Label-3f2c96ee.js";
 import "../../_app/immutable/chunks/CloseButton-88212a62.js";
 let defaultClass = "flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl";
 const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -306,7 +306,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -323,7 +325,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -340,7 +344,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -357,7 +363,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -374,7 +382,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -391,7 +401,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -408,7 +420,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -425,7 +439,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -442,7 +458,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -459,7 +477,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -476,7 +496,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -493,7 +515,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -510,7 +534,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -527,7 +553,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -544,7 +572,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -561,7 +591,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -578,7 +610,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -595,7 +629,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -612,7 +648,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -629,7 +667,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -646,7 +686,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -663,7 +705,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -680,7 +724,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -697,7 +743,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -714,7 +762,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -731,7 +781,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -748,7 +800,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -765,7 +819,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -782,7 +838,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -799,7 +857,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -816,7 +876,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -833,7 +895,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -850,7 +914,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -867,7 +933,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -884,7 +952,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -901,7 +971,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -918,7 +990,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -935,7 +1009,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -952,7 +1028,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -969,7 +1047,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -986,7 +1066,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -1003,7 +1085,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -1020,7 +1104,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -1037,7 +1123,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -1054,7 +1142,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -1071,7 +1161,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -1088,7 +1180,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -1105,7 +1199,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -1122,7 +1218,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     },
     {
       enable: false,
@@ -1139,7 +1237,9 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       postprocessingOperator: 0,
       postprocessingValue: 1,
       responseTimeout: 1e3,
-      pollingRate: 1e3
+      pollingRate: 1e3,
+      unitId: 0,
+      tagType: 0
     }
   ];
   let new_tag_modal = false;
@@ -2482,10 +2582,10 @@ ${validate_component(TabItem, "TabItem").$$render($$result, { title: "Tag" }, {}
 ${new_tag_profile[0] == "R" ? `<tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">Slave ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", new_tag[new_tag_index].slaveId, 0)}></td>
 <td></td>
 <td></td>
-<td></td></tr>` : `<tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">Slave ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50"}" disabled></td>
+<td></td></tr>` : `${new_tag_profile[0] == "T" ? `<tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">Unit ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", new_tag[new_tag_index].unitId, 0)}></td>
 <td></td>
 <td></td>
-<td></td></tr>`}
+<td></td></tr>` : ``}`}
 
 <tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">Point Type</p></td>
 
@@ -2763,10 +2863,10 @@ ${validate_component(Modal, "Modal").$$render(
 ${modify_tag_profile[0] == "R" ? `<tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">Slave ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].slaveId, 0)}></td>
 <td></td>
 <td></td>
-<td></td></tr>` : `<tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">Slave ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50"}" disabled></td>
+<td></td></tr>` : `${modify_tag_profile[0] == "T" ? `<tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">Unit ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].unitId, 0)}></td>
 <td></td>
 <td></td>
-<td></td></tr>`}
+<td></td></tr>` : ``}`}
 
 <tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">Point Type</p></td>
 

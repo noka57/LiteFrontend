@@ -1,7 +1,7 @@
 import { c as create_ssr_component, b as compute_rest_props, g as getContext, v as validate_component, d as spread, h as escape_attribute_value, f as escape_object, i as add_attribute, j as compute_slots } from "./index-a89b87ed.js";
 import classNames from "classnames";
-import { l as labelClass, i as inputClass } from "./Radio-a38204dd.js";
-import { L as Label } from "./Label-a273673c.js";
+import { l as labelClass, i as inputClass } from "./Radio-7d3f7bdf.js";
+import { L as Label } from "./Label-3f2c96ee.js";
 const Checkbox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$restProps = compute_rest_props($$props, ["color", "custom", "inline", "group", "value", "checked"]);
   let $$slots = compute_slots(slots);

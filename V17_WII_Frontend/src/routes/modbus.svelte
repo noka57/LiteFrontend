@@ -704,21 +704,6 @@
     }
 
 
-    let backup_data_model_master={
-        enable: false,
-        delete:false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 0,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-
-    };
 
     let backup_tag=
     {
@@ -736,7 +721,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     };
 
     let new_tag_profile="";
@@ -759,7 +746,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -776,7 +765,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -793,7 +784,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -810,7 +803,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -827,7 +822,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -844,7 +841,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -861,7 +860,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -878,7 +879,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -895,7 +898,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -912,7 +917,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -929,7 +936,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -946,7 +955,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -963,7 +974,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -980,7 +993,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -997,7 +1012,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1014,7 +1031,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1031,7 +1050,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1048,7 +1069,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1065,7 +1088,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1082,7 +1107,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1099,7 +1126,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1116,7 +1145,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1133,7 +1164,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1150,7 +1183,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1167,7 +1202,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1184,7 +1221,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1201,7 +1240,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1218,7 +1259,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1235,7 +1278,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1252,7 +1297,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1269,7 +1316,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1286,7 +1335,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1303,7 +1354,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1320,7 +1373,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1337,7 +1392,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1354,7 +1411,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1371,7 +1430,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1388,7 +1449,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1405,7 +1468,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1422,7 +1487,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1439,7 +1506,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1456,7 +1525,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1473,7 +1544,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1490,7 +1563,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1507,7 +1582,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1524,7 +1601,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1541,7 +1620,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1558,7 +1639,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },
     {
         enable: false,
@@ -1575,7 +1658,9 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     },                            
     {
         enable: false,
@@ -1592,161 +1677,12 @@
         postprocessingOperator: 0, 
         postprocessingValue: 1, 
         responseTimeout: 1000, 
-        pollingRate: 1000
+        pollingRate: 1000,
+        unitId:0,
+        tagType:0
     }
     ];
 
-    let new_data_model_master=[
-    {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-    },
-    {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0,
-        responseTimeout: 1000,
-        pollingRate: 1000,
-        delayBetweenPolls: 20
-
-    }
-
-    ];
 
     let new_tag_modal=false;
     let new_tag_index;
@@ -1769,6 +1705,8 @@
         new_tag[index].postprocessingValue=1;
         new_tag[index].responseTimeout=1000;
         new_tag[index].pollingRate=1000;
+        new_tag[index].unitId=0;
+        new_tag[index].tagType=0;
         new_tag_index=index;
         new_tag_modal=true;
 
@@ -1778,14 +1716,18 @@
     {
         if (new_tag_profile[0]=='T')
         {
+            new_tag[new_tag_index].tagType=0;
             new_tag[new_tag_index].slaveId=-1;
+            new_tag[new_tag_index].unitId=0;
             new_tag[new_tag_index].pollingRate=1000;
 
         }
         else if(new_tag_profile[0]=='R')
         {
+            new_tag[new_tag_index].tagType=1;
             new_tag[new_tag_index].pollingRate=-1;
             new_tag[new_tag_index].slaveId=1;
+            new_tag[new_tag_index].unitId=-1;
         }
 
     }
@@ -1794,13 +1736,17 @@
     {
         if (modify_tag_profile[0]=='T')
         {
+            changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].tagType=0;
             changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].slaveId=-1;
+            changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].unitId=0;
             changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].pollingRate=1000;
         }
         else if(modify_tag_profile[0]=='R')
         {
+            changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].tagType=1;
             changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].pollingRate=-1;
             changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].slaveId=1;
+            changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].unitId=-1;
         }
 
     }
@@ -1871,9 +1817,12 @@
         backup_tag.postprocessingOperator=changed_modbus_data.config.fieldManagement_modbus_tag[index].postprocessingOperator;
         backup_tag.postprocessingValue=changed_modbus_data.config.fieldManagement_modbus_tag[index].postprocessingValue;
         backup_tag.responseTimeout=changed_modbus_data.config.fieldManagement_modbus_tag[index].responseTimeout;
-        backup_tag.pollingRate=changed_modbus_data.config.fieldManagement_modbus_tag[index].pollingRate;       
+        backup_tag.pollingRate=changed_modbus_data.config.fieldManagement_modbus_tag[index].pollingRate;
+        backup_tag.unitId=changed_modbus_data.config.fieldManagement_modbus_tag[index].unitId;
+        backup_tag.tagType= changed_modbus_data.config.fieldManagement_modbus_tag[index].tagType;      
 
         modify_tag_profile="";
+
 
         for (let i=0; i< saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master.length;i++)
         {
@@ -1918,8 +1867,8 @@
         changed_modbus_data.config.fieldManagement_modbus_tag[index].postprocessingValue=backup_tag.postprocessingValue;
         changed_modbus_data.config.fieldManagement_modbus_tag[index].responseTimeout=backup_tag.responseTimeout;
         changed_modbus_data.config.fieldManagement_modbus_tag[index].pollingRate=backup_tag.pollingRate;
-
-
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].unitId=backup_tag.unitId;
+        changed_modbus_data.config.fieldManagement_modbus_tag[index].tagType=backup_tag.tagType;
         modify_tag_modal=false;
     }
 
@@ -1941,95 +1890,6 @@
         modify_tag_modal=false;  
     }
 
-
-
-
-    let new_data_model_master_modal=false;
-    let new_data_model_master_index;
-
-    function new_data_model_master_trigger(index)
-    {
-        new_data_model_master[index].enable=true;
-        new_data_model_master[index].delete=false;
-        new_data_model_master[index].dataModelName="";
-        new_data_model_master[index].profile="";
-        new_data_model_master[index].slaveId=0;
-        new_data_model_master[index].pointType=3;
-        new_data_model_master[index].address=0;
-        new_data_model_master[index].quantity=1;
-        new_data_model_master[index].byteOrder= 0;
-        new_data_model_master[index].responseTimeout=1000;
-        new_data_model_master[index].pollingRate=1000;
-        new_data_model_master[index].delayBetweenPolls=20;
-
-        new_data_model_master_index=index;
-        new_data_model_master_modal=true;
-
-    }
-
-    function add_new_data_model_master(index)
-    {
-        new_data_model_master_modal=false;
-
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master=[...changed_modbus_data.config.fieldManagement_modbus_data_model.master,new_data_model_master[index]];
-    }
-
-
-    let Modify_Data_Model_Master_Modal=false;
-    let Modify_Data_Model_Master_index;
-
-    function deleteDataModelMaster(index)
-    {
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].delete=true;
-    }
-
-    function RestoreDeleteDataModelMaster(index)
-    {
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].delete=false;
-    }
-
-
-    function TriggerModifyDataModelMaster(index)
-    {
-        Modify_Data_Model_Master_Modal=true;
-        Modify_Data_Model_Master_index=index;
-        backup_data_model_master.enable=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].enable;
-        backup_data_model_master.delete=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].delete;        
-        backup_data_model_master.dataModelName=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].dataModelName;
-        backup_data_model_master.profile=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].profile;
-        backup_data_model_master.slaveId=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].slaveId;        
-        backup_data_model_master.pointType=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].pointType;      
-        backup_data_model_master.address=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].address; 
-        backup_data_model_master.quantity=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].quantity;
-        backup_data_model_master.byteOrder=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].byteOrder;
-        backup_data_model_master.responseTimeout=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].responseTimeout;
-        backup_data_model_master.pollingRate=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].pollingRate;
-        backup_data_model_master.delayBetweenPolls=changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].delayBetweenPolls;
-
-    }
-
-    function NoModifyDataModelMaster(index)
-    {
-        Modify_Data_Model_Master_Modal=false;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].enable=backup_data_model_master.enable;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].delete=backup_data_model_master.delete;        
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].data_modelName=backup_data_model_master.dataModelName;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].profile=backup_data_model_master.profile;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].slaveId=backup_data_model_master.slaveId;        
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].pointType=backup_data_model_master.pointType;      
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].address=backup_data_model_master.address; 
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].quantity=backup_data_model_master.quantity;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].byteOrder=backup_data_model_master.byteOrder;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].responseTimeout=backup_data_model_master.responseTimeout;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].pollingRate=backup_data_model_master.pollingRate;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.master[index].delayBetweenPolls=backup_data_model_master.delayBetweenPolls;
-
-    }
-
-    function ModifyDataModelMaster()
-    {
-        Modify_Data_Model_Master_Modal=false;  
-    }
 
 
     let new_data_model_slave=[
@@ -6707,7 +6567,7 @@
 
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-3 strikeout">{TagItem.tagName}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-1 strikeout">{TagItem.masterProfile}
-{#if TagItem.slaveId != -1} (Slave ID: {TagItem.slaveId}){/if}
+{#if TagItem.tagType == 0} (Unit ID: {TagItem.unitId}){:else if TagItem.tagType==1}(Slave ID: {TagItem.slaveId}){/if}
   </td>
 {#if TagItem.pointType == 0}
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Coil</td>
@@ -6826,7 +6686,7 @@
       <TableBodyCell class="!p-1 w-4">{index+1}</TableBodyCell>
   <TableBodyCell class="!p-3">{TagItem.tagName}</TableBodyCell>
   <TableBodyCell class="!p-1">{TagItem.masterProfile}
-{#if TagItem.slaveId != -1} (Slave ID: {TagItem.slaveId}){/if}
+{#if TagItem.tagType == 0} (Unit ID: {TagItem.unitId}){:else if TagItem.tagType==1}(Slave ID: {TagItem.slaveId}){/if}
   </TableBodyCell>
 {#if TagItem.pointType == 0}
     <TableBodyCell >Coil</TableBodyCell>
@@ -7051,9 +6911,9 @@
 
   </tr>
 
-{:else}
+{:else if new_tag_profile[0] =='T'}
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Unit ID</p></td><td class="pl-5 pt-5"><input type="number" bind:value={new_tag[new_tag_index].unitId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 <td></td>
 <td></td>
 <td></td>
@@ -7297,9 +7157,9 @@
 
   </tr>
 
-{:else}
+{:else if modify_tag_profile[0] =='T'}
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Slave ID</p></td><td class="pl-5 pt-5"><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Unit ID</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_tag[modify_tag_index].unitId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500" ></td>
 <td></td>
 <td></td>
 <td></td>

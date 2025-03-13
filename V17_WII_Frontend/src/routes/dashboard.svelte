@@ -74,7 +74,7 @@
 
   function calculateProgressBarPath(value,i)
   {
-    let max = 105;
+    let max = 102;
     let x=50;
     let y=5;
 
@@ -105,27 +105,61 @@
       {
         if (i==1)
         {
-          x1=x;
-          y1=y;
+          if (value >=100)
+          {
+            x1=50;
+            y1=5;
+
+          }
+          else
+          {
+            x1=x;
+            y1=y;
+          }
 
         }
         else if (i==2)
         {
-          x2=x;
-          y2=y;
+          if (value >=100)
+          {
+            x2=50;
+            y2=5;
+
+          }
+          else
+          {
+            x2=x;
+            y2=y;
+          }
 
         }
         else if (i==3)
         {
-          x3=x;
-          y3=y;
+          if (value >=100)
+          {
+            x3=50;
+            y3=5;
 
+          }
+          else
+          {
+            x3=x;
+            y3=y;
+          }
         }
         else if (i==4)
         {
-          x4=x;
-          y4=y;
+          if (value >=100)
+          {
+            x4=50;
+            y4=5;
 
+          }
+          else
+          {
+            x4=x;
+            y4=y;
+          }
         }
         path+="A35 35 0 0 1 50 75A35 35 0 0 1 15.810308878413977 32.51234208777258";
         return path;

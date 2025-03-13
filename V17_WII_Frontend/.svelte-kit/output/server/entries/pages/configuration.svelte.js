@@ -2,7 +2,7 @@ import { c as create_ssr_component, v as validate_component, e as escape } from 
 import { A as Accordion, a as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-4c27590e.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
-/* empty css                                                                            */import { T as Toggle } from "../../_app/immutable/chunks/Toggle-31f82fc3.js";
+/* empty css                                                                            */import { T as Toggle } from "../../_app/immutable/chunks/Toggle-a89bbb21.js";
 import { M as Modal } from "../../_app/immutable/chunks/Modal-ea7df515.js";
 import { S as Spinner } from "../../_app/immutable/chunks/Spinner-337e42f7.js";
 import { T as TabItem } from "../../_app/immutable/chunks/TabItem-424b0447.js";
@@ -11,8 +11,8 @@ import { sessionidG } from "../endpoints/sessionG.js";
 import { wholeConfigVersion, configurationConfig, ConfigurationP2EConfigChangedLog, ChangedConfigurationConfig } from "../endpoints/configG.js";
 import "../../_app/immutable/chunks/index-b74adbb6.js";
 import "../../_app/immutable/chunks/Frame-cafee768.js";
-import "../../_app/immutable/chunks/Radio-a38204dd.js";
-import "../../_app/immutable/chunks/Label-a273673c.js";
+import "../../_app/immutable/chunks/Radio-7d3f7bdf.js";
+import "../../_app/immutable/chunks/Label-3f2c96ee.js";
 import "../../_app/immutable/chunks/CloseButton-88212a62.js";
 let defaultClass = "flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl";
 const Configuration = create_ssr_component(($$result, $$props, $$bindings, slots) => {

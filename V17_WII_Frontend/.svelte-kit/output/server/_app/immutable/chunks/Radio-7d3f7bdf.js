@@ -1,6 +1,6 @@
 import { c as create_ssr_component, b as compute_rest_props, g as getContext, v as validate_component, d as spread, h as escape_attribute_value, f as escape_object, i as add_attribute, j as compute_slots } from "./index-a89b87ed.js";
 import classNames from "classnames";
-import { L as Label } from "./Label-a273673c.js";
+import { L as Label } from "./Label-3f2c96ee.js";
 const colorClasses = {
   red: "text-red-600 focus:ring-red-500 dark:focus:ring-red-600",
   green: "text-green-600 focus:ring-green-500 dark:focus:ring-green-600",
@@ -21,13 +21,14 @@ const inputClass = (custom, color, rounded, tinted, extraClass) => classNames(
   extraClass
 );
 const Radio = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $$restProps = compute_rest_props($$props, ["color", "custom", "inline", "group", "value"]);
+  let $$restProps = compute_rest_props($$props, ["color", "custom", "inline", "group", "value", "styleSpecial"]);
   let $$slots = compute_slots(slots);
   let { color = "blue" } = $$props;
   let { custom = false } = $$props;
   let { inline = false } = $$props;
   let { group = "" } = $$props;
   let { value = "" } = $$props;
+  let { styleSpecial = false } = $$props;
   let background = getContext("background");
   if ($$props.color === void 0 && $$bindings.color && color !== void 0)
     $$bindings.color(color);
@@ -39,11 +40,14 @@ const Radio = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.group(group);
   if ($$props.value === void 0 && $$bindings.value && value !== void 0)
     $$bindings.value(value);
+  if ($$props.styleSpecial === void 0 && $$bindings.styleSpecial && styleSpecial !== void 0)
+    $$bindings.styleSpecial(styleSpecial);
   return `${validate_component(Label, "Label").$$render(
     $$result,
     {
       class: labelClass(inline, $$props.class),
-      show: $$slots.default
+      show: $$slots.default,
+      styleSpecial
     },
     {},
     {

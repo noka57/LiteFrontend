@@ -2,7 +2,7 @@ import { c as create_ssr_component, b as compute_rest_props, g as getContext, v 
 import { A as Accordion, a as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-4c27590e.js";
 import classNames from "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
-/* empty css                                                                            */import { L as Label } from "../../_app/immutable/chunks/Label-a273673c.js";
+/* empty css                                                                            */import { L as Label } from "../../_app/immutable/chunks/Label-3f2c96ee.js";
 import { W as Wrapper, T as Textarea } from "../../_app/immutable/chunks/Textarea-109fa399.js";
 import { T as Table } from "../../_app/immutable/chunks/Table-724d6c25.js";
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-3dfdaf75.js";

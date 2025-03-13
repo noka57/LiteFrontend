@@ -1169,6 +1169,7 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 </svg>
         </svelte:fragment>
 
+        			    <SidebarDropdownItem label="Smart Conversion" href='/conversion' active={activeUrl === '/conversion'}/>
 
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
 

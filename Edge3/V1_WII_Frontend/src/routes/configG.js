@@ -11,7 +11,7 @@ export const wholeConfigVersion=writable("");
 export const enableOPCUA=writable("");
 
 
-
+export const WiFiConfig=writable("");
 export const sconversionConfig=writable("");
 export const awsIoTcoreConfig=writable("");
 export const azureConfig=writable("");
@@ -34,6 +34,11 @@ export const lanConfig=writable("");
 export const wanConfig=writable("");
 export const configurationConfig=writable("");
 export const datatagproConfig=writable("");
+
+
+export const WiFi_11ah_ConfigChangedLog=writable("");
+export const WiFi_11ah_General_ConfigChangedLog=writable("");
+export const ChangedWiFiConfig=writable("");
 
 
 export const OPCUA_Server_ConfigChangedLog=writable("");

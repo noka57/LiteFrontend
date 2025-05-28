@@ -5,7 +5,9 @@
 	import { Hamburger } from 'svelte-hamburgers';
 	import { onMount } from 'svelte';
 	import { sessionidG } from "./sessionG.js";
-  	import { 
+  	import {
+  	    WiFi_11ah_ConfigChangedLog,
+        WiFi_11ah_General_ConfigChangedLog, 
   		OPCUA_Server_ConfigChangedLog,
     	OPCUA_Client_ConfigChangedLog,
     	Conversion_Opcua2Modbus_ConfigChangedLog,
@@ -299,6 +301,9 @@
   	let conversion_opcuagateway_changedValues=[];
 
 
+    let wifi_11ah_changedValues = [];
+    let wifi_11ah_general_changedValues = [];
+
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -318,7 +323,9 @@
 
   	function JudgeChangedOrNot()
   	{
-  		if (opcua_server_changedValues.length !=0 ||
+  		if (wifi_11ah_changedValues.length !=0 ||
+  			wifi_11ah_general_changedValues.length !=0 ||
+  			opcua_server_changedValues.length !=0 ||
   			opcua_client_changedValues.length !=0 ||
   			conversion_opcua2modbus_changedValues.length !=0 ||
   			conversion_opcuagateway_changedValues.length !=0 ||
@@ -436,6 +443,18 @@
   		}
 
   	}
+
+
+    WiFi_11ah_ConfigChangedLog.subscribe(val => {
+        wifi_11ah_changedValues = val;
+       	JudgeChangedOrNot();
+    });
+
+
+    WiFi_11ah_General_ConfigChangedLog.subscribe(val => {
+        wifi_11ah_general_changedValues = val;
+    	JudgeChangedOrNot();    
+    })
 
 
 

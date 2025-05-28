@@ -2,15 +2,13 @@
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio } from 'flowbite-svelte';
 
 
-  import { onMount } from 'svelte';
-  import { sessionidG } from "./sessionG.js";
-  import { WiFiConfig,
+      import { onMount } from 'svelte';
+      import { sessionidG } from "./sessionG.js";
+      import { WiFiConfig,
         WiFi_11ah_ConfigChangedLog,
         WiFi_11ah_General_ConfigChangedLog,
         ChangedWiFiConfig
-   } from "./configG.js"
-
-
+      } from "./configG.js"
 
 
 
@@ -22,39 +20,149 @@
       let wifi_11ah_general_changedValues = [];
 
 
-    let sessionid;
-    let sessionBinary;
-    sessionidG.subscribe(val => {
+      let sessionid;
+      let sessionBinary;
+      sessionidG.subscribe(val => {
         sessionid = val;
-    });
+      });
 
-    WiFiConfig.subscribe(val => {
+      WiFiConfig.subscribe(val => {
         wifi_data = val;
-    });
+      });
 
 
-    WiFi_11ah_ConfigChangedLog.subscribe(val => {
-      wifi_11ah_changedValues = val;
-    });
+      WiFi_11ah_ConfigChangedLog.subscribe(val => {
+            wifi_11ah_changedValues = val;
+      });
 
 
-    WiFi_11ah_General_ConfigChangedLog.subscribe(val => {
-      wifi_11ah_general_changedValues = val;
-    });
+      WiFi_11ah_General_ConfigChangedLog.subscribe(val => {
+            wifi_11ah_general_changedValues = val;
+      });
 
-    ChangedWiFiConfig.subscribe(val => {
+      ChangedWiFiConfig.subscribe(val => {
         saved_changed_wifi_data = val;
-    });
+      });
 
 
 
 
 
-let wifi_general_disable=1;
-let wifi_general_mode=0;
-
-   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
+      let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
   
+      function Save11ah()
+      {
+            console.log("Save 11 ah\r\n");
+            if (wifi_11ah_changedValues.length !=0)
+            {
+                  wifi_11ah_changedValues=[];
+            }
+
+
+            if (changed_wifi_data.config.wifi_11ah.enable != wifi_data.config.wifi_11ah.enable)
+            {
+                  let changedstr="Value of enable has changed to "+changed_wifi_data.config.wifi_11ah.enable;
+                  wifi_11ah_changedValues=[...wifi_11ah_changedValues, changedstr];
+            }
+
+            if (changed_wifi_data.config.wifi_11ah.mode != wifi_data.config.wifi_11ah.mode)
+            {
+                  let changedstr="Value of mode has changed to "+changed_wifi_data.config.wifi_11ah.mode;
+                  wifi_11ah_changedValues=[...wifi_11ah_changedValues, changedstr];
+            }
+
+
+            WiFi_11ah_ConfigChangedLog.set(wifi_11ah_changedValues);
+            saved_changed_wifi_data.config.wifi_11ah.enable=changed_wifi_data.config.wifi_11ah.enable;
+            saved_changed_wifi_data.config.wifi_11ah.mode=changed_wifi_data.config.wifi_11ah.mode;        
+            ChangedWiFiConfig.set(saved_changed_wifi_data);
+            console.log(wifi_11ah_changedValues);
+      };
+
+
+      function Save11ahStationMode()
+      {
+            console.log("Save 11 ah station mode\r\n");
+            if (wifi_11ah_general_changedValues.length !=0)
+            {
+                  wifi_11ah_general_changedValues=[];
+            }
+
+
+            if (changed_wifi_data.config.wifi_11ah_general.ssid != wifi_data.config.wifi_11ah_general.ssid)
+            {
+                  let changedstr="Value of ssid has changed to "+wifi_data.config.wifi_11ah_general.ssid;
+                  wifi_11ah_general_changedValues=[...wifi_11ah_general_changedValues, changedstr];
+            }
+
+            if (changed_wifi_data.config.wifi_11ah_general.password != wifi_data.config.wifi_11ah_general.password)
+            {
+                  let changedstr="Value of password has changed to "+changed_wifi_data.config.wifi_11ah_general.password;
+                  wifi_11ah_general_changedValues=[...wifi_11ah_general_changedValues, changedstr];
+            }
+
+
+            WiFi_11ah_General_ConfigChangedLog.set(wifi_11ah_general_changedValues);
+            saved_changed_wifi_data.config.wifi_11ah_general.ssid=changed_wifi_data.config.wifi_11ah_general.ssid;
+            saved_changed_wifi_data.config.wifi_11ah_general.password=changed_wifi_data.config.wifi_11ah_general.password;        
+            ChangedWiFiConfig.set(saved_changed_wifi_data);
+            console.log(wifi_11ah_general_changedValues);
+      }
+
+
+      function Save11ahAPMode()
+      {
+            console.log("Save 11 ah ap mode\r\n");
+            if (wifi_11ah_general_changedValues.length !=0)
+            {
+                  wifi_11ah_general_changedValues=[];
+            }
+
+
+            if (changed_wifi_data.config.wifi_11ah_general.ssid != wifi_data.config.wifi_11ah_general.ssid)
+            {
+                  let changedstr="Value of ssid has changed to "+changed_wifi_data.config.wifi_11ah_general.ssid;
+                  wifi_11ah_general_changedValues=[...wifi_11ah_general_changedValues, changedstr];
+            }
+
+            if (changed_wifi_data.config.wifi_11ah_general.password != wifi_data.config.wifi_11ah_general.password)
+            {
+                  let changedstr="Value of password has changed to "+changed_wifi_data.config.wifi_11ah_general.password;
+                  wifi_11ah_general_changedValues=[...wifi_11ah_general_changedValues, changedstr];
+            }
+
+
+            if (changed_wifi_data.config.wifi_11ah_general.region != wifi_data.config.wifi_11ah_general.region)
+            {
+                  let changedstr="Value of region has changed to "+changed_wifi_data.config.wifi_11ah_general.region;
+                  wifi_11ah_general_changedValues=[...wifi_11ah_general_changedValues, changedstr];
+            }
+
+
+            if (changed_wifi_data.config.wifi_11ah_general.operation_band != wifi_data.config.wifi_11ah_general.operation_band)
+            {
+                  let changedstr="Value of operation_band has changed to "+changed_wifi_data.config.wifi_11ah_general.operation_band;
+                  wifi_11ah_general_changedValues=[...wifi_11ah_general_changedValues, changedstr];
+            }
+
+            if (changed_wifi_data.config.wifi_11ah_general.channel != wifi_data.config.wifi_11ah_general.channel)
+            {
+                  let changedstr="Value of channel has changed to "+changed_wifi_data.config.wifi_11ah_general.channel;
+                  wifi_11ah_general_changedValues=[...wifi_11ah_general_changedValues, changedstr];
+            }
+
+
+            WiFi_11ah_General_ConfigChangedLog.set(wifi_11ah_general_changedValues);
+            saved_changed_wifi_data.config.wifi_11ah_general.ssid=changed_wifi_data.config.wifi_11ah_general.ssid;
+            saved_changed_wifi_data.config.wifi_11ah_general.password=changed_wifi_data.config.wifi_11ah_general.password;
+            saved_changed_wifi_data.config.wifi_11ah_general.region=changed_wifi_data.config.wifi_11ah_general.region;   
+            saved_changed_wifi_data.config.wifi_11ah_general.operation_band=changed_wifi_data.config.wifi_11ah_general.operation_band;   
+            saved_changed_wifi_data.config.wifi_11ah_general.channel=changed_wifi_data.config.wifi_11ah_general.channel;   
+
+            ChangedWiFiConfig.set(saved_changed_wifi_data);
+            console.log(wifi_11ah_general_changedValues);
+
+      }
 
 
    async function getWIFIData () {
@@ -98,8 +206,8 @@ let wifi_general_mode=0;
 
         if (wifi_11ah_changedValues.length == 0)
         {
-            changed_wifi_data.config.wifi_11ah.enable = docker_data.config.wifi_11ah.enable;
-            changed_wifi_data.config.wifi_11ah.mode = docker_data.config.wifi_11ah.mode;
+            changed_wifi_data.config.wifi_11ah.enable = wifi_data.config.wifi_11ah.enable;
+            changed_wifi_data.config.wifi_11ah.mode = wifi_data.config.wifi_11ah.mode;
         }
 
 
@@ -172,7 +280,7 @@ let wifi_general_mode=0;
         <td></td>
         <td></td>
         <td></td>        
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={Save11ah}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -229,7 +337,7 @@ let wifi_general_mode=0;
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={Save11ahStationMode}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -407,7 +515,7 @@ let wifi_general_mode=0;
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={Save11ahAPMode}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 

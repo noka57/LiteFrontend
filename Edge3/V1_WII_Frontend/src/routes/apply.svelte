@@ -2,6 +2,10 @@
 	import { List, Li, Heading,Button, Modal, Spinner} from 'flowbite-svelte';
 	import { sessionidG } from "./sessionG.js";
 	import { 
+      WiFiConfig,
+      WiFi_11ah_ConfigChangedLog,
+      WiFi_11ah_General_ConfigChangedLog,
+      ChangedWiFiConfig,
       sconversionConfig,
       ChangedSConfigConfig,
       OPCUA_Server_ConfigChangedLog,
@@ -171,10 +175,17 @@
   let sdata_logger_data="";
   let event_engine_data="";
   let data_tag_pro_data=""; 
-  let sconversion_data="";   
+  let sconversion_data="";
+  let wifi_data="";     
 
 	let sessionid;
   let sessionBinary;
+
+  let ContentWiFi;
+  let wifiBinary=null;
+  let wifi_11ah_changedValues = [];
+  let wifi_11ah_general_changedValues = [];
+
 
   let ContentSConversion;
   let sconversionBinary=null;
@@ -372,6 +383,10 @@
 	     sessionid = val;
 	});
 
+  ChangedWiFiConfig.subscribe(val => {
+      wifi_data = val;
+  });
+
 
   ChangedSConfigConfig.subscribe(val => {
       sconversion_data = val;
@@ -472,6 +487,16 @@
 
   ChangedDataTagProConfig.subscribe(val => {
       data_tag_pro_data = val;
+  });
+
+
+  WiFi_11ah_ConfigChangedLog.subscribe(val => {
+      wifi_11ah_changedValues = val;
+  });
+
+
+  WiFi_11ah_General_ConfigChangedLog.subscribe(val => {
+      wifi_11ah_general_changedValues = val;
   });
 
   Conversion_Opcua2Modbus_ConfigChangedLog.subscribe(val => {
@@ -1786,6 +1811,52 @@
   } 
 
 
+ async function RestartWiFi()
+  {
+    const res = await fetch(window.location.origin+"/resTARTwifI", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart wifi OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
+
+  async function SetWiFiData()
+  {
+    const res = await fetch(window.location.origin+"/sEtWIfI", {
+      method: 'POST',
+      body: ContentWiFi
+     })
+
+    if (res.status == 200)
+    {
+      console.log("set wifi data OK\r\n");
+      SetCountOK++;
+
+
+      let applied_new_wifi_data= JSON.parse(JSON.stringify(wifi_data));
+      WiFiConfig.set(wifi_data);
+      wifi_11ah_changedValues = [];
+      wifi_11ah_general_changedValues = [];
+      WiFi_11ah_ConfigChangedLog.set(wifi_11ah_changedValues);
+      WiFi_11ah_General_ConfigChangedLog.set(wifi_11ah_general_changedValues);
+      RestartWiFi();
+
+    } 
+  }
+
+
+
   async function SetSmartConversionData()
   {
     const res = await fetch(window.location.origin+"/SEtSconvErSion", {
@@ -2493,6 +2564,12 @@
       RestartCount++;    
     }
 
+    if (wifi_data != "" && (wifi_11ah_changedValues.length !=0 || wifi_11ah_general_changedValues.length !=0))
+    {
+      SetCount++; 
+      RestartCount++;     
+    }
+
     if (azure_data != "" && (azhub_changedValues.length !=0 || azhubdps_changedValues.length !=0 || azcentral_changedValues.length !=0))
     {
       SetCount++; 
@@ -2723,6 +2800,19 @@
   				SetWanData();
   			}
 
+        if (wifi_data !="" && (wifi_11ah_changedValues.length !=0 || wifi_11ah_general_changedValues.length !=0))
+        {
+          let WiFiString = JSON.stringify(wifi_data, null, 0);
+          const bytesArray = Array.from(WiFiString).map(char => char.charCodeAt(0));
+          wifiBinary = new Uint8Array(bytesArray);
+          ContentWiFi=new Uint8Array(wifiBinary.length+sessionBinary.length);
+          ContentWiFi.set(sessionBinary,0);
+          ContentWiFi.set(wifiBinary, sessionBinary.length);
+          console.log("set wifi");
+          SetWiFiData();
+
+
+        }
 
 
   			if (ipsec_data != "" && (basic_changedValues.length !=0 ||
@@ -2785,7 +2875,6 @@
           ContentSConversion.set(sconversionBinary, sessionBinary.length);
           SetSmartConversionData();
         }
-
 
 
         if (azure_data != "" && (azhub_changedValues.length !=0 || azhubdps_changedValues.length !=0 || azcentral_changedValues.length !=0))
@@ -4108,6 +4197,30 @@ event_engine_action_do_changeValues.length != 0 ||
   </Li>	
 {/if}
 
+{#if wifi_11ah_changedValues.length !=0 || wifi_11ah_general_changedValues.length !=0}
+ <Li>WiFi
+ {#if wifi_11ah_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+    {#each wifi_11ah_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+ {/if}
+ {#if wifi_11ah_general_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+    {#each wifi_11ah_general_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+ {/if}
+
+ </Li>
+
+{/if}
+
+
 {#if opcua_server_changedValues.length !=0 ||
               opcua_client_changedValues.length !=0 ||
               conversion_opcua2modbus_changedValues.length !=0 ||
@@ -4540,7 +4653,9 @@ event_engine_action_do_changeValues.length != 0 ||
 </div>
 <div class="pt-10 pl-10 text-center">
 
-{#if    opcua_server_changedValues.length !=0 ||
+{#if    wifi_11ah_changedValues.length !=0 ||
+        wifi_11ah_general_changedValues.length != 0 ||
+        opcua_server_changedValues.length !=0 ||
         opcua_client_changedValues.length !=0 ||
         conversion_opcua2modbus_changedValues.length !=0 ||
         conversion_opcuagateway_changedValues.length !=0 ||

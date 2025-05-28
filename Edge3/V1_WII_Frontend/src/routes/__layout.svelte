@@ -6,6 +6,10 @@
 	import { onMount } from 'svelte';
 	import { sessionidG } from "./sessionG.js";
   	import { 
+  		OPCUA_Server_ConfigChangedLog,
+    	OPCUA_Client_ConfigChangedLog,
+    	Conversion_Opcua2Modbus_ConfigChangedLog,
+    	Conversion_OpcuaGateway_ConfigChangedLog,
   		LanConfigChangedLog,
   		DHCPServerLANConfigLog,
   		NAT_LoopBack_ConfigChangedLog, 
@@ -98,7 +102,8 @@
 	    DataTagPro_TagRuleCalculation_ConfigChangedLog,
 	    DataTagPro_TagRuleC2D_ConfigChangedLog,
 	    DataTagPro_General_ConfigChangedLog,
-	    enableDataTagEnginePROall,    	
+	    enableDataTagEnginePROall,
+	    enableOPCUA,    	
     	VPNdashboad,
     	dashboadData
   	} from "./configG.js"
@@ -127,7 +132,7 @@
 	// Side component
 	let logo = 'EWLOGO.png';
 	let logoClass= 'w-20';
-	let siteName = 'EW50-V';
+	let siteName = 'EDGE 3';
 
 	let siteClass = 'pl-45';
 
@@ -148,13 +153,13 @@
 		'block py-2 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:py-0 pl-1 pr-1 text-lg dark:text-white bg-yellow-400';
 
 	let asideClass =
-		'absolute w-auto border-r-2 shadow-lg z-50 bg-white h-screen overflow-scroll dark:bg-gray-900 dark:text-white';
+		'absolute w-auto border-r-2 shadow-lg z-50 bg-white dark:bg-gray-900 dark:text-white';
 
 	let spanClass =
 		'pl-20 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white';
 
 	// Nav component
-	let navClass = 'py-1 px-1 text-lg';
+	let navClass = 'py-1 px-1 text-lg overflow-scroll';
 
 	let navDivClass = 'pb-8';
 
@@ -180,6 +185,7 @@
   	let dashboard_data="";
   	let vpn_dashboard="";
   	let data_tag_pro_flag=0;
+  	let opcua_flag=0;
 
 
   	let interval;
@@ -287,6 +293,12 @@
   	let data_tag_pro_tag_schedule_changedValues=[];
   	let data_tag_pro_ul_changedValues = [];
 
+  	let opcua_server_changedValues = [];
+  	let opcua_client_changedValues=[];
+  	let conversion_opcua2modbus_changedValues=[];
+  	let conversion_opcuagateway_changedValues=[];
+
+
 
 	const BlinkApply = () => {
 		if (svg0background=="")
@@ -306,7 +318,11 @@
 
   	function JudgeChangedOrNot()
   	{
-  		if (data_tag_pro_general_changedValues.length !=0 ||
+  		if (opcua_server_changedValues.length !=0 ||
+  			opcua_client_changedValues.length !=0 ||
+  			conversion_opcua2modbus_changedValues.length !=0 ||
+  			conversion_opcuagateway_changedValues.length !=0 ||
+  			data_tag_pro_general_changedValues.length !=0 ||
   			data_tag_pro_tag_c2d_changedValues.length !=0 ||
   			data_tag_pro_tag_calculation_changedValues.length !=0 ||
   			data_tag_pro_tag_accumulated_changedValues.length !=0 ||
@@ -421,6 +437,27 @@
 
   	}
 
+
+
+	Conversion_Opcua2Modbus_ConfigChangedLog.subscribe(val => {
+	    conversion_opcua2modbus_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	Conversion_OpcuaGateway_ConfigChangedLog.subscribe(val => {
+	    conversion_opcuagateway_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	OPCUA_Server_ConfigChangedLog.subscribe(val => {
+	    opcua_server_changedValues = val;
+	    JudgeChangedOrNot();
+	});
+
+	OPCUA_Client_ConfigChangedLog.subscribe(val => {
+	    opcua_client_changedValues = val;
+	    JudgeChangedOrNot();
+	});
 
  	DataTagPro_ULRule_ConfigChangedLog.subscribe(val => {
       	data_tag_pro_ul_changedValues = val;
@@ -922,6 +959,10 @@
         data_tag_pro_flag = val;
     });
 
+    enableOPCUA.subscribe(val => {
+        opcua_flag = val;
+    });
+
     async function getDataTagProFlag(){
 		const res = await fetch(window.location.origin+"/GEtdaTatagProFLAg", 
     	{
@@ -938,6 +979,26 @@
 			data_tag_pro_flag = parseInt(uint8Array, 16);
 			enableDataTagEnginePROall.set(data_tag_pro_flag);
 			//console.log(data_tag_pro_flag);
+		}
+    }
+
+
+    async function getOPCUAFlag(){
+		const res = await fetch(window.location.origin+"/gETOpcUAFLag", 
+    	{
+			method: 'POST',
+			body: sessionBinary
+		})
+
+		if (res.status == 200)
+		{
+			const data =await res.arrayBuffer();
+			//console.log("opcua_flag");
+			//console.log(data);
+			const uint8Array = new Uint8Array(data);
+			opcua_flag = parseInt(uint8Array, 16);
+			enableOPCUA.set(opcua_flag);
+			//console.log(opcua_flag);
 		}
     }
 
@@ -978,13 +1039,15 @@
       		const byteValues = hexArray.map(hex => parseInt(hex, 16));
       		sessionBinary = new Uint8Array(byteValues);
 			getUserType();
-			getDataTagProFlag();
+			//getDataTagProFlag();
+			//getOPCUAFlag();
 		}
 	});
 
 
-const topMenuList = [{ href: '/apply', id: 0 },
-					{href: '/logout', id: 1 }];
+const topMenuList = [{ href: '/dashboard', id: 0 },
+					{ href: '/apply', id: 1 },
+					{href: '/logout', id: 2 }];
 
 
 
@@ -1048,22 +1111,6 @@ const topMenuList = [{ href: '/apply', id: 0 },
 </script>
 
 
-
-<DarkMode {btnClass} />
-
-
-{#if activeUrl == '/dashboard' || activeUrl.substring(0,16)=='/EDashboard.html'}
-<button aria-label="RefreshDB"
-  type="button" on:click={RefreshDB}
-  class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 fixed right-2 top-36 z-50">
-  <span class="">
-    <slot name="ReloadIcon">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2c-5.288 0-9.649 3.914-10.377 9h-3.123l4 5.917 4-5.917h-2.847c.711-3.972 4.174-7 8.347-7 4.687 0 8.5 3.813 8.5 8.5s-3.813 8.5-8.5 8.5c-3.015 0-5.662-1.583-7.171-3.957l-1.2 1.775c1.916 2.536 4.948 4.182 8.371 4.182 5.797 0 10.5-4.702 10.5-10.5s-4.703-10.5-10.5-10.5z"/></svg>
-
-    </slot>
-  </span>
-</button>
-{/if}
 <Responsive />
 <Side
 	{logo}
@@ -1110,10 +1157,12 @@ const topMenuList = [{ href: '/apply', id: 0 },
 </svg>
         </svelte:fragment>
 						<SidebarDropdownItem label="WAN" href='/wan' active={activeUrl === '/wan'}/>
+						<SidebarDropdownItem label="WiFi" href='/wifi' active={activeUrl === '/wifi'}/>
 						<SidebarDropdownItem label="LAN" href='/lan' active={activeUrl === '/lan'}/>
 						<SidebarDropdownItem label="Port Forwarding" href='/nat' active={activeUrl === '/nat'}/>
 						<SidebarDropdownItem label="Firewall" href='/firewall'  active={activeUrl === '/firewall'}/>
 						<SidebarDropdownItem label="Static Route" href='/staticR' active={activeUrl === '/staticR'}/>
+						<SidebarDropdownItem label="eSim" href='/esim' active={activeUrl === '/esim'}/>	
 					</SidebarDropdownWrapper>
 					
 	<SidebarDropdownWrapper
@@ -1183,8 +1232,9 @@ const topMenuList = [{ href: '/apply', id: 0 },
   <path d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
         </svelte:fragment>
-        				<SidebarDropdownItem label="Remote Service" href='/remoteS' active={activeUrl === '/remoteS'}/>
-
+{#if opcua_flag==1}
+        			    <SidebarDropdownItem label="Smart Conversion" href='/conversion' active={activeUrl === '/conversion'}/>
+{/if}
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
 
 {#if data_tag_pro_flag==1}
@@ -1192,7 +1242,7 @@ const topMenuList = [{ href: '/apply', id: 0 },
 {/if}
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
 						<SidebarDropdownItem label="Docker Engine" href='/docker' active={activeUrl === '/docker'}/>
-
+        				<SidebarDropdownItem label="Remote Service" href='/remoteS' active={activeUrl === '/remoteS'}/>
 					</SidebarDropdownWrapper>
 
 
@@ -1221,11 +1271,11 @@ const topMenuList = [{ href: '/apply', id: 0 },
 </Side>
 
 {#if open}
-<main class="dark:text-white" style="padding-top: 115px;padding-left: 286px;padding-right: 76px;">
+<main class="dark:text-white" style="padding-top: 115px;padding-left: 286px;padding-right: 10px;">
 	<slot />
 </main>
 {:else}
-<main class="dark:text-white" style="padding-left: 84px;padding-top: 115px;padding-right: 64px;">
+<main class="dark:text-white" style="padding-left: 48px;padding-top: 115px;padding-right: 10px;">
 	<slot />
 </main>
 {/if}
@@ -1234,6 +1284,6 @@ const topMenuList = [{ href: '/apply', id: 0 },
 	<title>Etherwan</title>
 	<meta
 		name="description"
-		content="Flowbite-Svelte, Dark mode activated."
+		content="Flowbite-Svelte"
 	/>
 </svelte:head>

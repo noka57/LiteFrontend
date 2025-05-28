@@ -2,6 +2,12 @@
 	import { List, Li, Heading,Button, Modal, Spinner} from 'flowbite-svelte';
 	import { sessionidG } from "./sessionG.js";
 	import { 
+      sconversionConfig,
+      ChangedSConfigConfig,
+      OPCUA_Server_ConfigChangedLog,
+      OPCUA_Client_ConfigChangedLog,
+      Conversion_Opcua2Modbus_ConfigChangedLog,
+      Conversion_OpcuaGateway_ConfigChangedLog,
       lanConfig,
 			LanConfigChangedLog, 
       DHCPServerLANConfigLog,
@@ -164,10 +170,19 @@
   let modbus_data="";
   let sdata_logger_data="";
   let event_engine_data="";
-  let data_tag_pro_data="";  
+  let data_tag_pro_data=""; 
+  let sconversion_data="";   
 
 	let sessionid;
   let sessionBinary;
+
+  let ContentSConversion;
+  let sconversionBinary=null;
+  let opcua_server_changedValues = [];
+  let opcua_client_changedValues=[];
+  let conversion_opcua2modbus_changedValues=[];
+  let conversion_opcuagateway_changedValues=[];
+
   let ContentLAN; 
   let lanBinary=null;
   let LANchangedValues = [];
@@ -357,6 +372,12 @@
 	     sessionid = val;
 	});
 
+
+  ChangedSConfigConfig.subscribe(val => {
+      sconversion_data = val;
+  });
+
+
 	ChangedLANConfig.subscribe(val => {
       lan_data = val;
   });
@@ -452,6 +473,23 @@
   ChangedDataTagProConfig.subscribe(val => {
       data_tag_pro_data = val;
   });
+
+  Conversion_Opcua2Modbus_ConfigChangedLog.subscribe(val => {
+      conversion_opcua2modbus_changedValues = val;
+  });
+
+  Conversion_OpcuaGateway_ConfigChangedLog.subscribe(val => {
+      conversion_opcuagateway_changedValues = val;
+  });
+
+  OPCUA_Server_ConfigChangedLog.subscribe(val => {
+      opcua_server_changedValues = val;
+  });
+
+  OPCUA_Client_ConfigChangedLog.subscribe(val => {
+      opcua_client_changedValues = val;
+  });
+
 
   DataTagPro_ULRule_ConfigChangedLog.subscribe(val => {
       data_tag_pro_ul_changedValues = val;
@@ -1728,6 +1766,55 @@
 	  }	
 	}
 
+ async function RestartSmartConversion()
+  {
+    const res = await fetch(window.location.origin+"/RestARtSCOnversion", {
+      method: 'POST',
+      body: sessionBinary
+     })
+
+    if (res.status == 200)
+    {
+      console.log("restart smart conversion OK\r\n");
+      RestartCountOK++;
+      if (RestartCountOK == RestartCount)
+      {
+        AllRestartFinished=1;
+      }
+
+    }
+  } 
+
+
+  async function SetSmartConversionData()
+  {
+    const res = await fetch(window.location.origin+"/SEtSconvErSion", {
+      method: 'POST',
+      body: ContentSConversion
+     })
+
+    if (res.status == 200)
+    {
+      console.log("set smart conversion data OK\r\n");
+      SetCountOK++;
+
+
+      let applied_new_sconversion_data= JSON.parse(JSON.stringify(sconversion_data));
+      sconversionConfig.set(applied_new_sconversion_data);
+      opcua_server_changedValues = [];
+      opcua_client_changedValues=[];
+      conversion_opcua2modbus_changedValues=[];
+      conversion_opcuagateway_changedValues=[];
+      OPCUA_Server_ConfigChangedLog.set(opcua_server_changedValues);
+      OPCUA_Client_ConfigChangedLog.set(opcua_client_changedValues);
+      Conversion_OpcuaGateway_ConfigChangedLog.set(conversion_opcuagateway_changedValues);
+      Conversion_Opcua2Modbus_ConfigChangedLog.set(conversion_opcua2modbus_changedValues);
+      RestartSmartConversion();
+    } 
+  }
+
+
+
 
   async function RestartGenericMQTT()
   {
@@ -1769,6 +1856,9 @@
       RestartGenericMQTT();
 	  }	
 	}
+
+
+
 
 
   async function RestartAWSiotCore()
@@ -2394,6 +2484,15 @@
       RestartCount++;
 		}
 
+    if (sconversion_data != "" && (opcua_server_changedValues.length !=0 ||
+        opcua_client_changedValues.length !=0 ||
+        conversion_opcua2modbus_changedValues.length !=0 ||
+        conversion_opcuagateway_changedValues.length !=0))
+    {
+      SetCount++; 
+      RestartCount++;    
+    }
+
     if (azure_data != "" && (azhub_changedValues.length !=0 || azhubdps_changedValues.length !=0 || azcentral_changedValues.length !=0))
     {
       SetCount++; 
@@ -2672,6 +2771,21 @@
 	        ContentGenericMQTT.set(GenericMQTTBinary, sessionBinary.length);
 	        SetGenericMQTTData();
 				}
+
+        if (sconversion_data != "" && (opcua_server_changedValues.length !=0 ||
+              opcua_client_changedValues.length !=0 ||
+              conversion_opcua2modbus_changedValues.length !=0 ||
+              conversion_opcuagateway_changedValues.length !=0))
+        {
+          let SConversionString = JSON.stringify(sconversion_data, null, 0);
+          const bytesArray = Array.from(SConversionString).map(char => char.charCodeAt(0));
+          sconversionBinary = new Uint8Array(bytesArray);
+          ContentSConversion=new Uint8Array(SConversionString.length+sessionBinary.length);
+          ContentSConversion.set(sessionBinary,0);
+          ContentSConversion.set(sconversionBinary, sessionBinary.length);
+          SetSmartConversionData();
+        }
+
 
 
         if (azure_data != "" && (azhub_changedValues.length !=0 || azhubdps_changedValues.length !=0 || azcentral_changedValues.length !=0))
@@ -3994,6 +4108,92 @@ event_engine_action_do_changeValues.length != 0 ||
   </Li>	
 {/if}
 
+{#if opcua_server_changedValues.length !=0 ||
+              opcua_client_changedValues.length !=0 ||
+              conversion_opcua2modbus_changedValues.length !=0 ||
+              conversion_opcuagateway_changedValues.length !=0
+        }
+ <Li>Smart Conversion
+{#if opcua_server_changedValues.length !=0 ||
+              opcua_client_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+    OPCUA
+    <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+        {#if opcua_server_changedValues.length !=0}
+        <Li>Server
+
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each opcua_server_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+
+        </Li>
+
+
+        {/if}
+
+        {#if opcua_client_changedValues.length !=0}
+        <Li>Client
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each opcua_client_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+        </Li>
+        {/if}
+
+    </List>
+ </Li>
+</List>
+{/if}
+
+{#if conversion_opcua2modbus_changedValues.length !=0 ||
+              conversion_opcuagateway_changedValues.length !=0}
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+    Conversion
+    <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+        {#if conversion_opcua2modbus_changedValues.length !=0}
+        <Li>OPCUA Server To Modbus
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each conversion_opcua2modbus_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+        </Li>
+        {/if}
+
+        {#if conversion_opcuagateway_changedValues.length !=0}
+        <Li>OPCUA Server To OPCUA Client
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each conversion_opcuagateway_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+
+        </Li>
+        {/if}
+
+    </List>
+ </Li>
+</List>
+{/if}
+
+
+</Li>
+
+{/if}
+
+
 {#if 	cwan1_basic_changedValues.length !=0 ||
   		cwan1_advanced_changedValues.length != 0 ||
   		cwan1_simpolicy_changedValues.length != 0 ||
@@ -4227,6 +4427,9 @@ event_engine_action_do_changeValues.length != 0 ||
 {/if}
 
 
+
+
+
 {#if Firewall_general_changedValues.length !=0 || 
 		Firewall_ipfilter_changedValues.length !=0 ||
 		Firewall_macfilter_changedValues.length !=0
@@ -4337,7 +4540,11 @@ event_engine_action_do_changeValues.length != 0 ||
 </div>
 <div class="pt-10 pl-10 text-center">
 
-{#if    data_tag_pro_general_changedValues.length !=0 ||
+{#if    opcua_server_changedValues.length !=0 ||
+        opcua_client_changedValues.length !=0 ||
+        conversion_opcua2modbus_changedValues.length !=0 ||
+        conversion_opcuagateway_changedValues.length !=0 ||
+        data_tag_pro_general_changedValues.length !=0 ||
         data_tag_pro_tag_c2d_changedValues.length !=0 ||
         data_tag_pro_tag_calculation_changedValues.length !=0 ||
         data_tag_pro_tag_accumulated_changedValues.length !=0 ||

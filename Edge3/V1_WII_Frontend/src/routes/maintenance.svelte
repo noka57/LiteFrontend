@@ -29,6 +29,7 @@
   let RestartIntervalId;
   let RestartReady=0;
   let localUpdateKeepConfig=1;
+  let fileFwName="No file chosen";
 
 
   let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
@@ -247,6 +248,7 @@
     const fwr = event.target.files[0];
     if (fwr) 
     {
+      fileFwName=fwr.name;
       if (magicValid == 0) magicValid=1;
       selectedFwr = fwr;
       if (sessionid) 
@@ -670,7 +672,11 @@
 <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Update Local Firmware</p></td>
 <td class="pl-5 pt-5" colspan="2">
 
-<input type="file" id="FwrUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleFwrUpload}>
+
+<label for="FwrUpload" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg" >Choose File</label>
+<input type="file" id="FwrUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"  style="display: none;" on:change={handleFwrUpload}>
+<span class="pl-4">{fileFwName}</span>
+
 
 </td>
 <td class="pl-5 pt-5">

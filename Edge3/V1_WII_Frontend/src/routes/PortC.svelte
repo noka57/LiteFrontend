@@ -35,6 +35,9 @@
     let saved_changed_modbus_data ="";
     let modbus_data="";
 
+    let Adc1Type=0;
+    let Adc2Type=0;
+
     let sessionid;
     let sessionBinary;
     sessionidG.subscribe(val => {
@@ -635,6 +638,9 @@
   let DIValue=0;
   let SetDOHighReady=0;
   let SetDOLowReady=0;
+  let SetADC1Ready=0;
+  let SetADC2Ready=0;
+  let ADC1Vol_value=0;
 
 
   async function getDI() {
@@ -686,6 +692,91 @@
     }
   }
 
+
+  async function setADC1Voltage() {
+    const res = await fetch(window.location.origin+"/sEtAdc1TypeVoltage", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      SetADC1Ready=1;
+      //const data =await res.arrayBuffer();
+      //console.log("adc1 voltage value:");
+     // console.log(data);
+     // const uint8Array = new Uint8Array(data);
+     // ADC1Vol_value = parseInt(uint8Array, 10);
+    //  console.log(ADC1Vol_value);
+    
+    }
+  }
+
+
+
+  async function setADC1Current() {
+    const res = await fetch(window.location.origin+"/sETAdc1TypEcurRent", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      SetADC1Ready=1;
+     // const data =await res.arrayBuffer();
+     // console.log("adc1 current value:");
+     // console.log(data);
+      //const uint8Array = new Uint8Array(data);
+      //DIValue = parseInt(uint8Array, 16);
+      //console.log(DIValue);
+    
+    }
+  }
+
+  async function setADC2Voltage() {
+    const res = await fetch(window.location.origin+"/seTadC2TypevoltaGe", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      SetADC2Ready=1;
+     // const data =await res.arrayBuffer();
+     // console.log("adc2 voltage value:");
+     // console.log(data);
+      //const uint8Array = new Uint8Array(data);
+      //DIValue = parseInt(uint8Array, 16);
+      //console.log(DIValue);
+    
+    }
+  }
+
+
+
+  async function setADC2Current() {
+    const res = await fetch(window.location.origin+"/seTAdC2TypeCURrenT", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      SetADC2Ready=1;
+     // const data =await res.arrayBuffer();
+     // console.log("adc2 current value:");
+     // console.log(data);
+      //const uint8Array = new Uint8Array(data);
+      //DIValue = parseInt(uint8Array, 16);
+      //console.log(DIValue);
+    
+    }
+  }
+
+
+
+
+
   function TestDI()
   {
     GetDIReady=0;
@@ -709,6 +800,40 @@
     setDOLow();
 
   }
+
+  function SetAdc1Type()
+  {
+    SetADC1Ready=0;
+    if (Adc1Type ==0)
+    {
+      //voltage
+      setADC1Voltage();
+    }
+    else if (Adc1Type ==1)
+    {
+      //current
+      setADC1Current();
+    }
+
+
+  }
+
+  function SetAdc2Type()
+  {
+    SetADC2Ready=0;
+    if (Adc2Type ==0)
+    {
+      //voltage
+      setADC2Voltage();
+    }
+    else if (Adc2Type ==1)
+    {
+      //current
+      setADC2Current();
+    }
+  
+  }
+
 
 
   onMount(() => {
@@ -1201,6 +1326,32 @@
    <td class="pl-10">  <div class="flex gap-4">
    <Button pill={true} on:click={TestDOLow}>Test DO Low</Button>
    <p class="pl-2 pt-2">{#if SetDOLowReady==1}Command Executed{/if}</p>
+   </div>
+   </td>
+</tr>
+
+<p class="pt-10"></p>
+
+<tr>
+   <td class="pl-10">  <div class="flex gap-4">
+   <p class="w-26 pl-2 pt-3">ADC 1:</p>
+   <Radio bind:group={Adc1Type} class='p-3' value={0}>Voltage</Radio>
+   <Radio bind:group={Adc1Type} class='p-1' value={1}>Current</Radio>
+   <Button class="w-20" pill={true} on:click={SetAdc1Type}>Set</Button>
+   <p class="pl-2 pt-2">{#if SetADC1Ready==1}Command Executed{/if}</p>
+   </div>
+   </td>
+</tr>
+
+<p class="pt-10"></p>
+
+<tr>
+   <td class="pl-10">  <div class="flex gap-4">
+   <p class="w-26 pl-2 pt-3">ADC 2:</p>
+   <Radio bind:group={Adc2Type} class='p-3' value={0}>Voltage</Radio>
+   <Radio bind:group={Adc2Type} class='p-1' value={1}>Current</Radio>
+   <Button class="w-20" pill={true} on:click={SetAdc2Type}>Set</Button>
+   <p class="pl-2 pt-2">{#if SetADC2Ready==1}Command Executed{/if}</p>
    </div>
    </td>
 </tr>

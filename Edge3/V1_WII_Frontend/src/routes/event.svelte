@@ -1476,7 +1476,7 @@
       for (let i=0; i< lines.length; i++)
       {
         ViewerResultTimeStamp=[...ViewerResultTimeStamp, lines[i].slice(0,19)];
-        ViewerResultStatus=[...ViewerResultStatus,lines[i].split(' INFO ')[1]]
+        ViewerResultStatus=[...ViewerResultStatus,lines[i].slice(25)]
 
       }
 
@@ -10307,10 +10307,10 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 {:else if rule.firstTrigger.catalog ==4}MQTT({rule.firstTrigger.profile})
 {:else if rule.firstTrigger.catalog ==5}PING({rule.firstTrigger.profile})
 {:else if rule.firstTrigger.catalog ==6}RSSI({rule.firstTrigger.profile})
-{:else if rule.firstTrigger.catalog ==7}WAN( {#if rule.firstTrigger.statusType == 0}C-WAN Link Down{:else if rule.firstTrigger.statusType == 1}C-WAN Link Up{:else if rule.firstTrigger.statusType == 2}WAN Link Down{:else if rule.firstTrigger.statusType == 3}Dial Up Failed{:else if rule.firstTrigger.statusType==4}WAN Failover{:else if rule.firstTrigger.statusType == 5}SIM Switch{/if})
-{:else if rule.firstTrigger.catalog ==8}LAN({#if rule.firstTrigger.statusType==0}Link Down{:else if rule.firstTrigger.statusType==1}Link Up{/if})
+{:else if rule.firstTrigger.catalog ==7}WAN( {#if rule.firstTrigger.statusType == 0}C-WAN Link Down{:else if rule.firstTrigger.statusType == 1}C-WAN Link Up{:else if rule.firstTrigger.statusType == 2}WAN(LAN1) Link Down{:else if rule.firstTrigger.statusType == 3}Dial Up Failed{:else if rule.firstTrigger.statusType==4}WAN Failover{:else if rule.firstTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.firstTrigger.catalog ==8}LAN({#if rule.firstTrigger.statusType==0}(LAN2) Link Down{:else if rule.firstTrigger.statusType==1}(LAN2) Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9}Login({#if rule.firstTrigger.statusType==0}Web Login Fail{/if})
-{:else if rule.firstTrigger.catalog ==10}System({#if rule.firstTrigger.statusType==0}Boot Up{:else if rule.firstTrigger.statusType ==1}Firmware Upgrading{:else if rule.firstTrigger.statusType==2}Password Changed{:else if rule.firstTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
+{:else if rule.firstTrigger.catalog ==10}System({#if rule.firstTrigger.statusType==0}Boot Up{:else if rule.firstTrigger.statusType ==1}Firmware Upgrading{:else if rule.firstTrigger.statusType==2}Password Changed{:else if rule.firstTrigger.statusType==3}Reboot{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 
 
@@ -10323,10 +10323,10 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 {:else if rule.secondTrigger.catalog ==4},MQTT({rule.secondTrigger.profile})
 {:else if rule.secondTrigger.catalog ==5},PING({rule.secondTrigger.profile})
 {:else if rule.secondTrigger.catalog ==6},RSSI({rule.secondTrigger.profile})
-{:else if rule.secondTrigger.catalog ==7},WAN( {#if rule.secondTrigger.statusType == 0}C-WAN Link Down{:else if rule.secondTrigger.statusType == 1}C-WAN Link Up{:else if rule.secondTrigger.statusType == 2}WAN Link Down{:else if rule.secondTrigger.statusType == 3}Dial Up Failed{:else if rule.secondTrigger.statusType==4}WAN Failover{:else if rule.secondTrigger.statusType == 5}SIM Switch{/if})
-{:else if rule.secondTrigger.catalog ==8},LAN({#if rule.secondTrigger.statusType==0}Link Down{:else if rule.secondTrigger.statusType==1}Link Up{/if})
+{:else if rule.secondTrigger.catalog ==7},WAN( {#if rule.secondTrigger.statusType == 0}C-WAN Link Down{:else if rule.secondTrigger.statusType == 1}C-WAN Link Up{:else if rule.secondTrigger.statusType == 2}WAN(LAN1) Link Down{:else if rule.secondTrigger.statusType == 3}Dial Up Failed{:else if rule.secondTrigger.statusType==4}WAN Failover{:else if rule.secondTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.secondTrigger.catalog ==8},LAN({#if rule.secondTrigger.statusType==0}(LAN2) Link Down{:else if rule.secondTrigger.statusType==1}(LAN2) Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{/if})
-{:else if rule.secondTrigger.catalog ==10},System({#if rule.secondTrigger.statusType==0}Boot Up{:else if rule.secondTrigger.statusType ==1}Firmware Upgrading{:else if rule.secondTrigger.statusType==2}Password Changed{:else if rule.secondTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
+{:else if rule.secondTrigger.catalog ==10},System({#if rule.secondTrigger.statusType==0}Boot Up{:else if rule.secondTrigger.statusType ==1}Firmware Upgrading{:else if rule.secondTrigger.statusType==2}Password Changed{:else if rule.secondTrigger.statusType==3}Reboot{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 {/if}
 
@@ -10340,10 +10340,10 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 {:else if rule.thirdTrigger.catalog ==4},MQTT({rule.thirdTrigger.profile})
 {:else if rule.thirdTrigger.catalog ==5},PING({rule.thirdTrigger.profile})
 {:else if rule.thirdTrigger.catalog ==6},RSSI({rule.thirdTrigger.profile})
-{:else if rule.thirdTrigger.catalog ==7},WAN( {#if rule.thirdTrigger.statusType == 0}C-WAN Link Down{:else if rule.thirdTrigger.statusType == 1}C-WAN Link Up{:else if rule.thirdTrigger.statusType == 2}WAN Link Down{:else if rule.thirdTrigger.statusType == 3}Dial Up Failed{:else if rule.thirdTrigger.statusType==4}WAN Failover{:else if rule.thirdTrigger.statusType == 5}SIM Switch{/if})
-{:else if rule.thirdTrigger.catalog ==8},LAN({#if rule.thirdTrigger.statusType==0}Link Down{:else if rule.thirdTrigger.statusType==1}Link Up{/if})
+{:else if rule.thirdTrigger.catalog ==7},WAN( {#if rule.thirdTrigger.statusType == 0}C-WAN Link Down{:else if rule.thirdTrigger.statusType == 1}C-WAN Link Up{:else if rule.thirdTrigger.statusType == 2}WAN(LAN1) Link Down{:else if rule.thirdTrigger.statusType == 3}Dial Up Failed{:else if rule.thirdTrigger.statusType==4}WAN Failover{:else if rule.thirdTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.thirdTrigger.catalog ==8},LAN({#if rule.thirdTrigger.statusType==0}(LAN2) Link Down{:else if rule.thirdTrigger.statusType==1}(LAN2) Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{/if})
-{:else if rule.thirdTrigger.catalog ==10},System({#if rule.thirdTrigger.statusType==0}Boot Up{:else if rule.thirdTrigger.statusType ==1}Firmware Upgrading{:else if rule.thirdTrigger.statusType==2}Password Changed{:else if rule.thirdTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
+{:else if rule.thirdTrigger.catalog ==10},System({#if rule.thirdTrigger.statusType==0}Boot Up{:else if rule.thirdTrigger.statusType ==1}Firmware Upgrading{:else if rule.thirdTrigger.statusType==2}Password Changed{:else if rule.thirdTrigger.statusType==3}Reboot{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 {/if}
 
@@ -10405,10 +10405,10 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 {:else if rule.firstTrigger.catalog ==4}MQTT({rule.firstTrigger.profile})
 {:else if rule.firstTrigger.catalog ==5}PING({rule.firstTrigger.profile})
 {:else if rule.firstTrigger.catalog ==6}RSSI({rule.firstTrigger.profile})
-{:else if rule.firstTrigger.catalog ==7}WAN( {#if rule.firstTrigger.statusType == 0}C-WAN Link Down{:else if rule.firstTrigger.statusType == 1}C-WAN Link Up{:else if rule.firstTrigger.statusType == 2}WAN Link Down{:else if rule.firstTrigger.statusType == 3}Dial Up Failed{:else if rule.firstTrigger.statusType==4}WAN Failover{:else if rule.firstTrigger.statusType == 5}SIM Switch{/if})
-{:else if rule.firstTrigger.catalog ==8}LAN({#if rule.firstTrigger.statusType==0}Link Down{:else if rule.firstTrigger.statusType==1}Link Up{/if})
+{:else if rule.firstTrigger.catalog ==7}WAN( {#if rule.firstTrigger.statusType == 0}C-WAN Link Down{:else if rule.firstTrigger.statusType == 1}C-WAN Link Up{:else if rule.firstTrigger.statusType == 2}WAN(LAN1) Link Down{:else if rule.firstTrigger.statusType == 3}Dial Up Failed{:else if rule.firstTrigger.statusType==4}WAN Failover{:else if rule.firstTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.firstTrigger.catalog ==8}LAN({#if rule.firstTrigger.statusType==0}(LAN2) Link Down{:else if rule.firstTrigger.statusType==1}(LAN2) Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9}Login({#if rule.firstTrigger.statusType==0}Web Login Fail{/if})
-{:else if rule.firstTrigger.catalog ==10}System({#if rule.firstTrigger.statusType==0}Boot Up{:else if rule.firstTrigger.statusType ==1}Firmware Upgrading{:else if rule.firstTrigger.statusType==2}Password Changed{:else if rule.firstTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
+{:else if rule.firstTrigger.catalog ==10}System({#if rule.firstTrigger.statusType==0}Boot Up{:else if rule.firstTrigger.statusType ==1}Firmware Upgrading{:else if rule.firstTrigger.statusType==2}Password Changed{:else if rule.firstTrigger.statusType==3}Reboot{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 
 
@@ -10421,10 +10421,10 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 {:else if rule.secondTrigger.catalog ==4},MQTT({rule.secondTrigger.profile})
 {:else if rule.secondTrigger.catalog ==5},PING({rule.secondTrigger.profile})
 {:else if rule.secondTrigger.catalog ==6},RSSI({rule.secondTrigger.profile})
-{:else if rule.secondTrigger.catalog ==7},WAN( {#if rule.secondTrigger.statusType == 0}C-WAN Link Down{:else if rule.secondTrigger.statusType == 1}C-WAN Link Up{:else if rule.secondTrigger.statusType == 2}WAN Link Down{:else if rule.secondTrigger.statusType == 3}Dial Up Failed{:else if rule.secondTrigger.statusType==4}WAN Failover{:else if rule.secondTrigger.statusType == 5}SIM Switch{/if})
-{:else if rule.secondTrigger.catalog ==8},LAN({#if rule.secondTrigger.statusType==0}Link Down{:else if rule.secondTrigger.statusType==1}Link Up{/if})
+{:else if rule.secondTrigger.catalog ==7},WAN( {#if rule.secondTrigger.statusType == 0}C-WAN Link Down{:else if rule.secondTrigger.statusType == 1}C-WAN Link Up{:else if rule.secondTrigger.statusType == 2}WAN(LAN1) Link Down{:else if rule.secondTrigger.statusType == 3}Dial Up Failed{:else if rule.secondTrigger.statusType==4}WAN Failover{:else if rule.secondTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.secondTrigger.catalog ==8},LAN({#if rule.secondTrigger.statusType==0}(LAN2) Link Down{:else if rule.secondTrigger.statusType==1}(LAN2) Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{/if})
-{:else if rule.secondTrigger.catalog ==10},System({#if rule.secondTrigger.statusType==0}Boot Up{:else if rule.secondTrigger.statusType ==1}Firmware Upgrading{:else if rule.secondTrigger.statusType==2}Password Changed{:else if rule.secondTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
+{:else if rule.secondTrigger.catalog ==10},System({#if rule.secondTrigger.statusType==0}Boot Up{:else if rule.secondTrigger.statusType ==1}Firmware Upgrading{:else if rule.secondTrigger.statusType==2}Password Changed{:else if rule.secondTrigger.statusType==3}Reboot{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 {/if}
 
@@ -10438,10 +10438,10 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 {:else if rule.thirdTrigger.catalog ==4},MQTT({rule.thirdTrigger.profile})
 {:else if rule.thirdTrigger.catalog ==5},PING({rule.thirdTrigger.profile})
 {:else if rule.thirdTrigger.catalog ==6},RSSI({rule.thirdTrigger.profile})
-{:else if rule.thirdTrigger.catalog ==7},WAN( {#if rule.thirdTrigger.statusType == 0}C-WAN Link Down{:else if rule.thirdTrigger.statusType == 1}C-WAN Link Up{:else if rule.thirdTrigger.statusType == 2}WAN Link Down{:else if rule.thirdTrigger.statusType == 3}Dial Up Failed{:else if rule.thirdTrigger.statusType==4}WAN Failover{:else if rule.thirdTrigger.statusType == 5}SIM Switch{/if})
-{:else if rule.thirdTrigger.catalog ==8},LAN({#if rule.thirdTrigger.statusType==0}Link Down{:else if rule.thirdTrigger.statusType==1}Link Up{/if})
+{:else if rule.thirdTrigger.catalog ==7},WAN( {#if rule.thirdTrigger.statusType == 0}C-WAN Link Down{:else if rule.thirdTrigger.statusType == 1}C-WAN Link Up{:else if rule.thirdTrigger.statusType == 2}WAN(LAN1) Link Down{:else if rule.thirdTrigger.statusType == 3}Dial Up Failed{:else if rule.thirdTrigger.statusType==4}WAN Failover{:else if rule.thirdTrigger.statusType == 5}SIM Switch{/if})
+{:else if rule.thirdTrigger.catalog ==8},LAN({#if rule.thirdTrigger.statusType==0}(LAN2) Link Down{:else if rule.thirdTrigger.statusType==1}(LAN2) Link Up{/if})
 {:else if rule.firstTrigger.catalog ==9},Login({#if rule.firstTrigger.statusType==0}Web Login Fail{/if})
-{:else if rule.thirdTrigger.catalog ==10},System({#if rule.thirdTrigger.statusType==0}Boot Up{:else if rule.thirdTrigger.statusType ==1}Firmware Upgrading{:else if rule.thirdTrigger.statusType==2}Password Changed{:else if rule.thirdTrigger.statusType==3}Reboot with reason{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
+{:else if rule.thirdTrigger.catalog ==10},System({#if rule.thirdTrigger.statusType==0}Boot Up{:else if rule.thirdTrigger.statusType ==1}Firmware Upgrading{:else if rule.thirdTrigger.statusType==2}Password Changed{:else if rule.thirdTrigger.statusType==3}Reboot{:else if rule.firstTrigger.statusType==4}New Firmware Release{/if})
 {/if}
 {/if}
 
@@ -10572,6 +10572,8 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 <option value={5}>PING</option>
 <option value={6}>RSSI</option>
 <option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
 <option value={10}>System Status</option>
 
 </select>
@@ -10649,9 +10651,21 @@ on:click={handleClickMV2} on:keydown={() => {}}>
     <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].firstTrigger.statusType}><option disabled="" value="">None</option>
 
 {#if NewRuleItem[new_rule_index].firstTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
 <option value={1}>C-WAN Link Up</option>
-
+<option value={2}>WAN/LAN1 Link Down</option>
+<option value={3}>Dial Up Failed</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 8}
+<option value={0}>LAN2 Link Down</option>
+<option value={1}>LAN2 Link Up</option>
+{:else if NewRuleItem[new_rule_index].firstTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
 {:else if NewRuleItem[new_rule_index].firstTrigger.catalog  == 10}
+<option value={0}>Boot Up</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={3}>Reboot</option>
 <option value={4}>New Firmware Release</option>
 {:else if NewRuleItem[new_rule_index].firstTrigger.catalog  == 1}
 <option value={0}>Low</option>
@@ -10688,6 +10702,8 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 <option value={5}>PING</option>
 <option value={6}>RSSI</option>
 <option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
 <option value={10}>System Status</option>
 
 </select>
@@ -10772,12 +10788,26 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 {:else if NewRuleItem[new_rule_index].secondTrigger.catalog <=10}
  <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].secondTrigger.statusType}><option disabled="" value="">None</option>
 
+
 {#if NewRuleItem[new_rule_index].secondTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
 <option value={1}>C-WAN Link Up</option>
-
-
+<option value={2}>WAN/LAN1 Link Down</option>
+<option value={3}>Dial Up Failed</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 8}
+<option value={0}>LAN2 Link Down</option>
+<option value={1}>LAN2 Link Up</option>
+{:else if NewRuleItem[new_rule_index].secondTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
 {:else if NewRuleItem[new_rule_index].secondTrigger.catalog  == 10}
+<option value={0}>Boot Up</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={3}>Reboot</option>
 <option value={4}>New Firmware Release</option>
+
+
 {:else if NewRuleItem[new_rule_index].secondTrigger.catalog  == 1}
 <option value={0}>Low</option>
 <option value={1}>High</option>
@@ -10812,6 +10842,8 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 <option value={5}>PING</option>
 <option value={6}>RSSI</option>
 <option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
 <option value={10}>System Status</option>
 </select>
 
@@ -10892,11 +10924,25 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 
  <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={NewRuleItem[new_rule_index].thirdTrigger.statusType}><option disabled="" value="">None</option>
 
-{#if NewRuleItem[new_rule_index].thirdTrigger.catalog == 7}
-<option value={1}>C-WAN Link Up</option>
 
+{#if NewRuleItem[new_rule_index].thirdTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
+<option value={1}>C-WAN Link Up</option>
+<option value={2}>WAN/LAN1 Link Down</option>
+<option value={3}>Dial Up Failed</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 8}
+<option value={0}>LAN2 Link Down</option>
+<option value={1}>LAN2 Link Up</option>
+{:else if NewRuleItem[new_rule_index].thirdTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
 {:else if NewRuleItem[new_rule_index].thirdTrigger.catalog  == 10}
+<option value={0}>Boot Up</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={3}>Reboot</option>
 <option value={4}>New Firmware Release</option>
+
 
 {:else if NewRuleItem[new_rule_index].thirdTrigger.catalog  == 1}
 <option value={0}>Low</option>
@@ -11307,6 +11353,8 @@ on:click={handleClickMV2} on:keydown={() => {}}>
 <option value={5}>PING</option>
 <option value={6}>RSSI</option>
 <option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
 <option value={10}>System Status</option>
 
 </select>
@@ -11392,10 +11440,25 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
     <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.statusType}><option disabled="" value="">None</option>
 
 {#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
 <option value={1}>C-WAN Link Up</option>
+<option value={2}>WAN/LAN1 Link Down</option>
+<option value={3}>Dial Up Failed</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 8}
+<option value={0}>LAN2 Link Down</option>
+<option value={1}>LAN2 Link Up</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
 
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 10}
+<option value={0}>Boot Up</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={3}>Reboot</option>
 <option value={4}>New Firmware Release</option>
+
+
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].firstTrigger.catalog == 1}
 <option value={0}>Low</option>
 <option value={1}>High</option>
@@ -11433,6 +11496,8 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
 <option value={5}>PING</option>
 <option value={6}>RSSI</option>
 <option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
 <option value={10}>System Status</option>
 
 </select>
@@ -11520,11 +11585,25 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
  <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.statusType}><option disabled="" value="">None</option>
 
 {#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
 <option value={1}>C-WAN Link Up</option>
+<option value={2}>WAN/LAN1 Link Down</option>
+<option value={3}>Dial Up Failed</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 8}
+<option value={0}>LAN2 Link Down</option>
+<option value={1}>LAN2 Link Up</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
 
-
-{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog  == 10}
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog == 10}
+<option value={0}>Boot Up</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={3}>Reboot</option>
 <option value={4}>New Firmware Release</option>
+
+
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].secondTrigger.catalog  == 1}
 <option value={0}>Low</option>
 <option value={1}>High</option>
@@ -11559,6 +11638,8 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
 <option value={5}>PING</option>
 <option value={6}>RSSI</option>
 <option value={7}>WAN Status</option>
+<option value={8}>LAN Status</option>
+<option value={9}>Login Status</option>
 <option value={10}>System Status</option>
 </select>
 
@@ -11641,10 +11722,26 @@ changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_in
  <select class="block w-full text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.statusType}><option disabled="" value="">None</option>
 
 {#if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 7}
+<option value={0}>C-WAN Link Down</option>
 <option value={1}>C-WAN Link Up</option>
+<option value={2}>WAN/LAN1 Link Down</option>
+<option value={3}>Dial Up Failed</option>
+<option value={4}>WAN Failover</option>
+<option value={5}>SIM Switch</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 8}
+<option value={0}>LAN2 Link Down</option>
+<option value={1}>LAN2 Link Up</option>
+{:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 9}
+<option value={0}>Web Login Fail</option>
 
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 10}
+<option value={0}>Boot Up</option>
+<option value={1}>Firmware Upgrading</option>
+<option value={2}>Password Changed</option>
+<option value={3}>Reboot</option>
 <option value={4}>New Firmware Release</option>
+
+
 {:else if changed_event_engine_data.config.service_eventEngine_ruleSettings[modify_rule_index].thirdTrigger.catalog == 1}
 <option value={0}>Low</option>
 <option value={1}>High</option>

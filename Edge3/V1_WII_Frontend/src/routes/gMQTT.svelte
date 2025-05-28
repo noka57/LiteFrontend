@@ -196,7 +196,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   };
 
   let NewItem=[
@@ -218,7 +220,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   },
   {
     enable: true,
@@ -238,7 +242,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   },
   {
     enable: true,
@@ -258,7 +264,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   },
   {
     enable: true,
@@ -278,7 +286,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   },
   {
     enable: true,
@@ -298,7 +308,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   },
   {
     enable: true,
@@ -318,7 +330,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   }
   ,{
     enable: true,
@@ -338,7 +352,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   },
   {
     enable: true,
@@ -358,7 +374,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   },
   {
     enable: true,
@@ -378,7 +396,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   },
   {
     enable: true,
@@ -398,7 +418,9 @@
     dataPushInterval: 0,
     dataPushIntervalValue: 15,
     linkLostRetransmit: 0,
-    dataPriority: 0
+    dataPriority: 0,
+    appSignature:0,
+    appSignatureCert:""
   }
 
 
@@ -424,10 +446,12 @@
     NewItem[index].keepAliveInterval=60;    
     NewItem[index].dataCompression=0;        
     NewItem[index].retained=0;
-    NewItem[index].dataPushInterval=1;
+    NewItem[index].dataPushInterval=0;
     NewItem[index].dataPushIntervalValue=15;
     NewItem[index].linkLostRetransmit=0;
     NewItem[index].dataPriority=0;
+    NewItem[index].appSignature=0;
+    NewItem[index].appSignatureCert=""; 
 
     new_item_index=index;
     new_modal = true;
@@ -474,6 +498,9 @@
     BackupItem.dataPushIntervalValue=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].dataPushIntervalValue; 
     BackupItem.linkLostRetransmit=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].linkLostRetransmit;
     BackupItem.dataPriority=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].dataPriority;    
+    BackupItem.appSignature=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].appSignature; 
+    BackupItem.appSignatureCert=changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].appSignatureCert; 
+
   }
 
 
@@ -498,6 +525,8 @@
     changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].dataPushIntervalValue=BackupItem.dataPushIntervalValue; 
     changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].linkLostRetransmit=BackupItem.linkLostRetransmit;
     changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].dataPriority=BackupItem.dataPriority;  
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].appSignature=BackupItem.appSignature; 
+    changed_generic_mqtt_data.config.cloud_genericMqtt_profile[index].appSignatureCert=BackupItem.appSignatureCert;     
   
   }
 
@@ -1245,13 +1274,13 @@
     <TableHeadCell class="!p-1">No</TableHeadCell>
     <TableHeadCell class="w-18">Broker Host</TableHeadCell>
     <TableHeadCell class="!p-1">TLS</TableHeadCell>
+    <TableHeadCell class="w-10">App Signature</TableHeadCell>
     <TableHeadCell>Client ID</TableHeadCell>
     <TableHeadCell>Account</TableHeadCell>
     <TableHeadCell class="!p-1 w-4">QoS</TableHeadCell>
     <TableHeadCell class="!p-1 w-4">Retained</TableHeadCell>    
     <TableHeadCell class="!p-3 w-18">Keep Alive Interval</TableHeadCell>
     <TableHeadCell class="!p-3 w-10">Data Compression</TableHeadCell>
-    <TableHeadCell class="w-10">Data Push Interval</TableHeadCell>
     <TableHeadCell class="w-10">Link Lost Retransmit</TableHeadCell>
     <TableHeadCell class="w-10">Data Priority</TableHeadCell>    
      </TableHead>
@@ -1305,6 +1334,12 @@
 {:else if gMQTT.tls==1}
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-4 strikeout !p-1">Yes</td>
 {/if}
+{#if gMQTT.appSignature ==0}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">No</td>
+{:else if gMQTT.appSignature==1}
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Yes</td>
+{/if}
+
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{gMQTT.clientId}</td>
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{gMQTT.account}</td>
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-1 w-4 strikeout">{gMQTT.qos}</td>
@@ -1321,11 +1356,6 @@
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-3 w-10 strikeout">gzip</td>
 {/if}
 
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-3 w-10 strikeout">
-{#if gMQTT.dataPushInterval == 0}Right Away
-{:else if gMQTT.dataPushInterval == 1} {gMQTT.dataPushIntervalValue} min(s)
-{/if}
-</td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-3 w-10 strikeout">
 {gMQTT.linkLostRetransmit} delay second(s)
@@ -1374,6 +1404,14 @@
 {:else if gMQTT.tls==1}
       <TableBodyCell class="w-4 !p-1">Yes</TableBodyCell>
 {/if}
+
+{#if gMQTT.appSignature ==0}
+<TableBodyCell class="w-10">No</TableBodyCell>
+{:else if gMQTT.appSignature==1}
+<TableBodyCell class="w-10">Yes</TableBodyCell>
+{/if}
+
+
       <TableBodyCell class="w-10">{gMQTT.clientId}</TableBodyCell>
       <TableBodyCell class="w-10">{gMQTT.account}</TableBodyCell>
       <TableBodyCell class="!p-1 w-4">{gMQTT.qos}</TableBodyCell>
@@ -1390,12 +1428,7 @@
       <TableBodyCell class="!p-3 w-10">gzip</TableBodyCell>
 {/if}
 
-<TableBodyCell class="!p-3 w-10">
-{#if gMQTT.dataPushInterval == 0}Right Away
-{:else if gMQTT.dataPushInterval == 1} {gMQTT.dataPushIntervalValue} min(s)
-{/if}
 
-</TableBodyCell>
 
 <TableBodyCell class="!p-3 w-10">
 {gMQTT.linkLostRetransmit} delay second(s)
@@ -1537,6 +1570,35 @@
 </tr>
 
 
+<tr class="pt-4">
+  <td><p class="pl-20 pt-3 text-lg font-light text-right h-10">Application Signature</p></td>
+
+
+
+    <td class="pl-4 pt-4" ><div class="flex gap-2">
+  <Radio class="pb-2 pt-2 h-10" bind:group={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].appSignature} value={0} >No</Radio>
+  <Radio class="pb-2 pt-2 h-10" bind:group={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].appSignature} value={1} >Yes</Radio>
+{#if changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].appSignature ==1}
+
+  <p class="pl-2 pt-3 pb-2 font-medium">Local Certificate:</p>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-48" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].appSignatureCert}>
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+{/if}
+
+</div>
+</td>
+
+
+</tr>
+
+
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Client ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].clientId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
@@ -1603,23 +1665,6 @@
 </tr>
 
 
- <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
-      <td class="pl-5 pt-5">
-<div class="flex gap-4">
-  <Radio bind:group={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataPushInterval} value={0} >Right Away</Radio>
-  <Radio bind:group={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
-{#if changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataPushInterval==0}
-  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>
-
-{:else}
-  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16" bind:value={changed_generic_mqtt_data.config.cloud_genericMqtt_profile[modify_index].dataPushIntervalValue}>
-{/if}
-</div>
-
-      </td>
-
-</tr>
 
 <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
@@ -1730,6 +1775,35 @@
 
 
 
+<tr class="pt-4">
+  <td><p class="pl-20 pt-3 text-lg font-light text-right h-10">Application Signature</p></td>
+
+
+
+    <td class="pl-4 pt-4" ><div class="flex gap-2">
+  <Radio class="pb-2 pt-2 h-10" bind:group={NewItem[new_item_index].appSignature} value={0} >No</Radio>
+  <Radio class="pb-2 pt-2 h-10" bind:group={NewItem[new_item_index].appSignature} value={1} >Yes</Radio>
+{#if NewItem[new_item_index].appSignature ==1}
+
+  <p class="pl-2 pt-3 pb-2 font-medium">Local Certificate:</p>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 h-10 w-48" bind:value={NewItem[new_item_index].appSignatureCert}>
+{#if getMachineCertReady== 1}
+{#each machineCertList as machineCert, index}
+<option value={machineCert}>{machineCert}</option>
+{/each}
+{/if}
+</select>
+
+{/if}
+
+</div>
+</td>
+
+
+</tr>
+
+
+
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Client ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NewItem[new_item_index].clientId} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
@@ -1796,24 +1870,6 @@
 
 </tr>
 
-
- <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
-      <td class="pl-5 pt-5">
-<div class="flex gap-4">
-  <Radio bind:group={NewItem[new_item_index].dataPushInterval} value={0} >Right Away</Radio>
-  <Radio bind:group={NewItem[new_item_index].dataPushInterval} value={1} >User Defined (mins): </Radio>
-{#if NewItem[new_item_index].dataPushInterval==0}
-  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>
-
-{:else}
-  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16" bind:value={NewItem[new_item_index].dataPushIntervalValue}>
-{/if}
-</div>
-
-      </td>
-
-</tr>
 
 <tr>
       <td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>

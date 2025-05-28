@@ -29,6 +29,8 @@
   let uploadconfigIsValid =0;
   let CheckedConfigInvalid=0;
 
+  let fileImportName="No file chosen";
+
    sessionidG.subscribe(val => {
      sessionid = val;
    });
@@ -66,6 +68,7 @@
     if (file) 
     {
       selectedFile = file;
+      fileImportName=file.name;
       if (sessionid) 
       {
         const hexArray = sessionid.match(/.{1,2}/g); 
@@ -327,7 +330,9 @@
 <td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Configuration File</p></td>
 <td class="pl-5 pt-5">
 
-<input type="file" id="configUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" on:change={handleFileUpload}>
+<label for="importConfigUpload" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg" >Choose File</label>
+<input type="file" id="importConfigUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"  style="display: none;" on:change={handleFileUpload}>
+<span class="pl-4">{fileImportName}</span>
 
 </td>
 <td class="pl-5 pt-5">

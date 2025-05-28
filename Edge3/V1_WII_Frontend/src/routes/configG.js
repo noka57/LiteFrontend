@@ -8,7 +8,11 @@ export const fakeTimeMSecSince1970=writable("");
 export const fakeTimeString=writable("");
 export const enableDataTagEnginePROall=writable("");
 export const wholeConfigVersion=writable("");
+export const enableOPCUA=writable("");
 
+
+
+export const sconversionConfig=writable("");
 export const awsIoTcoreConfig=writable("");
 export const azureConfig=writable("");
 export const eventEngineConfig=writable("");
@@ -30,6 +34,13 @@ export const lanConfig=writable("");
 export const wanConfig=writable("");
 export const configurationConfig=writable("");
 export const datatagproConfig=writable("");
+
+
+export const OPCUA_Server_ConfigChangedLog=writable("");
+export const OPCUA_Client_ConfigChangedLog=writable("");
+export const Conversion_Opcua2Modbus_ConfigChangedLog=writable("");
+export const Conversion_OpcuaGateway_ConfigChangedLog=writable("");
+export const ChangedSConfigConfig=writable("");
 
 export const ConfigurationP2EConfigChangedLog=writable("");
 export const ChangedConfigurationConfig=writable("");

@@ -74,7 +74,7 @@
 
   function calculateProgressBarPath(value,i)
   {
-    let max = 105;
+    let max = 102;
     let x=50;
     let y=5;
 
@@ -105,27 +105,61 @@
       {
         if (i==1)
         {
-          x1=x;
-          y1=y;
+          if (value >=100)
+          {
+            x1=50;
+            y1=5;
+
+          }
+          else
+          {
+            x1=x;
+            y1=y;
+          }
 
         }
         else if (i==2)
         {
-          x2=x;
-          y2=y;
+          if (value >=100)
+          {
+            x2=50;
+            y2=5;
+
+          }
+          else
+          {
+            x2=x;
+            y2=y;
+          }
 
         }
         else if (i==3)
         {
-          x3=x;
-          y3=y;
+          if (value >=100)
+          {
+            x3=50;
+            y3=5;
 
+          }
+          else
+          {
+            x3=x;
+            y3=y;
+          }
         }
         else if (i==4)
         {
-          x4=x;
-          y4=y;
+          if (value >=100)
+          {
+            x4=50;
+            y4=5;
 
+          }
+          else
+          {
+            x4=x;
+            y4=y;
+          }
         }
         path+="A35 35 0 0 1 50 75A35 35 0 0 1 15.810308878413977 32.51234208777258";
         return path;
@@ -272,8 +306,6 @@
       history.pushState({}, '', "/dashboard");
     }
 
-
-
     if (sessionid && dashboard_data=="")
     {
       const hexArray = sessionid.match(/.{1,2}/g); 
@@ -350,7 +382,7 @@
 
 </div>
 <div class="w-full">
-<p class="text-sm font-light">Internet Uptime</p>
+<p class="pt-2 text-sm font-light">Internet Uptime</p>
 <p class="text-xl font-bold">{#if hidden == 0}{#if dashboard_data!=""}{dashboard_data.config.dashboard.internetUptime} {/if}{/if}
 {#if hidden == 1}
 NA
@@ -359,7 +391,7 @@ NA
 </div>
 </div></TableBodyCell>
       <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class="">
-      {#if 0}
+      {#if 1}
 <svg class="w-16 h-16 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45.3 25">
 
     <path fill="#076291" d="M42,10.1c0-0.2,0-0.3,0-0.5c0-2.9-2.3-5.2-5.2-5.2c-0.5,0-1,0.1-1.5,0.2c-0.2-0.4-0.5-0.7-0.8-1L13.3,25h19.2
@@ -375,7 +407,7 @@ NA
 {/if}
       </div>
 <div class="w-full">
-{#if 0}
+{#if 1}
 <p class="text-sm font-light">Pave2Edge</p>
 <p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.p2eStatus}{/if}</p>
 {/if}

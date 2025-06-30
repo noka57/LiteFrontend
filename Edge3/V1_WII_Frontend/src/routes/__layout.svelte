@@ -1121,7 +1121,7 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
       		sessionBinary = new Uint8Array(byteValues);
 
       		getDashboardData();
-      		getVPNDashboard();
+      		//getVPNDashboard();
 
 		}
 

@@ -340,8 +340,8 @@
       const hexArray = sessionid.match(/.{1,2}/g); 
       const byteValues = hexArray.map(hex => parseInt(hex, 16));
       sessionBinary = new Uint8Array(byteValues);
-      getVPNDashboard();
-      startIntervalVPN();
+      //getVPNDashboard();
+      //startIntervalVPN();
     }
     else if (sessionid && vpn_dashboard!="")
     {
@@ -351,7 +351,7 @@
       sessionBinary = new Uint8Array(byteValues);
 
       console.log("onMount get vpn dashboard\r\n");
-      getVPNDashboard();
+     // getVPNDashboard();
 
     }
 

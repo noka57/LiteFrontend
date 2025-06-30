@@ -247,7 +247,7 @@
       <tr>
           <td></td>
 
-{#if changed_wifi_data.config.wifi_11ah.enable == 1}    
+{#if saved_changed_wifi_data.config.wifi_11ah.enable == 1}    
           <td><p class="pl-5 pt-5 text-lg font-light text-left">Mode</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
@@ -293,10 +293,10 @@
 <p class="pt-10"></p>
 
 
-{#if changed_wifi_data.config.wifi_11ah.enable == 1}   
+{#if saved_changed_wifi_data.config.wifi_11ah.enable == 1}   
 
 
- {#if changed_wifi_data.config.wifi_11ah.mode ==0}
+ {#if saved_changed_wifi_data.config.wifi_11ah.mode ==0}
 
 
 <Accordion>
@@ -349,7 +349,7 @@
 
 </Accordion>
 
- {:else if changed_wifi_data.config.wifi_11ah.mode==1}
+ {:else if saved_changed_wifi_data.config.wifi_11ah.mode==1}
 
 <Accordion>
 

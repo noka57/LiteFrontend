@@ -1219,8 +1219,6 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
         </svelte:fragment>
 
 						<SidebarDropdownItem label="Generic MQTT" href='/gMQTT' active={activeUrl === '/gMQTT'}/>
-						<SidebarDropdownItem label="Azure IoT" href='/azure' active={activeUrl === '/azure'}/>
-						<SidebarDropdownItem label="AWS IoT Core" href='/awsIoTcore' active={activeUrl === '/awsIoTcore'}/>
 
 					</SidebarDropdownWrapper>
 
@@ -1237,7 +1235,23 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 </svg>
         </svelte:fragment>
 
-						<SidebarDropdownItem label="Port Connection" href='/PortC' active={activeUrl === '/PortC'}/>
+						<SidebarDropdownItem label="Physical Interface" href='/phyInterface' active={activeUrl === '/phyInterface'}/>
+					</SidebarDropdownWrapper>
+
+
+<SidebarDropdownWrapper
+						label="Protocol"
+
+					>
+
+		<svelte:fragment slot="icon">
+<svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-red-500 mr-2 dark:text-pink-500 w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.499l-3.11.732a9 9 0 0 1-6.085-.711l-.108-.054a9 9 0 0 0-6.208-.682L3 4.5M3 15V4.5" />
+
+</svg>
+        </svelte:fragment>
+
+
 						        <SidebarDropdownItem label="Modbus" href='/modbus' active={activeUrl === '/modbus'}/>
 					</SidebarDropdownWrapper>
 
@@ -1260,7 +1274,7 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
         			    <SidebarDropdownItem label="Data Tag Engine PRO" href='/datatagpro' active={activeUrl === '/datatagpro'}/>
 {/if}
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
-						<SidebarDropdownItem label="Docker Engine" href='/docker' active={activeUrl === '/docker'}/>
+						
         				<SidebarDropdownItem label="Remote Service" href='/remoteS' active={activeUrl === '/remoteS'}/>
 					</SidebarDropdownWrapper>
 

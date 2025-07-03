@@ -308,20 +308,8 @@
   async function updateFwr() {
     if (selectedFwr) 
     {
-      magicValid=0;
-      if (fwrContent[sessionBinary.length]==65 && fwrContent[sessionBinary.length+1]==80 && fwrContent[sessionBinary.length+2]== 118 && fwrContent[sessionBinary.length+3]==50)
-      {
-        console.log("is APv2!");
-        magicValid=1;
-
-      }
-      else
-      {
-        console.log("is not APv2");
-        magicValid=0;
-      }
-
-
+      magicValid=1;
+      
 
       if (magicValid == 1)
       {      
@@ -384,7 +372,6 @@
           }        
         }
       }
-
 
     }
   }

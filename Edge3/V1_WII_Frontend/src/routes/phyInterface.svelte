@@ -220,13 +220,13 @@
   {
     modify_com_modal=true;
     modify_com_index=index;    
-    backup_com_profile.enable=changed_port_connection_data.config.fieldManagement_portConnection_com[index].enable;
-    backup_com_profile.serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[index].serialProfile;
-    backup_com_profile.interface=changed_port_connection_data.config.fieldManagement_portConnection_com[index].interface;
-    backup_com_profile.baudrate=changed_port_connection_data.config.fieldManagement_portConnection_com[index].baudrate;
-    backup_com_profile.parity=changed_port_connection_data.config.fieldManagement_portConnection_com[index].parity;
-    backup_com_profile.dataBits=changed_port_connection_data.config.fieldManagement_portConnection_com[index].dataBits;
-    backup_com_profile.stopBits=changed_port_connection_data.config.fieldManagement_portConnection_com[index].stopBits;
+    backup_com_profile.enable=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].enable;
+    backup_com_profile.serialProfile=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].serialProfile;
+    backup_com_profile.interface=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].interface;
+    backup_com_profile.baudrate=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].baudrate;
+    backup_com_profile.parity=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].parity;
+    backup_com_profile.dataBits=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].dataBits;
+    backup_com_profile.stopBits=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].stopBits;
 
   }
 
@@ -234,13 +234,13 @@
   {
     modify_com_modal=false;
 
-    changed_port_connection_data.config.fieldManagement_portConnection_com[index].enable=backup_com_profile.enable;
-    changed_port_connection_data.config.fieldManagement_portConnection_com[index].serialProfile=backup_com_profile.serialProfile;
-    changed_port_connection_data.config.fieldManagement_portConnection_com[index].interface=backup_com_profile.interface;
-    changed_port_connection_data.config.fieldManagement_portConnection_com[index].baudrate=backup_com_profile.baudrate;
-    changed_port_connection_data.config.fieldManagement_portConnection_com[index].parity=backup_com_profile.parity;
-    changed_port_connection_data.config.fieldManagement_portConnection_com[index].dataBits=backup_com_profile.dataBits;
-    changed_port_connection_data.config.fieldManagement_portConnection_com[index].stopBits=backup_com_profile.stopBits;
+    changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].enable=backup_com_profile.enable;
+    changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].serialProfile=backup_com_profile.serialProfile;
+    changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].interface=backup_com_profile.interface;
+    changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].baudrate=backup_com_profile.baudrate;
+    changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].parity=backup_com_profile.parity;
+    changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].dataBits=backup_com_profile.dataBits;
+    changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[index].stopBits=backup_com_profile.stopBits;
 
   }
 
@@ -257,27 +257,27 @@
       port_connection_com_changedValues=[];
     }
 
-    for (let i=0;i<changed_port_connection_data.config.fieldManagement_portConnection_com.length;i++)
+    for (let i=0;i<changed_port_connection_data.config.fieldManagement_physicalInterface_rs485.length;i++)
     {
-        if (port_connection_data.config.fieldManagement_portConnection_com[i].enable != changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable)
+        if (port_connection_data.config.fieldManagement_physicalInterface_rs485[i].enable != changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].enable)
         {
-            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable=changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable;
-            let changedstr="COM List No."+(i+1)+" Enable is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].enable;
+            saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].enable=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].enable;
+            let changedstr="COM List No."+(i+1)+" Enable is changed to "+changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].enable;
 
             port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
         }
 
 
-        if (port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile)
+        if (port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile != changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile)
         {
 
             for (let j=0; j < modbus_data.config.fieldManagement_modbus_rtu.master.length; j++)
             {
-                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile 
+                if (saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile 
                 &&
-                saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != "")
+                saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile != "")
                 {
-                    saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+                    saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile;
 
   
                     if (modbus_rtu_master_changedValues.length !=0)
@@ -294,22 +294,22 @@
 
             for (let j=modbus_data.config.fieldManagement_modbus_rtu.master.length; j< saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master.length;j++)
             {
-                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile 
+                if (saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile 
                 &&
-                saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != "")
+                saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile != "")
                 {
-                   saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+                   saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].serialProfile=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile;
                 }
 
             }
 
             for (let j=0; j < modbus_data.config.fieldManagement_modbus_rtu.slave.length; j++)
             {
-                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile
+                if (saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile
                 &&
-                saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != "")
+                saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile != "")
                 {
-                    saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+                    saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile;
 
 
                     if (modbus_rtu_slave_changedValues.length !=0)
@@ -327,62 +327,62 @@
 
             for (let j=modbus_data.config.fieldManagement_modbus_rtu.slave.length; j< saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave.length;j++)
             {
-                if (saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile 
+                if (saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile 
                 &&
-                saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile != "")
+                saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile != "")
                 {
-                   saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+                   saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[j].serialProfile=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile;
                 }
 
             }  
 
-            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile=changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
-            let changedstr="COM List No."+(i+1)+" Serial Profile is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].serialProfile;
+            saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile;
+            let changedstr="COM List No."+(i+1)+" Serial Profile is changed to "+changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].serialProfile;
 
             port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];
 
         }
 
 
-        if (port_connection_data.config.fieldManagement_portConnection_com[i].interface != changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface)
+        if (port_connection_data.config.fieldManagement_physicalInterface_rs485[i].interface != changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].interface)
         {
-            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface=changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface;
-            let changedstr="COM List No."+(i+1)+" interface is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].interface;
+            saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].interface=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].interface;
+            let changedstr="COM List No."+(i+1)+" interface is changed to "+changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].interface;
 
             port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
         }
 
-        if (port_connection_data.config.fieldManagement_portConnection_com[i].baudrate != changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate)
+        if (port_connection_data.config.fieldManagement_physicalInterface_rs485[i].baudrate != changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].baudrate)
         {
-            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate=changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate;
-            let changedstr="COM List No."+(i+1)+" baudrate is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].baudrate;
-
-            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
-        }
-
-
-        if (port_connection_data.config.fieldManagement_portConnection_com[i].parity != changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity)
-        {
-            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity=changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity;
-            let changedstr="COM List No."+(i+1)+" parity is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].parity;
+            saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].baudrate=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].baudrate;
+            let changedstr="COM List No."+(i+1)+" baudrate is changed to "+changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].baudrate;
 
             port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
         }
 
 
-        if (port_connection_data.config.fieldManagement_portConnection_com[i].dataBits != changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits)
+        if (port_connection_data.config.fieldManagement_physicalInterface_rs485[i].parity != changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].parity)
         {
-            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits=changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits;
-            let changedstr="COM List No."+(i+1)+" dataBits is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].dataBits;
+            saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].parity=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].parity;
+            let changedstr="COM List No."+(i+1)+" parity is changed to "+changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].parity;
 
             port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
         }
 
 
-        if (port_connection_data.config.fieldManagement_portConnection_com[i].stopBits != changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits)
+        if (port_connection_data.config.fieldManagement_physicalInterface_rs485[i].dataBits != changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].dataBits)
         {
-            saved_changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits=changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits;
-            let changedstr="COM List No."+(i+1)+" stopBits is changed to "+changed_port_connection_data.config.fieldManagement_portConnection_com[i].stopBits;
+            saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].dataBits=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].dataBits;
+            let changedstr="COM List No."+(i+1)+" dataBits is changed to "+changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].dataBits;
+
+            port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
+        }
+
+
+        if (port_connection_data.config.fieldManagement_physicalInterface_rs485[i].stopBits != changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].stopBits)
+        {
+            saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].stopBits=changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].stopBits;
+            let changedstr="COM List No."+(i+1)+" stopBits is changed to "+changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[i].stopBits;
 
             port_connection_com_changedValues=[...port_connection_com_changedValues, changedstr];            
         }
@@ -405,59 +405,59 @@
     }
 
 
-    for (let i=0;i<changed_port_connection_data.config.fieldManagement_com_tcp.length;i++)
+    for (let i=0;i<changed_port_connection_data.config.fieldManagement_rs485_tcp.length;i++)
     {
 
-      if (changed_port_connection_data.config.fieldManagement_com_tcp[i].transparent != port_connection_data.config.fieldManagement_com_tcp[i].transparent)
+      if (changed_port_connection_data.config.fieldManagement_rs485_tcp[i].transparent != port_connection_data.config.fieldManagement_rs485_tcp[i].transparent)
       {
-        let changedstr="COM No."+(i+1)+" TCP transparent is changed to "+changed_port_connection_data.config.fieldManagement_com_tcp[i].transparent;
+        let changedstr="COM No."+(i+1)+" TCP transparent is changed to "+changed_port_connection_data.config.fieldManagement_rs485_tcp[i].transparent;
 
         port_connection_transparent_changedValues=[...port_connection_transparent_changedValues, changedstr]; 
 
-        saved_changed_port_connection_data.config.fieldManagement_com_tcp[i].transparent=changed_port_connection_data.config.fieldManagement_com_tcp[i].transparent;
+        saved_changed_port_connection_data.config.fieldManagement_rs485_tcp[i].transparent=changed_port_connection_data.config.fieldManagement_rs485_tcp[i].transparent;
 
       }
 
-      if (changed_port_connection_data.config.fieldManagement_com_tcp[i].mode != port_connection_data.config.fieldManagement_com_tcp[i].mode)
+      if (changed_port_connection_data.config.fieldManagement_rs485_tcp[i].mode != port_connection_data.config.fieldManagement_rs485_tcp[i].mode)
       {
-        let changedstr="COM No."+(i+1)+" TCP Transparent Mode is changed to "+changed_port_connection_data.config.fieldManagement_com_tcp[i].mode;
+        let changedstr="COM No."+(i+1)+" TCP Transparent Mode is changed to "+changed_port_connection_data.config.fieldManagement_rs485_tcp[i].mode;
 
         port_connection_transparent_changedValues=[...port_connection_transparent_changedValues, changedstr]; 
 
-        saved_changed_port_connection_data.config.fieldManagement_com_tcp[i].mode=changed_port_connection_data.config.fieldManagement_com_tcp[i].mode;
+        saved_changed_port_connection_data.config.fieldManagement_rs485_tcp[i].mode=changed_port_connection_data.config.fieldManagement_rs485_tcp[i].mode;
 
       }
 
-      if (changed_port_connection_data.config.fieldManagement_com_tcp[i].listenPort != port_connection_data.config.fieldManagement_com_tcp[i].listenPort)
+      if (changed_port_connection_data.config.fieldManagement_rs485_tcp[i].listenPort != port_connection_data.config.fieldManagement_rs485_tcp[i].listenPort)
       {
 
-        let changedstr="COM No."+(i+1)+" TCP Trasparent Listen Port is changed to "+changed_port_connection_data.config.fieldManagement_com_tcp[i].listenPort;
+        let changedstr="COM No."+(i+1)+" TCP Trasparent Listen Port is changed to "+changed_port_connection_data.config.fieldManagement_rs485_tcp[i].listenPort;
 
         port_connection_transparent_changedValues=[...port_connection_transparent_changedValues, changedstr]; 
 
-        saved_changed_port_connection_data.config.fieldManagement_com_tcp[i].listenPort=changed_port_connection_data.config.fieldManagement_com_tcp[i].listenPort;
+        saved_changed_port_connection_data.config.fieldManagement_rs485_tcp[i].listenPort=changed_port_connection_data.config.fieldManagement_rs485_tcp[i].listenPort;
       }
 
 
 
-      if (changed_port_connection_data.config.fieldManagement_com_tcp[i].remoteHost != port_connection_data.config.fieldManagement_com_tcp[i].remoteHost)
+      if (changed_port_connection_data.config.fieldManagement_rs485_tcp[i].remoteHost != port_connection_data.config.fieldManagement_rs485_tcp[i].remoteHost)
       {
 
-        let changedstr="COM No."+(i+1)+" TCP Transparent Remote Host is changed to "+changed_port_connection_data.config.fieldManagement_com_tcp[i].remoteHost;
+        let changedstr="COM No."+(i+1)+" TCP Transparent Remote Host is changed to "+changed_port_connection_data.config.fieldManagement_rs485_tcp[i].remoteHost;
 
         port_connection_transparent_changedValues=[...port_connection_transparent_changedValues, changedstr]; 
 
-        saved_changed_port_connection_data.config.fieldManagement_com_tcp[i].remoteHost=changed_port_connection_data.config.fieldManagement_com_tcp[i].remoteHost;
+        saved_changed_port_connection_data.config.fieldManagement_rs485_tcp[i].remoteHost=changed_port_connection_data.config.fieldManagement_rs485_tcp[i].remoteHost;
       }
 
 
-      if (changed_port_connection_data.config.fieldManagement_com_tcp[i].remotePort != port_connection_data.config.fieldManagement_com_tcp[i].remotePort)
+      if (changed_port_connection_data.config.fieldManagement_rs485_tcp[i].remotePort != port_connection_data.config.fieldManagement_rs485_tcp[i].remotePort)
       {
-        let changedstr="COM No."+(i+1)+" TCP Transparent Remote Port is changed to "+changed_port_connection_data.config.fieldManagement_com_tcp[i].remotePort;
+        let changedstr="COM No."+(i+1)+" TCP Transparent Remote Port is changed to "+changed_port_connection_data.config.fieldManagement_rs485_tcp[i].remotePort;
 
         port_connection_transparent_changedValues=[...port_connection_transparent_changedValues, changedstr]; 
     
-        saved_changed_port_connection_data.config.fieldManagement_com_tcp[i].remotePort=changed_port_connection_data.config.fieldManagement_com_tcp[i].remotePort;
+        saved_changed_port_connection_data.config.fieldManagement_rs485_tcp[i].remotePort=changed_port_connection_data.config.fieldManagement_rs485_tcp[i].remotePort;
 
       }
 
@@ -866,12 +866,12 @@
 
         if (port_connection_com_changedValues.length==0)
         {
-            changed_port_connection_data.config.fieldManagement_portConnection_com=JSON.parse(JSON.stringify(port_connection_data.config.fieldManagement_portConnection_com)); 
+            changed_port_connection_data.config.fieldManagement_physicalInterface_rs485=JSON.parse(JSON.stringify(port_connection_data.config.fieldManagement_physicalInterface_rs485)); 
         }
 
         if (port_connection_transparent_changedValues.length ==0)
         {
-          changed_port_connection_data.config.fieldManagement_com_tcp=JSON.parse(JSON.stringify(port_connection_data.config.fieldManagement_com_tcp)); 
+          changed_port_connection_data.config.fieldManagement_rs485_tcp=JSON.parse(JSON.stringify(port_connection_data.config.fieldManagement_rs485_tcp)); 
         }
 
         if (saved_changed_modbus_data == "")
@@ -991,7 +991,7 @@
 
 {/if}  
 
-  <TabItem open title="COM">
+  <TabItem open title="RS485">
 
 
 <Accordion>
@@ -1020,7 +1020,7 @@
   <TableBody>
 
 {#if getDataReady == 1}
-{#each changed_port_connection_data.config.fieldManagement_portConnection_com as ComItem, index}
+{#each changed_port_connection_data.config.fieldManagement_physicalInterface_rs485 as ComItem, index}
 
     <TableBodyRow>   
       <TableBodyCell class="!p-4 w-10">
@@ -1082,7 +1082,7 @@
 <Modal bind:open={modify_com_modal} size="md" class="w-full" permanent={true}>
 <form action="#">
 <label>
-  <input type="checkbox"  bind:checked={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].enable} >
+  <input type="checkbox"  bind:checked={changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[modify_com_index].enable} >
   Enable
 </label>
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyCOM(modify_com_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
@@ -1093,7 +1093,7 @@
   <td><p class="pl-4 pt-4 text-lg font-light text-right">Serial Profile</p></td>
 
       <td class="pl-5 pt-5">
-      {changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].serialProfile}
+      {changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[modify_com_index].serialProfile}
 
       </td>
 
@@ -1105,12 +1105,12 @@
   </td>
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].interface} value={0} >RS 485</Radio>
+  <Radio bind:group={changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[modify_com_index].interface} value={0} >RS 485</Radio>
 </div></td>
 </tr>
 
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].baudrate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Baudrate</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[modify_com_index].baudrate} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -1122,9 +1122,9 @@
 
 
     <td class="pl-5 pt-4"><div class="flex gap-4">
-  <Radio bind:group={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].parity} value={0} >None</Radio>
-  <Radio bind:group={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].parity} value={1} >Even</Radio>
-  <Radio bind:group={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].parity} value={2} >Odd</Radio>
+  <Radio bind:group={changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[modify_com_index].parity} value={0} >None</Radio>
+  <Radio bind:group={changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[modify_com_index].parity} value={1} >Even</Radio>
+  <Radio bind:group={changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[modify_com_index].parity} value={2} >Odd</Radio>
 </div></td>
 
 
@@ -1132,14 +1132,14 @@
   </tr>
 
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].dataBits} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Data Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[modify_com_index].dataBits} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
 
 <tr>
-      <td><p class="pl-4 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_portConnection_com[modify_com_index].stopBits} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Stop Bits</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_physicalInterface_rs485[modify_com_index].stopBits} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
   
@@ -1173,7 +1173,7 @@
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={COM_TCP_Target_Index}>
 <option disabled="" value="none">Choose Profile ...</option>
 
-{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_com as TargetProfile,index}
+{#each saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485 as TargetProfile,index}
 <option value={index}>{TargetProfile.serialProfile}</option>
 {/each}
 </select>
@@ -1189,7 +1189,7 @@
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Transparent</p></td>
 
       <td class="pl-5 pt-5">
-    <Toggle bind:checked={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].transparent}></Toggle>
+    <Toggle bind:checked={changed_port_connection_data.config.fieldManagement_rs485_tcp[COM_TCP_Target_Index].transparent}></Toggle>
       </td>
 
     <td class="w-10"></td>
@@ -1201,15 +1201,15 @@
   </tr>
 
 
-{#if changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].transparent}
+{#if changed_port_connection_data.config.fieldManagement_rs485_tcp[COM_TCP_Target_Index].transparent}
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Mode</p></td>
 
       <td class="pl-5 pt-5">
 <div class="flex gap-2">
-  <Radio class="pb-2" bind:group={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].mode} value={0} >Server</Radio>
-  <Radio class="pb-2" bind:group={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].mode} value={1} >Client</Radio>
+  <Radio class="pb-2" bind:group={changed_port_connection_data.config.fieldManagement_rs485_tcp[COM_TCP_Target_Index].mode} value={0} >Server</Radio>
+  <Radio class="pb-2" bind:group={changed_port_connection_data.config.fieldManagement_rs485_tcp[COM_TCP_Target_Index].mode} value={1} >Client</Radio>
 
 </div>
       </td>
@@ -1222,10 +1222,10 @@
 
   </tr>
 
-{#if changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].mode == 0}
+{#if changed_port_connection_data.config.fieldManagement_rs485_tcp[COM_TCP_Target_Index].mode == 0}
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].listenPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Listen Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_port_connection_data.config.fieldManagement_rs485_tcp[COM_TCP_Target_Index].listenPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
@@ -1235,10 +1235,10 @@
   </tr>
 
 
-{:else if changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].mode == 1}
+{:else if changed_port_connection_data.config.fieldManagement_rs485_tcp[COM_TCP_Target_Index].mode == 1}
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].remoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_port_connection_data.config.fieldManagement_rs485_tcp[COM_TCP_Target_Index].remoteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
@@ -1248,7 +1248,7 @@
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_port_connection_data.config.fieldManagement_com_tcp[COM_TCP_Target_Index].remotePort}  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Port</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_port_connection_data.config.fieldManagement_rs485_tcp[COM_TCP_Target_Index].remotePort}  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
     <td class="w-10"></td>
@@ -1294,7 +1294,7 @@
   </TabItem>
 
 
-  <TabItem title="Simulator">
+  <TabItem title="I/O">
 
   <table>
 <tr>

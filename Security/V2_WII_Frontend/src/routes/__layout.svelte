@@ -127,7 +127,7 @@
 	// Side component
 	let logo = 'EWLOGO.png';
 	let logoClass= 'w-20';
-	let siteName = 'EW50-V';
+	let siteName = "";
 
 	let siteClass = 'pl-45';
 
@@ -910,8 +910,21 @@
     	sessionid = val;
   	});
 
+
+  	function setSiteName()
+  	{
+
+        if (siteName == "" && dashboard_data != "")
+		{
+			siteName=dashboard_data.config.dashboard.systemInfo.modelName;
+			console.log("changed siteName:");
+			console.log(siteName);
+		}
+  	}
+
   	dashboadData.subscribe(val => {
         dashboard_data = val;
+        setSiteName();
     });
 
     VPNdashboad.subscribe(val => {
@@ -957,6 +970,43 @@
 	}
 
 
+  async function getVPNDashboard() {
+    const res = await fetch(window.location.origin+"/GetVPNdashboard", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      vpn_dashboard =await res.json();
+      console.log("New VPN Dashboard");
+      console.log(vpn_dashboard);
+      VPNdashboad.set(vpn_dashboard);
+    }
+  }
+
+
+  async function getDashboardData() {
+    const res = await fetch(window.location.origin+"/getDashboardData", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+    	dashboard_data =await res.json();
+    	console.log("New Dashboard");
+    	console.log(dashboard_data);
+    	dashboadData.set(dashboard_data);
+
+        if (siteName == "")
+		{
+			siteName=dashboard_data.config.dashboard.systemInfo.modelName;
+		}    	
+    }
+  }
+
+
 	onMount(() => {
 
 		if (!sessionid)
@@ -990,37 +1040,6 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 
 
 
-  async function getVPNDashboard() {
-    const res = await fetch(window.location.origin+"/GetVPNdashboard", {
-      method: 'POST',
-      body: sessionBinary
-    })
-
-    if (res.status == 200)
-    {
-      vpn_dashboard =await res.json();
-      console.log("New VPN Dashboard");
-      console.log(vpn_dashboard);
-      VPNdashboad.set(vpn_dashboard);
-    }
-  }
-
-
-  async function getDashboardData() {
-    const res = await fetch(window.location.origin+"/getDashboardData", {
-      method: 'POST',
-      body: sessionBinary
-    })
-
-    if (res.status == 200)
-    {
-      dashboard_data =await res.json();
-      console.log("New Dashboard");
-      console.log(dashboard_data);
-      dashboadData.set(dashboard_data);
-    }
-  }
-
 	function RefreshDB()
 	{
 		if (!sessionid)
@@ -1038,7 +1057,6 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 			const hexArray = sessionid.match(/.{1,2}/g); 
       		const byteValues = hexArray.map(hex => parseInt(hex, 16));
       		sessionBinary = new Uint8Array(byteValues);
-
       		getDashboardData();
       		getVPNDashboard();
 

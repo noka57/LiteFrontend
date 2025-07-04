@@ -1,5 +1,10 @@
 import { writable } from 'svelte/store';
 
+
+export const aesKey=writable("");
+export const aesIV=writable("");
+export const aesAAD=writable("");
+
 export const dashboadData= writable("");
 export const VPNdashboad= writable("");
 export const ewanWebInputFlag=writable("");

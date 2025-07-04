@@ -2,6 +2,7 @@
 	import { List, Li, Heading,Button, Modal, Spinner} from 'flowbite-svelte';
 	import { sessionidG } from "./sessionG.js";
 	import { 
+      aesKey, aesIV, aesAAD,
       lanConfig,
 			LanConfigChangedLog, 
       DHCPServerLANConfigLog,
@@ -144,6 +145,10 @@
   let uploadconfigIsValid =1;
   let CheckedConfigInvalid=0;
 
+  let aes_key="";
+  let aes_iv="";
+  let aes_aad="";
+
   let lan_data="";
   let nat_data="";
   let firewall_data="";
@@ -246,6 +251,7 @@
   let ContentGenericMQTT;
   let GenericMQTTBinary=null;
   let generic_mqtt_changedValues=[];
+  let EncryptedContentGenericMQTT="";
 
 
   let ContentAzure;
@@ -356,6 +362,20 @@
 	sessionidG.subscribe(val => {
 	     sessionid = val;
 	});
+
+  aesKey.subscribe(val => {
+        aes_key = val;
+    });
+
+  aesIV.subscribe(val => {
+        aes_iv = val;
+  });
+
+  aesAAD.subscribe(val => {
+        aes_aad = val;
+  });
+
+
 
 	ChangedLANConfig.subscribe(val => {
       lan_data = val;
@@ -1749,6 +1769,21 @@
   } 
 
 
+  async function SetEncryptedGenericMQTTData()
+  {
+    const res = await fetch(window.location.origin+"/PostEncryptEDMqtt", {
+      method: 'POST',
+      body: EncryptedContentGenericMQTT
+     })
+
+    if (res.status == 200)
+    {
+      console.log("post encrypted mqtt ok");
+    } 
+  }
+
+
+
 	async function SetGenericMQTTData()
 	{
 	  const res = await fetch(window.location.origin+"/SETgenericMqttdata", {
@@ -2495,6 +2530,49 @@
 
 	}
 
+  async function aesSetKey()
+  {
+    return await crypto.subtle.importKey(
+            "raw",
+            aes_key,
+            { name: "AES-GCM" },
+            false,
+            ["encrypt", "decrypt"]
+        );
+
+  }
+
+
+
+  async function aesGCM_encrypt(plaintext)
+  {
+        const key = await aesSetKey();
+        const encoder = new TextEncoder();
+        const encrypted = await crypto.subtle.encrypt(
+        {
+            name: "AES-GCM",
+            iv: aes_iv,
+            additionalData: aes_aad,
+            tagLength: 128
+        },
+        key,
+        encoder.encode(plaintext)
+        );
+
+        return encrypted;
+  }
+
+
+  async function HandleEncryptedMQTT()
+  {
+      let encrypted_data= await aesGCM_encrypt(JSON.stringify(generic_mqtt_data, null,0));
+      let unitArrayEncrypted= new Uint8Array(encrypted_data);
+      EncryptedContentGenericMQTT=new Uint8Array(unitArrayEncrypted.length+sessionBinary.length);
+      EncryptedContentGenericMQTT.set(sessionBinary,0);
+      EncryptedContentGenericMQTT.set(unitArrayEncrypted, sessionBinary.length);
+      SetEncryptedGenericMQTTData();
+  }
+
 
 	function modalTrigger()
 	{
@@ -2670,7 +2748,10 @@
 	      	ContentGenericMQTT=new Uint8Array(GenericMQTTBinary.length+sessionBinary.length);
 	        ContentGenericMQTT.set(sessionBinary,0);
 	        ContentGenericMQTT.set(GenericMQTTBinary, sessionBinary.length);
-	        SetGenericMQTTData();
+          SetGenericMQTTData();
+
+          HandleEncryptedMQTT();
+
 				}
 
 

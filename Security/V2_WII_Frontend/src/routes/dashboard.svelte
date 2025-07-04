@@ -3,7 +3,7 @@
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge } from 'flowbite-svelte';
   import { onMount} from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { dashboadData,VPNdashboad} from "./configG.js";
+  import { dashboadData,VPNdashboad, aesKey, aesIV, aesAAD} from "./configG.js";
   let tdStyle="width:25%";
   let tableBodyClass="";
   let tdClass="border-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium";
@@ -20,6 +20,10 @@
   let interval_vpn;
   let sessionBinary;
   let hidden=0;
+
+  let aes_key="";
+  let aes_iv="";
+  let aes_aad="";
 
   const options = {
     year: 'numeric',
@@ -44,6 +48,17 @@
         vpn_dashboard = val;
   });
 
+  aesKey.subscribe(val => {
+        aes_key = val;
+    });
+
+  aesIV.subscribe(val => {
+        aes_iv = val;
+  });
+
+  aesAAD.subscribe(val => {
+        aes_aad = val;
+  });
 
 
   function GPSClick() {
@@ -74,7 +89,7 @@
 
   function calculateProgressBarPath(value,i)
   {
-    let max = 105;
+    let max = 102;
     let x=50;
     let y=5;
 
@@ -105,27 +120,61 @@
       {
         if (i==1)
         {
-          x1=x;
-          y1=y;
+          if (value >=100)
+          {
+            x1=50;
+            y1=5;
+
+          }
+          else
+          {
+            x1=x;
+            y1=y;
+          }
 
         }
         else if (i==2)
         {
-          x2=x;
-          y2=y;
+          if (value >=100)
+          {
+            x2=50;
+            y2=5;
+
+          }
+          else
+          {
+            x2=x;
+            y2=y;
+          }
 
         }
         else if (i==3)
         {
-          x3=x;
-          y3=y;
+          if (value >=100)
+          {
+            x3=50;
+            y3=5;
 
+          }
+          else
+          {
+            x3=x;
+            y3=y;
+          }
         }
         else if (i==4)
         {
-          x4=x;
-          y4=y;
+          if (value >=100)
+          {
+            x4=50;
+            y4=5;
 
+          }
+          else
+          {
+            x4=x;
+            y4=y;
+          }
         }
         path+="A35 35 0 0 1 50 75A35 35 0 0 1 15.810308878413977 32.51234208777258";
         return path;
@@ -192,8 +241,54 @@
   }
 
 
-  async function getDashboardData() {
 
+
+  async function aesGCM_encrypt(plaintext)
+  {
+        const key =  await crypto.subtle.importKey(
+            "raw",
+            aes_key,
+            { name: "AES-GCM" },
+            false,
+            ["encrypt", "decrypt"]
+        );
+
+        const encoder = new TextEncoder();
+        const encrypted = await crypto.subtle.encrypt(
+        {
+            name: "AES-GCM",
+            iv: aes_iv,
+            additionalData: aes_aad,
+            tagLength: 128
+        },
+        key,
+        encoder.encode(plaintext)
+        );
+
+        return encrypted;
+  }
+
+
+  async function sha256(message, type) {
+
+    if (type==0)
+    {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      return hashBuffer;
+    }
+    else if (type ==1)
+    {
+      const hashBuffer = await crypto.subtle.digest('SHA-256', message);
+      return hashBuffer;
+    }
+    else
+      return ""
+  }
+
+
+
+  async function getDashboardData() {
     try
     {
       AllpathReady=0;
@@ -218,6 +313,22 @@
         path3=calculateProgressBarPath(value3,3);
         path4=calculateProgressBarPath(value4,4);
         AllpathReady=1;
+        if (aes_key == "")
+        {
+          let mac = dashboard_data.config.dashboard.systemInfo.macAddress.replace(/:/g, '');
+          console.log("--mac:", mac);
+          let sha256R=await sha256(mac,0);
+          console.log("sha256+:", sha256R);
+          aes_key= await sha256(sha256R,1);
+          aesKey.set(aes_key);
+          aes_iv = await sha256(aes_key,1);
+          aesIV.set(aes_iv);
+          aes_aad = await sha256(aes_iv,1);
+          aesAAD.set(aes_aad);
+          console.log("==aad:", Array.from(new Uint8Array(aes_aad)).map(b => b.toString(16).padStart(2, '0')).join(''));
+
+        }
+
       }
       else
       {
@@ -250,6 +361,7 @@
   const stopIntervalVPN = () => {
     clearInterval(interval_vpn);
   };
+
 
 
   onMount(() => {
@@ -298,6 +410,7 @@
       const byteValues = hexArray.map(hex => parseInt(hex, 16));
       sessionBinary = new Uint8Array(byteValues);
       console.log("onMount get dashboard\r\n");
+      console.log("aad:", Array.from(new Uint8Array(aes_aad)).map(b => b.toString(16).padStart(2, '0')).join(''));   
       getDashboardData();
     }
 

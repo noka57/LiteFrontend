@@ -811,7 +811,7 @@
         const hexArray = sessionid.match(/.{1,2}/g); 
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
-        getCertificateData();
+       // getCertificateData();
         getRemoteCertificate();
         getCACertificate();
         getMachineCertificate();

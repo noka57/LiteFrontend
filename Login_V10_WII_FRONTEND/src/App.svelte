@@ -26,6 +26,10 @@
 	let showPassword = false;
 	let expiredPWopration=0;
 	let PWRuleFailed=0;
+	let forceUpgrade=0;
+	let hasNewerFwr=0;
+
+	let showChangedPassword = false;
 
 
   $: {
@@ -64,7 +68,15 @@
 		if (res.status == 200)
 		{
 			console.log("remain password OK");
-			getNextPage();
+			if (hasNewerFwr==0)
+			{
+				getNextPage();
+			}
+			else if (hasNewerFwr==1)
+			{
+					console.log("Ota has newer fwr");
+					active_step = "OTAhasNewerFwr";
+			}
 		}
 		else
 		{
@@ -128,6 +140,23 @@
   }
 
 
+  function handleUpgradeFwr(event) 
+  {
+    const buttonClicked = event.target.className;
+    if (buttonClicked.includes('buttonExpiredChange')) 
+    {
+      console.log('Upgrade button clicked');
+    //  active_step='ChangeExpiredPW';
+
+    } 
+    else if (buttonClicked.includes('buttonExpiredRemain')) 
+    {
+      console.log('No button clicked');
+      getNextPage();
+    }
+  }
+
+
 	async function doPostChangeAPW() {
 		console.log("ChangePW");
 		const res = await fetch(window.location.href+"PchangeAdminPW", {
@@ -142,8 +171,16 @@
 		if (res.status == 200)
 		{
 			console.log("change password OK");
-			alert("Successful change! Please login again.");
-			window.location = '/';
+			if (hasNewerFwr==0)
+			{
+				alert("Successful change! Please login again.");
+				window.location = '/';
+			}
+			else if (hasNewerFwr==1)
+			{
+					console.log("OTa has newer fwr");
+					active_step = "OTAhasNewerFwr";
+			}
 		}
 		else
 		{
@@ -213,7 +250,7 @@
 	};
 
 	async function doPostLogin () {
-		console.log("Plogin");
+		//console.log("Plogin");
 		const res = await fetch(window.location.href+"Plogin", {
 			method: 'POST',
 			body: JSON.stringify({
@@ -227,15 +264,33 @@
 			pw_status=await res.text();
 			console.log(pw_status);
 
-			if (pw_status==1)
+			if (pw_status==1 || pw_status==5)
 			{
 				console.log("initial password");
 				active_step='ChangeInitPW';
+
+				if (pw_status==5)
+				{
+					hasNewerFwr=1;
+					console.log("ota has newer fwr");
+				}
 			}
-			else if (pw_status==2)
+			else if (pw_status==2 || pw_status==6)
 			{
 				console.log("expired password");
 				active_step='ExpiredPW';
+
+				if (pw_status==6)
+				{
+					hasNewerFwr=1;
+					console.log("ota has newer fwr");
+				}
+			}
+			else if (pw_status==4)
+			{
+					hasNewerFwr=1;
+					console.log("ota has newer fwr");
+					active_step = "OTAhasNewerFwr"
 			}
 			else
 			{
@@ -563,7 +618,7 @@
 
 	<button class="buttonAccount" type="submit">Continue</button>
 	{#if lock_status == 1}
-			<p class="PFail">This account will be locked. Please login again after 30 minutes</p>
+			<p class="PFail">This account has been locked. Please login again after 30 minutes</p>
 	{:else if account_Fail != 0}
 		<p class="AFail">Please enter a valid account</p>
 	{/if}	
@@ -589,7 +644,7 @@
 	<button class="buttonPassWord" type="submit">Login</button>
 	{#if password_Fail != 0}
 		{#if password_Fail >3}
-			<p class="PFail">This account will be locked. Please login again after 30 minutes</p>
+			<p class="PFail">This account has been locked. Please login again after 30 minutes</p>
 		{:else}
 			<p class="PFail">Please enter a valid password</p>
 		{/if}
@@ -604,10 +659,25 @@ This is default password. Now change password for security considerations.
 <p class="pt-10"></p>
 
 <div>
+{#if showChangedPassword}
 		<input type="text" id="newPassword" bind:this={NewPWInput} bind:value={NewPassword} required placeholder="New Password"/>
+{:else}
+		<input type="password" id="newPassword" bind:this={NewPWInput} bind:value={NewPassword} required placeholder="New Password"/>
+{/if}
 </div>
-
+{#if showChangedPassword}
 		<input type="text" id="ConfirmPassword" bind:this={ConfirmPWInput} bind:value={ConfirmPW} required placeholder="Confirm Password"/>
+{:else}
+		<input type="password" id="ConfirmPassword" bind:this={ConfirmPWInput} bind:value={ConfirmPW} required placeholder="Confirm Password"/>
+{/if}
+
+	<div class="checkPassword">
+		<label>
+  		<input type="checkbox" bind:checked={showChangedPassword}/>
+  		Show Password
+		</label>
+	</div>
+
 <div>
 		<button class="buttonChange" type="submit">Change</button>
 </div>
@@ -634,15 +704,39 @@ Your password has been expired. To change the password or remain the password.
 
 
 	</div>
+{:else if active_step == "OTAhasNewerFwr"}
+<div class="expiredPW">
+A newer firmware is available. Would you like to upgrade now?
+</div>
 
+	<div class="flex">
+
+		<button class="buttonExpiredChange" type="submit" on:click={handleUpgradeFwr}>Upgrade</button>
+		<button class="buttonExpiredRemain" type="submit" on:click={handleUpgradeFwr}>No Upgrade</button>
+
+
+	</div>
 
 {:else if active_step == 'ChangeExpiredPW'}
 
 	<div>
+	{#if showChangedPassword}
 		<input type="text" id="newPassword" bind:this={NewPWInput} bind:value={NewPassword} required placeholder="New Password"/>		
+	{:else}
+		<input type="password" id="newPassword" bind:this={NewPWInput} bind:value={NewPassword} required placeholder="New Password"/>	
+	{/if}
 	</div>
-
+	{#if showChangedPassword}
 		<input type="text" id="ConfirmPassword" bind:this={ConfirmPWInput} bind:value={ConfirmPW} required placeholder="Confirm Password"/>
+	{:else}
+		<input type="password" id="ConfirmPassword" bind:this={ConfirmPWInput} bind:value={ConfirmPW} required placeholder="Confirm Password"/>
+	{/if}
+	<div class="checkPassword">
+		<label>
+  		<input type="checkbox" bind:checked={showChangedPassword}/>
+  		Show Password
+		</label>
+	</div>
 
 
 	<div>

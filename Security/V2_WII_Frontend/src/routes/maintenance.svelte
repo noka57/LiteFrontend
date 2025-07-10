@@ -99,6 +99,7 @@
   let fileMajor=0;
   let fileMinor=0;
   let filePatch=0
+  let startTimeoutId=null;
 
 
 
@@ -279,6 +280,11 @@
 
   function sendPing() 
   {
+    if (startTimeoutId != null)
+    { 
+      clearTimeout(startTimeoutId);
+      startTimeoutId = null;
+    }
     fetch(window.location.origin)
       .then(response => {
         if (response.status === 200) 
@@ -352,7 +358,9 @@
           {
             uploadfwrIsValid=1;
             console.log("200 Valid Fwr, updating...");
-            RestartIntervalId = setInterval(sendPing, 5000);
+            startTimeoutId=setTimeout(() => {
+              RestartIntervalId = setInterval(sendPing, 5000);
+            }, 1000);
           }
           else
           {
@@ -375,7 +383,9 @@
           {
             uploadfwrIsValid=1;
             console.log("200 Valid Fwr, updating...");
-            RestartIntervalId = setInterval(sendPing, 5000);
+            startTimeoutId=setTimeout(() => {
+              RestartIntervalId = setInterval(sendPing, 5000);
+            }, 1000);
           }
           else
           {

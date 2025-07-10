@@ -5782,7 +5782,7 @@
 
 {#if !isValidRemoteSubnet}
 <td>
- <Helper class="pl-4 mt-2" color="red">
+ <Helper class="pl-4 mt-4" color="red">
     <span class="font-medium">Invalid CIDR Format</span>
   </Helper>
 </td>
@@ -5850,7 +5850,7 @@
 
 {#if !isValidRemoteSubnet}
 <td>
- <Helper class="pl-4 mt-2" color="red">
+ <Helper class="pl-4 mt-4" color="red">
     <span class="font-medium">Invalid CIDR Format</span>
   </Helper>
 </td>

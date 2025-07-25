@@ -47,6 +47,9 @@
     let newRCS_index;
     let Responder_AllowdIsValidLocalSubnet=true;
     let Responder_AllowdIsValidRemoteSubnet=true;
+
+    let Initiator_AllowdIsValidLocalSubnet=true;
+    let Initiator_AllowdIsValidRemoteSubnet=true;  
     const cidrRegex = /^(\d{1,3}\.){3}\d{1,3}\/\d{1,2}$/;
 
 
@@ -1846,10 +1849,15 @@
 
 
 
-    function modalTriggerInitiatorConnSubnet(index){
+    function modalTriggerInitiatorConnSubnet(index)
+    {
 
       initiatorConnSubnetModal=true;
       initiatorConnSubnetCurrentIndex=index;
+
+      Initiator_AllowdIsValidLocalSubnet=true;
+      Initiator_AllowdIsValidRemoteSubnet=true;
+
 
       BackupICS.enable=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].enable;
       BackupICS.delete=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].delete;      
@@ -1858,7 +1866,8 @@
 
     }
 
-    function NoModifyICS(index){
+    function NoModifyICS(index)
+    {
       
       initiatorConnSubnetModal=false;
 
@@ -1870,35 +1879,51 @@
 
     }
 
-    function ModifyICS(index){
-      initiatorConnSubnetModal = false;
+    function ModifyICS(index)
+    {
+
+      Initiator_AllowdIsValidLocalSubnet = cidrRegex.test(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].local_subnet)
+      Initiator_AllowdIsValidRemoteSubnet = cidrRegex.test(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[index].remote_subnet)
+
+      if (Initiator_AllowdIsValidLocalSubnet && Initiator_AllowdIsValidRemoteSubnet)
+      {
+        initiatorConnSubnetModal = false;
+      }
 
     }
 
-    function NewICS_Item_Invoker(index){
+    function NewICS_Item_Invoker(index)
+    {
 
       newICS_item[Initiator_Conn_Selected][index].enable=true;
       newICS_item[Initiator_Conn_Selected][index].delete=false;      
       newICS_item[Initiator_Conn_Selected][index].local_subnet="";
       newICS_item[Initiator_Conn_Selected][index].remote_subnet=""; 
 
+      Initiator_AllowdIsValidLocalSubnet=true;
+      Initiator_AllowdIsValidRemoteSubnet=true;
+
       newICS_index=index;
       newICS_Modal=true;
 
     }
 
-    function AddICS(index){
+    function NoAddICS()
+    {
+      newICS_Modal=false;
+    }
 
+    function AddICS(index)
+    {
+      Initiator_AllowdIsValidLocalSubnet = cidrRegex.test(newICS_item[Initiator_Conn_Selected][index].local_subnet)
+      Initiator_AllowdIsValidRemoteSubnet = cidrRegex.test(newICS_item[Initiator_Conn_Selected][index].remote_subnet)
+
+      if (Initiator_AllowdIsValidLocalSubnet && Initiator_AllowdIsValidRemoteSubnet)
+      {
         newICS_Modal = false;
-
-
-       // console.log("before");
-        //console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
-        //console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
         changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet=[...changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet,newICS_item[Initiator_Conn_Selected][index]];
-        //console.log("addICS");
-        //console.log(changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
-       // console.log(saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet.length);
+      }
+
     }
 
 
@@ -2867,7 +2892,25 @@ async function getIpsecStatus() {
       <p class="pl-10 pt-4 text-lg font-light text-right">
 Initiator Subnet
       </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[initiatorConnSubnetCurrentIndex].local_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5">
+{#if Initiator_AllowdIsValidLocalSubnet}      
+      <input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[initiatorConnSubnetCurrentIndex].local_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+      <input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[initiatorConnSubnetCurrentIndex].local_subnet} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+
+{/if}      
+
+      </td>
+{#if !Initiator_AllowdIsValidLocalSubnet}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid CIDR Format</span>
+  </Helper>
+</td>
+
+{/if}
+
 
   </tr>
 
@@ -2876,7 +2919,24 @@ Initiator Subnet
       <p class="pl-10 pt-4 text-lg font-light text-right">
 Responder Subnet
       </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[initiatorConnSubnetCurrentIndex].remote_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5">
+{#if Initiator_AllowdIsValidRemoteSubnet}  
+      <input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[initiatorConnSubnetCurrentIndex].remote_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+      <input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[Initiator_Conn_Selected].tunnel_subnet[initiatorConnSubnetCurrentIndex].remote_subnet} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+{/if}
+
+      </td>
+
+{#if !Initiator_AllowdIsValidRemoteSubnet}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid CIDR Format</span>
+  </Helper>
+</td>
+
+{/if}
+
 
   </tr>
 
@@ -2901,7 +2961,7 @@ Responder Subnet
 </Modal>
 
 
-<Modal bind:open={newICS_Modal} size="md" class="w-full" autoclose>
+<Modal bind:open={newICS_Modal} size="lg" class="w-full" permanent={true}>
 
   <form action="#">
 
@@ -2909,6 +2969,8 @@ Responder Subnet
   <input class="center" type=checkbox bind:checked={newICS_item[Initiator_Conn_Selected][newICS_index].enable}>
   Enable
 </label>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddICS}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+
 <p class="mt-10"></p>
 
 <table>
@@ -2918,7 +2980,25 @@ Responder Subnet
       <p class="pl-10 pt-4 text-lg font-light text-right">
 Initiator Subnet
       </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={newICS_item[Initiator_Conn_Selected][newICS_index].local_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5">
+{#if Initiator_AllowdIsValidLocalSubnet}
+
+      <input type="text" bind:value={newICS_item[Initiator_Conn_Selected][newICS_index].local_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+      <input type="text" bind:value={newICS_item[Initiator_Conn_Selected][newICS_index].local_subnet} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+{/if}
+      </td>
+
+
+{#if !Initiator_AllowdIsValidLocalSubnet}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid CIDR Format</span>
+  </Helper>
+</td>
+
+{/if}
 
   </tr>
 
@@ -2927,7 +3007,25 @@ Initiator Subnet
       <p class="pl-10 pt-4 text-lg font-light text-right">
 Responder Subnet
       </p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={newICS_item[Initiator_Conn_Selected][newICS_index].remote_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td class="pl-5 pt-5">
+
+{#if Initiator_AllowdIsValidRemoteSubnet}      
+      <input type="text" bind:value={newICS_item[Initiator_Conn_Selected][newICS_index].remote_subnet} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+      <input type="text" bind:value={newICS_item[Initiator_Conn_Selected][newICS_index].remote_subnet} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+{/if}
+
+      </td>
+
+{#if !Initiator_AllowdIsValidRemoteSubnet}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid CIDR Format</span>
+  </Helper>
+</td>
+
+{/if}
 
   </tr>
 

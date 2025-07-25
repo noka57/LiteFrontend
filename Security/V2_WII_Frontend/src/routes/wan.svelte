@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, Toggle,Select, Checkbox, Input, Tooltip, Radio,FloatingLabelInput } from 'flowbite-svelte';
+  import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button,  Label, Textarea, Toggle,Select, Checkbox, Input, Tooltip, Radio,FloatingLabelInput,Helper  } from 'flowbite-svelte';
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
   import { wanConfig, ewanWebInputFlag,
@@ -50,6 +50,13 @@
   let redundancy_policy_changedValues = [];
   let faresaving_policy_changedValues = [];
   let port_switch_changedValues=[];
+
+  const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
+  let validIPv4=true;
+  let validNetmask=true;
+  let validGateway=true;
+  let validDNS1=true;
+  let validDNS2=true;
 
 
 
@@ -110,10 +117,13 @@
   });
 
   let ATCommand="";
+  let invalidATCommand=false;
   let ATResult="";
   let ATCommandContent;
   let StartATCommand=0;
   let FinishATCommand=0;
+  const regex = /[;*!@#~]/;
+  const regAT = /^AT/;
 
 
   async function ATdebug() {
@@ -140,18 +150,26 @@
   function executeATdebug()
   {
     console.log(ATCommand);
+    invalidATCommand=!regAT.test(ATCommand)
 
-    if (ATCommand != "")
+    if (!invalidATCommand)
     {
-      StartATCommand=1;
-      FinishATCommand=0;
-      const bytesArray = Array.from(ATCommand).map(char => char.charCodeAt(0));
-      let ATCommandBinary = new Uint8Array(bytesArray);
-      ATCommandContent=new Uint8Array(ATCommandBinary.length+sessionBinary.length);
-      ATCommandContent.set(sessionBinary,0);
-      ATCommandContent.set(ATCommandBinary, sessionBinary.length);
+      invalidATCommand=regex.test(ATCommand);
+      if (!invalidATCommand)
+      {
+        if (ATCommand != "")
+        {
+          StartATCommand=1;
+          FinishATCommand=0;
+          const bytesArray = Array.from(ATCommand).map(char => char.charCodeAt(0));
+          let ATCommandBinary = new Uint8Array(bytesArray);
+          ATCommandContent=new Uint8Array(ATCommandBinary.length+sessionBinary.length);
+          ATCommandContent.set(sessionBinary,0);
+          ATCommandContent.set(ATCommandBinary, sessionBinary.length);
 
-      ATdebug();
+          ATdebug();
+        }
+      }
     }
 
 
@@ -442,28 +460,56 @@
 
   function saveEWAN1BasicSetting()
   {
-    console.log("save EWan1 Basic Setting\r\n");
-    if (ewan1_basic_changedValues.length != 0)
+
+    let validInput=true;
+    if (changed_wan_data.config.networking_wan_ewan[0].basicSetting.connectionType == 0)
     {
-      ewan1_basic_changedValues=[];
+      validIPv4=ipv4Regex.test(changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.ip)
+      validNetmask=ipv4Regex.test(changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.netmask);
+      validGateway=ipv4Regex.test(changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.gateway);
+
+      if (changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[0].length>0)
+        validDNS1=ipv4Regex.test(changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[0]);
+      else
+        validDNS1=true
+      
+      if (changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[1].length>0)
+        validDNS2=ipv4Regex.test(changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[1]);
+      else
+        validDNS2=true;
+      
+      if (!validIPv4 || !validNetmask || !validGateway || !validDNS1 || !validDNS2)
+      {
+        validInput=false;
+      }
+
     }
-    compareObjects(changed_wan_data.config.networking_wan_ewan[0].basicSetting, wan_data.config.networking_wan_ewan[0].basicSetting,4,0,0);
 
-   // console.log("compare remote access");
-  //  console.log(changed_wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess);
-  //  console.log(wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess);
-
-    if (wan_data.config.networking_wan_ewan[0].basicSetting.webAccess != changed_wan_data.config.networking_wan_ewan[0].basicSetting.webAccess)
+    if (validInput)
     {
-      ewanWebInputFlag.set("1");
+      console.log("save EWan1 Basic Setting\r\n");
+      if (ewan1_basic_changedValues.length != 0)
+      {
+        ewan1_basic_changedValues=[];
+      }
+      compareObjects(changed_wan_data.config.networking_wan_ewan[0].basicSetting, wan_data.config.networking_wan_ewan[0].basicSetting,4,0,0);
+
+     // console.log("compare remote access");
+    //  console.log(changed_wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess);
+    //  console.log(wan_data.config.networking_wan_ewan[0].basicSetting.remoteAccess);
+
+      if (wan_data.config.networking_wan_ewan[0].basicSetting.webAccess != changed_wan_data.config.networking_wan_ewan[0].basicSetting.webAccess)
+      {
+        ewanWebInputFlag.set("1");
+      }
+
+
+      WAN_EWAN1_Basic_ConfigChangedLog.set(ewan1_basic_changedValues);
+      saved_changed_wan_data.config.networking_wan_ewan[0].basicSetting=JSON.parse(JSON.stringify(changed_wan_data.config.networking_wan_ewan[0].basicSetting));
+      ChangedWANConfig.set(saved_changed_wan_data);
+
+      console.log(ewan1_basic_changedValues);      
     }
-
-
-    WAN_EWAN1_Basic_ConfigChangedLog.set(ewan1_basic_changedValues);
-    saved_changed_wan_data.config.networking_wan_ewan[0].basicSetting=JSON.parse(JSON.stringify(changed_wan_data.config.networking_wan_ewan[0].basicSetting));
-    ChangedWANConfig.set(saved_changed_wan_data);
-
-    console.log(ewan1_basic_changedValues);      
   }
 
 
@@ -1965,12 +2011,33 @@ Modem Power Cycle</label>
     <span slot="header" class="pl-4">AT Debug</span>
 <div class='mb-6'>
   <Label for='default-input' class='block mb-2'>Command</Label>
-  <Input id='default-input' placeholder="Command" bind:value={ATCommand}/>
+<table>
+<tr>
+<td>
+{#if !invalidATCommand}
+
+  <input type="text" bind:value={ATCommand}  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+  <input type="text" bind:value={ATCommand}  class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-40 p-2.5">
+
+{/if}
+</td>
+{#if invalidATCommand}
+<td>
+ <Helper class="pl-4" color="red">
+    <span class="font-medium">Invalid Command</span>
+  </Helper>
+</td>
+{/if}
+
+</tr>
+</table>
+
 </div>
 
 
 <Label for="textarea-id" class="mb-2">Result</Label>
-<Textarea id="textarea-id" placeholder="Result" rows="4" name="message" bind:value={ATResult}/>
+<Textarea id="textarea-id" rows="4" name="message" bind:value={ATResult}/>
 <div class="flex flex-wrap gap-2">
 <Button color="blue" pill={true} on:click={executeATdebug}>Send</Button>
 </div>
@@ -2130,28 +2197,122 @@ Modem Power Cycle</label>
 {#if getdataAlready}  
 {#if changed_wan_data.config.networking_wan_ewan[0].basicSetting.connectionType==0}
   <tr>
-      <td><p class="pl-40 pt-1 text-lg font-light text-right">IP Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.ip} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-40 pt-1 text-lg font-light text-right">IP Address</p></td><td class="pl-5 pt-5">
+{#if validIPv4}
+      <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.ip} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      
+{:else}
+      <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.ip} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+{/if}
+
+      </td>
+
+{#if !validIPv4}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid Format</span>
+  </Helper>
+</td>
+
+{/if}
+
+
+
+  </tr>
+
+
+  <tr>
+        <td><p class="pl-40 pt-1 text-lg font-light text-right">Network Mask</p></td><td class="pl-5 pt-5">
+{#if validNetmask}        
+        <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.netmask} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+        <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.netmask} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+{/if}
+        </td>
+
+{#if !validNetmask}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid Format</span>
+  </Helper>
+</td>
+
+{/if}
 
 
 
   </tr>
 
   <tr>
-        <td><p class="pl-40 pt-1 text-lg font-light text-right">Network Mask</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.netmask} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+            <td><p class="pl-40 pt-1 text-lg font-light text-right">Gateway</p></td><td class="pl-5 pt-5">
+{#if validGateway}            
+            <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.gateway} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+            <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.gateway} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+
+{/if}
+
+            </td>
+
+{#if !validGateway}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid Format</span>
+  </Helper>
+</td>
+
+{/if}
+
+
   </tr>
 
-  <tr>
 
-            <td><p class="pl-40 pt-1 text-lg font-light text-right">Gateway</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.gateway} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+  <tr>
+        <td><p class="pl-40 pt-4 text-lg font-light text-right">DNS 1</p></td><td class="pl-5 pt-5">
+{#if validDNS1}          
+        <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+        <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[0]} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+{/if}
+
+        </td>
+{#if !validDNS1}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid Format</span>
+  </Helper>
+</td>
+
+{/if}  
+
   </tr>
 
-  <tr>
-        <td><p class="pl-40 pt-4 text-lg font-light text-right">DNS 1</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[0]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-  </tr>
-
 
   <tr>
-        <td><p class="pl-40 pt-4 text-lg font-light text-right">DNS 2</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+        <td><p class="pl-40 pt-4 text-lg font-light text-right">DNS 2</p></td><td class="pl-5 pt-5">
+
+{#if validDNS2}
+        <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[1]} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+        <input type="text" bind:value={changed_wan_data.config.networking_wan_ewan[0].basicSetting.staticIp.dns[1]} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+{/if}
+
+        </td>
+
+{#if !validDNS2}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid Format</span>
+  </Helper>
+</td>
+
+{/if}  
+
   </tr>
   
 

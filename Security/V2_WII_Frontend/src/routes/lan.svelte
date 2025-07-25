@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal } from 'flowbite-svelte';
+  import { Tabs, TabItem, Button,  Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal,Helper } from 'flowbite-svelte';
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
@@ -84,31 +84,41 @@
   let firstThreeParts = "192.168.123."
   let lastPartBegin="100"
   let lastPartEnd="250"
-
+  const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
+  let validIPv4=true;
+  let validNetmask=true;
   
 
 
 
-  function SaveLanSettings(){
-    console.log("Save LAN Setting\r\n");
-    if (changedValues.length !=0)
+  function SaveLanSettings()
+  {
+
+    validIPv4= ipv4Regex.test(changed_lan_data.config.networking_lan.ipStatic.ip)
+    validNetmask=ipv4Regex.test(changed_lan_data.config.networking_lan.ipStatic.netmask);
+
+    if (validIPv4 && validNetmask)
     {
-      changedValues=[];
+      console.log("Save LAN Setting\r\n");
+      if (changedValues.length !=0)
+      {
+        changedValues=[];
+      }
+
+      compareObjects(changed_lan_data.config.networking_lan.ipStatic, lan_data.config.networking_lan.ipStatic,1);
+
+      LanConfigChangedLog.set(changedValues);
+      saved_changed_lan_data.config.networking_lan.ipStatic=JSON.parse(JSON.stringify(changed_lan_data.config.networking_lan.ipStatic));
+      ChangedLANConfig.set(saved_changed_lan_data);
+      let newPrefix=getFirstThreeParts(saved_changed_lan_data.config.networking_lan.ipStatic.ip);
+
+      if (firstThreeParts != newPrefix);
+      {
+        firstThreeParts=newPrefix;
+        SaveDHCPSettings();
+      }
+      console.log(changedValues);
     }
-
-    compareObjects(changed_lan_data.config.networking_lan.ipStatic, lan_data.config.networking_lan.ipStatic,1);
-
-    LanConfigChangedLog.set(changedValues);
-    saved_changed_lan_data.config.networking_lan.ipStatic=JSON.parse(JSON.stringify(changed_lan_data.config.networking_lan.ipStatic));
-    ChangedLANConfig.set(saved_changed_lan_data);
-    let newPrefix=getFirstThreeParts(saved_changed_lan_data.config.networking_lan.ipStatic.ip);
-
-    if (firstThreeParts != newPrefix);
-    {
-      firstThreeParts=newPrefix;
-      SaveDHCPSettings();
-    }
-    console.log(changedValues);
 
   };
 
@@ -222,14 +232,50 @@
 {#if getDataReady==1}
 {#if changed_lan_data.config.networking_lan.ipMode==0}
 <tr>
-      <td><p class="pl-40 pt-4 text-lg font-light text-right">IP Address</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_lan_data.config.networking_lan.ipStatic.ip} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-40 pt-4 text-lg font-light text-right">IP Address</p></td><td class="pl-5 pt-5">
+{#if validIPv4}
 
+      <input type="text" bind:value={changed_lan_data.config.networking_lan.ipStatic.ip} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+
+{:else}
+      <input type="text" bind:value={changed_lan_data.config.networking_lan.ipStatic.ip} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+{/if}
+
+      </td>
+{#if !validIPv4}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid Format</span>
+  </Helper>
+</td>
+
+{/if}
 
 
   </tr>
 
   <tr>
-        <td><p class="pl-40 pt-4 text-lg font-light text-right">Network Mask</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_lan_data.config.networking_lan.ipStatic.netmask} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+        <td><p class="pl-40 pt-4 text-lg font-light text-right">Network Mask</p></td><td class="pl-5 pt-5">
+{#if validNetmask}
+        <input type="text" bind:value={changed_lan_data.config.networking_lan.ipStatic.netmask} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+        <input type="text" bind:value={changed_lan_data.config.networking_lan.ipStatic.netmask} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-full p-2.5">
+
+{/if}
+
+        </td>
+
+{#if !validNetmask}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid Format</span>
+  </Helper>
+</td>
+
+{/if}
+
+
   </tr>
 
 
@@ -281,7 +327,7 @@
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Lease</p></td><td class="pl-5 pt-5">
 <div class="flex gap-1">
-<input type="text" bind:value={changed_lan_data.config.networking_lan.dhcpServer.lease} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="number" bind:value={changed_lan_data.config.networking_lan.dhcpServer.lease} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500">
 <p class="pl-1 pt-2">hr</p>
 </div>
 </td>

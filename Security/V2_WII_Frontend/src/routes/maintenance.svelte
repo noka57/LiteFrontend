@@ -1,5 +1,5 @@
 <script>
-  import { Tabs, TabItem, Table, AccordionItem, Accordion,Button, Label, Toggle, Checkbox, Radio, Modal, Spinner } from 'flowbite-svelte';
+  import { Tabs, TabItem, Table, AccordionItem, Accordion,Button, Label, Toggle, Checkbox, Radio, Modal, Spinner, Helper } from 'flowbite-svelte';
 
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
@@ -25,6 +25,7 @@
   let defaultModal = false;
   let uploadfwrIsValid =0;
   let CheckedFwrInvalid=0;
+  let logLines = [];
 
   let RestartIntervalId;
   let RestartReady=0;
@@ -75,6 +76,17 @@
       saved_changed_maintenance_data = val;
   });
 
+  const regex = /[;*!@#~]/;
+  const ipv4reg = /^((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/;
+  const ipv6Reg = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(([0-9a-fA-F]{1,4}:){1,7}:)|(([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4})|(([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2})|(([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3})|(([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4})|(([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5})|([0-9a-fA-F]{1,4}:)((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/;
+
+
+  const domain = /^(?!:\/\/)([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,}$/;
+
+
+  let invalidPing=false;
+  let invalidTraceRoute=false;
+  let invalidNslookup=false;
 
   let PingContent;
   let PingResult="";
@@ -127,16 +139,20 @@
 
   function executeNslookup()
   {
-    StartNsLookup=1;
-    FinishNsLookup=0;
-    let NslookupCmd="nslookup "+NSLookupHost;
-    const bytesArray = Array.from(NslookupCmd).map(char => char.charCodeAt(0));
-    let nslookupBinary = new Uint8Array(bytesArray);
-    NslookupContent=new Uint8Array(nslookupBinary.length+sessionBinary.length);
-    NslookupContent.set(sessionBinary,0);
-    NslookupContent.set(nslookupBinary, sessionBinary.length);
+    invalidNslookup=!domain.test(NSLookupHost);
+    if (!invalidNslookup)
+    {
+      StartNsLookup=1;
+      FinishNsLookup=0;
+      let NslookupCmd="nslookup "+NSLookupHost;
+      const bytesArray = Array.from(NslookupCmd).map(char => char.charCodeAt(0));
+      let nslookupBinary = new Uint8Array(bytesArray);
+      NslookupContent=new Uint8Array(nslookupBinary.length+sessionBinary.length);
+      NslookupContent.set(sessionBinary,0);
+      NslookupContent.set(nslookupBinary, sessionBinary.length);
 
-    NsLookup();
+      NsLookup();
+    }
   }
 
 
@@ -165,31 +181,48 @@
 
   function executeTraceroute()
   {
-    StartTraceroute=1;
-    FinishTraceroute=0;
 
-    let TracerouteCmd="traceroute -q 1";
-    if (TracerouteType==0)
+    if (TracerouteType == 0)
     {
-      TracerouteCmd +=" -w 1 -n -4 "+ TracerouteHost;
+      invalidTraceRoute=!(ipv4reg.test(TracerouteHost));
     }
     else if (TracerouteType == 1)
     {
-      TracerouteCmd +=" -w 3 -n -6 "+TracerouteHost;
+      invalidTraceRoute=!(ipv6Reg.test(TracerouteHost));
     }
     else
     {
-      console.log("error input of traceroute");
+      invalidTraceRoute=true;
     }
 
+    if (!invalidTraceRoute)
+    {
+      StartTraceroute=1;
+      FinishTraceroute=0;
 
-    const bytesArray = Array.from(TracerouteCmd).map(char => char.charCodeAt(0));
-    let tracerouteBinary = new Uint8Array(bytesArray);
-    TracerouteContent=new Uint8Array(tracerouteBinary.length+sessionBinary.length);
-    TracerouteContent.set(sessionBinary,0);
-    TracerouteContent.set(tracerouteBinary, sessionBinary.length);
+      let TracerouteCmd="traceroute -q 1";
+      if (TracerouteType==0)
+      {
+        TracerouteCmd +=" -w 1 -n -4 "+ TracerouteHost;
+      }
+      else if (TracerouteType == 1)
+      {
+        TracerouteCmd +=" -w 3 -n -6 "+TracerouteHost;
+      }
+      else
+      {
+        console.log("error input of traceroute");
+      }
 
-    Traceroute();
+
+      const bytesArray = Array.from(TracerouteCmd).map(char => char.charCodeAt(0));
+      let tracerouteBinary = new Uint8Array(bytesArray);
+      TracerouteContent=new Uint8Array(tracerouteBinary.length+sessionBinary.length);
+      TracerouteContent.set(sessionBinary,0);
+      TracerouteContent.set(tracerouteBinary, sessionBinary.length);
+
+      Traceroute();
+    }
   }
 
 
@@ -217,30 +250,50 @@
 
   function executePing()
   {
-    StartPing=1;
-    FinishPing=0;
-    let pingCmd="ping -c 5";
-    if (PingType==0)
+//    console.log("Ping Type:", PingType);
+
+    if (PingType == 0)
     {
-      pingCmd +=" -W 1 -4 "+ PingHost;
+      invalidPing=!(ipv4reg.test(PingHost));
     }
     else if (PingType == 1)
     {
-      pingCmd +=" -6 "+PingHost;
+      invalidPing=!(ipv6Reg.test(PingHost));
     }
     else
     {
-      console.log("error input of ping");
+      invalidPing=true;
     }
 
 
-    const bytesArray = Array.from(pingCmd).map(char => char.charCodeAt(0));
-    let pingBinary = new Uint8Array(bytesArray);
-    PingContent=new Uint8Array(pingBinary.length+sessionBinary.length);
-    PingContent.set(sessionBinary,0);
-    PingContent.set(pingBinary, sessionBinary.length);
+  
+    if (!invalidPing)
+    {
+      StartPing=1;
+      FinishPing=0;
+      let pingCmd="ping -c 5";
+      if (PingType==0)
+      {
+        pingCmd +=" -W 1 -4 "+ PingHost;
+      }
+      else if (PingType == 1)
+      {
+        pingCmd +=" -6 "+PingHost;
+      }
+      else
+      {
+        console.log("error input of ping");
+      }
 
-    Ping();
+
+      const bytesArray = Array.from(pingCmd).map(char => char.charCodeAt(0));
+      let pingBinary = new Uint8Array(bytesArray);
+      PingContent=new Uint8Array(pingBinary.length+sessionBinary.length);
+      PingContent.set(sessionBinary,0);
+      PingContent.set(pingBinary, sessionBinary.length);
+
+      Ping();
+    }
   }
 
 
@@ -597,6 +650,7 @@
         console.log(system_log);
         console.log("system logOK");
         console.log(system_log.length);
+       // logLines = system_log.split('\n').reverse().join('\n');
  
     }
   }
@@ -965,7 +1019,6 @@ Hour
     Ping
     </span>
 
-
 <table>
 
 
@@ -983,7 +1036,23 @@ Hour
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={PingHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host</p></td><td class="pl-5 pt-5">
+
+{#if !invalidPing}      
+      <input type="text" bind:value={PingHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+      <input type="text" bind:value={PingHost} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-fill p-2.5">
+
+{/if}
+      </td>
+
+{#if invalidPing}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid Command</span>
+  </Helper>
+</td>
+{/if}
 
 </tr>
 
@@ -991,9 +1060,7 @@ Hour
 
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
+
     <td class="pl-10"><Button color="blue" pill={true} on:click={executePing}>Execute</Button></td>
 </tr>
 
@@ -1029,7 +1096,6 @@ Hour
 
 <table>
 
-
  <tr>
   <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p>
 
@@ -1044,7 +1110,27 @@ Hour
 </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={TracerouteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host</p></td><td class="pl-5 pt-5">
+
+{#if !invalidTraceRoute}      
+      <input type="text" bind:value={TracerouteHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+      
+{:else}
+      <input type="text" bind:value={TracerouteHost} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-fill p-2.5">
+   
+{/if}
+
+      </td>
+
+
+
+{#if invalidTraceRoute}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid Command</span>
+  </Helper>
+</td>
+{/if}
 
 </tr>
 
@@ -1052,9 +1138,7 @@ Hour
 
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
+
     <td class="pl-10"><Button color="blue" pill={true} on:click={executeTraceroute}>Execute</Button></td>
 </tr>
 
@@ -1080,6 +1164,7 @@ Hour
   </AccordionItem>  
 
 
+
   <AccordionItem {defaultClass}>
 
 
@@ -1088,7 +1173,24 @@ Hour
     </span>
 <table>
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host</p></td><td class="pl-5 pt-5"><input type="text" bind:value={NSLookupHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Host</p></td><td class="pl-5 pt-5">
+{#if !invalidNslookup}
+
+      <input type="text" bind:value={NSLookupHost} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+
+      <input type="text" bind:value={NSLookupHost} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-fill p-2.5">
+{/if}
+      </td>
+
+
+{#if invalidNslookup}
+<td>
+ <Helper class="pl-4 mt-4" color="red">
+    <span class="font-medium">Invalid Command</span>
+  </Helper>
+</td>
+{/if}
 
 </tr>
 
@@ -1096,9 +1198,7 @@ Hour
 
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
+
     <td class="pl-10"><Button color="blue" pill={true} on:click={executeNslookup}>Execute</Button></td>
 </tr>
 </table>
@@ -1126,7 +1226,9 @@ Hour
  <TabItem title="Log Viewer" on:click={RefreshSystemLog}>
 
 
-<pre style="white-space: pre-wrap;">{system_log}</pre>
+<pre style="white-space: pre-wrap;">  
+{system_log}
+  </pre>
 
  </TabItem>
 </Tabs>

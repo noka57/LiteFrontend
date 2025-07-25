@@ -2851,7 +2851,7 @@
 {#if PFW.incomingDstPort ==0}
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.incomingDstPortRange.start}</td>
 {:else if PFW.incomingDstPort ==1}
-      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.incomingDstPortRange.start}-{PFW.incomingDstPort.end}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{PFW.incomingDstPortRange.start}-{PFW.incomingDstPortRange.end}</td>
 {:else if PFW.incomingDstPort==2}
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">Any</td>
 {/if}
@@ -2943,7 +2943,7 @@
 {#if PFW.incomingDstPort ==0}
       <TableBodyCell class="w-10">{PFW.incomingDstPortRange.start}</TableBodyCell>
 {:else if PFW.incomingDstPort ==1}
-      <TableBodyCell class="w-10">{PFW.incomingDstPortRange.start}-{PFW.incomingDstPort.end}</TableBodyCell>
+      <TableBodyCell class="w-10">{PFW.incomingDstPortRange.start}-{PFW.incomingDstPortRange.end}</TableBodyCell>
 {:else if PFW.incomingDstPort==2}
       <TableBodyCell class="w-10">Any</TableBodyCell>
 {/if}

@@ -117,7 +117,6 @@
     saved_changed_openvpn_data = val;
   });
 
-  const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
   const cidrRegex = /^(\d{1,3}\.){3}\d{1,3}\/\d{1,2}$/;
   let isValidRemotePort = true;
   let isValidRemoteSubnet= true;

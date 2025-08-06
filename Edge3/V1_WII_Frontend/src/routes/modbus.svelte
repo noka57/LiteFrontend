@@ -4985,6 +4985,8 @@
   </script>
 
  <Tabs style="underline">
+
+{#if 0} 
    <TabItem open title="RTU">
 <Accordion>
   <AccordionItem {defaultClass}>
@@ -5178,7 +5180,7 @@
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_rtu_master[New_RTU_Master_index].serialProfile}>
 <option disabled="" value="">Choose Profile ...</option>
 {#if saved_changed_port_connection_data != ""}
-{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_com as Serial, index}
+{#each saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485 as Serial, index}
 <option value={Serial.serialProfile}>{Serial.serialProfile}</option>
 {/each}
 {/if}
@@ -5237,7 +5239,7 @@
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_rtu.master[Modify_RTU_Master_index].serialProfile}>
 <option disabled="" value="">Choose Profile ...</option>
 {#if saved_changed_port_connection_data != ""}
-{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_com as Serial, index}
+{#each saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485 as Serial, index}
 <option value={Serial.serialProfile}>{Serial.serialProfile}</option>
 {/each}
 {/if}
@@ -5462,7 +5464,7 @@
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_rtu_slave[New_RTU_Slave_index].serialProfile}>
 <option disabled="" value="">Choose Profile ...</option>
 {#if saved_changed_port_connection_data != ""}
-{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_com as Serial, index}
+{#each saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485 as Serial, index}
 <option value={Serial.serialProfile}>{Serial.serialProfile}</option>
 {/each}
 {/if}
@@ -5520,7 +5522,7 @@
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_rtu.slave[Modify_RTU_Slave_index].serialProfile}>
 <option disabled="" value="">Choose Profile ...</option>
 {#if saved_changed_port_connection_data != ""}
-{#each saved_changed_port_connection_data.config.fieldManagement_portConnection_com as Serial, index}
+{#each saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485 as Serial, index}
 <option value={Serial.serialProfile}>{Serial.serialProfile}</option>
 {/each}
 {/if}
@@ -7067,9 +7069,9 @@
 
 
 </TabItem>
+{/if}
 
-
-<TabItem title="Gateway">
+<TabItem open title="Gateway">
 <Accordion>
   <AccordionItem {defaultClass}>
 
@@ -7089,9 +7091,7 @@
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell>Alias Name</TableHeadCell>
-    <TableHeadCell>TCP Slave Profile</TableHeadCell>
-    <TableHeadCell>RTU Master Profile</TableHeadCell>
+
     <TableHeadCell>Response Timeout</TableHeadCell>
   </TableHead>
   <TableBody>
@@ -7135,9 +7135,6 @@
       </td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-4 strikeout">{index+1}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Tcp2RtuItem.aliasName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-36 strikeout">{Tcp2RtuItem.tcpProfileSlave}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-36 strikeout">{Tcp2RtuItem.rtuProfileMaster}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Tcp2RtuItem.responseTimeout} ms</td>
 
 
@@ -7169,9 +7166,7 @@
 
 
      <TableBodyCell class="!p-6 w-4">{index+1}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">{Tcp2RtuItem.aliasName}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-36">{Tcp2RtuItem.tcpProfileSlave}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-36">{Tcp2RtuItem.rtuProfileMaster}</TableBodyCell>
+
       <TableBodyCell class="!p-6 w-10">{Tcp2RtuItem.responseTimeout} ms</TableBodyCell>
 
     </TableBodyRow>
@@ -7183,7 +7178,7 @@
 
 
    <TableBodyRow>
-{#if changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length < 10}   
+{#if changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length < 1}   
      <TableBodyCell class="!p-4 w-10">
 
             <button on:click={() => new_gateway_t2r_trigger(changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length)}>
@@ -7201,9 +7196,6 @@
      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
       <TableBodyCell></TableBodyCell>
       <TableBodyCell class="!p-6 w-4"></TableBodyCell>
-      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
-      <TableBodyCell class="!p-6 w-36"> </TableBodyCell>
-      <TableBodyCell class="!p-6 w-36"></TableBodyCell>
       <TableBodyCell class="!p-6 w-10"></TableBodyCell>
 
 
@@ -7247,56 +7239,6 @@
 <p class="mt-10"></p>
 <table>
 
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_t2r[new_gateway_t2r_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
-
-
-
-  <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
-    <td class= "pl-4 pt-4">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_t2r[new_gateway_t2r_index].tcpProfileSlave}>
-<option disabled="" value="">Choose Profile ...</option>
-
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TSlave, index}
-<option value={TSlave.aliasName}>{TSlave.aliasName}</option>
-{/each}
-
-</select>
-
-
-
-    </td>
-
-</tr>
-
-
-  <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Master Profile</p></td>
-    <td class= "pl-4 pt-4">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_t2r[new_gateway_t2r_index].rtuProfileMaster}>
-<option disabled="" value="">Choose Profile ...</option>
-
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RMaster, index}
-<option value={RMaster.aliasName}>{RMaster.aliasName}</option>
-{/each}
-
-</select>
-
-    
-
-    </td>
-
-</tr>
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_t2r[new_gateway_t2r_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
@@ -7347,55 +7289,6 @@
 <p class="mt-10"></p>
 <table>
 
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
-  </tr>
-
-
-
-
-
-  <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Slave Profile</p></td>
-    <td class= "pl-4 pt-4">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].tcpProfileSlave}>
-<option disabled="" value="">Choose Profile ...</option>
-
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TSlave, index}
-<option value={TSlave.aliasName}>{TSlave.aliasName}</option>
-{/each}
-
-</select>
-
-  
-
-    </td>
-
-</tr>
-
-
-  <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Master Profile</p></td>
-    <td class= "pl-4 pt-4">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].rtuProfileMaster}>
-<option disabled="" value="">Choose Profile ...</option>
-
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master as RMaster, index}
-<option value={RMaster.aliasName}>{RMaster.aliasName}</option>
-{/each}
-
-</select>
-
-    
-    </td>
-
-</tr>
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu[Modify_Gateway_T2R_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
@@ -7436,7 +7329,7 @@
   </Table>
 
     </AccordionItem>
-
+{#if 0}
   <AccordionItem {defaultClass}>
 
 
@@ -8517,6 +8410,7 @@
 
   </Table>
       </AccordionItem>
+{/if}
 
 </Accordion>
 </TabItem>

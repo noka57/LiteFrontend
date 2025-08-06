@@ -1,20 +1,20 @@
-import { c as create_ssr_component, v as validate_component, i as add_attribute } from "../../_app/immutable/chunks/index-a89b87ed.js";
+import { c as create_ssr_component, v as validate_component, i as add_attribute } from "../../_app/immutable/chunks/index-54377ec4.js";
 import "classnames";
-import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
-/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-a38204dd.js";
-import { M as Modal } from "../../_app/immutable/chunks/Modal-ea7df515.js";
-import { T as Table } from "../../_app/immutable/chunks/Table-724d6c25.js";
-import { T as TableBody } from "../../_app/immutable/chunks/TableBody-3dfdaf75.js";
-import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-acf5b861.js";
-import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-14fff184.js";
-import { T as TabItem } from "../../_app/immutable/chunks/TabItem-424b0447.js";
-import { T as Tabs } from "../../_app/immutable/chunks/Tabs-ef5c5efe.js";
+import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
+/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-77cf2b36.js";
+import { M as Modal } from "../../_app/immutable/chunks/Modal-de764e50.js";
+import { T as Table } from "../../_app/immutable/chunks/Table-297ce0df.js";
+import { T as TableBody } from "../../_app/immutable/chunks/TableBody-85264b11.js";
+import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-20bd2092.js";
+import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-db67647d.js";
+import { T as TabItem } from "../../_app/immutable/chunks/TabItem-0910d666.js";
+import { T as Tabs } from "../../_app/immutable/chunks/Tabs-92f4be17.js";
 import { sessionidG } from "../endpoints/sessionG.js";
 import { firewallConfig, Firewall_General_ConfigChangedLog, Firewall_IPFilter_ConfigChangedLog, Firewall_MACFilter_ConfigChangedLog, ChangedFirewallConfig } from "../endpoints/configG.js";
-/* empty css                                           */import "../../_app/immutable/chunks/Label-a273673c.js";
-import "../../_app/immutable/chunks/Frame-cafee768.js";
-import "../../_app/immutable/chunks/CloseButton-88212a62.js";
-import "../../_app/immutable/chunks/index-b74adbb6.js";
+/* empty css                                           */import "../../_app/immutable/chunks/Label-44304d72.js";
+import "../../_app/immutable/chunks/Frame-c602be1d.js";
+import "../../_app/immutable/chunks/CloseButton-dd962073.js";
+import "../../_app/immutable/chunks/index-df2ccd83.js";
 const Firewall = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let changed_firewall_data = {};
   let macfilter_current_index;
@@ -214,9 +214,9 @@ const Firewall = create_ssr_component(($$result, $$props, $$bindings, slots) => 
 
     <tr><td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
               default: () => {
-                return `<svg class="${"mr-2 -ml-1 w-6 h-6"}" fill="${"none"}" stroke="${"currentColor"}" stroke-width="${"2"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}"><path d="${"M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"}" stroke-linecap="${"round"}" stroke-linejoin="${"round"}"></path></svg>Save`;
+                return `<svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Save`;
               }
             })}</td></tr></table>`;
           }
@@ -224,10 +224,10 @@ const Firewall = create_ssr_component(($$result, $$props, $$bindings, slots) => 
 
   ${validate_component(TabItem, "TabItem").$$render($$result, { title: "IP Filter" }, {}, {
           default: () => {
-            return `<table><tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">IP Filter Type</p></td>
+            return `<table><tr><td><p class="pl-20 pt-4 text-lg font-light text-right">IP Filter Type</p></td>
 
-    <td class="${"pl-5 pt-4"}"><div class="${"flex gap-4"}">${``}</div></td></tr></table>
-<p class="${"mt-10"}"></p>
+    <td class="pl-5 pt-4"><div class="flex gap-4">${``}</div></td></tr></table>
+<p class="mt-10"></p>
 ${validate_component(Table, "Table").$$render($$result, { shadow: true, striped: true }, {}, {
               default: () => {
                 return `${validate_component(TableHead, "TableHead").$$render($$result, {}, {}, {
@@ -240,8 +240,8 @@ ${validate_component(Table, "Table").$$render($$result, { shadow: true, striped:
                         return `Enable`;
                       }
                     })}
-    <th class="${"px-1 py-3"}">No</th>
-    <th class="${"px-1 py-3"}">From Interface</th>
+    <th class="px-1 py-3">No</th>
+    <th class="px-1 py-3">From Interface</th>
     ${validate_component(TableHeadCell, "TableHeadCell").$$render($$result, {}, {}, {
                       default: () => {
                         return `To Interface`;
@@ -307,9 +307,9 @@ ${validate_component(TableBodyRow, "TableBodyRow").$$render($$result, {}, {}, {
         <td></td>
     <td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
                       default: () => {
-                        return `<svg class="${"mr-2 -ml-1 w-6 h-6"}" fill="${"none"}" stroke="${"currentColor"}" stroke-width="${"2"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}"><path d="${"M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"}" stroke-linecap="${"round"}" stroke-linejoin="${"round"}"></path></svg>Save`;
+                        return `<svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Save`;
                       }
                     })}</td></tr>
 
@@ -330,15 +330,15 @@ ${validate_component(Modal, "Modal").$$render(
                       },
                       {
                         default: () => {
-                          return `<form action="${"#"}"><label><input class="${"center"}" type="${"checkbox"}"${add_attribute("checked", newIPF_Item[new_ipfilter_index].enable, 1)}>
+                          return `<form action="#"><label><input class="center" type="checkbox"${add_attribute("checked", newIPF_Item[new_ipfilter_index].enable, 1)}>
   Enable
 </label>
 
-<p class="${"mt-10"}"></p>
+<p class="mt-10"></p>
 
-<table><tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">From Interface</p></td>
+<table><tr><td><p class="pl-20 pt-4 text-lg font-light text-right">From Interface</p></td>
 
-    <td class="${"pl-5 pt-4"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+    <td class="pl-5 pt-4"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                             $$result,
                             {
                               value: 0,
@@ -414,9 +414,9 @@ ${validate_component(Modal, "Modal").$$render(
 
 
 
- <tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">To Interface</p></td>
+ <tr><td><p class="pl-20 pt-4 text-lg font-light text-right">To Interface</p></td>
 
-    <td class="${"pl-5 pt-4"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+    <td class="pl-5 pt-4"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                             $$result,
                             {
                               value: 0,
@@ -489,15 +489,15 @@ ${validate_component(Modal, "Modal").$$render(
                             }
                           )}</div></td></tr>
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Source IP</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", newIPF_Item[new_ipfilter_index].srcIp, 0)}></td></tr>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Source IP</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", newIPF_Item[new_ipfilter_index].srcIp, 0)}></td></tr>
 
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Destination IP</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", newIPF_Item[new_ipfilter_index].dstIp, 0)}></td></tr>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Destination IP</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", newIPF_Item[new_ipfilter_index].dstIp, 0)}></td></tr>
 
- <tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Protocol</p></td>
+ <tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Protocol</p></td>
 
-    <td class="${"pl-5 pt-4"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+    <td class="pl-5 pt-4"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                             $$result,
                             {
                               value: "Any",
@@ -552,9 +552,9 @@ ${validate_component(Modal, "Modal").$$render(
                             }
                           )}</div></td></tr>
 
- <tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Destination Port</p></td>
+ <tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Destination Port</p></td>
 
-    <td class="${"pl-5 pt-4"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+    <td class="pl-5 pt-4"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                             $$result,
                             {
                               value: 0,
@@ -571,7 +571,7 @@ ${validate_component(Modal, "Modal").$$render(
                                 return `Single Port`;
                               }
                             }
-                          )}<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", newIPF_Item[new_ipfilter_index].dstPortRange.start, 0)}>
+                          )}<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", newIPF_Item[new_ipfilter_index].dstPortRange.start, 0)}>
   ${validate_component(Radio, "Radio").$$render(
                             $$result,
                             {
@@ -589,12 +589,12 @@ ${validate_component(Modal, "Modal").$$render(
                                 return `Port Range`;
                               }
                             }
-                          )}<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", newIPF_Item[new_ipfilter_index].dstPortRange.start, 0)}><p class="${"pt-2"}">-</p><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", newIPF_Item[new_ipfilter_index].dstPortRange.end, 0)}></div></td></tr>
+                          )}<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", newIPF_Item[new_ipfilter_index].dstPortRange.start, 0)}><p class="pt-2">-</p><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", newIPF_Item[new_ipfilter_index].dstPortRange.end, 0)}></div></td></tr>
 
 
       <tr><td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
                             default: () => {
                               return `Add`;
                             }
@@ -620,44 +620,44 @@ ${validate_component(Modal, "Modal").$$render(
                       },
                       {
                         default: () => {
-                          return `<form action="${"#"}"><label>${``}
+                          return `<form action="#"><label>${``}
   Enable
 </label>
-<button type="${"button"}" class="${"ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5"}" aria-label="${"Close"}"><span class="${"sr-only"}">Close modal</span> <svg class="${"w-5 h-5"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path fill-rule="${"evenodd"}" d="${"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"}" clip-rule="${"evenodd"}"></path></svg></button>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close"><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
-<p class="${"mt-10"}"></p>
+<p class="mt-10"></p>
 
-<table><tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">From Interface</p></td>
+<table><tr><td><p class="pl-20 pt-4 text-lg font-light text-right">From Interface</p></td>
 
-    <td class="${"pl-5 pt-4"}"><div class="${"flex gap-4"}">${``}</div></td></tr>
-
-
+    <td class="pl-5 pt-4"><div class="flex gap-4">${``}</div></td></tr>
 
 
- <tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">To Interface</p></td>
 
-    <td class="${"pl-5 pt-4"}"><div class="${"flex gap-4"}">${``}</div></td></tr>
 
-<tr>${``}</tr>
+ <tr><td><p class="pl-20 pt-4 text-lg font-light text-right">To Interface</p></td>
+
+    <td class="pl-5 pt-4"><div class="flex gap-4">${``}</div></td></tr>
 
 <tr>${``}</tr>
 
- <tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Protocol</p></td>
+<tr>${``}</tr>
 
-    <td class="${"pl-5 pt-4"}"><div class="${"flex gap-4"}">${``}</div></td></tr>
+ <tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Protocol</p></td>
+
+    <td class="pl-5 pt-4"><div class="flex gap-4">${``}</div></td></tr>
 
 
 
 
 
- <tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Destination Port</p></td>
+ <tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Destination Port</p></td>
 
-    <td class="${"pl-5 pt-4"}"><div class="${"flex gap-4"}">${``}</div></td></tr>
+    <td class="pl-5 pt-4"><div class="flex gap-4">${``}</div></td></tr>
 
 
       <tr><td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
                             default: () => {
                               return `Modify`;
                             }
@@ -675,10 +675,10 @@ ${validate_component(Modal, "Modal").$$render(
 
   ${validate_component(TabItem, "TabItem").$$render($$result, { title: "MAC Filter" }, {}, {
           default: () => {
-            return `<table><tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">MAC Filter Type</p></td>
+            return `<table><tr><td><p class="pl-20 pt-4 text-lg font-light text-right">MAC Filter Type</p></td>
 
-    <td class="${"pl-5 pt-4"}"><div class="${"flex gap-4"}">${``}</div></td></tr></table>
-<p class="${"mt-10"}"></p>
+    <td class="pl-5 pt-4"><div class="flex gap-4">${``}</div></td></tr></table>
+<p class="mt-10"></p>
 ${validate_component(Table, "Table").$$render($$result, { shadow: true, striped: true }, {}, {
               default: () => {
                 return `${validate_component(TableHead, "TableHead").$$render($$result, {}, {}, {
@@ -730,9 +730,9 @@ ${validate_component(TableBodyRow, "TableBodyRow").$$render($$result, {}, {}, {
         <td></td>
             <td></td>
         <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
                       default: () => {
-                        return `<svg class="${"mr-2 -ml-1 w-6 h-6"}" fill="${"none"}" stroke="${"currentColor"}" stroke-width="${"2"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}"><path d="${"M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"}" stroke-linecap="${"round"}" stroke-linejoin="${"round"}"></path></svg>Save`;
+                        return `<svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Save`;
                       }
                     })}</td></tr>
 
@@ -754,18 +754,18 @@ ${validate_component(Modal, "Modal").$$render(
                       },
                       {
                         default: () => {
-                          return `<form action="${"#"}"><label><input class="${"center"}" type="${"checkbox"}"${add_attribute("checked", newMAF_Item[new_macfilter_index].enable, 1)}>
+                          return `<form action="#"><label><input class="center" type="checkbox"${add_attribute("checked", newMAF_Item[new_macfilter_index].enable, 1)}>
   Enable
 </label>
 
-<p class="${"mt-10"}"></p>
+<p class="mt-10"></p>
 
 
-<table><tr><td class="${"pl-4"}"><p class="${"pt-4 text-lg font-light text-right"}">MAC Address</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", newMAF_Item[new_macfilter_index].macAddr, 0)}></td></tr>
+<table><tr><td class="pl-4"><p class="pt-4 text-lg font-light text-right">MAC Address</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", newMAF_Item[new_macfilter_index].macAddr, 0)}></td></tr>
 
         <tr><td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
                             default: () => {
                               return `Add`;
                             }
@@ -792,20 +792,20 @@ ${validate_component(Modal, "Modal").$$render(
                       },
                       {
                         default: () => {
-                          return `<form action="${"#"}"><label>${``}
+                          return `<form action="#"><label>${``}
   Enable
 </label>
 
-<button type="${"button"}" class="${"ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5"}" aria-label="${"Close"}"><span class="${"sr-only"}">Close modal</span> <svg class="${"w-5 h-5"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path fill-rule="${"evenodd"}" d="${"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"}" clip-rule="${"evenodd"}"></path></svg></button>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close"><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
-<p class="${"mt-10"}"></p>
+<p class="mt-10"></p>
 
 
-<table><tr><td class="${"pl-4"}"><p class="${"pt-4 text-lg font-light text-right"}">MAC Address</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_firewall_data.config.networking_firewall_macFilter.list[macfilter_current_index].macAddr, 0)}></td></tr>
+<table><tr><td class="pl-4"><p class="pt-4 text-lg font-light text-right">MAC Address</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_firewall_data.config.networking_firewall_macFilter.list[macfilter_current_index].macAddr, 0)}></td></tr>
 
         <tr><td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
                             default: () => {
                               return `Modify`;
                             }

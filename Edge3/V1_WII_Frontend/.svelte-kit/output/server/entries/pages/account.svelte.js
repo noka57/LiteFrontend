@@ -1,8 +1,8 @@
-import { c as create_ssr_component, v as validate_component } from "../../_app/immutable/chunks/index-a89b87ed.js";
+import { c as create_ssr_component, v as validate_component } from "../../_app/immutable/chunks/index-54377ec4.js";
 import "classnames";
-/* empty css                                                                            */import { T as Tabs } from "../../_app/immutable/chunks/Tabs-ef5c5efe.js";
+/* empty css                                                                            */import { T as Tabs } from "../../_app/immutable/chunks/Tabs-92f4be17.js";
 import { sessionidG } from "../endpoints/sessionG.js";
-import "../../_app/immutable/chunks/index-b74adbb6.js";
+import "../../_app/immutable/chunks/index-df2ccd83.js";
 const Account = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   sessionidG.subscribe((val) => {
   });

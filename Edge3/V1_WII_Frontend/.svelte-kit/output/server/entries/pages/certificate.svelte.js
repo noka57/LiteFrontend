@@ -1,19 +1,19 @@
-import { c as create_ssr_component, v as validate_component } from "../../_app/immutable/chunks/index-a89b87ed.js";
+import { c as create_ssr_component, v as validate_component, e as escape } from "../../_app/immutable/chunks/index-54377ec4.js";
 import "classnames";
-import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
-/* empty css                                                                            */import { F as FloatingLabelInput } from "../../_app/immutable/chunks/FloatingLabelInput-81886b3d.js";
-import { T as Table } from "../../_app/immutable/chunks/Table-724d6c25.js";
-import { T as TableBody } from "../../_app/immutable/chunks/TableBody-3dfdaf75.js";
-import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-acf5b861.js";
-import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-14fff184.js";
-import { T as TabItem } from "../../_app/immutable/chunks/TabItem-424b0447.js";
-import { T as Tabs } from "../../_app/immutable/chunks/Tabs-ef5c5efe.js";
+import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
+/* empty css                                                                            */import { F as FloatingLabelInput } from "../../_app/immutable/chunks/FloatingLabelInput-49cd3b9b.js";
+import { T as Table } from "../../_app/immutable/chunks/Table-297ce0df.js";
+import { T as TableBody } from "../../_app/immutable/chunks/TableBody-85264b11.js";
+import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-20bd2092.js";
+import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-db67647d.js";
+import { T as TabItem } from "../../_app/immutable/chunks/TabItem-0910d666.js";
+import { T as Tabs } from "../../_app/immutable/chunks/Tabs-92f4be17.js";
 import "node-forge";
 import { sessionidG } from "../endpoints/sessionG.js";
 import "asn1js";
 import "pkijs";
 import { Certificate_Settings_ConfigChangedLog, ChangedCertificateConfig } from "../endpoints/configG.js";
-import "../../_app/immutable/chunks/index-b74adbb6.js";
+import "../../_app/immutable/chunks/index-df2ccd83.js";
 const Certificate = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   sessionidG.subscribe((val) => {
   });
@@ -26,6 +26,9 @@ const Certificate = create_ssr_component(($$result, $$props, $$bindings, slots) 
   let crlAliasName = "";
   let MachineCertAliasName = "";
   let MachineCertP12Password = "";
+  let fileMachineCertName = "No file chosen";
+  let fileCACertName = "No file chosen";
+  let fileRemoteCertName = "No file chosen";
   let $$settled;
   let $$rendered;
   do {
@@ -128,7 +131,10 @@ ${validate_component(TableBodyRow, "TableBodyRow").$$render($$result, {}, {}, {
                             })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-96" }, {}, {
                               default: () => {
-                                return `<input type="${"file"}" id="${"RemoteCertUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}">`;
+                                return `<label for="MachineCertUpload" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg">Choose File</label>
+
+      <input type="file" id="MachineCertUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" style="display: none;">
+      <span class="pl-4">${escape(fileMachineCertName)}</span>`;
                               }
                             })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-36" }, {}, {
@@ -217,7 +223,9 @@ ${validate_component(TableBodyRow, "TableBodyRow").$$render($$result, {}, {}, {
                           })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-96" }, {}, {
                             default: () => {
-                              return `<input type="${"file"}" id="${"RemoteCertUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}">`;
+                              return `<label for="CACertUpload" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg">Choose File</label>
+      <input type="file" id="CACertUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" style="display: none;">
+      <span class="pl-4">${escape(fileCACertName)}</span>`;
                             }
                           })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-36" }, {}, {
@@ -306,7 +314,9 @@ ${validate_component(TableBodyRow, "TableBodyRow").$$render($$result, {}, {}, {
                           })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-96" }, {}, {
                             default: () => {
-                              return `<input type="${"file"}" id="${"RemoteCertUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}">`;
+                              return `<label for="RemoteCertUpload" class="text-center font-medium focus:ring-4 focus:outline-none inline-flex items-center justify-center px-5 py-2.5 text-sm text-white bg-gray-800 hover:bg-gray-900 focus:ring-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 rounded-lg">Choose File</label>
+      <input type="file" id="RemoteCertUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400" style="display: none;">
+      <span class="pl-4">${escape(fileRemoteCertName)}</span>`;
                             }
                           })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-36" }, {}, {
@@ -396,7 +406,7 @@ ${validate_component(TableBodyRow, "TableBodyRow").$$render($$result, {}, {}, {
                           })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-96" }, {}, {
                             default: () => {
-                              return `<input type="${"file"}" id="${"crlUpload"}" class="${"block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400"}">`;
+                              return `<input type="file" id="crlUpload" class="block w-full disabled:cursor-not-allowed disabled:opacity-50 focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500 bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-600 p-2.5 text-sm rounded-lg border !p-0 dark:text-gray-400">`;
                             }
                           })}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "w-36" }, {}, {

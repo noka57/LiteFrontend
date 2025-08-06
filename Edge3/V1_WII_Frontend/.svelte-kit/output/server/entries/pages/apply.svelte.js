@@ -1,13 +1,13 @@
-import { c as create_ssr_component, b as compute_rest_props, d as spread, f as escape_object, h as escape_attribute_value, p as is_void, v as validate_component, o as each, e as escape } from "../../_app/immutable/chunks/index-a89b87ed.js";
+import { c as create_ssr_component, b as compute_rest_props, d as spread, f as escape_object, h as escape_attribute_value, p as is_void, v as validate_component, o as each, e as escape } from "../../_app/immutable/chunks/index-54377ec4.js";
 import classNames from "classnames";
-import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
-/* empty css                                                                            */import { M as Modal } from "../../_app/immutable/chunks/Modal-ea7df515.js";
-import { S as Spinner } from "../../_app/immutable/chunks/Spinner-337e42f7.js";
+import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
+/* empty css                                                                            */import { M as Modal } from "../../_app/immutable/chunks/Modal-de764e50.js";
+import { S as Spinner } from "../../_app/immutable/chunks/Spinner-5981a62c.js";
 import { sessionidG } from "../endpoints/sessionG.js";
-import { ChangedLANConfig, ChangedNATConfig, ChangedFirewallConfig, ChangedStaticRouteConfig, ChangedMaintenanceConfig, ChangedConfigurationConfig, ChangedOperationConfig, ChangedDockerConfig, ChangedWANConfig, ewanWebInputFlag, cwanWebInputFlag, ChangedIPsecConfig, ChangedOpenVPNConfig, ChangedGenericMQTTConfig, ChangedAzureConfig, ChangedAWSIoTcoreConfig, ChangedRemoteServiceConfig, ChangedPortConnectionConfig, ChangedCertificateConfig, ChangedModbusConfig, ChangedSDataLoggerConfig, ChangedEventEngineConfig, ChangedDataTagProConfig, DataTagPro_ULRule_ConfigChangedLog, DataTagPro_TagRuleEvent_ConfigChangedLog, DataTagPro_TagRuleSCADA_ConfigChangedLog, DataTagPro_TagRuleDM_ConfigChangedLog, DataTagPro_TagRuleTOU_ConfigChangedLog, DataTagPro_TagRuleAccumulated_ConfigChangedLog, DataTagPro_TagRuleCalculation_ConfigChangedLog, DataTagPro_TagRuleC2D_ConfigChangedLog, DataTagPro_TagRuleSchedule_ConfigChangedLog, DataTagPro_General_ConfigChangedLog, EventEngine_General_ConfigChangedLog, EventEngine_Rule_ConfigChangedLog, EventEngine_TriggerSMS_ConfigChangedLog, EventEngine_TriggerDI_ConfigChangedLog, EventEngine_TriggerModbus_ConfigChangedLog, EventEngine_TriggerTCPMsg_ConfigChangedLog, EventEngine_TriggerMQTT_ConfigChangedLog, EventEngine_TriggerPING_ConfigChangedLog, EventEngine_TriggerRSSI_ConfigChangedLog, EventEngine_ActionSMS_ConfigChangedLog, EventEngine_ActionEmail_ConfigChangedLog, EventEngine_ActionDO_ConfigChangedLog, EventEngine_ActionModbus_ConfigChangedLog, EventEngine_ActionTCPMsg_ConfigChangedLog, EventEngine_ActionMQTT_ConfigChangedLog, EventEngine_ActionLINE_ConfigChangedLog, SDatalogger_General_ConfigChangedLog, SDatalogger_ProxyMode_Edge_ConfigChangedLog, SDatalogger_ProxyMode_Cloud_ConfigChangedLog, SDatalogger_ProxyMode_Topic_ConfigChangedLog, SDatalogger_MonitorMode_Edge_ConfigChangedLog, SDatalogger_MonitorMode_Cloud_ConfigChangedLog, SDatalogger_MonitorMode_Topic_ConfigChangedLog, Certificate_Settings_ConfigChangedLog, ModbusGateway_TtR_ConfigChangedLog, ModbusGateway_RtT_ConfigChangedLog, ModbusGateway_RtR_ConfigChangedLog, ModbusGateway_TtT_ConfigChangedLog, ModbusDataModel_Slave_ConfigChangedLog, ModbusTag_ConfigChangedLog, ModbusTCP_Slave_ConfigChangedLog, ModbusTCP_Master_ConfigChangedLog, ModbusRTU_Slave_ConfigChangedLog, ModbusRTU_Master_ConfigChangedLog, PortConnection_LAN_ConfigChangedLog, PortConnection_COM_ConfigChangedLog, PortConnection_Transparent_ConfigChangedLog, RemoteServiceConfigMqttChangedLog, RemoteServiceConfigRestfulChangedLog, RemoteServiceConfigRemoteControlChangedLog, GenericMQTTConfigChangedLog, AzHub_ConfigChangedLog, AzHubDPS_ConfigChangedLog, AzCentral_ConfigChangedLog, AWSIoTcoreConfigChangedLog, OpenVPN_Client_Advanced_PFW_ConfigChangedLog, OpenVPN_Client_Advanced_PSK_ConfigChangedLog, OpenVPN_Client_Advanced_RNA_ConfigChangedLog, OpenVPN_Client_Advanced_FO_ConfigChangedLog, OpenVPN_Client_Conn_ConfigChangedLog, OpenVPN_Server_Advanced_CCD_ConfigChangedLog, OpenVPN_Server_Advanced_PSK_ConfigChangedLog, OpenVPN_Server_Advanced_PFW_ConfigChangedLog, OpenVPN_Server_Conn_ConfigChangedLog, OpenVPN_Basic_ConfigChangedLog, IPsec_Responder_Conn_ConfigChangedLog, IPsec_Initiator_Conn_General_ConfigChangedLog, IPsec_Initiator_Conn_Subnet_ConfigChangedLog, IPsec_Basic_ConfigChangedLog, WAN_CWAN1_BASIC_ConfigChangedLog, WAN_CWAN1_Advanced_ConfigChangedLog, WAN_CWAN1_SimPolicy_ConfigChangedLog, WAN_CWAN1_GLink_ConfigChangedLog, WAN_EWAN1_Basic_ConfigChangedLog, WAN_EWAN1_EWLAP_ConfigChangedLog, WAN_RedundancyPolicy_ConfigChangedLog, WAN_FareSavingPolicy_ConfigChangedLog, WAN_PORT_SWITCH_ConfigChangedLog, LanConfigChangedLog, DHCPServerLANConfigLog, NAT_LoopBack_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_Dmz_ConfigChangedLog, Firewall_General_ConfigChangedLog, Firewall_IPFilter_ConfigChangedLog, Firewall_MACFilter_ConfigChangedLog, StaticRouteConfigChangedLog, MaintenanceConfigChangedLog, ConfigurationP2EConfigChangedLog, OperationConfigChangedLog, DockerConfigChangedLog } from "../endpoints/configG.js";
-import "../../_app/immutable/chunks/Frame-cafee768.js";
-import "../../_app/immutable/chunks/CloseButton-88212a62.js";
-import "../../_app/immutable/chunks/index-b74adbb6.js";
+import { ChangedWiFiConfig, ChangedSConfigConfig, ChangedLANConfig, ChangedNATConfig, ChangedFirewallConfig, ChangedStaticRouteConfig, ChangedMaintenanceConfig, ChangedConfigurationConfig, ChangedOperationConfig, ChangedDockerConfig, ChangedWANConfig, ewanWebInputFlag, cwanWebInputFlag, ChangedIPsecConfig, ChangedOpenVPNConfig, ChangedGenericMQTTConfig, ChangedAzureConfig, ChangedAWSIoTcoreConfig, ChangedRemoteServiceConfig, ChangedPortConnectionConfig, ChangedCertificateConfig, ChangedModbusConfig, ChangedSDataLoggerConfig, ChangedEventEngineConfig, ChangedDataTagProConfig, WiFi_11ah_ConfigChangedLog, WiFi_11ah_General_ConfigChangedLog, Conversion_Opcua2Modbus_ConfigChangedLog, Conversion_OpcuaGateway_ConfigChangedLog, OPCUA_Server_ConfigChangedLog, OPCUA_Client_ConfigChangedLog, DataTagPro_ULRule_ConfigChangedLog, DataTagPro_TagRuleEvent_ConfigChangedLog, DataTagPro_TagRuleSCADA_ConfigChangedLog, DataTagPro_TagRuleDM_ConfigChangedLog, DataTagPro_TagRuleTOU_ConfigChangedLog, DataTagPro_TagRuleAccumulated_ConfigChangedLog, DataTagPro_TagRuleCalculation_ConfigChangedLog, DataTagPro_TagRuleC2D_ConfigChangedLog, DataTagPro_TagRuleSchedule_ConfigChangedLog, DataTagPro_General_ConfigChangedLog, EventEngine_General_ConfigChangedLog, EventEngine_Rule_ConfigChangedLog, EventEngine_TriggerSMS_ConfigChangedLog, EventEngine_TriggerDI_ConfigChangedLog, EventEngine_TriggerModbus_ConfigChangedLog, EventEngine_TriggerTCPMsg_ConfigChangedLog, EventEngine_TriggerMQTT_ConfigChangedLog, EventEngine_TriggerPING_ConfigChangedLog, EventEngine_TriggerRSSI_ConfigChangedLog, EventEngine_ActionSMS_ConfigChangedLog, EventEngine_ActionEmail_ConfigChangedLog, EventEngine_ActionDO_ConfigChangedLog, EventEngine_ActionModbus_ConfigChangedLog, EventEngine_ActionTCPMsg_ConfigChangedLog, EventEngine_ActionMQTT_ConfigChangedLog, EventEngine_ActionLINE_ConfigChangedLog, SDatalogger_General_ConfigChangedLog, SDatalogger_ProxyMode_Edge_ConfigChangedLog, SDatalogger_ProxyMode_Cloud_ConfigChangedLog, SDatalogger_ProxyMode_Topic_ConfigChangedLog, SDatalogger_MonitorMode_Edge_ConfigChangedLog, SDatalogger_MonitorMode_Cloud_ConfigChangedLog, SDatalogger_MonitorMode_Topic_ConfigChangedLog, Certificate_Settings_ConfigChangedLog, ModbusGateway_TtR_ConfigChangedLog, ModbusGateway_RtT_ConfigChangedLog, ModbusGateway_RtR_ConfigChangedLog, ModbusGateway_TtT_ConfigChangedLog, ModbusDataModel_Slave_ConfigChangedLog, ModbusTag_ConfigChangedLog, ModbusTCP_Slave_ConfigChangedLog, ModbusTCP_Master_ConfigChangedLog, ModbusRTU_Slave_ConfigChangedLog, ModbusRTU_Master_ConfigChangedLog, PortConnection_LAN_ConfigChangedLog, PortConnection_COM_ConfigChangedLog, PortConnection_Transparent_ConfigChangedLog, RemoteServiceConfigMqttChangedLog, RemoteServiceConfigRestfulChangedLog, RemoteServiceConfigRemoteControlChangedLog, GenericMQTTConfigChangedLog, AzHub_ConfigChangedLog, AzHubDPS_ConfigChangedLog, AzCentral_ConfigChangedLog, AWSIoTcoreConfigChangedLog, OpenVPN_Client_Advanced_PFW_ConfigChangedLog, OpenVPN_Client_Advanced_PSK_ConfigChangedLog, OpenVPN_Client_Advanced_RNA_ConfigChangedLog, OpenVPN_Client_Advanced_FO_ConfigChangedLog, OpenVPN_Client_Conn_ConfigChangedLog, OpenVPN_Server_Advanced_CCD_ConfigChangedLog, OpenVPN_Server_Advanced_PSK_ConfigChangedLog, OpenVPN_Server_Advanced_PFW_ConfigChangedLog, OpenVPN_Server_Conn_ConfigChangedLog, OpenVPN_Basic_ConfigChangedLog, IPsec_Responder_Conn_ConfigChangedLog, IPsec_Initiator_Conn_General_ConfigChangedLog, IPsec_Initiator_Conn_Subnet_ConfigChangedLog, IPsec_Basic_ConfigChangedLog, WAN_CWAN1_BASIC_ConfigChangedLog, WAN_CWAN1_Advanced_ConfigChangedLog, WAN_CWAN1_SimPolicy_ConfigChangedLog, WAN_CWAN1_GLink_ConfigChangedLog, WAN_EWAN1_Basic_ConfigChangedLog, WAN_EWAN1_EWLAP_ConfigChangedLog, WAN_RedundancyPolicy_ConfigChangedLog, WAN_FareSavingPolicy_ConfigChangedLog, WAN_PORT_SWITCH_ConfigChangedLog, LanConfigChangedLog, DHCPServerLANConfigLog, NAT_LoopBack_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_Dmz_ConfigChangedLog, Firewall_General_ConfigChangedLog, Firewall_IPFilter_ConfigChangedLog, Firewall_MACFilter_ConfigChangedLog, StaticRouteConfigChangedLog, MaintenanceConfigChangedLog, ConfigurationP2EConfigChangedLog, OperationConfigChangedLog, DockerConfigChangedLog } from "../endpoints/configG.js";
+import "../../_app/immutable/chunks/Frame-c602be1d.js";
+import "../../_app/immutable/chunks/CloseButton-dd962073.js";
+import "../../_app/immutable/chunks/index-df2ccd83.js";
 const Heading = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$restProps = compute_rest_props($$props, ["tag", "color", "customSize"]);
   let { tag = "h1" } = $$props;
@@ -90,6 +90,12 @@ const List = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 let color = "text-blue-600 dark:text-gray-400";
 const Apply = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let defaultModal = false;
+  let wifi_11ah_changedValues = [];
+  let wifi_11ah_general_changedValues = [];
+  let opcua_server_changedValues = [];
+  let opcua_client_changedValues = [];
+  let conversion_opcua2modbus_changedValues = [];
+  let conversion_opcuagateway_changedValues = [];
   let LANchangedValues = [];
   let dhcpServerChangedValues = [];
   let NAT_loopback_changedValues = [];
@@ -185,6 +191,10 @@ const Apply = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let event_engine_action_line_changeValues = [];
   sessionidG.subscribe((val) => {
   });
+  ChangedWiFiConfig.subscribe((val) => {
+  });
+  ChangedSConfigConfig.subscribe((val) => {
+  });
   ChangedLANConfig.subscribe((val) => {
   });
   ChangedNATConfig.subscribe((val) => {
@@ -230,6 +240,24 @@ const Apply = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   ChangedEventEngineConfig.subscribe((val) => {
   });
   ChangedDataTagProConfig.subscribe((val) => {
+  });
+  WiFi_11ah_ConfigChangedLog.subscribe((val) => {
+    wifi_11ah_changedValues = val;
+  });
+  WiFi_11ah_General_ConfigChangedLog.subscribe((val) => {
+    wifi_11ah_general_changedValues = val;
+  });
+  Conversion_Opcua2Modbus_ConfigChangedLog.subscribe((val) => {
+    conversion_opcua2modbus_changedValues = val;
+  });
+  Conversion_OpcuaGateway_ConfigChangedLog.subscribe((val) => {
+    conversion_opcuagateway_changedValues = val;
+  });
+  OPCUA_Server_ConfigChangedLog.subscribe((val) => {
+    opcua_server_changedValues = val;
+  });
+  OPCUA_Client_ConfigChangedLog.subscribe((val) => {
+    opcua_client_changedValues = val;
   });
   DataTagPro_ULRule_ConfigChangedLog.subscribe((val) => {
     data_tag_pro_ul_changedValues = val;
@@ -511,7 +539,7 @@ const Apply = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$rendered;
   do {
     $$settled = true;
-    $$rendered = `<div class="${"text-center"}">${validate_component(Heading, "Heading").$$render(
+    $$rendered = `<div class="text-center">${validate_component(Heading, "Heading").$$render(
       $$result,
       {
         tag: "h2",
@@ -3047,6 +3075,216 @@ ${basic_changedValues.length != 0 || responder_conn_changedValues.length != 0 ||
             }
           })}` : ``}
 
+${wifi_11ah_changedValues.length != 0 || wifi_11ah_general_changedValues.length != 0 ? `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+            default: () => {
+              return `WiFi
+ ${wifi_11ah_changedValues.length != 0 ? `${validate_component(List, "List").$$render(
+                $$result,
+                {
+                  tag: "ol",
+                  class: "pl-5 mt-2 space-y-1 text-blue-400"
+                },
+                {},
+                {
+                  default: () => {
+                    return `${each(wifi_11ah_changedValues, (item) => {
+                      return `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                        default: () => {
+                          return `${escape(item)}`;
+                        }
+                      })}`;
+                    })}`;
+                  }
+                }
+              )}` : ``}
+ ${wifi_11ah_general_changedValues.length != 0 ? `${validate_component(List, "List").$$render(
+                $$result,
+                {
+                  tag: "ol",
+                  class: "pl-5 mt-2 space-y-1 text-blue-400"
+                },
+                {},
+                {
+                  default: () => {
+                    return `${each(wifi_11ah_general_changedValues, (item) => {
+                      return `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                        default: () => {
+                          return `${escape(item)}`;
+                        }
+                      })}`;
+                    })}`;
+                  }
+                }
+              )}` : ``}`;
+            }
+          })}` : ``}
+
+
+${opcua_server_changedValues.length != 0 || opcua_client_changedValues.length != 0 || conversion_opcua2modbus_changedValues.length != 0 || conversion_opcuagateway_changedValues.length != 0 ? `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+            default: () => {
+              return `Smart Conversion
+${opcua_server_changedValues.length != 0 || opcua_client_changedValues.length != 0 ? `${validate_component(List, "List").$$render(
+                $$result,
+                {
+                  tag: "ol",
+                  class: "pl-5 mt-2 space-y-1 text-blue-400"
+                },
+                {},
+                {
+                  default: () => {
+                    return `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                      default: () => {
+                        return `OPCUA
+    ${validate_component(List, "List").$$render(
+                          $$result,
+                          {
+                            tag: "ol",
+                            class: "pl-5 mt-2 space-y-1 text-red-600"
+                          },
+                          {},
+                          {
+                            default: () => {
+                              return `${opcua_server_changedValues.length != 0 ? `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                                default: () => {
+                                  return `Server
+
+${validate_component(List, "List").$$render(
+                                    $$result,
+                                    {
+                                      tag: "ol",
+                                      class: "pl-5 mt-2 space-y-1 text-green-900"
+                                    },
+                                    {},
+                                    {
+                                      default: () => {
+                                        return `${each(opcua_server_changedValues, (item) => {
+                                          return `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                                            default: () => {
+                                              return `${escape(item)}`;
+                                            }
+                                          })}`;
+                                        })}`;
+                                      }
+                                    }
+                                  )}`;
+                                }
+                              })}` : ``}
+
+        ${opcua_client_changedValues.length != 0 ? `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                                default: () => {
+                                  return `Client
+${validate_component(List, "List").$$render(
+                                    $$result,
+                                    {
+                                      tag: "ol",
+                                      class: "pl-5 mt-2 space-y-1 text-green-900"
+                                    },
+                                    {},
+                                    {
+                                      default: () => {
+                                        return `${each(opcua_client_changedValues, (item) => {
+                                          return `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                                            default: () => {
+                                              return `${escape(item)}`;
+                                            }
+                                          })}`;
+                                        })}`;
+                                      }
+                                    }
+                                  )}`;
+                                }
+                              })}` : ``}`;
+                            }
+                          }
+                        )}`;
+                      }
+                    })}`;
+                  }
+                }
+              )}` : ``}
+
+${conversion_opcua2modbus_changedValues.length != 0 || conversion_opcuagateway_changedValues.length != 0 ? `${validate_component(List, "List").$$render(
+                $$result,
+                {
+                  tag: "ol",
+                  class: "pl-5 mt-2 space-y-1 text-blue-400"
+                },
+                {},
+                {
+                  default: () => {
+                    return `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                      default: () => {
+                        return `Conversion
+    ${validate_component(List, "List").$$render(
+                          $$result,
+                          {
+                            tag: "ol",
+                            class: "pl-5 mt-2 space-y-1 text-red-600"
+                          },
+                          {},
+                          {
+                            default: () => {
+                              return `${conversion_opcua2modbus_changedValues.length != 0 ? `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                                default: () => {
+                                  return `OPCUA Server To Modbus
+${validate_component(List, "List").$$render(
+                                    $$result,
+                                    {
+                                      tag: "ol",
+                                      class: "pl-5 mt-2 space-y-1 text-green-900"
+                                    },
+                                    {},
+                                    {
+                                      default: () => {
+                                        return `${each(conversion_opcua2modbus_changedValues, (item) => {
+                                          return `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                                            default: () => {
+                                              return `${escape(item)}`;
+                                            }
+                                          })}`;
+                                        })}`;
+                                      }
+                                    }
+                                  )}`;
+                                }
+                              })}` : ``}
+
+        ${conversion_opcuagateway_changedValues.length != 0 ? `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                                default: () => {
+                                  return `OPCUA Server To OPCUA Client
+${validate_component(List, "List").$$render(
+                                    $$result,
+                                    {
+                                      tag: "ol",
+                                      class: "pl-5 mt-2 space-y-1 text-green-900"
+                                    },
+                                    {},
+                                    {
+                                      default: () => {
+                                        return `${each(conversion_opcuagateway_changedValues, (item) => {
+                                          return `${validate_component(Li, "Li").$$render($$result, {}, {}, {
+                                            default: () => {
+                                              return `${escape(item)}`;
+                                            }
+                                          })}`;
+                                        })}`;
+                                      }
+                                    }
+                                  )}`;
+                                }
+                              })}` : ``}`;
+                            }
+                          }
+                        )}`;
+                      }
+                    })}`;
+                  }
+                }
+              )}` : ``}`;
+            }
+          })}` : ``}
+
+
 ${cwan1_basic_changedValues.length != 0 || cwan1_advanced_changedValues.length != 0 || cwan1_simpolicy_changedValues.length != 0 || cwan1_glink_changedValues.length != 0 || ewan1_basic_changedValues.length != 0 || ewan1_ewlap_changedValues.length != 0 || redundancy_policy_changedValues.length != 0 || faresaving_policy_changedValues.length != 0 || port_switch_changedValues.length != 0 ? `${validate_component(Li, "Li").$$render($$result, {}, {}, {
             default: () => {
               return `WAN
@@ -3624,6 +3862,9 @@ ${NAT_loopback_changedValues.length != 0 || NAT_virtualServer_changedValues.leng
           })}` : ``}
 
 
+
+
+
 ${Firewall_general_changedValues.length != 0 || Firewall_ipfilter_changedValues.length != 0 || Firewall_macfilter_changedValues.length != 0 ? `${validate_component(Li, "Li").$$render($$result, {}, {}, {
             default: () => {
               return `Firewall
@@ -3868,7 +4109,7 @@ ${docker_changedValues.length != 0 ? `${validate_component(Li, "Li").$$render($$
         }
       }
     )}</div>
-<div class="${"pt-10 pl-10 text-center"}">${data_tag_pro_general_changedValues.length != 0 || data_tag_pro_tag_c2d_changedValues.length != 0 || data_tag_pro_tag_calculation_changedValues.length != 0 || data_tag_pro_tag_accumulated_changedValues.length != 0 || data_tag_pro_tag_tou_changedValues.length != 0 || data_tag_pro_tag_dm_changedValues.length != 0 || data_tag_pro_tag_scada_changedValues.length != 0 || data_tag_pro_tag_schedule_changedValues.length != 0 || data_tag_pro_tag_event_changedValues.length != 0 || data_tag_pro_ul_changedValues.length != 0 || event_engine_action_line_changeValues.length != 0 || event_engine_action_mqtt_changeValues.length != 0 || event_engine_action_tcpmsg_changeValues.length != 0 || event_engine_action_modbus_changeValues.length != 0 || event_engine_action_do_changeValues.length != 0 || event_engine_action_email_changeValues.length != 0 || event_engine_action_sms_changeValues.length != 0 || event_engine_trigger_rssi_changeValues.length != 0 || event_engine_trigger_ping_changeValues.length != 0 || event_engine_trigger_mqtt_changeValues.length != 0 || event_engine_trigger_tcpmsg_changeValues.length != 0 || event_engine_trigger_modbus_changeValues.length != 0 || event_engine_trigger_di_changeValues.length != 0 || event_engine_trigger_sms_changeValues.length != 0 || event_engine_general_changedValues.length != 0 || event_engine_rule_changedValues.length != 0 || sdata_logger_general_changedValues.length != 0 || sdata_logger_proxy_edge_changedValues.length != 0 || sdata_logger_proxy_cloud_changedValues.length != 0 || sdata_logger_proxy_topic_changedValues.length != 0 || sdata_logger_monitor_edge_changedValues.length != 0 || sdata_logger_monitor_cloud_changedValues.length != 0 || sdata_logger_monitor_topic_changedValues.length != 0 || modbus_gateway_TtR_changedValues.length != 0 || modbus_gateway_RtT_changedValues.length != 0 || modbus_gateway_RtR_changedValues.length != 0 || modbus_gateway_TtT_changedValues.length != 0 || modbus_data_model_master_changedValues.length != 0 || modbus_data_model_slave_changedValues.length != 0 || modbus_tcp_master_changedValues.length != 0 || modbus_tcp_slave_changedValues.length != 0 || modbus_rtu_master_changedValues.length != 0 || modbus_rtu_slave_changedValues.length != 0 || modbus_tag_changedValues.length != 0 || LANchangedValues.length != 0 || dhcpServerChangedValues.length != 0 || NAT_loopback_changedValues.length != 0 || NAT_virtualServer_changedValues.length != 0 || NAT_virtualComputer_changedValues.length != 0 || NAT_dmz_changedValues.length != 0 || Firewall_general_changedValues.length != 0 || Firewall_ipfilter_changedValues.length != 0 || Firewall_macfilter_changedValues.length != 0 || staticR_changedValues.length != 0 || maintenance_changedValues.length != 0 || configuration_p2e_changedValues.length != 0 || operation_changedValues.length != 0 || docker_changedValues.length != 0 || cwan1_basic_changedValues != 0 || cwan1_advanced_changedValues != 0 || cwan1_simpolicy_changedValues != 0 || cwan1_glink_changedValues.length != 0 || ewan1_basic_changedValues.length != 0 || ewan1_ewlap_changedValues.length != 0 || redundancy_policy_changedValues.length != 0 || faresaving_policy_changedValues.length != 0 || port_switch_changedValues.length != 0 || basic_changedValues.length != 0 || responder_conn_changedValues.length != 0 || initiator_conn_general_changedValues.length != 0 || initiator_conn_subnet_changedValues.length != 0 || openvpn_basic_changedValues.length != 0 || openvpn_server_conn_changedValues.length != 0 || openvpn_client_conn_changedValues.length != 0 || openvpn_server_advanced_ccd_changedValues.length != 0 || openvpn_server_advanced_psk_changedValues.length != 0 || openvpn_server_advanced_pfw_changedValues.length != 0 || openvpn_client_advanced_pfw_changedValues.length != 0 || openvpn_client_advanced_psk_changedValues.length != 0 || openvpn_client_advanced_rna_changedValues.length != 0 || openvpn_client_advanced_fo_changedValues.length != 0 || generic_mqtt_changedValues.length != 0 || azhub_changedValues.length != 0 || azhubdps_changedValues.length != 0 || azcentral_changedValues.length != 0 || awsIoT_core_changedValues.length != 0 || remote_service_mqtt_changedValues.length != 0 || remote_service_restful_changedValues.length != 0 || remote_service_remote_control_changedValues.length != 0 || port_connection_lan_changedValues.length != 0 || port_connection_com_changedValues.length != 0 || port_connection_transparent_changedValues.length != 0 || certificate_settings_changedValues.length != 0 ? `${validate_component(Button, "Button").$$render($$result, {}, {}, {
+<div class="pt-10 pl-10 text-center">${wifi_11ah_changedValues.length != 0 || wifi_11ah_general_changedValues.length != 0 || opcua_server_changedValues.length != 0 || opcua_client_changedValues.length != 0 || conversion_opcua2modbus_changedValues.length != 0 || conversion_opcuagateway_changedValues.length != 0 || data_tag_pro_general_changedValues.length != 0 || data_tag_pro_tag_c2d_changedValues.length != 0 || data_tag_pro_tag_calculation_changedValues.length != 0 || data_tag_pro_tag_accumulated_changedValues.length != 0 || data_tag_pro_tag_tou_changedValues.length != 0 || data_tag_pro_tag_dm_changedValues.length != 0 || data_tag_pro_tag_scada_changedValues.length != 0 || data_tag_pro_tag_schedule_changedValues.length != 0 || data_tag_pro_tag_event_changedValues.length != 0 || data_tag_pro_ul_changedValues.length != 0 || event_engine_action_line_changeValues.length != 0 || event_engine_action_mqtt_changeValues.length != 0 || event_engine_action_tcpmsg_changeValues.length != 0 || event_engine_action_modbus_changeValues.length != 0 || event_engine_action_do_changeValues.length != 0 || event_engine_action_email_changeValues.length != 0 || event_engine_action_sms_changeValues.length != 0 || event_engine_trigger_rssi_changeValues.length != 0 || event_engine_trigger_ping_changeValues.length != 0 || event_engine_trigger_mqtt_changeValues.length != 0 || event_engine_trigger_tcpmsg_changeValues.length != 0 || event_engine_trigger_modbus_changeValues.length != 0 || event_engine_trigger_di_changeValues.length != 0 || event_engine_trigger_sms_changeValues.length != 0 || event_engine_general_changedValues.length != 0 || event_engine_rule_changedValues.length != 0 || sdata_logger_general_changedValues.length != 0 || sdata_logger_proxy_edge_changedValues.length != 0 || sdata_logger_proxy_cloud_changedValues.length != 0 || sdata_logger_proxy_topic_changedValues.length != 0 || sdata_logger_monitor_edge_changedValues.length != 0 || sdata_logger_monitor_cloud_changedValues.length != 0 || sdata_logger_monitor_topic_changedValues.length != 0 || modbus_gateway_TtR_changedValues.length != 0 || modbus_gateway_RtT_changedValues.length != 0 || modbus_gateway_RtR_changedValues.length != 0 || modbus_gateway_TtT_changedValues.length != 0 || modbus_data_model_master_changedValues.length != 0 || modbus_data_model_slave_changedValues.length != 0 || modbus_tcp_master_changedValues.length != 0 || modbus_tcp_slave_changedValues.length != 0 || modbus_rtu_master_changedValues.length != 0 || modbus_rtu_slave_changedValues.length != 0 || modbus_tag_changedValues.length != 0 || LANchangedValues.length != 0 || dhcpServerChangedValues.length != 0 || NAT_loopback_changedValues.length != 0 || NAT_virtualServer_changedValues.length != 0 || NAT_virtualComputer_changedValues.length != 0 || NAT_dmz_changedValues.length != 0 || Firewall_general_changedValues.length != 0 || Firewall_ipfilter_changedValues.length != 0 || Firewall_macfilter_changedValues.length != 0 || staticR_changedValues.length != 0 || maintenance_changedValues.length != 0 || configuration_p2e_changedValues.length != 0 || operation_changedValues.length != 0 || docker_changedValues.length != 0 || cwan1_basic_changedValues != 0 || cwan1_advanced_changedValues != 0 || cwan1_simpolicy_changedValues != 0 || cwan1_glink_changedValues.length != 0 || ewan1_basic_changedValues.length != 0 || ewan1_ewlap_changedValues.length != 0 || redundancy_policy_changedValues.length != 0 || faresaving_policy_changedValues.length != 0 || port_switch_changedValues.length != 0 || basic_changedValues.length != 0 || responder_conn_changedValues.length != 0 || initiator_conn_general_changedValues.length != 0 || initiator_conn_subnet_changedValues.length != 0 || openvpn_basic_changedValues.length != 0 || openvpn_server_conn_changedValues.length != 0 || openvpn_client_conn_changedValues.length != 0 || openvpn_server_advanced_ccd_changedValues.length != 0 || openvpn_server_advanced_psk_changedValues.length != 0 || openvpn_server_advanced_pfw_changedValues.length != 0 || openvpn_client_advanced_pfw_changedValues.length != 0 || openvpn_client_advanced_psk_changedValues.length != 0 || openvpn_client_advanced_rna_changedValues.length != 0 || openvpn_client_advanced_fo_changedValues.length != 0 || generic_mqtt_changedValues.length != 0 || azhub_changedValues.length != 0 || azhubdps_changedValues.length != 0 || azcentral_changedValues.length != 0 || awsIoT_core_changedValues.length != 0 || remote_service_mqtt_changedValues.length != 0 || remote_service_restful_changedValues.length != 0 || remote_service_remote_control_changedValues.length != 0 || port_connection_lan_changedValues.length != 0 || port_connection_com_changedValues.length != 0 || port_connection_transparent_changedValues.length != 0 || certificate_settings_changedValues.length != 0 ? `${validate_component(Button, "Button").$$render($$result, {}, {}, {
       default: () => {
         return `Apply and Restart`;
       }
@@ -3892,11 +4133,11 @@ ${validate_component(Modal, "Modal").$$render(
         default: () => {
           return `${``}
 
-<table>${`${`<tr><td><svg class="${"w-16 h-16"}" aria-hidden="${"true"}" fill="${"none"}" stroke="${"currentColor"}" stroke-width="${"1.5"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}"><path d="${"M4.5 12.75l6 6 9-13.5"}" stroke-linecap="${"round"}" stroke-linejoin="${"round"}"></path></svg></td>
-<td><p class="${"pl-5"}" style="${"color:red; font-size:18px"}">It&#39;s valid configuration.
+<table>${`${`<tr><td><svg class="w-16 h-16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></td>
+<td><p class="pl-5" style="color:red; font-size:18px">It&#39;s valid configuration.
 </p></td></tr>
-<tr>${`<td class="${"pt-5"}">${validate_component(Spinner, "Spinner").$$render($$result, { size: 16 }, {}, {})}</td> 
-<td class="${"pt-5"}"><p class="${"pl-5"}" style="${"color:red; font-size:18px"}">Applying configuration and restart ....
+<tr>${`<td class="pt-5">${validate_component(Spinner, "Spinner").$$render($$result, { size: 16 }, {}, {})}</td> 
+<td class="pt-5"><p class="pl-5" style="color:red; font-size:18px">Applying configuration and restart ....
 </p></td>`}</tr>`}`}
 
 

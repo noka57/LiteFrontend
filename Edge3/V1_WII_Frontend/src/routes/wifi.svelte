@@ -543,10 +543,158 @@
 
 
  <TabItem title="WiFi5">
+
+
+
+
+<table>   
+ <tr>
+    <td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
+    <Toggle class="w-60" bind:checked={changed_wifi_data.config.wifi_wifi5.enable}></Toggle>
+</tr>
+</table>
+
+
+{#if changed_wifi_data.config.wifi_wifi5.enable}
+
+<table>
+
+<tr><td class="w-60"></td>
+<td class="w-20"></td>
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+
+<label class="font-medium block text-gray-900 dark:text-gray-300 flex items-center"><input type="radio" bind:group={changed_wifi_data.config.wifi_wifi5.type} value={0} class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-700 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">2.4G AP</label> <label class="font-medium block text-gray-900 dark:text-gray-300 flex items-center"><input type="radio" bind:group={changed_wifi_data.config.wifi_wifi5.type} value={1} class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-700 dark:border-gray-600 text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">5G AP</label>
+</div></td>
+</tr>
+
+
+<tr><td class="w-60"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SSID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={changed_wifi_data.config.wifi_wifi5.ssid}></td>
+<td class="pl-5 pt-5">
+
+</td>
+
+</tr>
+
+<tr><td class="w-60"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Region</p></td><td class="pl-5 pt-5">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-3 w-48" bind:value={changed_wifi_data.config.wifi_wifi5.region}>
+<option value={1}>EU</option>
+<option value={0}>US</option>
+</select>
+
+      </td>
+
+</tr>
+
+
+
+<tr><td class="w-60"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Channel</p></td><td class="pl-5 pt-5">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-3 w-48" bind:value={changed_wifi_data.config.wifi_wifi5.channel}>
+
+{#if changed_wifi_data.config.wifi_wifi5.region==0}
+
+<option value={1}>1</option>
+<option value={3}>3</option>
+<option value={5}>5</option>
+<option value={7}>7</option>
+<option value={9}>9</option>
+<option value={11}>11</option>
+<option value={13}>13</option>
+<option value={15}>15</option>
+<option value={17}>17</option>
+<option value={19}>19</option>
+<option value={21}>21</option>
+<option value={23}>23</option>
+<option value={25}>25</option>
+<option value={27}>27</option>
+<option value={29}>29</option>
+<option value={31}>31</option>
+<option value={33}>33</option>
+<option value={35}>35</option>
+<option value={37}>37</option>
+<option value={39}>39</option>
+<option value={41}>41</option>
+<option value={43}>43</option>
+<option value={45}>45</option>
+<option value={47}>47</option>
+<option value={49}>49</option>
+<option value={51}>51</option>
+
+
+
+{:else if changed_wifi_data.config.wifi_wifi5.region==1}
+<option value={40}>40</option>
+
+{/if}
+
+
+</select>
+
+      </td>
+
+</tr>
+
+
+
+<tr><td class="w-60"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Encryption</p></td><td class="pl-5 pt-5">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-3 w-48">
+<option value={0}>WPA3</option>
+</select>
+
+      </td>
+
+</tr>
+
+
+<tr><td class="w-60"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={changed_wifi_data.config.wifi_wifi5.password}></td>
+
+</tr>
+
+
+
+
+</table>
+
+
+{/if}
+
+
+
+
    </TabItem>
 
 
  <TabItem title="Bluetooth">
+   
+
+<table>   
+ <tr>
+    <td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
+    <Toggle class="w-60" bind:checked={changed_wifi_data.config.wifi_bluetooth.enable}></Toggle>
+</tr>
+</table>
+
+{#if changed_wifi_data.config.wifi_bluetooth.enable}
+
+<table>
+
+
+
+<tr><td class="w-60"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">SSID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={changed_wifi_data.config.wifi_bluetooth.ssid}></td>
+<td class="pl-5 pt-5">
+
+</td>
+
+</tr>
+</table>
+{/if}
+
+
    </TabItem>
 
  </Tabs>

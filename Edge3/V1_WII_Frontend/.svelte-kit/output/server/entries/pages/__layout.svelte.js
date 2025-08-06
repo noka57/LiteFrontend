@@ -1,8 +1,8 @@
-import { g as getContext, c as create_ssr_component, e as escape, b as compute_rest_props, d as spread, f as escape_object, h as escape_attribute_value, i as add_attribute, j as compute_slots, k as subscribe, l as null_to_empty, v as validate_component, o as each } from "../../_app/immutable/chunks/index-a89b87ed.js";
+import { g as getContext, c as create_ssr_component, e as escape, b as compute_rest_props, d as spread, f as escape_object, h as escape_attribute_value, i as add_attribute, j as compute_slots, k as subscribe, l as null_to_empty, v as validate_component, o as each } from "../../_app/immutable/chunks/index-54377ec4.js";
 /* empty css                                           */import { sessionidG } from "../endpoints/sessionG.js";
-import { DataTagPro_ULRule_ConfigChangedLog, DataTagPro_TagRuleSchedule_ConfigChangedLog, DataTagPro_TagRuleEvent_ConfigChangedLog, DataTagPro_TagRuleSCADA_ConfigChangedLog, DataTagPro_TagRuleDM_ConfigChangedLog, DataTagPro_TagRuleTOU_ConfigChangedLog, DataTagPro_TagRuleAccumulated_ConfigChangedLog, DataTagPro_TagRuleCalculation_ConfigChangedLog, DataTagPro_TagRuleC2D_ConfigChangedLog, DataTagPro_General_ConfigChangedLog, LanConfigChangedLog, DHCPServerLANConfigLog, NAT_LoopBack_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_Dmz_ConfigChangedLog, Firewall_General_ConfigChangedLog, Firewall_IPFilter_ConfigChangedLog, Firewall_MACFilter_ConfigChangedLog, StaticRouteConfigChangedLog, MaintenanceConfigChangedLog, ConfigurationP2EConfigChangedLog, OperationConfigChangedLog, DockerConfigChangedLog, WAN_PORT_SWITCH_ConfigChangedLog, WAN_CWAN1_BASIC_ConfigChangedLog, WAN_CWAN1_Advanced_ConfigChangedLog, WAN_CWAN1_SimPolicy_ConfigChangedLog, WAN_CWAN1_GLink_ConfigChangedLog, WAN_EWAN1_Basic_ConfigChangedLog, WAN_EWAN1_EWLAP_ConfigChangedLog, WAN_RedundancyPolicy_ConfigChangedLog, WAN_FareSavingPolicy_ConfigChangedLog, IPsec_Responder_Conn_ConfigChangedLog, IPsec_Initiator_Conn_General_ConfigChangedLog, IPsec_Initiator_Conn_Subnet_ConfigChangedLog, IPsec_Basic_ConfigChangedLog, OpenVPN_Client_Advanced_PSK_ConfigChangedLog, OpenVPN_Client_Advanced_PFW_ConfigChangedLog, OpenVPN_Client_Advanced_RNA_ConfigChangedLog, OpenVPN_Client_Advanced_FO_ConfigChangedLog, OpenVPN_Client_Conn_ConfigChangedLog, OpenVPN_Server_Advanced_CCD_ConfigChangedLog, OpenVPN_Server_Advanced_PSK_ConfigChangedLog, OpenVPN_Server_Advanced_PFW_ConfigChangedLog, OpenVPN_Server_Conn_ConfigChangedLog, OpenVPN_Basic_ConfigChangedLog, GenericMQTTConfigChangedLog, AWSIoTcoreConfigChangedLog, AzHub_ConfigChangedLog, AzHubDPS_ConfigChangedLog, AzCentral_ConfigChangedLog, RemoteServiceConfigMqttChangedLog, RemoteServiceConfigRestfulChangedLog, RemoteServiceConfigRemoteControlChangedLog, PortConnection_LAN_ConfigChangedLog, PortConnection_COM_ConfigChangedLog, PortConnection_Transparent_ConfigChangedLog, Certificate_Settings_ConfigChangedLog, ModbusGateway_TtR_ConfigChangedLog, ModbusGateway_RtT_ConfigChangedLog, ModbusGateway_RtR_ConfigChangedLog, ModbusGateway_TtT_ConfigChangedLog, ModbusDataModel_Slave_ConfigChangedLog, ModbusTag_ConfigChangedLog, ModbusTCP_Slave_ConfigChangedLog, ModbusTCP_Master_ConfigChangedLog, ModbusRTU_Slave_ConfigChangedLog, ModbusRTU_Master_ConfigChangedLog, SDatalogger_General_ConfigChangedLog, SDatalogger_ProxyMode_Edge_ConfigChangedLog, SDatalogger_ProxyMode_Cloud_ConfigChangedLog, SDatalogger_ProxyMode_Topic_ConfigChangedLog, SDatalogger_MonitorMode_Edge_ConfigChangedLog, SDatalogger_MonitorMode_Cloud_ConfigChangedLog, SDatalogger_MonitorMode_Topic_ConfigChangedLog, EventEngine_General_ConfigChangedLog, EventEngine_Rule_ConfigChangedLog, EventEngine_TriggerSMS_ConfigChangedLog, EventEngine_TriggerDI_ConfigChangedLog, EventEngine_TriggerModbus_ConfigChangedLog, EventEngine_TriggerTCPMsg_ConfigChangedLog, EventEngine_TriggerMQTT_ConfigChangedLog, EventEngine_TriggerPING_ConfigChangedLog, EventEngine_TriggerRSSI_ConfigChangedLog, EventEngine_ActionSMS_ConfigChangedLog, EventEngine_ActionEmail_ConfigChangedLog, EventEngine_ActionDO_ConfigChangedLog, EventEngine_ActionModbus_ConfigChangedLog, EventEngine_ActionTCPMsg_ConfigChangedLog, EventEngine_ActionMQTT_ConfigChangedLog, EventEngine_ActionLINE_ConfigChangedLog, dashboadData, VPNdashboad, enableDataTagEnginePROall } from "../endpoints/configG.js";
+import { dashboadData, VPNdashboad, WiFi_11ah_ConfigChangedLog, WiFi_11ah_General_ConfigChangedLog, Conversion_Opcua2Modbus_ConfigChangedLog, Conversion_OpcuaGateway_ConfigChangedLog, OPCUA_Server_ConfigChangedLog, OPCUA_Client_ConfigChangedLog, DataTagPro_ULRule_ConfigChangedLog, DataTagPro_TagRuleSchedule_ConfigChangedLog, DataTagPro_TagRuleEvent_ConfigChangedLog, DataTagPro_TagRuleSCADA_ConfigChangedLog, DataTagPro_TagRuleDM_ConfigChangedLog, DataTagPro_TagRuleTOU_ConfigChangedLog, DataTagPro_TagRuleAccumulated_ConfigChangedLog, DataTagPro_TagRuleCalculation_ConfigChangedLog, DataTagPro_TagRuleC2D_ConfigChangedLog, DataTagPro_General_ConfigChangedLog, LanConfigChangedLog, DHCPServerLANConfigLog, NAT_LoopBack_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_Dmz_ConfigChangedLog, Firewall_General_ConfigChangedLog, Firewall_IPFilter_ConfigChangedLog, Firewall_MACFilter_ConfigChangedLog, StaticRouteConfigChangedLog, MaintenanceConfigChangedLog, ConfigurationP2EConfigChangedLog, OperationConfigChangedLog, DockerConfigChangedLog, WAN_PORT_SWITCH_ConfigChangedLog, WAN_CWAN1_BASIC_ConfigChangedLog, WAN_CWAN1_Advanced_ConfigChangedLog, WAN_CWAN1_SimPolicy_ConfigChangedLog, WAN_CWAN1_GLink_ConfigChangedLog, WAN_EWAN1_Basic_ConfigChangedLog, WAN_EWAN1_EWLAP_ConfigChangedLog, WAN_RedundancyPolicy_ConfigChangedLog, WAN_FareSavingPolicy_ConfigChangedLog, IPsec_Responder_Conn_ConfigChangedLog, IPsec_Initiator_Conn_General_ConfigChangedLog, IPsec_Initiator_Conn_Subnet_ConfigChangedLog, IPsec_Basic_ConfigChangedLog, OpenVPN_Client_Advanced_PSK_ConfigChangedLog, OpenVPN_Client_Advanced_PFW_ConfigChangedLog, OpenVPN_Client_Advanced_RNA_ConfigChangedLog, OpenVPN_Client_Advanced_FO_ConfigChangedLog, OpenVPN_Client_Conn_ConfigChangedLog, OpenVPN_Server_Advanced_CCD_ConfigChangedLog, OpenVPN_Server_Advanced_PSK_ConfigChangedLog, OpenVPN_Server_Advanced_PFW_ConfigChangedLog, OpenVPN_Server_Conn_ConfigChangedLog, OpenVPN_Basic_ConfigChangedLog, GenericMQTTConfigChangedLog, AWSIoTcoreConfigChangedLog, AzHub_ConfigChangedLog, AzHubDPS_ConfigChangedLog, AzCentral_ConfigChangedLog, RemoteServiceConfigMqttChangedLog, RemoteServiceConfigRestfulChangedLog, RemoteServiceConfigRemoteControlChangedLog, PortConnection_LAN_ConfigChangedLog, PortConnection_COM_ConfigChangedLog, PortConnection_Transparent_ConfigChangedLog, Certificate_Settings_ConfigChangedLog, ModbusGateway_TtR_ConfigChangedLog, ModbusGateway_RtT_ConfigChangedLog, ModbusGateway_RtR_ConfigChangedLog, ModbusGateway_TtT_ConfigChangedLog, ModbusDataModel_Slave_ConfigChangedLog, ModbusTag_ConfigChangedLog, ModbusTCP_Slave_ConfigChangedLog, ModbusTCP_Master_ConfigChangedLog, ModbusRTU_Slave_ConfigChangedLog, ModbusRTU_Master_ConfigChangedLog, SDatalogger_General_ConfigChangedLog, SDatalogger_ProxyMode_Edge_ConfigChangedLog, SDatalogger_ProxyMode_Cloud_ConfigChangedLog, SDatalogger_ProxyMode_Topic_ConfigChangedLog, SDatalogger_MonitorMode_Edge_ConfigChangedLog, SDatalogger_MonitorMode_Cloud_ConfigChangedLog, SDatalogger_MonitorMode_Topic_ConfigChangedLog, EventEngine_General_ConfigChangedLog, EventEngine_Rule_ConfigChangedLog, EventEngine_TriggerSMS_ConfigChangedLog, EventEngine_TriggerDI_ConfigChangedLog, EventEngine_TriggerModbus_ConfigChangedLog, EventEngine_TriggerTCPMsg_ConfigChangedLog, EventEngine_TriggerMQTT_ConfigChangedLog, EventEngine_TriggerPING_ConfigChangedLog, EventEngine_TriggerRSSI_ConfigChangedLog, EventEngine_ActionSMS_ConfigChangedLog, EventEngine_ActionEmail_ConfigChangedLog, EventEngine_ActionDO_ConfigChangedLog, EventEngine_ActionModbus_ConfigChangedLog, EventEngine_ActionTCPMsg_ConfigChangedLog, EventEngine_ActionMQTT_ConfigChangedLog, EventEngine_ActionLINE_ConfigChangedLog, enableDataTagEnginePROall, enableOPCUA } from "../endpoints/configG.js";
 import classNames from "classnames";
-/* empty css                                                                            */import { w as writable } from "../../_app/immutable/chunks/index-b74adbb6.js";
+/* empty css                                                                            */import { w as writable } from "../../_app/immutable/chunks/index-df2ccd83.js";
 const app = "";
 const getStores = () => {
   const stores = getContext("__svelte__");
@@ -48,42 +48,12 @@ const Hamburger$1 = create_ssr_component(($$result, $$props, $$bindings, slots) 
 <button class="${[
     "hamburger hamburger--" + escape(type, true) + " svelte-sfue04",
     open ? "is-active" : ""
-  ].join(" ").trim()}" aria-label="${"Hamburger menu"}"><span class="${"hamburger-box svelte-sfue04"}"><span class="${"hamburger-inner svelte-sfue04"}"></span></span>
+  ].join(" ").trim()}" aria-label="Hamburger menu"><span class="hamburger-box svelte-sfue04"><span class="hamburger-inner svelte-sfue04"></span></span>
 </button>`;
 });
 function quartInOut(t) {
   return t < 0.5 ? 8 * Math.pow(t, 4) : -8 * Math.pow(t - 1, 4) + 1;
 }
-const DarkMode = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $$restProps = compute_rest_props($$props, ["btnClass"]);
-  let { btnClass: btnClass2 = "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5" } = $$props;
-  if ($$props.btnClass === void 0 && $$bindings.btnClass && btnClass2 !== void 0)
-    $$bindings.btnClass(btnClass2);
-  return `${$$result.head += `<!-- HEAD_svelte-16q53hu_START --><script>if (window) {
-      localStorage.getItem('color-theme') === 'dark' ||
-      (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-        ? window.document.documentElement.classList.add('dark')
-        : window.document.documentElement.classList.remove('dark');
-    }
-  <\/script><!-- HEAD_svelte-16q53hu_END -->`, ""}
-
-<button${spread(
-    [
-      { "aria-label": "Dark mode" },
-      { type: "button" },
-      escape_object($$restProps),
-      {
-        class: escape_attribute_value(classNames(btnClass2, $$props.class))
-      }
-    ],
-    {}
-  )}><span class="${"hidden dark:block"}">${slots.lightIcon ? slots.lightIcon({}) : `
-      <svg class="${"w-5 h-5"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path d="${"M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1\n  0 100-2H3a1 1 0 000 2h1z"}" fill-rule="${"evenodd"}" clip-rule="${"evenodd"}"></path></svg>
-    `}</span>
-  <span class="${"dark:hidden"}">${slots.darkIcon ? slots.darkIcon({}) : `
-      <svg class="${"w-5 h-5"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path d="${"M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"}"></path></svg>
-    `}</span></button>`;
-});
 const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$restProps = compute_rest_props($$props, ["asideClass"]);
   let { asideClass: asideClass2 = "w-64" } = $$props;
@@ -210,7 +180,7 @@ const Nav = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.navClass(navClass2);
   if ($$props.navDivClass === void 0 && $$bindings.navDivClass && navDivClass2 !== void 0)
     $$bindings.navDivClass(navDivClass2);
-  return `<nav class="${escape(navClass2, true) + " " + escape($$props.class ? $$props.class : "", true)}"><div${add_attribute("class", navDivClass2, 0)}>${slots.default ? slots.default({}) : ``}</div></nav>`;
+  return `<nav class="${escape(navClass2, true) + " " + escape($$props.class ? $$props.class : "", true)}" style="height:830px"><div${add_attribute("class", navDivClass2, 0)}>${slots.default ? slots.default({}) : ``}</div></nav>`;
 });
 (function(module, exports) {
   !function(e, t) {
@@ -588,10 +558,10 @@ const Hamburger = create_ssr_component(($$result, $$props, $$bindings, slots) =>
     $$bindings.hamburgerClass(hamburgerClass2);
   $$result.css.add(css);
   $$unsubscribe_sidebarOpen();
-  return `<button id="${"hamburgerBtn"}" class="${[
+  return `<button id="hamburgerBtn" class="${[
     escape(null_to_empty(hamburgerClass2), true) + " svelte-1prbcdr",
     $sidebarOpen ? "open" : ""
-  ].join(" ").trim()}" aria-label="${"Sidebar"}"><svg width="${"32"}" height="${"24"}" class="${"svelte-1prbcdr"}"><line id="${"top"}" x1="${"0"}" y1="${"2"}" x2="${"32"}" y2="${"2"}" class="${"svelte-1prbcdr"}"></line><line id="${"middle"}" x1="${"0"}" y1="${"12"}" x2="${"24"}" y2="${"12"}" class="${"svelte-1prbcdr"}"></line><line id="${"bottom"}" x1="${"0"}" y1="${"22"}" x2="${"32"}" y2="${"22"}" class="${"svelte-1prbcdr"}"></line></svg>
+  ].join(" ").trim()}" aria-label="Sidebar"><svg width="32" height="24" class="svelte-1prbcdr"><line id="top" x1="0" y1="2" x2="32" y2="2" class="svelte-1prbcdr"></line><line id="middle" x1="0" y1="12" x2="24" y2="12" class="svelte-1prbcdr"></line><line id="bottom" x1="0" y1="22" x2="32" y2="22" class="svelte-1prbcdr"></line></svg>
 </button>`;
 });
 const Navbar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -620,8 +590,8 @@ const Navbar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   if ($$props.siteName === void 0 && $$bindings.siteName && siteName2 !== void 0)
     $$bindings.siteName(siteName2);
   return `<header class="${escape(headerClass2, true) + " " + escape($$props.class ? $$props.class : "", true)}"><nav${add_attribute("class", navClass2, 0)}>${validate_component(Hamburger, "Hamburger").$$render($$result, { hamburgerClass: hamburgerClass2 }, {}, {})}
-		<div${add_attribute("class", siteClass2, 0)}><a href="${"https://www.etherwan.com/tw"}" class="${"flex w-20"}" target="${"_blank"}" rel="${"noopener noreferrer"}"><img${add_attribute("src", logo2, 0)}${add_attribute("alt", alt, 0)}${add_attribute("class", logoClass2, 0)}></a></div>
-		<div class="${"pt-8"}"><span class="${"pl-10 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white"}">${escape(siteName2)}</span></div>
+		<div${add_attribute("class", siteClass2, 0)}><a href="https://www.etherwan.com/tw" class="flex w-20" target="_blank" rel="noopener noreferrer"><img${add_attribute("src", logo2, 0)}${add_attribute("alt", alt, 0)}${add_attribute("class", logoClass2, 0)}></a></div>
+		<div class="pt-8"><span class="pl-10 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white">${escape(siteName2)}</span></div>
 		${slots.default ? slots.default({}) : ``}</nav></header>`;
 });
 const Responsive = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -661,17 +631,18 @@ const Dropdown = create_ssr_component(($$result, $$props, $$bindings, slots) => 
     $$bindings.dropdownLi(dropdownLi);
   return `${``}
 <li><button${add_attribute("class", dropdownLi, 0)}>${escape(name)}
-		<svg class="${"ml-1 w-4 h-4"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path fill-rule="${"evenodd"}" d="${"M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"}" clip-rule="${"evenodd"}"></path></svg></button>
+		<svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 	
 	<div class="${[
     escape(activeDropdownDiv, true) + " " + escape($$props.class ? $$props.class : "", true),
     "hidden "
-  ].join(" ").trim()}" style="${"position: absolute; margin: 0px;"}"><ul class="${"py-1"}" aria-label="${"dropdown-button"}">${each(child, ({ href, name: name2, rel, id }) => {
+  ].join(" ").trim()}" style="position: absolute; margin: 0px;"><ul class="py-1" aria-label="dropdown-button">${each(child, ({ href, name: name2, rel, id }) => {
     return `<li><a${add_attribute("href", href, 0)}${add_attribute("id", id, 0)}${add_attribute("rel", rel, 0)}${add_attribute("class", activeChildLi, 0)}>${escape(name2)}</a>
 				</li>`;
   })}</ul></div></li>`;
 });
 const TopMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let activeUrl;
   let $page, $$unsubscribe_page;
   $$unsubscribe_page = subscribe(page, (value) => $page = value);
   let { topDiv: topDiv2 = "w-full md:block md:w-auto" } = $$props;
@@ -684,6 +655,12 @@ const TopMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { activeChildLi = "block py-2 px-4 text-base text-gray-700 hover:bg-gray-100" } = $$props;
   let { dropdownLi = "flex justify-between items-center py-2 w-full text-base font-medium text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto" } = $$props;
   let { svg0background = "" } = $$props;
+  sessionidG.subscribe((val) => {
+  });
+  dashboadData.subscribe((val) => {
+  });
+  VPNdashboad.subscribe((val) => {
+  });
   if ($$props.topDiv === void 0 && $$bindings.topDiv && topDiv2 !== void 0)
     $$bindings.topDiv(topDiv2);
   if ($$props.childLi === void 0 && $$bindings.childLi && childLi !== void 0)
@@ -704,6 +681,7 @@ const TopMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.dropdownLi(dropdownLi);
   if ($$props.svg0background === void 0 && $$bindings.svg0background && svg0background !== void 0)
     $$bindings.svg0background(svg0background);
+  activeUrl = $page.url.pathname;
   $$unsubscribe_page();
   return `<div${add_attribute("class", topMenuDiv2, 0)}><div${add_attribute("class", topDiv2, 0)}><ul${add_attribute("class", topul2, 0)}>${each(topMenus, ({ id, name, href, rel, child }) => {
     return `${child ? `${validate_component(Dropdown, "Dropdown").$$render(
@@ -717,7 +695,21 @@ const TopMenu = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       },
       {},
       {}
-    )}` : `<li${add_attribute("class", topli, 0)}>${id == 0 ? `<a${add_attribute("href", href, 0)}${add_attribute("rel", rel, 0)} class="${[escape(childLi, true), $page.url.pathname === href ? "active" : ""].join(" ").trim()}"><svg fill="${"none"}" stroke="${"currentColor"}" stroke-width="${"1.5"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}" class="${"text-green-500 mr-2 dark:text-pink-500 w-6 h-6"}"${add_attribute("style", svg0background, 0)}><path d="${"M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75"}" stroke-linecap="${"round"}" stroke-linejoin="${"round"}"></path></svg></a>` : `${id == 1 ? `<a${add_attribute("href", href, 0)}${add_attribute("rel", rel, 0)} class="${[escape(childLi, true), $page.url.pathname === href ? "active" : ""].join(" ").trim()}"><svg fill="${"none"}" stroke="${"currentColor"}" stroke-width="${"1.5"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}" class="${"text-green-500 mr-2 dark:text-pink-500 w-6 h-6"}"><path d="${"M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"}" stroke-linecap="${"round"}" stroke-linejoin="${"round"}"></path></svg></a>` : ``}`}
+    )}` : `<li${add_attribute("class", topli, 0)}>${id == 0 ? `${activeUrl == "/dashboard" || activeUrl.substring(0, 16) == "/EDashboard.html" ? `<button type="button"><svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet" class="text-green-500 mr-2 dark:text-pink-500 w-6 h-6"><g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="green" stroke="none"><path d="M4213 5106 c-59 -19 -104 -49 -153 -102 -80 -87 -100 -171 -81 -333
+7 -51 10 -95 9 -96 -2 -2 -39 19 -83 47 -131 82 -370 193 -531 247 -731 243
+-1503 145 -2139 -273 -630 -414 -1038 -1047 -1141 -1771 -23 -159 -23 -486 0
+-638 41 -276 114 -514 231 -752 128 -263 275 -471 480 -683 211 -218 418 -370
+690 -503 600 -293 1258 -327 1919 -99 554 191 1027 562 1305 1024 206 340 321
+735 325 1111 1 135 0 142 -28 202 -33 73 -104 144 -174 176 -67 31 -207 31
+-274 0 -67 -31 -143 -106 -174 -171 -23 -48 -28 -76 -35 -196 -22 -376 -135
+-675 -359 -951 -323 -397 -893 -655 -1447 -655 -605 0 -1140 300 -1493 836
+-394 597 -398 1340 -12 1934 227 350 589 633 971 760 218 73 295 84 561 84
+217 0 244 -2 361 -26 136 -30 284 -78 402 -132 85 -39 221 -116 214 -122 -2
+-2 -51 -13 -109 -23 -57 -10 -124 -29 -147 -41 -65 -32 -127 -96 -158 -159
+-24 -49 -28 -68 -28 -146 0 -76 4 -99 26 -146 53 -112 161 -187 283 -196 83
+-6 1082 174 1151 207 57 28 127 97 154 153 46 95 45 111 -14 631 -31 264 -60
+505 -65 534 -28 156 -161 271 -324 279 -42 2 -88 -3 -113 -11z"></path></g></svg>
+</button>` : ``}` : `${id == 1 ? `<a${add_attribute("href", href, 0)}${add_attribute("rel", rel, 0)} class="${[escape(childLi, true), $page.url.pathname === href ? "active" : ""].join(" ").trim()}"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-green-500 mr-2 dark:text-pink-500 w-6 h-6"${add_attribute("style", svg0background, 0)}><path d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>` : `${id == 2 ? `<a${add_attribute("href", href, 0)}${add_attribute("rel", rel, 0)} class="${[escape(childLi, true), $page.url.pathname === href ? "active" : ""].join(" ").trim()}"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-green-500 mr-2 dark:text-pink-500 w-6 h-6"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>` : ``}`}`}
 
 					</li>`}`;
   })}</ul></div></div>`;
@@ -915,19 +907,18 @@ const OutsideClick = create_ssr_component(($$result, $$props, $$bindings, slots)
   $$unsubscribe_sidebarStayOpen();
   return `<div>${slots.default ? slots.default({}) : ``}</div>`;
 });
-let btnClass = "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 fixed right-2 top-28 z-50";
 let logo = "EWLOGO.png";
 let logoClass = "w-20";
-let siteName = "EW50-V";
+let siteName = "EDGE 3";
 let siteClass = "pl-45";
 let headerClass = "bg-white px-10 items-center text-gray-600 border-b-2 p-2 dark:bg-gray-900 dark:text-white";
 let hamburgerClass = "hover:text-gray-500 cursor-pointer mr-4 border-none focus:outline-none pt-2 lg:hidden";
 let topDiv = "pt-8 w-full md:block md:w-auto absolute right-0";
 let topMenuDiv = "container flex flex-wrap pt-0 md:pt-2";
 let topul = "flex flex-col mt-4 md:flex-row md:mt-0 md:text-md md:font-medium pt-1 bg-white dark:bg-gray-900 dark:text-white";
-let asideClass = "absolute w-auto border-r-2 shadow-lg z-50 bg-white h-screen overflow-scroll dark:bg-gray-900 dark:text-white";
+let asideClass = "absolute w-auto border-r-2 shadow-lg z-50 bg-white dark:bg-gray-900 dark:text-white";
 let spanClass = "pl-20 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white";
-let navClass = "py-1 px-1 text-lg";
+let navClass = "py-1 px-1 text-lg overflow-scroll";
 let navDivClass = "pb-8";
 let buttonClass = "inline-flex items-center text-base text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200";
 const _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -1036,6 +1027,12 @@ const _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let data_tag_pro_tag_event_changedValues = [];
   let data_tag_pro_tag_schedule_changedValues = [];
   let data_tag_pro_ul_changedValues = [];
+  let opcua_server_changedValues = [];
+  let opcua_client_changedValues = [];
+  let conversion_opcua2modbus_changedValues = [];
+  let conversion_opcuagateway_changedValues = [];
+  let wifi_11ah_changedValues = [];
+  let wifi_11ah_general_changedValues = [];
   const BlinkApply = () => {
     if (svg0background == "") {
       svg0background = "background-color: blue";
@@ -1047,7 +1044,7 @@ const _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     interval = setInterval(BlinkApply, 500);
   };
   function JudgeChangedOrNot() {
-    if (data_tag_pro_general_changedValues.length != 0 || data_tag_pro_tag_c2d_changedValues.length != 0 || data_tag_pro_tag_calculation_changedValues.length != 0 || data_tag_pro_tag_accumulated_changedValues.length != 0 || data_tag_pro_tag_tou_changedValues.length != 0 || data_tag_pro_tag_dm_changedValues.length != 0 || data_tag_pro_tag_scada_changedValues.length != 0 || data_tag_pro_tag_event_changedValues.length != 0 || data_tag_pro_tag_schedule_changedValues.length != 0 || data_tag_pro_ul_changedValues.length != 0 || event_engine_action_line_changeValues.length != 0 || event_engine_action_mqtt_changeValues.length != 0 || event_engine_action_tcpmsg_changeValues.length != 0 || event_engine_action_modbus_changeValues.length != 0 || event_engine_action_do_changeValues.length != 0 || event_engine_action_email_changeValues.length != 0 || event_engine_action_sms_changeValues.length != 0 || event_engine_trigger_rssi_changeValues.length != 0 || event_engine_trigger_ping_changeValues.length != 0 || event_engine_trigger_mqtt_changeValues.length != 0 || event_engine_trigger_tcpmsg_changeValues.length != 0 || event_engine_trigger_modbus_changeValues.length != 0 || event_engine_trigger_di_changeValues.length != 0 || event_engine_trigger_sms_changeValues.length != 0 || event_engine_rule_changedValues.length != 0 || event_engine_general_changedValues.length != 0 || sdata_logger_general_changedValues.length != 0 || sdata_logger_proxy_edge_changedValues.length != 0 || sdata_logger_proxy_cloud_changedValues.length != 0 || sdata_logger_proxy_topic_changedValues.length != 0 || sdata_logger_monitor_edge_changedValues.length != 0 || sdata_logger_monitor_cloud_changedValues.length != 0 || sdata_logger_monitor_topic_changedValues.length != 0 || modbus_gateway_TtR_changedValues.length != 0 || modbus_gateway_RtT_changedValues.length != 0 || modbus_gateway_RtR_changedValues.length != 0 || modbus_gateway_TtT_changedValues.length != 0 || modbus_data_model_master_changedValues.length != 0 || modbus_data_model_slave_changedValues.length != 0 || modbus_tcp_master_changedValues.length != 0 || modbus_tcp_slave_changedValues.length != 0 || modbus_rtu_master_changedValues.length != 0 || modbus_rtu_slave_changedValues.length != 0 || modbus_tag_changedValues.length != 0 || certificate_settings_changedValues.length != 0 || port_connection_lan_changedValues.length != 0 || port_connection_com_changedValues.length != 0 || port_connection_transparent_changedValues.length != 0 || remote_service_mqtt_changedValues.length != 0 || remote_service_restful_changedValues.length != 0 || remote_service_remote_control_changedValues.length != 0 || generic_mqtt_changedValues.length != 0 || azhub_changedValues.length != 0 || azhubdps_changedValues.length != 0 || azcentral_changedValues.length != 0 || awsIoT_core_changedValues.length != 0 || openvpn_basic_changedValues.length != 0 || openvpn_server_conn_changedValues.length != 0 || openvpn_client_conn_changedValues.length != 0 || openvpn_server_advanced_ccd_changedValues.length != 0 || openvpn_server_advanced_psk_changedValues.length != 0 || openvpn_client_advanced_psk_changedValues.length != 0 || openvpn_server_advanced_pfw_changedValues.length != 0 || openvpn_client_advanced_pfw_changedValues.length != 0 || openvpn_client_advanced_rna_changedValues.length != 0 || openvpn_client_advanced_fo_changedValues.length != 0 || LANchangedValues.length != 0 || dhcpServerChangedValues.length != 0 || NAT_loopback_changedValues.length != 0 || NAT_virtualServer_changedValues.length != 0 || NAT_virtualComputer_changedValues.length != 0 || NAT_dmz_changedValues.length != 0 || Firewall_general_changedValues.length != 0 || Firewall_ipfilter_changedValues.length != 0 || Firewall_macfilter_changedValues.length != 0 || staticR_changedValues.length != 0 || maintenance_changedValues.length != 0 || configuration_p2e_changedValues.length != 0 || operation_changedValues.length != 0 || docker_changedValues.length != 0 || cwan1_basic_changedValues.length != 0 || cwan1_advanced_changedValues.length != 0 || cwan1_simpolicy_changedValues.length != 0 || cwan1_glink_changedValues.length != 0 || ewan1_basic_changedValues.length != 0 || ewan1_ewlap_changedValues.length != 0 || redundancy_policy_changedValues.length != 0 || faresaving_policy_changedValues.length != 0 || port_switch_changedValues.length != 0 || basic_changedValues.length != 0 || responder_conn_changedValues.length != 0 || initiator_conn_general_changedValues.length != 0 || initiator_conn_subnet_changedValues.length != 0) {
+    if (wifi_11ah_changedValues.length != 0 || wifi_11ah_general_changedValues.length != 0 || opcua_server_changedValues.length != 0 || opcua_client_changedValues.length != 0 || conversion_opcua2modbus_changedValues.length != 0 || conversion_opcuagateway_changedValues.length != 0 || data_tag_pro_general_changedValues.length != 0 || data_tag_pro_tag_c2d_changedValues.length != 0 || data_tag_pro_tag_calculation_changedValues.length != 0 || data_tag_pro_tag_accumulated_changedValues.length != 0 || data_tag_pro_tag_tou_changedValues.length != 0 || data_tag_pro_tag_dm_changedValues.length != 0 || data_tag_pro_tag_scada_changedValues.length != 0 || data_tag_pro_tag_event_changedValues.length != 0 || data_tag_pro_tag_schedule_changedValues.length != 0 || data_tag_pro_ul_changedValues.length != 0 || event_engine_action_line_changeValues.length != 0 || event_engine_action_mqtt_changeValues.length != 0 || event_engine_action_tcpmsg_changeValues.length != 0 || event_engine_action_modbus_changeValues.length != 0 || event_engine_action_do_changeValues.length != 0 || event_engine_action_email_changeValues.length != 0 || event_engine_action_sms_changeValues.length != 0 || event_engine_trigger_rssi_changeValues.length != 0 || event_engine_trigger_ping_changeValues.length != 0 || event_engine_trigger_mqtt_changeValues.length != 0 || event_engine_trigger_tcpmsg_changeValues.length != 0 || event_engine_trigger_modbus_changeValues.length != 0 || event_engine_trigger_di_changeValues.length != 0 || event_engine_trigger_sms_changeValues.length != 0 || event_engine_rule_changedValues.length != 0 || event_engine_general_changedValues.length != 0 || sdata_logger_general_changedValues.length != 0 || sdata_logger_proxy_edge_changedValues.length != 0 || sdata_logger_proxy_cloud_changedValues.length != 0 || sdata_logger_proxy_topic_changedValues.length != 0 || sdata_logger_monitor_edge_changedValues.length != 0 || sdata_logger_monitor_cloud_changedValues.length != 0 || sdata_logger_monitor_topic_changedValues.length != 0 || modbus_gateway_TtR_changedValues.length != 0 || modbus_gateway_RtT_changedValues.length != 0 || modbus_gateway_RtR_changedValues.length != 0 || modbus_gateway_TtT_changedValues.length != 0 || modbus_data_model_master_changedValues.length != 0 || modbus_data_model_slave_changedValues.length != 0 || modbus_tcp_master_changedValues.length != 0 || modbus_tcp_slave_changedValues.length != 0 || modbus_rtu_master_changedValues.length != 0 || modbus_rtu_slave_changedValues.length != 0 || modbus_tag_changedValues.length != 0 || certificate_settings_changedValues.length != 0 || port_connection_lan_changedValues.length != 0 || port_connection_com_changedValues.length != 0 || port_connection_transparent_changedValues.length != 0 || remote_service_mqtt_changedValues.length != 0 || remote_service_restful_changedValues.length != 0 || remote_service_remote_control_changedValues.length != 0 || generic_mqtt_changedValues.length != 0 || azhub_changedValues.length != 0 || azhubdps_changedValues.length != 0 || azcentral_changedValues.length != 0 || awsIoT_core_changedValues.length != 0 || openvpn_basic_changedValues.length != 0 || openvpn_server_conn_changedValues.length != 0 || openvpn_client_conn_changedValues.length != 0 || openvpn_server_advanced_ccd_changedValues.length != 0 || openvpn_server_advanced_psk_changedValues.length != 0 || openvpn_client_advanced_psk_changedValues.length != 0 || openvpn_server_advanced_pfw_changedValues.length != 0 || openvpn_client_advanced_pfw_changedValues.length != 0 || openvpn_client_advanced_rna_changedValues.length != 0 || openvpn_client_advanced_fo_changedValues.length != 0 || LANchangedValues.length != 0 || dhcpServerChangedValues.length != 0 || NAT_loopback_changedValues.length != 0 || NAT_virtualServer_changedValues.length != 0 || NAT_virtualComputer_changedValues.length != 0 || NAT_dmz_changedValues.length != 0 || Firewall_general_changedValues.length != 0 || Firewall_ipfilter_changedValues.length != 0 || Firewall_macfilter_changedValues.length != 0 || staticR_changedValues.length != 0 || maintenance_changedValues.length != 0 || configuration_p2e_changedValues.length != 0 || operation_changedValues.length != 0 || docker_changedValues.length != 0 || cwan1_basic_changedValues.length != 0 || cwan1_advanced_changedValues.length != 0 || cwan1_simpolicy_changedValues.length != 0 || cwan1_glink_changedValues.length != 0 || ewan1_basic_changedValues.length != 0 || ewan1_ewlap_changedValues.length != 0 || redundancy_policy_changedValues.length != 0 || faresaving_policy_changedValues.length != 0 || port_switch_changedValues.length != 0 || basic_changedValues.length != 0 || responder_conn_changedValues.length != 0 || initiator_conn_general_changedValues.length != 0 || initiator_conn_subnet_changedValues.length != 0) {
       if (!interval) {
         startInterval();
       }
@@ -1059,6 +1056,30 @@ const _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       }
     }
   }
+  WiFi_11ah_ConfigChangedLog.subscribe((val) => {
+    wifi_11ah_changedValues = val;
+    JudgeChangedOrNot();
+  });
+  WiFi_11ah_General_ConfigChangedLog.subscribe((val) => {
+    wifi_11ah_general_changedValues = val;
+    JudgeChangedOrNot();
+  });
+  Conversion_Opcua2Modbus_ConfigChangedLog.subscribe((val) => {
+    conversion_opcua2modbus_changedValues = val;
+    JudgeChangedOrNot();
+  });
+  Conversion_OpcuaGateway_ConfigChangedLog.subscribe((val) => {
+    conversion_opcuagateway_changedValues = val;
+    JudgeChangedOrNot();
+  });
+  OPCUA_Server_ConfigChangedLog.subscribe((val) => {
+    opcua_server_changedValues = val;
+    JudgeChangedOrNot();
+  });
+  OPCUA_Client_ConfigChangedLog.subscribe((val) => {
+    opcua_client_changedValues = val;
+    JudgeChangedOrNot();
+  });
   DataTagPro_ULRule_ConfigChangedLog.subscribe((val) => {
     data_tag_pro_ul_changedValues = val;
     JudgeChangedOrNot();
@@ -1435,20 +1456,19 @@ const _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   });
   enableDataTagEnginePROall.subscribe((val) => {
   });
-  const topMenuList = [{ href: "/apply", id: 0 }, { href: "/logout", id: 1 }];
+  enableOPCUA.subscribe((val) => {
+  });
+  const topMenuList = [
+    { href: "/dashboard", id: 0 },
+    { href: "/apply", id: 1 },
+    { href: "/logout", id: 2 }
+  ];
   let $$settled;
   let $$rendered;
   do {
     $$settled = true;
     activeUrl = $page.url.pathname;
-    $$rendered = `${validate_component(DarkMode, "DarkMode").$$render($$result, { btnClass }, {}, {})}
-
-
-${activeUrl == "/dashboard" || activeUrl.substring(0, 16) == "/EDashboard.html" ? `<button aria-label="${"RefreshDB"}" type="${"button"}" class="${"text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 fixed right-2 top-36 z-50"}"><span class="${""}">${slots.ReloadIcon ? slots.ReloadIcon({}) : `
-<svg xmlns="${"http://www.w3.org/2000/svg"}" width="${"24"}" height="${"24"}" viewBox="${"0 0 24 24"}" fill="${"currentColor"}"><path d="${"M13.5 2c-5.288 0-9.649 3.914-10.377 9h-3.123l4 5.917 4-5.917h-2.847c.711-3.972 4.174-7 8.347-7 4.687 0 8.5 3.813 8.5 8.5s-3.813 8.5-8.5 8.5c-3.015 0-5.662-1.583-7.171-3.957l-1.2 1.775c1.916 2.536 4.948 4.182 8.371 4.182 5.797 0 10.5-4.702 10.5-10.5s-4.703-10.5-10.5-10.5z"}"></path></svg>
-
-    `}</span></button>` : ``}
-${validate_component(Responsive, "Responsive").$$render($$result, {}, {}, {})}
+    $$rendered = `${validate_component(Responsive, "Responsive").$$render($$result, {}, {}, {})}
 ${validate_component(Side, "Side").$$render(
       $$result,
       {
@@ -1501,7 +1521,7 @@ ${open ? `${validate_component(Nav, "Nav").$$render($$result, { navClass, navDiv
                             {},
                             {
                               icon: () => {
-                                return `<svg aria-hidden="${"true"}" fill="${"none"}" stroke="${"currentColor"}" stroke-width="${"1.5"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}" class="${"text-green-500 mr-2 dark:text-pink-500 w-6 h-6"}"><path d="${"M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"}" stroke-linecap="${"round"}" stroke-linejoin="${"round"}"></path></svg>`;
+                                return `<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-green-500 mr-2 dark:text-pink-500 w-6 h-6"><path d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" stroke-linecap="round" stroke-linejoin="round"></path></svg>`;
                               }
                             }
                           )}
@@ -1518,9 +1538,9 @@ ${``}`;
       }
     )}
 
-${open ? `<main class="${"dark:text-white"}" style="${"padding-top: 115px;padding-left: 286px;padding-right: 76px;"}">${slots.default ? slots.default({}) : ``}</main>` : `<main class="${"dark:text-white"}" style="${"padding-left: 84px;padding-top: 115px;padding-right: 64px;"}">${slots.default ? slots.default({}) : ``}</main>`}
+${open ? `<main class="dark:text-white" style="padding-top: 115px;padding-left: 286px;padding-right: 10px;">${slots.default ? slots.default({}) : ``}</main>` : `<main class="dark:text-white" style="padding-left: 48px;padding-top: 115px;padding-right: 10px;">${slots.default ? slots.default({}) : ``}</main>`}
 
-${$$result.head += `<!-- HEAD_svelte-nkzjcg_START -->${$$result.title = `<title>Etherwan</title>`, ""}<meta name="${"description"}" content="${"Flowbite-Svelte, Dark mode activated."}"><!-- HEAD_svelte-nkzjcg_END -->`, ""}`;
+${$$result.head += `<!-- HEAD_svelte-1hjx5sm_START -->${$$result.title = `<title>Etherwan</title>`, ""}<meta name="description" content="Flowbite-Svelte"><!-- HEAD_svelte-1hjx5sm_END -->`, ""}`;
   } while (!$$settled);
   $$unsubscribe_page();
   return $$rendered;

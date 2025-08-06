@@ -38,6 +38,16 @@
     let Adc1Type=0;
     let Adc2Type=0;
 
+    let DOValue=0;
+    let GetDIReady=0;
+    let DIValue=0;
+    let SetDOHighReady=0;
+    let SetDOLowReady=0;
+    let SetADC1Ready=0;
+    let SetADC2Ready=0;
+    let ADC1_value=0;
+    let ADC2_value=0;
+
     let sessionid;
     let sessionBinary;
     sessionidG.subscribe(val => {
@@ -634,13 +644,7 @@
   }
 
 
-  let GetDIReady=0;
-  let DIValue=0;
-  let SetDOHighReady=0;
-  let SetDOLowReady=0;
-  let SetADC1Ready=0;
-  let SetADC2Ready=0;
-  let ADC1Vol_value=0;
+
 
 
   async function getDI() {
@@ -702,12 +706,7 @@
     if (res.status == 200)
     {
       SetADC1Ready=1;
-      //const data =await res.arrayBuffer();
-      //console.log("adc1 voltage value:");
-     // console.log(data);
-     // const uint8Array = new Uint8Array(data);
-     // ADC1Vol_value = parseInt(uint8Array, 10);
-    //  console.log(ADC1Vol_value);
+
     
     }
   }
@@ -723,12 +722,7 @@
     if (res.status == 200)
     {
       SetADC1Ready=1;
-     // const data =await res.arrayBuffer();
-     // console.log("adc1 current value:");
-     // console.log(data);
-      //const uint8Array = new Uint8Array(data);
-      //DIValue = parseInt(uint8Array, 16);
-      //console.log(DIValue);
+
     
     }
   }
@@ -742,12 +736,6 @@
     if (res.status == 200)
     {
       SetADC2Ready=1;
-     // const data =await res.arrayBuffer();
-     // console.log("adc2 voltage value:");
-     // console.log(data);
-      //const uint8Array = new Uint8Array(data);
-      //DIValue = parseInt(uint8Array, 16);
-      //console.log(DIValue);
     
     }
   }
@@ -763,16 +751,40 @@
     if (res.status == 200)
     {
       SetADC2Ready=1;
-     // const data =await res.arrayBuffer();
-     // console.log("adc2 current value:");
-     // console.log(data);
-      //const uint8Array = new Uint8Array(data);
-      //DIValue = parseInt(uint8Array, 16);
-      //console.log(DIValue);
     
     }
   }
 
+
+
+
+  async function getIO() {
+    const res = await fetch(window.location.origin+"/GeTIOdaTa", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      console.log ("getiodata 200 ok");
+      const data =await res.json();
+      console.log(data);
+      DIValue=data.di;
+      DOValue=data.do;
+      Adc1Type=data.ai1_type;
+      Adc2Type=data.ai2_type;
+      ADC1_value=data.ai1;
+      ADC2_value=data.ai2;
+
+    
+    }
+  }
+
+  function getIOdata() 
+  {
+    console.log('getio clicked');
+    getIO();
+  }
 
 
 
@@ -833,6 +845,25 @@
     }
   
   }
+
+  function SetDOValue()
+  {
+    if (DOValue == 0)
+    {
+      SetDOLowReady=0;
+      console.log("Set DO Close");
+      setDOLow();
+    }
+    else if (DOValue ==1)
+    {
+      SetDOHighReady=0;
+      console.log("Set DO Open");
+      setDOHigh();
+    }
+
+
+  }
+
 
 
 
@@ -1294,7 +1325,10 @@
   </TabItem>
 
 
-  <TabItem title="I/O">
+  <TabItem title="I/O" on:click={getIOdata}>
+
+
+{#if 0}
 
   <table>
 <tr>
@@ -1357,6 +1391,106 @@
 </tr>
 
 </table>
+{/if}
+
+<Accordion>
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    IO Settings
+    </span>
+
+<table>
+<tr>
+   <td class="pl-10">  <div class="flex gap-1">
+   <p class="w-26 pt-2">DO:</p>
+   <Radio bind:group={DOValue} class='pl-3' value={0}>Close</Radio>   
+   <Radio bind:group={DOValue} class='p-1' value={1}>Open</Radio>
+   <Button class="w-20" pill={true} on:click={SetDOValue}>Set</Button>
+   <p class="pl-2 pt-2">{#if DOValue==0 && SetDOLowReady==1}Command Executed{:else if DOValue==1 && SetDOHighReady==1}Command Executed{/if}</p>
+   </div>
+   </td>
+</tr>
+
+
+<tr>
+   <td class="pl-10 pt-10">  <div class="flex gap-1">
+   <p class="w-26 pt-3">AI-1:</p>
+   <Radio bind:group={Adc1Type} class='p-3' value={0}>Voltage</Radio>
+   <Radio bind:group={Adc1Type} class='p-1' value={1}>Current</Radio>
+   <Button class="w-20" pill={true} on:click={SetAdc1Type}>Set</Button>
+   <p class="pl-2 pt-2">{#if SetADC1Ready==1}Command Executed{/if}</p>
+   </div>
+   </td>
+</tr>
+
+
+
+<tr>
+   <td class="pl-10 pt-10">  <div class="flex gap-1">
+   <p class="w-26 pt-3">AI-2:</p>
+   <Radio bind:group={Adc2Type} class='p-3' value={0}>Voltage</Radio>
+   <Radio bind:group={Adc2Type} class='p-1' value={1}>Current</Radio>
+   <Button class="w-20" pill={true} on:click={SetAdc2Type}>Set</Button>
+   <p class="pl-2 pt-2">{#if SetADC2Ready==1}Command Executed{/if}</p>
+   </div>
+   </td>
+</tr>
+
+</table>
+
+
+    </AccordionItem>
+
+
+  <AccordionItem {defaultClass}>
+
+
+    <span slot="header" class="pl-4">
+    IO Status
+    </span>
+
+<table>
+
+<tr>
+   <td class="pl-10 pt-3">  <div class="flex gap-1">
+   <p class="w-26 pt-2">DI: {#if DIValue ==0}Low{:else if DIValue ==1}High{/if}</p>
+   </td>
+</tr>
+
+
+<tr>
+   <td class="pl-10 pt-10">  <div class="flex gap-1">
+   <p class="w-26 pt-2">DO: {#if DOValue ==0}Close{:else if DOValue ==1}Open{/if}</p>
+   </td>
+</tr>
+
+
+<tr>
+   <td class="pl-10 pt-10">  <div class="flex gap-1">
+   <p class="w-26 pt-2">AI-1:{#if ADC1_value !=""}{ADC1_value}{/if}{#if Adc1Type==0} (Voltage){:else if Adc1Type==1} (Current){/if}</p>
+   </td>
+</tr>
+
+<tr>
+   <td class="pl-10 pt-10">  <div class="flex gap-1">
+   <p class="w-26 pt-2">AI-2:{#if ADC2_value !=""}{ADC2_value}{/if}{#if Adc2Type==0} (Voltage){:else if Adc2Type==1} (Current){/if}</p>
+   </td>
+</tr>
+
+
+<tr>
+   <td class="pl-12 pt-10">    <Button class="w-22" pill={true} on:click={getIOdata}>Refresh</Button>
+   </td>
+</tr>
+
+
+
+     </AccordionItem>
+
+</Accordion>
 
 
   </TabItem>

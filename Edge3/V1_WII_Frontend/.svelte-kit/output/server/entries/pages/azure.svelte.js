@@ -1,20 +1,20 @@
-import { c as create_ssr_component, v as validate_component, i as add_attribute } from "../../_app/immutable/chunks/index-a89b87ed.js";
+import { c as create_ssr_component, v as validate_component, i as add_attribute } from "../../_app/immutable/chunks/index-54377ec4.js";
 import "classnames";
-import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
-/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-a38204dd.js";
-import { M as Modal } from "../../_app/immutable/chunks/Modal-ea7df515.js";
-import { T as Table } from "../../_app/immutable/chunks/Table-724d6c25.js";
-import { T as TableBody } from "../../_app/immutable/chunks/TableBody-3dfdaf75.js";
-import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-acf5b861.js";
-import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-14fff184.js";
-import { T as TabItem } from "../../_app/immutable/chunks/TabItem-424b0447.js";
-import { T as Tabs } from "../../_app/immutable/chunks/Tabs-ef5c5efe.js";
+import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
+/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-77cf2b36.js";
+import { M as Modal } from "../../_app/immutable/chunks/Modal-de764e50.js";
+import { T as Table } from "../../_app/immutable/chunks/Table-297ce0df.js";
+import { T as TableBody } from "../../_app/immutable/chunks/TableBody-85264b11.js";
+import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-20bd2092.js";
+import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-db67647d.js";
+import { T as TabItem } from "../../_app/immutable/chunks/TabItem-0910d666.js";
+import { T as Tabs } from "../../_app/immutable/chunks/Tabs-92f4be17.js";
 import { sessionidG } from "../endpoints/sessionG.js";
 /* empty css                                           */import { sdataLoggerConfig, ChangedSDataLoggerConfig, azureConfig, AzHub_ConfigChangedLog, AzHubDPS_ConfigChangedLog, AzCentral_ConfigChangedLog, ChangedAzureConfig, SDatalogger_ProxyMode_Edge_ConfigChangedLog, SDatalogger_MonitorMode_Cloud_ConfigChangedLog } from "../endpoints/configG.js";
-import "../../_app/immutable/chunks/Label-a273673c.js";
-import "../../_app/immutable/chunks/Frame-cafee768.js";
-import "../../_app/immutable/chunks/CloseButton-88212a62.js";
-import "../../_app/immutable/chunks/index-b74adbb6.js";
+import "../../_app/immutable/chunks/Label-44304d72.js";
+import "../../_app/immutable/chunks/Frame-c602be1d.js";
+import "../../_app/immutable/chunks/CloseButton-dd962073.js";
+import "../../_app/immutable/chunks/index-df2ccd83.js";
 const Azure = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let changed_azure_data = {};
   let NewHubConnectionStringEnable = false;
@@ -636,7 +636,7 @@ const Azure = create_ssr_component(($$result, $$props, $$bindings, slots) => {
                         }
                       })}
 
-<tr class="${"pt-5"}"><td></td>
+<tr class="pt-5"><td></td>
     <td></td>
     <td></td>
     <td></td>
@@ -646,9 +646,9 @@ const Azure = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     <td></td>
     <td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
                         default: () => {
-                          return `<svg class="${"mr-2 -ml-1 w-6 h-6"}" fill="${"none"}" stroke="${"currentColor"}" stroke-width="${"2"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}"><path d="${"M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"}" stroke-linecap="${"round"}" stroke-linejoin="${"round"}"></path></svg>Save`;
+                          return `<svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Save`;
                         }
                       })}</td></tr>`;
                     }
@@ -670,46 +670,46 @@ ${validate_component(Modal, "Modal").$$render(
                     },
                     {
                       default: () => {
-                        return `<form action="${"#"}"><label>${``}
+                        return `<form action="#"><label>${``}
   Enable
 </label>
-<button type="${"button"}" class="${"ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5"}" aria-label="${"Close"}"><span class="${"sr-only"}">Close modal</span> <svg class="${"w-5 h-5"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path fill-rule="${"evenodd"}" d="${"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"}" clip-rule="${"evenodd"}"></path></svg></button>
-<p class="${"mt-10"}"></p>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close"><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
 
 
-<table><tr><td class="${"pl-5 pt-5"}"><input type="${"checkbox"}" class="${"mb-1"}"${add_attribute("checked", ModifyHubConnectionStringEnable, 1)}>
-  <span class="${"pl-1 pt-3 text-lg font-light text-right"}">Use Connection String</span></td>
-<td class="${"pl-5 pt-5"}" colspan="${"6"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50"}" disabled${add_attribute("value", ModifyHubConnectionString, 0)}>`}</td></tr>
+<table><tr><td class="pl-5 pt-5"><input type="checkbox" class="mb-1"${add_attribute("checked", ModifyHubConnectionStringEnable, 1)}>
+  <span class="pl-1 pt-3 text-lg font-light text-right">Use Connection String</span></td>
+<td class="pl-5 pt-5" colspan="6">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled${add_attribute("value", ModifyHubConnectionString, 0)}>`}</td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Hub Name</p></td><td class="${"pl-5 pt-5"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName, 0)}>`}</td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Hub Name</p></td><td class="pl-5 pt-5">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].azHubName, 0)}>`}</td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Device ID</p></td><td class="${"pl-5 pt-5"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID, 0)}>`}</td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Device ID</p></td><td class="pl-5 pt-5">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].deviceID, 0)}>`}</td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Model ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].modelID, 0)}></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Model ID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].modelID, 0)}></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Attestation</p></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
 
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+      <td class="pl-5 pt-5"><div class="flex gap-2">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             class: "pb-2",
@@ -748,23 +748,23 @@ ${validate_component(Modal, "Modal").$$render(
                           }
                         )}</div></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
-${changed_azure_data.config.cloud_azHub_profile[modify_index].attestation == 0 ? `<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Symmetric Key</p></td><td class="${"pl-5 pt-5"}" colspan="${"6"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary, 0)}>`}</td></tr>` : `${changed_azure_data.config.cloud_azHub_profile[modify_index].attestation == 1 ? `<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Machine CA Certificate</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"2"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>
-
-
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Machine Certificate</p></td><td class="${"pl-5 pt-5"}" colspan="${"2"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
+${changed_azure_data.config.cloud_azHub_profile[modify_index].attestation == 0 ? `<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].symmetric_key_primary, 0)}>`}</td></tr>` : `${changed_azure_data.config.cloud_azHub_profile[modify_index].attestation == 1 ? `<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="2"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>
 
 
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
 
 
- <tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Push Interval</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"3"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+
+
+ <tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             value: 0,
@@ -800,14 +800,14 @@ ${changed_azure_data.config.cloud_azHub_profile[modify_index].attestation == 0 ?
                             }
                           }
                         )}
-${changed_azure_data.config.cloud_azHub_profile[modify_index].dataPushInterval == 0 ? `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16"}" disabled>` : `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"}"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
+${changed_azure_data.config.cloud_azHub_profile[modify_index].dataPushInterval == 0 ? `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>` : `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Link Lost Retransmit</p></td>
-    <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].linkLostRetransmit, 0)}>
-      <p class="${"pt-2 text-lg font-light text-left"}">Delay Seconds</p></div></td></tr>
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4"><div class="flex gap-4"><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azHub_profile[modify_index].linkLostRetransmit, 0)}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p></div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Priority</p></td>
-      <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             value: 0,
@@ -852,7 +852,7 @@ ${changed_azure_data.config.cloud_azHub_profile[modify_index].dataPushInterval =
     <td></td>
     <td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
                           default: () => {
                             return `Modify`;
                           }
@@ -876,46 +876,46 @@ ${validate_component(Modal, "Modal").$$render(
                     },
                     {
                       default: () => {
-                        return `<label><input type="${"checkbox"}"${add_attribute("checked", NewItem[new_item_index].enable, 1)}>
+                        return `<label><input type="checkbox"${add_attribute("checked", NewItem[new_item_index].enable, 1)}>
   Enable
 </label>
-<p class="${"mt-10"}"></p>
+<p class="mt-10"></p>
 
 
 
-<table><tr><td class="${"pl-5 pt-5"}"><input type="${"checkbox"}" class="${"mb-1"}"${add_attribute("checked", NewHubConnectionStringEnable, 1)}>
-  <span class="${"pl-1 pt-3 text-lg font-light text-right"}">Use Connection String</span></td>
-<td class="${"pl-5 pt-5"}" colspan="${"6"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50"}" disabled${add_attribute("value", NewHubConnectionString, 0)}>`}</td></tr>
+<table><tr><td class="pl-5 pt-5"><input type="checkbox" class="mb-1"${add_attribute("checked", NewHubConnectionStringEnable, 1)}>
+  <span class="pl-1 pt-3 text-lg font-light text-right">Use Connection String</span></td>
+<td class="pl-5 pt-5" colspan="6">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50" disabled${add_attribute("value", NewHubConnectionString, 0)}>`}</td></tr>
 
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Hub Name</p></td><td class="${"pl-5 pt-5"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItem[new_item_index].azHubName, 0)}>`}</td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Hub Name</p></td><td class="pl-5 pt-5">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItem[new_item_index].azHubName, 0)}>`}</td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Device ID</p></td><td class="${"pl-5 pt-5"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItem[new_item_index].deviceID, 0)}>`}</td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Device ID</p></td><td class="pl-5 pt-5">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItem[new_item_index].deviceID, 0)}>`}</td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Model ID</p></td><td class="${"pl-5 pt-5"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItem[new_item_index].modelID, 0)}>`}</td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Model ID</p></td><td class="pl-5 pt-5">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItem[new_item_index].modelID, 0)}>`}</td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Attestation</p></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
 
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-2"}">${`${validate_component(Radio, "Radio").$$render(
+      <td class="pl-5 pt-5"><div class="flex gap-2">${`${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             class: "pb-2",
@@ -954,24 +954,24 @@ ${validate_component(Modal, "Modal").$$render(
                           }
                         )}`}</div></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
 
-${NewItem[new_item_index].attestation == 0 ? `<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Symmetric Key</p></td><td class="${"pl-5 pt-5"}" colspan="${"6"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItem[new_item_index].symmetric_key_primary, 0)}>`}</td></tr>` : `${NewItem[new_item_index].attestation == 1 ? `<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Machine CA Certificate</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"2"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>
+${NewItem[new_item_index].attestation == 0 ? `<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItem[new_item_index].symmetric_key_primary, 0)}>`}</td></tr>` : `${NewItem[new_item_index].attestation == 1 ? `<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="2"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>
 
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Machine Certificate</p></td><td class="${"pl-5 pt-5"}" colspan="${"2"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="2"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
 
 
 
- <tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Push Interval</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"3"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+ <tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             value: 0,
@@ -1007,14 +1007,14 @@ ${NewItem[new_item_index].attestation == 0 ? `<tr><td><p class="${"pl-20 pt-4 te
                             }
                           }
                         )}
-${NewItem[new_item_index].dataPushInterval == 0 ? `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16"}" disabled>` : `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"}"${add_attribute("value", NewItem[new_item_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
+${NewItem[new_item_index].dataPushInterval == 0 ? `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>` : `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"${add_attribute("value", NewItem[new_item_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Link Lost Retransmit</p></td>
-    <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItem[new_item_index].linkLostRetransmit, 0)}>
-      <p class="${"pt-2 text-lg font-light text-left"}">Delay Seconds</p></div></td></tr>
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4"><div class="flex gap-4"><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItem[new_item_index].linkLostRetransmit, 0)}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p></div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Priority</p></td>
-      <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             value: 0,
@@ -1067,7 +1067,7 @@ ${NewItem[new_item_index].dataPushInterval == 0 ? `<input type="${"number"}" cla
     <td></td>
     <td></td>
 
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
                           default: () => {
                             return `Add`;
                           }
@@ -1178,7 +1178,7 @@ ${NewItem[new_item_index].dataPushInterval == 0 ? `<input type="${"number"}" cla
                         }
                       })}
 
-<tr class="${"pt-5"}"><td></td>
+<tr class="pt-5"><td></td>
     <td></td>
     <td></td>
     <td></td>
@@ -1193,9 +1193,9 @@ ${NewItem[new_item_index].dataPushInterval == 0 ? `<input type="${"number"}" cla
     <td></td>
     <td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
                         default: () => {
-                          return `<svg class="${"mr-2 -ml-1 w-6 h-6"}" fill="${"none"}" stroke="${"currentColor"}" stroke-width="${"2"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}"><path d="${"M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"}" stroke-linecap="${"round"}" stroke-linejoin="${"round"}"></path></svg>Save`;
+                          return `<svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Save`;
                         }
                       })}</td></tr>`;
                     }
@@ -1218,43 +1218,43 @@ ${validate_component(Modal, "Modal").$$render(
                     },
                     {
                       default: () => {
-                        return `<form action="${"#"}"><label>${``}
+                        return `<form action="#"><label>${``}
   Enable
 </label>
-<button type="${"button"}" class="${"ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5"}" aria-label="${"Close"}"><span class="${"sr-only"}">Close modal</span> <svg class="${"w-5 h-5"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path fill-rule="${"evenodd"}" d="${"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"}" clip-rule="${"evenodd"}"></path></svg></button>
-<p class="${"mt-10"}"></p>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close"><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
 
 
-<table><tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">ID Scope</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].idScope, 0)}></td>
+<table><tr><td><p class="pl-20 pt-4 text-lg font-light text-right">ID Scope</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].idScope, 0)}></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
-
-
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Registration ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].RegistrationID, 0)}></td>
-
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Model ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].modelID, 0)}></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Registration ID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].RegistrationID, 0)}></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Enrollment</p></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Model ID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].modelID, 0)}></td>
 
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
+
+
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Enrollment</p></td>
+
+      <td class="pl-5 pt-5"><div class="flex gap-2">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             class: "pb-2",
@@ -1293,19 +1293,19 @@ ${validate_component(Modal, "Modal").$$render(
                           }
                         )}</div></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
 
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Attestation</p></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
 
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+      <td class="pl-5 pt-5"><div class="flex gap-2">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             class: "pb-2",
@@ -1344,24 +1344,24 @@ ${validate_component(Modal, "Modal").$$render(
                           }
                         )}</div></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
-${changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].attestation == 0 ? `<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Symmetric Key</p></td><td class="${"pl-5 pt-5"}" colspan="${"6"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].symmetric_key_primary, 0)}></td></tr>` : `${changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].attestation == 1 ? `<tr><td><p class="${"pl-5 pt-4 text-lg font-light text-right"}">Machine CA Certificate</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"6"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>
-
-
-<tr><td><p class="${"pl-5 pt-4 text-lg font-light text-right"}">Machine Certificate</p></td><td class="${"pl-5 pt-5"}" colspan="${"6"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
+${changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].attestation == 0 ? `<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].symmetric_key_primary, 0)}></td></tr>` : `${changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].attestation == 1 ? `<tr><td><p class="pl-5 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="6"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>
 
 
+<tr><td><p class="pl-5 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="6"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
 
 
 
- <tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Push Interval</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"3"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+
+
+ <tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             value: 0,
@@ -1397,14 +1397,14 @@ ${changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].attestation ==
                             }
                           }
                         )}
-${changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPushInterval == 0 ? `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16"}" disabled>` : `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"}"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
+${changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPushInterval == 0 ? `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>` : `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Link Lost Retransmit</p></td>
-    <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].linkLostRetransmit, 0)}>
-      <p class="${"pt-2 text-lg font-light text-left"}">Delay Seconds</p></div></td></tr>
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4"><div class="flex gap-4"><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].linkLostRetransmit, 0)}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p></div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Priority</p></td>
-      <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             value: 0,
@@ -1453,7 +1453,7 @@ ${changed_azure_data.config.cloud_azDPS_profile[modify_dps_index].dataPushInterv
     <td></td>
     <td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
                           default: () => {
                             return `Modify`;
                           }
@@ -1477,42 +1477,42 @@ ${validate_component(Modal, "Modal").$$render(
                     },
                     {
                       default: () => {
-                        return `<label><input type="${"checkbox"}"${add_attribute("checked", NewItemDPS[new_item_dps_index].enable, 1)}>
+                        return `<label><input type="checkbox"${add_attribute("checked", NewItemDPS[new_item_dps_index].enable, 1)}>
   Enable
 </label>
-<p class="${"mt-10"}"></p>
+<p class="mt-10"></p>
 
 
 
-<table><tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">ID Scope</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemDPS[new_item_dps_index].idScope, 0)}></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+<table><tr><td><p class="pl-20 pt-4 text-lg font-light text-right">ID Scope</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemDPS[new_item_dps_index].idScope, 0)}></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Registration ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemDPS[new_item_dps_index].RegistrationID, 0)}></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Registration ID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemDPS[new_item_dps_index].RegistrationID, 0)}></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Model ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemDPS[new_item_dps_index].modelID, 0)}></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Model ID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemDPS[new_item_dps_index].modelID, 0)}></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Enrollment</p></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Enrollment</p></td>
 
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+      <td class="pl-5 pt-5"><div class="flex gap-2">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             class: "pb-2",
@@ -1551,18 +1551,18 @@ ${validate_component(Modal, "Modal").$$render(
                           }
                         )}</div></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Attestation</p></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
 
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+      <td class="pl-5 pt-5"><div class="flex gap-2">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             class: "pb-2",
@@ -1601,20 +1601,20 @@ ${validate_component(Modal, "Modal").$$render(
                           }
                         )}</div></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
-${NewItemDPS[new_item_dps_index].attestation == 0 ? `<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Symmetric Key</p></td><td class="${"pl-5 pt-5"}" colspan="${"6"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemDPS[new_item_dps_index].symmetric_key_primary, 0)}></td></tr>` : `${NewItemDPS[new_item_dps_index].attestation == 1 ? `<tr><td><p class="${"pl-5 pt-4 text-lg font-light text-right"}">Machine CA Certificate</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"6"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>
+${NewItemDPS[new_item_dps_index].attestation == 0 ? `<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemDPS[new_item_dps_index].symmetric_key_primary, 0)}></td></tr>` : `${NewItemDPS[new_item_dps_index].attestation == 1 ? `<tr><td><p class="pl-5 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="6"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>
 
 
-<tr><td><p class="${"pl-5 pt-4 text-lg font-light text-right"}">Machine Certificate</p></td><td class="${"pl-5 pt-5"}" colspan="${"6"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
+<tr><td><p class="pl-5 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="6"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
 
- <tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Push Interval</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"3"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+ <tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             value: 0,
@@ -1650,14 +1650,14 @@ ${NewItemDPS[new_item_dps_index].attestation == 0 ? `<tr><td><p class="${"pl-20 
                             }
                           }
                         )}
-${NewItemDPS[new_item_dps_index].dataPushInterval == 0 ? `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16"}" disabled>` : `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"}"${add_attribute("value", NewItemDPS[new_item_dps_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
+${NewItemDPS[new_item_dps_index].dataPushInterval == 0 ? `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>` : `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"${add_attribute("value", NewItemDPS[new_item_dps_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Link Lost Retransmit</p></td>
-    <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemDPS[new_item_dps_index].linkLostRetransmit, 0)}>
-      <p class="${"pt-2 text-lg font-light text-left"}">Delay Seconds</p></div></td></tr>
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4"><div class="flex gap-4"><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemDPS[new_item_dps_index].linkLostRetransmit, 0)}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p></div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Priority</p></td>
-      <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                           $$result,
                           {
                             value: 0,
@@ -1708,7 +1708,7 @@ ${NewItemDPS[new_item_dps_index].dataPushInterval == 0 ? `<input type="${"number
     <td></td>
     <td></td>
 
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
                           default: () => {
                             return `Add`;
                           }
@@ -1823,7 +1823,7 @@ ${NewItemDPS[new_item_dps_index].dataPushInterval == 0 ? `<input type="${"number
                         }
                       })}
 
-<tr class="${"pt-5"}"><td></td>
+<tr class="pt-5"><td></td>
     <td></td>
     <td></td>
     <td></td>
@@ -1836,9 +1836,9 @@ ${NewItemDPS[new_item_dps_index].dataPushInterval == 0 ? `<input type="${"number
     <td></td>
     <td></td>
 
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
                         default: () => {
-                          return `<svg class="${"mr-2 -ml-1 w-6 h-6"}" fill="${"none"}" stroke="${"currentColor"}" stroke-width="${"2"}" viewBox="${"0 0 24 24"}" xmlns="${"http://www.w3.org/2000/svg"}"><path d="${"M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"}" stroke-linecap="${"round"}" stroke-linejoin="${"round"}"></path></svg>Save`;
+                          return `<svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Save`;
                         }
                       })}</td></tr>
 
@@ -1859,51 +1859,51 @@ ${validate_component(Modal, "Modal").$$render(
                         },
                         {
                           default: () => {
-                            return `<form action="${"#"}"><label>${``}
+                            return `<form action="#"><label>${``}
   Enable
 </label>
-<button type="${"button"}" class="${"ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5"}" aria-label="${"Close"}"><span class="${"sr-only"}">Close modal</span> <svg class="${"w-5 h-5"}" fill="${"currentColor"}" viewBox="${"0 0 20 20"}" xmlns="${"http://www.w3.org/2000/svg"}"><path fill-rule="${"evenodd"}" d="${"M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"}" clip-rule="${"evenodd"}"></path></svg></button>
-<p class="${"mt-10"}"></p>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close"><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<p class="mt-10"></p>
 
 
-<table><tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Application Name</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].applicationName, 0)}></td>
+<table><tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Application Name</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].applicationName, 0)}></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
-
-
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">ID Scope</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].idScope, 0)}></td>
-
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Device ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].deviceID, 0)}></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">ID Scope</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].idScope, 0)}></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
-
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Model ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].modelID, 0)}></td>
-
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Enrollment</p></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Device ID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].deviceID, 0)}></td>
 
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
+
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Model ID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].modelID, 0)}></td>
+
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
+
+
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Enrollment</p></td>
+
+      <td class="pl-5 pt-5"><div class="flex gap-2">${validate_component(Radio, "Radio").$$render(
                               $$result,
                               {
                                 class: "pb-2",
@@ -1942,20 +1942,20 @@ ${validate_component(Modal, "Modal").$$render(
                               }
                             )}</div></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
 
 
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Attestation</p></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
 
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+      <td class="pl-5 pt-5"><div class="flex gap-2">${validate_component(Radio, "Radio").$$render(
                               $$result,
                               {
                                 class: "pb-2",
@@ -1994,20 +1994,20 @@ ${validate_component(Modal, "Modal").$$render(
                               }
                             )}</div></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
-${changed_azure_data.config.cloud_azCentral_profile[modify_central_index].attestation == 0 ? `<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Symmetric Key</p></td><td class="${"pl-5 pt-5"}" colspan="${"6"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].symmetric_key_primary, 0)}></td></tr>` : `${changed_azure_data.config.cloud_azCentral_profile[modify_central_index].attestation == 1 ? `<tr><td><p class="${"pl-5 pt-4 text-lg font-light text-right"}">Machine CA Certificate</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"6"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>
+${changed_azure_data.config.cloud_azCentral_profile[modify_central_index].attestation == 0 ? `<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].symmetric_key_primary, 0)}></td></tr>` : `${changed_azure_data.config.cloud_azCentral_profile[modify_central_index].attestation == 1 ? `<tr><td><p class="pl-5 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="6"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>
 
 
-<tr><td><p class="${"pl-5 pt-4 text-lg font-light text-right"}">Machine Certificate</p></td><td class="${"pl-5 pt-5"}" colspan="${"6"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
+<tr><td><p class="pl-5 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="6"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
 
- <tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Push Interval</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"3"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+ <tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                               $$result,
                               {
                                 value: 0,
@@ -2043,14 +2043,14 @@ ${changed_azure_data.config.cloud_azCentral_profile[modify_central_index].attest
                                 }
                               }
                             )}
-${changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPushInterval == 0 ? `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16"}" disabled>` : `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"}"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
+${changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPushInterval == 0 ? `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>` : `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Link Lost Retransmit</p></td>
-    <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].linkLostRetransmit, 0)}>
-      <p class="${"pt-2 text-lg font-light text-left"}">Delay Seconds</p></div></td></tr>
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4"><div class="flex gap-4"><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_azure_data.config.cloud_azCentral_profile[modify_central_index].linkLostRetransmit, 0)}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p></div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Priority</p></td>
-      <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                               $$result,
                               {
                                 value: 0,
@@ -2097,7 +2097,7 @@ ${changed_azure_data.config.cloud_azCentral_profile[modify_central_index].dataPu
     <td></td>
     <td></td>
     <td></td>
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
                               default: () => {
                                 return `Modify`;
                               }
@@ -2121,46 +2121,46 @@ ${validate_component(Modal, "Modal").$$render(
                         },
                         {
                           default: () => {
-                            return `<label><input type="${"checkbox"}"${add_attribute("checked", NewItemCentral[new_item_central_index].enable, 1)}>
+                            return `<label><input type="checkbox"${add_attribute("checked", NewItemCentral[new_item_central_index].enable, 1)}>
   Enable
 </label>
-<p class="${"mt-10"}"></p>
+<p class="mt-10"></p>
 
 
 
-<table><tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Application Name</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemCentral[new_item_central_index].applicationName, 0)}></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+<table><tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Application Name</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemCentral[new_item_central_index].applicationName, 0)}></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">ID Scope</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemCentral[new_item_central_index].idScope, 0)}></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
-
-
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Device ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemCentral[new_item_central_index].deviceID, 0)}></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
-
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Model ID</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemCentral[new_item_central_index].modelID, 0)}></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">ID Scope</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemCentral[new_item_central_index].idScope, 0)}></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Enrollment</p></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Device ID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemCentral[new_item_central_index].deviceID, 0)}></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Model ID</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemCentral[new_item_central_index].modelID, 0)}></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
+
+
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Enrollment</p></td>
+
+      <td class="pl-5 pt-5"><div class="flex gap-2">${validate_component(Radio, "Radio").$$render(
                               $$result,
                               {
                                 class: "pb-2",
@@ -2199,18 +2199,18 @@ ${validate_component(Modal, "Modal").$$render(
                               }
                             )}</div></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
 
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Attestation</p></td>
+<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Attestation</p></td>
 
-      <td class="${"pl-5 pt-5"}"><div class="${"flex gap-2"}">${validate_component(Radio, "Radio").$$render(
+      <td class="pl-5 pt-5"><div class="flex gap-2">${validate_component(Radio, "Radio").$$render(
                               $$result,
                               {
                                 class: "pb-2",
@@ -2249,20 +2249,20 @@ ${validate_component(Modal, "Modal").$$render(
                               }
                             )}</div></td>
 
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td>
-    <td class="${"w-10"}"></td></tr>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td>
+    <td class="w-10"></td></tr>
 
-${NewItemCentral[new_item_central_index].attestation == 0 ? `<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Symmetric Key</p></td><td class="${"pl-5 pt-5"}" colspan="${"6"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemCentral[new_item_central_index].symmetric_key_primary, 0)}></td></tr>` : `${NewItemCentral[new_item_central_index].attestation == 1 ? `<tr><td><p class="${"pl-5 pt-4 text-lg font-light text-right"}">Machine CA Certificate</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"6"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>
+${NewItemCentral[new_item_central_index].attestation == 0 ? `<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Symmetric Key</p></td><td class="pl-5 pt-5" colspan="6"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemCentral[new_item_central_index].symmetric_key_primary, 0)}></td></tr>` : `${NewItemCentral[new_item_central_index].attestation == 1 ? `<tr><td><p class="pl-5 pt-4 text-lg font-light text-right">Machine CA Certificate</p></td>
+      <td class="pl-5 pt-5" colspan="6"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>
 
 
-<tr><td><p class="${"pl-5 pt-4 text-lg font-light text-right"}">Machine Certificate</p></td><td class="${"pl-5 pt-5"}" colspan="${"6"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${"none"}">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
+<tr><td><p class="pl-5 pt-4 text-lg font-light text-right">Machine Certificate</p></td><td class="pl-5 pt-5" colspan="6"><select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"><option disabled="" value="none">Choose Certificate ...</option>${``}</select></td></tr>` : ``}`}
 
- <tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Push Interval</p></td>
-      <td class="${"pl-5 pt-5"}" colspan="${"3"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+ <tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Push Interval</p></td>
+      <td class="pl-5 pt-5" colspan="3"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                               $$result,
                               {
                                 value: 0,
@@ -2298,14 +2298,14 @@ ${NewItemCentral[new_item_central_index].attestation == 0 ? `<tr><td><p class="$
                                 }
                               }
                             )}
-${NewItemCentral[new_item_central_index].dataPushInterval == 0 ? `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16"}" disabled>` : `<input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"}"${add_attribute("value", NewItemCentral[new_item_central_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
+${NewItemCentral[new_item_central_index].dataPushInterval == 0 ? `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 w-16" disabled>` : `<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-16"${add_attribute("value", NewItemCentral[new_item_central_index].dataPushIntervalValue, 0)}>`}</div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Link Lost Retransmit</p></td>
-    <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NewItemCentral[new_item_central_index].linkLostRetransmit, 0)}>
-      <p class="${"pt-2 text-lg font-light text-left"}">Delay Seconds</p></div></td></tr>
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Link Lost Retransmit</p></td>
+    <td class="pl-4 pt-4"><div class="flex gap-4"><input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", NewItemCentral[new_item_central_index].linkLostRetransmit, 0)}>
+      <p class="pt-2 text-lg font-light text-left">Delay Seconds</p></div></td></tr>
 
-<tr><td><p class="${"pl-4 pt-4 text-lg font-light text-right"}">Data Priority</p></td>
-      <td class="${"pl-4 pt-4"}"><div class="${"flex gap-4"}">${validate_component(Radio, "Radio").$$render(
+<tr><td><p class="pl-4 pt-4 text-lg font-light text-right">Data Priority</p></td>
+      <td class="pl-4 pt-4"><div class="flex gap-4">${validate_component(Radio, "Radio").$$render(
                               $$result,
                               {
                                 value: 0,
@@ -2358,7 +2358,7 @@ ${NewItemCentral[new_item_central_index].dataPushInterval == 0 ? `<input type="$
     <td></td>
     <td></td>
 
-    <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
+    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "dark", pill: true }, {}, {
                               default: () => {
                                 return `Add`;
                               }

@@ -3,11 +3,11 @@ export const manifest = {
 	assets: new Set(["EWLOGO.png","favicon.png"]),
 	mimeTypes: {".png":"image/png"},
 	_: {
-		entry: {"file":"_app/immutable/start-41700142.js","imports":["_app/immutable/start-41700142.js","_app/immutable/chunks/index-37477684.js","_app/immutable/chunks/index-744c10a2.js"],"stylesheets":[]},
+		entry: {"file":"_app/immutable/start-cbb630ee.js","imports":["_app/immutable/start-cbb630ee.js","_app/immutable/chunks/index-e8550257.js","_app/immutable/chunks/index-733060bd.js"],"stylesheets":[]},
 		nodes: [
 			() => import('./nodes/0.js'),
 			() => import('./nodes/1.js'),
-			() => import('./nodes/16.js'),
+			() => import('./nodes/17.js'),
 			() => import('./nodes/2.js'),
 			() => import('./nodes/3.js'),
 			() => import('./nodes/4.js'),
@@ -22,7 +22,7 @@ export const manifest = {
 			() => import('./nodes/13.js'),
 			() => import('./nodes/14.js'),
 			() => import('./nodes/15.js'),
-			() => import('./nodes/17.js'),
+			() => import('./nodes/16.js'),
 			() => import('./nodes/18.js'),
 			() => import('./nodes/19.js'),
 			() => import('./nodes/20.js'),
@@ -33,7 +33,10 @@ export const manifest = {
 			() => import('./nodes/25.js'),
 			() => import('./nodes/26.js'),
 			() => import('./nodes/27.js'),
-			() => import('./nodes/28.js')
+			() => import('./nodes/28.js'),
+			() => import('./nodes/29.js'),
+			() => import('./nodes/30.js'),
+			() => import('./nodes/31.js')
 		],
 		routes: [
 			{
@@ -76,24 +79,13 @@ export const manifest = {
 			},
 			{
 				type: 'page',
-				id: "PortC",
-				pattern: /^\/PortC\/?$/,
-				names: [],
-				types: [],
-				path: "/PortC",
-				shadow: null,
-				a: [0,4],
-				b: [1]
-			},
-			{
-				type: 'page',
 				id: "account",
 				pattern: /^\/account\/?$/,
 				names: [],
 				types: [],
 				path: "/account",
 				shadow: null,
-				a: [0,5],
+				a: [0,4],
 				b: [1]
 			},
 			{
@@ -104,7 +96,7 @@ export const manifest = {
 				types: [],
 				path: "/apply",
 				shadow: null,
-				a: [0,6],
+				a: [0,5],
 				b: [1]
 			},
 			{
@@ -115,7 +107,7 @@ export const manifest = {
 				types: [],
 				path: "/awsIoTcore",
 				shadow: null,
-				a: [0,7],
+				a: [0,6],
 				b: [1]
 			},
 			{
@@ -126,7 +118,7 @@ export const manifest = {
 				types: [],
 				path: "/azure",
 				shadow: null,
-				a: [0,8],
+				a: [0,7],
 				b: [1]
 			},
 			{
@@ -137,7 +129,7 @@ export const manifest = {
 				types: [],
 				path: "/certificate",
 				shadow: null,
-				a: [0,9],
+				a: [0,8],
 				b: [1]
 			},
 			{
@@ -147,6 +139,17 @@ export const manifest = {
 				names: [],
 				types: [],
 				path: "/configuration",
+				shadow: null,
+				a: [0,9],
+				b: [1]
+			},
+			{
+				type: 'page',
+				id: "conversion",
+				pattern: /^\/conversion\/?$/,
+				names: [],
+				types: [],
+				path: "/conversion",
 				shadow: null,
 				a: [0,10],
 				b: [1]
@@ -186,13 +189,24 @@ export const manifest = {
 			},
 			{
 				type: 'page',
+				id: "esim",
+				pattern: /^\/esim\/?$/,
+				names: [],
+				types: [],
+				path: "/esim",
+				shadow: null,
+				a: [0,14],
+				b: [1]
+			},
+			{
+				type: 'page',
 				id: "event",
 				pattern: /^\/event\/?$/,
 				names: [],
 				types: [],
 				path: "/event",
 				shadow: null,
-				a: [0,14],
+				a: [0,15],
 				b: [1]
 			},
 			{
@@ -203,7 +217,7 @@ export const manifest = {
 				types: [],
 				path: "/firewall",
 				shadow: null,
-				a: [0,15],
+				a: [0,16],
 				b: [1]
 			},
 			{
@@ -214,7 +228,7 @@ export const manifest = {
 				types: [],
 				path: "/gMQTT",
 				shadow: null,
-				a: [0,16],
+				a: [0,17],
 				b: [1]
 			},
 			{
@@ -225,7 +239,7 @@ export const manifest = {
 				types: [],
 				path: "/ipsec",
 				shadow: null,
-				a: [0,17],
+				a: [0,18],
 				b: [1]
 			},
 			{
@@ -236,7 +250,7 @@ export const manifest = {
 				types: [],
 				path: "/lan",
 				shadow: null,
-				a: [0,18],
+				a: [0,19],
 				b: [1]
 			},
 			{
@@ -247,7 +261,7 @@ export const manifest = {
 				types: [],
 				path: "/logout",
 				shadow: null,
-				a: [0,19],
+				a: [0,20],
 				b: [1]
 			},
 			{
@@ -258,7 +272,7 @@ export const manifest = {
 				types: [],
 				path: "/maintenance",
 				shadow: null,
-				a: [0,20],
+				a: [0,21],
 				b: [1]
 			},
 			{
@@ -269,7 +283,7 @@ export const manifest = {
 				types: [],
 				path: "/modbus",
 				shadow: null,
-				a: [0,21],
+				a: [0,22],
 				b: [1]
 			},
 			{
@@ -280,7 +294,7 @@ export const manifest = {
 				types: [],
 				path: "/nat",
 				shadow: null,
-				a: [0,22],
+				a: [0,23],
 				b: [1]
 			},
 			{
@@ -291,7 +305,7 @@ export const manifest = {
 				types: [],
 				path: "/openvpn",
 				shadow: null,
-				a: [0,23],
+				a: [0,24],
 				b: [1]
 			},
 			{
@@ -302,7 +316,18 @@ export const manifest = {
 				types: [],
 				path: "/operation",
 				shadow: null,
-				a: [0,24],
+				a: [0,25],
+				b: [1]
+			},
+			{
+				type: 'page',
+				id: "phyInterface",
+				pattern: /^\/phyInterface\/?$/,
+				names: [],
+				types: [],
+				path: "/phyInterface",
+				shadow: null,
+				a: [0,26],
 				b: [1]
 			},
 			{
@@ -313,7 +338,7 @@ export const manifest = {
 				types: [],
 				path: "/remoteS",
 				shadow: null,
-				a: [0,25],
+				a: [0,27],
 				b: [1]
 			},
 			{
@@ -324,7 +349,7 @@ export const manifest = {
 				types: [],
 				path: "/sdatalogger",
 				shadow: null,
-				a: [0,26],
+				a: [0,28],
 				b: [1]
 			},
 			{
@@ -335,7 +360,7 @@ export const manifest = {
 				types: [],
 				path: "/staticR",
 				shadow: null,
-				a: [0,27],
+				a: [0,29],
 				b: [1]
 			},
 			{
@@ -346,7 +371,18 @@ export const manifest = {
 				types: [],
 				path: "/wan",
 				shadow: null,
-				a: [0,28],
+				a: [0,30],
+				b: [1]
+			},
+			{
+				type: 'page',
+				id: "wifi",
+				pattern: /^\/wifi\/?$/,
+				names: [],
+				types: [],
+				path: "/wifi",
+				shadow: null,
+				a: [0,31],
 				b: [1]
 			}
 		],

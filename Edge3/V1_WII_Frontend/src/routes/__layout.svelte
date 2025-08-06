@@ -1180,8 +1180,14 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 						<SidebarDropdownItem label="LAN" href='/lan' active={activeUrl === '/lan'}/>
 						<SidebarDropdownItem label="Port Forwarding" href='/nat' active={activeUrl === '/nat'}/>
 						<SidebarDropdownItem label="Firewall" href='/firewall'  active={activeUrl === '/firewall'}/>
+
+{#if 0}						
 						<SidebarDropdownItem label="Static Route" href='/staticR' active={activeUrl === '/staticR'}/>
+{/if}
+
+{#if 0}
 						<SidebarDropdownItem label="eSim" href='/esim' active={activeUrl === '/esim'}/>	
+{/if}
 					</SidebarDropdownWrapper>
 					
 	<SidebarDropdownWrapper
@@ -1208,7 +1214,7 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 
 					</SidebarDropdownWrapper>
 					
-		
+{#if 0}		
 <SidebarDropdownWrapper
 						label="Cloud"
 					>
@@ -1221,6 +1227,7 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 						<SidebarDropdownItem label="Generic MQTT" href='/gMQTT' active={activeUrl === '/gMQTT'}/>
 
 					</SidebarDropdownWrapper>
+{/if}					
 
 <SidebarDropdownWrapper
 						label="Field Management"
@@ -1255,6 +1262,8 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 						        <SidebarDropdownItem label="Modbus" href='/modbus' active={activeUrl === '/modbus'}/>
 					</SidebarDropdownWrapper>
 
+{#if 0}
+					
 					<SidebarDropdownWrapper
 						label="Service"
 					>
@@ -1268,18 +1277,26 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 {#if opcua_flag==1}
         			    <SidebarDropdownItem label="Smart Conversion" href='/conversion' active={activeUrl === '/conversion'}/>
 {/if}
+
+{#if 0}
+
         			    <SidebarDropdownItem label="Smart Data Logger" href='/sdatalogger' active={activeUrl === '/sdatalogger'}/>
+
+{/if}
 
 {#if data_tag_pro_flag==1}
         			    <SidebarDropdownItem label="Data Tag Engine PRO" href='/datatagpro' active={activeUrl === '/datatagpro'}/>
 {/if}
 						<SidebarDropdownItem label="Event Engine" href='/event' active={activeUrl === '/event'}/>
-						
+
+{#if 0}						
         				<SidebarDropdownItem label="Remote Service" href='/remoteS' active={activeUrl === '/remoteS'}/>
+
+{/if}
+
 					</SidebarDropdownWrapper>
-
-
-
+{/if}
+					
 					<SidebarDropdownWrapper
 						label="System"
 					>

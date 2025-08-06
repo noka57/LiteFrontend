@@ -1,5 +1,5 @@
-import { w as writable } from "../../_app/immutable/chunks/index-b74adbb6.js";
-import "../../_app/immutable/chunks/index-a89b87ed.js";
+import { w as writable } from "../../_app/immutable/chunks/index-df2ccd83.js";
+import "../../_app/immutable/chunks/index-54377ec4.js";
 const dashboadData = writable("");
 const VPNdashboad = writable("");
 const ewanWebInputFlag = writable("");
@@ -8,6 +8,9 @@ const fakeTimeMSecSince1970 = writable("");
 const fakeTimeString = writable("");
 const enableDataTagEnginePROall = writable("");
 const wholeConfigVersion = writable("");
+const enableOPCUA = writable("");
+const WiFiConfig = writable("");
+const sconversionConfig = writable("");
 const awsIoTcoreConfig = writable("");
 const azureConfig = writable("");
 const eventEngineConfig = writable("");
@@ -29,6 +32,14 @@ const lanConfig = writable("");
 const wanConfig = writable("");
 const configurationConfig = writable("");
 const datatagproConfig = writable("");
+const WiFi_11ah_ConfigChangedLog = writable("");
+const WiFi_11ah_General_ConfigChangedLog = writable("");
+const ChangedWiFiConfig = writable("");
+const OPCUA_Server_ConfigChangedLog = writable("");
+const OPCUA_Client_ConfigChangedLog = writable("");
+const Conversion_Opcua2Modbus_ConfigChangedLog = writable("");
+const Conversion_OpcuaGateway_ConfigChangedLog = writable("");
+const ChangedSConfigConfig = writable("");
 const ConfigurationP2EConfigChangedLog = writable("");
 const ChangedConfigurationConfig = writable("");
 const AzCentral_ConfigChangedLog = writable("");
@@ -171,10 +182,14 @@ export {
   ChangedOperationConfig,
   ChangedPortConnectionConfig,
   ChangedRemoteServiceConfig,
+  ChangedSConfigConfig,
   ChangedSDataLoggerConfig,
   ChangedStaticRouteConfig,
   ChangedWANConfig,
+  ChangedWiFiConfig,
   ConfigurationP2EConfigChangedLog,
+  Conversion_Opcua2Modbus_ConfigChangedLog,
+  Conversion_OpcuaGateway_ConfigChangedLog,
   DHCPServerLANConfigLog,
   DataTagPro_General_ConfigChangedLog,
   DataTagPro_TagRuleAccumulated_ConfigChangedLog,
@@ -229,6 +244,8 @@ export {
   NAT_LoopBack_ConfigChangedLog,
   NAT_VC_ConfigChangedLog,
   NAT_VS_ConfigChangedLog,
+  OPCUA_Client_ConfigChangedLog,
+  OPCUA_Server_ConfigChangedLog,
   OpenVPN_Basic_ConfigChangedLog,
   OpenVPN_Client_Advanced_FO_ConfigChangedLog,
   OpenVPN_Client_Advanced_PFW_ConfigChangedLog,
@@ -265,6 +282,9 @@ export {
   WAN_FareSavingPolicy_ConfigChangedLog,
   WAN_PORT_SWITCH_ConfigChangedLog,
   WAN_RedundancyPolicy_ConfigChangedLog,
+  WiFiConfig,
+  WiFi_11ah_ConfigChangedLog,
+  WiFi_11ah_General_ConfigChangedLog,
   awsIoTcoreConfig,
   azureConfig,
   certificateConfig,
@@ -274,6 +294,7 @@ export {
   datatagproConfig,
   dockerConfig,
   enableDataTagEnginePROall,
+  enableOPCUA,
   eventEngineConfig,
   ewanWebInputFlag,
   fakeTimeMSecSince1970,
@@ -289,6 +310,7 @@ export {
   operationConfig,
   portConnectionConfig,
   remoteServiceConfig,
+  sconversionConfig,
   sdataLoggerConfig,
   staticrouteConfig,
   wanConfig,

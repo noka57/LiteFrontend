@@ -11,7 +11,6 @@ declare module '$env/static/private' {
 	export const USER: string;
 	export const LC_TIME: string;
 	export const npm_config_user_agent: string;
-	export const SSH_AGENT_PID: string;
 	export const XDG_SESSION_TYPE: string;
 	export const npm_node_execpath: string;
 	export const SHLVL: string;
@@ -33,6 +32,7 @@ declare module '$env/static/private' {
 	export const COLOR: string;
 	export const npm_config_metrics_registry: string;
 	export const IM_CONFIG_PHASE: string;
+	export const WAYLAND_DISPLAY: string;
 	export const LOGNAME: string;
 	export const JOURNAL_STREAM: string;
 	export const _: string;
@@ -42,7 +42,6 @@ declare module '$env/static/private' {
 	export const TERM: string;
 	export const npm_config_cache: string;
 	export const GNOME_DESKTOP_SESSION_ID: string;
-	export const WINDOWPATH: string;
 	export const npm_config_node_gyp: string;
 	export const PATH: string;
 	export const SESSION_MANAGER: string;
@@ -52,6 +51,7 @@ declare module '$env/static/private' {
 	export const XDG_MENU_PREFIX: string;
 	export const LC_ADDRESS: string;
 	export const GNOME_TERMINAL_SCREEN: string;
+	export const GNOME_SETUP_DISPLAY: string;
 	export const XDG_RUNTIME_DIR: string;
 	export const DISPLAY: string;
 	export const LANG: string;
@@ -63,6 +63,7 @@ declare module '$env/static/private' {
 	export const LS_COLORS: string;
 	export const GNOME_TERMINAL_SERVICE: string;
 	export const npm_lifecycle_script: string;
+	export const SSH_AGENT_LAUNCHER: string;
 	export const SSH_AUTH_SOCK: string;
 	export const SHELL: string;
 	export const LC_NAME: string;
@@ -72,7 +73,6 @@ declare module '$env/static/private' {
 	export const GDMSESSION: string;
 	export const LESSCLOSE: string;
 	export const LC_MEASUREMENT: string;
-	export const GPG_AGENT_INFO: string;
 	export const OPAM_SWITCH_PREFIX: string;
 	export const GJS_DEBUG_OUTPUT: string;
 	export const LC_IDENTIFICATION: string;

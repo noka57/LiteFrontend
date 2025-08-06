@@ -1,4 +1,4 @@
-import { c as create_ssr_component, s as setContext, v as validate_component, m as missing_component } from "./_app/immutable/chunks/index-a89b87ed.js";
+import { c as create_ssr_component, s as setContext, v as validate_component, m as missing_component } from "./_app/immutable/chunks/index-54377ec4.js";
 function afterUpdate() {
 }
 const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -28,15 +28,15 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `
 
 
-${components[1] ? `${validate_component(components[0] || missing_component, "svelte:component").$$render($$result, Object.assign(props_0 || {}), {}, {
+${components[1] ? `${validate_component(components[0] || missing_component, "svelte:component").$$render($$result, Object.assign({}, props_0 || {}), {}, {
     default: () => {
-      return `${components[2] ? `${validate_component(components[1] || missing_component, "svelte:component").$$render($$result, Object.assign(props_1 || {}), {}, {
+      return `${components[2] ? `${validate_component(components[1] || missing_component, "svelte:component").$$render($$result, Object.assign({}, props_1 || {}), {}, {
         default: () => {
-          return `${validate_component(components[2] || missing_component, "svelte:component").$$render($$result, Object.assign(props_2 || {}), {}, {})}`;
+          return `${validate_component(components[2] || missing_component, "svelte:component").$$render($$result, Object.assign({}, props_2 || {}), {}, {})}`;
         }
-      })}` : `${validate_component(components[1] || missing_component, "svelte:component").$$render($$result, Object.assign(props_1 || {}), {}, {})}`}`;
+      })}` : `${validate_component(components[1] || missing_component, "svelte:component").$$render($$result, Object.assign({}, props_1 || {}), {}, {})}`}`;
     }
-  })}` : `${validate_component(components[0] || missing_component, "svelte:component").$$render($$result, Object.assign(props_0 || {}), {}, {})}`}
+  })}` : `${validate_component(components[0] || missing_component, "svelte:component").$$render($$result, Object.assign({}, props_0 || {}), {}, {})}`}
 
 ${``}`;
 });

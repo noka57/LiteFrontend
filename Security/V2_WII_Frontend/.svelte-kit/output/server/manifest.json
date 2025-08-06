@@ -122,6 +122,21 @@
       "_app/immutable/assets/Indicator-587c320c.css"
     ]
   },
+  "src/routes/audit.svelte": {
+    "file": "entries/pages/audit.svelte.js",
+    "src": "src/routes/audit.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index-a89b87ed.js",
+      "_TabItem-424b0447.js",
+      "_Tabs-ef5c5efe.js",
+      "src/routes/sessionG.js",
+      "_index-b74adbb6.js"
+    ],
+    "css": [
+      "_app/immutable/assets/Indicator-587c320c.css"
+    ]
+  },
   "src/routes/awsIoTcore.svelte": {
     "file": "entries/pages/awsIoTcore.svelte.js",
     "src": "src/routes/awsIoTcore.svelte",
@@ -584,7 +599,7 @@
       "_AccordionItem-4c27590e.js",
       "_Button-3f46d15e.js",
       "_Radio-a38204dd.js",
-      "_Textarea-109fa399.js",
+      "_Textarea-acf16d8f.js",
       "_Modal-ea7df515.js",
       "_Frame-cafee768.js",
       "_StepIndicator-2e176f3e.js",
@@ -639,7 +654,7 @@
       "_AccordionItem-4c27590e.js",
       "_Button-3f46d15e.js",
       "_Label-a273673c.js",
-      "_Textarea-109fa399.js",
+      "_Textarea-acf16d8f.js",
       "_Table-724d6c25.js",
       "_TableBody-3dfdaf75.js",
       "_TableBodyRow-acf5b861.js",
@@ -775,8 +790,8 @@
       "_index-a89b87ed.js"
     ]
   },
-  "_Textarea-109fa399.js": {
-    "file": "_app/immutable/chunks/Textarea-109fa399.js",
+  "_Textarea-acf16d8f.js": {
+    "file": "_app/immutable/chunks/Textarea-acf16d8f.js",
     "imports": [
       "_index-a89b87ed.js"
     ]

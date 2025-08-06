@@ -51,7 +51,7 @@ ${changed_lan_data.config.networking_lan.dhcpServer.enable ? `<tr><td><p class="
 
 
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Lease</p></td><td class="${"pl-5 pt-5"}"><div class="${"flex gap-1"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_lan_data.config.networking_lan.dhcpServer.lease, 0)}>
+<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Lease</p></td><td class="${"pl-5 pt-5"}"><div class="${"flex gap-1"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_lan_data.config.networking_lan.dhcpServer.lease, 0)}>
 <p class="${"pl-1 pt-2"}">hr</p></div></td></tr>` : ``}
 
     <tr><td></td>

@@ -330,6 +330,22 @@
         }
 
       }
+      else if (res.status==500)
+      {
+        if (dashboard_data !="")
+        {
+          value1=dashboard_data.config.dashboard.systemResource.cpuUsage;
+          value2=dashboard_data.config.dashboard.systemResource.ramUsage;
+          value3=dashboard_data.config.dashboard.systemResource.emmcUsage;
+          value4=dashboard_data.config.dashboard.systemResource.sdCardUsage;
+
+          path1=calculateProgressBarPath(value1,1);
+          path2=calculateProgressBarPath(value2,2);
+          path3=calculateProgressBarPath(value3,3);
+          path4=calculateProgressBarPath(value4,4);
+        }
+        AllpathReady=1;      
+      }
       else
       {
           console.log("get dashboard error\r\n");

@@ -5,7 +5,7 @@ import { C as CloseButton } from "../../_app/immutable/chunks/CloseButton-88212a
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-3dfdaf75.js";
 import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-acf5b861.js";
 import { sessionidG } from "../endpoints/sessionG.js";
-import { dashboadData, VPNdashboad } from "../endpoints/configG.js";
+import { dashboadData, VPNdashboad, aesKey, aesIV, aesAAD } from "../endpoints/configG.js";
 import "../../_app/immutable/chunks/index-b74adbb6.js";
 const baseClass = "font-medium inline-flex items-center justify-center px-2.5 py-0.5";
 const closeBtnBaseClass = "inline-flex items-center !p-0.5 !m-0 !ml-2 text-sm bg-transparent rounded-sm focus:!ring-0";
@@ -156,6 +156,12 @@ const Dashboard = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   });
   VPNdashboad.subscribe((val) => {
     vpn_dashboard = val;
+  });
+  aesKey.subscribe((val) => {
+  });
+  aesIV.subscribe((val) => {
+  });
+  aesAAD.subscribe((val) => {
   });
   let disabledOpenVPNTunnel = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
   let disabledIPsecTunnel = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];

@@ -1,5 +1,8 @@
 import { w as writable } from "../../_app/immutable/chunks/index-b74adbb6.js";
 import "../../_app/immutable/chunks/index-a89b87ed.js";
+const aesKey = writable("");
+const aesIV = writable("");
+const aesAAD = writable("");
 const dashboadData = writable("");
 const VPNdashboad = writable("");
 const ewanWebInputFlag = writable("");
@@ -265,6 +268,9 @@ export {
   WAN_FareSavingPolicy_ConfigChangedLog,
   WAN_PORT_SWITCH_ConfigChangedLog,
   WAN_RedundancyPolicy_ConfigChangedLog,
+  aesAAD,
+  aesIV,
+  aesKey,
   awsIoTcoreConfig,
   azureConfig,
   certificateConfig,

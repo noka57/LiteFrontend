@@ -1,7 +1,7 @@
-import * as module from '../entries/pages/logout.svelte.js';
+import * as module from '../entries/pages/lan.svelte.js';
 
 export { module };
 export const index = 19;
-export const file = '_app/immutable/pages/logout.svelte-cdd2efce.js';
-export const imports = ["_app/immutable/pages/logout.svelte-cdd2efce.js","_app/immutable/chunks/index-1ab591d7.js"];
-export const stylesheets = [];
+export const file = '_app/immutable/pages/lan.svelte-461f2b15.js';
+export const imports = ["_app/immutable/pages/lan.svelte-461f2b15.js","_app/immutable/chunks/index-1ab591d7.js","_app/immutable/chunks/Indicator.svelte_svelte_type_style_lang-28f07d2f.js","_app/immutable/chunks/index-6fbc3f26.js","_app/immutable/chunks/Button-fa4fdcb7.js","_app/immutable/chunks/Helper-db1fcf0e.js","_app/immutable/chunks/Toggle-c37db970.js","_app/immutable/chunks/Radio-932a263b.js","_app/immutable/chunks/TabItem-e3e9e853.js","_app/immutable/chunks/Tabs-c930f01e.js","_app/immutable/chunks/configG-29affe51.js"];
+export const stylesheets = ["_app/immutable/assets/Indicator-1d121e74.css"];

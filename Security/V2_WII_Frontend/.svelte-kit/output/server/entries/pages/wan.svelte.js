@@ -1,9 +1,9 @@
-import { c as create_ssr_component, b as compute_rest_props, g as getContext, v as validate_component, e as escape, d as spread, f as escape_object, h as escape_attribute_value, i as add_attribute, j as compute_slots } from "../../_app/immutable/chunks/index-a89b87ed.js";
+import { c as create_ssr_component, v as validate_component, i as add_attribute } from "../../_app/immutable/chunks/index-a89b87ed.js";
 import { A as Accordion, a as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-4c27590e.js";
-import classNames from "classnames";
+import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-3f46d15e.js";
 /* empty css                                                                            */import { L as Label } from "../../_app/immutable/chunks/Label-a273673c.js";
-import { W as Wrapper, T as Textarea } from "../../_app/immutable/chunks/Textarea-109fa399.js";
+import { T as Textarea } from "../../_app/immutable/chunks/Textarea-acf16d8f.js";
 import { T as Table } from "../../_app/immutable/chunks/Table-724d6c25.js";
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-3dfdaf75.js";
 import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-acf5b861.js";
@@ -14,96 +14,6 @@ import { sessionidG } from "../endpoints/sessionG.js";
 import { wanConfig, ChangedWANConfig, LastestReadableWANConfig, WAN_PORT_SWITCH_ConfigChangedLog, WAN_CWAN1_BASIC_ConfigChangedLog, WAN_CWAN1_Advanced_ConfigChangedLog, WAN_CWAN1_SimPolicy_ConfigChangedLog, WAN_CWAN1_GLink_ConfigChangedLog, WAN_EWAN1_Basic_ConfigChangedLog, WAN_EWAN1_EWLAP_ConfigChangedLog, WAN_RedundancyPolicy_ConfigChangedLog, WAN_FareSavingPolicy_ConfigChangedLog } from "../endpoints/configG.js";
 import "../../_app/immutable/chunks/index-b74adbb6.js";
 import "../../_app/immutable/chunks/Frame-cafee768.js";
-function clampSize(s) {
-  return s && s === "xs" ? "sm" : s === "xl" ? "lg" : s;
-}
-let floatClass = "flex absolute inset-y-0 items-center text-gray-500 dark:text-gray-400";
-const Input = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let _size;
-  let $$restProps = compute_rest_props($$props, ["type", "value", "size", "defaultClass", "color"]);
-  let $$slots = compute_slots(slots);
-  let { type = "text" } = $$props;
-  let { value = "" } = $$props;
-  let { size = void 0 } = $$props;
-  let { defaultClass: defaultClass2 = "block w-full disabled:cursor-not-allowed disabled:opacity-50" } = $$props;
-  let { color = "base" } = $$props;
-  const borderClasses = {
-    base: "border-gray-300 dark:border-gray-600",
-    tinted: "border-gray-300 dark:border-gray-500",
-    green: "border-green-500 dark:border-green-400",
-    red: "border-red-500 dark:border-red-400"
-  };
-  const ringClasses = {
-    base: "focus:border-blue-500 focus:ring-blue-500 dark:focus:border-blue-500 dark:focus:ring-blue-500",
-    green: "focus:ring-green-500 focus:border-green-500 dark:focus:border-green-500 dark:focus:ring-green-500",
-    red: "focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500"
-  };
-  const colorClasses = {
-    base: "bg-gray-50 text-gray-900 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400",
-    tinted: "bg-gray-50 text-gray-900 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400",
-    green: "bg-green-50 text-green-900 placeholder-green-700 dark:text-green-400 dark:placeholder-green-500 dark:bg-gray-700",
-    red: "bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700"
-  };
-  let background = getContext("background");
-  let group = getContext("group");
-  const textSizes = {
-    sm: "sm:text-xs",
-    md: "text-sm",
-    lg: "sm:text-base"
-  };
-  const leftPadding = { sm: "pl-9", md: "pl-10", lg: "pl-11" };
-  const rightPadding = { sm: "pr-9", md: "pr-10", lg: "pr-11" };
-  const inputPadding = { sm: "p-2", md: "p-2.5", lg: "p-4" };
-  let inputClass;
-  if ($$props.type === void 0 && $$bindings.type && type !== void 0)
-    $$bindings.type(type);
-  if ($$props.value === void 0 && $$bindings.value && value !== void 0)
-    $$bindings.value(value);
-  if ($$props.size === void 0 && $$bindings.size && size !== void 0)
-    $$bindings.size(size);
-  if ($$props.defaultClass === void 0 && $$bindings.defaultClass && defaultClass2 !== void 0)
-    $$bindings.defaultClass(defaultClass2);
-  if ($$props.color === void 0 && $$bindings.color && color !== void 0)
-    $$bindings.color(color);
-  _size = size || clampSize(group == null ? void 0 : group.size) || "md";
-  {
-    {
-      const _color = color === "base" && background ? "tinted" : color;
-      inputClass = classNames(defaultClass2, $$slots.left && leftPadding[_size], $$slots.right && rightPadding[_size], ringClasses[color], colorClasses[_color], borderClasses[_color], inputPadding[_size], textSizes[_size], group || "rounded-lg", group && "first:rounded-l-lg last:rounded-r-lg", group && "border-l-0 first:border-l last:border-r", $$props.class);
-    }
-  }
-  return `${validate_component(Wrapper, "Wrapper").$$render(
-    $$result,
-    {
-      class: "relative w-full",
-      show: $$slots.left || $$slots.right
-    },
-    {},
-    {
-      default: () => {
-        return `${$$slots.left ? `<div class="${escape(floatClass, true) + " left-0 pl-2.5 pointer-events-none"}">${slots.left ? slots.left({
-          props: { ...$$restProps, class: inputClass }
-        }) : ``}</div>` : ``}
-  ${slots.default ? slots.default({
-          props: { ...$$restProps, class: inputClass }
-        }) : `
-    <input${spread(
-          [
-            escape_object($$restProps),
-            {
-              class: escape_attribute_value(inputClass)
-            }
-          ],
-          {}
-        )}${add_attribute("value", value, 0)}>
-  `}
-  ${$$slots.right ? `<div class="${escape(floatClass, true) + " right-0 pr-2.5"}">${slots.right ? slots.right({
-          props: { ...$$restProps, class: inputClass }
-        }) : ``}</div>` : ``}`;
-      }
-    }
-  )}`;
-});
 let defaultClass = "flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl";
 const Wan = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let saved_changed_wan_data = {};
@@ -761,21 +671,8 @@ ${``}
                         }
                       }
                     )}
-  ${validate_component(Input, "Input").$$render(
-                      $$result,
-                      {
-                        id: "default-input",
-                        placeholder: "Command",
-                        value: ATCommand
-                      },
-                      {
-                        value: ($$value) => {
-                          ATCommand = $$value;
-                          $$settled = false;
-                        }
-                      },
-                      {}
-                    )}</div>
+<table><tr><td>${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", ATCommand, 0)}>`}</td>
+${``}</tr></table></div>
 
 
 ${validate_component(Label, "Label").$$render($$result, { for: "textarea-id", class: "mb-2" }, {}, {
@@ -787,7 +684,6 @@ ${validate_component(Textarea, "Textarea").$$render(
                       $$result,
                       {
                         id: "textarea-id",
-                        placeholder: "Result",
                         rows: "4",
                         name: "message",
                         value: ATResult

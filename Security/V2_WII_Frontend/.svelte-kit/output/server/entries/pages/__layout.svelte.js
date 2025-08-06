@@ -572,7 +572,7 @@ const Navbar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { logoClass: logoClass2 = "" } = $$props;
   let { navClass: navClass2 = "flex relative" } = $$props;
   let { siteClass: siteClass2 = "w-1/4 h-12 text-lg pt-1 pl-12" } = $$props;
-  let { siteName: siteName2 = "Demo" } = $$props;
+  let { siteName = "Demo" } = $$props;
   if ($$props.alt === void 0 && $$bindings.alt && alt !== void 0)
     $$bindings.alt(alt);
   if ($$props.hamburgerClass === void 0 && $$bindings.hamburgerClass && hamburgerClass2 !== void 0)
@@ -587,11 +587,11 @@ const Navbar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.navClass(navClass2);
   if ($$props.siteClass === void 0 && $$bindings.siteClass && siteClass2 !== void 0)
     $$bindings.siteClass(siteClass2);
-  if ($$props.siteName === void 0 && $$bindings.siteName && siteName2 !== void 0)
-    $$bindings.siteName(siteName2);
+  if ($$props.siteName === void 0 && $$bindings.siteName && siteName !== void 0)
+    $$bindings.siteName(siteName);
   return `<header class="${escape(headerClass2, true) + " " + escape($$props.class ? $$props.class : "", true)}"><nav${add_attribute("class", navClass2, 0)}>${validate_component(Hamburger, "Hamburger").$$render($$result, { hamburgerClass: hamburgerClass2 }, {}, {})}
 		<div${add_attribute("class", siteClass2, 0)}><a href="${"https://www.etherwan.com/tw"}" class="${"flex w-20"}" target="${"_blank"}" rel="${"noopener noreferrer"}"><img${add_attribute("src", logo2, 0)}${add_attribute("alt", alt, 0)}${add_attribute("class", logoClass2, 0)}></a></div>
-		<div class="${"pt-8"}"><span class="${"pl-10 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white"}">${escape(siteName2)}</span></div>
+		<div class="${"pt-8"}"><span class="${"pl-10 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white"}">${escape(siteName)}</span></div>
 		${slots.default ? slots.default({}) : ``}</nav></header>`;
 });
 const Responsive = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -711,7 +711,7 @@ const Side = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { logoClass: logoClass2 = "" } = $$props;
   let { navClass: navClass2 = "flex relative" } = $$props;
   let { siteClass: siteClass2 = "w-1/4 h-12 text-lg pt-1 pl-12" } = $$props;
-  let { siteName: siteName2 = "Demo" } = $$props;
+  let { siteName = "Demo" } = $$props;
   let { spanClass: spanClass2 = "pl-2 self-center text-lg font-semibold text-gray-900 whitespace-nowrap" } = $$props;
   let { topDiv: topDiv2 = "w-full md:block md:w-auto" } = $$props;
   let { buttonClass: buttonClass2 = "inline-flex items-center text-base text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" } = $$props;
@@ -742,8 +742,8 @@ const Side = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.navClass(navClass2);
   if ($$props.siteClass === void 0 && $$bindings.siteClass && siteClass2 !== void 0)
     $$bindings.siteClass(siteClass2);
-  if ($$props.siteName === void 0 && $$bindings.siteName && siteName2 !== void 0)
-    $$bindings.siteName(siteName2);
+  if ($$props.siteName === void 0 && $$bindings.siteName && siteName !== void 0)
+    $$bindings.siteName(siteName);
   if ($$props.spanClass === void 0 && $$bindings.spanClass && spanClass2 !== void 0)
     $$bindings.spanClass(spanClass2);
   if ($$props.topDiv === void 0 && $$bindings.topDiv && topDiv2 !== void 0)
@@ -789,7 +789,7 @@ const Side = create_ssr_component(($$result, $$props, $$bindings, slots) => {
           logoClass: logoClass2,
           navClass: navClass2,
           siteClass: siteClass2,
-          siteName: siteName2,
+          siteName,
           spanClass: spanClass2
         },
         {},
@@ -842,7 +842,7 @@ const Side = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       logoClass: logoClass2,
       navClass: navClass2,
       siteClass: siteClass2,
-      siteName: siteName2,
+      siteName,
       spanClass: spanClass2
     },
     {},
@@ -896,7 +896,6 @@ const OutsideClick = create_ssr_component(($$result, $$props, $$bindings, slots)
 });
 let logo = "EWLOGO.png";
 let logoClass = "w-20";
-let siteName = "EW50-V";
 let siteClass = "pl-45";
 let headerClass = "bg-white px-10 items-center text-gray-600 border-b-2 p-2 dark:bg-gray-900 dark:text-white";
 let hamburgerClass = "hover:text-gray-500 cursor-pointer mr-4 border-none focus:outline-none pt-2 lg:hidden";
@@ -912,6 +911,7 @@ const _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let activeUrl;
   let $page, $$unsubscribe_page;
   $$unsubscribe_page = subscribe(page, (value) => $page = value);
+  let siteName = "";
   let transitionParams = {
     duration: 200,
     delay: 100,
@@ -920,6 +920,7 @@ const _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   };
   let open;
   let svg0background = "";
+  let dashboard_data = "";
   let interval;
   let LANchangedValues = [];
   let dhcpServerChangedValues = [];
@@ -1407,7 +1408,16 @@ const _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   });
   sessionidG.subscribe((val) => {
   });
+  function setSiteName() {
+    if (siteName == "" && dashboard_data != "") {
+      siteName = dashboard_data.config.dashboard.systemInfo.modelName;
+      console.log("changed siteName:");
+      console.log(siteName);
+    }
+  }
   dashboadData.subscribe((val) => {
+    dashboard_data = val;
+    setSiteName();
   });
   VPNdashboad.subscribe((val) => {
   });

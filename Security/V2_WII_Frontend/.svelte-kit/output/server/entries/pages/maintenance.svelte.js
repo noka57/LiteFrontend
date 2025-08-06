@@ -215,13 +215,13 @@ ${validate_component(Modal, "Modal").$$render(
                       }
                     )}</div></td></tr>
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Host</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", PingHost, 0)}></td></tr>
+<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Host</p></td><td class="${"pl-5 pt-5"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", PingHost, 0)}>`}</td>
+
+${``}</tr>
 
 <tr><td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
+
     <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
                       default: () => {
                         return `Execute`;
@@ -276,13 +276,15 @@ ${validate_component(Table, "Table").$$render($$result, { class: "text-gray-900"
                       }
                     )}</div></td></tr>
 
-<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Host</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", TracerouteHost, 0)}></td></tr>
+<tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Host</p></td><td class="${"pl-5 pt-5"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", TracerouteHost, 0)}>`}</td>
+
+
+
+${``}</tr>
 
 <tr><td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
+
     <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
                       default: () => {
                         return `Execute`;
@@ -300,19 +302,21 @@ ${validate_component(Table, "Table").$$render($$result, { class: "text-gray-900"
                 })}  
 
 
+
   ${validate_component(AccordionItem, "AccordionItem").$$render($$result, { defaultClass }, {}, {
                   header: () => {
                     return `<span slot="${"header"}" class="${"pl-4"}">Nslookup
     </span>`;
                   },
                   default: () => {
-                    return `<table><tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Host</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NSLookupHost, 0)}></td></tr>
+                    return `<table><tr><td><p class="${"pl-20 pt-4 text-lg font-light text-right"}">Host</p></td><td class="${"pl-5 pt-5"}">${`<input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", NSLookupHost, 0)}>`}</td>
+
+
+${``}</tr>
 
 <tr><td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
+
     <td class="${"pl-10"}">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
                       default: () => {
                         return `Execute`;
@@ -335,7 +339,9 @@ ${validate_component(Table, "Table").$$render($$result, { class: "text-gray-900"
 
  ${validate_component(TabItem, "TabItem").$$render($$result, { title: "Log Viewer" }, {}, {
           default: () => {
-            return `<pre style="${"white-space: pre-wrap;"}">${escape(system_log)}</pre>`;
+            return `<pre style="${"white-space: pre-wrap;"}">  
+${escape(system_log)}
+  </pre>`;
           }
         })}`;
       }

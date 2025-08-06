@@ -1,0 +1,48 @@
+
+
+.strikeout {
+  text-decoration: line-through;
+  color: #999; /* Adjust color for deleted text */
+  position: relative;
+}
+
+.strikeout:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #111; /* Adjust strikeout line color */
+  transform: translateY(-50%);
+}
+
+.strikeout:after {
+  content: "\00B7"; /* Unicode dot character */
+  font-size: 1px; /* Adjust dot size */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.ContextMenu
+    {
+        font-size: 1rem;
+        color: #222;
+        width: 100%;
+        height: 30px;
+        text-align: left;
+        border: 0px;
+        background-color: #fff;
+        padding: 0;
+        margin: 0;
+    }
+.ContextMenu:hover{
+        color: #000;
+        text-align: left;
+        border-radius: 5px;
+        background-color: #eee;
+        padding: 0;
+        margin: 0;
+    }

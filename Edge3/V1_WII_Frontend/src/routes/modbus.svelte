@@ -2290,81 +2290,81 @@
     {
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     },
     {
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     },
     {
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     },
     {
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     },
     {
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     },
     {
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     },
     {
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     },
     {
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     },
     {
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     },
     {
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     }
 
@@ -2377,9 +2377,9 @@
     {
         new_gateway_r2t[index].enable=true;
         new_gateway_r2t[index].delete=false;        
-        new_gateway_r2t[index].aliasName="";
-        new_gateway_r2t[index].rtuProfileSlave="";
-        new_gateway_r2t[index].tcpProfileMaster="";
+        new_gateway_r2t[index].origin_slave_id="";
+        new_gateway_r2t[index].ip="";
+        new_gateway_r2t[index].destination_slave_id="";
         new_gateway_r2t[index].responseTimeout=1000;
         new_gateway_r2t_index=index;
         new_gateway_r2t_modal=true;
@@ -2397,9 +2397,9 @@
     let backup_gateway_r2t={
         enable: false,
         delete: false,
-        aliasName: "",
-        rtuProfileSlave: "",
-        tcpProfileMaster: "",
+        origin_slave_id: "",
+        ip: "",
+        destination_slave_id: "",
         responseTimeout: 1000
     };
 
@@ -2423,9 +2423,9 @@
         Modify_Gateway_R2T_index=index;
         backup_gateway_r2t.enable=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].enable;
         backup_gateway_r2t.delete=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].delete;        
-        backup_gateway_r2t.aliasName=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].aliasName;
-        backup_gateway_r2t.rtuProfileSlave=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].rtuProfileSlave;
-        backup_gateway_r2t.tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].tcpProfileMaster;
+        backup_gateway_r2t.origin_slave_id=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].origin_slave_id;
+        backup_gateway_r2t.ip=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].ip;
+        backup_gateway_r2t.destination_slave_id=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].destination_slave_id;
         backup_gateway_r2t.responseTimeout=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].responseTimeout;
     }
 
@@ -2434,9 +2434,9 @@
         Modify_Gateway_R2T_Modal=false;
         changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].enable=backup_gateway_r2t.enable;
         changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].delete=backup_gateway_r2t.delete;        
-        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].aliasName=backup_gateway_r2t.aliasName;
-        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].rtuProfileSlave=backup_gateway_r2t.rtuProfileSlave;
-        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].tcpProfileMaster=backup_gateway_r2t.tcpProfileMaster;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].origin_slave_id=backup_gateway_r2t.origin_slave_id;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].ip=backup_gateway_r2t.ip;
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].destination_slave_id=backup_gateway_r2t.destination_slave_id;
         changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].responseTimeout=backup_gateway_r2t.responseTimeout;
 
     }
@@ -7329,7 +7329,7 @@
   </Table>
 
     </AccordionItem>
-{#if 0}
+
   <AccordionItem {defaultClass}>
 
 
@@ -7348,9 +7348,9 @@
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell>Alias Name</TableHeadCell>
-    <TableHeadCell>RTU Slave Profile</TableHeadCell>
-    <TableHeadCell>TCP Master Profile</TableHeadCell>
+    <TableHeadCell>Origin Slave ID</TableHeadCell>
+    <TableHeadCell>IP</TableHeadCell>
+    <TableHeadCell>Destination Slave ID</TableHeadCell>
     <TableHeadCell>Response Timeout</TableHeadCell>
   </TableHead>
   <TableBody>
@@ -7394,9 +7394,9 @@
       </td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-4 strikeout">{index+1}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Rtu2TcpItem.aliasName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{Rtu2TcpItem.rtuProfileSlave}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Rtu2TcpItem.tcpProfileMaster}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Rtu2TcpItem.origin_slave_id}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{Rtu2TcpItem.ip}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Rtu2TcpItem.destination_slave_id}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Rtu2TcpItem.responseTimeout} ms</td>
 
       </tr>
@@ -7428,9 +7428,9 @@
 
 
      <TableBodyCell class="!p-6 w-4">{index+1}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.aliasName}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18">{Rtu2TcpItem.rtuProfileSlave}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.tcpProfileMaster}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.origin_slave_id}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{Rtu2TcpItem.ip}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.destination_slave_id}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.responseTimeout} ms</TableBodyCell>
 
 
@@ -7502,8 +7502,8 @@
 <table>
 
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_r2t[new_gateway_r2t_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Origin Slave ID</p></td>
+      <td class="pl-5 pt-5"><input type="number" bind:value={new_gateway_r2t[new_gateway_r2t_index].origin_slave_id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
@@ -7514,17 +7514,10 @@
 
 
   <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave Profile</p></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">IP</p></td>
     <td class= "pl-4 pt-4">
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_r2t[new_gateway_r2t_index].rtuProfileSlave}>
-<option disabled="" value="">Choose Profile ...</option>
-
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave as RSlave, index}
-<option value={RSlave.aliasName}>{RSlave.aliasName}</option>
-{/each}
-
-</select>
+<input type="text" bind:value={new_gateway_r2t[new_gateway_r2t_index].ip} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 
     
 
@@ -7534,20 +7527,9 @@
 
 
   <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Destination Slave ID</p></td>
     <td class= "pl-4 pt-4">
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_gateway_r2t[new_gateway_r2t_index].tcpProfileMaster}>
-<option disabled="" value="">Choose Profile ...</option>
-
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TMaster, index}
-<option value={TMaster.aliasName}>{TMaster.aliasName}</option>
-{/each}
-
-</select>
-
-
-    </td>
+<input type="number" bind:value={new_gateway_r2t[new_gateway_r2t_index].destination_slave_id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 </tr>
 
@@ -7601,8 +7583,10 @@
 <table>
 
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Alias Name</p></td>
-      <td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].aliasName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Origin Slave ID</p></td>
+      <td class="pl-5 pt-5">
+<input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].origin_slave_id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+</td>
 
 
 
@@ -7613,17 +7597,10 @@
 
 
   <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave Profile</p></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">IP</p></td>
     <td class= "pl-4 pt-4">
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].rtuProfileSlave}>
-<option disabled="" value="">Choose Profile ...</option>
-
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave as RSlave, index}
-<option value={RSlave.aliasName}>{RSlave.aliasName}</option>
-{/each}
-
-</select>
+<input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].ip} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
     
@@ -7633,16 +7610,9 @@
 
 
   <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">Destination Slave ID</p></td>
     <td class= "pl-4 pt-4">
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].tcpProfileMaster}>
-<option disabled="" value="">Choose Profile ...</option>
-
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master as TMaster, index}
-<option value={TMaster.aliasName}>{TMaster.aliasName}</option>
-{/each}
-
-</select>
+<input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].destination_slave_id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
     </td>
@@ -7683,7 +7653,7 @@
   </Table>
       </AccordionItem>
 
-
+{#if 0}
   <AccordionItem {defaultClass}>
 
 

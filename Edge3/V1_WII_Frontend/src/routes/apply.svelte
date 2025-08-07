@@ -5,6 +5,8 @@
       WiFiConfig,
       WiFi_11ah_ConfigChangedLog,
       WiFi_11ah_General_ConfigChangedLog,
+      WiFi_Bluetooth_ConfigChangedLog,
+      WiFi_WiFi5_ConfigChangedLog,
       ChangedWiFiConfig,
       sconversionConfig,
       ChangedSConfigConfig,
@@ -185,7 +187,8 @@
   let wifiBinary=null;
   let wifi_11ah_changedValues = [];
   let wifi_11ah_general_changedValues = [];
-
+  let wifi_wifi5_changedValues = [];
+  let wifi_bluetooth_changedValues = [];
 
   let ContentSConversion;
   let sconversionBinary=null;
@@ -489,6 +492,15 @@
       data_tag_pro_data = val;
   });
 
+
+  WiFi_WiFi5_ConfigChangedLog.subscribe(val => {
+      wifi_wifi5_changedValues = val;
+  });
+
+
+  WiFi_Bluetooth_ConfigChangedLog.subscribe(val => {
+      wifi_bluetooth_changedValues = val;
+  });
 
   WiFi_11ah_ConfigChangedLog.subscribe(val => {
       wifi_11ah_changedValues = val;
@@ -1848,8 +1860,13 @@
       WiFiConfig.set(wifi_data);
       wifi_11ah_changedValues = [];
       wifi_11ah_general_changedValues = [];
+      wifi_wifi5_changedValues = [];
+      wifi_bluetooth_changedValues = [];
+
       WiFi_11ah_ConfigChangedLog.set(wifi_11ah_changedValues);
       WiFi_11ah_General_ConfigChangedLog.set(wifi_11ah_general_changedValues);
+      WiFi_Bluetooth_ConfigChangedLog.set(wifi_bluetooth_changedValues);
+      WiFi_WiFi5_ConfigChangedLog.set(wifi_wifi5_changedValues);
       RestartWiFi();
 
     } 
@@ -2564,7 +2581,8 @@
       RestartCount++;    
     }
 
-    if (wifi_data != "" && (wifi_11ah_changedValues.length !=0 || wifi_11ah_general_changedValues.length !=0))
+    if (wifi_data != "" && (wifi_11ah_changedValues.length !=0 || wifi_11ah_general_changedValues.length !=0 ||
+                            wifi_wifi5_changedValues.length !=0 || wifi_bluetooth_changedValues.length !=0))
     {
       SetCount++; 
       RestartCount++;     
@@ -2800,7 +2818,7 @@
   				SetWanData();
   			}
 
-        if (wifi_data !="" && (wifi_11ah_changedValues.length !=0 || wifi_11ah_general_changedValues.length !=0))
+        if (wifi_data !="" && (wifi_11ah_changedValues.length !=0 || wifi_11ah_general_changedValues.length !=0 || wifi_wifi5_changedValues.length !=0 || wifi_bluetooth_changedValues.length !=0))
         {
           let WiFiString = JSON.stringify(wifi_data, null, 0);
           const bytesArray = Array.from(WiFiString).map(char => char.charCodeAt(0));
@@ -4197,7 +4215,8 @@ event_engine_action_do_changeValues.length != 0 ||
   </Li>	
 {/if}
 
-{#if wifi_11ah_changedValues.length !=0 || wifi_11ah_general_changedValues.length !=0}
+{#if wifi_11ah_changedValues.length !=0 || wifi_11ah_general_changedValues.length !=0 || 
+wifi_wifi5_changedValues.length !=0 || wifi_bluetooth_changedValues.length !=0}
  <Li>WiFi
  {#if wifi_11ah_changedValues.length !=0}
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
@@ -4215,6 +4234,26 @@ event_engine_action_do_changeValues.length != 0 ||
 
   </List>
  {/if}
+
+
+ {#if wifi_wifi5_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+    {#each wifi_wifi5_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+ {/if}
+
+ {#if wifi_bluetooth_changedValues.length !=0}
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+    {#each wifi_bluetooth_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+ {/if}
+
 
  </Li>
 
@@ -4655,6 +4694,8 @@ event_engine_action_do_changeValues.length != 0 ||
 
 {#if    wifi_11ah_changedValues.length !=0 ||
         wifi_11ah_general_changedValues.length != 0 ||
+        wifi_bluetooth_changedValues.length !=0 ||
+        wifi_wifi5_changedValues.length !=0 ||
         opcua_server_changedValues.length !=0 ||
         opcua_client_changedValues.length !=0 ||
         conversion_opcua2modbus_changedValues.length !=0 ||

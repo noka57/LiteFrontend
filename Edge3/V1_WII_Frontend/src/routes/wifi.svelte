@@ -5,6 +5,8 @@
       import { onMount } from 'svelte';
       import { sessionidG } from "./sessionG.js";
       import { WiFiConfig,
+        WiFi_Bluetooth_ConfigChangedLog,
+        WiFi_WiFi5_ConfigChangedLog,
         WiFi_11ah_ConfigChangedLog,
         WiFi_11ah_General_ConfigChangedLog,
         ChangedWiFiConfig
@@ -18,7 +20,8 @@
       let getDataReady=0;
       let wifi_11ah_changedValues = [];
       let wifi_11ah_general_changedValues = [];
-
+      let wifi_wifi5_changedValues = [];
+      let wifi_bluetooth_changedValues = [];
 
       let sessionid;
       let sessionBinary;
@@ -40,6 +43,16 @@
             wifi_11ah_general_changedValues = val;
       });
 
+      WiFi_WiFi5_ConfigChangedLog.subscribe(val => {
+            wifi_wifi5_changedValues = val;
+      });
+
+
+      WiFi_Bluetooth_ConfigChangedLog.subscribe(val => {
+            wifi_bluetooth_changedValues = val;
+      });
+
+
       ChangedWiFiConfig.subscribe(val => {
         saved_changed_wifi_data = val;
       });
@@ -50,6 +63,102 @@
 
       let defaultClass='flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl';
   
+
+      function SaveBluetooth()
+      {
+            console.log("Save bluetooth\r\n");
+            if (wifi_bluetooth_changedValues.length !=0)
+            {
+                  wifi_bluetooth_changedValues=[];
+            }
+
+            if (changed_wifi_data.config.wifi_bluetooth.enable != wifi_data.config.wifi_bluetooth.enable)
+            {
+                  let changedstr="Value of enable has changed to "+changed_wifi_data.config.wifi_bluetooth.enable;
+                  wifi_bluetooth_changedValues=[...wifi_bluetooth_changedValues, changedstr];
+            }
+
+            if (changed_wifi_data.config.wifi_bluetooth.ssid != wifi_data.config.wifi_bluetooth.ssid)
+            {
+                  let changedstr="Value of ssid has changed to "+changed_wifi_data.config.wifi_bluetooth.ssid;
+                  wifi_bluetooth_changedValues=[...wifi_bluetooth_changedValues, changedstr];
+            }
+
+
+            WiFi_Bluetooth_ConfigChangedLog.set(wifi_bluetooth_changedValues);
+            saved_changed_wifi_data.config.wifi_bluetooth.enable=changed_wifi_data.config.wifi_bluetooth.enable;
+            saved_changed_wifi_data.config.wifi_bluetooth.ssid=changed_wifi_data.config.wifi_bluetooth.ssid;
+
+            ChangedWiFiConfig.set(saved_changed_wifi_data);
+            console.log(wifi_bluetooth_changedValues);
+      }
+
+
+
+
+      function SaveWifi5()
+      {
+
+            console.log("Save wifi5\r\n");
+            if (wifi_wifi5_changedValues.length !=0)
+            {
+                  wifi_wifi5_changedValues=[];
+            }
+
+
+            if (changed_wifi_data.config.wifi_wifi5.enable != wifi_data.config.wifi_wifi5.enable)
+            {
+                  let changedstr="Value of enable has changed to "+changed_wifi_data.config.wifi_wifi5.enable;
+                  wifi_wifi5_changedValues=[...wifi_wifi5_changedValues, changedstr];
+            }
+
+
+            if (changed_wifi_data.config.wifi_wifi5.type != wifi_data.config.wifi_wifi5.type)
+            {
+                  let changedstr="Value of type has changed to "+changed_wifi_data.config.wifi_wifi5.type;
+                  wifi_wifi5_changedValues=[...wifi_wifi5_changedValues, changedstr];
+            }
+
+
+            if (changed_wifi_data.config.wifi_wifi5.ssid != wifi_data.config.wifi_wifi5.ssid)
+            {
+                  let changedstr="Value of ssid has changed to "+changed_wifi_data.config.wifi_wifi5.ssid;
+                  wifi_wifi5_changedValues=[...wifi_wifi5_changedValues, changedstr];
+            }
+
+            if (changed_wifi_data.config.wifi_wifi5.password != wifi_data.config.wifi_wifi5.password)
+            {
+                  let changedstr="Value of password has changed to "+changed_wifi_data.config.wifi_wifi5.password;
+                  wifi_wifi5_changedValues=[...wifi_wifi5_changedValues, changedstr];
+            }
+
+            if (changed_wifi_data.config.wifi_wifi5.region != wifi_data.config.wifi_wifi5.region)
+            {
+                  let changedstr="Value of region has changed to "+changed_wifi_data.config.wifi_wifi5.region;
+                  wifi_wifi5_changedValues=[...wifi_wifi5_changedValues, changedstr];
+            }
+
+
+            if (changed_wifi_data.config.wifi_wifi5.channel != wifi_data.config.wifi_wifi5.channel)
+            {
+                  let changedstr="Value of channel has changed to "+changed_wifi_data.config.wifi_wifi5.channel;
+                  wifi_wifi5_changedValues=[...wifi_wifi5_changedValues, changedstr];
+            }
+
+            WiFi_WiFi5_ConfigChangedLog.set(wifi_wifi5_changedValues);
+            saved_changed_wifi_data.config.wifi_wifi5.enable=changed_wifi_data.config.wifi_wifi5.enable;
+            saved_changed_wifi_data.config.wifi_wifi5.type=changed_wifi_data.config.wifi_wifi5.type;
+            saved_changed_wifi_data.config.wifi_wifi5.ssid=changed_wifi_data.config.wifi_wifi5.ssid;
+            saved_changed_wifi_data.config.wifi_wifi5.password=changed_wifi_data.config.wifi_wifi5.password;     
+            saved_changed_wifi_data.config.wifi_wifi5.region=changed_wifi_data.config.wifi_wifi5.region;
+            saved_changed_wifi_data.config.wifi_wifi5.channel=changed_wifi_data.config.wifi_wifi5.channel;     
+
+            ChangedWiFiConfig.set(saved_changed_wifi_data);
+            console.log(wifi_wifi5_changedValues);
+
+      }
+
+
       function Save11ah()
       {
             console.log("Save 11 ah\r\n");
@@ -214,6 +323,24 @@
         if (wifi_11ah_general_changedValues.length == 0)
         {
             changed_wifi_data.config.wifi_11ah_general = JSON.parse(JSON.stringify(wifi_data.config.wifi_11ah_general)); 
+        }
+
+        if (wifi_wifi5_changedValues.length == 0)
+        {
+            changed_wifi_data.config.wifi_wifi5.enable = wifi_data.config.wifi_wifi5.enable;
+            changed_wifi_data.config.wifi_wifi5.type = wifi_data.config.wifi_wifi5.type;
+            changed_wifi_data.config.wifi_wifi5.ssid = wifi_data.config.wifi_wifi5.ssid;
+            changed_wifi_data.config.wifi_wifi5.password = wifi_data.config.wifi_wifi5.password;
+            changed_wifi_data.config.wifi_wifi5.region = wifi_data.config.wifi_wifi5.region;
+            changed_wifi_data.config.wifi_wifi5.channel = wifi_data.config.wifi_wifi5.channel;
+        }
+
+
+        if (wifi_bluetooth_changedValues.length == 0)
+        {
+            changed_wifi_data.config.wifi_bluetooth.enable = wifi_data.config.wifi_bluetooth.enable;
+            changed_wifi_data.config.wifi_bluetooth.ssid = wifi_data.config.wifi_bluetooth.ssid;
+
         }
 
 
@@ -550,14 +677,16 @@
 <table>   
  <tr>
     <td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
-    <Toggle class="w-60" bind:checked={changed_wifi_data.config.wifi_wifi5.enable}></Toggle>
+    <Toggle class="w-60" checked={!!changed_wifi_data.config.wifi_wifi5.enable}
+  on:change={(e) => changed_wifi_data.config.wifi_wifi5.enable = e.target.checked ? 1 : 0}></Toggle>
 </tr>
 </table>
 
 
-{#if changed_wifi_data.config.wifi_wifi5.enable}
 
 <table>
+
+{#if changed_wifi_data.config.wifi_wifi5.enable}
 
 <tr><td class="w-60"></td>
 <td class="w-20"></td>
@@ -653,6 +782,26 @@
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Password</p></td><td class="pl-5 pt-5"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={changed_wifi_data.config.wifi_wifi5.password}></td>
 
 </tr>
+{/if}
+
+     <tr>
+<td class="w-60"></td>
+<td class="w-20"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>        
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveWifi5}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
 
 
 
@@ -660,7 +809,7 @@
 </table>
 
 
-{/if}
+
 
 
 
@@ -674,14 +823,15 @@
 <table>   
  <tr>
     <td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">Enable</p></td><td class="pl-5 pt-5">
-    <Toggle class="w-60" bind:checked={changed_wifi_data.config.wifi_bluetooth.enable}></Toggle>
+    <Toggle class="w-60" checked={!!changed_wifi_data.config.wifi_bluetooth.enable}
+  on:change={(e) => changed_wifi_data.config.wifi_bluetooth.enable = e.target.checked ? 1 : 0}></Toggle>
 </tr>
 </table>
 
-{#if changed_wifi_data.config.wifi_bluetooth.enable}
+
 
 <table>
-
+{#if changed_wifi_data.config.wifi_bluetooth.enable}
 
 
 <tr><td class="w-60"></td>
@@ -691,8 +841,29 @@
 </td>
 
 </tr>
-</table>
 {/if}
+
+     <tr>
+<td class="w-60"></td>
+<td class="w-20"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>        
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveBluetooth}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button></td>
+
+
+    </tr>
+
+</table>
+
 
 
    </TabItem>

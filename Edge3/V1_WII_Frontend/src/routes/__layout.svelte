@@ -6,6 +6,8 @@
 	import { onMount } from 'svelte';
 	import { sessionidG } from "./sessionG.js";
   	import {
+  	    WiFi_Bluetooth_ConfigChangedLog,
+        WiFi_WiFi5_ConfigChangedLog,
   	    WiFi_11ah_ConfigChangedLog,
         WiFi_11ah_General_ConfigChangedLog, 
   		OPCUA_Server_ConfigChangedLog,
@@ -303,6 +305,8 @@
 
     let wifi_11ah_changedValues = [];
     let wifi_11ah_general_changedValues = [];
+    let wifi_wifi5_changedValues = [];
+    let wifi_bluetooth_changedValues = [];    
 
 
 	const BlinkApply = () => {
@@ -324,6 +328,8 @@
   	function JudgeChangedOrNot()
   	{
   		if (wifi_11ah_changedValues.length !=0 ||
+  			wifi_bluetooth_changedValues.length !=0 ||
+  			wifi_wifi5_changedValues.length !=0 ||
   			wifi_11ah_general_changedValues.length !=0 ||
   			opcua_server_changedValues.length !=0 ||
   			opcua_client_changedValues.length !=0 ||
@@ -455,6 +461,17 @@
         wifi_11ah_general_changedValues = val;
     	JudgeChangedOrNot();    
     })
+
+    WiFi_WiFi5_ConfigChangedLog.subscribe(val => {
+        wifi_wifi5_changedValues = val;
+        JudgeChangedOrNot(); 
+    });
+
+
+    WiFi_Bluetooth_ConfigChangedLog.subscribe(val => {
+        wifi_bluetooth_changedValues = val;
+        JudgeChangedOrNot(); 
+    });
 
 
 

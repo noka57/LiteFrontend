@@ -36,6 +36,8 @@ export const configurationConfig=writable("");
 export const datatagproConfig=writable("");
 
 
+export const WiFi_Bluetooth_ConfigChangedLog=writable("");
+export const WiFi_WiFi5_ConfigChangedLog=writable("");
 export const WiFi_11ah_ConfigChangedLog=writable("");
 export const WiFi_11ah_General_ConfigChangedLog=writable("");
 export const ChangedWiFiConfig=writable("");

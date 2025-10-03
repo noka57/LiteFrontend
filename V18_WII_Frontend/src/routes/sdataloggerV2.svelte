@@ -1540,11 +1540,8 @@
         ];
 
 
-        selectedNewTags.clear();
-        New_SingleCheckedTag=null;
+
         currentStep=1;
-        openTagList=false;
-        tagsArray=[];
         new_proxy_edge_index=index;
         new_proxy_edge_modal=true;
 
@@ -1575,7 +1572,10 @@
       samplingCondition:0,
       periodMS:1000,
       changePercentage:10,
-      modbusTag: [],     
+      modbusTag: [],
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
       cloud:
       [
         {
@@ -1586,8 +1586,8 @@
               name:""
             }
           ],
-          tagDisplay:0, 
-          dataLogFormat: 1,
+          tagDisplay:0,
+          dataLogFormat: 0,
           alternativeFormatCloudIndex:0, 
           userDefineedData: ""
         },
@@ -1599,12 +1599,11 @@
               name:""
             }
           ],
-          tagDisplay:0, 
-          dataLogFormat: 1,
+          tagDisplay:0,
+          dataLogFormat: 0,
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
         }
-
       ]
     };
 
@@ -1919,23 +1918,18 @@
         BackupProxyEdge.periodMS=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].periodMS;
         BackupProxyEdge.changePercentage=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].changePercentage;
  
-        BackupProxyEdge.modbusTag=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag));
+        BackupProxyEdge.modbusTCPSlaveTag=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTCPSlaveTag));
+        
+        BackupProxyEdge.modbusTCPMasterTag=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTCPMasterTag));
+
+        BackupProxyEdge.modbusRTUMasterTag=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusRTUMasterTag));
+
         BackupProxyEdge.cloud=JSON.parse(JSON.stringify(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].cloud));
 
 
-        selectedNewTags.clear();
-        New_SingleCheckedTag=null;
         currentStep=1;
-        openTagList=false;
-        tagsArray=[];
 
-        if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].samplingCondition==0)
-        {
-          for (let i=0; i < changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag.length; i++)
-          {
-            selectedNewTags.add(changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag[i])
-          }
-        }
+
 
         modify_proxy_edge_modal=true;
 
@@ -1955,7 +1949,14 @@
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].changePercentage=BackupProxyEdge.changePercentage;
 
 
-        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTag==JSON.parse(JSON.stringify(BackupProxyEdge.modbusTag));
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTCPSlaveTag=JSON.parse(JSON.stringify(BackupProxyEdge.modbusTCPSlaveTag));
+
+
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusTCPMasterTag=JSON.parse(JSON.stringify(BackupProxyEdge.modbusTCPMasterTag));
+
+
+        changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].modbusRTUMasterTag=JSON.parse(JSON.stringify(BackupProxyEdge.modbusRTUMasterTag));
+
         changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[index].cloud=JSON.parse(JSON.stringify(BackupProxyEdge.cloud));
 
         modify_proxy_edge_modal=false;
@@ -4291,12 +4292,12 @@ on:click={onPageClick}></textarea>
 
 
 
-{:else if new_proxy_edge[new_proxy_edge_index].cloud[0].dataLogFormat == 0}
+{:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].dataLogFormat == 0}
 <textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
 
 
 
-{:else if new_proxy_edge[new_proxy_edge_index].cloud[0].dataLogFormat == 2}
+{:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].dataLogFormat == 2}
 <textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[0].userDefineedData}></textarea>
 
 {/if}
@@ -4412,7 +4413,7 @@ on:click={onPageClick}></textarea>
     <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 200px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
         <ul style="margin: 6px;">
               <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTimeClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTimeClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
 
               <hr>
 {#each changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTCPSlaveTag as Slave, index}
@@ -4533,12 +4534,12 @@ on:click={onPageClick}></textarea>
 
 
 
-{:else if new_proxy_edge[new_proxy_edge_index].cloud[1].dataLogFormat == 0}
+{:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].dataLogFormat == 0}
 <textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
 
 
 
-{:else if new_proxy_edge[new_proxy_edge_index].cloud[1].dataLogFormat == 2}
+{:else if changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].dataLogFormat == 2}
 <textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled bind:value={changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[1].userDefineedData}></textarea>
 
 {/if}

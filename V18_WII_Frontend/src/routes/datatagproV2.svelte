@@ -1,6 +1,7 @@
 <script>
   import { Tabs, TabItem, AccordionItem, Accordion, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell,TableSearch, Button, Label, Textarea,  Toggle,Select, Checkbox, Input, Tooltip, Radio, Modal, Fileupload, FloatingLabelInput, Helper, StepIndicator,MultiSelect, Dropdown, DropdownItem } from 'flowbite-svelte';
 
+  import { ChevronDownOutline, ChevronRightOutline } from "flowbite-svelte-icons";
   import { writable } from 'svelte/store';
   import './global.css';
   import DateTimePicker from "./DateTimePicker.svelte";
@@ -214,7 +215,7 @@
 
 
   let selectedStartDateTime = "";
-
+  let selectedEndDateTime = "";
 
 
   function handleClickTagList()
@@ -1105,6 +1106,13 @@
     enable:false,
     delete:false,
     tagName:"",
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   };
 
@@ -1117,22 +1125,52 @@
     BackupCTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].delete;
     BackupCTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName;
     BackupCTag.calculationFormula=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula;
+
+    BackupCTag.dayTimeRangeEnable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeRangeEnable;
+    BackupCTag.dayTimeStartString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeStartString;
+    BackupCTag.dayTimeEndString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeEndString;
+    BackupCTag.startDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startDay;
+    BackupCTag.startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startTime;
+    BackupCTag.endDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].endDay;
+    BackupCTag.endTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].endTime;
+
     showMenu=false;
     modify_calculation_tag_modal=true;
   }
 
-  function no_modify_calculation_tag()
+  function no_modify_calculation_tag(index)
   {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].enable=BackupCTag.enable;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].delete=BackupCTag.delete;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName=BackupCTag.tagName;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula=BackupCTag.calculationFormula;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].enable=BackupCTag.enable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].delete=BackupCTag.delete;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].tagName=BackupCTag.tagName;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula=BackupCTag.calculationFormula;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeRangeEnable=BackupCTag.dayTimeRangeEnable;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeStartString=BackupCTag.dayTimeStartString;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeEndString=BackupCTag.dayTimeEndString;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startDay=BackupCTag.startDay;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startTime=BackupCTag.startTime;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].endDay=BackupCTag.endDay;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].endTime=BackupCTag.endTime;
 
     modify_calculation_tag_modal=false;
   }
 
-  function modify_calculation_tag()
+  function modify_calculation_tag(index)
   {
+    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeStartString !="" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeStartString.length > 11)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].startDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeStartString.substring(0, 10);
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeStartString.substring(11);
+    }
+
+    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeEndString !="" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeEndString.length > 11)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].endDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeEndString.substring(0, 10);
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].endTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeEndString.substring(11);
+    }
+
     modify_calculation_tag_modal=false;
   }
 
@@ -1145,27 +1183,26 @@
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   };
 
   function TriggerModifyATag(index)
   {
-    const [hours, minutes] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].startTime.split(':');
-    start_time_hh = parseInt(hours, 10) || 0; 
-    start_time_mm = parseInt(minutes, 10) || 0; 
 
-    const [hours2, minutes2] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].endTime.split(':');
-
-    end_time_hh = parseInt(hours2, 10) || 0;  
-    end_time_mm = parseInt(minutes2, 10) || 0; 
 
     BackupAccumulatedTag.enable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].enable;
     BackupAccumulatedTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].delete;
     BackupAccumulatedTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].tagName;
     BackupAccumulatedTag.targetTag=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].targetTag;
-    BackupAccumulatedTag.startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].startTime;
-    BackupAccumulatedTag.endTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].endTime;
+    BackupAccumulatedTag.modbusTagType=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].modbusTagType;
+
+    BackupAccumulatedTag.modbusTagOwner=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].modbusTagOwner;
+    BackupAccumulatedTag.modbusTagOwnerIndex=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].modbusTagOwnerIndex;
+
+    BackupAccumulatedTag.startDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].startDay;
 
     modify_accumulated_tag_index=index;
     modify_accumulated_tag_modal=true;
@@ -1178,16 +1215,20 @@
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].delete=BackupAccumulatedTag.delete;
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].tagName=BackupAccumulatedTag.tagName;
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].targetTag=BackupAccumulatedTag.targetTag;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startTime=BackupAccumulatedTag.startTime;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].endTime=BackupAccumulatedTag.endTime;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwner=BackupAccumulatedTag.modbusTagOwner;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex=BackupAccumulatedTag.modbusTagOwnerIndex;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startDay=BackupAccumulatedTag.startDay;
+
+
 
     modify_accumulated_tag_modal=false;
   }
 
   function modify_accumulated_tag()
   {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startTime=`${start_time_hh}:${start_time_mm}`;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].endTime=`${end_time_hh}:${end_time_mm}`;
 
     modify_accumulated_tag_modal=false;
   }
@@ -1378,12 +1419,17 @@
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   }
 
 
@@ -1395,12 +1441,28 @@
     BackupEventTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].delete;
     BackupEventTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].tagName;
     BackupEventTag.triggerTag=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerTag;
+
+    BackupEventTag.triggerModbusTagType=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagType;
+
+    BackupEventTag.triggerModbusTagOwner=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwner;
+
+
+    BackupEventTag.triggerModbusTagOwnerIndex=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex;
+
     BackupEventTag.triggerConditionOperand=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionOperand;
-    BackupEventTag.triggerConditionValue=    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionValue;  
-    BackupEventTag.pollingRateS=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].pollingRateS;
+    BackupEventTag.triggerConditionValue= changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionValue;  
+
     BackupEventTag.actionOperation=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperation;
     BackupEventTag.actionOperationValue=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperationValue; 
     BackupEventTag.actionTarget=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionTarget;
+
+    BackupEventTag.actionModbusTagType=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagType;
+
+
+    BackupEventTag.actionModbusTagOwner=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwner;
+
+
+    BackupEventTag.actionModbusTagOwnerIndex=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex;
 
     modify_event_tag_modal=true;
   }
@@ -1411,13 +1473,30 @@
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].enable=BackupEventTag.enable;
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].delete=BackupEventTag.delete;
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].tagName=BackupEventTag.tagName;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerTag=BackupEventTag.triggerTag;    
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerTag=BackupEventTag.triggerTag;   
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagType=BackupEventTag.triggerModbusTagType;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwner=BackupEventTag.triggerModbusTagOwner;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex=BackupEventTag.triggerModbusTagOwnerIndex;
+
+
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionOperand=BackupEventTag.triggerConditionOperand;  
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerConditionValue=BackupEventTag.triggerConditionValue;  
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].pollingRateS=BackupEventTag.pollingRateS;  
+
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperation=BackupEventTag.actionOperation;  
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperationValue=BackupEventTag.actionOperationValue;  
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionTarget=BackupEventTag.actionTarget;  
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagType=BackupEventTag.actionModbusTagType;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwner=BackupEventTag.actionModbusTagOwner;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex=BackupEventTag.actionModbusTagOwnerIndex;
 
     modify_event_tag_modal=false;
 
@@ -1435,11 +1514,16 @@
   let modify_ul_rule_index;
 
   let BackupULRule=
-  {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
+   {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
       [
         {
           profile:"",
@@ -1467,21 +1551,30 @@
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
         }
-
       ]
-  }
+    };
 
   function TriggerModifyULRule(index)
   {
     modify_ul_rule_index=index;
-    BackupULRule.enable=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].enable;
-    BackupULRule.delete=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].delete;
-    BackupULRule.ruleName=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].ruleName;
-    BackupULRule.cloud=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud));
+
+    BackupULRule.enable=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].enable;
+    BackupULRule.delete=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].delete;      
+    BackupULRule.samplingCondition=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].samplingCondition;
+    BackupULRule.periodMS=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].periodMS;
+    BackupULRule.changePercentage=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].changePercentage;
+
+    BackupULRule.modbusTCPSlaveTag=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].modbusTCPSlaveTag));
+    
+    BackupULRule.modbusTCPMasterTag=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].modbusTCPMasterTag));
+
+    BackupULRule.modbusRTUMasterTag=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].modbusRTUMasterTag));
+
+    BackupULRule.cloud=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].cloud));
+
+
 
     currentStep=1;
-    openTagList=false;
-
 
     modify_ul_rule_modal=true;
   }
@@ -1490,8 +1583,25 @@
   {
     changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].enable=BackupULRule.enable;
     changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].delete=BackupULRule.delete;
-    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].ruleName=BackupULRule.ruleName;
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].samplingCondition=BackupULRule.samplingCondition;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].periodMS=BackupULRule.periodMS;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].changePercentage=BackupULRule.changePercentage;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].modbusTCPSlaveTag=JSON.parse(JSON.stringify(BackupULRule.modbusTCPSlaveTag));
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].modbusTCPMasterTag=JSON.parse(JSON.stringify(BackupULRule.modbusTCPMasterTag));
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].modbusRTUMasterTag=JSON.parse(JSON.stringify(BackupULRule.modbusRTUMasterTag));
+
     changed_data_tag_pro_data.config.service_dataTagPro_ulRule[index].cloud=JSON.parse(JSON.stringify(BackupULRule.cloud));
+
 
     modify_ul_rule_modal=false;
   }
@@ -1503,188 +1613,6 @@
   }
 
 
-    function ModifyTimeClick(index)
-    {
-      if (cursorPosition !=-1)
-      {
-        if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.length < cursorPosition)
-        {
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
-        }
-        else
-        {
-          let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.slice(0, cursorPosition);
-          let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.slice(cursorPosition);
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData=`${beforeCursorString}`;
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+=`${afterCursorString}`;
-        }
-
-      }
-      else
-      {
-        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
-      }
-
-      showMenu=false; 
-
-    }
-
-    function ModifyArrayClick(index)
-    {
-      if (cursorPosition !=-1)
-      {
-        if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.length < cursorPosition)
-        {
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
-        }
-        else
-        {
-          let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.slice(0, cursorPosition);
-          let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.slice(cursorPosition);
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData=`${beforeCursorString}`;
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+=`${afterCursorString}`;
-        }
-
-      }
-      else
-      {
-        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
-      }
-
-      showMenu=false;
-    }
-
-    function ModifyTagRawRequest(CloudIndex, TagIndex)
-    {
-
-      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
-      {
-        if (cursorPosition !=-1)
-        {
-          if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
-          {
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
-          }
-          else
-          {
-            let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
-            let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
-          }
-
-        }
-        else
-        {
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
-        }  
-      }
-
-      showMenu=false;
-    }
-
-    function ModifyTagRawReply(CloudIndex, TagIndex)
-    {
-      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
-      {
-        if (cursorPosition !=-1)
-        {
-          if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
-          {
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
-          }
-          else
-          {
-            let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
-            let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
-          }
-
-        }
-        else
-        {
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
-        }  
-      }
-      
-      showMenu=false;
-    }
-
-
-    function ModifyTagStatus(CloudIndex, TagIndex)
-    {
-
-      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
-      {
-        if (cursorPosition !=-1)
-        {
-          if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
-          {
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
-          }
-          else
-          {
-            let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
-            let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
-            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
-          }
-
-        }
-        else
-        {
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
-        }  
-      }
-
-      showMenu=false;
-         
-    }
-
-
-    function ModifyCloudFormatChange(current_cloud_index, other_cloud_index)
-    {
-
-      if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].dataLogFormat==2)
-      {
-        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].alternativeFormatCloudIndex=other_cloud_index;
-        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].userDefineedData=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[other_cloud_index].userDefineedData;
-
-      }
-      else if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].dataLogFormat==1)
-      {
-        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].userDefineedData="";
-      }
-      else if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].dataLogFormat==0)
-      {
-        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[current_cloud_index].userDefineedData="";
-      }      
-
-    }
 
 
 
@@ -1692,10 +1620,15 @@
   let new_ul_rule_index;
   let new_ul_rule=[
   {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
       [
         {
           profile:"",
@@ -1723,14 +1656,18 @@
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
         }
-
       ]
   },   
   {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
       [
         {
           profile:"",
@@ -1758,14 +1695,96 @@
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
         }
-
+      ]
+  },  
+  {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ]
+  },  
+  {
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
+      [
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:0,
+          dataLogFormat: 0,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
       ]
   },   
   {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
       [
         {
           profile:"",
@@ -1793,14 +1812,18 @@
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
         }
-
       ]
-  },   
+  },  
   {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
       [
         {
           profile:"",
@@ -1828,14 +1851,18 @@
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
         }
-
       ]
-  },   
+  },  
   {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
       [
         {
           profile:"",
@@ -1863,14 +1890,18 @@
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
         }
-
       ]
-  },       
+  },
   {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
       [
         {
           profile:"",
@@ -1898,14 +1929,18 @@
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
         }
-
       ]
-  },   
+  },
   {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
       [
         {
           profile:"",
@@ -1933,14 +1968,18 @@
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
         }
-
       ]
-  },   
+  },
   {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
+      enable: false,
+      delete: false,
+      samplingCondition:0,
+      periodMS:1000,
+      changePercentage:10,
+      modbusTCPSlaveTag:[],
+      modbusTCPMasterTag:[],
+      modbusRTUMasterTag:[],
+      cloud:
       [
         {
           profile:"",
@@ -1968,79 +2007,8 @@
           alternativeFormatCloudIndex:1, 
           userDefineedData: ""
         }
-
       ]
-  },   
-  {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
-      [
-        {
-          profile:"",
-          topic:[
-            {
-              type: 0,
-              name:""
-            }
-          ],
-          tagDisplay:0,
-          dataLogFormat: 0,
-          alternativeFormatCloudIndex:0, 
-          userDefineedData: ""
-        },
-        {
-          profile:"",
-          topic:[
-            {
-              type: 0,
-              name:""
-            }
-          ],
-          tagDisplay:0,
-          dataLogFormat: 0,
-          alternativeFormatCloudIndex:1, 
-          userDefineedData: ""
-        }
-
-      ]
-  },   
-  {
-    enable:false,
-    delete:false,
-    ruleName:"",        
-    cloud:
-      [
-        {
-          profile:"",
-          topic:[
-            {
-              type: 0,
-              name:""
-            }
-          ],
-          tagDisplay:0,
-          dataLogFormat: 0,
-          alternativeFormatCloudIndex:0, 
-          userDefineedData: ""
-        },
-        {
-          profile:"",
-          topic:[
-            {
-              type: 0,
-              name:""
-            }
-          ],
-          tagDisplay:0,
-          dataLogFormat: 0,
-          alternativeFormatCloudIndex:1, 
-          userDefineedData: ""
-        }
-
-      ]
-  }
+  }             
   ];
 
   function NoAddULRule(index)
@@ -2067,25 +2035,6 @@
   {
     showMenu=false;
 
-    if (type == 0)
-    {
-      if (new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat==2)
-      {
-        let other_cloud_index=new_ul_rule[new_ul_rule_index].cloud[0].alternativeFormatCloudIndex;
-        new_ul_rule[new_ul_rule_index].cloud[0].userDefineedData=new_ul_rule[new_ul_rule_index].cloud[other_cloud_index].userDefineedData;
-      }
-
-    }
-    else if (type==1)
-    {
-      if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat==2)
-      {
-        let other_cloud_index=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].alternativeFormatCloudIndex;
-        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].userDefineedData=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[other_cloud_index].userDefineedData;
-      }
-    }
-
-
     currentStep=2;
   }
 
@@ -2093,216 +2042,525 @@
   {
     showMenu=false;
 
-    if (type == 0)
-    {
-      if (new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat==2)
-      {
-        let other_cloud_index=new_ul_rule[new_ul_rule_index].cloud[1].alternativeFormatCloudIndex;
-        new_ul_rule[new_ul_rule_index].cloud[1].userDefineedData=new_ul_rule[new_ul_rule_index].cloud[other_cloud_index].userDefineedData;
-      }
-
-    }
-    else if (type==1)
-    {
-      if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat==2)
-      {
-        let other_cloud_index=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].alternativeFormatCloudIndex;
-        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].userDefineedData=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[other_cloud_index].userDefineedData;
-      }
-    }
-
-
     currentStep=3;
   }
 
 
+  function New_clickTagStatus_UL(type, CloudIndex, device_index, tag_index)
+  {
+    if(type==0)
+    {
+
+      if (device_index < new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag.length)
+      {
+        if (tag_index < new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].tag.length)
+        {
 
 
-    function NewTimeClick(index)
+          if (cursorPosition !=-1)
+          {
+            if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+
+        }
+      }
+
+      tcp_slave_tag_show=false;
+      showMenu=false;
+    }
+    else if (type ==1)
+    {
+      if (device_index < new_ul_rule[new_ul_rule_index].modbusTCPMasterTag.length)
+      {
+        if (tag_index < new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].tag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+
+        }
+      }
+
+      tcp_master_tag_show=false;
+      showMenu=false;
+    }
+    else if (type == 2)
+    {
+      if (device_index < new_ul_rule[new_ul_rule_index].modbusRTUMasterTag.length)
+      {
+        if (tag_index < new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].tag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+
+        }
+      }
+
+      rtu_master_tag_show=false;
+      showMenu=false;
+    }
+
+  }
+
+  function New_clickTag_UL(type, CloudIndex, device_index, tag_index)
+  {
+    if(type==0)
+    {
+
+      if (device_index < new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag.length)
+      {
+        if (tag_index < new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].tag.length)
+        {
+
+
+          if (cursorPosition !=-1)
+          {
+            if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+            }
+            else
+            {
+              let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$" 
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+          }     
+
+        }
+      }
+
+      tcp_slave_tag_show=false;
+      showMenu=false;
+    }
+    else if (type ==1)
+    {
+      if (device_index < new_ul_rule[new_ul_rule_index].modbusTCPMasterTag.length)
+      {
+        if (tag_index < new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].tag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+            }
+            else
+            {
+              let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$" 
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+          }     
+
+        }
+      }
+
+      tcp_master_tag_show=false;
+      showMenu=false;
+    }
+    else if (type == 2)
+    {
+      if (device_index < new_ul_rule[new_ul_rule_index].modbusRTUMasterTag.length)
+      {
+        if (tag_index < new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].tag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+            }
+            else
+            {
+              let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$" 
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+          }     
+
+        }
+      }
+
+      rtu_master_tag_show=false;
+      showMenu=false;
+    }
+
+  }
+    function ModifyTimeClick_UL(index)
     {
       if (cursorPosition !=-1)
       {
-        if (new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.length < cursorPosition)
+        if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.length < cursorPosition)
         {
-          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
         }
         else
         {
-          let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.slice(0, cursorPosition);
-          let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.slice(cursorPosition);
-          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData=`${beforeCursorString}`;
-          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
-          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+=`${afterCursorString}`;
+          let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.slice(0, cursorPosition);
+          let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData.slice(cursorPosition);
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData=`${beforeCursorString}`;
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+          changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+=`${afterCursorString}`;
         }
 
       }
       else
       {
-        new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
-      }
-
-      showMenu=false;
-      
-    }
-
-    function NewArrayClick(index)
-    {
-      if (cursorPosition != -1)
-      {
-        if (new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.length < cursorPosition)
-        {
-          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
-        }
-        else
-        {
-          let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.slice(0, cursorPosition);
-          let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.slice(cursorPosition);
-          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData=`${beforeCursorString}`;
-          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
-          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+=`${afterCursorString}`;
-        }
-
-      }
-      else
-      {
-          new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$ARRAY$"
+        changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
       }
 
       showMenu=false;
     }
 
-    function NewTagRawRequest(CloudIndex, TagIndex)
+  function Modify_clickTagStatus_UL(type, CloudIndex, device_index, tag_index)
+  {
+    if(type==0)
     {
 
-      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
+      if (device_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag.length)
       {
-        if (cursorPosition !=-1)
+        if (tag_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].tag.length)
         {
-          if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+
+
+          if (cursorPosition !=-1)
           {
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
+            if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
           }
           else
           {
-            let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
-            let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
-          }
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
 
         }
-        else
-        {
-          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREQUEST$" 
-        }  
       }
-      
+
+      tcp_slave_tag_show=false;
       showMenu=false;
     }
-
-    function NewTagRawReply(CloudIndex, TagIndex)
+    else if (type ==1)
     {
-
-      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
+      if (device_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag.length)
       {
-        if (cursorPosition !=-1)
+        if (tag_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].tag.length)
         {
-          if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          if (cursorPosition !=-1)
           {
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
+            if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
           }
           else
           {
-            let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
-            let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
-          }
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
 
         }
-        else
-        {
-          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_RAWREPLY$" 
-        }    
       }
 
+      tcp_master_tag_show=false;
       showMenu=false;
-      
     }
-
-
-    function NewTagStatus(CloudIndex, TagIndex)
+    else if (type == 2)
     {
-
-      if (saved_changed_modbus_data.config.fieldManagement_modbus_tag.length > TagIndex)
+      if (device_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag.length)
       {
-        if (cursorPosition != -1)
+        if (tag_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].tag.length)
         {
-          if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+          if (cursorPosition !=-1)
           {
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+            if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
           }
           else
           {
-            let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
-            let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
-            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
-          }
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
 
         }
-        else
-        {
-          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
-          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${saved_changed_modbus_data.config.fieldManagement_modbus_tag[TagIndex].tagName}`;
-          new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
-        }     
       }
 
-
+      rtu_master_tag_show=false;
       showMenu=false;
-         
     }
 
+  }
 
-    function NewCloudFormatChange(current_cloud_index, other_cloud_index)
+  function Modify_clickTag_UL(type, CloudIndex, device_index, tag_index)
+  {
+    if(type==0)
     {
 
-      if (new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].dataLogFormat==2)
+      if (device_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag.length)
       {
-        new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].alternativeFormatCloudIndex=other_cloud_index;
-        new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].userDefineedData=new_ul_rule[new_ul_rule_index].cloud[other_cloud_index].userDefineedData;
+        if (tag_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].tag.length)
+        {
 
-      }
-      else if (new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].dataLogFormat==1)
-      {
-        new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].userDefineedData="";
-      }
-      else if (new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].dataLogFormat==0)
-      {
-        new_ul_rule[new_ul_rule_index].cloud[current_cloud_index].userDefineedData="";
+
+          if (cursorPosition !=-1)
+          {
+            if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+            }
+            else
+            {
+              let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$" 
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].tag[tag_index].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+          }     
+
+        }
       }
 
+      tcp_slave_tag_show=false;
+      showMenu=false;
     }
+    else if (type ==1)
+    {
+      if (device_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag.length)
+      {
+        if (tag_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].tag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+            }
+            else
+            {
+              let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$" 
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].tag[tag_index].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+          }     
+
+        }
+      }
+
+      tcp_master_tag_show=false;
+      showMenu=false;
+    }
+    else if (type == 2)
+    {
+      if (device_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag.length)
+      {
+        if (tag_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].tag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+            }
+            else
+            {
+              let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$" 
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].tag[tag_index].tagName}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$"
+          }     
+
+        }
+      }
+
+      rtu_master_tag_show=false;
+      showMenu=false;
+    }
+
+  }
+
+
+
 
 
   function add_new_ul_rule(index)
@@ -2315,50 +2573,77 @@
 
   function new_ul_rule_trigger(index)
   {
-    new_ul_rule[index].enable=true;
-    new_ul_rule[index].delete=false;
-    new_ul_rule[index].ruleName="";
-    new_ul_rule[index].cloud=[
-          {
-            profile:"",
-            topic:[
-              {
-                type: 0,
-                name:""
-              }
-            ],
-            tagDisplay:1,
-            dataLogFormat: 0,
-            alternativeFormatCloudIndex:0, 
-            userDefineedData: ""
-          },
-          {
-            profile:"",
-            topic:[
-              {
-                type: 0,
-                name:""
-              }
-            ],
-            tagDisplay:1,  
-            dataLogFormat: 0,
-            alternativeFormatCloudIndex:1, 
-            userDefineedData: ""
-          }
-        ];
+      new_ul_rule[index].enable=true;
+      new_ul_rule[index].delete=false;
+      new_ul_rule[index].samplingCondition=0;
+      new_ul_rule[index].periodMS=1000;
+      new_ul_rule[index].changePercentage=10;
+      new_ul_rule[index].modbusTCPSlaveTag=JSON.parse(JSON.stringify(TCPSlaveTag));
+      new_ul_rule[index].modbusTCPMasterTag=JSON.parse(JSON.stringify(TCPMasterTag));
+      new_ul_rule[index].modbusRTUMasterTag=JSON.parse(JSON.stringify(RTUMasterTag));
+      new_ul_rule[index].cloud=[
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:1,
+          dataLogFormat: 1,
+          alternativeFormatCloudIndex:0, 
+          userDefineedData: ""
+        },
+        {
+          profile:"",
+          topic:[
+            {
+              type: 0,
+              name:""
+            }
+          ],
+          tagDisplay:1,  
+          dataLogFormat: 1,
+          alternativeFormatCloudIndex:1, 
+          userDefineedData: ""
+        }
+      ];
 
+      currentStep=1;
 
-
-
-    currentStep=1;
-    openTagList=false;
-
-
-    new_ul_rule_index=index;
-    new_ul_rule_modal=true;
-
+      new_ul_rule_index=index;
+      new_ul_rule_modal=true;
   }
 
+  function NewTimeClick_UL(index)
+  {
+    if (cursorPosition !=-1)
+    {
+      if (new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.length < cursorPosition)
+      {
+        new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+      }
+      else
+      {
+        let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.slice(0, cursorPosition);
+        let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData.slice(cursorPosition);
+        console.log("b:", beforeCursorString);
+        console.log("a:", afterCursorString);
+        new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData=`${beforeCursorString}`;
+        new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+        new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+=`${afterCursorString}`;
+      }
+
+    }
+    else
+    {
+      new_ul_rule[new_ul_rule_index].cloud[index].userDefineedData+="$TIME$"
+    }
+
+    showMenu=false;
+
+  }
 
 
 
@@ -2371,120 +2656,170 @@
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   },
   {
     enable:false,
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   },
   {
     enable:false,
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   },  
   {
     enable:false,
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   },
   {
     enable:false,
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   },
   {
     enable:false,
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   },
   {
     enable:false,
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   },
   {
     enable:false,
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   },
   {
     enable:false,
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   },
   {
     enable:false,
     delete:false,
     tagName:"",
     triggerTag:"",
+    triggerModbusTagType: -1,
+    triggerModbusTagOwner: "",
+    triggerModbusTagOwnerIndex: -1,    
     triggerConditionOperand:0,
     triggerConditionValue:1,
-    pollingRateS:1,
     actionOperation:0,
     actionOperationValue:1,
-    actionTarget:""
+    actionTarget:"",
+    actionModbusTagType: -1,
+    actionModbusTagOwner: "",
+    actionModbusTagOwnerIndex: -1, 
   }    
   ];
 
@@ -2513,18 +2848,123 @@
   }
 
 
+
+  function handleEvtActionModbusChange(type)
+  {
+    if (type ==0)
+    {
+      console.log(new_event_tag[new_event_tag_index].actionModbusTagOwner);
+      new_event_tag[new_event_tag_index].actionModbusTagOwnerIndex=Number(new_event_tag[new_event_tag_index].actionModbusTagOwner.substring(3));
+      if (new_event_tag[new_event_tag_index].actionModbusTagOwner.startsWith("TS"))
+      {
+          new_event_tag[new_event_tag_index].actionModbusTagType=2;
+      }
+      else if (new_event_tag[new_event_tag_index].actionModbusTagOwner.startsWith("TM"))
+      {
+          new_event_tag[new_event_tag_index].actionModbusTagType=0;   
+      }
+      else if (new_event_tag[new_event_tag_index].actionModbusTagOwner.startsWith("RM"))
+      {
+          new_event_tag[new_event_tag_index].actionModbusTagType=1;   
+      }
+
+      console.log(new_event_tag[new_event_tag_index].actionModbusTagType);
+      console.log(new_event_tag[new_event_tag_index].actionModbusTagOwnerIndex); 
+    }
+    else if (type ==1)
+    {
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwner);
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex=Number(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwner.substring(3));
+      if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwner.startsWith("TS"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagType=2;
+      }
+      else if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwner.startsWith("TM"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagType=0;   
+      }
+      else if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwner.startsWith("RM"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagType=1;   
+      }
+
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagType);
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex); 
+
+    }
+
+  }
+
+
+  function handleEvtTriggerModbusChange(type)
+  {
+    if (type ==0)
+    {
+      console.log(new_event_tag[new_event_tag_index].triggerModbusTagOwner);
+      new_event_tag[new_event_tag_index].triggerModbusTagOwnerIndex=Number(new_event_tag[new_event_tag_index].triggerModbusTagOwner.substring(3));
+      if (new_event_tag[new_event_tag_index].triggerModbusTagOwner.startsWith("TS"))
+      {
+          new_event_tag[new_event_tag_index].triggerModbusTagType=2;
+      }
+      else if (new_event_tag[new_event_tag_index].triggerModbusTagOwner.startsWith("TM"))
+      {
+          new_event_tag[new_event_tag_index].triggerModbusTagType=0;   
+      }
+      else if (new_event_tag[new_event_tag_index].triggerModbusTagOwner.startsWith("RM"))
+      {
+          new_event_tag[new_event_tag_index].triggerModbusTagType=1;   
+      }
+
+      console.log(new_event_tag[new_event_tag_index].triggerModbusTagType);
+      console.log(new_event_tag[new_event_tag_index].triggerModbusTagOwnerIndex); 
+    }
+    else if (type ==1)
+    {
+
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwner);
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex=Number(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwner.substring(3));
+      if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwner.startsWith("TS"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagType=2;
+      }
+      else if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwner.startsWith("TM"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagType=0;   
+      }
+      else if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwner.startsWith("RM"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagType=1;   
+      }
+
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagType);
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex); 
+
+    }
+
+  }
+
+
+
+
   function new_event_tag_trigger(index)
   {
     new_event_tag[index].enable=true;
     new_event_tag[index].delete=false;
     new_event_tag[index].tagName="";
     new_event_tag[index].triggerTag="";
+    new_event_tag[index].triggerModbusTagType=-1;
+    new_event_tag[index].triggerModbusTagOwner="";
+    new_event_tag[index].triggerModbusTagOwnerIndex=-1;
+
     new_event_tag[index].triggerConditionOperand=0;
     new_event_tag[index].triggerConditionValue=1;
     new_event_tag[index].pollingRateS=1;
     new_event_tag[index].actionOperation=0;
     new_event_tag[index].actionOperationValue=1;
     new_event_tag[index].actionTarget="";
+    new_event_tag[index].actionModbusTagType=-1;
+    new_event_tag[index].actionModbusTagOwner="";
+    new_event_tag[index].actionModbusTagOwnerIndex=-1;
 
     new_event_tag_index=index;
     new_event_tag_modal=true;
@@ -3836,82 +4276,151 @@
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   },
   {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
-    startTime:"",
-    endTime:""
+    modbusTagType:0,
+    modbusTagOwner:"",
+    modbusTagOwnerIndex:-1,    
+    startDay:""
   }
   ];
+
+
+
+  function handleACTargetModbusChange(type)
+  {
+    if (type ==0)
+    {
+      console.log(new_accumulated_tag[new_accumulated_tag_index].modbusTagOwner);
+      new_accumulated_tag[new_accumulated_tag_index].modbusTagOwnerIndex=Number(new_accumulated_tag[new_accumulated_tag_index].modbusTagOwner.substring(3));
+      if (new_accumulated_tag[new_accumulated_tag_index].modbusTagOwner.startsWith("TS"))
+      {
+          new_accumulated_tag[new_accumulated_tag_index].modbusTagType=2;
+      }
+      else if (new_accumulated_tag[new_accumulated_tag_index].modbusTagOwner.startsWith("TM"))
+      {
+          new_accumulated_tag[new_accumulated_tag_index].modbusTagType=0;   
+      }
+      else if (new_accumulated_tag[new_accumulated_tag_index].modbusTagOwner.startsWith("RM"))
+      {
+          new_accumulated_tag[new_accumulated_tag_index].modbusTagType=1;   
+      }
+
+      console.log(new_accumulated_tag[new_accumulated_tag_index].modbusTagType);
+      console.log(new_accumulated_tag[new_accumulated_tag_index].modbusTagOwnerIndex); 
+    }
+    else if (type ==1)
+    {
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwner);
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex=Number(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwner.substring(3));
+
+      if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwner.startsWith("TS"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagType=2;
+      }
+      else if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwner.startsWith("TM"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagType=0;   
+      }
+      else if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwner.startsWith("RM"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagType=1;   
+      }
+
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagType);
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex); 
+
+    }
+
+  }
 
   function new_accumulated_tag_trigger(index)
   {
@@ -3919,8 +4428,12 @@
     new_accumulated_tag[index].delete=false;
     new_accumulated_tag[index].tagName="";
     new_accumulated_tag[index].targetTag="";
-    new_accumulated_tag[index].startTime="0:0";
-    new_accumulated_tag[index].endTime="0:0";
+    new_accumulated_tag[index].modbusTagType=-1;
+    new_accumulated_tag[index].modbusTagOwner="";
+    new_accumulated_tag[index].modbusTagOwnerIndex=-1;
+
+    new_accumulated_tag[index].startDay="";
+
 
     start_time_hh='';
     start_time_mm='';
@@ -3968,9 +4481,14 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
     actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
@@ -3995,11 +4513,29 @@
     BackupScheduleTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].delete;
     BackupScheduleTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].tagName;
 
-    BackupScheduleTag.scheduleTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].scheduleTime;
+
+
+    BackupScheduleTag.dayTimeStartString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString;
+
+
+    BackupScheduleTag.startDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startDay;
+
+    BackupScheduleTag.startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startTime;
+
+
 
     BackupScheduleTag.actionType=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType;
 
     BackupScheduleTag.actionTargetTag=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTag;
+
+    BackupScheduleTag.actionTargetTagValue=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTagValue;
+
+
+    BackupScheduleTag.modbusTagType=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType;
+
+    BackupScheduleTag.modbusTagOwner=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner;
+
+    BackupScheduleTag.modbusTagOwnerIndex=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex;
 
     BackupScheduleTag.actionTimeSyncFormatType=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatType;
 
@@ -4010,17 +4546,31 @@
   }
 
 
-  function NoModifyScheduleTag()
+  function NoModifyScheduleTag(index)
   {
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].enable=BackupScheduleTag.enable;
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].delete=BackupScheduleTag.delete;
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].tagName=BackupScheduleTag.tagName;
 
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].scheduleTime=BackupScheduleTag.scheduleTime;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString=BackupScheduleTag.dayTimeStartString;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startDay=BackupScheduleTag.startDay;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startTime=BackupScheduleTag.startTime;
 
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType=BackupScheduleTag.actionType;
 
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTag= BackupScheduleTag.actionTargetTag;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType= BackupScheduleTag.modbusTagType;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner= BackupScheduleTag.modbusTagOwner;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex= BackupScheduleTag.modbusTagOwnerIndex;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTagValue=BackupScheduleTag.actionTargetTagValue;
 
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatType=BackupScheduleTag.actionTimeSyncFormatType;
 
@@ -4032,7 +4582,14 @@
 
   function ModifyScheduleTag()
   {
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startTime=`${start_time_hh}:${start_time_mm}`;
+
+
+    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString !="" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString.length > 11)
+    {
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString.substring(0, 10);
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString.substring(11);
+    }
+
     modify_schedule_tag_modal=false;
   }
 
@@ -4045,9 +4602,14 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
     actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
@@ -4056,9 +4618,14 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
     actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
@@ -4067,9 +4634,14 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
     actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
@@ -4078,9 +4650,14 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
     actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
@@ -4089,9 +4666,14 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
     actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
@@ -4100,9 +4682,14 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
     actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
@@ -4111,9 +4698,14 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
     actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
@@ -4122,9 +4714,14 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
     actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
@@ -4133,9 +4730,14 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
     actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
@@ -4144,30 +4746,87 @@
     enable:false,
     delete:false,
     tagName:"",
-    scheduleTime:"",
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
     actionType:0,
     actionTargetTag:"",
-    actionTargetTagValue:1,
+    modbusTagType: -1,
+    modbusTagOwner: "",
+    modbusTagOwnerIndex: -1,    
+    actionTargetTagValue:"",
     actionTimeSyncFormatType:0,
     actionTimeSyncFormatUserDefine:""
   }              
   ];
+
+
+  function handleScheTargetModbusChange(type)
+  {
+    if (type ==0)
+    {
+      console.log(new_schedule_tag[new_schedule_tag_index].modbusTagOwner);
+      new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex=Number(new_schedule_tag[new_schedule_tag_index].modbusTagOwner.substring(3));
+      if (new_schedule_tag[new_schedule_tag_index].modbusTagOwner.startsWith("TS"))
+      {
+          new_schedule_tag[new_schedule_tag_index].modbusTagType=2;
+      }
+      else if (new_schedule_tag[new_schedule_tag_index].modbusTagOwner.startsWith("TM"))
+      {
+          new_schedule_tag[new_schedule_tag_index].modbusTagType=0;   
+      }
+      else if (new_schedule_tag[new_schedule_tag_index].modbusTagOwner.startsWith("RM"))
+      {
+          new_schedule_tag[new_schedule_tag_index].modbusTagType=1;   
+      }
+
+      console.log(new_schedule_tag[new_schedule_tag_index].modbusTagType);
+      console.log(new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex); 
+    }
+    else if (type ==1)
+    {
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner);
+      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex=Number(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner.substring(3));
+
+      if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner.startsWith("TS"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType=2;
+      }
+      else if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner.startsWith("TM"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType=0;   
+      }
+      else if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner.startsWith("RM"))
+      {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType=1;   
+      }
+
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType);
+      console.log(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex); 
+
+    }
+
+  }
+
 
   function new_schedule_tag_trigger(index)
   {
     new_schedule_tag[index].enable=true;
     new_schedule_tag[index].delete=false;
     new_schedule_tag[index].tagName="";
-    new_schedule_tag[index].scheduleTime="";
+    new_schedule_tag[index].dayTimeStartString="";
+    new_schedule_tag[index].startDay="";
+    new_schedule_tag[index].startTime="";    
     new_schedule_tag[index].actionType=0;
     new_schedule_tag[index].actionTargetTag="";
+    new_schedule_tag[index].modbusTagType=-1;
+    new_schedule_tag[index].modbusTagOwner="";
+    new_schedule_tag[index].modbusTagOwnerIndex=-1;
     new_schedule_tag[index].actionTargetTagValue=1
     new_schedule_tag[index].actionTimeSyncFormatType=0;
     new_schedule_tag[index].actionTimeSyncFormatUserDefine="";
 
 
-    start_time_hh='';
-    start_time_mm='';
 
     new_schedule_tag_index=index;
     new_schedule_tag_modal=true;
@@ -4182,7 +4841,12 @@
 
   function AddScheduleTag(index)
   {
-    new_schedule_tag[index].scheduleTime=`${start_time_hh}:${start_time_mm}`;
+
+    if (new_schedule_tag[index].dayTimeStartString !="" && new_schedule_tag[index].dayTimeStartString.length > 11)
+    {
+      new_schedule_tag[index].startDay=new_schedule_tag[index].dayTimeStartString.substring(0, 10);
+      new_schedule_tag[index].startTime=new_schedule_tag[index].dayTimeStartString.substring(11);
+    }
 
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag=[...
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag,new_schedule_tag[index]];
@@ -4199,70 +4863,130 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayRangeEnable:false,
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayRangeEnable:false,
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayRangeEnable:false,
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayRangeEnable:false,
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayRangeEnable:false,
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayRangeEnable:false,
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayRangeEnable:false,
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayRangeEnable:false,
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayRangeEnable:false,
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayRangeEnable:false,
+    dayTimeRangeEnable:false,
+    dayTimeStartString:"",
+    startDay:"",
+    startTime:"",
+    endDay:"",
+    endTime:"",
+    dayTimeEndString:"",
     calculationFormula:""
   }
 
@@ -4277,7 +5001,13 @@
     new_calculation_tag[index].calculationFormula="return "
 
 
-    new_calculation_tag[index].timerangeEnable=false;
+    new_calculation_tag[index].dayTimeRangeEnable=false;
+    new_calculation_tag[index].dayTimeStartString="";
+    new_calculation_tag[index].dayTimeEndString="";
+    new_calculation_tag[index].startDay="";
+    new_calculation_tag[index].startTime="";
+    new_calculation_tag[index].endDay="";
+    new_calculation_tag[index].endTime="";
 
     showMenu=false;
     new_calculation_tag_index=index;
@@ -4390,6 +5120,23 @@
 
   function add_new_calculation_tag(index)
   {
+    console.log("new_calculation_tag[index].dayTimeStartString:", new_calculation_tag[index].dayTimeStartString);
+
+    if (new_calculation_tag[index].dayTimeStartString !="" && new_calculation_tag[index].dayTimeStartString.length > 11)
+    {
+      new_calculation_tag[index].startDay=new_calculation_tag[index].dayTimeStartString.substring(0, 10);
+      new_calculation_tag[index].startTime=new_calculation_tag[index].dayTimeStartString.substring(11);
+    }
+
+    if (new_calculation_tag[index].dayTimeEndString !="" && new_calculation_tag[index].dayTimeEndString.length > 11)
+    {
+      new_calculation_tag[index].endDay=new_calculation_tag[index].dayTimeEndString.substring(0, 10);
+      new_calculation_tag[index].endTime=new_calculation_tag[index].dayTimeEndString.substring(11);
+    }
+
+    console.log("new_calculation_tag[index].startDay:", new_calculation_tag[index].startDay);
+
+
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag,new_calculation_tag[index]];
     new_calculation_tag_modal=false;
   }
@@ -6225,7 +6972,7 @@
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">None</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{#if Ctag.dayTimeRangeEnable}{Ctag.startDay} {Ctag.startTime} - {Ctag.endDay} {Ctag.endTime}{:else}None{/if}</td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.calculationFormula}</td>
 
@@ -6261,8 +7008,12 @@
 
     <TableBodyCell>{index+1}</TableBodyCell>
  <TableBodyCell>{Ctag.tagName}</TableBodyCell>
- <TableBodyCell>None</TableBodyCell>
+ <TableBodyCell>{#if Ctag.dayTimeRangeEnable}{Ctag.startDay} {Ctag.startTime} - {Ctag.endDay} {Ctag.endTime}{:else}None{/if}</TableBodyCell>
     <TableBodyCell>{Ctag.calculationFormula}</TableBodyCell>
+
+
+
+
 
 
 
@@ -6361,17 +7112,19 @@
 
   </td>
 
-    <td class="pl-4 pt-8" colspan="10">
+    <td class="pl-4 pt-8" colspan="20">
     <div class="flex gap-2">
 
-<Toggle class="p-2.5 mt-2 mb-4" bind:checked={new_calculation_tag[new_calculation_tag_index].dayRangeEnable}></Toggle>
+<Toggle class="p-2.5 mt-3 mb-4" bind:checked={new_calculation_tag[new_calculation_tag_index].dayTimeRangeEnable}></Toggle>
 
-{#if new_calculation_tag[new_calculation_tag_index].dayRangeEnable}
-
-
-<DateTimePicker bind:value={selectedStartDateTime} />
+{#if new_calculation_tag[new_calculation_tag_index].dayTimeRangeEnable}
 
 
+<DateTimePicker bind:value={new_calculation_tag[new_calculation_tag_index].dayTimeStartString} />
+
+<p class="pt-5 border"><strong>-</strong></p>
+
+<DateTimePicker bind:value={new_calculation_tag[new_calculation_tag_index].dayTimeEndString} />
 
 
 {/if}
@@ -6387,7 +7140,7 @@
 
 
       </td>
-      <td class="pl-5 pt-10" colspan="10">
+      <td class="pl-5 pt-10" colspan="16">
 
 {#if showMenu}
 <nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
@@ -6499,7 +7252,7 @@
 </nav>
 {/if}
 
-<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" bind:value={new_calculation_tag[new_calculation_tag_index].calculationFormula} on:contextmenu|preventDefault={rightClickContextMenu} 
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" bind:value={new_calculation_tag[new_calculation_tag_index].calculationFormula} on:contextmenu|preventDefault={rightClickContextMenu} 
 on:click={onPageClick}></textarea>
 
       </td>
@@ -6528,8 +7281,8 @@ on:click={onPageClick}></textarea>
     <td></td>
     <td class="pl-40"></td>
     <td class="pl-40"></td>
-    <td></td>
-    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
     <td >
 <Button color="dark" pill={true} on:click={()=>add_new_calculation_tag(new_calculation_tag_index)}>Add</Button></td>
 
@@ -6540,7 +7293,7 @@ on:click={onPageClick}></textarea>
 
 
 
-<Modal bind:open={modify_calculation_tag_modal}  size="lg" class="w-full" permanent={true}>
+<Modal bind:open={modify_calculation_tag_modal}  size="xl" class="w-full" permanent={true}>
   <form action="#">
 <label>
 {#if getDataReady == 1}
@@ -6572,6 +7325,31 @@ on:click={onPageClick}></textarea>
 
 
 
+<tr>
+  <td><p class="pl-2 pt-5 text-lg font-light text-right">Day Time Range</p>
+
+  </td>
+
+    <td class="pl-4 pt-8" colspan="20">
+    <div class="flex gap-2">
+
+<Toggle class="p-2.5 mt-3 mb-4" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeRangeEnable}></Toggle>
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeRangeEnable}
+
+
+<DateTimePicker bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeStartString} />
+
+<p class="pt-5 border"><strong>-</strong></p>
+
+<DateTimePicker bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeEndString} />
+
+
+{/if}
+</div></td>
+</tr>
+
+
 
 
 
@@ -6582,7 +7360,7 @@ on:click={onPageClick}></textarea>
 
 
       </td>
-      <td class="pl-5 pt-2" colspan="10">
+      <td class="pl-5 pt-10" colspan="10">
 
 {#if showMenu}
 <nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
@@ -6723,10 +7501,10 @@ on:click={onPageClick}></textarea>
     <td></td>
     <td class="pl-40"></td>
     <td class="pl-40"></td>
-    <td></td>
-    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
     <td>
-<Button color="dark" pill={true} on:click={modify_calculation_tag(modify_calculation_tag_index)}>Modify</Button></td>
+<Button color="dark" pill={true} on:click={()=>modify_calculation_tag(modify_calculation_tag_index)}>Modify</Button></td>
 
 
 </table>
@@ -6807,8 +7585,8 @@ on:click={onPageClick}></textarea>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.targetTag}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.startTime}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.targetTag}{#if Atag.modbusTagType==2} ({TCPSlaveTag[Atag.modbusTagOwnerIndex].modbusProfile}){:else if Atag.modbusTagType==0} ({TCPMasterTag[Atag.modbusTagOwnerIndex].modbusProfile}){:else if Atag.modbusTagType==1} ({RTUMasterTag[Atag.modbusTagOwnerIndex].modbusProfile}){/if}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.startDay}</td>
 
 
 
@@ -6841,9 +7619,9 @@ on:click={onPageClick}></textarea>
 
       <TableBodyCell >{index+1}</TableBodyCell>
       <TableBodyCell >{Atag.tagName}</TableBodyCell>
-      <TableBodyCell >{Atag.targetTag}</TableBodyCell>
+      <TableBodyCell >{Atag.targetTag}{#if Atag.modbusTagType==2} ({TCPSlaveTag[Atag.modbusTagOwnerIndex].modbusProfile}){:else if Atag.modbusTagType==0} ({TCPMasterTag[Atag.modbusTagOwnerIndex].modbusProfile}){:else if Atag.modbusTagType==1} ({RTUMasterTag[Atag.modbusTagOwnerIndex].modbusProfile}){/if}</TableBodyCell>
 
-      <TableBodyCell >{Atag.startTime}</TableBodyCell>
+      <TableBodyCell >{Atag.startDay}</TableBodyCell>
 
 
  </TableBodyRow>
@@ -6922,7 +7700,7 @@ on:click={onPageClick}></textarea>
   Enable
 </label>
 
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoAddAccumulated(new_accumulated_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={()=>NoAddAccumulated(new_accumulated_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
 
@@ -6932,7 +7710,7 @@ on:click={onPageClick}></textarea>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
       <td class="pl-5 pt-5">
 
-<input type="text" bind:value={new_accumulated_tag[new_accumulated_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="text" bind:value={new_accumulated_tag[new_accumulated_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
       </td>
@@ -6943,30 +7721,77 @@ on:click={onPageClick}></textarea>
 
 
 
+
+
 <tr>
-<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
-    <td class= "pl-4 pt-4" colspan="3">
-<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_accumulated_tag[new_accumulated_tag_index].targetTag}>
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-<option value={TagItem.tagName}>{TagItem.tagName}</option>
+<td><p class="pl-4 pt-5 text-lg font-light text-right">Target Tag</p></td>
+
+
+  <td class= "pl-4 pt-8">
+<div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_accumulated_tag[new_accumulated_tag_index].modbusTagOwner} on:change={()=>handleACTargetModbusChange(0)}>
+<option disabled="" value="">Choose ...</option>
+
+{#each TCPSlaveTag as Slave, index}
+<option value={"TS_" + index}>{Slave.modbusProfile}</option>
+{/each}
+
+{#each TCPMasterTag as TCPMaster, index}
+<option value={"TM_" + index}>{TCPMaster.modbusProfile}</option>
+{/each}
+
+{#each RTUMasterTag as RTUMaster, index}
+<option value={"RM_" + index}>{RTUMaster.modbusProfile}</option>
 {/each}
 
 </select>
-</td>
-   <td></td>
-    <td></td>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_accumulated_tag[new_accumulated_tag_index].targetTag} >
+
+<option disabled="" value="">Choose ...</option>
+
+{#if new_accumulated_tag[new_accumulated_tag_index].modbusTagOwner != "" && new_accumulated_tag[new_accumulated_tag_index].modbusTagOwnerIndex != -1}
+
+{#if new_accumulated_tag[new_accumulated_tag_index].modbusTagType==2 && new_accumulated_tag[new_accumulated_tag_index].modbusTagOwnerIndex < TCPSlaveTag.length}
+{#each TCPSlaveTag[new_accumulated_tag[new_accumulated_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if new_accumulated_tag[new_accumulated_tag_index].modbusTagType==0 && new_accumulated_tag[new_accumulated_tag_index].modbusTagOwnerIndex < TCPMasterTag.length}
+
+{#each TCPMasterTag[new_accumulated_tag[new_accumulated_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if new_accumulated_tag[new_accumulated_tag_index].modbusTagType==1 && new_accumulated_tag[new_accumulated_tag_index].modbusTagOwnerIndex < RTUMasterTag.length}
+{#each RTUMasterTag[new_accumulated_tag[new_accumulated_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{/if}
+
+{/if}
+
+</select>
+
+
+  </div>
+
+    </td>
+
 
 </tr>
 
 
 
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Day</p></td>
-      <td class="pl-5 pt-5">
-<div class="flex gap-4">
-<input type="text"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
-<p class="pt-3">(Period: 1 Day)</p>
+
+<tr>
+      <td><p class="pl-2 pt-2 text-lg font-light text-right">Start Day</p></td>
+      <td class="pl-5 pt-2">
+<div class="flex gap-4">
+
+<DateTimePicker bind:value={new_accumulated_tag[new_accumulated_tag_index].startDay} hideTime/>
+<p class="pt-5">(Period: 1 Day)</p>
 
 
       </div>
@@ -7020,7 +7845,7 @@ on:click={onPageClick}></textarea>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
       <td class="pl-5 pt-5">
 
-<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
+<input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
       </td>
@@ -7032,50 +7857,79 @@ on:click={onPageClick}></textarea>
 
 
 <tr>
-<td><p class="pl-4 pt-4 text-lg font-light text-right">Target Tag</p></td>
-    <td class= "pl-4 pt-4" colspan="3">
-<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].targetTag}>
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-<option value={TagItem.tagName}>{TagItem.tagName}</option>
+<td><p class="pl-4 pt-5 text-lg font-light text-right">Target Tag</p></td>
+
+
+  <td class= "pl-4 pt-8">
+<div class="flex gap-4">
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwner} on:change={()=>handleACTargetModbusChange(1)}>
+<option disabled="" value="">Choose ...</option>
+
+{#each TCPSlaveTag as Slave, index}
+<option value={"TS_" + index}>{Slave.modbusProfile}</option>
+{/each}
+
+{#each TCPMasterTag as TCPMaster, index}
+<option value={"TM_" + index}>{TCPMaster.modbusProfile}</option>
+{/each}
+
+{#each RTUMasterTag as RTUMaster, index}
+<option value={"RM_" + index}>{RTUMaster.modbusProfile}</option>
 {/each}
 
 </select>
-</td>
-   <td></td>
-    <td></td>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].targetTag} >
+
+<option disabled="" value="">Choose ...</option>
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwner != "" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex != -1}
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagType==2 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex < TCPSlaveTag.length}
+{#each TCPSlaveTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagType==0 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex < TCPMasterTag.length}
+
+{#each TCPMasterTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagType==1 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex < RTUMasterTag.length}
+{#each RTUMasterTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{/if}
+
+{/if}
+
+</select>
+
+
+  </div>
+
+    </td>
+
 
 </tr>
 
 
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Start Time</p></td>
-      <td class="pl-5 pt-5">
-<div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_hh}>
 
-<p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_mm}>
+<tr>
+      <td><p class="pl-2 pt-2 text-lg font-light text-right">Start Day</p></td>
+      <td class="pl-5 pt-2">
+<div class="flex gap-4">
+
+<DateTimePicker bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startDay} hideTime/>
+<p class="pt-5">(Period: 1 Day)</p>
+
 
       </div>
 
       </td>
   </tr>
 
-<p class="pt-5"></p>
-
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">End Time</p></td>
-      <td class="pl-5 pt-5">
-
-<div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={end_time_hh}>
-
-<p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={end_time_mm}>
-
-      </div>
-      </td>
-  </tr>
 
 <p class="pt-5"></p>
 
@@ -8018,13 +8872,13 @@ on:click={onPageClick}></textarea>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScheduleTag.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScheduleTag.scheduleTime}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScheduleTag.startDay} {ScheduleTag.startTime}</td>
 
 
 {#if ScheduleTag.actionType==0}
-      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Write {ScheduleTag.actionTargetTag} with {ScheduleTag.actionTargetTagValue}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Write {ScheduleTag.actionTargetTag} {#if ScheduleTag.modbusTagType==2} ({TCPSlaveTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){:else if ScheduleTag.modbusTagType==0} ({TCPMasterTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){:else if ScheduleTag.modbusTagType==1} ({RTUMasterTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){/if} with {ScheduleTag.actionTargetTagValue}</td>
 {:else if ScheduleTag.actionType==1}
-      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Time Sync ({ScheduleTag.actionTimeSyncFormatType}) with {ScheduleTag.actionTargetTag}</td>
+      <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Time Sync ({#if ScheduleTag.actionTimeSyncFormatType==0}Epoch Seconds{:else if ScheduleTag.actionTimeSyncFormatType==1}Schneider{:else if ScheduleTag.actionTimeSyncFormatType==2}User Defined{/if}) with {ScheduleTag.actionTargetTag} {#if ScheduleTag.modbusTagType==2} ({TCPSlaveTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){:else if ScheduleTag.modbusTagType==0} ({TCPMasterTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){:else if ScheduleTag.modbusTagType==1} ({RTUMasterTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){/if}</td>
 {:else}
       <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout"></td>
 {/if}
@@ -8058,14 +8912,16 @@ on:click={onPageClick}></textarea>
 
       <TableBodyCell>{index+1}</TableBodyCell>
       <TableBodyCell>{ScheduleTag.tagName}</TableBodyCell>
-      <TableBodyCell>{ScheduleTag.scheduleTime}</TableBodyCell>
+      <TableBodyCell>{ScheduleTag.startDay} {ScheduleTag.startTime}</TableBodyCell>
 {#if ScheduleTag.actionType==0}
-      <TableBodyCell>Write {ScheduleTag.actionTargetTag} with {ScheduleTag.actionTargetTagValue}</TableBodyCell>
+      <TableBodyCell>Write {ScheduleTag.actionTargetTag} {#if ScheduleTag.modbusTagType==2} ({TCPSlaveTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){:else if ScheduleTag.modbusTagType==0} ({TCPMasterTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){:else if ScheduleTag.modbusTagType==1} ({RTUMasterTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){/if} with {ScheduleTag.actionTargetTagValue}</TableBodyCell>
 {:else if ScheduleTag.actionType==1}
-      <TableBodyCell>Time Sync ({ScheduleTag.actionTimeSyncFormatType}) with {ScheduleTag.actionTargetTag}</TableBodyCell>
+      <TableBodyCell>Time Sync ({#if ScheduleTag.actionTimeSyncFormatType==0}Epoch Seconds{:else if ScheduleTag.actionTimeSyncFormatType==1}Schneider{:else if ScheduleTag.actionTimeSyncFormatType==2}User Defined{/if}) with {ScheduleTag.actionTargetTag} {#if ScheduleTag.modbusTagType==2} ({TCPSlaveTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){:else if ScheduleTag.modbusTagType==0} ({TCPMasterTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){:else if ScheduleTag.modbusTagType==1} ({RTUMasterTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){/if}</TableBodyCell>
 {:else}
       <TableBodyCell></TableBodyCell>
 {/if}
+
+
 
 
  </TableBodyRow>
@@ -8143,7 +8999,7 @@ on:click={onPageClick}></textarea>
 
 
 
-<Modal bind:open={new_schedule_tag_modal}  size="lg" class="w-full" permanent={true}>
+<Modal bind:open={new_schedule_tag_modal}  size="xl" class="w-full" permanent={true}>
   <form action="#">
 <label>
 {#if getDataReady == 1}
@@ -8175,13 +9031,8 @@ on:click={onPageClick}></textarea>
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Schedule Time</p></td>
       <td class="pl-5 pt-5">
-<div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_hh}>
 
-<p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_mm}>
-
-      </div>
+<DateTimePicker bind:value={new_schedule_tag[new_schedule_tag_index].dayTimeStartString} />
 
       </td>
   </tr>
@@ -8192,21 +9043,62 @@ on:click={onPageClick}></textarea>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Action</p></td>
 
- <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+ <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
 
   <Radio bind:group={new_schedule_tag[new_schedule_tag_index].actionType} value={0}>Write</Radio>
 {#if new_schedule_tag[new_schedule_tag_index].actionType==0}
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-<option value={TagItem.tagName}>{TagItem.tagName}</option>
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_schedule_tag[new_schedule_tag_index].modbusTagOwner} on:change={()=>handleScheTargetModbusChange(0)}>
+<option disabled="" value="">Choose ...</option>
+
+{#each TCPSlaveTag as Slave, index}
+<option value={"TS_" + index}>{Slave.modbusProfile}</option>
 {/each}
+
+{#each TCPMasterTag as TCPMaster, index}
+<option value={"TM_" + index}>{TCPMaster.modbusProfile}</option>
+{/each}
+
+{#each RTUMasterTag as RTUMaster, index}
+<option value={"RM_" + index}>{RTUMaster.modbusProfile}</option>
+{/each}
+
+</select>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTag} >
+
+<option disabled="" value="">Choose ...</option>
+
+{#if new_schedule_tag[new_schedule_tag_index].modbusTagOwner != "" && new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex != -1}
+
+{#if new_schedule_tag[new_schedule_tag_index].modbusTagType==2 && new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex < TCPSlaveTag.length}
+{#each TCPSlaveTag[new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if new_schedule_tag[new_schedule_tag_index].modbusTagType==0 && new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex < TCPMasterTag.length}
+
+{#each TCPMasterTag[new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if new_schedule_tag[new_schedule_tag_index].modbusTagType==1 && new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex < RTUMasterTag.length}
+{#each RTUMasterTag[new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{/if}
+
 {/if}
 
 </select>
 
+
 {:else}
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
+
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
 
 {/if}
@@ -8233,24 +9125,69 @@ on:click={onPageClick}></textarea>
 <option disabled="" value="none">Choose ...</option>
 
 <option value={0}>Epoch Seconds</option>
-<option value={1}>by filed</option>
-<option value={2}>Schneider</option>
-<option value={3}>User Define</option>
+<option value={1}>Schneider</option>
+<option value={2}>User Defined</option>
 </select>
 
 <p class="pt-4"> with </p>
 
 {#if new_schedule_tag[new_schedule_tag_index].actionType==1}
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-<option value={TagItem.tagName}>{TagItem.tagName}</option>
+
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_schedule_tag[new_schedule_tag_index].modbusTagOwner} on:change={()=>handleScheTargetModbusChange(0)}>
+<option disabled="" value="">Choose ...</option>
+
+{#each TCPSlaveTag as Slave, index}
+<option value={"TS_" + index}>{Slave.modbusProfile}</option>
 {/each}
+
+{#each TCPMasterTag as TCPMaster, index}
+<option value={"TM_" + index}>{TCPMaster.modbusProfile}</option>
+{/each}
+
+{#each RTUMasterTag as RTUMaster, index}
+<option value={"RM_" + index}>{RTUMaster.modbusProfile}</option>
+{/each}
+
+</select>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_schedule_tag[new_schedule_tag_index].actionTargetTag} >
+
+<option disabled="" value="">Choose ...</option>
+
+{#if new_schedule_tag[new_schedule_tag_index].modbusTagOwner != "" && new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex != -1}
+
+{#if new_schedule_tag[new_schedule_tag_index].modbusTagType==2 && new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex < TCPSlaveTag.length}
+{#each TCPSlaveTag[new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if new_schedule_tag[new_schedule_tag_index].modbusTagType==0 && new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex < TCPMasterTag.length}
+
+{#each TCPMasterTag[new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if new_schedule_tag[new_schedule_tag_index].modbusTagType==1 && new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex < RTUMasterTag.length}
+{#each RTUMasterTag[new_schedule_tag[new_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{/if}
+
 {/if}
 
 </select>
+
+
+
 {:else}
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
+
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
 
 {/if}
@@ -8307,7 +9244,7 @@ on:click={onPageClick}></textarea>
 </Modal>
 
 
-<Modal bind:open={modify_schedule_tag_modal}  size="lg" class="w-full" permanent={true}>
+<Modal bind:open={modify_schedule_tag_modal}  size="xl" class="w-full" permanent={true}>
   <form action="#">
 <label>
 {#if getDataReady == 1}
@@ -8316,7 +9253,7 @@ on:click={onPageClick}></textarea>
   Enable
 </label>
 
-<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={NoModifyScheduleTag}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
+<button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={()=>NoModifyScheduleTag(modify_schedule_tag_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 
 <p class="mt-10"></p>
 
@@ -8340,13 +9277,8 @@ on:click={onPageClick}></textarea>
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Schedule Time</p></td>
       <td class="pl-5 pt-5">
-<div class="flex gap-4">
-<input type="number" placeholder="hh" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_hh}>
 
-<p class="pt-3">:</p>
-<input type="number" placeholder="mm" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-gray-400 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" bind:value={start_time_mm}>
-
-      </div>
+<DateTimePicker bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString} />
 
       </td>
   </tr>
@@ -8361,20 +9293,64 @@ on:click={onPageClick}></textarea>
 
   <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType} value={0}>Write</Radio>
 {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType==0}
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-<option value={TagItem.tagName}>{TagItem.tagName}</option>
+
+
+
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner} on:change={()=>handleScheTargetModbusChange(1)}>
+<option disabled="" value="">Choose ...</option>
+
+{#each TCPSlaveTag as Slave, index}
+<option value={"TS_" + index}>{Slave.modbusProfile}</option>
 {/each}
+
+{#each TCPMasterTag as TCPMaster, index}
+<option value={"TM_" + index}>{TCPMaster.modbusProfile}</option>
+{/each}
+
+{#each RTUMasterTag as RTUMaster, index}
+<option value={"RM_" + index}>{RTUMaster.modbusProfile}</option>
+{/each}
+
+</select>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTag} >
+
+<option disabled="" value="">Choose ...</option>
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner != "" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex != -1}
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType==2 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex < TCPSlaveTag.length}
+{#each TCPSlaveTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType==0 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex < TCPMasterTag.length}
+
+{#each TCPMasterTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType==1 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex < RTUMasterTag.length}
+{#each RTUMasterTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{/if}
+
 {/if}
 
 </select>
 
+
 {:else}
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
+
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
 
 {/if}
+
+
 
 <p class="pt-4"> with </p>
 <div class="relative"><input id="operand_value" class="block w-36 text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTagValue}> 
@@ -8398,23 +9374,62 @@ on:click={onPageClick}></textarea>
 <option disabled="" value="none">Choose ...</option>
 
 <option value={0}>Epoch Seconds</option>
-<option value={1}>by filed</option>
-<option value={2}>Schneider</option>
-<option value={3}>User Define</option>
+<option value={1}>Schneider</option>
+<option value={2}>User Defined</option>
 </select>
 <p class="pt-4"> with </p>
 
 {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType==1}
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTag}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-<option value={TagItem.tagName}>{TagItem.tagName}</option>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner} on:change={()=>handleScheTargetModbusChange(1)}>
+<option disabled="" value="">Choose ...</option>
+
+{#each TCPSlaveTag as Slave, index}
+<option value={"TS_" + index}>{Slave.modbusProfile}</option>
 {/each}
+
+{#each TCPMasterTag as TCPMaster, index}
+<option value={"TM_" + index}>{TCPMaster.modbusProfile}</option>
+{/each}
+
+{#each RTUMasterTag as RTUMaster, index}
+<option value={"RM_" + index}>{RTUMaster.modbusProfile}</option>
+{/each}
+
+</select>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTag} >
+
+<option disabled="" value="">Choose ...</option>
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner != "" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex != -1}
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType==2 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex < TCPSlaveTag.length}
+{#each TCPSlaveTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType==0 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex < TCPMasterTag.length}
+
+{#each TCPMasterTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagType==1 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex < RTUMasterTag.length}
+{#each RTUMasterTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{/if}
+
 {/if}
 
 </select>
+
+
+
 {:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
+
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
 
 {/if}
@@ -8545,7 +9560,7 @@ on:click={onPageClick}></textarea>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">{EventTag.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">{EventTag.triggerTag}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">{EventTag.triggerTag} {#if EventTag.triggerModbusTagType==2} ({TCPSlaveTag[EventTag.triggerModbusTagOwnerIndex].modbusProfile}){:else if EventTag.triggerModbusTagType==0} ({TCPMasterTag[EventTag.triggerModbusTagOwnerIndex].modbusProfile}){:else if EventTag.triggerModbusTagType==1} ({RTUMasterTag[EventTag.triggerModbusTagOwnerIndex].modbusProfile}){/if}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-18">
 {#if EventTag.triggerConditionOperand==5}
 >
@@ -8566,7 +9581,7 @@ on:click={onPageClick}></textarea>
       {EventTag.triggerConditionValue}
 </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout w-36">
-{#if EventTag.actionOperation==0}Write{/if} {EventTag.actionTarget} with {EventTag.actionOperationValue}
+{#if EventTag.actionOperation==0}Write{/if} {EventTag.actionTarget} {#if EventTag.actionModbusTagType==2} ({TCPSlaveTag[EventTag.actionModbusTagOwnerIndex].modbusProfile}){:else if EventTag.actionModbusTagType==0} ({TCPMasterTag[EventTag.actionModbusTagOwnerIndex].modbusProfile}){:else if EventTag.actionModbusTagType==1} ({RTUMasterTag[EventTag.actionModbusTagOwnerIndex].modbusProfile}){/if} with {EventTag.actionOperationValue}
 
 </td>
 </tr>
@@ -8595,10 +9610,9 @@ on:click={onPageClick}></textarea>
 
     <TableBodyCell><input class="mb-1" type="checkbox" bind:checked={EventTag.enable}></TableBodyCell>
 
-
       <TableBodyCell>{index+1}</TableBodyCell>
       <TableBodyCell class="w-18">{EventTag.tagName}</TableBodyCell>
-      <TableBodyCell class="w-18">{EventTag.triggerTag}</TableBodyCell>
+      <TableBodyCell class="w-18">{EventTag.triggerTag} {#if EventTag.triggerModbusTagType==2} ({TCPSlaveTag[EventTag.triggerModbusTagOwnerIndex].modbusProfile}){:else if EventTag.triggerModbusTagType==0} ({TCPMasterTag[EventTag.triggerModbusTagOwnerIndex].modbusProfile}){:else if EventTag.triggerModbusTagType==1} ({RTUMasterTag[EventTag.triggerModbusTagOwnerIndex].modbusProfile}){/if}</TableBodyCell>
   <TableBodyCell class="w-18">
 {#if EventTag.triggerConditionOperand==5}
 >
@@ -8619,7 +9633,7 @@ on:click={onPageClick}></textarea>
       {EventTag.triggerConditionValue}</TableBodyCell>
 
       <TableBodyCell class="w-36">
-{#if EventTag.actionOperation==0}Write{/if} {EventTag.actionTarget} with {EventTag.actionOperationValue}
+{#if EventTag.actionOperation==0}Write{/if} {EventTag.actionTarget} {#if EventTag.actionModbusTagType==2} ({TCPSlaveTag[EventTag.actionModbusTagOwnerIndex].modbusProfile}){:else if EventTag.actionModbusTagType==0} ({TCPMasterTag[EventTag.actionModbusTagOwnerIndex].modbusProfile}){:else if EventTag.actionModbusTagType==1} ({RTUMasterTag[EventTag.actionModbusTagOwnerIndex].modbusProfile}){/if} with {EventTag.actionOperationValue}
 
 
       </TableBodyCell>
@@ -8696,7 +9710,7 @@ on:click={onPageClick}></textarea>
 
 
 
-<Modal bind:open={new_event_tag_modal}  size="lg" class="w-full" permanent={true}>
+<Modal bind:open={new_event_tag_modal}  size="xl" class="w-full" permanent={true}>
   <form action="#">
 <label>
 {#if getDataReady == 1}
@@ -8728,12 +9742,56 @@ on:click={onPageClick}></textarea>
 <tr>
 <td><p class="pl-4 pt-4 text-lg font-light text-right">Trigger Tag</p></td>
     <td class= "pl-4 pt-4" colspan="3">
-<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={new_event_tag[new_event_tag_index].triggerTag}>
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-<option value={TagItem.tagName}>{TagItem.tagName}</option>
+<div class="flex gap-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_event_tag[new_event_tag_index].triggerModbusTagOwner} on:change={()=>handleEvtTriggerModbusChange(0)}>
+<option disabled="" value="">Choose ...</option>
+
+{#each TCPSlaveTag as Slave, index}
+<option value={"TS_" + index}>{Slave.modbusProfile}</option>
+{/each}
+
+{#each TCPMasterTag as TCPMaster, index}
+<option value={"TM_" + index}>{TCPMaster.modbusProfile}</option>
+{/each}
+
+{#each RTUMasterTag as RTUMaster, index}
+<option value={"RM_" + index}>{RTUMaster.modbusProfile}</option>
 {/each}
 
 </select>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_event_tag[new_event_tag_index].triggerTag} >
+
+<option disabled="" value="">Choose ...</option>
+
+{#if new_event_tag[new_event_tag_index].triggerModbusTagOwner != "" && new_event_tag[new_event_tag_index].triggerModbusTagOwnerIndex != -1}
+
+{#if new_event_tag[new_event_tag_index].triggerModbusTagType==2 && new_event_tag[new_event_tag_index].triggerModbusTagOwnerIndex < TCPSlaveTag.length}
+{#each TCPSlaveTag[new_event_tag[new_event_tag_index].triggerModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if new_event_tag[new_event_tag_index].triggerModbusTagType==0 && new_event_tag[new_event_tag_index].triggerModbusTagOwnerIndex < TCPMasterTag.length}
+
+{#each TCPMasterTag[new_event_tag[new_event_tag_index].triggerModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if new_event_tag[new_event_tag_index].triggerModbusTagType==1 && new_event_tag[new_event_tag_index].triggerModbusTagOwnerIndex < RTUMasterTag.length}
+{#each RTUMasterTag[new_event_tag[new_event_tag_index].triggerModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{/if}
+
+{/if}
+
+</select>
+
+</div>
+
+
+
 </td>
    <td></td>
     <td></td>
@@ -8765,18 +9823,7 @@ on:click={onPageClick}></textarea>
   </td>
   </tr>
 
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td>
-      <td class="pl-5 pt-5">
-<div class="flex gap-4">
-<input type="number" bind:value={new_event_tag[new_event_tag_index].pollingRateS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
-
-     <p class="pt-1 text-lg">s</p>
-
-</div>
-</td>
-  </tr>
 
 
 
@@ -8788,15 +9835,52 @@ on:click={onPageClick}></textarea>
 
   <Radio bind:group={new_event_tag[new_event_tag_index].actionOperation} value={0}>Write</Radio>
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={new_event_tag[new_event_tag_index].actionTarget}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-<option value={TagItem.tagName}>{TagItem.tagName}</option>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_event_tag[new_event_tag_index].actionModbusTagOwner} on:change={()=>handleEvtActionModbusChange(0)}>
+<option disabled="" value="">Choose ...</option>
+
+{#each TCPSlaveTag as Slave, index}
+<option value={"TS_" + index}>{Slave.modbusProfile}</option>
 {/each}
+
+{#each TCPMasterTag as TCPMaster, index}
+<option value={"TM_" + index}>{TCPMaster.modbusProfile}</option>
+{/each}
+
+{#each RTUMasterTag as RTUMaster, index}
+<option value={"RM_" + index}>{RTUMaster.modbusProfile}</option>
+{/each}
+
+</select>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_event_tag[new_event_tag_index].actionTarget} >
+
+<option disabled="" value="">Choose ...</option>
+
+{#if new_event_tag[new_event_tag_index].actionModbusTagOwner != "" && new_event_tag[new_event_tag_index].actionModbusTagOwnerIndex != -1}
+
+{#if new_event_tag[new_event_tag_index].actionModbusTagType==2 && new_event_tag[new_event_tag_index].actionModbusTagOwnerIndex < TCPSlaveTag.length}
+{#each TCPSlaveTag[new_event_tag[new_event_tag_index].actionModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if new_event_tag[new_event_tag_index].actionModbusTagType==0 && new_event_tag[new_event_tag_index].actionModbusTagOwnerIndex < TCPMasterTag.length}
+
+{#each TCPMasterTag[new_event_tag[new_event_tag_index].actionModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if new_event_tag[new_event_tag_index].actionModbusTagType==1 && new_event_tag[new_event_tag_index].actionModbusTagOwnerIndex < RTUMasterTag.length}
+{#each RTUMasterTag[new_event_tag[new_event_tag_index].actionModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{/if}
+
 {/if}
 
 </select>
+
+
 
 <p class="pt-5"> with </p>
 
@@ -8830,7 +9914,7 @@ on:click={onPageClick}></textarea>
 </Modal>
 
 
-<Modal bind:open={modify_event_tag_modal}  size="lg" class="w-full" permanent={true}>
+<Modal bind:open={modify_event_tag_modal}  size="xl" class="w-full" permanent={true}>
   <form action="#">
 <label>
 {#if getDataReady == 1}
@@ -8862,12 +9946,57 @@ on:click={onPageClick}></textarea>
 <tr>
 <td><p class="pl-4 pt-4 text-lg font-light text-right">Trigger Tag</p></td>
     <td class= "pl-4 pt-4" colspan="3">
-<select class="block w-60 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerTag}>
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-<option value={TagItem.tagName}>{TagItem.tagName}</option>
+
+<div class="flex gap-4">
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwner} on:change={()=>handleEvtTriggerModbusChange(1)}>
+<option disabled="" value="">Choose ...</option>
+
+{#each TCPSlaveTag as Slave, index}
+<option value={"TS_" + index}>{Slave.modbusProfile}</option>
+{/each}
+
+{#each TCPMasterTag as TCPMaster, index}
+<option value={"TM_" + index}>{TCPMaster.modbusProfile}</option>
+{/each}
+
+{#each RTUMasterTag as RTUMaster, index}
+<option value={"RM_" + index}>{RTUMaster.modbusProfile}</option>
 {/each}
 
 </select>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerTag} >
+
+<option disabled="" value="">Choose ...</option>
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwner != "" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex != -1}
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagType==2 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex < TCPSlaveTag.length}
+{#each TCPSlaveTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagType==0 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex < TCPMasterTag.length}
+
+{#each TCPMasterTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagType==1 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex < RTUMasterTag.length}
+{#each RTUMasterTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].triggerModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{/if}
+
+{/if}
+
+</select>
+
+</div>
+
+
+
 </td>
    <td></td>
     <td></td>
@@ -8900,18 +10029,7 @@ on:click={onPageClick}></textarea>
   </td>
   </tr>
 
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Polling Rate</p></td>
-      <td class="pl-5 pt-5">
-<div class="flex gap-4">
-<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].pollingRateS} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
-
-      <p class="pt-1 text-lg"> s</p>
-</div>
-</td>
-
-  </tr>
 
 
 
@@ -8923,15 +10041,51 @@ on:click={onPageClick}></textarea>
 
   <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionOperation} value={0}>Write</Radio>
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-64" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionTarget}>
-<option disabled="" value="none">Choose ...</option>
-{#if saved_changed_modbus_data != ""}
-{#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-<option value={TagItem.tagName}>{TagItem.tagName}</option>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwner} on:change={()=>handleEvtActionModbusChange(1)}>
+<option disabled="" value="">Choose ...</option>
+
+{#each TCPSlaveTag as Slave, index}
+<option value={"TS_" + index}>{Slave.modbusProfile}</option>
 {/each}
+
+{#each TCPMasterTag as TCPMaster, index}
+<option value={"TM_" + index}>{TCPMaster.modbusProfile}</option>
+{/each}
+
+{#each RTUMasterTag as RTUMaster, index}
+<option value={"RM_" + index}>{RTUMaster.modbusProfile}</option>
+{/each}
+
+</select>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionTarget} >
+
+<option disabled="" value="">Choose ...</option>
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwner != "" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex != -1}
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagType==2 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex < TCPSlaveTag.length}
+{#each TCPSlaveTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagType==0 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex < TCPMasterTag.length}
+
+{#each TCPMasterTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{:else if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagType==1 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex < RTUMasterTag.length}
+{#each RTUMasterTag[changed_data_tag_pro_data.config.service_dataTagPro_tagRule.eventTag[modify_event_tag_index].actionModbusTagOwnerIndex].tag as Tag, index}
+<option value={Tag.tagName}>{Tag.tagName}</option>
+{/each}
+
+{/if}
+
 {/if}
 
 </select>
+
 
 <p class="pt-5"> with </p>
 
@@ -8977,10 +10131,11 @@ on:click={onPageClick}></textarea>
 </TabItem>
 {#if data_tag_pro_flag==1}
 
-<TabItem title="UL Rule">
+
+ <TabItem title="UL Rule">
 
 
-<Table shadow striped={true} tableNoWFull={true}>
+ <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
     <TableHeadCell class="!p-4">
     </TableHeadCell>
@@ -8990,29 +10145,26 @@ on:click={onPageClick}></textarea>
     </TableHeadCell>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
-    <TableHeadCell class="w-18">Rule Name</TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>    
-    <TableHeadCell class="w-18"></TableHeadCell>
-    <TableHeadCell class="w-18"></TableHeadCell>    
-
+    <TableHeadCell class="w-18">Modbus Tag</TableHeadCell>
+    <TableHeadCell class="w-18">Sampling Condition</TableHeadCell>
+    <TableHeadCell >Cloud Setting</TableHeadCell>
   </TableHead>
 
 <TableBody>
-
-
-
 {#if getDataReady == 1}
 {#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule as ulRule, index}
+
 {#if ulRule.delete}
 
-<tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+  <tr class="border-b last:border-b-0 bg-white dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700 ">
+
 <td class="px-6 py-1 whitespace-nowrap font-medium text-gray-900 dark:text-white !px-4 w-10">
 <button on:click={() => RestoreDeleteULRule(index)}>
 <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
   <path d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 </button>
-   </td>
+</td>
 
 
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
@@ -9022,23 +10174,55 @@ on:click={onPageClick}></textarea>
 </svg>
       </button>
 
-
        </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white !p-0 w-10 strikeout"> 
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-0 w-10 strikeout">  
 <button class="disabled:cursor-not-allowed" disabled>    
     <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
   <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 </button>
     </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">
-<input class="mb-1 strikeout" type="checkbox" bind:checked={ulRule.enable}>
-    </td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">{ulRule.ruleName}</td>
+
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout"> 
+<input type="checkbox" class="disabled:cursor-not-allowed" bind:checked={ulRule.enable} disabled>
+      </td>
+
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
+{
+  ulRule.modbusRTUMasterTag
+    .flatMap(master =>
+      master.tag
+        .filter(t => t.enable)
+        .map(t => `${t.tagName}(${master.modbusProfile})`)
+    )
+    .slice(0, 2)
+    .join(", ")
+},
+{
+  ulRule.modbusTCPMasterTag
+    .flatMap(master =>
+      master.tag
+        .filter(t => t.enable)
+        .map(t => `${t.tagName}(${master.modbusProfile})`)
+    )
+    .slice(0, 2)
+    .join(", ")
+},
+
+......
+
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">
+{#if ulRule.samplingCondition==0}
+per {ulRule.periodMS} ms
+{/if}
+</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white strikeout">
 {#each ulRule.cloud as Cloud, index}
-{#if index!=0}/{/if} {Cloud.profile}({Cloud.topic[0].name}, {#if Cloud.tagDisplay==0}Hex,{:else if Cloud.tagDisplay==1}Decimal,{:else if Cloud.tagDisplay==2}Binary,{/if}{#if Cloud.dataLogFormat==0}Default{:else if Cloud.dataLogFormat==1}User Defined{:else if Cloud.dataLogFormat} Use others{/if})
+{#if index!=0}/{/if} {Cloud.profile}({Cloud.topic[0].name})
 
 {/each}
 </td>
@@ -9046,17 +10230,18 @@ on:click={onPageClick}></textarea>
 </tr>
 
 {:else}
-<TableBodyRow>
- <TableBodyCell class="!p-4"></TableBodyCell>
+
+    <TableBodyRow>
+ <TableBodyCell class="!p-4 w-10"></TableBodyCell>
       <TableBodyCell class="!p-0 w-10">
-<button on:click={()=>TriggerModifyULRule(index)}>
+<button on:click={() => TriggerModifyULRule(index)}>
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 -2 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 <path d="M16.8617 4.48667L18.5492 2.79917C19.2814 2.06694 20.4686 2.06694 21.2008 2.79917C21.9331 3.53141 21.9331 4.71859 21.2008 5.45083L10.5822 16.0695C10.0535 16.5981 9.40144 16.9868 8.68489 17.2002L6 18L6.79978 15.3151C7.01323 14.5986 7.40185 13.9465 7.93052 13.4178L16.8617 4.48667ZM16.8617 4.48667L19.5 7.12499M18 14V18.75C18 19.9926 16.9926 21 15.75 21H5.25C4.00736 21 3 19.9926 3 18.75V8.24999C3 7.00735 4.00736 5.99999 5.25 5.99999H10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
 
        </TableBodyCell>
-     <TableBodyCell class="!p-0 w-10">
+    <TableBodyCell class="!p-0 w-10">
 <button on:click={() => DeleteULRule(index)}>    
     <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 -1.5 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
   <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -9064,53 +10249,84 @@ on:click={onPageClick}></textarea>
 </button>
     </TableBodyCell>
 
+<TableBodyCell class="w-10">
+<input type="checkbox"  bind:checked={ulRule.enable}>
 
-    <TableBodyCell><input class="mb-1" type="checkbox" bind:checked={ulRule.enable}></TableBodyCell>
+</TableBodyCell>
+
+<TableBodyCell class="w-10">{index+1}</TableBodyCell>
 
 
-      <TableBodyCell>{index+1}</TableBodyCell>
-      <TableBodyCell class="w-18">{ulRule.ruleName}</TableBodyCell>
+
+
+<TableBodyCell class="w-18">
+
+{
+  ulRule.modbusRTUMasterTag
+    .flatMap(master =>
+      master.tag
+        .filter(t => t.enable)
+        .map(t => `${t.tagName}(${master.modbusProfile})`)
+    )
+    .slice(0, 2)
+    .join(", ")
+},
+{
+  ulRule.modbusTCPMasterTag
+    .flatMap(master =>
+      master.tag
+        .filter(t => t.enable)
+        .map(t => `${t.tagName}(${master.modbusProfile})`)
+    )
+    .slice(0, 2)
+    .join(", ")
+},
+
+......
+
+</TableBodyCell>
+<TableBodyCell class="w-18"> 
+{#if ulRule.samplingCondition==0}
+per {ulRule.periodMS} ms
+{/if}
+</TableBodyCell>
+
 <TableBodyCell>
 {#each ulRule.cloud as Cloud, index}
-{#if index!=0}/{/if} {Cloud.profile}({Cloud.topic[0].name}, {#if Cloud.tagDisplay==0}Hex,{:else if Cloud.tagDisplay==1}Decimal,{:else if Cloud.tagDisplay==2}Binary,{/if}{#if Cloud.dataLogFormat==0}Default{:else if Cloud.dataLogFormat==1}User Defined{:else if Cloud.dataLogFormat} Use others{/if})
+{#if index!=0}/{/if} {Cloud.profile}({Cloud.topic[0].name})
 
 {/each}
 
 </TableBodyCell>
-
-
- </TableBodyRow>
+    </TableBodyRow>
 
 {/if}
+
 {/each}
 {/if}
 
- <TableBodyRow>
- {#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length < 10}
 
+  <TableBodyRow>
+
+{#if getDataReady == 1}
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length < 10}
  <TableBodyCell class="!p-4 w-10">
-
-<button on:click={()=>new_ul_rule_trigger(changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length)}>
+<button on:click={() => new_ul_rule_trigger(changed_data_tag_pro_data.config.service_dataTagPro_ulRule.length)}>
     <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-gray-500 ml-2 dark:text-pink-500 w-6 h-6">
 
   <path d="M12 4V20M20 12L4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> 
 </svg>
       </button>
-
  </TableBodyCell>
-{:else}
-
+ {:else}
  <TableBodyCell class="!p-4 w-16"> </TableBodyCell>
 {/if}
+{/if}
 
-
-      <TableBodyCell class="!p-0 w-10">
-
-
+      <TableBodyCell class="!p-4">
 
        </TableBodyCell>
-      <TableBodyCell class="!p-0 w-10"></TableBodyCell>
-
+      <TableBodyCell class="!p-4"></TableBodyCell>
 
 
     <TableBodyCell class="w-10"></TableBodyCell>
@@ -9121,14 +10337,14 @@ on:click={onPageClick}></textarea>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-
-
+      <TableBodyCell class="w-36"></TableBodyCell>      
     </TableBodyRow>
 
 
   <tr>
     <td></td>
     <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -9143,10 +10359,11 @@ on:click={onPageClick}></textarea>
 
     </tr>
 
+  </TableBody>
 
 
 
-<Modal bind:open={new_ul_rule_modal}  size="lg" class="w-full" autoclose={false}>
+<Modal bind:open={new_ul_rule_modal} autoclose={false} size="lg" class="w-full">
 
 <StepIndicator {currentStep} {steps} glow />
 
@@ -9163,11 +10380,100 @@ on:click={onPageClick}></textarea>
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Rule Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={new_ul_rule[new_ul_rule_index].ruleName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Sampling Condition</p></td>
+    <td class= "pl-4 pt-5" colspan="3">
+<div class="flex gap-4">
+
+  <Radio class="pb-1" bind:group={new_ul_rule[new_ul_rule_index].samplingCondition} value={0} >Period</Radio>
+
+{#if new_ul_rule[new_ul_rule_index].samplingCondition==0}
+
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 dark:bg-gray-700 dark:border-green-500" bind:value={new_ul_rule[new_ul_rule_index].periodMS}> <p class="pt-2">ms</p>
+
+{/if}
 
 
 
-  </tr>
+</div>    
+    </td>
+    <td></td>
+    <td></td>
+
+</tr>
+
+<tr>
+<td><p class="pl-4 pt-8 text-lg font-light text-right">Modbus Tag</p></td>
+    <td class= "pl-5 pt-8" colspan="3">
+
+
+<Button>Choose Tag<ChevronDownOutline class="ms-2 h-6 w-6 text-white dark:text-white" /></Button>
+<Dropdown simple>
+{#each new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag as Slave}
+
+  <DropdownItem class="flex items-center justify-between">{Slave.modbusProfile}<ChevronRightOutline class="text-primary-700 ms-2 h-6 w-6 dark:text-white" /></DropdownItem>
+
+<Dropdown simple placement="right-start" trigger="mouseenter">
+{#each Slave.tag as TagItem}
+
+  <li class="rounded-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+<label class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center"><input type="checkbox" bind:checked={TagItem.enable} class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">{TagItem.tagName}</label>
+
+  </li>
+{/each}
+
+</Dropdown>
+{/each}
+
+{#each new_ul_rule[new_ul_rule_index].modbusTCPMasterTag as TCPMaster}
+
+  <DropdownItem class="flex items-center justify-between">
+    {TCPMaster.modbusProfile}<ChevronRightOutline class="text-primary-700 ms-2 h-6 w-6 dark:text-white" />
+  </DropdownItem>
+<Dropdown simple placement="right-start" trigger="mouseenter">
+
+{#each TCPMaster.tag as TagItem}
+  <li class="rounded-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+<label class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center"><input type="checkbox" bind:checked={TagItem.enable} class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">{TagItem.tagName}</label>
+  </li>
+{/each}
+
+</Dropdown>
+
+
+{/each}
+
+
+
+{#each new_ul_rule[new_ul_rule_index].modbusRTUMasterTag as RTUMaster}
+
+  <DropdownItem class="flex items-center justify-between">
+    {RTUMaster.modbusProfile}<ChevronRightOutline class="text-primary-700 ms-2 h-6 w-6 dark:text-white" />
+  </DropdownItem>
+<Dropdown simple placement="right-start" trigger="mouseenter">
+
+{#each RTUMaster.tag as TagItem}
+  <li class="rounded-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+<label class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center"><input type="checkbox" bind:checked={TagItem.enable} class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">{TagItem.tagName}</label>
+  </li>
+{/each}
+
+</Dropdown>
+
+
+{/each}
+
+
+
+</Dropdown>
+
+</td>
+
+</tr>
+
+
+
+
+
 
 
 <tr>
@@ -9178,6 +10484,99 @@ on:click={onPageClick}></textarea>
 
 
     </tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
 {:else if currentStep ==2}
 
 <tr>
@@ -9216,8 +10615,14 @@ on:click={onPageClick}></textarea>
       <td class="pl-4 pt-5">
 
 <div class="flex gap-4">
+{#if new_ul_rule[new_ul_rule_index].cloud[0].profile.startsWith("hub_") || new_ul_rule[new_ul_rule_index].cloud[0].profile.startsWith("dps_") || new_ul_rule[new_ul_rule_index].cloud[0].profile.startsWith("central_")}
+  <Radio bind:group={new_ul_rule[new_ul_rule_index].cloud[0].topic[0].type} value={0} disabled>Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+{:else}
   <Radio bind:group={new_ul_rule[new_ul_rule_index].cloud[0].topic[0].type} value={0} >Publish Topic</Radio>
   <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={new_ul_rule[new_ul_rule_index].cloud[0].topic[0].name}>
+{/if}  
 </div>
 
 </td>
@@ -9226,19 +10631,6 @@ on:click={onPageClick}></textarea>
 </tr>
 
 
-<tr class="pt-4">
-  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
-
-  </td>
-
-    <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[0].tagDisplay} value={0} >Hexadecimal</Radio>
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[0].tagDisplay} value={1} >Decimal</Radio>
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[0].tagDisplay} value={2} >Binary</Radio>
-
-</div></td>
-</tr>
-
 
 
 <tr class="pt-4">
@@ -9246,26 +10638,6 @@ on:click={onPageClick}></textarea>
 
   </td>
 
-    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat} value={0} on:change={()=>NewCloudFormatChange(0,1)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
-<Radio class="pb-2"  bind:group={new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat} value={2} on:change={()=>NewCloudFormatChange(0,1)}>Use 2nd Cloud Setting</Radio>
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat} value={1} on:change={()=>NewCloudFormatChange(0,1)}>User Defined:</Radio>
-
-
-
-</div></td>
-</tr>
-
-
-
-<tr>
-  <td class="text-right" >
-  
-
-  </td>
 
     <td class="pl-4 pt-4" colspan="5">
 
@@ -9273,45 +10645,123 @@ on:click={onPageClick}></textarea>
 {#if new_ul_rule[new_ul_rule_index].cloud[0].dataLogFormat == 1}
 {#if showMenu}
 <nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
-    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 200px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
         <ul style="margin: 6px;">
               <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>NewTimeClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>NewArrayClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTimeClick_UL(0)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+
               <hr>
+{#each new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag as Slave, index}
 
 
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<li style="display: block;list-style-type: none;width: 1fr;">
 
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawRequest(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREQUEST$</button></li>
-
-
-            {/each}
-            <hr>
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawReply(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREPLY$</button></li>
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(0, index)}><i style="padding: 0px 15px 0px 10px;"></i>{Slave.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
 
 
-            {/each}
 
-            <hr>
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+{#if tcp_slave_tag_show && target_index_for_show_tag == index}
 
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagStatus(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, 30px);"> 
+
+<ul class="py-1 w-44">
+
+{#each Slave.tag as TagItem, index2}
+{#if TagItem.enable}
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
 
 
-            {/each}
+
+{/each}
+</ul>  </div>
+{/if}
+{/each}
+
+
+{#each new_ul_rule[new_ul_rule_index].modbusTCPMasterTag as Master, index}
+
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>{Master.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
+
+
+
+
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, {74+index*46}px);"> 
+{#if tcp_master_tag_show && target_index_for_show_tag == index}
+
+<ul class="py-1 w-44">
+
+{#each Master.tag as TagItem, index2}
+{#if TagItem.enable}
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
+
+{/each}
+
+
+</ul>  
+{/if}
+</div>
+{/each}
+
+
+
+{#each new_ul_rule[new_ul_rule_index].modbusRTUMasterTag as Master, index}
+
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(2,index)}><i style="padding: 0px 15px 0px 10px;"></i>{Master.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
+
+
+
+
+
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, {74+new_ul_rule[new_ul_rule_index].modbusTCPMasterTag.length*46+index*46}px);"> 
+{#if rtu_master_tag_show && target_index_for_show_tag == index}
+<ul class="py-1 w-44">
+
+{#each Master.tag as TagItem, index2}
+{#if TagItem.enable}
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
+
+
+
+{/each}
+</ul> 
+{/if}
+ </div>
+{/each}
+
 
 
         </ul>
     </div>
 </nav>
 {/if}
+
+
 
 <textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={new_ul_rule[new_ul_rule_index].cloud[0].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
 on:click={onPageClick}></textarea>
@@ -9333,9 +10783,8 @@ on:click={onPageClick}></textarea>
     </td>
 
 
-
-
 </tr>
+
 
 
 
@@ -9386,33 +10835,24 @@ on:click={onPageClick}></textarea>
 </tr>
 
 
-
 <tr>
 <td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
       <td class="pl-4 pt-5">
 
 <div class="flex gap-4">
+{#if new_ul_rule[new_ul_rule_index].cloud[1].profile.startsWith("hub_") || new_ul_rule[new_ul_rule_index].cloud[1].profile.startsWith("dps_") || new_ul_rule[new_ul_rule_index].cloud[1].profile.startsWith("central_")}
+  <Radio bind:group={new_ul_rule[new_ul_rule_index].cloud[1].topic[0].type} value={0} disabled>Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+{:else}
   <Radio bind:group={new_ul_rule[new_ul_rule_index].cloud[1].topic[0].type} value={0} >Publish Topic</Radio>
   <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={new_ul_rule[new_ul_rule_index].cloud[1].topic[0].name}>
+{/if}  
 </div>
 
 </td>
 
 
-</tr>
-
-
-<tr class="pt-4">
-  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
-
-  </td>
-
-    <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[1].tagDisplay} value={0} >Hexadecimal</Radio>
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[1].tagDisplay} value={1} >Decimal</Radio>
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[1].tagDisplay} value={2} >Binary</Radio>
-
-</div></td>
 </tr>
 
 
@@ -9422,26 +10862,6 @@ on:click={onPageClick}></textarea>
 
   </td>
 
-    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat} value={0} on:change={()=>NewCloudFormatChange(1,0)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
-<Radio class="pb-2"  bind:group={new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat} value={2} on:change={()=>NewCloudFormatChange(1,0)}>Use 1st Cloud Setting</Radio>
-  <Radio class="pb-2" bind:group={new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat} value={1} on:change={()=>NewCloudFormatChange(1,0)}>User Defined:</Radio>
-
-
-
-</div></td>
-</tr>
-
-
-
-<tr>
-  <td class="text-right" >
-  
-
-  </td>
 
     <td class="pl-4 pt-4" colspan="5">
 
@@ -9449,39 +10869,117 @@ on:click={onPageClick}></textarea>
 {#if new_ul_rule[new_ul_rule_index].cloud[1].dataLogFormat == 1}
 {#if showMenu}
 <nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
-    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 200px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
         <ul style="margin: 6px;">
               <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>NewTimeClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>NewArrayClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+                    <button class="ContextMenu" on:click|preventDefault={()=>NewTimeClick_UL(1)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+
               <hr>
+{#each new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag as Slave, index}
 
 
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<li style="display: block;list-style-type: none;width: 1fr;">
 
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawRequest(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREQUEST$</button></li>
-
-
-            {/each}
-            <hr>
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagRawReply(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREPLY$</button></li>
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(0, index)}><i style="padding: 0px 15px 0px 10px;"></i>{Slave.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
 
 
-            {/each}
 
-            <hr>
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+{#if tcp_slave_tag_show && target_index_for_show_tag == index}
 
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>NewTagStatus(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, 30px);"> 
+
+<ul class="py-1 w-44">
+
+{#each Slave.tag as TagItem, index2}
+{#if TagItem.enable}
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
 
 
-            {/each}
+
+{/each}
+</ul>  </div>
+{/if}
+{/each}
+
+
+{#each new_ul_rule[new_ul_rule_index].modbusTCPMasterTag as Master, index}
+
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>{Master.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
+
+
+
+
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, {74+index*46}px);"> 
+{#if tcp_master_tag_show && target_index_for_show_tag == index}
+
+<ul class="py-1 w-44">
+
+{#each Master.tag as TagItem, index2}
+{#if TagItem.enable}
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
+
+{/each}
+
+
+</ul>  
+{/if}
+</div>
+{/each}
+
+
+
+{#each new_ul_rule[new_ul_rule_index].modbusRTUMasterTag as Master, index}
+
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(2,index)}><i style="padding: 0px 15px 0px 10px;"></i>{Master.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
+
+
+
+
+
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, {74+new_ul_rule[new_ul_rule_index].modbusTCPMasterTag.length*46+index*46}px);"> 
+{#if rtu_master_tag_show && target_index_for_show_tag == index}
+<ul class="py-1 w-44">
+
+{#each Master.tag as TagItem, index2}
+{#if TagItem.enable}
+
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
+
+
+
+{/each}
+</ul> 
+{/if}
+ </div>
+{/each}
+
 
 
         </ul>
@@ -9489,7 +10987,9 @@ on:click={onPageClick}></textarea>
 </nav>
 {/if}
 
-<textarea id="textarea-id" rows="12"  class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={new_ul_rule[new_ul_rule_index].cloud[1].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
+
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={new_ul_rule[new_ul_rule_index].cloud[1].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
 on:click={onPageClick}></textarea>
 
 
@@ -9509,8 +11009,6 @@ on:click={onPageClick}></textarea>
     </td>
 
 
-
-
 </tr>
 
 
@@ -9524,16 +11022,23 @@ on:click={onPageClick}></textarea>
 
 
     </tr>
-{/if}
+
+
+
+
+
+{/if}    
+
 
 </table>
+
 
 </Modal>
 
 
 
 
-<Modal bind:open={modify_ul_rule_modal}  size="lg" class="w-full" autoclose={false}>
+<Modal bind:open={modify_ul_rule_modal} autoclose={false} size="lg" class="w-full">
 <form action="#">
 <button type="button" class="ml-auto focus:outline-none whitespace-normal rounded-lg focus:ring-2 p-1.5 focus:ring-gray-300  hover:bg-gray-100 dark:hover:bg-gray-600 absolute top-3 right-2.5" aria-label="Close" on:click={()=>NoModifyULRule(modify_ul_rule_index)}><span class="sr-only">Close modal</span> <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button>
 <StepIndicator {currentStep} {steps} glow />
@@ -9551,11 +11056,98 @@ on:click={onPageClick}></textarea>
   </tr>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Rule Name</p></td><td class="pl-5 pt-5" colspan="2"><div class="flex gap-0"><input type="text" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].ruleName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-18 dark:bg-gray-700 dark:border-green-500"></div></td>
+      <td><p class="pl-4 pt-4 text-lg font-light text-right">Sampling Condition</p></td>
+    <td class= "pl-4 pt-4" colspan="3">
+<div class="flex gap-4">
+
+  <Radio class="pb-1" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].samplingCondition} value={0} >Period</Radio>
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].samplingCondition==0}
+
+  <input type="number"  class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 dark:bg-gray-700 dark:border-green-500" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].periodMS}> <p class="pt-2">ms</p>
+
+{/if}
+
+
+</div>    
+    </td>
+    <td></td>
+    <td></td>
+
+</tr>
+
+
+<tr>
+<td><p class="pl-4 pt-8 text-lg font-light text-right">Modbus Tag</p></td>
+    <td class= "pl-5 pt-8" colspan="3">
+
+
+<Button>Choose Tag<ChevronDownOutline class="ms-2 h-6 w-6 text-white dark:text-white" /></Button>
+<Dropdown simple>
+{#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag as Slave}
+
+  <DropdownItem class="flex items-center justify-between">{Slave.modbusProfile}<ChevronRightOutline class="text-primary-700 ms-2 h-6 w-6 dark:text-white" /></DropdownItem>
+
+<Dropdown simple placement="right-start" trigger="mouseenter">
+{#each Slave.tag as TagItem}
+
+  <li class="rounded-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+<label class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center"><input type="checkbox" bind:checked={TagItem.enable} class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">{TagItem.tagName}</label>
+
+  </li>
+{/each}
+
+</Dropdown>
+{/each}
+
+{#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag as TCPMaster}
+
+  <DropdownItem class="flex items-center justify-between">
+    {TCPMaster.modbusProfile}<ChevronRightOutline class="text-primary-700 ms-2 h-6 w-6 dark:text-white" />
+  </DropdownItem>
+<Dropdown simple placement="right-start" trigger="mouseenter">
+
+{#each TCPMaster.tag as TagItem}
+  <li class="rounded-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+<label class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center"><input type="checkbox" bind:checked={TagItem.enable} class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">{TagItem.tagName}</label>
+  </li>
+{/each}
+
+</Dropdown>
+
+
+{/each}
 
 
 
-  </tr>
+{#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag as RTUMaster}
+
+  <DropdownItem class="flex items-center justify-between">
+    {RTUMaster.modbusProfile}<ChevronRightOutline class="text-primary-700 ms-2 h-6 w-6 dark:text-white" />
+  </DropdownItem>
+<Dropdown simple placement="right-start" trigger="mouseenter">
+
+{#each RTUMaster.tag as TagItem}
+  <li class="rounded-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+<label class="text-sm font-medium block text-gray-900 dark:text-gray-300 flex items-center"><input type="checkbox" bind:checked={TagItem.enable} class="w-4 h-4 bg-gray-100 border-gray-300 dark:ring-offset-gray-800 focus:ring-2 mr-2 dark:bg-gray-600 dark:border-gray-500 rounded text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-600">{TagItem.tagName}</label>
+  </li>
+{/each}
+
+</Dropdown>
+
+
+{/each}
+
+
+
+</Dropdown>
+
+</td>
+
+</tr>
+
+
+
 
 
 <tr>
@@ -9566,7 +11158,103 @@ on:click={onPageClick}></textarea>
 
 
     </tr>
+
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+<tr>
+    <td></td>
+    <td class="pl-40"></td>
+    <td class="pl-40"></td>
+    <td class="pt-4 pl-40"></td>
+</tr>
+
+
+
 {:else if currentStep ==2}
+
 <tr>
       <td></td>
       <td class="pl-4 pt-4">
@@ -9598,13 +11286,26 @@ on:click={onPageClick}></textarea>
 
 
 
+
+
 <tr>
 <td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
       <td class="pl-4 pt-5">
 
 <div class="flex gap-4">
+
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].profile.startsWith("hub_") || changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].profile.startsWith("dps_") || changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].profile.startsWith("central_")}
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].topic[0].type} value={0} disabled>Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+{:else}
   <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].topic[0].type} value={0} >Publish Topic</Radio>
   <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].topic[0].name}>
+{/if}  
+
+
+
 </div>
 
 </td>
@@ -9613,18 +11314,10 @@ on:click={onPageClick}></textarea>
 </tr>
 
 
-<tr class="pt-4">
-  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
 
-  </td>
 
-    <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].tagDisplay} value={0} >Hexadecimal</Radio>
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].tagDisplay} value={1} >Decimal</Radio>
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].tagDisplay} value={2} >Binary</Radio>
 
-</div></td>
-</tr>
+
 
 
 
@@ -9633,26 +11326,6 @@ on:click={onPageClick}></textarea>
 
   </td>
 
-    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat} value={0} on:change={()=>NewCloudFormatChange(0,1)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
-<Radio class="pb-2"  bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat} value={2} on:change={()=>NewCloudFormatChange(0,1)}>Use 2nd Cloud Setting</Radio>
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat} value={1} on:change={()=>NewCloudFormatChange(0,1)}>User Defined:</Radio>
-
-
-
-</div></td>
-</tr>
-
-
-
-<tr>
-  <td class="text-right" >
-  
-
-  </td>
 
     <td class="pl-4 pt-4" colspan="5">
 
@@ -9660,45 +11333,123 @@ on:click={onPageClick}></textarea>
 {#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].dataLogFormat == 1}
 {#if showMenu}
 <nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
-    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 200px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
         <ul style="margin: 6px;">
               <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTimeClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyArrayClick(0)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTimeClick_UL(0)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+
               <hr>
+{#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag as Slave, index}
 
 
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<li style="display: block;list-style-type: none;width: 1fr;">
 
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawRequest(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREQUEST$</button></li>
-
-
-            {/each}
-            <hr>
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawReply(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREPLY$</button></li>
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(0, index)}><i style="padding: 0px 15px 0px 10px;"></i>{Slave.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
 
 
-            {/each}
 
-            <hr>
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+{#if tcp_slave_tag_show && target_index_for_show_tag == index}
 
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagStatus(0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, 30px);"> 
+
+<ul class="py-1 w-44">
+
+{#each Slave.tag as TagItem, index2}
+{#if TagItem.enable}
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
 
 
-            {/each}
+
+{/each}
+</ul>  </div>
+{/if}
+{/each}
+
+
+{#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag as Master, index}
+
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>{Master.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
+
+
+
+
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, {74+index*46}px);"> 
+{#if tcp_master_tag_show && target_index_for_show_tag == index}
+
+<ul class="py-1 w-44">
+
+{#each Master.tag as TagItem, index2}
+{#if TagItem.enable}
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
+
+{/each}
+
+
+</ul>  
+{/if}
+</div>
+{/each}
+
+
+
+{#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag as Master, index}
+
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(2,index)}><i style="padding: 0px 15px 0px 10px;"></i>{Master.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
+
+
+
+
+
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, {74+changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag.length*46+index*46}px);"> 
+{#if rtu_master_tag_show && target_index_for_show_tag == index}
+<ul class="py-1 w-44">
+
+{#each Master.tag as TagItem, index2}
+{#if TagItem.enable}
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
+
+
+
+{/each}
+</ul> 
+{/if}
+ </div>
+{/each}
+
 
 
         </ul>
     </div>
 </nav>
 {/if}
+
+
 
 <textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[0].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
 on:click={onPageClick}></textarea>
@@ -9720,9 +11471,12 @@ on:click={onPageClick}></textarea>
     </td>
 
 
-
-
 </tr>
+
+
+
+
+
 
 
 
@@ -9736,7 +11490,11 @@ on:click={onPageClick}></textarea>
 
     </tr>
 
+
+
+
 {:else if currentStep ==3}
+
 
 
 <tr>
@@ -9770,13 +11528,26 @@ on:click={onPageClick}></textarea>
 
 
 
+
+
 <tr>
 <td><p class="pl-4 pt-4 text-lg font-light text-right">Topic 1</p></td>
       <td class="pl-4 pt-5">
 
 <div class="flex gap-4">
+
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].profile.startsWith("hub_") || changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].profile.startsWith("dps_") || changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].profile.startsWith("central_")}
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].topic[0].type} value={0} disabled>Publish Topic</Radio>
+  <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+
+{:else}
   <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].topic[0].type} value={0} >Publish Topic</Radio>
   <input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-green-500 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].topic[0].name}>
+{/if}  
+
+
+
 </div>
 
 </td>
@@ -9785,18 +11556,10 @@ on:click={onPageClick}></textarea>
 </tr>
 
 
-<tr class="pt-4">
-  <td><p class="pl-4 pt-4 text-lg font-light text-right">Tag Value Display</p>
 
-  </td>
 
-    <td class="pl-4 pt-8" ><div class="flex gap-2">
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].tagDisplay} value={0} >Hexadecimal</Radio>
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].tagDisplay} value={1} >Decimal</Radio>
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].tagDisplay} value={2} >Binary</Radio>
 
-</div></td>
-</tr>
+
 
 
 
@@ -9805,26 +11568,6 @@ on:click={onPageClick}></textarea>
 
   </td>
 
-    <td class="pl-4 pt-8" colspan="3"><div class="flex gap-4">
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat} value={0} on:change={()=>NewCloudFormatChange(1,0)}>Default  <svg id="hover" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
-<Tooltip triggeredBy="#hover">$Time Stamp$,$RuleName$,$ModbusReq$,$ModbusResp$</Tooltip></Radio>
-<Radio class="pb-2"  bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat} value={2} on:change={()=>NewCloudFormatChange(1,0)}>Use 1st Cloud Setting</Radio>
-  <Radio class="pb-2" bind:group={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat} value={1} on:change={()=>NewCloudFormatChange(1,0)}>User Defined:</Radio>
-
-
-
-</div></td>
-</tr>
-
-
-
-<tr>
-  <td class="text-right" >
-  
-
-  </td>
 
     <td class="pl-4 pt-4" colspan="5">
 
@@ -9832,39 +11575,115 @@ on:click={onPageClick}></textarea>
 {#if changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].dataLogFormat == 1}
 {#if showMenu}
 <nav use:getContextMenuDimension style="position: absolute; top:{pos.y}px; left:{pos.x}px;padding: 0;margin: 0;">
-    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 300px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
+    <div id="navbar" style="display: inline-flex;border: 1px #999 solid;width: 200px;background-color: #fff;border-radius: 10px;overflow: hidden;flex-direction: column;padding: 0;margin: 0;">
         <ul style="margin: 6px;">
               <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTimeClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyArrayClick(1)}><i style="padding: 0px 15px 0px 10px;"></i>$ARRAY$</button></li>
+                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTimeClick_UL(1)}><i style="padding: 0px 15px 0px 10px;"></i>$TIME$</button></li>
+
               <hr>
+{#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag as Slave, index}
 
 
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+<li style="display: block;list-style-type: none;width: 1fr;">
 
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawRequest(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREQUEST$</button></li>
-
-
-            {/each}
-            <hr>
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
-
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagRawReply(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_RAWREPLY$</button></li>
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(0, index)}><i style="padding: 0px 15px 0px 10px;"></i>{Slave.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
 
 
-            {/each}
 
-            <hr>
-            {#each saved_changed_modbus_data.config.fieldManagement_modbus_tag as TagItem, index}
+{#if tcp_slave_tag_show && target_index_for_show_tag == index}
 
-              <li style="display: block;list-style-type: none;width: 1fr;">
-                    <button class="ContextMenu" on:click|preventDefault={()=>ModifyTagStatus(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, 30px);"> 
+
+<ul class="py-1 w-44">
+
+{#each Slave.tag as TagItem, index2}
+{#if TagItem.enable}
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
 
 
-            {/each}
+
+{/each}
+</ul>  </div>
+{/if}
+{/each}
+
+
+{#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag as Master, index}
+
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>{Master.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
+
+
+
+
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, {74+index*46}px);"> 
+{#if tcp_master_tag_show && target_index_for_show_tag == index}
+
+<ul class="py-1 w-44">
+
+{#each Master.tag as TagItem, index2}
+{#if TagItem.enable}
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
+
+{/each}
+
+
+</ul>  
+{/if}
+</div>
+{/each}
+
+
+
+{#each changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag as Master, index}
+
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+
+<button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(2,index)}><i style="padding: 0px 15px 0px 10px;"></i>{Master.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
+
+
+
+
+
+<div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, {74+changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag.length*46+index*46}px);"> 
+{#if rtu_master_tag_show && target_index_for_show_tag == index}
+<ul class="py-1 w-44">
+
+{#each Master.tag as TagItem, index2}
+{#if TagItem.enable}
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+{/if}
+
+
+
+{/each}
+</ul> 
+{/if}
+ </div>
+{/each}
+
 
 
         </ul>
@@ -9872,7 +11691,9 @@ on:click={onPageClick}></textarea>
 </nav>
 {/if}
 
-<textarea id="textarea-id" rows="12"  class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
+
+
+<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[1].userDefineedData} on:contextmenu|preventDefault={rightClickContextMenu} 
 on:click={onPageClick}></textarea>
 
 
@@ -9892,8 +11713,6 @@ on:click={onPageClick}></textarea>
     </td>
 
 
-
-
 </tr>
 
 
@@ -9903,93 +11722,31 @@ on:click={onPageClick}></textarea>
     <td class="pl-10"></td>
     <td class="pl-10"></td>
     <td class="pt-4 pl-10"><Button color="dark" pill={true} on:click={()=>New_UL_Rule_Modal_Page2(1)}>Back</Button></td>
-    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>modify_ul_rule(modify_ul_rule_index)}>Add</Button></td>
+    <td class="pt-4 pl-1"><Button color="dark" pill={true} on:click={()=>modify_ul_rule(modify_ul_rule_index)}>Modify</Button></td>
 
 
     </tr>
 
-{/if}
+
+
+
+
+{/if}    
+
 
 </table>
 </form>
 </Modal>
 
 
-</TableBody>
-
-</Table>
-
-</TabItem>
-
-{/if}
-
-{#if 0}
-
-<TabItem title="DL Rule">
-</TabItem>
-{/if}
-
-{#if 0}
-
-<TabItem title="Observation">
-
-<Accordion>
-  <AccordionItem {defaultClass}>
 
 
-    <span slot="header" class="pl-4">
-    Port Status
-    </span>
-
-  </AccordionItem>
-
-
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    Tag Log
-    </span>
-
-  </AccordionItem>
-
-
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    UL Log
-    </span>
-
-  </AccordionItem>
-
-
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    DL Log
-    </span>
-
-  </AccordionItem>
-
-
-  <AccordionItem {defaultClass}>
-
-
-    <span slot="header" class="pl-4">
-    Log Export
-    </span>
-
-  </AccordionItem>
-
-</Accordion>
-
-
+  </Table>
 
 </TabItem>
 
 {/if}
+
 
 
 

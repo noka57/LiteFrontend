@@ -2079,15 +2079,7 @@
                       if (obj1[key][i][key2][0]['name'] != obj2[key][i][key2][0]['name'])
                       {
                         let changedstr="Edge Data No."+ArrayIndex +",Cloud No."+(i+1)+" item is changed: "+ "value of topic has changed to "+obj1[key][i][key2][0]['name'];
-                        if (type == 3)
-                        {
-                          sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                        }
-                        else if (type == 2)
-                        {
-                          sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                        }
-                        else if (type == 0)
+                        if (type == 0)
                         {
                           sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                         }
@@ -2098,15 +2090,7 @@
                     {
                       let changedstr="Edge Data No."+ArrayIndex +",Cloud No."+(i+1)+" item is changed: "+ "value of "+key2+" has changed to "+obj1[key][i][key2];
 
-                      if (type == 3)
-                      {
-                        sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                      }
-                      else if (type == 2)
-                      {
-                        sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                      }
-                      else if (type == 0)
+                      if (type == 0)
                       {
                         sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                       }
@@ -2119,28 +2103,11 @@
                 if (obj1[key].length > obj2[key].length) 
                 {
                   let addedCount=obj1[key].length-obj2[key].length;
-                  for (let j=obj2[key].length; j <obj1[key].length; j++)
-                  {
-                    if (obj1[key][j]["delete"])
-                    {
-                      addedCount--;
-                    }
-
-                  }
 
                   if (addedCount >0)
                   {
-
                     let changedstr="Edge Data No."+ArrayIndex +", Add "+addedCount+" item(s) to "+ key;
-                    if (type == 3)
-                    {
-                      sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                    }
-                    else if (type == 2)
-                    {
-                      sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                    }
-                    else if (type == 0)
+                    if (type == 0)
                     {
                       sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                     }
@@ -2150,15 +2117,7 @@
                 {
                   let deletedCount=obj2[key].length-obj1[key].length;
                   let changedstr="Edge Data No."+ArrayIndex +", Delete "+deletedCount+" item(s) from "+ key;
-                  if (type == 3)
-                  {
-                    sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                  }
-                  else if (type == 2)
-                  {
-                    sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                  }
-                  else if (type == 0)
+                  if (type == 0)
                   {
                     sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                   }
@@ -2171,23 +2130,53 @@
                     {
                       if (key2=='tag') 
                       { 
-                        for (let m=0; m < obj1[key][i][key2].length; m++)
+
+                        if (obj1[key][i][key2].length < obj2[key][i][key2].length)
                         {
-                          if (obj1[key][i][key2][m]['tagName'] != obj2[key][i][key2][m]['tagName'])
+
+                          let deletedCount=obj2[key][i][key2].length-obj1[key][i][key2].length;
+                          let changedstr="Edge Data No."+ArrayIndex +", Delete "+deletedCount+" Tags(s) from Modbus TCP Slave:"+ obj1[key][i]['modbusProfile'];
+                          if (type == 0)
                           {
-                            let changedstr="Edge Data No."+ArrayIndex +",Modbus TCP Slave Tag List No."+(i+1)+" item is changed: " +obj2[key][i][key2][m]['tagName']+" has changed to "+obj1[key][i][key2][m]['tagName'];
+                            sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                          }
+
+                        }
+                        else if (obj1[key][i][key2].length > obj2[key][i][key2].length)
+                        {
+
+                          let addedCount=obj1[key][i][key2].length-obj2[key][i][key2].length;
+
+                          if (addedCount >0)
+                          {
+                            let changedstr="Edge Data No."+ArrayIndex +", Add "+addedCount+" Tag(s) to Modbus TCP Slave:"+ obj1[key][i]['modbusProfile'];
                             if (type == 0)
                             {
                               sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                             }
                           }
 
-                          if (obj1[key][i][key2][m]['enable'] != obj2[key][i][key2][m]['enable'])
+                        }
+                        else
+                        {
+                          for (let m=0; m < obj1[key][i][key2].length; m++)
                           {
-                            let changedstr="Edge Data No."+ArrayIndex +",Modbus TCP Slave Tag List No."+(i+1)+" item is changed: "+ obj1[key][i][key2][m]['tagName'] +" enable has changed to "+obj1[key][i][key2][m]['enable'];
-                            if (type == 0)
+                            if (obj1[key][i][key2][m]['tagName'] != obj2[key][i][key2][m]['tagName'])
                             {
-                              sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                              let changedstr="Edge Data No."+ArrayIndex +",Modbus TCP Slave Tag List No."+(i+1)+" item is changed: " +obj2[key][i][key2][m]['tagName']+" has changed to "+obj1[key][i][key2][m]['tagName'];
+                              if (type == 0)
+                              {
+                                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                              }
+                            }
+
+                            if (obj1[key][i][key2][m]['enable'] != obj2[key][i][key2][m]['enable'])
+                            {
+                              let changedstr="Edge Data No."+ArrayIndex +",Modbus TCP Slave Tag List No."+(i+1)+" item is changed: "+ obj1[key][i][key2][m]['tagName'] +" enable has changed to "+obj1[key][i][key2][m]['enable'];
+                              if (type == 0)
+                              {
+                                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                              }
                             }
                           }
                         }
@@ -2211,28 +2200,13 @@
                 if (obj1[key].length > obj2[key].length) 
                 {
                   let addedCount=obj1[key].length-obj2[key].length;
-                  for (let j=obj2[key].length; j <obj1[key].length; j++)
-                  {
-                    if (obj1[key][j]["delete"])
-                    {
-                      addedCount--;
-                    }
-
-                  }
 
                   if (addedCount >0)
                   {
 
                     let changedstr="Edge Data No."+ArrayIndex +", Add "+addedCount+" item(s) to "+ key;
-                    if (type == 3)
-                    {
-                      sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                    }
-                    else if (type == 2)
-                    {
-                      sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                    }
-                    else if (type == 0)
+                  
+                    if (type == 0)
                     {
                       sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                     }
@@ -2242,15 +2216,7 @@
                 {
                   let deletedCount=obj2[key].length-obj1[key].length;
                   let changedstr="Edge Data No."+ArrayIndex +", Delete "+deletedCount+" item(s) from "+ key;
-                  if (type == 3)
-                  {
-                    sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                  }
-                  else if (type == 2)
-                  {
-                    sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                  }
-                  else if (type == 0)
+                  if (type == 0)
                   {
                     sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                   }
@@ -2263,23 +2229,53 @@
                     {
                       if (key2=='tag') 
                       { 
-                        for (let m=0; m < obj1[key][i][key2].length; m++)
+
+                        if (obj1[key][i][key2].length < obj2[key][i][key2].length)
                         {
-                          if (obj1[key][i][key2][m]['tagName'] != obj2[key][i][key2][m]['tagName'])
+
+                          let deletedCount=obj2[key][i][key2].length-obj1[key][i][key2].length;
+                          let changedstr="Edge Data No."+ArrayIndex +", Delete "+deletedCount+" Tags(s) from Modbus TCP Master:"+ obj1[key][i]['modbusProfile'];
+                          if (type == 0)
                           {
-                            let changedstr="Edge Data No."+ArrayIndex +",Modbus TCP Master Tag List No."+(i+1)+" item is changed: " +obj2[key][i][key2][m]['tagName']+" has changed to "+obj1[key][i][key2][m]['tagName'];
+                            sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                          }
+
+                        }
+                        else if (obj1[key][i][key2].length > obj2[key][i][key2].length)
+                        {
+
+                          let addedCount=obj1[key][i][key2].length-obj2[key][i][key2].length;
+
+                          if (addedCount >0)
+                          {
+                            let changedstr="Edge Data No."+ArrayIndex +", Add "+addedCount+" Tag(s) to Modbus TCP Master:"+ obj1[key][i]['modbusProfile'];
                             if (type == 0)
                             {
                               sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                             }
                           }
 
-                          if (obj1[key][i][key2][m]['enable'] != obj2[key][i][key2][m]['enable'])
+                        }
+                        else
+                        {
+                          for (let m=0; m < obj1[key][i][key2].length; m++)
                           {
-                            let changedstr="Edge Data No."+ArrayIndex +",Modbus TCP Master Tag List No."+(i+1)+" item is changed: "+ obj1[key][i][key2][m]['tagName'] +" enable has changed to "+obj1[key][i][key2][m]['enable'];
-                            if (type == 0)
+                            if (obj1[key][i][key2][m]['tagName'] != obj2[key][i][key2][m]['tagName'])
                             {
-                              sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                              let changedstr="Edge Data No."+ArrayIndex +",Modbus TCP Master Tag List No."+(i+1)+" item is changed: " +obj2[key][i][key2][m]['tagName']+" has changed to "+obj1[key][i][key2][m]['tagName'];
+                              if (type == 0)
+                              {
+                                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                              }
+                            }
+
+                            if (obj1[key][i][key2][m]['enable'] != obj2[key][i][key2][m]['enable'])
+                            {
+                              let changedstr="Edge Data No."+ArrayIndex +",Modbus TCP Master Tag List No."+(i+1)+" item is changed: "+ obj1[key][i][key2][m]['tagName'] +" enable has changed to "+obj1[key][i][key2][m]['enable'];
+                              if (type == 0)
+                              {
+                                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                              }
                             }
                           }
                         }
@@ -2303,28 +2299,12 @@
                 if (obj1[key].length > obj2[key].length) 
                 {
                   let addedCount=obj1[key].length-obj2[key].length;
-                  for (let j=obj2[key].length; j <obj1[key].length; j++)
-                  {
-                    if (obj1[key][j]["delete"])
-                    {
-                      addedCount--;
-                    }
-
-                  }
 
                   if (addedCount >0)
                   {
 
                     let changedstr="Edge Data No."+ArrayIndex +", Add "+addedCount+" item(s) to "+ key;
-                    if (type == 3)
-                    {
-                      sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                    }
-                    else if (type == 2)
-                    {
-                      sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                    }
-                    else if (type == 0)
+                    if (type == 0)
                     {
                       sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                     }
@@ -2334,15 +2314,7 @@
                 {
                   let deletedCount=obj2[key].length-obj1[key].length;
                   let changedstr="Edge Data No."+ArrayIndex +", Delete "+deletedCount+" item(s) from "+ key;
-                  if (type == 3)
-                  {
-                    sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                  }
-                  else if (type == 2)
-                  {
-                    sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                  }
-                  else if (type == 0)
+                  if (type == 0)
                   {
                     sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                   }
@@ -2355,23 +2327,53 @@
                     {
                       if (key2=='tag') 
                       { 
-                        for (let m=0; m < obj1[key][i][key2].length; m++)
+
+                        if (obj1[key][i][key2].length < obj2[key][i][key2].length)
                         {
-                          if (obj1[key][i][key2][m]['tagName'] != obj2[key][i][key2][m]['tagName'])
+
+                          let deletedCount=obj2[key][i][key2].length-obj1[key][i][key2].length;
+                          let changedstr="Edge Data No."+ArrayIndex +", Delete "+deletedCount+" Tags(s) from Modbus RTU Master:"+ obj1[key][i]['modbusProfile'];
+                          if (type == 0)
                           {
-                            let changedstr="Edge Data No."+ArrayIndex +",Modbus RTU Master Tag List No."+(i+1)+" item is changed: " +obj2[key][i][key2][m]['tagName']+" has changed to "+obj1[key][i][key2][m]['tagName'];
+                            sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                          }
+
+                        }
+                        else if (obj1[key][i][key2].length > obj2[key][i][key2].length)
+                        {
+
+                          let addedCount=obj1[key][i][key2].length-obj2[key][i][key2].length;
+
+                          if (addedCount >0)
+                          {
+                            let changedstr="Edge Data No."+ArrayIndex +", Add "+addedCount+" Tag(s) to Modbus RTU Master:"+ obj1[key][i]['modbusProfile'];
                             if (type == 0)
                             {
                               sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                             }
                           }
 
-                          if (obj1[key][i][key2][m]['enable'] != obj2[key][i][key2][m]['enable'])
+                        }
+                        else
+                        {
+                          for (let m=0; m < obj1[key][i][key2].length; m++)
                           {
-                            let changedstr="Edge Data No."+ArrayIndex +",Modbus RTU Master Tag List No."+(i+1)+" item is changed: "+ obj1[key][i][key2][m]['tagName'] +" enable has changed to "+obj1[key][i][key2][m]['enable'];
-                            if (type == 0)
+                            if (obj1[key][i][key2][m]['tagName'] != obj2[key][i][key2][m]['tagName'])
                             {
-                              sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                              let changedstr="Edge Data No."+ArrayIndex +",Modbus RTU Master Tag List No."+(i+1)+" item is changed: " +obj2[key][i][key2][m]['tagName']+" has changed to "+obj1[key][i][key2][m]['tagName'];
+                              if (type == 0)
+                              {
+                                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                              }
+                            }
+
+                            if (obj1[key][i][key2][m]['enable'] != obj2[key][i][key2][m]['enable'])
+                            {
+                              let changedstr="Edge Data No."+ArrayIndex +",Modbus RTU Master Tag List No."+(i+1)+" item is changed: "+ obj1[key][i][key2][m]['tagName'] +" enable has changed to "+obj1[key][i][key2][m]['enable'];
+                              if (type == 0)
+                              {
+                                sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
+                              }
                             }
                           }
                         }
@@ -2413,15 +2415,7 @@
                   {
 
                     let changedstr="Add "+addedCount+" item(s) to "+ key;
-                    if (type == 3)
-                    {
-                      sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                    }
-                    else if (type == 2)
-                    {
-                      sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                    }
-                    else if (type == 0)
+                    if (type == 0)
                     {
                       sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                     }
@@ -2431,15 +2425,7 @@
                 {
                   let deletedCount=obj2[key].length-obj1[key].length;
                   let changedstr="Delete "+deletedCount+" item(s) from "+ key;
-                  if (type == 3)
-                  {
-                    sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-                  }
-                  else if (type == 2)
-                  {
-                    sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-                  }
-                  else if (type == 0)
+                  if (type == 0)
                   {
                     sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
                   }
@@ -2471,15 +2457,7 @@
             }
           }
           
-          if (type == 3)
-          {
-            sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-          }
-          else if (type == 2)
-          {
-            sdata_logger_monitor_edge_changedValues=[...sdata_logger_monitor_edge_changedValues, changedstr];
-          }
-          else if (type == 0)
+          if (type == 0)
           {
             sdata_logger_proxy_edge_changedValues=[...sdata_logger_proxy_edge_changedValues, changedstr]; 
           }

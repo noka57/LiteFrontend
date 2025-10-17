@@ -3144,7 +3144,6 @@
             ChangedEventEngineConfig.set(saved_changed_event_engine_data);
     
         }
-
     }
 
     function HandleLastTCPMasterTagAndRelated()
@@ -3600,6 +3599,572 @@
         } 
     }
 
+    function HandleSavedButNotApplyRTUMasterTagAndRelated()
+    {
+        let RMitem = `RM_${target_device_index}`;
+
+        for (let i=modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length; i< saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;i++)
+        {
+            if (sdata_logger_proxy_edge_changedValues.length !=0)
+            {
+                sdata_logger_proxy_edge_changedValues=[];
+            }
+
+
+            for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+            {
+
+                if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
+                {
+                    if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName)
+                    {
+
+                        for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag.length; m++)
+                        {
+                            if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName==saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].modbusProfile)
+                            {
+
+                                for (let k=0;k < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag.length; k++)
+                                {
+
+
+                                    if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag[k].tagName ==saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName
+                                    &&
+                                    saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                                    {
+
+    
+                                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag[k].tagName=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
+                                            
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                   
+                }
+                else
+                {
+
+                    for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag.length; m++)
+                    {
+                        if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName==saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].modbusProfile)
+                        {
+                            let nondeleteTags=[];
+                            for (let k=0;k < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag.length; k++)
+                            {
+
+                                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag[k].tagName !=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName
+                                &&
+                                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                                {
+                                    nondeleteTags=[...nondeleteTags, saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag[k]];
+                                }
+
+
+                            }
+
+                            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag=JSON.parse(JSON.stringify(nondeleteTags));
+
+                        }
+                    }
+
+                }
+
+                compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
+
+            }
+
+
+            SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
+            ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+
+            if (event_engine_trigger_modbus_changeValues.length !=0)
+            {
+                event_engine_trigger_modbus_changeValues=[];
+            }
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (RMitem ==saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTagOwner)
+                {
+                    if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                    {
+                        if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
+                        }
+                        else
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";
+                        }
+
+                    }
+                }
+
+
+                compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
+                        event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
+
+            }
+
+            for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (RMitem ==saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTagOwner)
+                {
+                    if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                    {
+                        if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
+                        }
+                        else
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";   
+                        }
+                    }
+                }
+
+            }
+
+            EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
+            ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+
+            if (event_engine_action_modbus_changeValues.length !=0)
+            {
+                event_engine_action_modbus_changeValues=[];
+            }
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+
+
+                if (RMitem ==saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTagOwner)
+                {
+                    if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                    {
+                        if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
+                        }
+                        else
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
+                        }
+
+
+                    }
+                }
+                
+
+                compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
+                    event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
+            }
+
+
+            for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+
+                if (RMitem ==saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTagOwner)
+                {
+                    if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                    {
+                        if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
+                        }
+                        else
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
+                        }
+                    }
+                }
+            }
+
+            EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
+            ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+    
+        }
+    }
+
+
+    function HandleLastRTUMasterTagAndRelated()
+    {
+        let RMitem = `RM_${target_device_index}`;
+
+        for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length, modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length); i++) 
+        {
+            compareObjects(changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i], modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i], 10, 1,i+1);
+
+            if (sdata_logger_proxy_edge_changedValues.length !=0)
+            {
+                sdata_logger_proxy_edge_changedValues=[];
+            }
+
+            for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+            {
+                if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
+                {
+                    if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName)
+                    {
+                        for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag.length; m++)
+                        {
+                            if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName==saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].modbusProfile)
+                            {
+                                for (let k=0;k < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag.length; k++)
+                                {
+                                    if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag[k].tagName ==saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName
+                                    &&
+                                    saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                                    {
+                                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag[k].tagName=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;                                                    
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                   
+                }
+                else
+                {
+
+                    for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag.length; m++)
+                    {
+                        if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName==saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].modbusProfile)
+                        {
+                            let nondeleteTags=[];
+                            for (let k=0;k < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag.length; k++)
+                            {
+
+                                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag[k].tagName !=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName
+                                &&
+                                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                                {
+                                    nondeleteTags=[...nondeleteTags, saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag[k]];
+                                }
+                            }
+
+                            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag=JSON.parse(JSON.stringify(nondeleteTags));
+
+                        }
+                    }
+
+                }
+
+
+                compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
+
+            }
+
+
+            SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
+            ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+
+            if (event_engine_trigger_modbus_changeValues.length !=0)
+            {
+                event_engine_trigger_modbus_changeValues=[];
+            }
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (RMitem ==saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTagOwner)
+                {
+                    if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                    {
+                        if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
+                        }
+                        else
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";
+                        }
+
+                    }
+                }
+
+
+                compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
+                        event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
+
+            }
+
+            for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
+            {
+                if (RMitem ==saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTagOwner)
+                {
+                    if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                    {
+                        if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
+                        }
+                        else
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";   
+                        }
+                    }
+                }
+
+            }
+
+            EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
+            ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+
+
+            if (event_engine_action_modbus_changeValues.length !=0)
+            {
+                event_engine_action_modbus_changeValues=[];
+            }
+
+            for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+
+
+                if (RMitem ==saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTagOwner)
+                {
+                    if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                    {
+                        if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
+                        }
+                        else
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
+                        }
+
+
+                    }
+                }
+                
+
+                compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
+                    event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
+            }
+
+
+            for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
+            {
+
+                if (RMitem ==saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTagOwner)
+                {
+                    if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
+                    {
+                        if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
+                        }
+                        else
+                        {
+                            saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
+                        }
+                    }
+                }
+            }
+
+            EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
+            ChangedEventEngineConfig.set(saved_changed_event_engine_data);
+    
+        }
+
+        HandleSavedButNotApplyRTUMasterTagAndRelated()
+    }
+
+
+    function HandleNewRTUMasterTagToExistedRTUMaster(addedTag)
+    {
+        let RMitem = `RM_${target_device_index}`;
+        if (sdata_logger_proxy_edge_changedValues.length !=0)
+        {
+            sdata_logger_proxy_edge_changedValues=[];
+        }
+
+        let newRTUMaster=1;
+        for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
+        {
+            for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag.length; m++)
+            {
+                if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName==saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].modbusProfile)
+                {
+                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag=
+                        [...saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag[m].tag, ...addedTag];
+
+                        newRTUMaster=0;
+
+                }
+            }
+
+            if (newRTUMaster ==1)
+            {
+                if (addedTag.length >0)
+                {
+                    let rtu_master={"modbusProfile":changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName, "tag":addedTag};
+                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag=[...saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusRTUMasterTag, rtu_master];
+                }
+            }
+
+
+            compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
+        }
+
+        SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
+        ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
+
+    }
+
+
+    function HandleAddedRTUMasterTagAndRelated()
+    {
+
+        let addedCount=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length-modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;
+
+        let addedTag=[];
+        for (let k=modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;k<changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;k++)
+        {
+            if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[k].delete)
+            {
+                addedCount--;
+            }
+            else
+            {
+                let item={"enable":false, "tagName":changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[k].tagName};
+                addedTag=[...addedTag, item];
+
+            }
+        }
+
+        if (addedCount > 0)
+        {
+            let changedstr="Add "+addedCount+" item(s) to "+changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName+" Tag List";
+
+            modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+            HandleNewRTUMasterTagToExistedRTUMaster(addedTag);
+
+        }
+
+    
+    }
+
+    function HandleOriginRTUMasterAndRelated()
+    {
+
+        HandleLastRTUMasterTagAndRelated();
+        if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length > modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length)
+        {
+          HandleAddedRTUMasterTagAndRelated();
+        }
+
+        if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length < modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length)
+        {
+            let deletedCount=modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length-changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;
+
+            let changedstr="Delete "+deleteCount+" item(s) from "+changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName +" Tag List";
+            modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+        }
+
+    }
+
+
+    function HandleNontargetRTUMaster()
+    {
+
+        for (let j=0; j < Math.min(modbus_data.config.fieldManagement_modbus_rtu.master.length,saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master.length) ;j++)
+        {
+
+            if (j != target_device_index)
+            {
+                for (let i = 0; i <  Math.min(saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag.length, modbus_data.config.fieldManagement_modbus_rtu.master[j].tag.length); i++) 
+                {   
+
+                    if (modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].enable != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].enable)
+                    {
+                        let changedstr=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName + " Tag List No."+(i+1)+" item is changed: value of enable has changed to "+ saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].enable;
+                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+                    }
+
+                    if (modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].delete != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].delete)
+                    {
+                        let changedstr=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName + " Tag List No."+(i+1)+" item is changed: value of delete has changed to "+ saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].delete;
+                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+                    }
+                      
+                    if (modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].tagName != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].tagName)
+                    {
+                        let changedstr=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName + " Tag List No."+(i+1)+" item is changed: value of tagName has changed to "+ saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].tagName;
+                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+                    }
+
+                    if (modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].pointType != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].pointType)
+                    {
+                        let changedstr=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName + " Tag List No."+(i+1)+" item is changed: value of pointType has changed to "+ saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].pointType;
+                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+                    }
+
+                    if (modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].address != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].address)
+                    {
+                        let changedstr=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName + " Tag List No."+(i+1)+" item is changed: value of address has changed to "+ saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].address;
+                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+                    }
+
+                    if (modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].byteOrder != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].byteOrder)
+                    {
+                        let changedstr=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName + " Tag List No."+(i+1)+" item is changed: value of byteOrder has changed to "+ saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].byteOrder;
+                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+                    }
+
+                    if (modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].dataType != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].dataType)
+                    {
+                        let changedstr=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName + " Tag List No."+(i+1)+" item is changed: value of dataType has changed to "+ saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].dataType;
+                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+                    }
+
+                    if (modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].postprocessingEnable != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].postprocessingEnable)
+                    {
+                        let changedstr=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName + " Tag List No."+(i+1)+" item is changed: value of postprocessingEnable has changed to "+ saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].postprocessingEnable;
+                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+                    }
+
+
+                    if (modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].postprocessingScale != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].postprocessingScale)
+                    {
+                        let changedstr=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName + " Tag List No."+(i+1)+" item is changed: value of postprocessingScale has changed to "+ saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].postprocessingScale;
+                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+                    }
+
+                    if (modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].postprocessingOffset != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].postprocessingOffset)
+                    {
+                        let changedstr=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName + " Tag List No."+(i+1)+" item is changed: value of postprocessingOffset has changed to "+ saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag[i].postprocessingOffset;
+                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+                    }
+
+                }
+
+                if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag.length > modbus_data.config.fieldManagement_modbus_rtu.master[j].tag.length)
+                {
+                    let addedCount=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag.length-modbus_data.config.fieldManagement_modbus_rtu.master[j].tag.length;
+                    let changedstr="Add "+addedCount+" item(s) to "+saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName+" Tag List";
+
+                    modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+
+                }
+                else if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag.length <modbus_data.config.fieldManagement_modbus_rtu.master[j].tag.length)
+                {
+                    let deletedCount=modbus_data.config.fieldManagement_modbus_rtu.master[j].tag.length-saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].tag.length;
+
+                    let changedstr="Delete "+deleteCount+" item(s) from "+saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[j].aliasName +" Tag List";
+                    modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
+
+                }
+            }
+        
+        } 
+    }
 
 
 
@@ -3622,17 +4187,10 @@
                 HandleOriginTCPMasterAndRelated();
             
             }
-            else if (modbus_data.config.fieldManagement_modbus_tcp.master.length==0)
-            {
-
-                HandleAddedTCPMasterTagAndRelated()
-            }
             else if (modbus_data.config.fieldManagement_modbus_tcp.master.length <= target_device_index)
             {
-                console.log("new master and new tag!");
                 NewTCPMasterToSmartDataLogger(target_device_index);
             }
-
 
 
             let nonDelete=[];
@@ -3650,417 +4208,20 @@
         else if(target_device_tag_type==1)
         {
 
-            if (modbus_data.config.fieldManagement_modbus_rtu.master.length > 0 && modbus_data.config.fieldManagement_modbus_rtu.master.length >= target_device_index)
+            HandleNontargetRTUMaster();
+
+            if (modbus_data.config.fieldManagement_modbus_rtu.master.length > 0 && modbus_data.config.fieldManagement_modbus_rtu.master.length > target_device_index)
             {
-                for (let i = 0; i < Math.min(changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length, modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length); i++) 
-                {
-                    compareObjects(changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i], modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i], 10, 1,i+1);
-
-                    if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName)
-                    {
-      
-                        for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-                        {
-                            for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag.length; m++)
-                            {
-                                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m] ==saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName
-                                &&
-                                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                                {
-
-                                    if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                                    {
-                                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                                    }
-                                    else
-                                    {
-                                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]="";
-                                    }
-
-                                    if (sdata_logger_proxy_edge_changedValues.length !=0)
-                                    {
-                                        sdata_logger_proxy_edge_changedValues=[];
-                                    }
-
-
-                                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
-
-                                    SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
-
-                                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-                                }
-                            }
-                        }
-
-                        for (let j=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-                        {
-
-                            for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag.length; m++)
-                            {
-                                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m] ==saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName
-                                &&
-                                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                                {
-
-                                    if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                                    {
-                                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                                    }
-                                    else
-                                    {
-                                        saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]="";
-                                    }
-                                }
-                            }
-                        }
-
-
-                        for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-                        {
-                            if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                            {
-                                if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                                {
-                                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                                }
-                                else
-                                {
-                                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";
-                                }
-
-
-                                if (event_engine_trigger_modbus_changeValues.length !=0)
-                                {
-                                    event_engine_trigger_modbus_changeValues=[];
-                                }
-
-                                compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
-                                event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
-
-                                EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
-                                ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                            }
-
-                        }
-
-                        for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-                        {
-                            if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                            {
-                                if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                                {
-                                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                                }
-                                else
-                                {
-                                    saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";   
-                                }
-                            }
-
-                        }
-
-
-                        for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-                        {
-                            if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                            {
-                                if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                                {
-                                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                                }
-                                else
-                                {
-                                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
-                                }
-
-                                if (event_engine_action_modbus_changeValues.length !=0)
-                                {
-                                    event_engine_action_modbus_changeValues=[];
-                                }
-
-                                compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
-                                event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
-
-                                EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
-                                ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                            }
-
-                        }
-
-                        for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-                        {
-                            if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                            {
-                                if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                                {
-                                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                                }
-                                else
-                                {
-                                    saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
-                                }
-                            }
-                        }
-                    }
-
-                }
-
-
-                for (let i=modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length; i< saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;i++)
-                {
-
-                  if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName != saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName)
-                  {
-          
-                    for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-                    {
-
-                        for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag.length; m++)
-                        {
-                            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m] ==saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName
-                            &&
-                            saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                            {
-                                if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                                {
-                                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                                }
-                                else
-                                {
-                                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]=""; 
-                                }
-
-                                if (sdata_logger_proxy_edge_changedValues.length !=0)
-                                {
-                                    sdata_logger_proxy_edge_changedValues=[];
-                                }
-
-
-                                compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
-
-                                SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
-
-                                ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-                            }
-                        }
-                    }
-
-                    for (let j=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-                    {
-
-                        for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag.length; m++)
-                        {
-                            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m] ==saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName
-                            &&
-                            saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                            {
-                                if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                                {
-                                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                                }
-                                else
-                                {
-                                    saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]="";
-                                }
-                            }
-
-                        }
-                    }
-
-
-
-
-                    for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-                    {
-                        if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                        {
-
-                            if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                            {
-                                saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                            }
-                            else
-                            {
-                                saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";
-                            }
-
-
-                            if (event_engine_trigger_modbus_changeValues.length !=0)
-                            {
-                                event_engine_trigger_modbus_changeValues=[];
-                            }
-
-                            compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
-                            event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
-
-                            EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
-                            ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                        }
-
-                    }
-
-                    for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-                    {
-                        if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                        {
-                            if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                            {
-                                saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                            }
-                            else
-                            {
-                                saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";
-                            }
-                        }
-
-                    }
-
-
-                    for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-                    {
-                        if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                        {
-
-                            if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                            {
-                                saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                            }
-                            else
-                            {
-                                saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
-                            }
-
-
-
-                            if (event_engine_action_modbus_changeValues.length !=0)
-                            {
-                                event_engine_action_modbus_changeValues=[];
-                            }
-
-                            compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
-                            event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
-
-                            
-                            EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
-                            ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                        }
-
-                    }
-
-                    for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-                    {
-                        if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                        {
-                            if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                            {
-                                saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                            }
-                            else
-                            {
-                                saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
-                            }
-                        }
-                    }
-
-
-                    for (let t=0; t<sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList.length;t++)
-                    {
-                        if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                        {
-
-                            if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                            {
-                                saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                            }
-                            else
-                            {
-                                saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName="";
-                            }
-
-
-                            if (conversion_opcua2modbus_changedValues.length !=0)
-                            {
-                                conversion_opcua2modbus_changedValues=[];
-                            }
-
-
-                            comparedSmartConverionOPCUA2ModbusObject(saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus,sconversion_data.config.service_smartConversion.opcua2modbus,3,0,0,"none")
-
-                            Conversion_Opcua2Modbus_ConfigChangedLog.set(conversion_opcua2modbus_changedValues);
-                            ChangedSConfigConfig.set(saved_changed_sconversion_data);
-
-                        }
-                    }
-
-                    for (let t=sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList.length; t<saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList.length;t++)
-                    {
-                        if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName == saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName && saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName!="")
-                        {
-                            if (!changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].delete)
-                            {
-                                saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[i].tagName;
-                            }
-                            else
-                            {
-                                saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName="";
-                            }
-                        }
-                    }
-                  }
-                }
-
-                if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length > modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length)
-                {
-                  let addedCount=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length-modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;
-
-                  for (let k=modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;k<changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;k++)
-                  {
-                    if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[k].delete)
-                    {
-                        addedCount--;
-                    }
-                  }
-
-                    if (addedCount > 0)
-                    {
-                        let changedstr="Add "+addedCount+" item(s) to "+changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName  +" Tag List";
-                        modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
-                    }
-                }
-
-                if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length < modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length)
-                {
-                    let deletedCount=modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length-changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;
-
-                    let changedstr="Delete "+deleteCount+" item(s) from "+changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName +" Tag List";
-                    modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
-                }
+                HandleOriginRTUMasterAndRelated();
+            
             }
-            else if (modbus_data.config.fieldManagement_modbus_rtu.master.length==0)
+            else if (modbus_data.config.fieldManagement_modbus_rtu.master.length <= target_device_index)
             {
-                let addedCount=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;
+                console.log("new rtu master and new tag!");
+                NewRTUMasterToSmartDataLogger(target_device_index);
+            }
 
-                for (let k=0;k<changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length;k++)
-                {
-                    if (changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[k].delete)
-                    {
-                        addedCount--;
-                    }
-                }
-
-                if (addedCount > 0)
-                {
-                    let changedstr="Add "+addedCount+" item(s) to "+changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName+" Tag List";
-                    modbus_tag_changedValues=[...modbus_tag_changedValues, changedstr];
-                }
-
-            }            
+       
 
             let nonDelete=[];
             for (let i = 0; i< changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag.length; i++)

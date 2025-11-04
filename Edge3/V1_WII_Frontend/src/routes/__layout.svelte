@@ -63,6 +63,7 @@
     	PortConnection_COM_ConfigChangedLog,
     	PortConnection_Transparent_ConfigChangedLog,
     	Certificate_Settings_ConfigChangedLog,
+    	ModbusGateway_General_ConfigChangedLog,
 	    ModbusGateway_TtR_ConfigChangedLog,
 	    ModbusGateway_RtT_ConfigChangedLog,
 	    ModbusGateway_RtR_ConfigChangedLog,
@@ -258,6 +259,8 @@
     let modbus_tcp_slave_changedValues=[];
     let modbus_rtu_master_changedValues=[];
     let modbus_rtu_slave_changedValues=[];
+    let modbus_gateway_general_changedValues=[];
+
 
   	let sdata_logger_general_changedValues = [];
   	let sdata_logger_proxy_edge_changedValues = [];
@@ -368,6 +371,7 @@
   			sdata_logger_monitor_edge_changedValues.length !=0 ||
   			sdata_logger_monitor_cloud_changedValues.length !=0 ||
   			sdata_logger_monitor_topic_changedValues.length !=0 ||
+  			modbus_gateway_general_changedValues.length !=0 ||
   			modbus_gateway_TtR_changedValues.length !=0 ||
 		    modbus_gateway_RtT_changedValues.length !=0 ||
 		    modbus_gateway_RtR_changedValues.length !=0 ||
@@ -806,6 +810,12 @@
       JudgeChangedOrNot();
     });
 
+    ModbusGateway_General_ConfigChangedLog.subscribe(val => {
+          	modbus_gateway_general_changedValues = val;
+            JudgeChangedOrNot();
+      });
+
+
     ModbusGateway_TtR_ConfigChangedLog.subscribe(val => {
     	modbus_gateway_TtR_changedValues = val;
     	JudgeChangedOrNot();
@@ -1088,20 +1098,6 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 
 
 
-  async function getVPNDashboard() {
-    const res = await fetch(window.location.origin+"/GetVPNdashboard", {
-      method: 'POST',
-      body: sessionBinary
-    })
-
-    if (res.status == 200)
-    {
-      vpn_dashboard =await res.json();
-      console.log("New VPN Dashboard");
-      console.log(vpn_dashboard);
-      VPNdashboad.set(vpn_dashboard);
-    }
-  }
 
 
   async function getDashboardData() {
@@ -1138,7 +1134,7 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
       		sessionBinary = new Uint8Array(byteValues);
 
       		getDashboardData();
-      		//getVPNDashboard();
+
 
 		}
 
@@ -1206,7 +1202,9 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 						<SidebarDropdownItem label="eSim" href='/esim' active={activeUrl === '/esim'}/>	
 {/if}
 					</SidebarDropdownWrapper>
-					
+
+
+{#if 0}					
 	<SidebarDropdownWrapper
 						label="Authentication"
 					>
@@ -1230,6 +1228,8 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 						<SidebarDropdownItem label="IPsec" href='/ipsec' active={activeUrl === '/ipsec'}/>
 
 					</SidebarDropdownWrapper>
+
+{/if}
 					
 {#if 0}		
 <SidebarDropdownWrapper
@@ -1264,7 +1264,7 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 
 
 <SidebarDropdownWrapper
-						label="Protocol"
+						label="Extend"
 
 					>
 

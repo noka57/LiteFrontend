@@ -100,6 +100,7 @@
     	Certificate_Settings_ConfigChangedLog,
     	ChangedCertificateConfig,
       modbusConfig,
+      ModbusGateway_General_ConfigChangedLog,
     	ModbusGateway_TtR_ConfigChangedLog,
 	    ModbusGateway_RtT_ConfigChangedLog,
 	    ModbusGateway_RtR_ConfigChangedLog,
@@ -307,6 +308,7 @@
 
   let ContentModbus;
   let ModbusBinary=null;
+  let modbus_gateway_general_changedValues=[];
   let modbus_gateway_TtR_changedValues=[];
   let modbus_gateway_RtT_changedValues=[];
   let modbus_gateway_RtR_changedValues=[];
@@ -669,6 +671,10 @@
   Certificate_Settings_ConfigChangedLog.subscribe(val => {
       certificate_settings_changedValues = val;
   });
+
+    ModbusGateway_General_ConfigChangedLog.subscribe(val => {
+          modbus_gateway_general_changedValues = val;
+      });
 
 
   ModbusGateway_TtR_ConfigChangedLog.subscribe(val => {
@@ -1066,11 +1072,15 @@
         }
 
       }
+
     }
     catch (error) 
     {
       console.error('Error fetching resTarTlan data:', error);
-      RestartIntervalIdByLan = setInterval(sendPingbyRlan, 10000);
+      setTimeout(() => {
+            window.location.href = "https://"+lan_data.config.networking_lan.ipStatic.ip;
+          }, 10000); 
+
     }
 
   }
@@ -2234,6 +2244,7 @@
 
       let applied_new_modbus_data= JSON.parse(JSON.stringify(modbus_data));
       modbusConfig.set(applied_new_modbus_data);
+      modbus_gateway_general_changedValues=[];
       modbus_gateway_TtR_changedValues=[];
       modbus_gateway_RtT_changedValues=[];
       modbus_gateway_RtR_changedValues=[];
@@ -2247,6 +2258,7 @@
       modbus_rtu_master_changedValues=[];
       modbus_rtu_slave_changedValues=[];
 
+      ModbusGateway_General_ConfigChangedLog.set(modbus_gateway_general_changedValues);
       ModbusGateway_TtR_ConfigChangedLog.set(modbus_gateway_TtR_changedValues);
       ModbusGateway_RtT_ConfigChangedLog.set(modbus_gateway_RtT_changedValues);
       ModbusGateway_RtR_ConfigChangedLog.set(modbus_gateway_RtR_changedValues);
@@ -2631,7 +2643,7 @@
 		    modbus_tcp_master_changedValues.length !=0 ||
 		    modbus_tcp_slave_changedValues.length !=0 ||
 		    modbus_rtu_master_changedValues.length !=0 ||
-		    modbus_rtu_slave_changedValues.length !=0 ))
+		    modbus_rtu_slave_changedValues.length !=0  ||  modbus_gateway_general_changedValues.length !=0))
   	{
   		SetCount++;	
       RestartCount++;
@@ -2966,7 +2978,7 @@
 										    modbus_tcp_master_changedValues.length !=0 ||
 										    modbus_tcp_slave_changedValues.length !=0 ||
 										    modbus_rtu_master_changedValues.length !=0 ||
-										    modbus_rtu_slave_changedValues.length !=0 ))
+										    modbus_rtu_slave_changedValues.length !=0  ||  modbus_gateway_general_changedValues.length !=0))
   			{
   				let ModbusString = JSON.stringify(modbus_data, null, 0);
 					const bytesArray = Array.from(ModbusString).map(char => char.charCodeAt(0));
@@ -3661,7 +3673,7 @@ event_engine_action_do_changeValues.length != 0 ||
 										    modbus_tcp_master_changedValues.length !=0 ||
 										    modbus_tcp_slave_changedValues.length !=0 ||
 										    modbus_rtu_master_changedValues.length !=0 ||
-										    modbus_rtu_slave_changedValues.length !=0}
+										    modbus_rtu_slave_changedValues.length !=0 ||  modbus_gateway_general_changedValues.length !=0}
 	<Li>Modbus
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
 
@@ -3767,9 +3779,22 @@ event_engine_action_do_changeValues.length != 0 ||
 {#if modbus_gateway_TtR_changedValues.length !=0 ||
 										    modbus_gateway_RtT_changedValues.length !=0 ||
 										    modbus_gateway_RtR_changedValues.length !=0 ||
-										    modbus_gateway_TtT_changedValues.length !=0}
+										    modbus_gateway_TtT_changedValues.length !=0 ||  modbus_gateway_general_changedValues.length !=0}
 			<Li>Gateway
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+
+{#if modbus_gateway_general_changedValues.length !=0}
+      <Li>General
+ <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
+  {#each modbus_gateway_general_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+
+  </List>
+  </Li>
+{/if}
+
+
 {#if modbus_gateway_TtR_changedValues.length !=0}
 			<Li>From TCP To RTU
  <List tag="ol" class="pl-5 mt-2 space-y-1 text-green-900">
@@ -4733,6 +4758,7 @@ wifi_wifi5_changedValues.length !=0 || wifi_bluetooth_changedValues.length !=0}
         sdata_logger_monitor_edge_changedValues.length !=0 ||
         sdata_logger_monitor_cloud_changedValues.length !=0 ||
         sdata_logger_monitor_topic_changedValues.length !=0 ||
+        modbus_gateway_general_changedValues.length!=0||
   			modbus_gateway_TtR_changedValues.length !=0 ||
 		    modbus_gateway_RtT_changedValues.length !=0 ||
 		    modbus_gateway_RtR_changedValues.length !=0 ||

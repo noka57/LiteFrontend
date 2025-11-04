@@ -106,6 +106,8 @@ export const Certificate_Settings_ConfigChangedLog=writable("");
 export const Certificate_CRL_ConfigChangedLog=writable("");
 export const ChangedCertificateConfig=writable("");
 
+
+export const ModbusGateway_General_ConfigChangedLog=writable("");
 export const ModbusGateway_TtR_ConfigChangedLog=writable("");
 export const ModbusGateway_RtT_ConfigChangedLog=writable("");
 export const ModbusGateway_RtR_ConfigChangedLog=writable("");

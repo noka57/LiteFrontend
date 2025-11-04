@@ -297,6 +297,9 @@
 
 
 <Accordion>
+
+{#if 0}
+
   <AccordionItem {defaultClass}>
 
 
@@ -315,6 +318,8 @@
   </table>
 
 </AccordionItem>
+
+{/if}
 
   <AccordionItem {defaultClass}>
 

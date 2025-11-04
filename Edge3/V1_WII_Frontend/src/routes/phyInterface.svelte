@@ -773,8 +773,19 @@
       DOValue=data.do;
       Adc1Type=data.ai1_type;
       Adc2Type=data.ai2_type;
-      ADC1_value=data.ai1;
-      ADC2_value=data.ai2;
+
+      if (data.ai1 != "")
+      {
+        let intADC1=parseInt(data.ai1, 10);
+        ADC1_value=(intADC1/100).toFixed(1);
+      }
+
+      if (data.ai2 !="")
+      {
+
+        let intADC2=parseInt(data.ai2, 10);
+        ADC2_value=(intADC2/100).toFixed(1);
+      }
 
     
     }
@@ -818,13 +829,14 @@
     SetADC1Ready=0;
     if (Adc1Type ==0)
     {
-      //voltage
-      setADC1Voltage();
+      //current
+      setADC1Current();
+
     }
     else if (Adc1Type ==1)
     {
-      //current
-      setADC1Current();
+      //voltage
+      setADC1Voltage();
     }
 
 
@@ -835,13 +847,14 @@
     SetADC2Ready=0;
     if (Adc2Type ==0)
     {
-      //voltage
-      setADC2Voltage();
+      //current
+      setADC2Current();
+
     }
     else if (Adc2Type ==1)
     {
-      //current
-      setADC2Current();
+      //voltage
+      setADC2Voltage();
     }
   
   }
@@ -1191,6 +1204,7 @@
 
 </AccordionItem>
 
+{#if 0}
 
   <AccordionItem {defaultClass}>
 
@@ -1319,6 +1333,8 @@
 {/if}
 
 </AccordionItem>
+{/if}
+
 </Accordion>
 
 
@@ -1369,8 +1385,8 @@
 <tr>
    <td class="pl-10">  <div class="flex gap-4">
    <p class="w-26 pl-2 pt-3">ADC 1:</p>
-   <Radio bind:group={Adc1Type} class='p-3' value={0}>Voltage</Radio>
-   <Radio bind:group={Adc1Type} class='p-1' value={1}>Current</Radio>
+   <Radio bind:group={Adc1Type} class='p-3' value={1}>Voltage</Radio>
+   <Radio bind:group={Adc1Type} class='p-1' value={0}>Current</Radio>
    <Button class="w-20" pill={true} on:click={SetAdc1Type}>Set</Button>
    <p class="pl-2 pt-2">{#if SetADC1Ready==1}Command Executed{/if}</p>
    </div>
@@ -1382,8 +1398,8 @@
 <tr>
    <td class="pl-10">  <div class="flex gap-4">
    <p class="w-26 pl-2 pt-3">ADC 2:</p>
-   <Radio bind:group={Adc2Type} class='p-3' value={0}>Voltage</Radio>
-   <Radio bind:group={Adc2Type} class='p-1' value={1}>Current</Radio>
+   <Radio bind:group={Adc2Type} class='p-3' value={1}>Voltage</Radio>
+   <Radio bind:group={Adc2Type} class='p-1' value={0}>Current</Radio>
    <Button class="w-20" pill={true} on:click={SetAdc2Type}>Set</Button>
    <p class="pl-2 pt-2">{#if SetADC2Ready==1}Command Executed{/if}</p>
    </div>
@@ -1418,8 +1434,8 @@
 <tr>
    <td class="pl-10 pt-10">  <div class="flex gap-1">
    <p class="w-26 pt-3">AI-1:</p>
-   <Radio bind:group={Adc1Type} class='p-3' value={0}>Voltage</Radio>
-   <Radio bind:group={Adc1Type} class='p-1' value={1}>Current</Radio>
+   <Radio bind:group={Adc1Type} class='p-3' value={1}>Voltage</Radio>
+   <Radio bind:group={Adc1Type} class='p-1' value={0}>Current</Radio>
    <Button class="w-20" pill={true} on:click={SetAdc1Type}>Set</Button>
    <p class="pl-2 pt-2">{#if SetADC1Ready==1}Command Executed{/if}</p>
    </div>
@@ -1431,8 +1447,8 @@
 <tr>
    <td class="pl-10 pt-10">  <div class="flex gap-1">
    <p class="w-26 pt-3">AI-2:</p>
-   <Radio bind:group={Adc2Type} class='p-3' value={0}>Voltage</Radio>
-   <Radio bind:group={Adc2Type} class='p-1' value={1}>Current</Radio>
+   <Radio bind:group={Adc2Type} class='p-3' value={1}>Voltage</Radio>
+   <Radio bind:group={Adc2Type} class='p-1' value={0}>Current</Radio>
    <Button class="w-20" pill={true} on:click={SetAdc2Type}>Set</Button>
    <p class="pl-2 pt-2">{#if SetADC2Ready==1}Command Executed{/if}</p>
    </div>
@@ -1456,27 +1472,27 @@
 
 <tr>
    <td class="pl-10 pt-3">  <div class="flex gap-1">
-   <p class="w-26 pt-2">DI: {#if DIValue ==0}Low{:else if DIValue ==1}High{/if}</p>
+   <p class="w-26 pt-2">DI: <span class="text-red-700">{#if DIValue ==0}Low{:else if DIValue ==1}High{/if}</span></p>
    </td>
 </tr>
 
 
 <tr>
    <td class="pl-10 pt-10">  <div class="flex gap-1">
-   <p class="w-26 pt-2">DO: {#if DOValue ==0}Close{:else if DOValue ==1}Open{/if}</p>
+   <p class="w-26 pt-2">DO: <span class="text-red-700">{#if DOValue ==0}Close{:else if DOValue ==1}Open{/if}</span></p>
    </td>
 </tr>
 
 
 <tr>
    <td class="pl-10 pt-10">  <div class="flex gap-1">
-   <p class="w-26 pt-2">AI-1:{#if ADC1_value !=""}{ADC1_value}{/if}{#if Adc1Type==0} (Voltage){:else if Adc1Type==1} (Current){/if}</p>
+   <p class="w-26 pt-2">AI-1: <span class="text-red-700">{#if ADC1_value !=""}{ADC1_value}{/if}{#if Adc1Type==1} (Voltage){:else if Adc1Type==0} (Current){/if}</span></p>
    </td>
 </tr>
 
 <tr>
    <td class="pl-10 pt-10">  <div class="flex gap-1">
-   <p class="w-26 pt-2">AI-2:{#if ADC2_value !=""}{ADC2_value}{/if}{#if Adc2Type==0} (Voltage){:else if Adc2Type==1} (Current){/if}</p>
+   <p class="w-26 pt-2">AI-2: <span class="text-red-700">{#if ADC2_value !=""}{ADC2_value}{/if}{#if Adc2Type==1} (Voltage){:else if Adc2Type==0} (Current){/if}</span></p>
    </td>
 </tr>
 

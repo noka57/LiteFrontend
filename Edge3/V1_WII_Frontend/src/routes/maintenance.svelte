@@ -28,7 +28,7 @@
 
   let RestartIntervalId;
   let RestartReady=0;
-  let localUpdateKeepConfig=1;
+  let localUpdateKeepConfig=0;
   let fileFwName="No file chosen";
 
 
@@ -695,7 +695,7 @@
 
 </AccordionItem>
 
-
+{#if  0}
 
   <AccordionItem {defaultClass}>
 
@@ -872,6 +872,8 @@ Hour
 
 </table>
 </AccordionItem>
+{/if}
+
 </Accordion>
 
 

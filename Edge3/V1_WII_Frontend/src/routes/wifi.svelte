@@ -23,6 +23,11 @@
       let wifi_wifi5_changedValues = [];
       let wifi_bluetooth_changedValues = [];
 
+
+      let Stations_list_11ah="";
+      let Stations_list_wifi5="";
+      let Stations_list_bluetooth="";
+
       let sessionid;
       let sessionBinary;
       sessionidG.subscribe(val => {
@@ -274,6 +279,69 @@
       }
 
 
+
+
+  async function RefreshBLEStationList()
+  {
+      const res = await fetch(window.location.origin+"/gETblueToOthStatioNlIst", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+
+        Stations_list_bluetooth =await res.text();
+        console.log(Stations_list_bluetooth);
+        console.log("Stations_list_bluetooth OK");
+       
+
+    }
+
+  }
+     
+
+  async function RefreshWifi5StationList()
+  {
+      const res = await fetch(window.location.origin+"/geTwifI5staTionlist", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+
+        Stations_list_wifi5 =await res.text();
+        console.log(Stations_list_wifi5);
+        console.log("Stations_list_wifi5 OK");
+       
+
+    }
+
+  }
+
+
+
+  async function Refresh11ahStationList()
+  {
+      const res = await fetch(window.location.origin+"/geT11ahStaTIonList", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+
+        Stations_list_11ah =await res.text();
+        console.log(Stations_list_11ah);
+        console.log("Stations_list_11ah OK");
+       
+
+    }
+
+  }
+
+
    async function getWIFIData () {
     const res = await fetch(window.location.origin+"/GEtwIFi", {
       method: 'POST',
@@ -289,9 +357,13 @@
       changed_wifi_data = JSON.parse(JSON.stringify(wifi_data));
       saved_changed_wifi_data = JSON.parse(JSON.stringify(wifi_data))
       ChangedWiFiConfig.set(saved_changed_wifi_data);
+     // Refresh11ahStationList();
       getDataReady=1;
     }
   }
+
+
+
 
 
   onMount(() => {
@@ -474,6 +546,8 @@
 
   </AccordionItem>
 
+
+
 </Accordion>
 
  {:else if saved_changed_wifi_data.config.wifi_11ah.mode==1}
@@ -510,6 +584,7 @@
 
 </tr>
 
+{#if 0}
 
 <tr><td class="w-60"></td>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Region</p></td><td class="pl-5 pt-5">
@@ -522,6 +597,7 @@
 
 </tr>
 
+{/if}
 
 
 
@@ -655,6 +731,27 @@
 
   </AccordionItem>
 
+  <AccordionItem {defaultClass}>
+    <div slot="header" class="pl-4">Stations List</div>
+<table>
+<tr>
+   <td class="pl-12 pt-10">    <Button class="w-22" pill={true} on:click={Refresh11ahStationList}>Refresh</Button>
+   </td>
+</tr>
+</table>
+
+<p class="pt-10"></p>
+
+<pre style="white-space: pre-wrap;">{Stations_list_11ah}</pre>
+
+
+
+
+
+
+    </AccordionItem>
+
+
 </Accordion>
 
 
@@ -705,16 +802,20 @@
 
 </tr>
 
+{#if 0}
+
 <tr><td class="w-60"></td>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Region</p></td><td class="pl-5 pt-5">
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-3 w-48" bind:value={changed_wifi_data.config.wifi_wifi5.region}>
-<option value={1}>EU</option>
+<option value={1}>TAIWAN</option>
 <option value={0}>US</option>
 </select>
 
       </td>
 
 </tr>
+
+{/if}
 
 
 
@@ -723,38 +824,22 @@
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-3 w-48" bind:value={changed_wifi_data.config.wifi_wifi5.channel}>
 
 {#if changed_wifi_data.config.wifi_wifi5.region==0}
+{#if changed_wifi_data.config.wifi_wifi5.type==1}
+<option value={36}>36</option>
+{:else if changed_wifi_data.config.wifi_wifi5.type==0}
+<option value={6}>6</option>
+{/if}
 
-<option value={1}>1</option>
-<option value={3}>3</option>
-<option value={5}>5</option>
-<option value={7}>7</option>
-<option value={9}>9</option>
-<option value={11}>11</option>
-<option value={13}>13</option>
-<option value={15}>15</option>
-<option value={17}>17</option>
-<option value={19}>19</option>
-<option value={21}>21</option>
-<option value={23}>23</option>
-<option value={25}>25</option>
-<option value={27}>27</option>
-<option value={29}>29</option>
-<option value={31}>31</option>
-<option value={33}>33</option>
-<option value={35}>35</option>
-<option value={37}>37</option>
-<option value={39}>39</option>
-<option value={41}>41</option>
-<option value={43}>43</option>
-<option value={45}>45</option>
-<option value={47}>47</option>
-<option value={49}>49</option>
-<option value={51}>51</option>
 
 
 
 {:else if changed_wifi_data.config.wifi_wifi5.region==1}
-<option value={40}>40</option>
+{#if changed_wifi_data.config.wifi_wifi5.type==1}
+<option value={36}>36</option>
+{:else if changed_wifi_data.config.wifi_wifi5.type==0}
+<option value={6}>6</option>
+{/if}
+
 
 {/if}
 
@@ -808,8 +893,32 @@
 
 </table>
 
+<p class="pt-10"></p>
+
+<Accordion>
+
+  <AccordionItem {defaultClass}>
+    <div slot="header" class="pl-4">Stations List</div>
+<table>
+<tr>
+   <td class="pl-12 pt-10">    <Button class="w-22" pill={true} on:click={RefreshWifi5StationList}>Refresh</Button>
+   </td>
+</tr>
+</table>
+
+<p class="pt-10"></p>
+
+<pre style="white-space: pre-wrap;">{Stations_list_wifi5}</pre>
 
 
+
+
+
+
+    </AccordionItem>
+
+
+</Accordion>
 
 
 
@@ -865,7 +974,38 @@
 </table>
 
 
+<p class="pt-10"></p>
+
+<Accordion>
+
+  <AccordionItem {defaultClass}>
+    <div slot="header" class="pl-4">Stations List</div>
+<table>
+<tr>
+   <td class="pl-12 pt-10">    <Button class="w-22" pill={true} on:click={RefreshBLEStationList}>Refresh</Button>
+   </td>
+</tr>
+</table>
+
+<p class="pt-10"></p>
+
+<pre style="white-space: pre-wrap;">{Stations_list_bluetooth}</pre>
+
+
+
+
+
+
+    </AccordionItem>
+
+
+</Accordion>
+
+
+
 
    </TabItem>
+
+
 
  </Tabs>

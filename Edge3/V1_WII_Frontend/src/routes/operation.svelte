@@ -513,6 +513,9 @@
 </table>
       </TabItem>
 
+{#if 0}
+
+
    <TabItem title="Reset">
 
 <table>
@@ -537,5 +540,7 @@
 </table>
 
       </TabItem>
+{/if}
+
 
  </Tabs>

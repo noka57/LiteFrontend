@@ -242,15 +242,15 @@
         console.log("get dashboard 200 OK\r\n");
         console.log(dashboard_data);
         dashboadData.set(dashboard_data);
-        value1=dashboard_data.config.dashboard.systemResource.cpuUsage;
-        value2=dashboard_data.config.dashboard.systemResource.ramUsage;
-        value3=dashboard_data.config.dashboard.systemResource.emmcUsage;
-        value4=dashboard_data.config.dashboard.systemResource.sdCardUsage;
+       // value1=dashboard_data.config.dashboard.systemResource.cpuUsage;
+       // value2=dashboard_data.config.dashboard.systemResource.ramUsage;
+       // value3=dashboard_data.config.dashboard.systemResource.emmcUsage;
+       // value4=dashboard_data.config.dashboard.systemResource.sdCardUsage;
 
-        path1=calculateProgressBarPath(value1,1);
-        path2=calculateProgressBarPath(value2,2);
-        path3=calculateProgressBarPath(value3,3);
-        path4=calculateProgressBarPath(value4,4);
+       // path1=calculateProgressBarPath(value1,1);
+      //  path2=calculateProgressBarPath(value2,2);
+       // path3=calculateProgressBarPath(value3,3);
+      //  path4=calculateProgressBarPath(value4,4);
         AllpathReady=1;
       }
       else
@@ -317,15 +317,15 @@
     else if (sessionid && dashboard_data!="")
     {
       AllpathReady=0;
-      value1=dashboard_data.config.dashboard.systemResource.cpuUsage;
-      value2=dashboard_data.config.dashboard.systemResource.ramUsage;
-      value3=dashboard_data.config.dashboard.systemResource.emmcUsage;
-      value4=dashboard_data.config.dashboard.systemResource.sdCardUsage;
+     // value1=dashboard_data.config.dashboard.systemResource.cpuUsage;
+     // value2=dashboard_data.config.dashboard.systemResource.ramUsage;
+     // value3=dashboard_data.config.dashboard.systemResource.emmcUsage;
+     // value4=dashboard_data.config.dashboard.systemResource.sdCardUsage;
 
-      path1=calculateProgressBarPath(value1,1);
-      path2=calculateProgressBarPath(value2,2);
-      path3=calculateProgressBarPath(value3,3);
-      path4=calculateProgressBarPath(value4,4);
+    //  path1=calculateProgressBarPath(value1,1);
+    //  path2=calculateProgressBarPath(value2,2);
+    //  path3=calculateProgressBarPath(value3,3);
+    //  path4=calculateProgressBarPath(value4,4);
       AllpathReady=1;
 
       const hexArray = sessionid.match(/.{1,2}/g); 
@@ -372,7 +372,10 @@
 <p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemUptime} {/if}</p>
 </div>
 </div></TableBodyCell>
-      <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class=""><svg class="w-16 h-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 -3 24 24">
+      <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class="">
+
+{#if 0}
+      <svg class="w-16 h-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 -3 24 24">
 
   <circle fill="#1A87C9" cx="9" cy="9" r="9"/>
   <path fill="#FFFFFF" d="M13.5,9.8H9C8.6,9.8,8.2,9.4,8.2,9V3c0-0.4,0.3-0.8,0.8-0.8S9.8,2.6,9.8,3v5.2h3.8c0.4,0,0.8,0.3,0.8,0.8
@@ -380,18 +383,21 @@
 
 </svg>
 
+{/if}
+
 </div>
 <div class="w-full">
+{#if 0}
 <p class="pt-2 text-sm font-light">Internet Uptime</p>
-<p class="text-xl font-bold">{#if hidden == 0}{#if dashboard_data!=""}{dashboard_data.config.dashboard.internetUptime} {/if}{/if}
-{#if hidden == 1}
-NA
-{/if}
+<p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.internetUptime} {/if}
+
+
 </p>
+{/if}
 </div>
 </div></TableBodyCell>
       <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class="">
-      {#if 1}
+      {#if 0}
 <svg class="w-16 h-16 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45.3 25">
 
     <path fill="#076291" d="M42,10.1c0-0.2,0-0.3,0-0.5c0-2.9-2.3-5.2-5.2-5.2c-0.5,0-1,0.1-1.5,0.2c-0.2-0.4-0.5-0.7-0.8-1L13.3,25h19.2
@@ -407,13 +413,15 @@ NA
 {/if}
       </div>
 <div class="w-full">
-{#if 1}
+{#if 0}
 <p class="text-sm font-light">Pave2Edge</p>
 <p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.p2eStatus}{/if}</p>
 {/if}
 </div>
 </div></TableBodyCell>
-      <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class="">
+      <TableBodyCell {tdStyle} {tdClass}>
+{#if 0}
+      <div class="flex"><div class="">
 <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-white bg-blue-500 mr-2 rounded-full dark:text-pink-500 w-12 h-12" cursor=pointer on:click={GPSClick} on:keyup={() => {}} on:keydown={() => {}}>
   <path d="M15 10.5C15 12.1569 13.6569 13.5 12 13.5C10.3431 13.5 9 12.1569 9 10.5C9 8.84315 10.3431 7.5 12 7.5C13.6569 7.5 15 8.84315 15 10.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path d="M19.5 10.5C19.5 17.6421 12 21.75 12 21.75C12 21.75 4.5 17.6421 4.5 10.5C4.5 6.35786 7.85786 3 12 3C16.1421 3 19.5 6.35786 19.5 10.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
@@ -438,12 +446,15 @@ NA
 </p>
 </div>
 </div>
+{/if}
 
       </TableBodyCell>
     </TableBodyRow>
-        <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Cellular Information</p>
+        <TableBodyRow>
 
+
+        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
+<p class="text-red-600 text-lg">WAN Status</p>
 
               </TableBodyCell>
                       <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Ethernet</p>
@@ -453,84 +464,27 @@ NA
 
 
                     <TableBodyRow>      
-        <TableBodyCell class="border-l-8 border-r-0 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex">
-{#if hidden ==0}
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
 
-        <div class=""><p class="text-black text-lg">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].name}{/if}</p>
+        <div class="flex"><div class="px-10"><p class="text-black text-lg">Active Link</p>
+        <p class="text-black text-lg">IP Address</p>
 
-{#if dashboard_data!=""}    
-<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 mr-2 dark:text-pink-500 w-12 h-12">
-{#if dashboard_data.config.dashboard.modem[0].signal == 0}    
-<path d="M3 13.125C3 12.5037 3.50368 12 4.125 12H6.375C6.99632 12 7.5 12.5037 7.5 13.125V19.875C7.5 20.4963 6.99632 21 6.375 21H4.125C3.50368 21 3 20.4963 3 19.875V13.125Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
- <path d="M9.75 8.625C9.75 8.00368 10.2537 7.5 10.875 7.5H13.125C13.7463 7.5 14.25 8.00368 14.25 8.625V19.875C14.25 20.4963 13.7463 21 13.125 21H10.875C10.2537 21 9.75 20.4963 9.75 19.875V8.625Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
- <path d="M16.5 4.125C16.5 3.50368 17.0037 3 17.625 3H19.875C20.4963 3 21 3.50368 21 4.125V19.875C21 20.4963 20.4963 21 19.875 21H17.625C17.0037 21 16.5 20.4963 16.5 19.875V4.125Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-{:else if dashboard_data.config.dashboard.modem[0].signal == 1}
-<path d="M3 13.125C3 12.5037 3.50368 12 4.125 12H6.375C6.99632 12 7.5 12.5037 7.5 13.125V19.875C7.5 20.4963 6.99632 21 6.375 21H4.125C3.50368 21 3 20.4963 3 19.875V13.125Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M9.75 8.625C9.75 8.00368 10.2537 7.5 10.875 7.5H13.125C13.7463 7.5 14.25 8.00368 14.25 8.625V19.875C14.25 20.4963 13.7463 21 13.125 21H10.875C10.2537 21 9.75 20.4963 9.75 19.875V8.625Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-<path d="M16.5 4.125C16.5 3.50368 17.0037 3 17.625 3H19.875C20.4963 3 21 3.50368 21 4.125V19.875C21 20.4963 20.4963 21 19.875 21H17.625C17.0037 21 16.5 20.4963 16.5 19.875V4.125Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-{:else if dashboard_data.config.dashboard.modem[0].signal == 2}
-<path d="M3 13.125C3 12.5037 3.50368 12 4.125 12H6.375C6.99632 12 7.5 12.5037 7.5 13.125V19.875C7.5 20.4963 6.99632 21 6.375 21H4.125C3.50368 21 3 20.4963 3 19.875V13.125Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M9.75 8.625C9.75 8.00368 10.2537 7.5 10.875 7.5H13.125C13.7463 7.5 14.25 8.00368 14.25 8.625V19.875C14.25 20.4963 13.7463 21 13.125 21H10.875C10.2537 21 9.75 20.4963 9.75 19.875V8.625Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-<path d="M16.5 4.125C16.5 3.50368 17.0037 3 17.625 3H19.875C20.4963 3 21 3.50368 21 4.125V19.875C21 20.4963 20.4963 21 19.875 21H17.625C17.0037 21 16.5 20.4963 16.5 19.875V4.125Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-{:else if dashboard_data.config.dashboard.modem[0].signal == 3}
-<path d="M3 13.125C3 12.5037 3.50368 12 4.125 12H6.375C6.99632 12 7.5 12.5037 7.5 13.125V19.875C7.5 20.4963 6.99632 21 6.375 21H4.125C3.50368 21 3 20.4963 3 19.875V13.125Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M9.75 8.625C9.75 8.00368 10.2537 7.5 10.875 7.5H13.125C13.7463 7.5 14.25 8.00368 14.25 8.625V19.875C14.25 20.4963 13.7463 21 13.125 21H10.875C10.2537 21 9.75 20.4963 9.75 19.875V8.625Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-<path d="M16.5 4.125C16.5 3.50368 17.0037 3 17.625 3H19.875C20.4963 3 21 3.50368 21 4.125V19.875C21 20.4963 20.4963 21 19.875 21H17.625C17.0037 21 16.5 20.4963 16.5 19.875V4.125Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-{/if}
-</svg>
-{/if}
+        <p class="text-black text-lg">Gateway</p>
+        <p class="text-black text-lg">DNS</p>
 
 </div>
+<div class="px-40"><p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.active_link}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.ip}{/if}</p>
 
-<div class="w-full pt-4 px-10">
-<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].type}{/if}</p>
-<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].band}{/if}</p>
-<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[0].operator}{/if}</p>
-</div>
-
-{/if}
-</div>
-
-              </TableBodyCell>
-                      <TableBodyCell class="border-l-0 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium"><div class="flex">
-{#if hidden == 0}
-
-                      <div class=""><p class="text-black text-lg">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].name}{/if}</p>
-                      
-
-{#if dashboard_data!=""}    
-<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-gray-700 mr-2 dark:text-pink-500 w-12 h-12">
-{#if dashboard_data.config.dashboard.modem[1].signal == 0}    
-<path d="M3 13.125C3 12.5037 3.50368 12 4.125 12H6.375C6.99632 12 7.5 12.5037 7.5 13.125V19.875C7.5 20.4963 6.99632 21 6.375 21H4.125C3.50368 21 3 20.4963 3 19.875V13.125Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
- <path d="M9.75 8.625C9.75 8.00368 10.2537 7.5 10.875 7.5H13.125C13.7463 7.5 14.25 8.00368 14.25 8.625V19.875C14.25 20.4963 13.7463 21 13.125 21H10.875C10.2537 21 9.75 20.4963 9.75 19.875V8.625Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
- <path d="M16.5 4.125C16.5 3.50368 17.0037 3 17.625 3H19.875C20.4963 3 21 3.50368 21 4.125V19.875C21 20.4963 20.4963 21 19.875 21H17.625C17.0037 21 16.5 20.4963 16.5 19.875V4.125Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-{:else if dashboard_data.config.dashboard.modem[1].signal == 1}
-<path d="M3 13.125C3 12.5037 3.50368 12 4.125 12H6.375C6.99632 12 7.5 12.5037 7.5 13.125V19.875C7.5 20.4963 6.99632 21 6.375 21H4.125C3.50368 21 3 20.4963 3 19.875V13.125Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M9.75 8.625C9.75 8.00368 10.2537 7.5 10.875 7.5H13.125C13.7463 7.5 14.25 8.00368 14.25 8.625V19.875C14.25 20.4963 13.7463 21 13.125 21H10.875C10.2537 21 9.75 20.4963 9.75 19.875V8.625Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-<path d="M16.5 4.125C16.5 3.50368 17.0037 3 17.625 3H19.875C20.4963 3 21 3.50368 21 4.125V19.875C21 20.4963 20.4963 21 19.875 21H17.625C17.0037 21 16.5 20.4963 16.5 19.875V4.125Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-{:else if dashboard_data.config.dashboard.modem[1].signal == 2}
-<path d="M3 13.125C3 12.5037 3.50368 12 4.125 12H6.375C6.99632 12 7.5 12.5037 7.5 13.125V19.875C7.5 20.4963 6.99632 21 6.375 21H4.125C3.50368 21 3 20.4963 3 19.875V13.125Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M9.75 8.625C9.75 8.00368 10.2537 7.5 10.875 7.5H13.125C13.7463 7.5 14.25 8.00368 14.25 8.625V19.875C14.25 20.4963 13.7463 21 13.125 21H10.875C10.2537 21 9.75 20.4963 9.75 19.875V8.625Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-<path d="M16.5 4.125C16.5 3.50368 17.0037 3 17.625 3H19.875C20.4963 3 21 3.50368 21 4.125V19.875C21 20.4963 20.4963 21 19.875 21H17.625C17.0037 21 16.5 20.4963 16.5 19.875V4.125Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-{:else if dashboard_data.config.dashboard.modem[1].signal == 3}
-<path d="M3 13.125C3 12.5037 3.50368 12 4.125 12H6.375C6.99632 12 7.5 12.5037 7.5 13.125V19.875C7.5 20.4963 6.99632 21 6.375 21H4.125C3.50368 21 3 20.4963 3 19.875V13.125Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M9.75 8.625C9.75 8.00368 10.2537 7.5 10.875 7.5H13.125C13.7463 7.5 14.25 8.00368 14.25 8.625V19.875C14.25 20.4963 13.7463 21 13.125 21H10.875C10.2537 21 9.75 20.4963 9.75 19.875V8.625Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> 
-<path d="M16.5 4.125C16.5 3.50368 17.0037 3 17.625 3H19.875C20.4963 3 21 3.50368 21 4.125V19.875C21 20.4963 20.4963 21 19.875 21H17.625C17.0037 21 16.5 20.4963 16.5 19.875V4.125Z" fill="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-{/if}
-</svg>
-{/if}
-
-
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.gateway}{/if}</p>
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.dns[0]}/{dashboard_data.config.dashboard.wanStatus.ipv4.dns[1]}{/if}</p>
 
 </div>
-<div class="w-full pt-4 px-10">
-<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].type}{/if}</p>
-<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].band}{/if}</p>
-<p class="text-sm font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.modem[1].operator}{/if}</p>
 </div>
-{/if}
-</div>
-              </TableBodyCell>
+
+
+
+                      </TableBodyCell>
 
               <TableBodyCell class="border-l-8 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex">
               <div class="">
@@ -598,189 +552,49 @@ NA
 
 
             </TableBodyRow>
+
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Internet Status</p>
 
 
+
+              <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">LAN Status</p>
               </TableBodyCell>
-                      <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">LAN Status</p>
+
+
+        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">System Information</p>
+
+
+
               </TableBodyCell>
 
             </TableBodyRow>
 
 
              <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10"><p class="text-black text-lg">Active Link</p>
-        <p class="text-black text-lg">IP Address</p>
-        {#if hidden == 0}
-        <p class="text-black text-lg">Gateway</p>
-        <p class="text-black text-lg">DNS</p>
-        {/if}
-</div>
-<div class="px-40"><p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.active_link}{/if}</p>
-        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.ip}{/if}</p>
-        {#if hidden == 0}
-        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.gateway}{/if}</p>
-        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.dns[0]}/{dashboard_data.config.dashboard.wanStatus.ipv4.dns[1]}{/if}</p>
-        {/if}
-</div>
-</div>
-                      </TableBodyCell>
+
 
    
         <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10">
+        <p class="text-black text-lg">IP Mode</p>
         <p class="text-black text-lg">IP Address(IPv4)</p>
-                {#if hidden == 0}
-        <p class="text-black text-lg">Gateway</p>
 
-        {/if}
 </div>
 <div class="px-40">
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.ipMode}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.ip}{/if}</p>
 
 </div>
 </div>
                       </TableBodyCell>
-        </TableBodyRow>
 
- <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">System Resource</p>
+<TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg"></p>
 
-
-              </TableBodyCell>
-                      <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">System Information</p>
-              </TableBodyCell>
-
-            </TableBodyRow>
-
-
-             <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex">
-{#if hidden == 0}
-<div class="pb-20"> <p class="text-black text-sm text-center">
-        {#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.cpuRemaining}{/if}</p>
-  {#if dashboard_data!="" && AllpathReady　==1}
-    <div style="height: 100%;position:relative;weight:100%">  
-        <svg viewBox="0 0 100 100" height="100%" width="100%" style="fill: var(--progress-fill, transparent);stroke-linecap: var(--progress-linecap, line);">
-<path d="M50,5A35 35 0 1 1 49.9999 5" style="stroke: var(--progress-trackcolor, #adb5bd);
-    stroke-width: var(--progress-trackwidth, 19px);"/>
-{#if value1 > 80}
- <path stroke-width=20px stroke="blue" d={path1} />
- <path d="M{x1},{y1}A35 35 0 0 0 15.810308878413977 32.51234208777258" stroke="red" style="stroke-width: var(--progress-width, 20px);"/>
-{:else}
- <path stroke-width=20px stroke="blue" d={path1} style="stroke-width: var(--progress-width, 20px);"/>
-
-{/if}
-
-</svg>
-  <div style="height: 100%;position:relative;weight:100%">
-    <slot>
-      <span style="left: 50%;position: absolute;top: -57%;transform: translate(-50%, -50%);color: blue">{value1}%</span>
-    </slot>
-  </div>
-
-  </div>
-{/if}
-<p class="text-black text-lg text-center">CPU</p>
-</div>
-
-
-<div class="pl-20 pb-20">
-<p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.ramRemaining}{/if}</p>
-{#if dashboard_data!="" && AllpathReady　==1}<div style="height: 100%;position:relative;weight:100%">
-
-
- <svg viewBox="0 0 100 100" height="100%" width="100%" style="fill: var(--progress-fill, transparent);stroke-linecap: var(--progress-linecap, line);">
-<path d="M50,5A35 35 0 1 1 49.9999 5" style="stroke: var(--progress-trackcolor, #adb5bd);
-    stroke-width: var(--progress-trackwidth, 19px);"/>
-{#if value2 > 80}
- <path stroke-width=20px stroke="green" d={path2} />
- <path d="M{x2},{y2}A35 35 0 0 0 15.810308878413977 32.51234208777258" stroke="red" style="stroke-width: var(--progress-width, 20px);"/>
-{:else}
- <path stroke-width=20px stroke="green" d={path2} style="stroke-width: var(--progress-width, 20px);"/>
-
-{/if}
-
-</svg>
-
-
-
-
-<div style="height: 100%;position:relative;weight:100%">   <slot>
-      <span style="left: 50%;position: absolute;top: -57%;transform: translate(-50%, -50%);color: blue">{value2}%</span>
-    </slot></div>
-
-    </div>{/if}
-<p class="text-black text-lg text-center">RAM</p>
-</div>
-
-
-<div class="pl-20 pb-20">
-<p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.emmcRemaining}{/if}</p>
-{#if dashboard_data!="" && AllpathReady　==1}<div style="height: 100%;position:relative;weight:100%">
-
-
- <svg viewBox="0 0 100 100" height="100%" width="100%" style="fill: var(--progress-fill, transparent);stroke-linecap: var(--progress-linecap, line);">
-<path d="M50,5A35 35 0 1 1 49.9999 5" style="stroke: var(--progress-trackcolor, #adb5bd);
-    stroke-width: var(--progress-trackwidth, 19px);"/>
-{#if value3 > 80}
- <path stroke-width=20px stroke="yellow" d={path3} />
- <path d="M{x3},{y3}A35 35 0 0 0 15.810308878413977 32.51234208777258" stroke="red" style="stroke-width: var(--progress-width, 20px);"/>
-{:else}
- <path stroke-width=20px stroke="yellow" d={path3} style="stroke-width: var(--progress-width, 20px);"/>
-
-{/if}
-
-</svg>
-
-
-
-
-
-<div style="height: 100%;position:relative;weight:100%">  <slot>
-      <span style="left: 50%;position: absolute;top: -57%;transform: translate(-50%, -50%);color: blue">{value3}%</span>
-    </slot></div></div>{/if}
-<p class="text-black text-lg text-center">EMMC</p>
-</div>
-<div class="pl-20 pb-20">
-<p class="text-black text-sm text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemResource.sdCardRemaining}{/if}</p>
-{#if dashboard_data!=""&& AllpathReady　==1}<div style="height: 100%;position:relative;weight:100%">
-
-
- <svg viewBox="0 0 100 100" height="100%" width="100%" style="fill: var(--progress-fill, transparent);stroke-linecap: var(--progress-linecap, line);">
-<path d="M50,5A35 35 0 1 1 49.9999 5" style="stroke: var(--progress-trackcolor, #adb5bd);
-    stroke-width: var(--progress-trackwidth, 19px);"/>
-{#if value4 > 80}
- <path stroke-width=20px stroke="orange" d={path4} />
- <path d="M{x4},{y4}A35 35 0 0 0 15.810308878413977 32.51234208777258" stroke="red" style="stroke-width: var(--progress-width, 20px);"/>
-{:else}
- <path stroke-width=20px stroke="orange" d={path4} style="stroke-width: var(--progress-width, 20px);"/>
-
-{/if}
-
-</svg>
-
-
-<div style="height: 100%;position:relative;weight:100%">  <slot>
-      <span style="left: 50%;position: absolute;top: -57%;transform: translate(-50%, -50%);color: blue">{value4}%</span>
-    </slot></div></div>{/if}
-<p class="text-black text-lg text-center">SD Card</p>
-</div>
-{/if}
-</div>
-                      </TableBodyCell>
-
-   
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex"><div class="px-10">
+<div class="flex"><div class="px-10">
         <p class="text-black text-lg">Model Name</p>
         <p class="text-black text-lg">Serial Number</p>
         <p class="text-black text-lg">Firmware Version</p>
         <p class="text-black text-lg">WAN MAC Address</p>
-        <p class="text-black text-lg">IMEI</p>
-        <p class="text-black text-lg">Modem Vendor/Model</p>
         <p class="text-black text-lg">System Time</p>
-
-
 
 </div>
 <div class="px-1">
@@ -788,16 +602,81 @@ NA
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.serialNumber}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.firmwareVersion}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.macAddress}{/if}</p>
+        {#if 0}
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.imei}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.modemVendor}{/if}/{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.modemModel}{/if}</p>
+        {/if}
         <p class="text-lg font-light">{#if dashboard_data!=""}{new Date(dashboard_data.config.dashboard.systemInfo.systemTime*1000).toLocaleString('en-US', options)}{/if}</p>
 
 
 </div>
 </div>
-                      </TableBodyCell>
+
+              </TableBodyCell>
+
         </TableBodyRow>
 
+
+<TableBodyRow>      
+        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">IO Data</p>
+
+
+              </TableBodyCell>
+                      <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Modbus Gateway</p>
+              </TableBodyCell>
+
+            </TableBodyRow>
+
+
+
+             <TableBodyRow>      
+
+
+   
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
+
+<div class="flex">
+        <div class="px-10">
+                <p class="text-black text-lg">AI-1</p>
+                <p class="text-black text-lg">AI-2</p>
+                <p class="text-black text-lg">DI</p>
+                <p class="text-black text-lg">DO</p>
+        </div>
+
+        <div class="px-1">
+<p class="text-lg font-light">0</p>
+<p class="text-lg font-light">0</p>
+<p class="text-lg font-light">High</p>
+<p class="text-lg font-light">Close</p>
+        </div>
+      </div>
+
+                      </TableBodyCell>
+
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
+              
+
+<div class="flex">
+        <div class="px-10">
+                <p class="text-black text-lg">Mode</p>
+        </div>
+
+        <div class="px-1">
+<p class="text-lg font-light">Disable</p>
+
+        </div>
+      </div>
+
+
+                      </TableBodyCell>
+
+        </TableBodyRow>
+
+
+
+
+
+{#if 0}
 
          <TableBodyRow>      
         <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Cloud</p>
@@ -943,6 +822,9 @@ NA
                       </TableBodyCell>
 
         </TableBodyRow>
+{/if}
+
+
 
 
   </TableBody>

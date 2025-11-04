@@ -3039,7 +3039,7 @@
 {#if saved_changed_wan_data != "" && saved_changed_wan_data.config.networking_wan_port_switch==1}  
   <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={1} on:change={NewIncomingIfChanged}>Ethernet WAN</Radio>
 {/if}  
-  <Radio bind:group={newPFW_Item[new_pfw_index].incomingIf} value={2} on:change={NewIncomingIfChanged}>Cellular WAN</Radio>
+
 {#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
 
 {#if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
@@ -3463,7 +3463,7 @@ saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole ==1}
 {#if saved_changed_wan_data != "" && saved_changed_wan_data.config.networking_wan_port_switch==1}  
   <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={1} on:change={NewIncomingIfChanged}>Ethernet WAN</Radio>
 {/if}  
-  <Radio bind:group={changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf} value={2} on:change={NewIncomingIfChanged}>Cellular WAN</Radio>
+
 {#if saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1}  
 
 {#if saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0}
@@ -3885,7 +3885,6 @@ saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole ==1}
 {#if getDataReady == 1}
   <Radio bind:group={changed_nat_data.config.networking_nat_dmz.interface} value={0} >All</Radio>
   <Radio bind:group={changed_nat_data.config.networking_nat_dmz.interface} value={1} >Ethernet WAN</Radio>
-  <Radio bind:group={changed_nat_data.config.networking_nat_dmz.interface} value={2} >Cellular WAN</Radio>
 {/if}
 </div></td>
 </tr>

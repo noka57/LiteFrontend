@@ -1174,7 +1174,6 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
         </svelte:fragment>
 						<SidebarDropdownItem label="Certificate" href='/certificate' active={activeUrl === '/certificate'}/>
 
-						<SidebarDropdownItem label="Password" href='/password' active={activeUrl === '/password'}/>
 					</SidebarDropdownWrapper>
 
 					<SidebarDropdownWrapper

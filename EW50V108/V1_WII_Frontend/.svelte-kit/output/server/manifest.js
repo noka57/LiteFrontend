@@ -3,7 +3,7 @@ export const manifest = {
 	assets: new Set(["EWLOGO.png","favicon.png"]),
 	mimeTypes: {".png":"image/png"},
 	_: {
-		entry: {"file":"_app/immutable/start-6f8892c6.js","imports":["_app/immutable/start-6f8892c6.js","_app/immutable/chunks/index-1ab591d7.js","_app/immutable/chunks/index-6fbc3f26.js"],"stylesheets":[]},
+		entry: {"file":"_app/immutable/start-61183a9c.js","imports":["_app/immutable/start-61183a9c.js","_app/immutable/chunks/index-1ab591d7.js","_app/immutable/chunks/index-6fbc3f26.js"],"stylesheets":[]},
 		nodes: [
 			() => import('./nodes/0.js'),
 			() => import('./nodes/1.js'),

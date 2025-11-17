@@ -1914,215 +1914,7 @@
 
 
 
-    let new_data_model_slave=[
-    {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-    },
-        {
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 3,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-    }
 
-    ];
-
-
-    let new_data_model_slave_modal=false;
-    let new_data_model_slave_index;
-
-    function new_data_model_slave_trigger(index)
-    {
-        new_data_model_slave[index].enable=true;
-        new_data_model_slave[index].delete=false;
-        new_data_model_slave[index].dataModelName="";
-        new_data_model_slave[index].profile="";
-        new_data_model_slave[index].slaveId=0;
-        new_data_model_slave[index].pointType=3;
-        new_data_model_slave[index].address=0;
-        new_data_model_slave[index].quantity=1;
-        new_data_model_slave[index].byteOrder= 0;
-
-
-        new_data_model_slave_index=index;
-        new_data_model_slave_modal=true;
-
-    }
-
-    function add_new_data_model_slave(index)
-    {
-        new_data_model_slave_modal=false;
-
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave=[...changed_modbus_data.config.fieldManagement_modbus_data_model.slave,new_data_model_slave[index]];
-    }
-
-
-
-
-   let backup_data_model_slave={
-        enable: false,
-        delete: false,
-        dataModelName: "",
-        profile: "",
-        slaveId: 2,
-        pointType: 0,
-        address: 0,
-        quantity: 1,
-        byteOrder: 0
-
-    };
-
-    let Modify_Data_Model_Slave_Modal=false;
-    let Modify_Data_Model_Slave_index;
-
-    function deleteDataModelSlave(index)
-    {
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].delete=true;
-    }
-
-    function RestoreDeleteDataModelSlave(index)
-    {
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].delete=false;
-    }
-
-
-    function TriggerModifyDataModelSlave(index)
-    {
-        Modify_Data_Model_Slave_Modal=true;
-        Modify_Data_Model_Slave_index=index;
-        backup_data_model_slave.enable=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].enable;
-        backup_data_model_slave.delete=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].delete;        
-        backup_data_model_slave.dataModelName=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].dataModelName;
-        backup_data_model_slave.profile=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].profile;
-        backup_data_model_slave.slaveId=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].slaveId;        
-        backup_data_model_slave.pointType=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].pointType;      
-        backup_data_model_slave.address=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].address; 
-        backup_data_model_slave.quantity=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].quantity;
-        backup_data_model_slave.byteOrder=changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].byteOrder;
-
-
-    }
-
-    function NoModifyDataModelSlave(index)
-    {
-        Modify_Data_Model_Slave_Modal=false;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].enable=backup_data_model_slave.enable;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].delete=backup_data_model_slave.delete;        
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].dataModelName=backup_data_model_slave.dataModelName;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].profile=backup_data_model_slave.profile;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].slaveId=backup_data_model_slave.slaveId;        
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].pointType=backup_data_model_slave.pointType;      
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].address=backup_data_model_slave.address; 
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].quantity=backup_data_model_slave.quantity;
-        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[index].byteOrder=backup_data_model_slave.byteOrder;
-
-    }
-
-    function ModifyDataModelSlave()
-    {
-        Modify_Data_Model_Slave_Modal=false;  
-    }
 
 
 
@@ -2292,6 +2084,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     },
@@ -2300,6 +2094,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     },
@@ -2308,6 +2104,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     },
@@ -2316,6 +2114,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     },
@@ -2324,6 +2124,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     },
@@ -2332,6 +2134,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     },
@@ -2340,6 +2144,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     },
@@ -2348,6 +2154,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     },
@@ -2356,6 +2164,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     },
@@ -2364,6 +2174,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     }
@@ -2379,6 +2191,8 @@
         new_gateway_r2t[index].delete=false;        
         new_gateway_r2t[index].aliasName="";
         new_gateway_r2t[index].rtuProfileSlave="";
+        new_gateway_r2t[index].rtuSlaveID=-1;
+        new_gateway_r2t[index].tcpRemoteUnitID=-1;
         new_gateway_r2t[index].tcpProfileMaster="";
         new_gateway_r2t[index].responseTimeout=1000;
         new_gateway_r2t_index=index;
@@ -2399,6 +2213,8 @@
         delete: false,
         aliasName: "",
         rtuProfileSlave: "",
+        rtuSlaveID:-1,
+        tcpRemoteUnitID:-1,
         tcpProfileMaster: "",
         responseTimeout: 1000
     };
@@ -2425,6 +2241,8 @@
         backup_gateway_r2t.delete=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].delete;        
         backup_gateway_r2t.aliasName=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].aliasName;
         backup_gateway_r2t.rtuProfileSlave=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].rtuProfileSlave;
+        backup_gateway_r2t.rtuSlaveID=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].rtuSlaveID;
+        backup_gateway_r2t.tcpRemoteUnitID=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].tcpRemoteUnitID;        
         backup_gateway_r2t.tcpProfileMaster=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].tcpProfileMaster;
         backup_gateway_r2t.responseTimeout=changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].responseTimeout;
     }
@@ -2436,6 +2254,11 @@
         changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].delete=backup_gateway_r2t.delete;        
         changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].aliasName=backup_gateway_r2t.aliasName;
         changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].rtuProfileSlave=backup_gateway_r2t.rtuProfileSlave;
+
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].rtuSlaveID=backup_gateway_r2t.rtuSlaveID;
+
+        changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].tcpRemoteUnitID=backup_gateway_r2t.tcpRemoteUnitID;
+
         changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].tcpProfileMaster=backup_gateway_r2t.tcpProfileMaster;
         changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[index].responseTimeout=backup_gateway_r2t.responseTimeout;
 
@@ -3600,25 +3423,7 @@
         {
           compareObjects(changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i], modbus_data.config.fieldManagement_modbus_rtu.slave[i], 8, 1,i+1);
 
-            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length; j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName 
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName != "")
-                {
 
-                    if (!changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].delete)
-                    {
-                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile= changed_modbus_data.config.fieldManagement_modbus_rtu.slave[i].aliasName;
-                    }
-                    else
-                    {
-                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile="";
-                    }
-
-                }
-
-            }
 
             for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp.length; j++)
             {
@@ -3897,25 +3702,7 @@
         {
             compareObjects(changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i], modbus_data.config.fieldManagement_modbus_tcp.slave[i], 6, 1,i+1);
 
-            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length; j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName 
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != "")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].delete)
-                    {
-                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile= changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
-                    }
-                    else
-                    {
-                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile="";
-                    }
 
-
-                }
-
-            }
 
             for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length; j++)
             {
@@ -3961,24 +3748,7 @@
 
         for (let i=modbus_data.config.fieldManagement_modbus_tcp.slave.length; i< saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave.length; i++ )
         {
-            for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave.length; j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName 
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName != "")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].delete)
-                    {
-                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[i].aliasName;
-                    }
-                    else
-                    {
-                        changed_modbus_data.config.fieldManagement_modbus_data_model.slave[j].profile="";
-                    }
 
-                }
-
-            }
 
             for (let j=0;j < saved_changed_modbus_data.config.fieldManagement_modbus_gateway.fromTcpToRtu.length; j++)
             {
@@ -7457,7 +7227,9 @@
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell>Alias Name</TableHeadCell>
     <TableHeadCell>RTU Slave Profile</TableHeadCell>
+    <TableHeadCell>RTU Slave ID</TableHeadCell>
     <TableHeadCell>TCP Master Profile</TableHeadCell>
+    <TableHeadCell>TCP Remote Unit ID</TableHeadCell>
     <TableHeadCell>Response Timeout</TableHeadCell>
   </TableHead>
   <TableBody>
@@ -7503,7 +7275,10 @@
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-4 strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Rtu2TcpItem.aliasName}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{Rtu2TcpItem.rtuProfileSlave}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Rtu2TcpItem.rtuSlaveID}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Rtu2TcpItem.tcpProfileMaster}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Rtu2TcpItem.tcpRemoteUnitID}</td>
+
 <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-10 strikeout">{Rtu2TcpItem.responseTimeout} ms</td>
 
       </tr>
@@ -7537,7 +7312,9 @@
      <TableBodyCell class="!p-6 w-4">{index+1}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.aliasName}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{Rtu2TcpItem.rtuProfileSlave}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.rtuSlaveID}</TableBodyCell>
       <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.tcpProfileMaster}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.tcpRemoteUnitID}</TableBodyCell>      
       <TableBodyCell class="!p-6 w-10">{Rtu2TcpItem.responseTimeout} ms</TableBodyCell>
 
 
@@ -7572,7 +7349,9 @@
       <TableBodyCell class="!p-6 w-18"> </TableBodyCell>
       <TableBodyCell class="!p-6 w-10"></TableBodyCell>
       <TableBodyCell class="!p-6 w-10"></TableBodyCell>
-
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>      
+      <TableBodyCell class="!p-6 w-10"></TableBodyCell>
 
     </TableBodyRow>
 
@@ -7639,6 +7418,15 @@
 
 </tr>
 
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave ID</p></td>
+      <td class="pl-5 pt-5"><input type="number" bind:value={new_gateway_r2t[new_gateway_r2t_index].rtuSlaveID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
 
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
@@ -7657,6 +7445,15 @@
     </td>
 
 </tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Remote Unit ID</p></td>
+      <td class="pl-5 pt-5"><input type="number" bind:value={new_gateway_r2t[new_gateway_r2t_index].tcpRemoteUnitID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={new_gateway_r2t[new_gateway_r2t_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>
@@ -7739,6 +7536,15 @@
 </tr>
 
 
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">RTU Slave ID</p></td>
+      <td class="pl-5 pt-5"><input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].rtuSlaveID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
+
   <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Master Profile</p></td>
     <td class= "pl-4 pt-4">
@@ -7755,6 +7561,15 @@
     </td>
 
 </tr>
+
+<tr>
+      <td><p class="pl-2 pt-4 text-lg font-light text-right">TCP Remote Unit ID</p></td>
+      <td class="pl-5 pt-5"><input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].tcpRemoteUnitID} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+
+
+
+  </tr>
+
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].responseTimeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td><td><p class="pl-2 pt-4 text-lg"> ms</p></td>

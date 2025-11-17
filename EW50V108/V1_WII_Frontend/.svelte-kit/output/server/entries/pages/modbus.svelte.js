@@ -1344,6 +1344,8 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       delete: false,
       aliasName: "",
       rtuProfileSlave: "",
+      rtuSlaveID: -1,
+      tcpRemoteUnitID: -1,
       tcpProfileMaster: "",
       responseTimeout: 1e3
     },
@@ -1352,6 +1354,8 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       delete: false,
       aliasName: "",
       rtuProfileSlave: "",
+      rtuSlaveID: -1,
+      tcpRemoteUnitID: -1,
       tcpProfileMaster: "",
       responseTimeout: 1e3
     },
@@ -1360,6 +1364,8 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       delete: false,
       aliasName: "",
       rtuProfileSlave: "",
+      rtuSlaveID: -1,
+      tcpRemoteUnitID: -1,
       tcpProfileMaster: "",
       responseTimeout: 1e3
     },
@@ -1368,6 +1374,8 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       delete: false,
       aliasName: "",
       rtuProfileSlave: "",
+      rtuSlaveID: -1,
+      tcpRemoteUnitID: -1,
       tcpProfileMaster: "",
       responseTimeout: 1e3
     },
@@ -1376,6 +1384,8 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       delete: false,
       aliasName: "",
       rtuProfileSlave: "",
+      rtuSlaveID: -1,
+      tcpRemoteUnitID: -1,
       tcpProfileMaster: "",
       responseTimeout: 1e3
     },
@@ -1384,6 +1394,8 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       delete: false,
       aliasName: "",
       rtuProfileSlave: "",
+      rtuSlaveID: -1,
+      tcpRemoteUnitID: -1,
       tcpProfileMaster: "",
       responseTimeout: 1e3
     },
@@ -1392,6 +1404,8 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       delete: false,
       aliasName: "",
       rtuProfileSlave: "",
+      rtuSlaveID: -1,
+      tcpRemoteUnitID: -1,
       tcpProfileMaster: "",
       responseTimeout: 1e3
     },
@@ -1400,6 +1414,8 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       delete: false,
       aliasName: "",
       rtuProfileSlave: "",
+      rtuSlaveID: -1,
+      tcpRemoteUnitID: -1,
       tcpProfileMaster: "",
       responseTimeout: 1e3
     },
@@ -1408,6 +1424,8 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       delete: false,
       aliasName: "",
       rtuProfileSlave: "",
+      rtuSlaveID: -1,
+      tcpRemoteUnitID: -1,
       tcpProfileMaster: "",
       responseTimeout: 1e3
     },
@@ -1416,6 +1434,8 @@ const Modbus = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       delete: false,
       aliasName: "",
       rtuProfileSlave: "",
+      rtuSlaveID: -1,
+      tcpRemoteUnitID: -1,
       tcpProfileMaster: "",
       responseTimeout: 1e3
     }
@@ -3401,7 +3421,17 @@ ${validate_component(Modal, "Modal").$$render(
                               })}
     ${validate_component(TableHeadCell, "TableHeadCell").$$render($$result, {}, {}, {
                                 default: () => {
+                                  return `RTU Slave ID`;
+                                }
+                              })}
+    ${validate_component(TableHeadCell, "TableHeadCell").$$render($$result, {}, {}, {
+                                default: () => {
                                   return `TCP Master Profile`;
+                                }
+                              })}
+    ${validate_component(TableHeadCell, "TableHeadCell").$$render($$result, {}, {}, {
+                                default: () => {
+                                  return `TCP Remote Unit ID`;
                                 }
                               })}
     ${validate_component(TableHeadCell, "TableHeadCell").$$render($$result, {}, {}, {
@@ -3429,6 +3459,9 @@ ${validate_component(Modal, "Modal").$$render(
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "!p-6 w-10" }, {}, {})}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "!p-6 w-18" }, {}, {})}
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "!p-6 w-10" }, {}, {})}
+      ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "!p-6 w-10" }, {}, {})}
+      ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "!p-6 w-10" }, {}, {})}
+      ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "!p-6 w-10" }, {}, {})}      
       ${validate_component(TableBodyCell, "TableBodyCell").$$render($$result, { class: "!p-6 w-10" }, {}, {})}`;
                                 }
                               })}
@@ -3484,11 +3517,19 @@ ${validate_component(Modal, "Modal").$$render(
                                   return `<option${add_attribute("value", RSlave.aliasName, 0)}>${escape(RSlave.aliasName)}</option>`;
                                 })}</select></td></tr>
 
+<tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">RTU Slave ID</p></td>
+      <td class="${"pl-5 pt-5"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", new_gateway_r2t[new_gateway_r2t_index].rtuSlaveID, 0)}></td></tr>
+
+
 
   <tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">TCP Master Profile</p></td>
     <td class="${"pl-4 pt-4"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${""}">Choose Profile ...</option>${each(saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master, (TMaster, index) => {
                                   return `<option${add_attribute("value", TMaster.aliasName, 0)}>${escape(TMaster.aliasName)}</option>`;
                                 })}</select></td></tr>
+
+<tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">TCP Remote Unit ID</p></td>
+      <td class="${"pl-5 pt-5"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", new_gateway_r2t[new_gateway_r2t_index].tcpRemoteUnitID, 0)}></td></tr>
+
 
 <tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">Response Timeout</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", new_gateway_r2t[new_gateway_r2t_index].responseTimeout, 0)}></td><td><p class="${"pl-2 pt-4 text-lg"}">ms</p></td>
 <td></td>
@@ -3555,10 +3596,18 @@ ${validate_component(Modal, "Modal").$$render(
                                 })}</select></td></tr>
 
 
+<tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">RTU Slave ID</p></td>
+      <td class="${"pl-5 pt-5"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].rtuSlaveID, 0)}></td></tr>
+
+
   <tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">TCP Master Profile</p></td>
     <td class="${"pl-4 pt-4"}"><select class="${"block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48"}"><option disabled="${""}" value="${""}">Choose Profile ...</option>${each(saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master, (TMaster, index) => {
                                   return `<option${add_attribute("value", TMaster.aliasName, 0)}>${escape(TMaster.aliasName)}</option>`;
                                 })}</select></td></tr>
+
+<tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">TCP Remote Unit ID</p></td>
+      <td class="${"pl-5 pt-5"}"><input type="${"number"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].tcpRemoteUnitID, 0)}></td></tr>
+
 
 <tr><td><p class="${"pl-2 pt-4 text-lg font-light text-right"}">Response Timeout</p></td><td class="${"pl-5 pt-5"}"><input type="${"text"}" class="${"bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"}"${add_attribute("value", changed_modbus_data.config.fieldManagement_modbus_gateway.fromRtuToTcp[Modify_Gateway_R2T_index].responseTimeout, 0)}></td><td><p class="${"pl-2 pt-4 text-lg"}">ms</p></td>
 <td></td>

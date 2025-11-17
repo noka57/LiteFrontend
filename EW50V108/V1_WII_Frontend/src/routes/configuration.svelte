@@ -97,8 +97,14 @@
     {
       defaultModal=true;
      // console.log("sessionBinary.length:", sessionBinary.length)
+     // console.log("fileContent:", fileContent);
       if (fileContent.length-sessionBinary.length <120)
       {
+            CheckedConfigInvalid=1;
+      }
+      else if (fileContent[sessionBinary.length+16]!=3 || fileContent[sessionBinary.length+17]!=0 || fileContent[sessionBinary.length+18]!= 0 || fileContent[sessionBinary.length+19]!=0)
+      {
+            console.log("This is not version 3 config");
             CheckedConfigInvalid=1;
       }
       else

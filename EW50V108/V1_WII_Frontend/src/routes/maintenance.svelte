@@ -335,54 +335,55 @@
         [fileMajor, fileMinor, filePatch] = parseVersion(version);
         console.log(fileMajor,fileMinor,filePatch);
 
-        defaultModal=true;
 
-        if (localUpdateKeepConfig ==1)
-        {
-          const res = await fetch(window.location.origin+"/updateFwr", {
-          method: 'POST',
-          body: fwrContent,
-              headers: {
-                'Content-Type': 'application/octet-stream',
-              },
-            }
-          )
 
-          if (res.status == 200)
+          defaultModal=true;
+          if (localUpdateKeepConfig ==1)
           {
-            uploadfwrIsValid=1;
-            console.log("200 Valid Fwr, updating...");
-            RestartIntervalId = setInterval(sendPing, 5000);
+            const res = await fetch(window.location.origin+"/updateFwr", {
+            method: 'POST',
+            body: fwrContent,
+                headers: {
+                  'Content-Type': 'application/octet-stream',
+                },
+              }
+            )
+
+            if (res.status == 200)
+            {
+              uploadfwrIsValid=1;
+              console.log("200 Valid Fwr, updating...");
+              RestartIntervalId = setInterval(sendPing, 5000);
+            }
+            else
+            {
+              magicValid=0;
+              CheckedFwrInvalid=1;
+            }
           }
           else
           {
-            magicValid=0;
-            CheckedFwrInvalid=1;
-          }
-        }
-        else
-        {
-          const res = await fetch(window.location.origin+"/UpdateFwrNokeepC", {
-          method: 'POST',
-          body: fwrContent,
-              headers: {
-                'Content-Type': 'application/octet-stream',
-              },
-            }
-          )
+            const res = await fetch(window.location.origin+"/UpdateFwrNokeepC", {
+            method: 'POST',
+            body: fwrContent,
+                headers: {
+                  'Content-Type': 'application/octet-stream',
+                },
+              }
+            )
 
-          if (res.status == 200)
-          {
-            uploadfwrIsValid=1;
-            console.log("200 Valid Fwr, updating...");
-            RestartIntervalId = setInterval(sendPing, 5000);
+            if (res.status == 200)
+            {
+              uploadfwrIsValid=1;
+              console.log("200 Valid Fwr, updating...");
+              RestartIntervalId = setInterval(sendPing, 5000);
+            }
+            else
+            {
+              magicValid=0;
+              CheckedFwrInvalid=1;
+            }        
           }
-          else
-          {
-            magicValid=0;
-            CheckedFwrInvalid=1;
-          }        
-        }
       }
 
 

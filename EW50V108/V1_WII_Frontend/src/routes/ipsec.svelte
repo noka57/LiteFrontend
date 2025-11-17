@@ -410,22 +410,22 @@
             } 
 
 
-            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id !=
-            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id)
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate !=
+            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate)
             {
-                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id;
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate;
                 let arrayindex=i+1;
-                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: local_id has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: local_certificate has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate;
                 initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
             }
 
 
-            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id !=
-            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id)
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate !=
+            ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate)
             {
-                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id;
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate;
                 let arrayindex=i+1;
-                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: remote_id has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: remote_certificate has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate;
                 initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
             } 
 
@@ -480,22 +480,22 @@
             } 
 
 
-            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id !=
-            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id)
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate !=
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate)
             {
-                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id;
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate;
                 let arrayindex=i+1;
-                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: local_id has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: local_certificate has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate;
                 initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
             }
 
 
-            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id !=
-            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id)
+            if (changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate !=
+            saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate)
             {
-                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id;
+                saved_changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate;
                 let arrayindex=i+1;
-                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: remote_id has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id;
+                let changedstr="Initiator Connection List No."+arrayindex+" item is changed: remote_certificate has changed to "+changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate;
                 initiator_conn_general_changedValues=[...initiator_conn_general_changedValues, changedstr];
             } 
 
@@ -744,88 +744,77 @@
     let BackupRCG={
         "enable":false,
         "delete":false,
-        "remote_id": "",
-        "psk":"",
+        "remote_certificate": "",
         "type": 0
     };
 
     let newRCG_item=[{
             "enable":true,
             "delete":false,
-            "remote_id": "",
-            "psk":"",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
         {
             "enable":true,
             "delete":false,
-            "remote_id": "",
-            "psk":"",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
         {
             "enable":true,
             "delete":false,
-            "remote_id": "",
-            "psk":"",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
         {
             "enable":true,
             "delete":false,
-            "remote_id": "",
-            "psk":"",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
         {
             "enable":true,
             "delete":false,
-            "remote_id": "",
-            "psk":"",  
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
         {
             "enable":true,
             "delete":false,
-            "remote_id": "",
-            "psk":"",  
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
         {
             "enable":true,
             "delete":false,
-            "remote_id": "",
-            "psk":"",  
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
         {
             "enable":true,
             "delete":false,
-            "remote_id": "",
-            "psk":"",  
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
         {
             "enable":true,
             "delete":false,
-            "remote_id": "",
-            "psk":"",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
         {
             "enable":true,
             "delete":false,
-            "remote_id": "",
-            "psk":"",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         }
@@ -849,8 +838,7 @@
       responderConnGeneralCurrentIndex=index;
       BackupRCG.enable=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].enable;
       BackupRCG.delete=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].delete;
-      BackupRCG.remote_id=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].remote_id;
-      BackupRCG.psk=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].psk;      
+      BackupRCG.remote_certificate=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].remote_certificate;
       BackupRCG.type=changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].type;
 
     }
@@ -859,8 +847,7 @@
       responderConnGeneralModal = false;
       changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].enable=BackupRCG.enable;      
       changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].delete=BackupRCG.delete; 
-      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].remote_id=BackupRCG.remote_id;
-      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].psk=BackupRCG.psk;
+      changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].remote_certificate=BackupRCG.remote_certificate;
       changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].type=BackupRCG.type;
 
     }
@@ -874,8 +861,7 @@
     function NewRCG_Item_Invoker(index){
       newRCG_item[index].enable=true;
       newRCG_item[index].delete=false;      
-      newRCG_item[index].remote_id="";
-      newRCG_item[index].psk="";      
+      newRCG_item[index].remote_certificate="";
       newRCG_item[index].type=0;
       newRCG_index=index;
       newRCG_Modal=true;
@@ -898,9 +884,8 @@
         "delete":false,
         "name": 0,
         "remote_host":"",
-        "local_id": "",
-        "remote_id": "",
-        "psk":"",
+        "local_certificate": "",
+        "remote_certificate": "",
         "type": 0
     };
 
@@ -909,9 +894,8 @@
             "delete":false,
             "name": 0,
             "remote_host":"",
-            "local_id": "",
-            "remote_id": "",
-            "psk":"",            
+            "local_certificate": "",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
@@ -920,9 +904,8 @@
             "delete":false,
             "name": 0,
             "remote_host":"",
-            "local_id": "",
-            "remote_id": "",
-            "psk":"",            
+            "local_certificate": "",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
@@ -931,9 +914,8 @@
             "delete":false,
             "name": 0,
             "remote_host":"",
-            "local_id": "",
-            "remote_id": "",
-            "psk":"",            
+            "local_certificate": "",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
@@ -942,9 +924,8 @@
             "delete":false,
             "name": 0,
             "remote_host":"",
-            "local_id": "",
-            "remote_id": "",
-            "psk":"",            
+            "local_certificate": "",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
@@ -953,9 +934,8 @@
             "delete":false,
             "name": 0,
             "remote_host":"",
-            "local_id": "",
-            "remote_id": "",
-            "psk":"",            
+            "local_certificate": "",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
@@ -964,9 +944,8 @@
             "delete":false,
             "name": 0,
             "remote_host":"",
-            "local_id": "",
-            "remote_id": "",
-            "psk":"",            
+            "local_certificate": "",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
@@ -975,9 +954,8 @@
             "delete":false,
             "name": 0,
             "remote_host":"",
-            "local_id": "",
-            "remote_id": "",
-            "psk":"",            
+            "local_certificate": "",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
@@ -986,9 +964,8 @@
             "delete":false,
             "name": 0,
             "remote_host":"",
-            "local_id": "",
-            "remote_id": "",
-            "psk":"",            
+            "local_certificate": "",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
@@ -997,9 +974,8 @@
             "delete":false,
             "name": 0,
             "remote_host":"",
-            "local_id": "",
-            "remote_id": "",
-            "psk":"",            
+            "local_certificate": "",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         },
@@ -1008,9 +984,8 @@
             "delete":false,
             "name": 0,
             "remote_host":"",
-            "local_id": "",
-            "remote_id": "",
-            "psk":"",            
+            "local_certificate": "",
+            "remote_certificate": "",
             "type": 0,
             "tunnel_subnet":[]
         }
@@ -1035,9 +1010,8 @@
       BackupICG.delete=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].delete;
       BackupICG.name=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].name;
       BackupICG.remote_host=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].remote_host;
-      BackupICG.local_id=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].local_id;
-      BackupICG.remote_id=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].remote_id;
-      BackupICG.psk=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].psk;      
+      BackupICG.local_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].local_certificate;
+      BackupICG.remote_certificate=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].remote_certificate;
       BackupICG.type=changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].type;
 
     }
@@ -1048,9 +1022,8 @@
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].delete=BackupICG.delete; 
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].name=BackupICG.name;
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].remote_host=BackupICG.remote_host;
-      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].local_id=BackupICG.local_id;
-      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].remote_id=BackupICG.remote_id;
-      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].psk=BackupICG.psk;      
+      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].local_certificate=BackupICG.local_certificate;
+      changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].remote_certificate=BackupICG.remote_certificate;
       changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[index].type=BackupICG.type;
 
     }
@@ -1066,9 +1039,8 @@
       newICG_item[index].delete=false;      
       newICG_item[index].name="";
       newICG_item[index].remote_host="";
-      newICG_item[index].local_id="";
-      newICG_item[index].remote_id="";
-      newICG_item[index].psk="";      
+      newICG_item[index].local_certificate="";
+      newICG_item[index].remote_certificate="";
       newICG_item[index].type=0;
       newICG_index=index;
       newICG_Modal=true;
@@ -2018,7 +1990,7 @@ async function getIpsecStatus() {
   }
 
    async function getIPsecData () {
-    const res = await fetch(window.location.origin+"/getIPsecPSkData", {
+    const res = await fetch(window.location.origin+"/getIPsecdata", {
       method: 'POST',
       body: sessionBinary
     })
@@ -2105,11 +2077,9 @@ async function getIpsecStatus() {
 
           changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_host));
 
-          changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_id));
+          changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].local_certificate));
 
-          changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_id));
-
-          changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].psk=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].psk));
+          changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].remote_certificate));
 
           changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type=JSON.parse(JSON.stringify(ipsec_data.config.vpn_ipsec_connection.initiator_conn[i].type));
 
@@ -2286,9 +2256,8 @@ async function getIpsecStatus() {
     <TableHeadCell class="w-10">No</TableHeadCell>
     <TableHeadCell class="w-18">Name</TableHeadCell>
     <TableHeadCell class="w-18">Remote Host</TableHeadCell>
-    <TableHeadCell class="w-18">Remote ID</TableHeadCell>    
-    <TableHeadCell class="w-18">Local ID</TableHeadCell>
-    <TableHeadCell class="w-18">Preshared Key</TableHeadCell>    
+    <TableHeadCell class="w-18">Remote Certificate</TableHeadCell>
+    <TableHeadCell class="w-18">Local Certificate</TableHeadCell>
     <TableHeadCell class="w-18">Type</TableHeadCell>
 
 
@@ -2338,9 +2307,8 @@ async function getIpsecStatus() {
 
   <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.name}</td>
   <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.remote_host}</td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.remote_id}</td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.local_id}</td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.psk}</td>  
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.remote_certificate}</td>
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{initiatorConn.local_certificate}</td>
 {#if initiatorConn.type==0}
   <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Site-To-Site</td>
 {:else if initiatorConn.type==1}
@@ -2383,9 +2351,8 @@ async function getIpsecStatus() {
                     <TableBodyCell class="w-10">{index+1}</TableBodyCell>
                     <TableBodyCell class="w-18">{initiatorConn.name}</TableBodyCell>
                     <TableBodyCell class="w-18">{initiatorConn.remote_host}</TableBodyCell>
-                    <TableBodyCell class="w-18">{initiatorConn.remote_id}</TableBodyCell>
-                    <TableBodyCell class="w-18">{initiatorConn.local_id}</TableBodyCell>
-                    <TableBodyCell class="w-18">{initiatorConn.psk}</TableBodyCell>                    
+                    <TableBodyCell class="w-18">{initiatorConn.remote_certificate}</TableBodyCell>
+                    <TableBodyCell class="w-18">{initiatorConn.local_certificate}</TableBodyCell>
 {#if initiatorConn.type==0}
                     <TableBodyCell class="w-18">Site-To-Site</TableBodyCell>
 {:else if initiatorConn.type==1}
@@ -2422,7 +2389,6 @@ async function getIpsecStatus() {
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>      
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
 
@@ -2480,11 +2446,10 @@ async function getIpsecStatus() {
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote ID</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
     <td class= "pl-4 pt-4">
-<input type="text" bind:value={newICG_item[newICG_index].remote_id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 
-{#if 0}
+
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={newICG_item[newICG_index].remote_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getRemoteCertReady== 1}
@@ -2493,33 +2458,25 @@ async function getIpsecStatus() {
 {/each}
 {/if}
 </select>
-{/if}
+
     
 
     </td>
-
-    {#if 0}
     <td class="pl-5 pt-1">
 <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 <Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
     </td>
-{/if}
+
 </tr>
 
 
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local ID</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
     <td class= "pl-4 pt-4">
-
-
-<input type="text" bind:value={newICG_item[newICG_index].local_id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-{#if 0}
-
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={newICG_item[newICG_index].local_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getMachineCertReady== 1}
@@ -2529,32 +2486,16 @@ async function getIpsecStatus() {
 {/if}
 </select>
 
-{/if}
+    
 
 
     </td>
-
-{#if 0}
-
     <td class="pl-5 pt-1">
-
-
-
 <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 <Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
     </td>
-
-{/if}
-
-  </tr>
-
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Preshared Key</p></td><td class="pl-5 pt-5"><input type="text" bind:value={newICG_item[newICG_index].psk} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
 
   </tr>
 
@@ -2624,13 +2565,8 @@ async function getIpsecStatus() {
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote ID</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
     <td class= "pl-4 pt-4">
-
-<input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].remote_id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-{#if 0}
-
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].remote_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getRemoteCertReady== 1}
@@ -2640,31 +2576,23 @@ async function getIpsecStatus() {
 {/if}
 </select>
 
-{/if}
-
 
     </td>
-{#if 0}
-
     <td class="pl-5 pt-1">
 <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 <Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
     </td>
-{/if}
+
 </tr>
 
 
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local ID</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
     <td class= "pl-4 pt-4">
-<input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].local_id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-{#if 0}
-
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].local_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getMachineCertReady== 1}
@@ -2673,11 +2601,9 @@ async function getIpsecStatus() {
 {/each}
 {/if}
 </select>
-{/if}
+
 
     </td>
-
-{#if 0}
 
     <td class="pl-5 pt-1">
 <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -2685,16 +2611,6 @@ async function getIpsecStatus() {
 </svg>
 <Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
     </td>
-
-{/if}
-
-  </tr>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Preshared Key</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.initiator_conn[initiatorConnGeneralCurrentIndex].psk} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
-
   </tr>
 
 
@@ -3023,12 +2939,11 @@ Responder Subnet
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Responder ID</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Responder Name</p></td><td class="pl-5 pt-5"><input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.name} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 
 
   </tr>
-{#if 0}
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Local Certificate</p></td>
@@ -3056,7 +2971,6 @@ Responder Subnet
 
 </tr>
 
-{/if}
 
 </table>
 <p class="pt-10"></p>
@@ -3083,8 +2997,7 @@ Responder Subnet
     </TableHeadCell>
     <TableHeadCell class="w-10">Enable</TableHeadCell>    
     <TableHeadCell class="w-10">No</TableHeadCell>
-    <TableHeadCell class="w-18">Remote ID</TableHeadCell>
-    <TableHeadCell class="w-18">Preshared Key</TableHeadCell>    
+    <TableHeadCell class="w-18">Remote Certificate</TableHeadCell>
     <TableHeadCell class="w-18">Type</TableHeadCell>
 
 
@@ -3132,8 +3045,7 @@ Responder Subnet
 
       <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-10 strikeout">{index+1}</td>
 
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Conn.remote_id}</td>
-  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Conn.psk}</td>  
+  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">{Conn.remote_certificate}</td>
 {#if Conn.type==0}
   <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white w-18 strikeout">Site-To-Site</td>
 {:else if Conn.type==1}
@@ -3174,8 +3086,7 @@ Responder Subnet
 
                     </TableBodyCell>
                     <TableBodyCell class="w-10">{index+1}</TableBodyCell>
-                    <TableBodyCell class="w-18">{Conn.remote_id}</TableBodyCell>
-                    <TableBodyCell class="w-18">{Conn.psk}</TableBodyCell>                    
+                    <TableBodyCell class="w-18">{Conn.remote_certificate}</TableBodyCell>
 {#if Conn.type==0}
                     <TableBodyCell class="w-18">Site-To-Site</TableBodyCell>
 {:else if Conn.type==1}
@@ -3214,7 +3125,6 @@ Responder Subnet
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
       <TableBodyCell class="w-18"></TableBodyCell>
-      <TableBodyCell class="w-18"></TableBodyCell>
 
     </TableBodyRow>
 
@@ -3236,10 +3146,8 @@ Responder Subnet
 <table>
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote ID</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
     <td class= "pl-4 pt-4">
-
-{#if 0}    
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={newRCG_item[newRCG_index].remote_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getRemoteCertReady== 1}
@@ -3249,13 +3157,9 @@ Responder Subnet
 {/if}
 </select>
     
-{/if}
-
-<input type="text" bind:value={newRCG_item[newRCG_index].remote_id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 
 
     </td>
-{#if 0}
 
     <td class="pl-5 pt-1">
 <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -3263,20 +3167,7 @@ Responder Subnet
 </svg>
 <Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
     </td>
-{/if}
-
   </tr>
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Preshared Key</p></td>
-    <td class= "pl-4 pt-4">
-<input type="text" bind:value={newRCG_item[newRCG_index].psk} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-</td>
-
-</tr>
-
-
 
   <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Type</p></td>
@@ -3329,10 +3220,8 @@ Responder Subnet
 
 
 <tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote ID</p></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">Remote Certificate</p></td>
     <td class= "pl-4 pt-4">
-{#if 0}
-
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-full" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[responderConnGeneralCurrentIndex].remote_certificate}>
 <option disabled="" value="none">Choose Certificate ...</option>
 {#if getRemoteCertReady== 1}
@@ -3341,32 +3230,18 @@ Responder Subnet
 {/each}
 {/if}
 </select>
-{/if}
 
-<input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[responderConnGeneralCurrentIndex].remote_id} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
 
     </td>
-
-{#if 0}    
     <td class="pl-5 pt-1">
 <svg id="click" fill="none" class="w-6 h-6" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 <Tooltip trigger="click" triggeredBy="#click">Please go to certificate page to upload certificate first.</Tooltip>
     </td>
-{/if}
 
 </tr>
 
-
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right">Preshared Key</p></td>
-    <td class= "pl-4 pt-4">
-<input type="text" bind:value={changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[responderConnGeneralCurrentIndex].psk} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500">
-
-</td>
-
-</tr>
 
 
 
@@ -3419,7 +3294,7 @@ Responder Subnet
 <option disabled="" value="none">Choose Connection ...</option>
 {#each saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection as Conn, index}
 {#if saved_changed_ipsec_data.config.vpn_ipsec_connection.responder_conn.connection[index].type == 0}
-<option value={index}>{Conn.remote_id}</option>
+<option value={index}>{Conn.remote_certificate}</option>
 {/if}
 {/each}
 </select>

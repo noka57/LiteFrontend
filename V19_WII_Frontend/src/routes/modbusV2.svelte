@@ -1026,7 +1026,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     };
 
     let new_tag_profile="";
@@ -1044,7 +1045,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1056,7 +1058,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1068,7 +1071,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1080,7 +1084,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1092,7 +1097,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1104,7 +1110,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1116,7 +1123,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1128,7 +1136,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1140,7 +1149,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1152,7 +1162,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1164,7 +1175,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1176,7 +1188,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1188,7 +1201,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1200,7 +1214,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1212,7 +1227,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1224,7 +1240,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1236,7 +1253,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1248,7 +1266,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1260,7 +1279,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1272,7 +1292,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1284,7 +1305,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1296,7 +1318,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1308,7 +1331,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1320,7 +1344,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1332,7 +1357,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1344,7 +1370,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1356,7 +1383,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1368,7 +1396,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1380,7 +1409,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1392,7 +1422,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1404,7 +1435,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1416,7 +1448,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1428,7 +1461,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1440,7 +1474,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1452,7 +1487,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1464,7 +1500,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1476,7 +1513,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1488,7 +1526,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1500,7 +1539,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1512,7 +1552,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1524,7 +1565,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1536,7 +1578,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1548,7 +1591,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1560,7 +1604,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1572,7 +1617,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1584,7 +1630,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1596,7 +1643,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1608,7 +1656,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },
     {
         enable: false,
@@ -1620,7 +1669,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     },                            
     {
         enable: false,
@@ -1632,7 +1682,8 @@
         dataType: 0,
         postprocessingEnable:false,
         postprocessingScale: "", 
-        postprocessingOffset: ""
+        postprocessingOffset: "",
+        errorHandling:0
     }
     ];
 
@@ -1648,7 +1699,20 @@
         new_tag_profile="";
         new_tag[index].enable=true;
         new_tag[index].delete=false;
-        new_tag[index].tagName="";
+
+        if (target_device_tag_type==0)
+        {
+            new_tag[index].tagName=saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[target_device_index].aliasName+"_";
+
+        }
+        else if (target_device_tag_type ==1)
+        {
+            new_tag[index].tagName=saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].aliasName+"_";  
+        }
+        else
+        {
+            new_tag[index].tagName=""
+        }
 
         new_tag[index].pointType=0;
         new_tag[index].address=0;
@@ -1657,6 +1721,7 @@
         new_tag[index].postprocessingEnable=false;
         new_tag[index].postprocessingScale="";
         new_tag[index].postprocessingOffset="";
+        new_tag[index].errorHandling=0;
         new_tag_index=index;
         new_tag_modal=true;
 
@@ -5989,7 +6054,7 @@
  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{RTUMasterItem.aliasName}</td>
  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{RTUMasterItem.serialProfile}</td>
  <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{RTUMasterItem.slave_id}</td>
- <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{RTUMasterItem.response_timeout}</td>
+ <td class="px-6 py-4 whitespace-nowrap font-medium  text-gray-900 dark:text-white !p-6 w-18 strikeout">{RTUMasterItem.response_timeout} ms</td>
       </tr>
 
 {:else}
@@ -6027,7 +6092,7 @@
       <TableBodyCell class="!p-6 w-18">{RTUMasterItem.aliasName}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{RTUMasterItem.serialProfile}</TableBodyCell>
       <TableBodyCell class="!p-6 w-18">{RTUMasterItem.slave_id}</TableBodyCell>
-      <TableBodyCell class="!p-6 w-18">{RTUMasterItem.response_timeout}</TableBodyCell>
+      <TableBodyCell class="!p-6 w-18">{RTUMasterItem.response_timeout} ms</TableBodyCell>
     </TableBodyRow>
 
 {/if}
@@ -6144,8 +6209,9 @@
 
 
 <tr>
-      <td><p class="pl-10 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="number" bind:value={new_rtu_master[New_RTU_Master_index].response_timeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Response Timeout</p></td>
+    <td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
+      <input type="number" bind:value={new_rtu_master[New_RTU_Master_index].response_timeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
 
 
   </tr>
@@ -6218,9 +6284,9 @@
 
 
 <tr>
-      <td><p class="pl-10 pt-4 text-lg font-light text-right">Response Timeout</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_rtu.master[Modify_RTU_Master_index].response_timeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
-
-
+      <td><p class="pl-10 pt-4 text-lg font-light text-right">Response Timeout</p></td>
+    <td class="pl-5 pt-5 w-18" colspan="2"><div class="flex gap-2">
+      <input type="number" bind:value={changed_modbus_data.config.fieldManagement_modbus_rtu.master[Modify_RTU_Master_index].response_timeout} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"><p class="pl-1 pt-4">ms</p></div></td>
 
   </tr>
 
@@ -6711,7 +6777,7 @@
 
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64" bind:value={target_device_tag} on:change={target_device_tag_changed}>
-<option disabled="" value="none">Choose Profile ...</option>
+<option disabled="" value="none">Choose ...</option>
 
 {#each saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave as TCPSlave,index}
 {#if index ==0}
@@ -6756,6 +6822,7 @@
     <TableHeadCell class="!p-1">Date Type</TableHeadCell>
     <TableHeadCell>Byte Order</TableHeadCell>
     <TableHeadCell>Post Processing</TableHeadCell>
+    <TableHeadCell>Error Handling</TableHeadCell>    
   </TableHead>
 
   <TableBody>
@@ -6873,7 +6940,13 @@
 
       </td>
 
-
+{#if TagItem.errorHandling==0} 
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Keep Last Valid Value</td>
+{:else if TagItem.errorHandlingr==1}   
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Reset To Zero</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout"></td>
+{/if}
 
 </tr>
 
@@ -6965,7 +7038,13 @@
 {/if}
 
       </TableBodyCell>
-
+{#if TagItem.errorHandling==0} 
+    <TableBodyCell >Keep Last Valid Value</TableBodyCell>
+{:else if TagItem.errorHandling==1}   
+        <TableBodyCell >Reset To Zero</TableBodyCell>
+{:else}
+    <TableBodyCell ></TableBodyCell>
+{/if}
 
 
     </TableBodyRow>
@@ -7088,6 +7167,15 @@
 
 
 
+{#if TagItem.errorHandling==0} 
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Keep Last Valid Value</td>
+{:else if TagItem.errorHandlingr==1}   
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Reset To Zero</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout"></td>
+{/if}
+
+
 </tr>
 
 {:else}
@@ -7179,7 +7267,13 @@
 
       </TableBodyCell>
 
-
+{#if TagItem.errorHandling==0} 
+    <TableBodyCell >Keep Last Valid Value</TableBodyCell>
+{:else if TagItem.errorHandling==1}   
+        <TableBodyCell >Reset To Zero</TableBodyCell>
+{:else}
+    <TableBodyCell ></TableBodyCell>
+{/if}
 
     </TableBodyRow>
 
@@ -7300,6 +7394,14 @@
       </td>
 
 
+{#if TagItem.errorHandling==0} 
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Keep Last Valid Value</td>
+{:else if TagItem.errorHandlingr==1}   
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">Reset To Zero</td>
+{:else}
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout"></td>
+{/if}
+
 
 </tr>
 
@@ -7386,6 +7488,16 @@
 
 
 
+{#if TagItem.errorHandling==0} 
+    <TableBodyCell >Keep Last Valid Value</TableBodyCell>
+{:else if TagItem.errorHandling==1}   
+        <TableBodyCell >Reset To Zero</TableBodyCell>
+{:else}
+    <TableBodyCell ></TableBodyCell>
+{/if}
+
+
+
     </TableBodyRow>
 
 {/if}
@@ -7455,6 +7567,7 @@
       <TableBodyCell></TableBodyCell>
       <TableBodyCell></TableBodyCell>
       <TableBodyCell></TableBodyCell>
+
     </TableBodyRow>
 
 
@@ -7472,6 +7585,8 @@
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
+        <td></td>        
     <td class="pl-4 pt-4"><Button color="blue" pill={true} on:click={saveTagV2}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
@@ -7604,6 +7719,18 @@
 
 <p class="mt-4">(X: Raw Data)</p>
 {/if}
+</div></td>
+</tr>
+
+
+  <tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Error Handling</p>
+
+  </td>
+
+    <td class="pl-4 pt-5" colspan="5"><div class="flex gap-2">
+  <Radio bind:group={new_tag[new_tag_index].errorHandling} value={0} >Keep Last Valid Value</Radio>
+  <Radio bind:group={new_tag[new_tag_index].errorHandling} value={1} >Reset To Zero</Radio>
 </div></td>
 </tr>
 

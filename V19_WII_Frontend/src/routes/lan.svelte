@@ -98,12 +98,13 @@
 
     compareObjects(changed_lan_data.config.networking_lan.ipStatic, lan_data.config.networking_lan.ipStatic,1);
 
+    let firstThreeParts=getFirstThreeParts(lan_data.config.networking_lan.ipStatic.ip);
     LanConfigChangedLog.set(changedValues);
     saved_changed_lan_data.config.networking_lan.ipStatic=JSON.parse(JSON.stringify(changed_lan_data.config.networking_lan.ipStatic));
     ChangedLANConfig.set(saved_changed_lan_data);
     let newPrefix=getFirstThreeParts(saved_changed_lan_data.config.networking_lan.ipStatic.ip);
 
-    if (firstThreeParts != newPrefix);
+    if (firstThreeParts != newPrefix)
     {
       firstThreeParts=newPrefix;
       SaveDHCPSettings();
@@ -112,13 +113,31 @@
 
   };
 
+  function DHCPServer_Check()
+  {
+    console.log("DHCPServer_Check()");
+    console.log(changed_lan_data.config.networking_lan.dhcpServer.enable);
+    if (changed_lan_data.config.networking_lan.dhcpServer.enable)
+    {
+      changed_lan_data.config.networking_lan.dhcpServer.enable=1;
+    }
+    else
+    {
+      changed_lan_data.config.networking_lan.dhcpServer.enable=0;
+    }
+  }
+
+
   function SaveDHCPSettings()
   {
-      console.log("Save DHCPServer Setting\r\n");
-      if (dhcpServerChangedValues.length !=0)
-      {
-        dhcpServerChangedValues=[]
-      }
+    console.log("Save DHCPServer Setting\r\n");
+    if (dhcpServerChangedValues.length !=0)
+    {
+      dhcpServerChangedValues=[]
+    }
+
+
+    DHCPServer_Check()  
 
     changed_lan_data.config.networking_lan.dhcpServer.startIP=`${firstThreeParts}${lastPartBegin}` 
     changed_lan_data.config.networking_lan.dhcpServer.endIP=`${firstThreeParts}${lastPartEnd}`
@@ -134,19 +153,7 @@
   }
 
 
-  function DHCPServer_Check()
-  {
-    console.log("DHCPServer_Check()");
-    console.log(changed_lan_data.config.networking_lan.dhcpServer.enable);
-    if (changed_lan_data.config.networking_lan.dhcpServer.enable)
-    {
-      changed_lan_data.config.networking_lan.dhcpServer.enable=1;
-    }
-    else
-    {
-      changed_lan_data.config.networking_lan.dhcpServer.enable=0;
-    }
-  }
+
 
 
    async function getLANData () {

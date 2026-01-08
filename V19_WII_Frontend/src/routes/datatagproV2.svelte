@@ -70,6 +70,9 @@
 
 
 
+
+
+
   let sessionid;
   let sessionBinary;
   sessionidG.subscribe(val => {
@@ -135,6 +138,99 @@
 
 
   let CloudProfile=[];
+
+
+
+    let activePreset = '';
+    let minute = '*';
+    let hour = '*';
+    let dayOfMonth = '*';
+    let month = '*';
+    let dayOfWeek = '*';
+
+    let action='reboot'
+
+
+    const presets = {
+    everyMinute: '* * * * * reboot',
+    hourly: '0 * * * * reboot',
+    daily: '0 0 * * * reboot',
+    weekly: '0 0 * * 7 reboot',
+    monthly: '0 0 1 * * reboot'
+    };
+
+
+    let cron = '* * * * * reboot';
+
+
+
+    let errors = {
+        minute: false,
+        hour: false,
+        dayOfMonth: false,
+        dayOfWeek: false
+    };
+
+    function updateCron() {
+        cron = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek} ${action}`;
+    }
+
+
+    function applyPreset(p) 
+    {
+        errors.minute=false;
+        errors.hour=false;
+        errors.dayOfMonth=false;
+        errors.dayOfWeek=false;
+        activePreset = p;
+        cron = presets[p];
+        [minute, hour, dayOfMonth, month, dayOfWeek, action] = cron.split(' ');
+    }
+
+
+
+
+    function isValidCronField(value, min, max) 
+    {
+        if (value === '*') return true;
+
+
+        const parts = value.split(',');
+
+        return parts.every(part => {
+          // step
+          if (part.includes('/')) {
+            const [base, step] = part.split('/');
+            if (!step || isNaN(step)) return false;
+            return base === '*' || isValidCronField(base, min, max);
+          }
+
+          // range
+          if (part.includes('-')) {
+            const [from, to] = part.split('-').map(Number);
+            return (
+              !isNaN(from) &&
+              !isNaN(to) &&
+              from >= min &&
+              to <= max &&
+              from <= to
+            );
+          }
+
+           //single number
+          const num = Number(part);
+          return !isNaN(num) && num >= min && num <= max;
+        });
+    }
+
+    const validators = {
+        minute: v => isValidCronField(v, 0, 59),
+        hour: v => isValidCronField(v, 0, 23),
+        dayOfMonth: v => isValidCronField(v, 1, 31),
+        month: v => isValidCronField(v, 1, 12),
+        dayOfWeek: v => isValidCronField(v, 1, 7)
+    };
+
 
   genericMQTTConfig.subscribe(val => {
       generic_mqtt_data = val;
@@ -2229,6 +2325,231 @@
     }
 
   }
+
+
+    function New_MasterStatus_UL(type, CloudIndex, device_index)
+    {
+      if(type==0)
+      {
+
+        if (device_index < new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+          
+        }
+
+        tcp_slave_tag_show=false;
+        showMenu=false;
+      }
+      else if (type ==1)
+      {
+        if (device_index < new_ul_rule[new_ul_rule_index].modbusTCPMasterTag.length)
+        {
+
+          if (cursorPosition !=-1)
+          {
+            if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }         
+        }
+
+        tcp_master_tag_show=false;
+        showMenu=false;
+      }
+      else if (type == 2)
+      {
+        if (device_index < new_ul_rule[new_ul_rule_index].modbusRTUMasterTag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${new_ul_rule[new_ul_rule_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+            new_ul_rule[new_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }        
+        }
+
+        rtu_master_tag_show=false;
+        showMenu=false;
+      }
+    }
+
+
+    function Modify_MasterStatus_UL(type,CloudIndex, device_index)
+    {
+      if(type==0)
+      {
+
+        if (device_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+
+        }
+
+        tcp_slave_tag_show=false;
+        showMenu=false;
+      }
+      else if (type ==1)
+      {
+        if (device_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+        }
+
+        tcp_master_tag_show=false;
+        showMenu=false;
+      }
+      else if (type == 2)
+      {
+        if (device_index < changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag.length)
+        {
+
+          if (cursorPosition !=-1)
+          {
+            if (changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+=`${changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+            changed_data_tag_pro_data.config.service_dataTagPro_ulRule[modify_ul_rule_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+          
+        }
+
+        rtu_master_tag_show=false;
+        showMenu=false;
+      }
+
+    }
+
+
+
 
   function New_clickTag_UL(type, CloudIndex, device_index, tag_index)
   {
@@ -10041,16 +10362,6 @@ on:click={onPageClick}></textarea>
   </tr>
 
 
-<tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Schedule Time</p></td>
-      <td class="pl-5 pt-5">
-
-<DateTimePicker bind:value={new_schedule_tag[new_schedule_tag_index].dayTimeStartString} />
-
-      </td>
-  </tr>
-
-
 
 
 <tr>
@@ -10131,9 +10442,38 @@ on:click={onPageClick}></textarea>
 
  <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
 
+ <p class="pl-10 pt-4 text-lg font-light text-right">on</p>
+{#if new_schedule_tag[new_schedule_tag_index].actionType==0}
+
+<DateTimePicker bind:value={new_schedule_tag[new_schedule_tag_index].dayTimeStartString} />
+
+{:else}
+<DateTimePicker bind:value={new_schedule_tag[new_schedule_tag_index].dayTimeStartString} disabled/>
+
+{/if}
+      
+
+
+ </div>
+  </td>
+</tr>
+
+
+<tr >
+
+<td></td>
+<td style="border: 1px solid black"></td>
+
+</tr>
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+
   <Radio bind:group={new_schedule_tag[new_schedule_tag_index].actionType} value={1}>Time Sync</Radio>
 
-
+{#if new_schedule_tag[new_schedule_tag_index].actionType==1}
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-36" bind:value={new_schedule_tag[new_schedule_tag_index].actionTimeSyncFormatType}>
 <option disabled="" value="none">Choose ...</option>
 
@@ -10142,11 +10482,19 @@ on:click={onPageClick}></textarea>
 <option value={2}>User Defined</option>
 </select>
 
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-36 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+<option disabled="" value="none">Choose ...</option>
+
+
+</select>
+
+{/if}
+
+
 <p class="pt-4"> with </p>
 
 {#if new_schedule_tag[new_schedule_tag_index].actionType==1}
-
-
 
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={new_schedule_tag[new_schedule_tag_index].modbusTagOwner} on:change={()=>handleScheTargetModbusChange(0)}>
@@ -10210,6 +10558,213 @@ on:click={onPageClick}></textarea>
 
   </tr>
 
+
+
+<tr>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
+
+ <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+
+ <p class="pl-10 pt-4 text-lg font-light text-right"></p>
+{#if new_schedule_tag[new_schedule_tag_index].actionType==1}
+<div>      
+<h3 class="font-semibold">Presets</h3>
+<div class="flex flex-wrap gap-3 mt-2 mb-6">
+  <button
+    type="button"
+    on:click={() => applyPreset('daily')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {activePreset == 'daily'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Daily
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('weekly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {activePreset == 'weekly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Weekly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('monthly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {activePreset == 'monthly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Monthly
+  </button>
+</div>
+
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
+    errors.minute = !validators.minute(minute);
+    if (!errors.minute) updateCron();
+  }} placeholder="* 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
+  errors.hour = !validators.hour(hour);
+  if (!errors.hour) updateCron();
+}} placeholder="* / , 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
+  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
+  if (!errors.dayOfMonth) updateCron();
+}} placeholder="* / , 1-31" disabled={activePreset != 'monthly'} />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
+  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
+  if (!errors.dayOfWeek) updateCron();
+}} placeholder="* / , 1-7" disabled={activePreset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute}
+  <p class="text-red-200 text-xs mt-1">
+    Invalid Minute (0–59 / , and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour}
+  <p class="text-red-200 text-xs mt-1">
+    Invalid Hour (0–23 / , and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth}
+  <p class="text-red-200 text-xs mt-1">
+    Invalid Day (1-31 / , and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek}
+  <p class="text-red-200 text-xs mt-1">
+    Invalid Weekday (1-7 / , and * allowed)
+  </p>
+{/if}
+
+</div>
+
+
+{:else}
+
+
+<div>      
+<h3 class="font-semibold">Presets</h3>
+<div class="flex flex-wrap gap-3 mt-2 mb-6">
+  <button
+    type="button"
+    on:click={() => applyPreset('daily')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {activePreset == 'daily'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'} disabled:cursor-not-allowed" disabled>
+    Daily
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('weekly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {activePreset == 'weekly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'} disabled:cursor-not-allowed" disabled>
+    Weekly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('monthly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {activePreset == 'monthly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'} disabled:cursor-not-allowed" disabled>
+    Monthly
+  </button>
+</div>
+
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
+    errors.minute = !validators.minute(minute);
+    if (!errors.minute) updateCron();
+  }} placeholder="* 0-59" disabled />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
+  errors.hour = !validators.hour(hour);
+  if (!errors.hour) updateCron();
+}} placeholder="* 0-23" disabled />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
+  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
+  if (!errors.dayOfMonth) updateCron();
+}} placeholder="* 1-31" disabled />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
+  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
+  if (!errors.dayOfWeek) updateCron();
+}} placeholder="* 1-7" disabled/>
+
+
+
+</div>
+</div>
+
+
+
+</div>
+
+
+{/if}
+
+
+  </td>
+</tr>
 
 
 
@@ -11790,8 +12345,6 @@ per {ulRule.periodMS} ms
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -11818,13 +12371,17 @@ per {ulRule.periodMS} ms
 
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_MasterStatus_UL(1,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -11853,14 +12410,17 @@ per {ulRule.periodMS} ms
 {#if rtu_master_tag_show && target_index_for_show_tag == index}
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_MasterStatus_UL(2,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -12014,8 +12574,7 @@ on:click={onPageClick}></textarea>
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
 
 {/if}
 
@@ -12040,7 +12599,15 @@ on:click={onPageClick}></textarea>
 <div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" style="position: absolute; left: 0px; top: 0px; margin: 0px; transform: translate(200px, {74+index*46}px);"> 
 {#if tcp_master_tag_show && target_index_for_show_tag == index}
 
+
+
 <ul class="py-1 w-44">
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_MasterStatus_UL(1,1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
 
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
@@ -12048,8 +12615,6 @@ on:click={onPageClick}></textarea>
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -12078,6 +12643,12 @@ on:click={onPageClick}></textarea>
 {#if rtu_master_tag_show && target_index_for_show_tag == index}
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_MasterStatus_UL(2,1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 
@@ -12085,8 +12656,6 @@ on:click={onPageClick}></textarea>
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag_UL(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus_UL(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -12581,8 +13150,7 @@ on:click={onPageClick}></textarea>
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
 
 {/if}
 
@@ -12609,13 +13177,17 @@ on:click={onPageClick}></textarea>
 
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_MasterStatus_UL(1,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -12644,14 +13216,20 @@ on:click={onPageClick}></textarea>
 {#if rtu_master_tag_show && target_index_for_show_tag == index}
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_MasterStatus_UL(2,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
+
 
 {/if}
 
@@ -12823,8 +13401,6 @@ on:click={onPageClick}></textarea>
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -12851,13 +13427,18 @@ on:click={onPageClick}></textarea>
 
 <ul class="py-1 w-44">
 
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_MasterStatus_UL(1,1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -12886,14 +13467,19 @@ on:click={onPageClick}></textarea>
 {#if rtu_master_tag_show && target_index_for_show_tag == index}
 <ul class="py-1 w-44">
 
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_MasterStatus_UL(2,1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag_UL(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus_UL(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 

@@ -1041,6 +1041,228 @@
 
     }
 
+    function New_MasterStatus(type, CloudIndex, device_index)
+    {
+      if(type==0)
+      {
+
+        if (device_index < new_proxy_edge[new_proxy_edge_index].modbusTCPSlaveTag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${new_proxy_edge[new_proxy_edge_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${new_proxy_edge[new_proxy_edge_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${new_proxy_edge[new_proxy_edge_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+          
+        }
+
+        tcp_slave_tag_show=false;
+        showMenu=false;
+      }
+      else if (type ==1)
+      {
+        if (device_index < new_proxy_edge[new_proxy_edge_index].modbusTCPMasterTag.length)
+        {
+
+          if (cursorPosition !=-1)
+          {
+            if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${new_proxy_edge[new_proxy_edge_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${new_proxy_edge[new_proxy_edge_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${new_proxy_edge[new_proxy_edge_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }         
+        }
+
+        tcp_master_tag_show=false;
+        showMenu=false;
+      }
+      else if (type == 2)
+      {
+        if (device_index < new_proxy_edge[new_proxy_edge_index].modbusRTUMasterTag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${new_proxy_edge[new_proxy_edge_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${new_proxy_edge[new_proxy_edge_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${new_proxy_edge[new_proxy_edge_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+            new_proxy_edge[new_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }        
+        }
+
+        rtu_master_tag_show=false;
+        showMenu=false;
+      }
+    }
+
+
+    function Modify_MasterStatus(type,CloudIndex, device_index)
+    {
+      if(type==0)
+      {
+
+        if (device_index < changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTCPSlaveTag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTCPSlaveTag[device_index].modbusProfile}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+
+        }
+
+        tcp_slave_tag_show=false;
+        showMenu=false;
+      }
+      else if (type ==1)
+      {
+        if (device_index < changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTCPMasterTag.length)
+        {
+          if (cursorPosition !=-1)
+          {
+            if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusTCPMasterTag[device_index].modbusProfile}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+        }
+
+        tcp_master_tag_show=false;
+        showMenu=false;
+      }
+      else if (type == 2)
+      {
+        if (device_index < changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusRTUMasterTag.length)
+        {
+
+          if (cursorPosition !=-1)
+          {
+            if (changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.length < cursorPosition)
+            {
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+            }
+            else
+            {
+              let beforeCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(0, cursorPosition);
+              let afterCursorString=changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData.slice(cursorPosition);
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData=`${beforeCursorString}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$" 
+              changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${afterCursorString}`;
+            }
+          }
+          else
+          {
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="$";
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+=`${changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].modbusRTUMasterTag[device_index].modbusProfile}`;
+            changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[modify_proxy_edge_index].cloud[CloudIndex].userDefineedData+="_STATUS$"
+          }     
+          
+        }
+
+        rtu_master_tag_show=false;
+        showMenu=false;
+      }
+
+    }
+
+
     function New_clickTag(type, CloudIndex, device_index, tag_index)
     {
       if(type==0)
@@ -3771,8 +3993,7 @@ per {ProxyEdgeData.periodMS} ms
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
 
 {/if}
 
@@ -3787,6 +4008,10 @@ per {ProxyEdgeData.periodMS} ms
 {#each new_proxy_edge[new_proxy_edge_index].modbusTCPMasterTag as Master, index}
 
 
+
+
+
+
 <li style="display: block;list-style-type: none;width: 1fr;">
 
 <button class="inline-flex ContextMenu" on:mouseenter|preventDefault={()=>showTag(1,index)}><i style="padding: 0px 15px 0px 10px;"></i>{Master.modbusProfile} <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="currentColor" class="shrink-0 text-primary-700 ms-2 h-6 w-6 dark:text-white" role="img" aria-label="chevron right outline" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m10 16 4-4-4-4"></path></svg></button></li>
@@ -3799,13 +4024,16 @@ per {ProxyEdgeData.periodMS} ms
 
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_MasterStatus(1,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -3834,14 +4062,17 @@ per {ProxyEdgeData.periodMS} ms
 {#if rtu_master_tag_show && target_index_for_show_tag == index}
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_MasterStatus(2,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -3995,8 +4226,6 @@ on:click={onPageClick}></textarea>
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -4023,14 +4252,19 @@ on:click={onPageClick}></textarea>
 
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_MasterStatus(1,1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
 
 {/if}
 
@@ -4059,6 +4293,12 @@ on:click={onPageClick}></textarea>
 {#if rtu_master_tag_show && target_index_for_show_tag == index}
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>New_MasterStatus(2,1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 
@@ -4066,8 +4306,7 @@ on:click={onPageClick}></textarea>
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>New_clickTag(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>New_clickTagStatus(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
 
 {/if}
 
@@ -4507,8 +4746,7 @@ on:click={onPageClick}></textarea>
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus(0,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
 
 {/if}
 
@@ -4535,13 +4773,19 @@ on:click={onPageClick}></textarea>
 
 <ul class="py-1 w-44">
 
+
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_MasterStatus(1,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus(1,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
+
 
 {/if}
 
@@ -4570,14 +4814,17 @@ on:click={onPageClick}></textarea>
 {#if rtu_master_tag_show && target_index_for_show_tag == index}
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_MasterStatus(2,0,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus(2,0,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -4749,8 +4996,6 @@ on:click={onPageClick}></textarea>
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus(0,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -4777,13 +5022,17 @@ on:click={onPageClick}></textarea>
 
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_MasterStatus(1,1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus(1,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 
@@ -4812,14 +5061,19 @@ on:click={onPageClick}></textarea>
 {#if rtu_master_tag_show && target_index_for_show_tag == index}
 <ul class="py-1 w-44">
 
+<li style="display: block;list-style-type: none;width: 1fr;">
+<button class="ContextMenu" on:click|preventDefault={()=>Modify_MasterStatus(2,1,index)}><i style="padding: 0px 15px 0px 10px;"></i>${Master.modbusProfile}_STATUS$</button></li>
+
+<hr>
+
+
+
 {#each Master.tag as TagItem, index2}
 {#if TagItem.enable}
 
 <li style="display: block;list-style-type: none;width: 1fr;">
 <button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTag(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}$</button></li>
 
-<li style="display: block;list-style-type: none;width: 1fr;">
-<button class="ContextMenu" on:click|preventDefault={()=>Modify_clickTagStatus(2,1,index,index2)}><i style="padding: 0px 15px 0px 10px;"></i>${TagItem.tagName}_STATUS$</button></li>
 
 {/if}
 

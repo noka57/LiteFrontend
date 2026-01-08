@@ -157,7 +157,7 @@
 		'pl-20 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white';
 
 	// Nav component
-	let navClass = 'py-1 px-1 text-lg overflow-scroll';
+	let navClass = 'py-1 px-1 text-lg overflow-y-auto overflow-x-hidden';
 
 	let navDivClass = 'pb-8';
 
@@ -1200,7 +1200,11 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
         </svelte:fragment>
 
 						<SidebarDropdownItem label="Port Connection" href='/PortCV2' active={activeUrl === '/PortCV2'}/>
-						        <SidebarDropdownItem label="Modbus" href='/modbusV2' active={activeUrl === '/modbusV2'}/>
+						<SidebarDropdownItem label="Modbus" href='/modbusV2' active={activeUrl === '/modbusV2'}/>
+						
+{#if 0}
+						<SidebarDropdownItem label="DNP3" href='/dnp3' active={activeUrl === '/dnp2'}/>
+{/if}
 					</SidebarDropdownWrapper>
 
 					<SidebarDropdownWrapper
@@ -1221,6 +1225,14 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 {#if data_tag_pro_flag==1}
         			    <SidebarDropdownItem label="Data Tag Engine PRO" href='/datatagproV2' active={activeUrl === '/datatagproV2'}/>
 {/if}
+						
+
+
+{#if 0}
+        			    <SidebarDropdownItem label="Smart Data Process" href='/sdataprocess' active={activeUrl === '/sdataprocess'}/>
+{/if}
+
+
 						<SidebarDropdownItem label="Event Engine" href='/eventV2' active={activeUrl === '/eventV2'}/>
 						<SidebarDropdownItem label="Docker Engine" href='/docker' active={activeUrl === '/docker'}/>
         				<SidebarDropdownItem label="Remote Service" href='/remoteS' active={activeUrl === '/remoteS'}/>

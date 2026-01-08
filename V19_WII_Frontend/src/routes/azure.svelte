@@ -1299,60 +1299,6 @@
 
       ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
 
-      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length;j++)
-      {
-
-        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j] == item)
-        {
-          if (!saved_changed_azure_data.config.cloud_azHub_profile[i].delete && changed_azure_data.config.cloud_azHub_profile[i].delete)
-          {
-            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
-            sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-
-           // console.log(changedstr);
-            SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
-            deleteMonitorCount+=1;
-
-            saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j]=""
-
-            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length !=0)
-            {
-              saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[j]="";
-            }
-            
-            if (j==0)
-            {
-              if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length==2)
-              {
-                moveMonitorCount=1;
-              }
-            }
-          }
-
-        }
-      }
-
-      if (moveMonitorCount==1 && deleteMonitorCount==1)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[1];
-
-        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length==2)
-        {
-          saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[1];
-        }
-      }
-
-      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length != 0)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length-=deleteMonitorCount;
-      }
-
-      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length != 0)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length-=deleteMonitorCount;
-      }
-
-      ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
 
     }
 
@@ -1459,60 +1405,6 @@
 
       ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
 
-      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length;j++)
-      {
-
-        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j] == item)
-        {
-          if (!saved_changed_azure_data.config.cloud_azDPS_profile[i].delete && changed_azure_data.config.cloud_azDPS_profile[i].delete)
-          {
-            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
-            sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-
-           // console.log(changedstr);
-            SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
-            deleteMonitorCount+=1;
-
-            saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j]=""
-
-            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length !=0)
-            {
-              saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[j]="";
-            }
-            
-            if (j==0)
-            {
-              if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length==2)
-              {
-                moveMonitorCount=1;
-              }
-            }
-          }
-
-        }
-      }
-
-      if (moveMonitorCount==1 && deleteMonitorCount==1)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[1];
-
-        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length==2)
-        {
-          saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[1];
-        }
-      }
-
-      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length != 0)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length-=deleteMonitorCount;
-      }
-
-      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length != 0)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length-=deleteMonitorCount;
-      }
-
-      ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
 
     }
 
@@ -1615,61 +1507,6 @@
 
 
 
-
-      ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-      for (let j=0; j < saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length;j++)
-      {
-
-        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j] == item)
-        {
-          if (!saved_changed_azure_data.config.cloud_azCentral_profile[i].delete && changed_azure_data.config.cloud_azCentral_profile[i].delete)
-          {
-            let changedstr="CloudProfile No. "+ (j+1)+ " is deleted";
-            sdata_logger_monitor_cloud_changedValues=[...sdata_logger_monitor_cloud_changedValues, changedstr];
-
-           // console.log(changedstr);
-            SDatalogger_MonitorMode_Cloud_ConfigChangedLog.set(sdata_logger_monitor_cloud_changedValues);
-            deleteMonitorCount+=1;
-
-            saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[j]=""
-
-            if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length !=0)
-            {
-              saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[j]="";
-            }
-            
-            if (j==0)
-            {
-              if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length==2)
-              {
-                moveMonitorCount=1;
-              }
-            }
-          }
-
-        }
-      }
-
-      if (moveMonitorCount==1 && deleteMonitorCount==1)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile[1];
-
-        if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length==2)
-        {
-          saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[0]=saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic[1];
-        }
-      }
-
-      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length != 0)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudProfile.length-=deleteMonitorCount;
-      }
-
-      if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length != 0)
-      {
-        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.cloudSettings.cloudTopic.length-=deleteMonitorCount;
-      }
 
       ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
 

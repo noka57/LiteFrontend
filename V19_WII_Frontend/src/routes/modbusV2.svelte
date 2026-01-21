@@ -1847,6 +1847,7 @@
             backup_tag.postprocessingEnable=changed_modbus_data.config.fieldManagement_modbus_tcp.master[target_device_index].tag[index].postprocessingEnable;
             backup_tag.postprocessingScale=changed_modbus_data.config.fieldManagement_modbus_tcp.master[target_device_index].tag[index].postprocessingScale;
             backup_tag.postprocessingOffset=changed_modbus_data.config.fieldManagement_modbus_tcp.master[target_device_index].tag[index].postprocessingOffset;
+            backup_tag.errorHandling=changed_modbus_data.config.fieldManagement_modbus_tcp.master[target_device_index].tag[index].errorHandling;
 
         }
         else if(target_device_tag_type==1)
@@ -1862,6 +1863,7 @@
 
             backup_tag.postprocessingScale=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[index].postprocessingScale;
             backup_tag.postprocessingOffset=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[index].postprocessingOffset;
+            backup_tag.errorHandling=changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[index].errorHandling;
 
         }
         else if(target_device_tag_type==2)
@@ -1877,6 +1879,8 @@
 
             backup_tag.postprocessingScale=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[target_device_index].tag[index].postprocessingScale;
             backup_tag.postprocessingOffset=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[target_device_index].tag[index].postprocessingOffset;
+            backup_tag.errorHandling=changed_modbus_data.config.fieldManagement_modbus_tcp.slave[target_device_index].tag[index].errorHandling;
+
         }
 
         modify_tag_index=index;
@@ -1901,6 +1905,9 @@
             changed_modbus_data.config.fieldManagement_modbus_tcp.master[target_device_index].tag[index].postprocessingScale=backup_tag.postprocessingScale;
             changed_modbus_data.config.fieldManagement_modbus_tcp.master[target_device_index].tag[index].postprocessingOffset=backup_tag.postprocessingOffset;
 
+            changed_modbus_data.config.fieldManagement_modbus_tcp.master[target_device_index].tag[index].errorHandling=backup_tag.errorHandling;
+
+
         }
         else if(target_device_tag_type==1)
         {     
@@ -1916,6 +1923,8 @@
             changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[index].postprocessingScale=backup_tag.postprocessingScale;
             changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[index].postprocessingOffset=backup_tag.postprocessingOffset;
 
+            changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[index].errorHandling=backup_tag.errorHandling;        
+
         }
         else if(target_device_tag_type==2)
         {
@@ -1930,6 +1939,9 @@
 
             changed_modbus_data.config.fieldManagement_modbus_tcp.slave[target_device_index].tag[index].postprocessingScale=backup_tag.postprocessingScale;
             changed_modbus_data.config.fieldManagement_modbus_tcp.slave[target_device_index].tag[index].postprocessingOffset=backup_tag.postprocessingOffset;
+
+            changed_modbus_data.config.fieldManagement_modbus_tcp.slave[target_device_index].tag[index].errorHandling=backup_tag.errorHandling;
+
 
         }
 
@@ -7981,6 +7993,9 @@
 
 <p class="mt-4">(X: Raw Data)</p>
 
+
+
+
 {/if}
 
 {:else if target_device_tag_type==1}
@@ -7997,6 +8012,9 @@
 
 
 <p class="mt-4">(X: Raw Data)</p>
+
+
+
 
 {/if}
 
@@ -8023,6 +8041,29 @@
 </tr>
 
 
+
+  <tr>
+  <td><p class="pl-2 pt-4 text-lg font-light text-right">Error Handling</p>
+
+  </td>
+
+    <td class="pl-4 pt-5" colspan="5"><div class="flex gap-2">
+{#if target_device_tag_type==0} 
+
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tcp.master[target_device_index].tag[modify_tag_index].errorHandling} value={0} >Keep Last Valid Value</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tcp.master[target_device_index].tag[modify_tag_index].errorHandling} value={1} >Reset To Zero</Radio>
+{:else if target_device_tag_type==1}
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[modify_tag_index].errorHandling} value={0} >Keep Last Valid Value</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_rtu.master[target_device_index].tag[modify_tag_index].errorHandling} value={1} >Reset To Zero</Radio>
+{:else if target_device_tag_type==2}
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tcp.slave[target_device_index].tag[modify_tag_index].errorHandling} value={0} >Keep Last Valid Value</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_tcp.slave[target_device_index].tag[modify_tag_index].errorHandling} value={1} >Reset To Zero</Radio>
+
+{/if}
+
+
+</div></td>
+</tr>
 
 
 

@@ -141,95 +141,7 @@
 
 
 
-    let activePreset = '';
-    let minute = '*';
-    let hour = '*';
-    let dayOfMonth = '*';
-    let month = '*';
-    let dayOfWeek = '*';
 
-    let action='reboot'
-
-
-    const presets = {
-    everyMinute: '* * * * * reboot',
-    hourly: '0 * * * * reboot',
-    daily: '0 0 * * * reboot',
-    weekly: '0 0 * * 7 reboot',
-    monthly: '0 0 1 * * reboot'
-    };
-
-
-    let cron = '* * * * * reboot';
-
-
-
-    let errors = {
-        minute: false,
-        hour: false,
-        dayOfMonth: false,
-        dayOfWeek: false
-    };
-
-    function updateCron() {
-        cron = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek} ${action}`;
-    }
-
-
-    function applyPreset(p) 
-    {
-        errors.minute=false;
-        errors.hour=false;
-        errors.dayOfMonth=false;
-        errors.dayOfWeek=false;
-        activePreset = p;
-        cron = presets[p];
-        [minute, hour, dayOfMonth, month, dayOfWeek, action] = cron.split(' ');
-    }
-
-
-
-
-    function isValidCronField(value, min, max) 
-    {
-        if (value === '*') return true;
-
-
-        const parts = value.split(',');
-
-        return parts.every(part => {
-          // step
-          if (part.includes('/')) {
-            const [base, step] = part.split('/');
-            if (!step || isNaN(step)) return false;
-            return base === '*' || isValidCronField(base, min, max);
-          }
-
-          // range
-          if (part.includes('-')) {
-            const [from, to] = part.split('-').map(Number);
-            return (
-              !isNaN(from) &&
-              !isNaN(to) &&
-              from >= min &&
-              to <= max &&
-              from <= to
-            );
-          }
-
-           //single number
-          const num = Number(part);
-          return !isNaN(num) && num >= min && num <= max;
-        });
-    }
-
-    const validators = {
-        minute: v => isValidCronField(v, 0, 59),
-        hour: v => isValidCronField(v, 0, 23),
-        dayOfMonth: v => isValidCronField(v, 1, 31),
-        month: v => isValidCronField(v, 1, 12),
-        dayOfWeek: v => isValidCronField(v, 1, 7)
-    };
 
 
   genericMQTTConfig.subscribe(val => {
@@ -783,10 +695,23 @@
   function saveScadaTag()
   {
     console.log("save scada tag");
-    if (data_tag_pro_tag_scada_changedValues.length !=0)
+
+    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTagTCPListenPort == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].listenPort)
     {
-      data_tag_pro_tag_scada_changedValues=[];
+      validSlavePort=false;
     }
+    else
+    {
+      validSlavePort=true;
+    }
+
+    if (validSlavePort)
+    {
+
+      if (data_tag_pro_tag_scada_changedValues.length !=0)
+      {
+        data_tag_pro_tag_scada_changedValues=[];
+      }
 
       for (let i = 0; i < Math.min(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length, data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag.length); i++) 
       {
@@ -839,6 +764,11 @@
       ChangedDataTagProConfig.set(saved_changed_data_tag_pro_data);
       
       console.log(data_tag_pro_tag_scada_changedValues);
+    }
+    else
+    {
+      console.log("[Warn] The same listen port as origin modbus tcp slave")
+    }
 
 
   }
@@ -1141,15 +1071,13 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   };
+
 
 
   function TriggerModifyCTag(index)
@@ -1161,13 +1089,29 @@
     BackupCTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].tagName;
     BackupCTag.calculationFormula=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].calculationFormula;
 
-    BackupCTag.dayTimeRangeEnable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeRangeEnable;
-    BackupCTag.dayTimeStartString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeStartString;
-    BackupCTag.dayTimeEndString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeEndString;
-    BackupCTag.startDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startDay;
-    BackupCTag.startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startTime;
-    BackupCTag.endDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].endDay;
-    BackupCTag.endTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].endTime;
+    BackupCTag.schedulerEnable=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].schedulerEnable;
+
+    BackupCTag.preset=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset;
+
+    BackupCTag.startCronString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startCronString;
+    BackupCTag.stopCronString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].stopCronString;
+
+
+    [minute, hour, dayOfMonth, month, dayOfWeek] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startCronString.split(' ');
+    [minute2, hour2, dayOfMonth2, month2, dayOfWeek2] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].stopCronString.split(' ');
+
+
+    errors.minute=false;
+    errors.hour=false;
+    errors.dayOfMonth=false;
+    errors.dayOfWeek=false;
+    errors.month=false;
+
+    errors.minute2=false;
+    errors.hour2=false;
+    errors.dayOfMonth2=false;
+    errors.dayOfWeek2=false;
+    errors.month2=false;
 
     showMenu=false;
 
@@ -1186,13 +1130,14 @@
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].calculationFormula=BackupCTag.calculationFormula;
 
 
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeRangeEnable=BackupCTag.dayTimeRangeEnable;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeStartString=BackupCTag.dayTimeStartString;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeEndString=BackupCTag.dayTimeEndString;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startDay=BackupCTag.startDay;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startTime=BackupCTag.startTime;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].endDay=BackupCTag.endDay;
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].endTime=BackupCTag.endTime;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].schedulerEnable=BackupCTag.schedulerEnable;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset=BackupCTag.preset;
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startCronString=BackupCTag.startCronString;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].stopCronString=BackupCTag.stopCronString;
+
 
     modify_calculation_tag_modal=false;
 
@@ -1204,17 +1149,6 @@
 
   function modify_calculation_tag(index)
   {
-    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeStartString !="" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeStartString.length > 11)
-    {
-      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].startDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeStartString.substring(0, 10);
-      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeStartString.substring(11);
-    }
-
-    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeEndString !="" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeEndString.length > 11)
-    {
-      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].endDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeEndString.substring(0, 10);
-      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].endTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[index].dayTimeEndString.substring(11);
-    }
 
     modify_calculation_tag_modal=false;
     target_index_for_show_tag=-1;
@@ -1236,8 +1170,13 @@
     modbusTagType:0,
     modbusTagOwner:"",
     modbusTagOwnerIndex:-1,    
-    startDay:""
+    preset:"",
+    startCronString:"",
+    stopCronString:""
   };
+
+
+
 
   function TriggerModifyATag(index)
   {
@@ -1252,7 +1191,30 @@
     BackupAccumulatedTag.modbusTagOwner=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].modbusTagOwner;
     BackupAccumulatedTag.modbusTagOwnerIndex=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].modbusTagOwnerIndex;
 
-    BackupAccumulatedTag.startDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].startDay;
+
+    BackupAccumulatedTag.preset=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].preset;
+    BackupAccumulatedTag.startCronString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].startCronString;
+
+
+    BackupAccumulatedTag.stopCronString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].stopCronString;
+
+
+
+    [minute, hour, dayOfMonth, month, dayOfWeek] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].startCronString.split(' ');
+    [minute2, hour2, dayOfMonth2, month2, dayOfWeek2] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].stopCronString.split(' ');
+
+
+    errors.minute=false;
+    errors.hour=false;
+    errors.dayOfMonth=false;
+    errors.dayOfWeek=false;
+    errors.month=false;
+
+    errors.minute2=false;
+    errors.hour2=false;
+    errors.dayOfMonth2=false;
+    errors.dayOfWeek2=false;
+    errors.month2=false;
 
     modify_accumulated_tag_index=index;
     modify_accumulated_tag_modal=true;
@@ -1270,7 +1232,11 @@
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwner=BackupAccumulatedTag.modbusTagOwner;
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].modbusTagOwnerIndex=BackupAccumulatedTag.modbusTagOwnerIndex;
 
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startDay=BackupAccumulatedTag.startDay;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset=BackupAccumulatedTag.preset;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startCronString=BackupAccumulatedTag.startCronString;
+
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].stopCronString=BackupAccumulatedTag.stopCronString;
 
 
 
@@ -1350,7 +1316,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -1408,7 +1373,6 @@
     BackupScada.modbusRTUMasterInputRegisterTag=JSON.parse(JSON.stringify(changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].modbusRTUMasterInputRegisterTag));  
 
 
-    BackupScada.slavePort=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].slavePort;
     BackupScada.pointType=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].pointType;
 
     BackupScada.address=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].address;
@@ -1463,7 +1427,6 @@
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].modbusRTUMasterInputRegisterTag=JSON.parse(JSON.stringify(BackupScada.modbusRTUMasterInputRegisterTag));  
 
 
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].slavePort=BackupScada.slavePort;
 
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].pointType=BackupScada.pointType;
 
@@ -1482,25 +1445,22 @@
   function modify_scada_tag()
   {
 
-    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].slavePort == saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].listenPort)
-    {
-      validSlavePort=false;
-    }
-    else
-    {
-      validSlavePort=true;
-    }
 
-    if (validSlavePort)
-    {
-      modify_scada_tag_modal=false;
-      openTagList=false;
-      target_index_for_show_tag=-1;
-      tcp_master_tag_show=false;
-      rtu_master_tag_show=false;
-      tcp_slave_tag_show=false;
-    }
+    modify_scada_tag_modal=false;
+    openTagList=false;
+    target_index_for_show_tag=-1;
+    tcp_master_tag_show=false;
+    rtu_master_tag_show=false;
+    tcp_slave_tag_show=false;
+    
   }
+
+  function ModifyPointTypeChange(index, logical_address)
+  {
+
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[index].address=logical_address; 
+  }
+
 
   let modify_event_tag_modal=false;
   let modify_event_tag_index;
@@ -4192,6 +4152,57 @@
   }
 
 
+  let searchedTag = "";
+  let loading = false;
+  let error = "";
+  let searchContent;
+  let searchResult="";
+
+  async function doSearchMappingAddress()
+  {
+      const res = await fetch(window.location.origin+"/SearchScadaTagMAPPingAddRess", {
+      method: 'POST',
+      body: searchContent
+    })
+
+    if (res.status == 200)
+    {
+      searchResult =await res.text();
+      console.log(searchResult);
+      loading = false;
+    }
+    else
+    {
+      error="Error "+ res.status;
+      console.log(error);
+      loading = false;
+    }
+  }
+
+
+  function DoSearch(tag) 
+  {
+    error = "";
+    searchResult="";
+    let searchCmd=`uci show mbusd_slave_scada | grep "write_column_tag_name='${tag}'" | sed -n "s/^\\(.*\\)\\.write_column_tag_name=.*/\\1.address/p" | xargs -r uci get`;
+    console.log(searchCmd);
+
+
+    const bytesArray = Array.from(searchCmd).map(char => char.charCodeAt(0));
+    let searchBinary = new Uint8Array(bytesArray);
+    searchContent=new Uint8Array(searchBinary.length+sessionBinary.length);
+    searchContent.set(sessionBinary,0);
+    searchContent.set(searchBinary, sessionBinary.length);
+
+    loading = true;
+    doSearchMappingAddress();
+
+
+  }
+    
+
+
+
 
   let new_scada_tag_modal=false;
   let new_scada_tag_index;
@@ -4201,7 +4212,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -4221,7 +4231,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -4241,7 +4250,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -4261,7 +4269,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -4281,7 +4288,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -4301,7 +4307,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -4321,7 +4326,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -4341,7 +4345,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -4361,7 +4364,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -4381,7 +4383,6 @@
     enable:false,
     delete:false,
     tagName:"",
-    slavePort:503,
     modbusTCPSlaveCoilTag:[],
     modbusTCPSlaveDiscreteInputTag:[],
     modbusTCPSlaveHoldingRegisterTag:[],
@@ -4688,6 +4689,47 @@
   }
 
 
+    let minute = '*';
+    let hour = '*';
+    let dayOfMonth = '*';
+    let month = '*';
+    let dayOfWeek = '*';
+    let minute2 = '*';
+    let hour2 = '*';
+    let dayOfMonth2 = '*';
+    let month2 = '*';
+    let dayOfWeek2 = '*';
+
+
+
+    const presets = {
+    everyMinute: '* * * * *',
+    hourly: '0 * * * *',
+    daily: '0 0 * * *',
+    weekly: '0 0 * * 7',
+    monthly: '0 0 1 * *',
+    yearly: '0 0 1 1 *'
+    };
+
+
+    let cron = '* * * * *';
+
+
+
+    let errors = {
+        minute: false,
+        hour: false,
+        dayOfMonth: false,
+        dayOfWeek: false,
+        month: false,
+        minute2: false,
+        hour2: false,
+        dayOfMonth2: false,
+        dayOfWeek2: false,
+        month2: false
+    };
+
+
 
   let new_accumulated_tag_modal=false;
   let new_accumulated_tag_index;
@@ -4700,8 +4742,10 @@
     targetTag:"",
     modbusTagType:0,
     modbusTagOwner:"",
-    modbusTagOwnerIndex:-1,    
-    startDay:""
+    modbusTagOwnerIndex:-1,  
+    preset:"",  
+    startCronString:"",
+    stopCronString:""
   },
   {
     enable:false,
@@ -4710,88 +4754,106 @@
     targetTag:"",
     modbusTagType:0,
     modbusTagOwner:"",
-    modbusTagOwnerIndex:-1,    
-    startDay:""
+    modbusTagOwnerIndex:-1,  
+    preset:"",  
+    startCronString:"",
+    stopCronString:""
   },
-    {
+  {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
     modbusTagType:0,
     modbusTagOwner:"",
-    modbusTagOwnerIndex:-1,    
-    startDay:""
+    modbusTagOwnerIndex:-1,  
+    preset:"",  
+    startCronString:"",
+    stopCronString:""
   },
-    {
+  {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
     modbusTagType:0,
     modbusTagOwner:"",
-    modbusTagOwnerIndex:-1,    
-    startDay:""
+    modbusTagOwnerIndex:-1,  
+    preset:"",  
+    startCronString:"",
+    stopCronString:""
   },
-    {
+  {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
     modbusTagType:0,
     modbusTagOwner:"",
-    modbusTagOwnerIndex:-1,    
-    startDay:""
+    modbusTagOwnerIndex:-1,  
+    preset:"",  
+    startCronString:"",
+    stopCronString:""
   },
-    {
+  {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
     modbusTagType:0,
     modbusTagOwner:"",
-    modbusTagOwnerIndex:-1,    
-    startDay:""
+    modbusTagOwnerIndex:-1,  
+    preset:"",  
+    startCronString:"",
+    stopCronString:""
   },
-    {
+  {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
     modbusTagType:0,
     modbusTagOwner:"",
-    modbusTagOwnerIndex:-1,    
-    startDay:""
+    modbusTagOwnerIndex:-1,  
+    preset:"",  
+    startCronString:"",
+    stopCronString:""
   },
-    {
+  {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
     modbusTagType:0,
     modbusTagOwner:"",
-    modbusTagOwnerIndex:-1,    
-    startDay:""
+    modbusTagOwnerIndex:-1,  
+    preset:"",  
+    startCronString:"",
+    stopCronString:""
   },
-    {
+  {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
     modbusTagType:0,
     modbusTagOwner:"",
-    modbusTagOwnerIndex:-1,    
-    startDay:""
+    modbusTagOwnerIndex:-1,  
+    preset:"",  
+    startCronString:"",
+    stopCronString:""
   },
-    {
+  {
     enable:false,
     delete:false,
     tagName:"",
     targetTag:"",
     modbusTagType:0,
     modbusTagOwner:"",
-    modbusTagOwnerIndex:-1,    
-    startDay:""
+    modbusTagOwnerIndex:-1,  
+    preset:"",  
+    startCronString:"",
+    stopCronString:""
   }
   ];
 
@@ -4854,13 +4916,24 @@
     new_accumulated_tag[index].modbusTagOwner="";
     new_accumulated_tag[index].modbusTagOwnerIndex=-1;
 
-    new_accumulated_tag[index].startDay="";
+    new_accumulated_tag[index].startCronString="0 0 * * *";
+    new_accumulated_tag[index].stopCronString="0 2 * * *";  
+    new_accumulated_tag[index].preset='daily';
 
+    errors.minute=false;
+    errors.hour=false;
+    errors.dayOfMonth=false;
+    errors.dayOfWeek=false;
+    errors.month=false; 
 
-    start_time_hh='';
-    start_time_mm='';
-    end_time_hh='';
-    end_time_mm='';
+    errors.minute2=false;
+    errors.hour2=false;
+    errors.dayOfMonth2=false;
+    errors.dayOfWeek2=false;
+    errors.month2=false; 
+
+    [minute, hour, dayOfMonth, month, dayOfWeek] = new_accumulated_tag[index].startCronString.split(' ');
+    [minute2, hour2, dayOfMonth2, month2, dayOfWeek2] = new_accumulated_tag[index].stopCronString.split(' ');
 
     new_accumulated_tag_index=index;
     new_accumulated_tag_modal=true;
@@ -4877,8 +4950,7 @@
 
   function add_new_accumulated_tag(index)
   {
-    new_accumulated_tag[index].startTime=`${start_time_hh}:${start_time_mm}`;
-    new_accumulated_tag[index].endTime=`${end_time_hh}:${end_time_mm}`;
+
 
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag,new_accumulated_tag[index]];
 
@@ -4896,6 +4968,10 @@
       changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[index].delete=true;
   }
 
+
+
+
+
   let modify_schedule_tag_modal=false;
   let modify_schedule_tag_index;
   let BackupScheduleTag=
@@ -4903,8 +4979,8 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -4935,14 +5011,17 @@
     BackupScheduleTag.delete=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].delete;
     BackupScheduleTag.tagName=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].tagName;
 
+    BackupScheduleTag.cronString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].cronString;
 
+    BackupScheduleTag.preset=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset;
 
-    BackupScheduleTag.dayTimeStartString=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString;
+    [minute, hour, dayOfMonth, month, dayOfWeek] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].cronString.split(' ');
 
-
-    BackupScheduleTag.startDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startDay;
-
-    BackupScheduleTag.startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startTime;
+    errors.minute=false;
+    errors.hour=false;
+    errors.dayOfMonth=false;
+    errors.dayOfWeek=false;
+    errors.month=false;
 
 
 
@@ -4964,6 +5043,8 @@
 
     BackupScheduleTag.actionTimeSyncFormatUserDefine=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatUserDefine;
 
+
+
     modify_schedule_tag_modal=true;
   }
 
@@ -4974,12 +5055,10 @@
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].delete=BackupScheduleTag.delete;
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].tagName=BackupScheduleTag.tagName;
 
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString=BackupScheduleTag.dayTimeStartString;
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].cronString=BackupScheduleTag.cronString;
 
+    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset=BackupScheduleTag.preset;
 
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startDay=BackupScheduleTag.startDay;
-
-    changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startTime=BackupScheduleTag.startTime;
 
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType=BackupScheduleTag.actionType;
 
@@ -5006,12 +5085,6 @@
   {
 
 
-    if (changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString !="" && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString.length > 11)
-    {
-      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startDay=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString.substring(0, 10);
-      changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].startTime=changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString.substring(11);
-    }
-
     modify_schedule_tag_modal=false;
   }
 
@@ -5019,13 +5092,166 @@
   let new_schedule_tag_modal=false;
   let new_schedule_tag_index;
 
+
+
+    function updateCron() 
+    {
+
+        if (new_schedule_tag_modal)
+        {
+          new_schedule_tag[new_schedule_tag_index].cronString = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+        }
+        else if (modify_schedule_tag_modal)
+        {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].cronString = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+        }
+    }
+
+
+
+
+
+    function applyPreset(p) 
+    {
+        errors.minute=false;
+        errors.hour=false;
+        errors.dayOfMonth=false;
+        errors.dayOfWeek=false;
+        errors.month=false; 
+        if (new_schedule_tag_modal)
+        {      
+          new_schedule_tag[new_schedule_tag_index].preset=p;
+
+          new_schedule_tag[new_schedule_tag_index].cronString = presets[p];
+          [minute, hour, dayOfMonth, month, dayOfWeek] = new_schedule_tag[new_schedule_tag_index].cronString.split(' ');
+        }
+        else if (modify_schedule_tag_modal)
+        {
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset=p;
+
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].cronString = presets[p];
+          [minute, hour, dayOfMonth, month, dayOfWeek] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].cronString.split(' ');       
+        }
+        else if (new_calculation_tag_modal)
+        {
+          errors.minute2=false;
+          errors.hour2=false;
+          errors.dayOfMonth2=false;
+          errors.dayOfWeek2=false;
+          errors.month2=false; 
+
+          new_calculation_tag[new_calculation_tag_index].preset=p;
+
+          new_calculation_tag[new_calculation_tag_index].startCronString = presets[p];
+          new_calculation_tag[new_calculation_tag_index].stopCronString = presets[p];
+          [minute, hour, dayOfMonth, month, dayOfWeek] = new_calculation_tag[new_calculation_tag_index].startCronString.split(' ');
+
+          [minute2, hour2, dayOfMonth2, month2, dayOfWeek2] = new_calculation_tag[new_calculation_tag_index].stopCronString.split(' ');
+
+        }
+        else if (modify_calculation_tag_modal)
+        {
+          errors.minute2=false;
+          errors.hour2=false;
+          errors.dayOfMonth2=false;
+          errors.dayOfWeek2=false;
+          errors.month2=false; 
+
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset=p;
+
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startCronString = presets[p];
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].stopCronString = presets[p];
+          [minute, hour, dayOfMonth, month, dayOfWeek] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startCronString.split(' ');
+
+          [minute2, hour2, dayOfMonth2, month2, dayOfWeek2] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].stopCronString.split(' ');
+
+        }
+        else if (new_accumulated_tag_modal)
+        {
+          errors.minute2=false;
+          errors.hour2=false;
+          errors.dayOfMonth2=false;
+          errors.dayOfWeek2=false;
+          errors.month2=false; 
+
+          new_accumulated_tag[new_accumulated_tag_index].preset=p;
+
+          new_accumulated_tag[new_accumulated_tag_index].startCronString = presets[p];
+          new_accumulated_tag[new_accumulated_tag_index].stopCronString = presets[p];
+          [minute, hour, dayOfMonth, month, dayOfWeek] = new_accumulated_tag[new_accumulated_tag_index].startCronString.split(' ');
+
+          [minute2, hour2, dayOfMonth2, month2, dayOfWeek2] = new_accumulated_tag[new_accumulated_tag_index].stopCronString.split(' ');
+        }
+        else if (modify_accumulated_tag_modal)
+        {
+          errors.minute2=false;
+          errors.hour2=false;
+          errors.dayOfMonth2=false;
+          errors.dayOfWeek2=false;
+          errors.month2=false; 
+
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset=p;
+
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startCronString = presets[p];
+          changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].stopCronString = presets[p];
+          [minute, hour, dayOfMonth, month, dayOfWeek] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startCronString.split(' ');
+
+          [minute2, hour2, dayOfMonth2, month2, dayOfWeek2] = changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].stopCronString.split(' ');
+        }
+    }
+
+
+
+
+    function isValidCronField(value, min, max) 
+    {
+        if (value === '*') return true;
+
+
+        const parts = value.split(',');
+
+        return parts.every(part => {
+          // step
+          if (part.includes('/')) {
+            const [base, step] = part.split('/');
+            if (!step || isNaN(step)) return false;
+            return base === '*' || isValidCronField(base, min, max);
+          }
+
+          // range
+          if (part.includes('-')) {
+            const [from, to] = part.split('-').map(Number);
+            return (
+              !isNaN(from) &&
+              !isNaN(to) &&
+              from >= min &&
+              to <= max &&
+              from <= to
+            );
+          }
+
+           //single number
+          const num = Number(part);
+          return !isNaN(num) && num >= min && num <= max;
+        });
+    }
+
+    const validators = {
+        minute: v => isValidCronField(v, 0, 59),
+        hour: v => isValidCronField(v, 0, 23),
+        dayOfMonth: v => isValidCronField(v, 1, 31),
+        month: v => isValidCronField(v, 1, 12),
+        dayOfWeek: v => isValidCronField(v, 1, 7)
+    };
+
+
   let new_schedule_tag=[
   {
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -5040,8 +5266,8 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -5056,8 +5282,8 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -5072,8 +5298,8 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -5088,8 +5314,8 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -5104,8 +5330,8 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -5120,8 +5346,8 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -5136,8 +5362,8 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -5152,8 +5378,8 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -5168,8 +5394,8 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeStartString:"",
-    startDay:"",
+    cronString:"",
+    preset:"",
     startTime:"",
     actionType:0,
     actionTargetTag:"",
@@ -5236,20 +5462,27 @@
     new_schedule_tag[index].enable=true;
     new_schedule_tag[index].delete=false;
     new_schedule_tag[index].tagName="";
-    new_schedule_tag[index].dayTimeStartString="";
-    new_schedule_tag[index].startDay="";
-    new_schedule_tag[index].startTime="";    
+    new_schedule_tag[index].cronString="0 0 * * *";
+    new_schedule_tag[index].preset="daily";  
     new_schedule_tag[index].actionType=0;
-    new_schedule_tag[index].actionTargetTag="";
-    new_schedule_tag[index].modbusTagType=-1;
-    new_schedule_tag[index].modbusTagOwner="";
-    new_schedule_tag[index].modbusTagOwnerIndex=-1;
+    new_schedule_tag[index].actionTargetTag="DO";
+    new_schedule_tag[index].modbusTagType=2;
+    new_schedule_tag[index].modbusTagOwner="TS_0";
+    new_schedule_tag[index].modbusTagOwnerIndex=0;
     new_schedule_tag[index].actionTargetTagValue=1
     new_schedule_tag[index].actionTimeSyncFormatType=0;
     new_schedule_tag[index].actionTimeSyncFormatUserDefine="";
 
 
 
+    errors.minute=false;
+    errors.hour=false;
+    errors.dayOfMonth=false;
+    errors.dayOfWeek=false;
+    errors.month=false; 
+
+
+    [minute, hour, dayOfMonth, month, dayOfWeek] = new_schedule_tag[index].cronString.split(' ');
 
 
     new_schedule_tag_index=index;
@@ -5265,19 +5498,62 @@
 
   function AddScheduleTag(index)
   {
-
-    if (new_schedule_tag[index].dayTimeStartString !="" && new_schedule_tag[index].dayTimeStartString.length > 11)
-    {
-      new_schedule_tag[index].startDay=new_schedule_tag[index].dayTimeStartString.substring(0, 10);
-      new_schedule_tag[index].startTime=new_schedule_tag[index].dayTimeStartString.substring(11);
-    }
-
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag=[...
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag,new_schedule_tag[index]];
     new_schedule_tag_modal=false;
 
   }
 
+
+    function updateCronDuration(type) 
+    {
+        if (new_calculation_tag_modal)
+        {
+          if (type ==1)
+          {
+            new_calculation_tag[new_calculation_tag_index].startCronString = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+          }
+          else if (type==2)
+          {
+            new_calculation_tag[new_calculation_tag_index].stopCronString = `${minute2} ${hour2} ${dayOfMonth2} ${month2} ${dayOfWeek2}`;
+          }
+
+        }
+        else if (modify_calculation_tag_modal)
+        {
+          if (type ==1)
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].startCronString = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+          }
+          else if (type ==2)
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].stopCronString = `${minute2} ${hour2} ${dayOfMonth2} ${month2} ${dayOfWeek2}`;
+          }
+        }
+        else if (new_accumulated_tag_modal)
+        {
+          if (type ==1)
+          {
+            new_accumulated_tag[new_accumulated_tag_index].startCronString = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+          }
+          else if (type==2)
+          {
+            new_accumulated_tag[new_accumulated_tag_index].stopCronString = `${minute2} ${hour2} ${dayOfMonth2} ${month2} ${dayOfWeek2}`;
+          }
+        }
+        else if (modify_accumulated_tag_modal)
+        {
+          if (type ==1)
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startCronString = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+          }
+          else if (type ==2)
+          {
+            changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].stopCronString = `${minute2} ${hour2} ${dayOfMonth2} ${month2} ${dayOfWeek2}`;
+          }
+
+        }
+    }
 
 
   let new_calculation_tag_modal=false;
@@ -5288,130 +5564,100 @@
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   },
     {
     enable:false,
     delete:false,
     tagName:"",
-    dayTimeRangeEnable:false,
-    dayTimeStartString:"",
-    startDay:"",
-    startTime:"",
-    endDay:"",
-    endTime:"",
-    dayTimeEndString:"",
+    preset:"",
+    schedulerEnable:false,
+    startCronString:"",
+    stopCronString:"",
     calculationFormula:""
   }
 
@@ -5424,15 +5670,24 @@
     new_calculation_tag[index].delete=false;
     new_calculation_tag[index].tagName="";   
     new_calculation_tag[index].calculationFormula="return "
+    new_calculation_tag[index].preset='daily';
+    new_calculation_tag[index].startCronString="0 0 * * *";
+    new_calculation_tag[index].stopCronString="0 2 * * *";  
+
+    errors.minute=false;
+    errors.hour=false;
+    errors.dayOfMonth=false;
+    errors.dayOfWeek=false;
+    errors.month=false; 
+    errors.minute2=false;
+    errors.hour2=false;
+    errors.dayOfMonth2=false;
+    errors.dayOfWeek2=false;
+    errors.month2=false; 
 
 
-    new_calculation_tag[index].dayTimeRangeEnable=false;
-    new_calculation_tag[index].dayTimeStartString="";
-    new_calculation_tag[index].dayTimeEndString="";
-    new_calculation_tag[index].startDay="";
-    new_calculation_tag[index].startTime="";
-    new_calculation_tag[index].endDay="";
-    new_calculation_tag[index].endTime="";
+    [minute, hour, dayOfMonth, month, dayOfWeek] = new_calculation_tag[index].startCronString.split(' ');
+    [minute2, hour2, dayOfMonth2, month2, dayOfWeek2] = new_calculation_tag[index].stopCronString.split(' ');
 
     target_index_for_show_tag=-1;
     tcp_master_tag_show=false;
@@ -5553,21 +5808,6 @@
 
   function add_new_calculation_tag(index)
   {
-    console.log("new_calculation_tag[index].dayTimeStartString:", new_calculation_tag[index].dayTimeStartString);
-
-    if (new_calculation_tag[index].dayTimeStartString !="" && new_calculation_tag[index].dayTimeStartString.length > 11)
-    {
-      new_calculation_tag[index].startDay=new_calculation_tag[index].dayTimeStartString.substring(0, 10);
-      new_calculation_tag[index].startTime=new_calculation_tag[index].dayTimeStartString.substring(11);
-    }
-
-    if (new_calculation_tag[index].dayTimeEndString !="" && new_calculation_tag[index].dayTimeEndString.length > 11)
-    {
-      new_calculation_tag[index].endDay=new_calculation_tag[index].dayTimeEndString.substring(0, 10);
-      new_calculation_tag[index].endTime=new_calculation_tag[index].dayTimeEndString.substring(11);
-    }
-
-    console.log("new_calculation_tag[index].startDay:", new_calculation_tag[index].startDay);
 
 
     changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag=[...changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag,new_calculation_tag[index]];
@@ -6049,27 +6289,27 @@
 
         for (let i=0; i<saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag.length; i++)
         {
-          let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+          let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
           tcp_slave_tag=[...tcp_slave_tag, item];
 
           if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==0)
           {
-            let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
             tcp_slave_coil_tag=[...tcp_slave_coil_tag, coil_item];
           }
           else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==1)
           {
-            let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
             tcp_slave_discrete_input_tag=[...tcp_slave_discrete_input_tag, discrete_input_item];
           }
           else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==3)
           {
-            let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
             tcp_slave_holding_register_tag=[...tcp_slave_holding_register_tag, holding_register_item];
           }
           else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==2)
           {
-            let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
 
             tcp_slave_input_register_tag=[...tcp_slave_input_register_tag, input_register_item];
           }          
@@ -6120,28 +6360,28 @@
 
           for (let j=0;j<saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag.length;j++)
           {
-            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType": saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
 
             tcp_master_tag=[...tcp_master_tag, item];
 
             if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==0)
             {
-              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType": saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
               tcp_master_coil_tag=[...tcp_master_coil_tag, coil_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==1)
             {
-              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType": saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
               tcp_master_discrete_input_tag=[...tcp_master_discrete_input_tag, discrete_input_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==3)
             {
-              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType": saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
               tcp_master_holding_register_tag=[...tcp_master_holding_register_tag, holding_register_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==2)
             {
-              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType": saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
 
               tcp_master_input_register_tag=[...tcp_master_input_register_tag, input_register_item];
             }    
@@ -6196,28 +6436,28 @@
 
           for (let j=0;j<saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag.length;j++)
           {
-            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
 
             rtu_master_tag=[...rtu_master_tag, item];
 
             if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==0)
             {
-              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
               rtu_master_coil_tag=[...rtu_master_coil_tag, coil_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==1)
             {
-              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
               rtu_master_discrete_input_tag=[...rtu_master_discrete_input_tag, discrete_input_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==3)
             {
-              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
               rtu_master_holding_register_tag=[...rtu_master_holding_register_tag, holding_register_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==2)
             {
-              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
 
               rtu_master_input_register_tag=[...rtu_master_input_register_tag, input_register_item];
             } 
@@ -6613,27 +6853,27 @@
 
         for (let i=0; i<saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag.length; i++)
         {
-          let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+          let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
           tcp_slave_tag=[...tcp_slave_tag, item];
 
           if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==0)
           {
-            let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
             tcp_slave_coil_tag=[...tcp_slave_coil_tag, coil_item];
           }
           else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==1)
           {
-            let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
             tcp_slave_discrete_input_tag=[...tcp_slave_discrete_input_tag, discrete_input_item];
           }
           else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==3)
           {
-            let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
             tcp_slave_holding_register_tag=[...tcp_slave_holding_register_tag, holding_register_item];
           }
           else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==2)
           {
-            let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
 
             tcp_slave_input_register_tag=[...tcp_slave_input_register_tag, input_register_item];
           }          
@@ -6684,28 +6924,28 @@
 
           for (let j=0;j<saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag.length;j++)
           {
-            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
 
             tcp_master_tag=[...tcp_master_tag, item];
 
             if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==0)
             {
-              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
               tcp_master_coil_tag=[...tcp_master_coil_tag, coil_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==1)
             {
-              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
               tcp_master_discrete_input_tag=[...tcp_master_discrete_input_tag, discrete_input_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==3)
             {
-              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
               tcp_master_holding_register_tag=[...tcp_master_holding_register_tag, holding_register_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==2)
             {
-              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
 
               tcp_master_input_register_tag=[...tcp_master_input_register_tag, input_register_item];
             }    
@@ -6759,28 +6999,28 @@
 
           for (let j=0;j<saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag.length;j++)
           {
-            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType": saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
 
             rtu_master_tag=[...rtu_master_tag, item];
 
             if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==0)
             {
-              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType": saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
               rtu_master_coil_tag=[...rtu_master_coil_tag, coil_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==1)
             {
-              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType": saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
               rtu_master_discrete_input_tag=[...rtu_master_discrete_input_tag, discrete_input_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==3)
             {
-              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType": saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
               rtu_master_holding_register_tag=[...rtu_master_holding_register_tag, holding_register_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==2)
             {
-              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType": saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
 
               rtu_master_input_register_tag=[...rtu_master_input_register_tag, input_register_item];
             } 
@@ -7866,7 +8106,7 @@
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-18">Day Time Range</TableHeadCell>
+    <TableHeadCell class="w-18">Scheduler</TableHeadCell>
     <TableHeadCell class="w-80">Calculation Formula</TableHeadCell>    
 
   </TableHead>
@@ -7906,7 +8146,30 @@
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{#if Ctag.dayTimeRangeEnable}{Ctag.startDay} {Ctag.startTime} - {Ctag.endDay} {Ctag.endTime}{:else}None{/if}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{#if Ctag.schedulerEnable}{#if Ctag.preset == 'daily'}
+      {Ctag.startCronString.split(' ')[1].padStart(2, '0')}:{Ctag.startCronString.split(' ')[0].padStart(2, '0')} - {Ctag.stopCronString.split(' ')[1].padStart(2, '0')}:{Ctag.stopCronString.split(' ')[0].padStart(2, '0')}{:else if Ctag.preset=='weekly'}
+      {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][Ctag.startCronString.split(' ')[4] % 7]} {Ctag.startCronString.split(' ')[1].padStart(2, '0')}:{Ctag.startCronString.split(' ')[0].padStart(2, '0')} -       {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][Ctag.stopCronString.split(' ')[4] % 7]} {Ctag.stopCronString.split(' ')[1].padStart(2, '0')}:{Ctag.stopCronString.split(' ')[0].padStart(2, '0')}
+{:else if Ctag.preset == 'monthly'}
+ Day {Ctag.startCronString.split(' ')[2]} 
+  {Ctag.startCronString.split(' ')[1].padStart(2,'0')}:{Ctag.startCronString.split(' ')[0].padStart(2,'0')} -  Day {Ctag.stopCronString.split(' ')[2]} 
+  {Ctag.stopCronString.split(' ')[1].padStart(2,'0')}:{Ctag.stopCronString.split(' ')[0].padStart(2,'0')}
+{:else if Ctag.preset == 'yearly'}
+  {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Ctag.startCronString.split(' ')[3] - 1]}
+  {' '}
+  {Ctag.startCronString.split(' ')[2]}
+  {' '}
+  {Ctag.stopCronString.split(' ')[1].padStart(2,'0')}:{Ctag.stopCronString.split(' ')[0].padStart(2,'0')} -   {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Ctag.stopCronString.split(' ')[3] - 1]}
+  {' '}
+  {Ctag.stopCronString.split(' ')[2]}
+  {' '}
+  {Ctag.stopCronString.split(' ')[1].padStart(2,'0')}:{Ctag.stopCronString.split(' ')[0].padStart(2,'0')}
+
+
+
+      {/if} ({Ctag.preset})
+{:else}
+None
+{/if}</td>
 
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Ctag.calculationFormula}</td>
 
@@ -7942,7 +8205,36 @@
 
     <TableBodyCell>{index+1}</TableBodyCell>
  <TableBodyCell>{Ctag.tagName}</TableBodyCell>
- <TableBodyCell>{#if Ctag.dayTimeRangeEnable}{Ctag.startDay} {Ctag.startTime} - {Ctag.endDay} {Ctag.endTime}{:else}None{/if}</TableBodyCell>
+
+
+      <TableBodyCell>{#if Ctag.schedulerEnable}{#if Ctag.preset == 'daily'}
+      {Ctag.startCronString.split(' ')[1].padStart(2, '0')}:{Ctag.startCronString.split(' ')[0].padStart(2, '0')} - {Ctag.stopCronString.split(' ')[1].padStart(2, '0')}:{Ctag.stopCronString.split(' ')[0].padStart(2, '0')}{:else if Ctag.preset=='weekly'}
+      {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][Ctag.startCronString.split(' ')[4] % 7]} {Ctag.startCronString.split(' ')[1].padStart(2, '0')}:{Ctag.startCronString.split(' ')[0].padStart(2, '0')} -       {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][Ctag.stopCronString.split(' ')[4] % 7]} {Ctag.stopCronString.split(' ')[1].padStart(2, '0')}:{Ctag.stopCronString.split(' ')[0].padStart(2, '0')}
+{:else if Ctag.preset == 'monthly'}
+ Day {Ctag.startCronString.split(' ')[2]} 
+  {Ctag.startCronString.split(' ')[1].padStart(2,'0')}:{Ctag.startCronString.split(' ')[0].padStart(2,'0')} -  Day {Ctag.stopCronString.split(' ')[2]} 
+  {Ctag.stopCronString.split(' ')[1].padStart(2,'0')}:{Ctag.stopCronString.split(' ')[0].padStart(2,'0')}
+{:else if Ctag.preset == 'yearly'}
+  {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Ctag.startCronString.split(' ')[3] - 1]}
+  {' '}
+  {Ctag.startCronString.split(' ')[2]}
+  {' '}
+  {Ctag.stopCronString.split(' ')[1].padStart(2,'0')}:{Ctag.stopCronString.split(' ')[0].padStart(2,'0')} -   {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Ctag.stopCronString.split(' ')[3] - 1]}
+  {' '}
+  {Ctag.stopCronString.split(' ')[2]}
+  {' '}
+  {Ctag.stopCronString.split(' ')[1].padStart(2,'0')}:{Ctag.stopCronString.split(' ')[0].padStart(2,'0')}
+
+
+
+      {/if} ({Ctag.preset})
+{:else}
+None
+{/if}
+      </TableBodyCell>
+
+
+
     <TableBodyCell>{Ctag.calculationFormula}</TableBodyCell>
 
 
@@ -8028,7 +8320,7 @@
 
 <tr>
       <td><p class="pl-2 pt-4 text-lg font-light text-right">Tag Name</p></td>
-      <td class="pl-5 pt-5">
+      <td class="pl-2 pt-5" colspan="20">
 
 <input type="text" bind:value={new_calculation_tag[new_calculation_tag_index].tagName} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-48 p-2.5 dark:bg-gray-700 dark:border-green-500">
 
@@ -8041,28 +8333,258 @@
 
 
 
+
+
+
+<p class="mt-10"></p>
 <tr>
-  <td><p class="pl-2 pt-5 text-lg font-light text-right">Day Time Range</p>
+      <td><p class="pl-20 pt-4 pr-4 text-lg font-light text-right">Scheduler</p></td>
+
+ <td class="pl-1 pt-5" colspan="1">
+    <div class="flex gap-2">
+
+<Toggle class="p-2.5 mt-3 mb-4" bind:checked={new_calculation_tag[new_calculation_tag_index].schedulerEnable}></Toggle>
+</div>
+</td>
+
+
+{#if new_calculation_tag[new_calculation_tag_index].schedulerEnable}
+
+
+ <td class="pl-5 pt-4" colspan="20" style="border:1px solid black;"><div class="flex gap-4">
+
+<div>      
+<h3 class="font-semibold">Presets</h3>
+<div class="flex flex-wrap gap-3 mt-2 mb-6">
+  <button
+    type="button"
+    on:click={() => applyPreset('daily')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_calculation_tag[new_calculation_tag_index].preset == 'daily'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Daily
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('weekly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_calculation_tag[new_calculation_tag_index].preset == 'weekly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Weekly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('monthly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_calculation_tag[new_calculation_tag_index].preset == 'monthly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Monthly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('yearly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_calculation_tag[new_calculation_tag_index].preset == 'yearly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Yearly
+  </button>
+
+</div>
+
+
+<h3 class="font-semibold">Start:</h3>
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
+    errors.minute = !validators.minute(minute);
+    if (!errors.minute) updateCronDuration(1);
+  }} placeholder="* / , - 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
+  errors.hour = !validators.hour(hour);
+  if (!errors.hour) updateCronDuration(1);
+}} placeholder="* / , - 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
+  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
+  if (!errors.dayOfMonth) updateCronDuration(1);
+}} placeholder="* / , - 1-31" disabled={new_calculation_tag[new_calculation_tag_index].preset != 'monthly' && new_calculation_tag[new_calculation_tag_index].preset != 'yearly'}/>
+</div>
+
+
+<div>
+<label for="cron-m" class="text-sm">Month</label>
+<input id="cron-m" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.month ? 'border-2 border-red-500' : ''}" bind:value={month} on:input={() => {
+  errors.month = !validators.month(month);
+  if (!errors.month) updateCronDuration(1);
+}} placeholder="* / , - 1-12" disabled={new_calculation_tag[new_calculation_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
+  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
+  if (!errors.dayOfWeek) updateCronDuration(1);
+}} placeholder="* / , - 1-7" disabled={new_calculation_tag[new_calculation_tag_index].preset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Minute (0–59 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Hour (0–23 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-31 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.month}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-12 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Weekday (1-7 / , - and * allowed)
+  </p>
+{/if}
+
+
+
+
+
+<h3 class="font-semibold">Stop:</h3>
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute2" class="text-sm">Minute</label>
+<input id="cron-minute2" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute2 ? 'border-2 border-red-500' : ''}" bind:value={minute2} on:input={() => {
+    errors.minute2 = !validators.minute(minute2);
+    if (!errors.minute2) updateCronDuration(2);
+  }} placeholder="* / , - 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour2" class="text-sm">Hour</label>
+<input id="cron-hour2" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour2 ? 'border-2 border-red-500' : ''}" bind:value={hour2} on:input={() => {
+  errors.hour2 = !validators.hour(hour2);
+  if (!errors.hour2) updateCronDuration(2);
+}} placeholder="* / , - 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom2" class="text-sm">Day</label>
+<input id="cron-dom2" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth2 ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth2} on:input={() => {
+  errors.dayOfMonth2 = !validators.dayOfMonth(dayOfMonth2);
+  if (!errors.dayOfMonth2) updateCronDuration(2);
+}} placeholder="* / , - 1-31" disabled={new_calculation_tag[new_calculation_tag_index].preset != 'monthly' && new_calculation_tag[new_calculation_tag_index].preset != 'yearly'}/>
+</div>
+
+
+<div>
+<label for="cron-m2" class="text-sm">Month</label>
+<input id="cron-m2" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.month2 ? 'border-2 border-red-500' : ''}" bind:value={month2} on:input={() => {
+  errors.month2 = !validators.month(month2);
+  if (!errors.month2) updateCronDuration(2);
+}} placeholder="* / , - 1-12" disabled={new_calculation_tag[new_calculation_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dow2" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow2" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek2 ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek2} on:input={() => {
+  errors.dayOfWeek2 = !validators.dayOfWeek(dayOfWeek2);
+  if (!errors.dayOfWeek2) updateCronDuration(2);
+}} placeholder="* / , - 1-7" disabled={new_calculation_tag[new_calculation_tag_index].preset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Minute (0–59 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Hour (0–23 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-31 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.month2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-12 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Weekday (1-7 / , - and * allowed)
+  </p>
+{/if}
+
+</div>
+</div>
+
+
 
   </td>
 
-    <td class="pl-4 pt-8" colspan="20">
-    <div class="flex gap-2">
-
-<Toggle class="p-2.5 mt-3 mb-4" bind:checked={new_calculation_tag[new_calculation_tag_index].dayTimeRangeEnable}></Toggle>
-
-{#if new_calculation_tag[new_calculation_tag_index].dayTimeRangeEnable}
-
-
-<DateTimePicker bind:value={new_calculation_tag[new_calculation_tag_index].dayTimeStartString} />
-
-<p class="pt-5 border"><strong>-</strong></p>
-
-<DateTimePicker bind:value={new_calculation_tag[new_calculation_tag_index].dayTimeEndString} />
-
-
 {/if}
-</div></td>
 </tr>
 
 
@@ -8259,28 +8781,256 @@ on:click={onPageClick}></textarea>
 
 
 
+
+<p class="mt-10"></p>
 <tr>
-  <td><p class="pl-2 pt-5 text-lg font-light text-right">Day Time Range</p>
+      <td><p class="pl-20 pt-4 pr-4 text-lg font-light text-right">Scheduler</p></td>
+
+ <td class="pl-1 pt-5" colspan="1">
+    <div class="flex gap-2">
+
+<Toggle class="p-2.5 mt-3 mb-4" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].schedulerEnable}></Toggle>
+</div>
+</td>
+
+
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].schedulerEnable}
+
+
+ <td class="pl-5 pt-4" colspan="20" style="border:1px solid black;"><div class="flex gap-4">
+
+<div>      
+<h3 class="font-semibold">Presets</h3>
+<div class="flex flex-wrap gap-3 mt-2 mb-6">
+  <button
+    type="button"
+    on:click={() => applyPreset('daily')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset == 'daily'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Daily
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('weekly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset == 'weekly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Weekly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('monthly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset == 'monthly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Monthly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('yearly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset == 'yearly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Yearly
+  </button>
+
+</div>
+
+
+<h3 class="font-semibold">Start:</h3>
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
+    errors.minute = !validators.minute(minute);
+    if (!errors.minute) updateCronDuration(1);
+  }} placeholder="* / , - 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
+  errors.hour = !validators.hour(hour);
+  if (!errors.hour) updateCronDuration(1);
+}} placeholder="* / , - 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
+  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
+  if (!errors.dayOfMonth) updateCronDuration(1);
+}} placeholder="* / , - 1-31" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset != 'monthly' && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset != 'yearly'}/>
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Month</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.month ? 'border-2 border-red-500' : ''}" bind:value={month} on:input={() => {
+  errors.month = !validators.month(month);
+  if (!errors.month) updateCronDuration(1);
+}} placeholder="* / , - 1-12" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
+  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
+  if (!errors.dayOfWeek) updateCronDuration(1);
+}} placeholder="* / , - 1-7" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Minute (0–59 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Hour (0–23 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-31 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.month}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-12 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Weekday (1-7 / , - and * allowed)
+  </p>
+{/if}
+
+
+
+
+
+<h3 class="font-semibold">Stop:</h3>
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute2 ? 'border-2 border-red-500' : ''}" bind:value={minute2} on:input={() => {
+    errors.minute2 = !validators.minute(minute);
+    if (!errors.minute2) updateCronDuration(2);
+  }} placeholder="* / , - 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour2 ? 'border-2 border-red-500' : ''}" bind:value={hour2} on:input={() => {
+  errors.hour2 = !validators.hour(hour2);
+  if (!errors.hour2) updateCronDuration(2);
+}} placeholder="* / , - 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth2 ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth2} on:input={() => {
+  errors.dayOfMonth2 = !validators.dayOfMonth(dayOfMonth2);
+  if (!errors.dayOfMonth2) updateCronDuration(2);
+}} placeholder="* / , - 1-31" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset != 'monthly' && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset != 'yearly'}/>
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Month</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.month2 ? 'border-2 border-red-500' : ''}" bind:value={month2} on:input={() => {
+  errors.month2 = !validators.month(month2);
+  if (!errors.month2) updateCronDuration(2);
+}} placeholder="* / , - 1-12" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek2 ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek2} on:input={() => {
+  errors.dayOfWeek2 = !validators.dayOfWeek(dayOfWeek2);
+  if (!errors.dayOfWeek2) updateCronDuration(2);
+}} placeholder="* / , - 1-7" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].preset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Minute (0–59 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Hour (0–23 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-31 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.month2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-12 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Weekday (1-7 / , - and * allowed)
+  </p>
+{/if}
+
+</div>
+</div>
+
+
 
   </td>
 
-    <td class="pl-4 pt-8" colspan="20">
-    <div class="flex gap-2">
-
-<Toggle class="p-2.5 mt-3 mb-4" bind:checked={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeRangeEnable}></Toggle>
-
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeRangeEnable}
-
-
-<DateTimePicker bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeStartString} />
-
-<p class="pt-5 border"><strong>-</strong></p>
-
-<DateTimePicker bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.calculationTag[modify_calculation_tag_index].dayTimeEndString} />
-
-
 {/if}
-</div></td>
 </tr>
 
 
@@ -8476,7 +9226,7 @@ on:click={onPageClick}></textarea>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell >Tag Name</TableHeadCell>
     <TableHeadCell >Target Tag</TableHeadCell>    
-    <TableHeadCell >Start Day</TableHeadCell>
+    <TableHeadCell >Scheduler</TableHeadCell>
 
   
 
@@ -8520,7 +9270,25 @@ on:click={onPageClick}></textarea>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.tagName}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.targetTag}{#if Atag.modbusTagType==2} ({TCPSlaveTag[Atag.modbusTagOwnerIndex].modbusProfile}){:else if Atag.modbusTagType==0} ({TCPMasterTag[Atag.modbusTagOwnerIndex].modbusProfile}){:else if Atag.modbusTagType==1} ({RTUMasterTag[Atag.modbusTagOwnerIndex].modbusProfile}){/if}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{Atag.startDay}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{#if Atag.preset == 'daily'}
+      {Atag.startCronString.split(' ')[1].padStart(2, '0')}:{Atag.startCronString.split(' ')[0].padStart(2, '0')} - {Atag.stopCronString.split(' ')[1].padStart(2, '0')}:{Atag.stopCronString.split(' ')[0].padStart(2, '0')}{:else if Atag.preset=='weekly'}
+      {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][Atag.startCronString.split(' ')[4] % 7]} {Atag.startCronString.split(' ')[1].padStart(2, '0')}:{Atag.startCronString.split(' ')[0].padStart(2, '0')} -       {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][Atag.stopCronString.split(' ')[4] % 7]} {Atag.stopCronString.split(' ')[1].padStart(2, '0')}:{Atag.stopCronString.split(' ')[0].padStart(2, '0')}
+{:else if Atag.preset == 'monthly'}
+ Day {Atag.startCronString.split(' ')[2]} 
+  {Atag.startCronString.split(' ')[1].padStart(2,'0')}:{Atag.startCronString.split(' ')[0].padStart(2,'0')} -  Day {Atag.stopCronString.split(' ')[2]} 
+  {Atag.stopCronString.split(' ')[1].padStart(2,'0')}:{Atag.stopCronString.split(' ')[0].padStart(2,'0')}
+{:else if Atag.preset == 'yearly'}
+  {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Atag.startCronString.split(' ')[3] - 1]}
+  {' '}
+  {Atag.startCronString.split(' ')[2]}
+  {' '}
+  {Atag.stopCronString.split(' ')[1].padStart(2,'0')}:{Atag.stopCronString.split(' ')[0].padStart(2,'0')} -   {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Atag.stopCronString.split(' ')[3] - 1]}
+  {' '}
+  {Atag.stopCronString.split(' ')[2]}
+  {' '}
+  {Atag.stopCronString.split(' ')[1].padStart(2,'0')}:{Atag.stopCronString.split(' ')[0].padStart(2,'0')}
+
+      {/if} ({Atag.preset})</td>
 
 
 
@@ -8555,7 +9323,27 @@ on:click={onPageClick}></textarea>
       <TableBodyCell >{Atag.tagName}</TableBodyCell>
       <TableBodyCell >{Atag.targetTag}{#if Atag.modbusTagType==2} ({TCPSlaveTag[Atag.modbusTagOwnerIndex].modbusProfile}){:else if Atag.modbusTagType==0} ({TCPMasterTag[Atag.modbusTagOwnerIndex].modbusProfile}){:else if Atag.modbusTagType==1} ({RTUMasterTag[Atag.modbusTagOwnerIndex].modbusProfile}){/if}</TableBodyCell>
 
-      <TableBodyCell >{Atag.startDay}</TableBodyCell>
+      <TableBodyCell>{#if Atag.preset == 'daily'}
+      {Atag.startCronString.split(' ')[1].padStart(2, '0')}:{Atag.startCronString.split(' ')[0].padStart(2, '0')} - {Atag.stopCronString.split(' ')[1].padStart(2, '0')}:{Atag.stopCronString.split(' ')[0].padStart(2, '0')}{:else if Atag.preset=='weekly'}
+      {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][Atag.startCronString.split(' ')[4] % 7]} {Atag.startCronString.split(' ')[1].padStart(2, '0')}:{Atag.startCronString.split(' ')[0].padStart(2, '0')} -       {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][Atag.stopCronString.split(' ')[4] % 7]} {Atag.stopCronString.split(' ')[1].padStart(2, '0')}:{Atag.stopCronString.split(' ')[0].padStart(2, '0')}
+{:else if Atag.preset == 'monthly'}
+ Day {Atag.startCronString.split(' ')[2]} 
+  {Atag.startCronString.split(' ')[1].padStart(2,'0')}:{Atag.startCronString.split(' ')[0].padStart(2,'0')} -  Day {Atag.stopCronString.split(' ')[2]} 
+  {Atag.stopCronString.split(' ')[1].padStart(2,'0')}:{Atag.stopCronString.split(' ')[0].padStart(2,'0')}
+{:else if Atag.preset == 'yearly'}
+  {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Atag.startCronString.split(' ')[3] - 1]}
+  {' '}
+  {Atag.startCronString.split(' ')[2]}
+  {' '}
+  {Atag.stopCronString.split(' ')[1].padStart(2,'0')}:{Atag.stopCronString.split(' ')[0].padStart(2,'0')} -   {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Atag.stopCronString.split(' ')[3] - 1]}
+  {' '}
+  {Atag.stopCronString.split(' ')[2]}
+  {' '}
+  {Atag.stopCronString.split(' ')[1].padStart(2,'0')}:{Atag.stopCronString.split(' ')[0].padStart(2,'0')}
+
+      {/if} ({Atag.preset})
+
+      </TableBodyCell>
 
 
  </TableBodyRow>
@@ -8719,19 +9507,256 @@ on:click={onPageClick}></textarea>
 
 
 
+
+
+<p class="mt-10"></p>
 <tr>
-      <td><p class="pl-2 pt-2 text-lg font-light text-right">Start Day</p></td>
-      <td class="pl-5 pt-2">
-<div class="flex gap-4">
-
-<DateTimePicker bind:value={new_accumulated_tag[new_accumulated_tag_index].startDay} hideTime/>
-<p class="pt-5">(Period: 1 Day)</p>
+      <td><p class="pl-20 pt-4 pr-4 text-lg font-light text-right">Scheduler</p></td>
 
 
-      </div>
 
-      </td>
-  </tr>
+
+
+
+ <td class="pl-5 pt-4" colspan="20" style="border:1px solid black;"><div class="flex gap-4">
+
+<div>      
+<h3 class="font-semibold">Presets</h3>
+<div class="flex flex-wrap gap-3 mt-2 mb-6">
+  <button
+    type="button"
+    on:click={() => applyPreset('daily')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_accumulated_tag[new_accumulated_tag_index].preset == 'daily'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Daily
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('weekly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_accumulated_tag[new_accumulated_tag_index].preset == 'weekly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Weekly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('monthly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_accumulated_tag[new_accumulated_tag_index].preset == 'monthly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Monthly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('yearly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_accumulated_tag[new_accumulated_tag_index].preset == 'yearly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Yearly
+  </button>
+
+</div>
+
+
+<h3 class="font-semibold">Start:</h3>
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
+    errors.minute = !validators.minute(minute);
+    if (!errors.minute) updateCronDuration(1);
+  }} placeholder="* / , - 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
+  errors.hour = !validators.hour(hour);
+  if (!errors.hour) updateCronDuration(1);
+}} placeholder="* / , - 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
+  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
+  if (!errors.dayOfMonth) updateCronDuration(1);
+}} placeholder="* / , - 1-31" disabled={new_accumulated_tag[new_accumulated_tag_index].preset != 'monthly' && new_accumulated_tag[new_accumulated_tag_index].preset != 'yearly'}/>
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Month</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.month ? 'border-2 border-red-500' : ''}" bind:value={month} on:input={() => {
+  errors.month = !validators.month(month);
+  if (!errors.month) updateCronDuration(1);
+}} placeholder="* / , - 1-12" disabled={new_accumulated_tag[new_accumulated_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
+  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
+  if (!errors.dayOfWeek) updateCronDuration(1);
+}} placeholder="* / , - 1-7" disabled={new_accumulated_tag[new_accumulated_tag_index].preset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Minute (0–59 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Hour (0–23 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-31 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.month}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-12 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Weekday (1-7 / , - and * allowed)
+  </p>
+{/if}
+
+
+
+
+
+<h3 class="font-semibold">Stop:</h3>
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute2 ? 'border-2 border-red-500' : ''}" bind:value={minute2} on:input={() => {
+    errors.minute2 = !validators.minute(minute2);
+    if (!errors.minute2) updateCronDuration(2);
+  }} placeholder="* / , - 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour2 ? 'border-2 border-red-500' : ''}" bind:value={hour2} on:input={() => {
+  errors.hour2 = !validators.hour(hour2);
+  if (!errors.hour2) updateCronDuration(2);
+}} placeholder="* / , - 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth2 ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth2} on:input={() => {
+  errors.dayOfMonth2 = !validators.dayOfMonth(dayOfMonth2);
+  if (!errors.dayOfMonth2) updateCronDuration(2);
+}} placeholder="* / , - 1-31" disabled={new_accumulated_tag[new_accumulated_tag_index].preset != 'monthly' && new_accumulated_tag[new_accumulated_tag_index].preset != 'yearly'}/>
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Month</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.month2 ? 'border-2 border-red-500' : ''}" bind:value={month2} on:input={() => {
+  errors.month2 = !validators.month(month2);
+  if (!errors.month2) updateCronDuration(2);
+}} placeholder="* / , - 1-12" disabled={new_accumulated_tag[new_accumulated_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek2 ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek2} on:input={() => {
+  errors.dayOfWeek2 = !validators.dayOfWeek(dayOfWeek2);
+  if (!errors.dayOfWeek2) updateCronDuration(2);
+}} placeholder="* / , - 1-7" disabled={new_accumulated_tag[new_accumulated_tag_index].preset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Minute (0–59 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Hour (0–23 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-31 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.month2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-12 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Weekday (1-7 / , - and * allowed)
+  </p>
+{/if}
+
+</div>
+</div>
+
+
+
+  </td>
+
+
+</tr>
+
+
+
+
 
 
 <p class="pt-5"></p>
@@ -8850,19 +9875,256 @@ on:click={onPageClick}></textarea>
 
 
 
+<p class="mt-10"></p>
 <tr>
-      <td><p class="pl-2 pt-2 text-lg font-light text-right">Start Day</p></td>
-      <td class="pl-5 pt-2">
-<div class="flex gap-4">
-
-<DateTimePicker bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].startDay} hideTime/>
-<p class="pt-5">(Period: 1 Day)</p>
+      <td><p class="pl-20 pt-4 pr-4 text-lg font-light text-right">Scheduler</p></td>
 
 
-      </div>
 
-      </td>
-  </tr>
+
+
+
+ <td class="pl-5 pt-4" colspan="20" style="border:1px solid black;"><div class="flex gap-4">
+
+<div>      
+<h3 class="font-semibold">Presets</h3>
+<div class="flex flex-wrap gap-3 mt-2 mb-6">
+  <button
+    type="button"
+    on:click={() => applyPreset('daily')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset == 'daily'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Daily
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('weekly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset == 'weekly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Weekly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('monthly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset == 'monthly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Monthly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('yearly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset == 'yearly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Yearly
+  </button>
+
+</div>
+
+
+<h3 class="font-semibold">Start:</h3>
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
+    errors.minute = !validators.minute(minute);
+    if (!errors.minute) updateCronDuration(1);
+  }} placeholder="* / , - 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
+  errors.hour = !validators.hour(hour);
+  if (!errors.hour) updateCronDuration(1);
+}} placeholder="* / , - 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
+  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
+  if (!errors.dayOfMonth) updateCronDuration(1);
+}} placeholder="* / , - 1-31" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset != 'monthly' && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset != 'yearly'}/>
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Month</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.month ? 'border-2 border-red-500' : ''}" bind:value={month} on:input={() => {
+  errors.month = !validators.month(month);
+  if (!errors.month) updateCronDuration(1);
+}} placeholder="* / , - 1-12" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
+  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
+  if (!errors.dayOfWeek) updateCronDuration(1);
+}} placeholder="* / , - 1-7" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Minute (0–59 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Hour (0–23 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-31 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.month}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-12 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Weekday (1-7 / , - and * allowed)
+  </p>
+{/if}
+
+
+
+
+
+<h3 class="font-semibold">Stop:</h3>
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute2 ? 'border-2 border-red-500' : ''}" bind:value={minute2} on:input={() => {
+    errors.minute2 = !validators.minute(minute2);
+    if (!errors.minute2) updateCronDuration(2);
+  }} placeholder="* / , - 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour2 ? 'border-2 border-red-500' : ''}" bind:value={hour2} on:input={() => {
+  errors.hour2 = !validators.hour(hour2);
+  if (!errors.hour2) updateCronDuration(2);
+}} placeholder="* / , - 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth2 ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth2} on:input={() => {
+  errors.dayOfMonth2 = !validators.dayOfMonth(dayOfMonth2);
+  if (!errors.dayOfMonth2) updateCronDuration(2);
+}} placeholder="* / , - 1-31" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset != 'monthly' && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset != 'yearly'}/>
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Month</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.month2 ? 'border-2 border-red-500' : ''}" bind:value={month2} on:input={() => {
+  errors.month2 = !validators.month(month2);
+  if (!errors.month2) updateCronDuration(2);
+}} placeholder="* / , - 1-12" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek2 ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek2} on:input={() => {
+  errors.dayOfWeek2 = !validators.dayOfWeek(dayOfWeek2);
+  if (!errors.dayOfWeek2) updateCronDuration(2);
+}} placeholder="* / , - 1-7" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.accumulatedTag[modify_accumulated_tag_index].preset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Minute (0–59 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Hour (0–23 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-31 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.month2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-12 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek2}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Weekday (1-7 / , - and * allowed)
+  </p>
+{/if}
+
+</div>
+</div>
+
+
+
+  </td>
+
+
+</tr>
+
+
+
+
+
+
 
 
 <p class="pt-5"></p>
@@ -8906,6 +10168,36 @@ on:click={onPageClick}></textarea>
     </span>
 
 
+<table>
+
+<tr><td class="w-20"></td>
+      <td><p class="pl-20 pt-4 text-lg font-light text-right">TCP Slave Listen Port</p></td><td class="pl-5 pt-5">
+       <div class="flex gap-4">
+{#if validSlavePort}
+      <input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTagTCPListenPort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-green-500">
+{:else}
+      <input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTagTCPListenPort} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 block w-40 p-2.5 text-sm rounded-lg">
+
+{/if}
+
+{#if !validSlavePort}
+
+ <Helper class="pl-1 mt-4" color="red">
+    <span class="font-medium">Invalid Port Number. It could not be the same as TCP Local Slave</span>
+  </Helper>
+
+{/if}
+  </div>
+
+      </td>
+
+</tr>
+
+</table>
+
+
+<p class="pt-10"></p>
+
 
 <Table shadow striped={true} tableNoWFull={true}>
   <TableHead>
@@ -8918,7 +10210,6 @@ on:click={onPageClick}></textarea>
     <TableHeadCell>Enable</TableHeadCell>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Tag Name</TableHeadCell>
-    <TableHeadCell class="w-18">TCP Slave Port</TableHeadCell>  
     <TableHeadCell class="w-18">Point Type</TableHeadCell>      
     <TableHeadCell class="w-18">Address</TableHeadCell>    
     <TableHeadCell class="w-18"></TableHeadCell>
@@ -8968,7 +10259,6 @@ on:click={onPageClick}></textarea>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScadaTag.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScadaTag.slavePort}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{#if ScadaTag.pointType==0}Coil{:else if ScadaTag.pointType==1}Discrete Input{:else if ScadaTag.pointType==2}Input Registers{:else if ScadaTag.pointType==3}Holding Registers{/if}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScadaTag.address}</td>
 
@@ -9001,7 +10291,6 @@ on:click={onPageClick}></textarea>
 
       <TableBodyCell>{index+1}</TableBodyCell>
       <TableBodyCell>{ScadaTag.tagName}</TableBodyCell>
-      <TableBodyCell>{ScadaTag.slavePort}</TableBodyCell>
       <TableBodyCell>{#if ScadaTag.pointType==0}Coil{:else if ScadaTag.pointType==1}Discrete Input{:else if ScadaTag.pointType==2}Input Registers{:else if ScadaTag.pointType==3}Holding Registers{/if}</TableBodyCell> 
       <TableBodyCell>{ScadaTag.address}</TableBodyCell>
 
@@ -9106,33 +10395,6 @@ on:click={onPageClick}></textarea>
 
 
 
-<tr>
-<td><p class="pl-1 pt-4 text-lg font-light text-right">TCP Slave Port</p></td>
-    <td class= "pl-4 pt-4" colspan="3">
-    <div class="flex gap-4">
-{#if validSlavePort}
-<input type="number" bind:value={new_scada_tag[new_scada_tag_index].slavePort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
-{:else}
-<input type="number" bind:value={new_scada_tag[new_scada_tag_index].slavePort} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-20 p-2.5">
-
-
-{/if}
-
-
-{#if !validSlavePort}
-
- <Helper class="pl-1 mt-4" color="red">
-    <span class="font-medium">Invalid Port Number. It could not be the same as TCP Local Slave</span>
-  </Helper>
-
-{/if}
-  </div>
-</td>
-    <td></td>
-
-</tr>
-
-
 
 <tr>
   <td><p class="pl-2 pt-4 text-lg font-light text-right">Point Type</p>
@@ -9177,7 +10439,7 @@ on:click={onPageClick}></textarea>
 
 {#if openTagList}
 
- <div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" data-popper-escaped="" data-popper-placement="bottom" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(152px, 399px);"> 
+ <div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" data-popper-escaped="" data-popper-placement="bottom" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(152px, 338px);"> 
 
  <ul class="py-1 w-44">
 
@@ -9641,43 +10903,15 @@ on:click={onPageClick}></textarea>
 
 
 <tr>
-<td><p class="pl-1 pt-4 text-lg font-light text-right">TCP Slave Port</p></td>
-    <td class= "pl-4 pt-4" colspan="3">
-    <div class="flex gap-4">
-{#if validSlavePort}
-<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].slavePort} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500">
-{:else}
-<input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].slavePort} class="focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500 bg-red-50 text-red-900 placeholder-red-700 dark:text-red-500 dark:placeholder-red-500 dark:bg-gray-700 border-red-500 dark:border-red-400 text-sm rounded-lg block w-20 p-2.5">
-
-
-{/if}
-
-
-{#if !validSlavePort}
-
- <Helper class="pl-1 mt-4" color="red">
-    <span class="font-medium">Invalid Port Number. It could not be the same as TCP Local Slave</span>
-  </Helper>
-
-{/if}
-  </div>
-</td>
-    <td></td>
-
-</tr>
-
-
-
-<tr>
   <td><p class="pl-2 pt-4 text-lg font-light text-right">Point Type</p>
 
   </td>
 
     <td class="pl-4 pt-4" colspan="5"><div class="flex gap-4">
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].pointType} value={0} on:change={()=>NewPointTypeChange(new_scada_tag_index,1)}>Coil</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].pointType} value={1} on:change={()=>NewPointTypeChange(new_scada_tag_index,10001)}>Discrete Input</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].pointType} value={2} on:change={()=>NewPointTypeChange(new_scada_tag_index,30001)}>Input Register</Radio>
-  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].pointType} value={3} on:change={()=>NewPointTypeChange(new_scada_tag_index,40001)}>Holding Register</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].pointType} value={0} on:change={()=>ModifyPointTypeChange(modify_scada_tag_index,1)}>Coil</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].pointType} value={1} on:change={()=>ModifyPointTypeChange(modify_scada_tag_index,10001)}>Discrete Input</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].pointType} value={2} on:change={()=>ModifyPointTypeChange(modify_scada_tag_index,30001)}>Input Register</Radio>
+  <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].pointType} value={3} on:change={()=>ModifyPointTypeChange(modify_scada_tag_index,40001)}>Holding Register</Radio>
 </div></td>
 </tr>
 
@@ -9711,7 +10945,7 @@ on:click={onPageClick}></textarea>
 
 {#if openTagList}
 
- <div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" data-popper-escaped="" data-popper-placement="bottom" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(152px, 399px);"> 
+ <div role="tooltip" tabindex="-1" simple="true" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded border-gray-100 dark:border-gray-700 shadow-md z-10 outline-none divide-y divide-gray-100 dark:divide-gray-600" data-popper-escaped="" data-popper-placement="bottom" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(152px, 338px);"> 
 
  <ul class="py-1 w-44">
 
@@ -10141,6 +11375,19 @@ on:click={onPageClick}></textarea>
 </Table>
 
 
+<p class="pt-10"></p>
+<div class="max-w-md p-4 rounded-xl bg-white shadow"><h2 class="text-lg font-semibold mb-3">Search Applied Address By Tag Name</h2> <div class="relative">
+  <input id="tag-input" class="w-full pl-10 pr-3 py-2 border rounded-lg" placeholder="Tag Name" bind:value={searchedTag} on:keydown={(e) => e.key === "Enter" && DoSearch(searchedTag)}
+><button class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600" aria-label="Search" on:click={()=>DoSearch(searchedTag)}
+    disabled={loading}>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 0 0-15 a7.5 7.5 0 0 0 0 15 z"></path>
+    </svg>
+  </button>
+</div><div class="mt-4 p-3 bg-gray-100 rounded-lg text-sm"><div><b>Address:{#if searchResult != ""}{searchResult}{/if}</b></div></div></div>
+
+
+
   </AccordionItem>
 
 <AccordionItem {defaultClass}>
@@ -10206,7 +11453,20 @@ on:click={onPageClick}></textarea>
     </td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{index+1}</td>
 <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScheduleTag.tagName}</td>
-<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{ScheduleTag.startDay} {ScheduleTag.startTime}</td>
+<td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white strikeout">{#if ScheduleTag.preset == 'daily'}
+      {ScheduleTag.cronString.split(' ')[1].padStart(2, '0')}:{ScheduleTag.cronString.split(' ')[0].padStart(2, '0')} {:else if ScheduleTag.preset=='weekly'}
+      {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][ScheduleTag.cronString.split(' ')[4] % 7]} {ScheduleTag.cronString.split(' ')[1].padStart(2, '0')}:{ScheduleTag.cronString.split(' ')[0].padStart(2, '0')}
+{:else if ScheduleTag.preset == 'monthly'}
+ Day {ScheduleTag.cronString.split(' ')[2]} 
+  {ScheduleTag.cronString.split(' ')[1].padStart(2,'0')}:{ScheduleTag.cronString.split(' ')[0].padStart(2,'0')}
+{:else if ScheduleTag.preset == 'yearly'}
+  {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][ScheduleTag.cronString.split(' ')[3] - 1]}
+  {' '}
+  {ScheduleTag.cronString.split(' ')[2]}
+  {' '}
+  {ScheduleTag.cronString.split(' ')[1].padStart(2,'0')}:{ScheduleTag.cronString.split(' ')[0].padStart(2,'0')}
+
+      {/if} ({ScheduleTag.preset})</td>
 
 
 {#if ScheduleTag.actionType==0}
@@ -10246,7 +11506,20 @@ on:click={onPageClick}></textarea>
 
       <TableBodyCell>{index+1}</TableBodyCell>
       <TableBodyCell>{ScheduleTag.tagName}</TableBodyCell>
-      <TableBodyCell>{ScheduleTag.startDay} {ScheduleTag.startTime}</TableBodyCell>
+      <TableBodyCell>{#if ScheduleTag.preset == 'daily'}
+      {ScheduleTag.cronString.split(' ')[1].padStart(2, '0')}:{ScheduleTag.cronString.split(' ')[0].padStart(2, '0')} {:else if ScheduleTag.preset=='weekly'}
+      {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][ScheduleTag.cronString.split(' ')[4] % 7]} {ScheduleTag.cronString.split(' ')[1].padStart(2, '0')}:{ScheduleTag.cronString.split(' ')[0].padStart(2, '0')}
+{:else if ScheduleTag.preset == 'monthly'}
+ Day {ScheduleTag.cronString.split(' ')[2]} 
+  {ScheduleTag.cronString.split(' ')[1].padStart(2,'0')}:{ScheduleTag.cronString.split(' ')[0].padStart(2,'0')}
+{:else if ScheduleTag.preset == 'yearly'}
+  {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][ScheduleTag.cronString.split(' ')[3] - 1]}
+  {' '}
+  {ScheduleTag.cronString.split(' ')[2]}
+  {' '}
+  {ScheduleTag.cronString.split(' ')[1].padStart(2,'0')}:{ScheduleTag.cronString.split(' ')[0].padStart(2,'0')}
+
+      {/if} ({ScheduleTag.preset})</TableBodyCell>
 {#if ScheduleTag.actionType==0}
       <TableBodyCell>Write {ScheduleTag.actionTargetTag} {#if ScheduleTag.modbusTagType==2} ({TCPSlaveTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){:else if ScheduleTag.modbusTagType==0} ({TCPMasterTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){:else if ScheduleTag.modbusTagType==1} ({RTUMasterTag[ScheduleTag.modbusTagOwnerIndex].modbusProfile}){/if} with {ScheduleTag.actionTargetTagValue}</TableBodyCell>
 {:else if ScheduleTag.actionType==1}
@@ -10361,6 +11634,152 @@ on:click={onPageClick}></textarea>
 
   </tr>
 
+<p class="mt-10"></p>
+<tr>
+      <td><p class="pl-20 pt-4 pr-4 text-lg font-light text-right">Scheduler</p></td>
+
+ <td class="pl-5 pt-4" colspan="4" style="border:1px solid black;"><div class="flex gap-4">
+
+<div>      
+<h3 class="font-semibold">Presets</h3>
+<div class="flex flex-wrap gap-3 mt-2 mb-6">
+  <button
+    type="button"
+    on:click={() => applyPreset('daily')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_schedule_tag[new_schedule_tag_index].preset == 'daily'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Daily
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('weekly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_schedule_tag[new_schedule_tag_index].preset == 'weekly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Weekly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('monthly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_schedule_tag[new_schedule_tag_index].preset == 'monthly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Monthly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('yearly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {new_schedule_tag[new_schedule_tag_index].preset == 'yearly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Yearly
+  </button>
+
+</div>
+
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
+    errors.minute = !validators.minute(minute);
+    if (!errors.minute) updateCron();
+  }} placeholder="* / , - 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
+  errors.hour = !validators.hour(hour);
+  if (!errors.hour) updateCron();
+}} placeholder="* / , - 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
+  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
+  if (!errors.dayOfMonth) updateCron();
+}} placeholder="* / , - 1-31" disabled={new_schedule_tag[new_schedule_tag_index].preset != 'monthly' && new_schedule_tag[new_schedule_tag_index].preset != 'yearly'}/>
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Month</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.month ? 'border-2 border-red-500' : ''}" bind:value={month} on:input={() => {
+  errors.month = !validators.month(month);
+  if (!errors.month) updateCron();
+}} placeholder="* / , - 1-12" disabled={new_schedule_tag[new_schedule_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
+  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
+  if (!errors.dayOfWeek) updateCron();
+}} placeholder="* / , - 1-7" disabled={new_schedule_tag[new_schedule_tag_index].preset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Minute (0–59 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Hour (0–23 / , - and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-31 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.month}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-12 / , - and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Weekday (1-7 / , - and * allowed)
+  </p>
+{/if}
+
+</div>
+
+
+
+  </td>
+</tr>
+
 
 
 
@@ -10437,34 +11856,7 @@ on:click={onPageClick}></textarea>
   </tr>
 
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
- <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
-
- <p class="pl-10 pt-4 text-lg font-light text-right">on</p>
-{#if new_schedule_tag[new_schedule_tag_index].actionType==0}
-
-<DateTimePicker bind:value={new_schedule_tag[new_schedule_tag_index].dayTimeStartString} />
-
-{:else}
-<DateTimePicker bind:value={new_schedule_tag[new_schedule_tag_index].dayTimeStartString} disabled/>
-
-{/if}
-      
-
-
- </div>
-  </td>
-</tr>
-
-
-<tr >
-
-<td></td>
-<td style="border: 1px solid black"></td>
-
-</tr>
 
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
@@ -10479,7 +11871,7 @@ on:click={onPageClick}></textarea>
 
 <option value={0}>Epoch Seconds</option>
 <option value={1}>Schneider</option>
-<option value={2}>User Defined</option>
+
 </select>
 
 {:else}
@@ -10560,236 +11952,6 @@ on:click={onPageClick}></textarea>
 
 
 
-<tr>
-      <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
-
- <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
-
- <p class="pl-10 pt-4 text-lg font-light text-right"></p>
-{#if new_schedule_tag[new_schedule_tag_index].actionType==1}
-<div>      
-<h3 class="font-semibold">Presets</h3>
-<div class="flex flex-wrap gap-3 mt-2 mb-6">
-  <button
-    type="button"
-    on:click={() => applyPreset('daily')}
-    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
-      {activePreset == 'daily'
-        ? 'bg-blue-800 text-white scale-105'
-        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
-  >
-    Daily
-  </button>
-
-  <button
-    type="button"
-    on:click={() => applyPreset('weekly')}
-    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
-      {activePreset == 'weekly'
-        ? 'bg-blue-800 text-white scale-105'
-        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
-  >
-    Weekly
-  </button>
-
-  <button
-    type="button"
-    on:click={() => applyPreset('monthly')}
-    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
-      {activePreset == 'monthly'
-        ? 'bg-blue-800 text-white scale-105'
-        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
-  >
-    Monthly
-  </button>
-</div>
-
-
-<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
-<div>
-<label for="cron-minute" class="text-sm">Minute</label>
-<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
-    errors.minute = !validators.minute(minute);
-    if (!errors.minute) updateCron();
-  }} placeholder="* 0-59" />
-</div>
-
-
-<div>
-<label for="cron-hour" class="text-sm">Hour</label>
-<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
-  errors.hour = !validators.hour(hour);
-  if (!errors.hour) updateCron();
-}} placeholder="* / , 0-23" />
-</div>
-
-
-<div>
-<label for="cron-dom" class="text-sm">Day</label>
-<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
-  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
-  if (!errors.dayOfMonth) updateCron();
-}} placeholder="* / , 1-31" disabled={activePreset != 'monthly'} />
-</div>
-
-
-<div>
-<label for="cron-dow" class="text-sm">Weekday</label>
-
-
-<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
-  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
-  if (!errors.dayOfWeek) updateCron();
-}} placeholder="* / , 1-7" disabled={activePreset != 'weekly'}/>
-
-
-
-</div>
-</div>
-
-{#if errors.minute}
-  <p class="text-red-200 text-xs mt-1">
-    Invalid Minute (0–59 / , and * allowed)
-  </p>
-{/if}
-
-{#if errors.hour}
-  <p class="text-red-200 text-xs mt-1">
-    Invalid Hour (0–23 / , and * allowed)
-  </p>
-{/if}
-
-{#if errors.dayOfMonth}
-  <p class="text-red-200 text-xs mt-1">
-    Invalid Day (1-31 / , and * allowed)
-  </p>
-{/if}
-
-
-{#if errors.dayOfWeek}
-  <p class="text-red-200 text-xs mt-1">
-    Invalid Weekday (1-7 / , and * allowed)
-  </p>
-{/if}
-
-</div>
-
-
-{:else}
-
-
-<div>      
-<h3 class="font-semibold">Presets</h3>
-<div class="flex flex-wrap gap-3 mt-2 mb-6">
-  <button
-    type="button"
-    on:click={() => applyPreset('daily')}
-    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
-      {activePreset == 'daily'
-        ? 'bg-blue-800 text-white scale-105'
-        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'} disabled:cursor-not-allowed" disabled>
-    Daily
-  </button>
-
-  <button
-    type="button"
-    on:click={() => applyPreset('weekly')}
-    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
-      {activePreset == 'weekly'
-        ? 'bg-blue-800 text-white scale-105'
-        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'} disabled:cursor-not-allowed" disabled>
-    Weekly
-  </button>
-
-  <button
-    type="button"
-    on:click={() => applyPreset('monthly')}
-    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
-      {activePreset == 'monthly'
-        ? 'bg-blue-800 text-white scale-105'
-        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'} disabled:cursor-not-allowed" disabled>
-    Monthly
-  </button>
-</div>
-
-
-<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
-<div>
-<label for="cron-minute" class="text-sm">Minute</label>
-<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
-    errors.minute = !validators.minute(minute);
-    if (!errors.minute) updateCron();
-  }} placeholder="* 0-59" disabled />
-</div>
-
-
-<div>
-<label for="cron-hour" class="text-sm">Hour</label>
-<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
-  errors.hour = !validators.hour(hour);
-  if (!errors.hour) updateCron();
-}} placeholder="* 0-23" disabled />
-</div>
-
-
-<div>
-<label for="cron-dom" class="text-sm">Day</label>
-<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
-  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
-  if (!errors.dayOfMonth) updateCron();
-}} placeholder="* 1-31" disabled />
-</div>
-
-
-<div>
-<label for="cron-dow" class="text-sm">Weekday</label>
-
-
-<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
-  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
-  if (!errors.dayOfWeek) updateCron();
-}} placeholder="* 1-7" disabled/>
-
-
-
-</div>
-</div>
-
-
-
-</div>
-
-
-{/if}
-
-
-  </td>
-</tr>
-
-
-
-<tr>
-  <td class="text-right" >
-  
-
-  </td>
-
-    <td class="pl-4 pt-4" colspan="5">
-{#if new_schedule_tag[new_schedule_tag_index].actionType==1 && new_schedule_tag[new_schedule_tag_index].actionTimeSyncFormatType==2}
-<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={new_schedule_tag[new_schedule_tag_index].actionTimeSyncFormatUserDefine}></textarea>
-
-{:else}
-<textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
-
-{/if}
-
-
-    </td>
-
-
-    </tr>
-
-
 
  <tr>
     <td></td>
@@ -10842,14 +12004,156 @@ on:click={onPageClick}></textarea>
   </tr>
 
 
+
+<p class="mt-10"></p>
 <tr>
-      <td><p class="pl-2 pt-4 text-lg font-light text-right">Schedule Time</p></td>
-      <td class="pl-5 pt-5">
+      <td><p class="pl-20 pt-4 pr-4 text-lg font-light text-right">Scheduler</p></td>
 
-<DateTimePicker bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].dayTimeStartString} />
+ <td class="pl-5 pt-4" colspan="4" style="border:1px solid black;"><div class="flex gap-4">
 
-      </td>
-  </tr>
+<div>      
+<h3 class="font-semibold">Presets</h3>
+<div class="flex flex-wrap gap-3 mt-2 mb-6">
+  <button
+    type="button"
+    on:click={() => applyPreset('daily')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset == 'daily'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Daily
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('weekly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset == 'weekly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Weekly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('monthly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset == 'monthly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Monthly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('yearly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset == 'yearly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Yearly
+  </button>
+
+</div>
+
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
+    errors.minute = !validators.minute(minute);
+    if (!errors.minute) updateCron();
+  }} placeholder="* 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
+  errors.hour = !validators.hour(hour);
+  if (!errors.hour) updateCron();
+}} placeholder="* / , 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
+  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
+  if (!errors.dayOfMonth) updateCron();
+}} placeholder="* / , 1-31" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset != 'monthly' && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Month</label>
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.month ? 'border-2 border-red-500' : ''}" bind:value={month} on:input={() => {
+  errors.month = !validators.month(month);
+  if (!errors.month) updateCron();
+}} placeholder="* / , 1-12" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset != 'yearly'} />
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
+  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
+  if (!errors.dayOfWeek) updateCron();
+}} placeholder="* / , 1-7" disabled={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].preset != 'weekly'}/>
+
+
+
+</div>
+</div>
+
+{#if errors.minute}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Minute (0–59 / , and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Hour (0–23 / , and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-31 / , and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.month}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Day (1-12 / , and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek}
+  <p class="text-red-700 text-xs mt-1">
+    Invalid Weekday (1-7 / , and * allowed)
+  </p>
+{/if}
+
+</div>
+
+
+
+
+
+
+
+  </td>
+</tr>
 
 
 
@@ -10857,15 +12161,14 @@ on:click={onPageClick}></textarea>
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right">Action</p></td>
 
- <td class="pl-5 pt-4" colspan="2"><div class="flex gap-4">
+ <td class="pl-5 pt-4" colspan="4"><div class="flex gap-4">
 
   <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType} value={0}>Write</Radio>
 {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType==0}
 
 
 
-
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner} on:change={()=>handleScheTargetModbusChange(1)}>
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner} on:change={()=>handleScheTargetModbusChange(0)}>
 <option disabled="" value="">Choose ...</option>
 
 {#each TCPSlaveTag as Slave, index}
@@ -10917,8 +12220,6 @@ on:click={onPageClick}></textarea>
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
 
 {/if}
-
-
 
 <p class="pt-4"> with </p>
 <div class="relative"><input id="operand_value" class="block w-36 text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer border-gray-300 dark:border-gray-600 dark:focus:border-blue-500 focus:border-blue-600 px-2.5 pb-2.5 pt-4 p-2 mt-1 mb-3" name="operand_value" placeholder=" " type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTargetTagValue}> 
@@ -10930,6 +12231,8 @@ on:click={onPageClick}></textarea>
   </tr>
 
 
+
+
 <tr>
       <td><p class="pl-20 pt-4 text-lg font-light text-right"></p></td>
 
@@ -10937,19 +12240,31 @@ on:click={onPageClick}></textarea>
 
   <Radio bind:group={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType} value={1}>Time Sync</Radio>
 
-
+{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType==1}
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-36" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatType}>
 <option disabled="" value="none">Choose ...</option>
 
 <option value={0}>Epoch Seconds</option>
 <option value={1}>Schneider</option>
-<option value={2}>User Defined</option>
+
 </select>
+
+{:else}
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-36 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+<option disabled="" value="none">Choose ...</option>
+
+
+</select>
+
+{/if}
+
+
 <p class="pt-4"> with </p>
 
 {#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType==1}
 
-<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner} on:change={()=>handleScheTargetModbusChange(1)}>
+
+<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].modbusTagOwner} on:change={()=>handleScheTargetModbusChange(0)}>
 <option disabled="" value="">Choose ...</option>
 
 {#each TCPSlaveTag as Slave, index}
@@ -10996,6 +12311,9 @@ on:click={onPageClick}></textarea>
 
 
 {:else}
+
+
+
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-48 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
 
 <select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-1 w-48 h-10 disabled:cursor-not-allowed disabled:opacity-50" disabled></select>
@@ -11006,31 +12324,6 @@ on:click={onPageClick}></textarea>
   </td>
 
   </tr>
-
-
-
-
-<tr>
-  <td class="text-right" >
-  
-
-  </td>
-
-    <td class="pl-4 pt-4" colspan="5">
-{#if changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionType==1 && changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatType==2}
-<textarea id="textarea-id" rows="12" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"  bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scheduleTag[modify_schedule_tag_index].actionTimeSyncFormatUserDefine}></textarea>
-
-{:else}
-<textarea id="textarea-id" placeholder="Disabled" rows="12" name="message" class="w-full rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:placeholder-gray-400 dark:text-white  border border-gray-200 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled></textarea>
-
-{/if}
-
-
-    </td>
-
-
-    </tr>
-
 
 
  <tr>

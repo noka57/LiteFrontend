@@ -504,6 +504,32 @@
     }
 
 
+function parseDbSlaves(text) {
+    const blocks = text
+      .split(/config\s+db_slave/)
+      .map(b => b.trim())
+      .filter(Boolean);
+
+    return blocks
+      .map(block => {
+        const address = block.match(/option\s+address\s+'([^']+)'/)?.[1];
+        const tag = block.match(/option\s+write_column_tag_name\s+'([^']+)'/)?.[1];
+
+        if (!address || !tag) return null;
+
+        return {
+          tag_name: tag,
+          address: Number(address)
+        };
+      })
+      .filter(Boolean);
+  }
+
+
+
+
+
+
   
   function saveScheduleTag()
   {
@@ -4152,56 +4178,34 @@
   }
 
 
-  let searchedTag = "";
-  let loading = false;
-  let error = "";
-  let searchContent;
-  let searchResult="";
 
-  async function doSearchMappingAddress()
+
+
+  let scadaMappingResult = "";
+
+
+$: parsed = parseDbSlaves(scadaMappingResult);
+
+  async function GetScadaAdrress()
   {
-      const res = await fetch(window.location.origin+"/SearchScadaTagMAPPingAddRess", {
+
+    const res = await fetch(window.location.origin+"/GeTScaDaAddREss", {
       method: 'POST',
-      body: searchContent
+      body: sessionBinary
     })
 
     if (res.status == 200)
     {
-      searchResult =await res.text();
-      console.log(searchResult);
-      loading = false;
+      scadaMappingResult =await res.text();
+      console.log(scadaMappingResult);
+
     }
-    else
-    {
-      error="Error "+ res.status;
-      console.log(error);
-      loading = false;
-    }
+
+
   }
 
 
-  function DoSearch(tag) 
-  {
-    error = "";
-    searchResult="";
-    let searchCmd=`uci show mbusd_slave_scada | grep "write_column_tag_name='${tag}'" | sed -n "s/^\\(.*\\)\\.write_column_tag_name=.*/\\1.address/p" | xargs -r uci get`;
-    console.log(searchCmd);
-
-
-    const bytesArray = Array.from(searchCmd).map(char => char.charCodeAt(0));
-    let searchBinary = new Uint8Array(bytesArray);
-    searchContent=new Uint8Array(searchBinary.length+sessionBinary.length);
-    searchContent.set(sessionBinary,0);
-    searchContent.set(searchBinary, sessionBinary.length);
-
-    loading = true;
-    doSearchMappingAddress();
-
-
-  }
     
-
-
 
 
   let new_scada_tag_modal=false;
@@ -4464,23 +4468,133 @@
     new_scada_tag[index].pointType=3;
     new_scada_tag[index].address=40001;
     new_scada_tag[index].modbusTCPSlaveCoilTag=JSON.parse(JSON.stringify(TCPSlaveCoilTag));
+
+
+    new_scada_tag[index].modbusTCPSlaveCoilTag = new_scada_tag[index].modbusTCPSlaveCoilTag.map(slave => ({
+      ...slave,
+      tag: (slave.tag || []).map(t => ({
+        ...t,
+        enable: false
+      }))
+    }));
+
+
+
+
     new_scada_tag[index].modbusTCPSlaveDiscreteInputTag=JSON.parse(JSON.stringify(TCPSlaveDiscreteInputTag)); 
+
+
+    new_scada_tag[index].modbusTCPSlaveDiscreteInputTag = new_scada_tag[index].modbusTCPSlaveDiscreteInputTag.map(slave => ({
+      ...slave,
+      tag: (slave.tag || []).map(t => ({
+        ...t,
+        enable: false
+      }))
+    }));
+
     new_scada_tag[index].modbusTCPSlaveHoldingRegisterTag=JSON.parse(JSON.stringify(TCPSlaveHoldingRegisterTag)); 
+  
+    new_scada_tag[index].modbusTCPSlaveHoldingRegisterTag = new_scada_tag[index].modbusTCPSlaveHoldingRegisterTag.map(slave => ({
+    ...slave,
+    tag: (slave.tag || []).map(t => ({
+      ...t,
+      enable: false
+      }))
+    }));
+
     new_scada_tag[index].modbusTCPSlaveInputRegisterTag=JSON.parse(JSON.stringify(TCPSlaveInputRegisterTag)); 
 
+    new_scada_tag[index].modbusTCPSlaveInputRegisterTag = new_scada_tag[index].modbusTCPSlaveInputRegisterTag.map(slave => ({
+    ...slave,
+    tag: (slave.tag || []).map(t => ({
+      ...t,
+      enable: false
+      }))
+    }));
+
+
+
     new_scada_tag[index].modbusTCPMasterCoilTag=JSON.parse(JSON.stringify(TCPMasterCoilTag));
+    new_scada_tag[index].modbusTCPMasterCoilTag = new_scada_tag[index].modbusTCPMasterCoilTag.map(master => ({
+    ...master,
+    tag: (master.tag || []).map(t => ({
+      ...t,
+      enable: false
+      }))
+    }));
+
+
     new_scada_tag[index].modbusTCPMasterDiscreteInputTag=JSON.parse(JSON.stringify(TCPMasterDiscreteInputTag)); 
+
+    new_scada_tag[index].modbusTCPMasterDiscreteInputTag = new_scada_tag[index].modbusTCPMasterDiscreteInputTag.map(master => ({
+    ...master,
+    tag: (master.tag || []).map(t => ({
+      ...t,
+      enable: false
+      }))
+    }));
+
     new_scada_tag[index].modbusTCPMasterHoldingRegisterTag=JSON.parse(JSON.stringify(TCPMasterHoldingRegisterTag)); 
+
+    new_scada_tag[index].modbusTCPMasterHoldingRegisterTag = new_scada_tag[index].modbusTCPMasterHoldingRegisterTag.map(master => ({
+      ...master,
+      tag: (master.tag || []).map(t => ({
+        ...t,
+        enable: false
+      }))
+    }));
+
+
     new_scada_tag[index].modbusTCPMasterInputRegisterTag=JSON.parse(JSON.stringify(TCPMasterInputRegisterTag)); 
 
+    new_scada_tag[index].modbusTCPMasterInputRegisterTag = new_scada_tag[index].modbusTCPMasterInputRegisterTag.map(master => ({
+      ...master,
+      tag: (master.tag || []).map(t => ({
+        ...t,
+        enable: false
+      }))
+    }));
+
     new_scada_tag[index].modbusRTUMasterCoilTag=JSON.parse(JSON.stringify(RTUMasterCoilTag));
+
+    new_scada_tag[index].modbusRTUMasterCoilTag = new_scada_tag[index].modbusRTUMasterCoilTag.map(master => ({
+      ...master,
+      tag: (master.tag || []).map(t => ({
+        ...t,
+        enable: false
+      }))
+    }));
+
     new_scada_tag[index].modbusRTUMasterDiscreteInputTag=JSON.parse(JSON.stringify(RTUMasterDiscreteInputTag)); 
+    new_scada_tag[index].modbusRTUMasterDiscreteInputTag = new_scada_tag[index].modbusRTUMasterDiscreteInputTag.map(master => ({
+      ...master,
+      tag: (master.tag || []).map(t => ({
+        ...t,
+        enable: false
+      }))
+    }));
+
     new_scada_tag[index].modbusRTUMasterHoldingRegisterTag=JSON.parse(JSON.stringify(RTUMasterHoldingRegisterTag)); 
+    new_scada_tag[index].modbusRTUMasterHoldingRegisterTag = new_scada_tag[index].modbusRTUMasterHoldingRegisterTag.map(master => ({
+      ...master,
+      tag: (master.tag || []).map(t => ({
+        ...t,
+        enable: false
+      }))
+    }));
+
+
     new_scada_tag[index].modbusRTUMasterInputRegisterTag=JSON.parse(JSON.stringify(RTUMasterInputRegisterTag)); 
 
+    new_scada_tag[index].modbusRTUMasterInputRegisterTag = new_scada_tag[index].modbusRTUMasterInputRegisterTag.map(master => ({
+      ...master,
+      tag: (master.tag || []).map(t => ({
+        ...t,
+        enable: false
+      }))
+    }));
 
 
-    validSlavePort=true;
 
     target_index_for_show_tag=-1;
     tcp_master_tag_show=false;
@@ -5950,27 +6064,27 @@
 
         for (let i=0; i<saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag.length; i++)
         {
-          let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+          let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
           tcp_slave_tag=[...tcp_slave_tag, item];
 
           if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==0)
           {
-            let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
             tcp_slave_coil_tag=[...tcp_slave_coil_tag, coil_item];
           }
           else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==1)
           {
-            let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
             tcp_slave_discrete_input_tag=[...tcp_slave_discrete_input_tag, discrete_input_item];
           }
           else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==3)
           {
-            let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
             tcp_slave_holding_register_tag=[...tcp_slave_holding_register_tag, holding_register_item];
           }
           else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].pointType==2)
           {
-            let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName};
+            let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.slave[0].tag[i].dataType};
 
             tcp_slave_input_register_tag=[...tcp_slave_input_register_tag, input_register_item];
           }          
@@ -6021,28 +6135,28 @@
 
           for (let j=0;j<saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag.length;j++)
           {
-            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
 
             tcp_master_tag=[...tcp_master_tag, item];
 
             if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==0)
             {
-              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
               tcp_master_coil_tag=[...tcp_master_coil_tag, coil_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==1)
             {
-              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
               tcp_master_discrete_input_tag=[...tcp_master_discrete_input_tag, discrete_input_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==3)
             {
-              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
               tcp_master_holding_register_tag=[...tcp_master_holding_register_tag, holding_register_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].pointType==2)
             {
-              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName};
+              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_tcp.master[i].tag[j].dataType};
 
               tcp_master_input_register_tag=[...tcp_master_input_register_tag, input_register_item];
             }    
@@ -6096,28 +6210,28 @@
 
           for (let j=0;j<saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag.length;j++)
           {
-            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+            let item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName, "dataType":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
 
             rtu_master_tag=[...rtu_master_tag, item];
 
             if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==0)
             {
-              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let coil_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
               rtu_master_coil_tag=[...rtu_master_coil_tag, coil_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==1)
             {
-              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let discrete_input_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
               rtu_master_discrete_input_tag=[...rtu_master_discrete_input_tag, discrete_input_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==3)
             {
-              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let holding_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
               rtu_master_holding_register_tag=[...rtu_master_holding_register_tag, holding_register_item];
             }
             else if (saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].pointType==2)
             {
-              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName};
+              let input_register_item={"enable":true, "tagName":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].tagName,"dataType":saved_changed_modbus_data.config.fieldManagement_modbus_rtu.master[i].tag[j].dataType};
 
               rtu_master_input_register_tag=[...rtu_master_input_register_tag, input_register_item];
             } 
@@ -7141,7 +7255,7 @@
 
 </TabItem>
    
-<TabItem title="Tag Rule">
+<TabItem title="Tag Rule" on:click={GetScadaAdrress}>
 <Accordion>
  
 
@@ -10211,7 +10325,7 @@ on:click={onPageClick}></textarea>
     <TableHeadCell>No</TableHeadCell>
     <TableHeadCell class="w-18">Tag Name</TableHeadCell>
     <TableHeadCell class="w-18">Point Type</TableHeadCell>      
-    <TableHeadCell class="w-18">Address</TableHeadCell>    
+    <TableHeadCell class="w-18">Scada Address</TableHeadCell>    
     <TableHeadCell class="w-18"></TableHeadCell>
     <TableHeadCell class="w-18"></TableHeadCell>
     <TableHeadCell class="w-18"></TableHeadCell>
@@ -10413,7 +10527,7 @@ on:click={onPageClick}></textarea>
 
 
 <tr>
-      <td><p class="pt-4 text-lg font-light text-right">Logical Address</p></td><td class="pl-5 pt-5"><input type="number" bind:value={new_scada_tag[new_scada_tag_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pt-4 text-lg font-light text-right">Scada Address</p></td><td class="pl-5 pt-5"><input type="number" bind:value={new_scada_tag[new_scada_tag_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 <td></td>
 <td></td>
@@ -10919,7 +11033,7 @@ on:click={onPageClick}></textarea>
 
 
 <tr>
-      <td><p class="pt-4 text-lg font-light text-right">Logical Address</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
+      <td><p class="pt-4 text-lg font-light text-right">Scada Address</p></td><td class="pl-5 pt-5"><input type="number" bind:value={changed_data_tag_pro_data.config.service_dataTagPro_tagRule.scadaTag[modify_scada_tag_index].address} class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-20 p-2.5 dark:bg-gray-700 dark:border-green-500"></td>
 
 <td></td>
 <td></td>
@@ -11376,15 +11490,37 @@ on:click={onPageClick}></textarea>
 
 
 <p class="pt-10"></p>
-<div class="max-w-md p-4 rounded-xl bg-white shadow"><h2 class="text-lg font-semibold mb-3">Search Applied Address By Tag Name</h2> <div class="relative">
-  <input id="tag-input" class="w-full pl-10 pr-3 py-2 border rounded-lg" placeholder="Tag Name" bind:value={searchedTag} on:keydown={(e) => e.key === "Enter" && DoSearch(searchedTag)}
-><button class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600" aria-label="Search" on:click={()=>DoSearch(searchedTag)}
-    disabled={loading}>
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 0 0-15 a7.5 7.5 0 0 0 0 15 z"></path>
-    </svg>
-  </button>
-</div><div class="mt-4 p-3 bg-gray-100 rounded-lg text-sm"><div><b>Address:{#if searchResult != ""}{searchResult}{/if}</b></div></div></div>
+
+
+
+
+
+
+
+<Table shadow striped={true} tableNoWFull={true}>
+  <TableHead>
+    <TableHeadCell class="w-18">Modbus Tag Name</TableHeadCell>
+    <TableHeadCell class="w-18">Point Type</TableHeadCell>    
+    <TableHeadCell >Mapping Scada Address</TableHeadCell> 
+ 
+
+  </TableHead>
+
+  <TableBody>
+
+
+ {#each parsed as item}
+
+ <TableBodyRow>
+    <TableBodyCell>{item.tag_name}</TableBodyCell>
+      <TableBodyCell>{#if item.address >= 40001}Holding Register{:else if item.address >= 30001}Input Register{:else if item.address >=10001}Discrete Input{:else if item.address>=1}Coil{/if}</TableBodyCell>
+        <TableBodyCell>{item.address}</TableBodyCell>
+ </TableBodyRow>
+{/each}
+
+
+  </TableBody>
+  </Table>
 
 
 

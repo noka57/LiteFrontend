@@ -1,9 +1,9 @@
 import { c as create_ssr_component, v as validate_component, i as add_attribute } from "../../_app/immutable/chunks/index-54377ec4.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
-/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-77cf2b36.js";
-import { M as Modal } from "../../_app/immutable/chunks/Modal-de764e50.js";
-import { T as Table } from "../../_app/immutable/chunks/Table-297ce0df.js";
+/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-5b795065.js";
+import { M as Modal } from "../../_app/immutable/chunks/Modal-e8760b90.js";
+import { T as Table } from "../../_app/immutable/chunks/Table-a510ae4f.js";
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-85264b11.js";
 import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-20bd2092.js";
 import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-db67647d.js";
@@ -11,9 +11,7 @@ import { T as TabItem } from "../../_app/immutable/chunks/TabItem-0910d666.js";
 import { T as Tabs } from "../../_app/immutable/chunks/Tabs-92f4be17.js";
 import { sessionidG } from "../endpoints/sessionG.js";
 import { firewallConfig, Firewall_General_ConfigChangedLog, Firewall_IPFilter_ConfigChangedLog, Firewall_MACFilter_ConfigChangedLog, ChangedFirewallConfig } from "../endpoints/configG.js";
-/* empty css                                           */import "../../_app/immutable/chunks/Label-44304d72.js";
-import "../../_app/immutable/chunks/Frame-c602be1d.js";
-import "../../_app/immutable/chunks/CloseButton-dd962073.js";
+/* empty css                                           */import "../../_app/immutable/chunks/Frame-c602be1d.js";
 import "../../_app/immutable/chunks/index-df2ccd83.js";
 const Firewall = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let changed_firewall_data = {};
@@ -391,24 +389,6 @@ ${validate_component(Modal, "Modal").$$render(
                                 return `Ethernet WAN`;
                               }
                             }
-                          )}
-  ${validate_component(Radio, "Radio").$$render(
-                            $$result,
-                            {
-                              value: 3,
-                              group: newIPF_Item[new_ipfilter_index].fromIf
-                            },
-                            {
-                              group: ($$value) => {
-                                newIPF_Item[new_ipfilter_index].fromIf = $$value;
-                                $$settled = false;
-                              }
-                            },
-                            {
-                              default: () => {
-                                return `Cellular WAN`;
-                              }
-                            }
                           )}</div></td></tr>
 
 
@@ -467,24 +447,6 @@ ${validate_component(Modal, "Modal").$$render(
                             {
                               default: () => {
                                 return `Ethernet WAN`;
-                              }
-                            }
-                          )}
-  ${validate_component(Radio, "Radio").$$render(
-                            $$result,
-                            {
-                              value: 3,
-                              group: newIPF_Item[new_ipfilter_index].toIf
-                            },
-                            {
-                              group: ($$value) => {
-                                newIPF_Item[new_ipfilter_index].toIf = $$value;
-                                $$settled = false;
-                              }
-                            },
-                            {
-                              default: () => {
-                                return `Cellular WAN`;
                               }
                             }
                           )}</div></td></tr>

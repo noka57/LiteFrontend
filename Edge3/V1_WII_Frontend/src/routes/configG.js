@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 
 export const dashboadData= writable("");
 export const VPNdashboad= writable("");
+export const ioDashboard=writable("");
 export const ewanWebInputFlag=writable("");
 export const cwanWebInputFlag=writable("");
 export const fakeTimeMSecSince1970=writable("");
@@ -34,7 +35,11 @@ export const lanConfig=writable("");
 export const wanConfig=writable("");
 export const configurationConfig=writable("");
 export const datatagproConfig=writable("");
+export const schedulerConfig=writable("");
 
+
+export const SchedulerConfigChangedLog=writable("");
+export const ChangedSchedulerConfig=writable("");
 
 export const WiFi_Bluetooth_ConfigChangedLog=writable("");
 export const WiFi_WiFi5_ConfigChangedLog=writable("");
@@ -177,7 +182,9 @@ export const ChangedStaticRouteConfig=writable("");
 export const MaintenanceConfigChangedLog=writable("");
 export const ChangedMaintenanceConfig=writable("");
 
-export const OperationConfigChangedLog=writable("");
+
+export const OperationConfig_Reboot_ChangedLog=writable("");
+export const OperationConfig_Time_ChangedLog=writable("");
 export const ChangedOperationConfig=writable("");
 
 export const DockerConfigChangedLog=writable("");

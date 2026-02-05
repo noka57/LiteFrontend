@@ -2,6 +2,7 @@ import { w as writable } from "../../_app/immutable/chunks/index-df2ccd83.js";
 import "../../_app/immutable/chunks/index-54377ec4.js";
 const dashboadData = writable("");
 const VPNdashboad = writable("");
+const ioDashboard = writable("");
 const ewanWebInputFlag = writable("");
 const cwanWebInputFlag = writable("");
 const fakeTimeMSecSince1970 = writable("");
@@ -32,6 +33,11 @@ const lanConfig = writable("");
 const wanConfig = writable("");
 const configurationConfig = writable("");
 const datatagproConfig = writable("");
+const schedulerConfig = writable("");
+const SchedulerConfigChangedLog = writable("");
+const ChangedSchedulerConfig = writable("");
+const WiFi_Bluetooth_ConfigChangedLog = writable("");
+const WiFi_WiFi5_ConfigChangedLog = writable("");
 const WiFi_11ah_ConfigChangedLog = writable("");
 const WiFi_11ah_General_ConfigChangedLog = writable("");
 const ChangedWiFiConfig = writable("");
@@ -87,6 +93,7 @@ const ChangedSDataLoggerConfig = writable("");
 const Certificate_Settings_ConfigChangedLog = writable("");
 const Certificate_CRL_ConfigChangedLog = writable("");
 const ChangedCertificateConfig = writable("");
+const ModbusGateway_General_ConfigChangedLog = writable("");
 const ModbusGateway_TtR_ConfigChangedLog = writable("");
 const ModbusGateway_RtT_ConfigChangedLog = writable("");
 const ModbusGateway_RtR_ConfigChangedLog = writable("");
@@ -142,7 +149,8 @@ const StaticRouteConfigChangedLog = writable("");
 const ChangedStaticRouteConfig = writable("");
 const MaintenanceConfigChangedLog = writable("");
 const ChangedMaintenanceConfig = writable("");
-const OperationConfigChangedLog = writable("");
+const OperationConfig_Reboot_ChangedLog = writable("");
+const OperationConfig_Time_ChangedLog = writable("");
 const ChangedOperationConfig = writable("");
 const DockerConfigChangedLog = writable("");
 const ChangedDockerConfig = writable("");
@@ -184,6 +192,7 @@ export {
   ChangedRemoteServiceConfig,
   ChangedSConfigConfig,
   ChangedSDataLoggerConfig,
+  ChangedSchedulerConfig,
   ChangedStaticRouteConfig,
   ChangedWANConfig,
   ChangedWiFiConfig,
@@ -231,6 +240,7 @@ export {
   MaintenanceConfigChangedLog,
   ModbusDataModel_Master_ConfigChangedLog,
   ModbusDataModel_Slave_ConfigChangedLog,
+  ModbusGateway_General_ConfigChangedLog,
   ModbusGateway_RtR_ConfigChangedLog,
   ModbusGateway_RtT_ConfigChangedLog,
   ModbusGateway_TtR_ConfigChangedLog,
@@ -256,7 +266,8 @@ export {
   OpenVPN_Server_Advanced_PFW_ConfigChangedLog,
   OpenVPN_Server_Advanced_PSK_ConfigChangedLog,
   OpenVPN_Server_Conn_ConfigChangedLog,
-  OperationConfigChangedLog,
+  OperationConfig_Reboot_ChangedLog,
+  OperationConfig_Time_ChangedLog,
   PortConnection_COM_ConfigChangedLog,
   PortConnection_LAN_ConfigChangedLog,
   PortConnection_Transparent_ConfigChangedLog,
@@ -271,6 +282,7 @@ export {
   SDatalogger_ProxyMode_Cloud_ConfigChangedLog,
   SDatalogger_ProxyMode_Edge_ConfigChangedLog,
   SDatalogger_ProxyMode_Topic_ConfigChangedLog,
+  SchedulerConfigChangedLog,
   StaticRouteConfigChangedLog,
   VPNdashboad,
   WAN_CWAN1_Advanced_ConfigChangedLog,
@@ -285,6 +297,8 @@ export {
   WiFiConfig,
   WiFi_11ah_ConfigChangedLog,
   WiFi_11ah_General_ConfigChangedLog,
+  WiFi_Bluetooth_ConfigChangedLog,
+  WiFi_WiFi5_ConfigChangedLog,
   awsIoTcoreConfig,
   azureConfig,
   certificateConfig,
@@ -301,6 +315,7 @@ export {
   fakeTimeString,
   firewallConfig,
   genericMQTTConfig,
+  ioDashboard,
   ipsecConfig,
   lanConfig,
   maintenanceConfig,
@@ -310,6 +325,7 @@ export {
   operationConfig,
   portConnectionConfig,
   remoteServiceConfig,
+  schedulerConfig,
   sconversionConfig,
   sdataLoggerConfig,
   staticrouteConfig,

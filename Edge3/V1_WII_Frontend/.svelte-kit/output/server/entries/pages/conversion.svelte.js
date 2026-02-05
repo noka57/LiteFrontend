@@ -1,11 +1,12 @@
 import { c as create_ssr_component, v as validate_component, i as add_attribute, e as escape, o as each } from "../../_app/immutable/chunks/index-54377ec4.js";
-import { A as Accordion, a as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-b4ae9971.js";
+import { A as Accordion } from "../../_app/immutable/chunks/Accordion-c8c12650.js";
+import { A as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-ab074a69.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
-/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-77cf2b36.js";
-import { T as Toggle } from "../../_app/immutable/chunks/Toggle-e6b9a75f.js";
-import { M as Modal } from "../../_app/immutable/chunks/Modal-de764e50.js";
-import { T as Table } from "../../_app/immutable/chunks/Table-297ce0df.js";
+/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-5b795065.js";
+import { T as Toggle } from "../../_app/immutable/chunks/Toggle-93a31009.js";
+import { M as Modal } from "../../_app/immutable/chunks/Modal-e8760b90.js";
+import { T as Table } from "../../_app/immutable/chunks/Table-a510ae4f.js";
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-85264b11.js";
 import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-20bd2092.js";
 import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-db67647d.js";
@@ -15,8 +16,6 @@ import { T as Tabs } from "../../_app/immutable/chunks/Tabs-92f4be17.js";
 import { sconversionConfig, Conversion_Opcua2Modbus_ConfigChangedLog, Conversion_OpcuaGateway_ConfigChangedLog, OPCUA_Server_ConfigChangedLog, OPCUA_Client_ConfigChangedLog, ChangedSConfigConfig, modbusConfig, ChangedModbusConfig } from "../endpoints/configG.js";
 import "../../_app/immutable/chunks/index-df2ccd83.js";
 import "../../_app/immutable/chunks/Frame-c602be1d.js";
-import "../../_app/immutable/chunks/Label-44304d72.js";
-import "../../_app/immutable/chunks/CloseButton-dd962073.js";
 let defaultClass = "flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl";
 let styleSpecial = true;
 const Conversion = create_ssr_component(($$result, $$props, $$bindings, slots) => {

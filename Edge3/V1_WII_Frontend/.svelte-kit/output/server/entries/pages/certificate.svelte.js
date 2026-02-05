@@ -2,7 +2,7 @@ import { c as create_ssr_component, v as validate_component, e as escape } from 
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
 /* empty css                                                                            */import { F as FloatingLabelInput } from "../../_app/immutable/chunks/FloatingLabelInput-49cd3b9b.js";
-import { T as Table } from "../../_app/immutable/chunks/Table-297ce0df.js";
+import { T as Table } from "../../_app/immutable/chunks/Table-a510ae4f.js";
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-85264b11.js";
 import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-20bd2092.js";
 import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-db67647d.js";

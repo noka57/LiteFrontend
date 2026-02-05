@@ -1,9 +1,9 @@
 import { c as create_ssr_component, v as validate_component, i as add_attribute, e as escape, o as each } from "../../_app/immutable/chunks/index-54377ec4.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
-/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-77cf2b36.js";
-import { M as Modal } from "../../_app/immutable/chunks/Modal-de764e50.js";
-import { T as Table } from "../../_app/immutable/chunks/Table-297ce0df.js";
+/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-5b795065.js";
+import { M as Modal } from "../../_app/immutable/chunks/Modal-e8760b90.js";
+import { T as Table } from "../../_app/immutable/chunks/Table-a510ae4f.js";
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-85264b11.js";
 import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-20bd2092.js";
 import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-db67647d.js";
@@ -11,9 +11,7 @@ import { T as TabItem } from "../../_app/immutable/chunks/TabItem-0910d666.js";
 import { T as Tabs } from "../../_app/immutable/chunks/Tabs-92f4be17.js";
 /* empty css                                           */import { sessionidG } from "../endpoints/sessionG.js";
 import { ipsecConfig, ChangedIPsecConfig, openvpnConfig, ChangedOpenVPNConfig, wanConfig, ChangedWANConfig, natConfig, NAT_LoopBack_ConfigChangedLog, NAT_VC_ConfigChangedLog, NAT_VS_ConfigChangedLog, NAT_Dmz_ConfigChangedLog, ChangedNATConfig } from "../endpoints/configG.js";
-import "../../_app/immutable/chunks/Label-44304d72.js";
 import "../../_app/immutable/chunks/Frame-c602be1d.js";
-import "../../_app/immutable/chunks/CloseButton-dd962073.js";
 import "../../_app/immutable/chunks/index-df2ccd83.js";
 const Nat = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let formModalPFW = false;
@@ -1624,24 +1622,7 @@ ${saved_changed_wan_data != "" && saved_changed_wan_data.config.networking_wan_p
                               }
                             }
                           )}` : ``}  
-  ${validate_component(Radio, "Radio").$$render(
-                            $$result,
-                            {
-                              value: 2,
-                              group: newPFW_Item[new_pfw_index].incomingIf
-                            },
-                            {
-                              group: ($$value) => {
-                                newPFW_Item[new_pfw_index].incomingIf = $$value;
-                                $$settled = false;
-                              }
-                            },
-                            {
-                              default: () => {
-                                return `Cellular WAN`;
-                              }
-                            }
-                          )}
+
 ${saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1 ? `${saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 ? `${validate_component(Radio, "Radio").$$render(
                             $$result,
                             {
@@ -2389,24 +2370,7 @@ ${saved_changed_wan_data != "" && saved_changed_wan_data.config.networking_wan_p
                               }
                             }
                           )}` : ``}  
-  ${validate_component(Radio, "Radio").$$render(
-                            $$result,
-                            {
-                              value: 2,
-                              group: changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf
-                            },
-                            {
-                              group: ($$value) => {
-                                changed_nat_data.config.networking_port_forwarding.list[port_forwarding_current_index].incomingIf = $$value;
-                                $$settled = false;
-                              }
-                            },
-                            {
-                              default: () => {
-                                return `Cellular WAN`;
-                              }
-                            }
-                          )}
+
 ${saved_changed_openvpn_data != "" && saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnServiceEn == 1 ? `${saved_changed_openvpn_data.config.vpn_openvpn_basic.ovpnRole == 0 ? `${validate_component(Radio, "Radio").$$render(
                             $$result,
                             {
@@ -3098,34 +3062,8 @@ ${changed_nat_data.config.networking_port_forwarding.list[port_forwarding_curren
           }
         })}
 
- ${validate_component(TabItem, "TabItem").$$render($$result, { title: "DMZ" }, {}, {
-          default: () => {
-            return `<label>${``}
-  Enable DMZ
-</label>
 
-<table><tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Interface</p></td>
-
-    <td class="pl-5 pt-4"><div class="flex gap-4">${``}</div></td></tr>
-
-
-<tr>${``}</tr>
-
-
-      <tr><td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-        <td></td>
-
-
-    <td class="pl-10">${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
-              default: () => {
-                return `<svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Save`;
-              }
-            })}</td></tr></table>`;
-          }
-        })}`;
+  ${``}`;
       }
     })}`;
   } while (!$$settled);

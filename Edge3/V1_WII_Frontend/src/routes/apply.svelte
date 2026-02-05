@@ -39,7 +39,8 @@
       ConfigurationP2EConfigChangedLog,
       ChangedConfigurationConfig,
       operationConfig,
-  		OperationConfigChangedLog,
+  		OperationConfig_Time_ChangedLog,
+      OperationConfig_Reboot_ChangedLog,
   		ChangedOperationConfig,
       dockerConfig,
   		DockerConfigChangedLog,
@@ -231,7 +232,8 @@
 
   let ContentOperation;
   let OperationBinary=null;
-  let operation_changedValues = [];
+  let operation_time_changedValues = [];
+  let operation_reboot_changedValues = [];     
 
 
   let ContentDocker;
@@ -914,8 +916,13 @@
       configuration_p2e_changedValues = val;
   });
 
-  OperationConfigChangedLog.subscribe(val => {
-      operation_changedValues = val;
+  OperationConfig_Time_ChangedLog.subscribe(val => {
+      operation_time_changedValues = val;
+  });
+
+
+  OperationConfig_Reboot_ChangedLog.subscribe(val => {
+      operation_reboot_changedValues = val;
   });
 
 
@@ -1407,9 +1414,10 @@
       let applied_new_operation_data= JSON.parse(JSON.stringify(operation_data));
       operationConfig.set(applied_new_operation_data);
 
-      operation_changedValues = [];
-      OperationConfigChangedLog.set(operation_changedValues);
-
+      operation_time_changedValues = [];
+      operation_reboot_changedValues=[];
+      OperationConfig_Time_ChangedLog.set(operation_time_changedValues);
+      OperationConfig_Reboot_ChangedLog.set(operation_reboot_changedValues);
       RestartOperation();
 	  }
 	} 
@@ -2525,7 +2533,7 @@
       RestartCount++;  
     }
 
-    if (operation_data != "" && operation_changedValues.length!=0)
+    if (operation_data != "" && (operation_time_changedValues.length!=0 || operation_reboot_changedValues.length !=0))
     {
     	SetCount++;
       RestartCount++; 
@@ -2785,7 +2793,7 @@
         }
 
 
-        if (operation_data != "" && operation_changedValues.length!=0)
+        if (operation_data != "" && (operation_time_changedValues.length!=0 || operation_reboot_changedValues.length !=0))
         {
           let OperationString = JSON.stringify(operation_data, null, 0);
 					const bytesArray = Array.from(OperationString).map(char => char.charCodeAt(0));
@@ -4684,13 +4692,34 @@ wifi_wifi5_changedValues.length !=0 || wifi_bluetooth_changedValues.length !=0}
 {/if}
 
 
-{#if operation_changedValues.length!=0}
+{#if operation_time_changedValues.length!=0 || operation_reboot_changedValues.length !=0}
   <Li>Operation
+{#if operation_time_changedValues.length!=0}
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+    Time
   <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
-  {#each operation_changedValues as item}
+  {#each operation_time_changedValues as item}
       <Li>{item}</Li>
    {/each}
   </List>
+</Li>
+</List>
+{/if}
+
+{#if operation_reboot_changedValues.length!=0}
+<List tag="ol" class="pl-5 mt-2 space-y-1 text-blue-400">
+  <Li>
+    Reboot
+  <List tag="ol" class="pl-5 mt-2 space-y-1 text-red-600">
+  {#each operation_reboot_changedValues as item}
+      <Li>{item}</Li>
+   {/each}
+  </List>
+</Li>
+</List>
+{/if}
+
   </Li>
 {/if}
 
@@ -4782,7 +4811,8 @@ wifi_wifi5_changedValues.length !=0 || wifi_bluetooth_changedValues.length !=0}
   			staticR_changedValues.length != 0 ||
   			maintenance_changedValues.length != 0 ||
         configuration_p2e_changedValues.length != 0 ||
-  			operation_changedValues.length != 0 ||
+  			operation_time_changedValues.length != 0 ||
+        operation_reboot_changedValues.length != 0 ||
   			docker_changedValues.length != 0 ||
   			cwan1_basic_changedValues !=0 ||
   			cwan1_advanced_changedValues != 0 ||

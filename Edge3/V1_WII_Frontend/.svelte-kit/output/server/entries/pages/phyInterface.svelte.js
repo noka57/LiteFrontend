@@ -1,10 +1,11 @@
-import { c as create_ssr_component, v as validate_component, i as add_attribute, e as escape, o as each } from "../../_app/immutable/chunks/index-54377ec4.js";
-import { A as Accordion, a as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-b4ae9971.js";
+import { c as create_ssr_component, v as validate_component, i as add_attribute, e as escape } from "../../_app/immutable/chunks/index-54377ec4.js";
+import { A as Accordion } from "../../_app/immutable/chunks/Accordion-c8c12650.js";
+import { A as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-ab074a69.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
-/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-77cf2b36.js";
-import { M as Modal } from "../../_app/immutable/chunks/Modal-de764e50.js";
-import { T as Table } from "../../_app/immutable/chunks/Table-297ce0df.js";
+/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-5b795065.js";
+import { M as Modal } from "../../_app/immutable/chunks/Modal-e8760b90.js";
+import { T as Table } from "../../_app/immutable/chunks/Table-a510ae4f.js";
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-85264b11.js";
 import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-db67647d.js";
 import { T as TabItem } from "../../_app/immutable/chunks/TabItem-0910d666.js";
@@ -13,12 +14,9 @@ import { sessionidG } from "../endpoints/sessionG.js";
 import { ModbusTCP_Slave_ConfigChangedLog, ModbusTCP_Master_ConfigChangedLog, ModbusRTU_Slave_ConfigChangedLog, ModbusRTU_Master_ConfigChangedLog, ChangedModbusConfig, modbusConfig, portConnectionConfig, PortConnection_LAN_ConfigChangedLog, PortConnection_COM_ConfigChangedLog, PortConnection_Transparent_ConfigChangedLog, ChangedPortConnectionConfig } from "../endpoints/configG.js";
 import "../../_app/immutable/chunks/index-df2ccd83.js";
 import "../../_app/immutable/chunks/Frame-c602be1d.js";
-import "../../_app/immutable/chunks/Label-44304d72.js";
-import "../../_app/immutable/chunks/CloseButton-dd962073.js";
 let defaultClass = "flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl";
 const PhyInterface = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let changed_port_connection_data = {};
-  let saved_changed_port_connection_data = {};
   let Adc1Type = 0;
   let Adc2Type = 0;
   let DOValue = 0;
@@ -47,7 +45,6 @@ const PhyInterface = create_ssr_component(($$result, $$props, $$bindings, slots)
   PortConnection_Transparent_ConfigChangedLog.subscribe((val) => {
   });
   ChangedPortConnectionConfig.subscribe((val) => {
-    saved_changed_port_connection_data = val;
   });
   let modify_com_modal = false;
   let modify_com_index;
@@ -280,22 +277,7 @@ ${validate_component(Modal, "Modal").$$render(
                   }
                 })}
 
-
-  ${validate_component(AccordionItem, "AccordionItem").$$render($$result, { defaultClass }, {}, {
-                  header: () => {
-                    return `<span slot="header" class="pl-4">TCP Transparent
-    </span>`;
-                  },
-                  default: () => {
-                    return `<select class="block text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-sm p-2.5 mt-2 mb-4 w-64"><option disabled="" value="none">Choose Profile ...</option>${each(saved_changed_port_connection_data.config.fieldManagement_physicalInterface_rs485, (TargetProfile, index) => {
-                      return `<option${add_attribute("value", index, 0)}>${escape(TargetProfile.serialProfile)}</option>`;
-                    })}</select>
-
-<p class="pt-4"></p>
-
 ${``}`;
-                  }
-                })}`;
               }
             })}`;
           }
@@ -317,7 +299,7 @@ ${validate_component(Accordion, "Accordion").$$render($$result, {}, {}, {
                     return `<table><tr><td class="pl-10"><div class="flex gap-1"><p class="w-26 pt-2">DO:</p>
    ${validate_component(Radio, "Radio").$$render(
                       $$result,
-                      { class: "pl-3", value: 0, group: DOValue },
+                      { class: "pl-3", value: 1, group: DOValue },
                       {
                         group: ($$value) => {
                           DOValue = $$value;
@@ -332,7 +314,7 @@ ${validate_component(Accordion, "Accordion").$$render($$result, {}, {}, {
                     )}   
    ${validate_component(Radio, "Radio").$$render(
                       $$result,
-                      { class: "p-1", value: 1, group: DOValue },
+                      { class: "p-1", value: 0, group: DOValue },
                       {
                         group: ($$value) => {
                           DOValue = $$value;
@@ -356,7 +338,7 @@ ${validate_component(Accordion, "Accordion").$$render($$result, {}, {}, {
 <tr><td class="pl-10 pt-10"><div class="flex gap-1"><p class="w-26 pt-3">AI-1:</p>
    ${validate_component(Radio, "Radio").$$render(
                       $$result,
-                      { class: "p-3", value: 0, group: Adc1Type },
+                      { class: "p-3", value: 1, group: Adc1Type },
                       {
                         group: ($$value) => {
                           Adc1Type = $$value;
@@ -371,7 +353,7 @@ ${validate_component(Accordion, "Accordion").$$render($$result, {}, {}, {
                     )}
    ${validate_component(Radio, "Radio").$$render(
                       $$result,
-                      { class: "p-1", value: 1, group: Adc1Type },
+                      { class: "p-1", value: 0, group: Adc1Type },
                       {
                         group: ($$value) => {
                           Adc1Type = $$value;
@@ -396,7 +378,7 @@ ${validate_component(Accordion, "Accordion").$$render($$result, {}, {}, {
 <tr><td class="pl-10 pt-10"><div class="flex gap-1"><p class="w-26 pt-3">AI-2:</p>
    ${validate_component(Radio, "Radio").$$render(
                       $$result,
-                      { class: "p-3", value: 0, group: Adc2Type },
+                      { class: "p-3", value: 1, group: Adc2Type },
                       {
                         group: ($$value) => {
                           Adc2Type = $$value;
@@ -411,7 +393,7 @@ ${validate_component(Accordion, "Accordion").$$render($$result, {}, {}, {
                     )}
    ${validate_component(Radio, "Radio").$$render(
                       $$result,
-                      { class: "p-1", value: 1, group: Adc2Type },
+                      { class: "p-1", value: 0, group: Adc2Type },
                       {
                         group: ($$value) => {
                           Adc2Type = $$value;
@@ -440,15 +422,15 @@ ${validate_component(Accordion, "Accordion").$$render($$result, {}, {}, {
     </span>`;
                   },
                   default: () => {
-                    return `<table><tr><td class="pl-10 pt-3"><div class="flex gap-1"><p class="w-26 pt-2">DI: ${`Low`}</p></div></td></tr>
+                    return `<table><tr><td class="pl-10 pt-3"><div class="flex gap-1"><p class="w-26 pt-2">DI: <span class="text-red-700">${`Low`}</span></p></div></td></tr>
 
 
-<tr><td class="pl-10 pt-10"><div class="flex gap-1"><p class="w-26 pt-2">DO: ${DOValue == 0 ? `Close` : `${DOValue == 1 ? `Open` : ``}`}</p></div></td></tr>
+<tr><td class="pl-10 pt-10"><div class="flex gap-1"><p class="w-26 pt-2">DO: <span class="text-red-700">${DOValue == 1 ? `Close` : `${DOValue == 0 ? `Open` : ``}`}</span></p></div></td></tr>
 
 
-<tr><td class="pl-10 pt-10"><div class="flex gap-1"><p class="w-26 pt-2">AI-1:${``}${Adc1Type == 0 ? ` (Voltage)` : `${Adc1Type == 1 ? ` (Current)` : ``}`}</p></div></td></tr>
+<tr><td class="pl-10 pt-10"><div class="flex gap-1"><p class="w-26 pt-2">AI-1: <span class="text-red-700">${``}${Adc1Type == 1 ? ` (Voltage)` : `${Adc1Type == 0 ? ` (Current)` : ``}`}</span></p></div></td></tr>
 
-<tr><td class="pl-10 pt-10"><div class="flex gap-1"><p class="w-26 pt-2">AI-2:${``}${Adc2Type == 0 ? ` (Voltage)` : `${Adc2Type == 1 ? ` (Current)` : ``}`}</p></div></td></tr>
+<tr><td class="pl-10 pt-10"><div class="flex gap-1"><p class="w-26 pt-2">AI-2: <span class="text-red-700">${``}${Adc2Type == 1 ? ` (Voltage)` : `${Adc2Type == 0 ? ` (Current)` : ``}`}</span></p></div></td></tr>
 
 
 <tr><td class="pl-12 pt-10">${validate_component(Button, "Button").$$render($$result, { class: "w-22", pill: true }, {}, {

@@ -3112,201 +3112,8 @@
           if (changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName != saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName)
           {
   
-            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-            {
-                for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag.length; m++)
-                {
-                    if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m] ==saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName
-                    &&
-                    saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                    {
-
-                        if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                        {
-                            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                        }
-                        else
-                        {
-                            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]="";
-                        }
-
-                        if (sdata_logger_proxy_edge_changedValues.length !=0)
-                        {
-                            sdata_logger_proxy_edge_changedValues=[];
-                        }
 
 
-                        compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
-
-                        SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
-
-                        ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-                    }
-                }
-            }
-
-            for (let j=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-            {
-
-                for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag.length; m++)
-                {
-                    if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m] ==saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName
-                    &&
-                    saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                    {
-
-                        if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                        {
-                            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                        }
-                        else
-                        {
-                            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]="";
-                        }
-                    }
-                }
-            }
-
-
-            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
-            {
-
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag ==saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag="";
-                    }
-
-                    if (sdata_logger_monitor_edge_changedValues.length !=0)
-                    {
-                        sdata_logger_monitor_edge_changedValues=[];
-                    }
-
-
-                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], 2, 1,j+1);
-
-                    SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
-
-                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-                }
-            }
-
-            for (let j=sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag ==saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag="";
-                    }
-                }
-            }
-
-
-            for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";
-                    }
-
-
-                    if (event_engine_trigger_modbus_changeValues.length !=0)
-                    {
-                        event_engine_trigger_modbus_changeValues=[];
-                    }
-
-                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
-                    event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
-
-                    EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
-                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                }
-
-            }
-
-            for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";   
-                    }
-                }
-
-            }
-
-
-            for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
-                    }
-
-                    if (event_engine_action_modbus_changeValues.length !=0)
-                    {
-                        event_engine_action_modbus_changeValues=[];
-                    }
-
-                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
-                    event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
-
-                    EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
-                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                }
-
-            }
-
-            for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
-                    }
-                }
-            }
 
           }
         }
@@ -3317,250 +3124,7 @@
           if (changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName != saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName)
           {
   
-            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-            {
 
-                for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag.length; m++)
-                {
-                    if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m] ==saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName
-                    &&
-                    saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                    {
-                        if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                        {
-                            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                        }
-                        else
-                        {
-                            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]=""; 
-                        }
-
-                        if (sdata_logger_proxy_edge_changedValues.length !=0)
-                        {
-                            sdata_logger_proxy_edge_changedValues=[];
-                        }
-
-
-                        compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j], 0, 1,j+1);
-
-                        SDatalogger_ProxyMode_Edge_ConfigChangedLog.set(sdata_logger_proxy_edge_changedValues);
-
-                        ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-                    }
-                }
-            }
-
-            for (let j=sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData.length;j++)
-            {
-
-                for (let m=0; m < saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag.length; m++)
-                {
-                    if (saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m] ==saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName
-                    &&
-                    saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                    {
-                        if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                        {
-                            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusDataModel=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                        }
-                        else
-                        {
-                            saved_changed_sdata_logger_data.config.service_smartDataLogger_proxyMode.edgeData[j].modbusTag[m]="";
-                        }
-                    }
-
-                }
-            }
-
-
-            for (let j=0; j <sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag ==saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;                   
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag="";
-                    }
-
-                    if (sdata_logger_monitor_edge_changedValues.length !=0)
-                    {
-                        sdata_logger_monitor_edge_changedValues=[];
-                    }
-
-
-                    compareSDLObjects(saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j], 2, 1,j+1);
-
-                    SDatalogger_MonitorMode_Edge_ConfigChangedLog.set(sdata_logger_monitor_edge_changedValues);
-
-                    ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-                }
-            }
-
-            for (let j=sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j< saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData.length;j++)
-            {
-                if (saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag ==saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName
-                &&
-                saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_sdata_logger_data.config.service_smartDataLogger_monitorMode.edgeData[j].modbusTag="";
-                    }
-
-                }
-            }
-
-
-            for (let j=0; j < event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";
-                    }
-
-
-                    if (event_engine_trigger_modbus_changeValues.length !=0)
-                    {
-                        event_engine_trigger_modbus_changeValues=[];
-                    }
-
-                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],
-                    event_engine_data.config.service_eventEngine_triggerProfile.modbus[j],2,1,j+1,"Modbus");
-
-                    EventEngine_TriggerModbus_ConfigChangedLog.set(event_engine_trigger_modbus_changeValues);
-                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                }
-
-            }
-
-            for (let j=event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_triggerProfile.modbus[j].modbusTag="";
-                    }
-                }
-
-            }
-
-
-            for (let j=0; j < event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
-                    }
-
-
-
-                    if (event_engine_action_modbus_changeValues.length !=0)
-                    {
-                        event_engine_action_modbus_changeValues=[];
-                    }
-
-                    compareEventEngineObjects(saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j],
-                    event_engine_data.config.service_eventEngine_actionProfile.modbus[j],8,1,j+1,"Modbus");
-
-                    
-                    EventEngine_ActionModbus_ConfigChangedLog.set(event_engine_action_modbus_changeValues);
-                    ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-
-                }
-
-            }
-
-            for (let j=event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j < saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus.length;j++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName == saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag && saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_event_engine_data.config.service_eventEngine_actionProfile.modbus[j].modbusTag="";
-                    }
-                }
-            }
-
-
-            for (let t=0; t<sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList.length;t++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName == saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName && saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName="";
-                    }
-
-
-                    if (conversion_opcua2modbus_changedValues.length !=0)
-                    {
-                        conversion_opcua2modbus_changedValues=[];
-                    }
-
-
-                    comparedSmartConverionOPCUA2ModbusObject(saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus,sconversion_data.config.service_smartConversion.opcua2modbus,3,0,0,"none")
-
-                    Conversion_Opcua2Modbus_ConfigChangedLog.set(conversion_opcua2modbus_changedValues);
-                    ChangedSConfigConfig.set(saved_changed_sconversion_data);
-
-                }
-            }
-
-            for (let t=sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList.length; t<saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList.length;t++)
-            {
-                if (saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName == saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName && saved_changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName!="")
-                {
-                    if (!changed_modbus_data.config.fieldManagement_modbus_tag[i].delete)
-                    {
-                        saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName=changed_modbus_data.config.fieldManagement_modbus_tag[i].tagName;
-                    }
-                    else
-                    {
-                        saved_changed_sconversion_data.config.service_smartConversion.opcua2modbus.modbusTagList[t].modbusTagName="";
-                    }
-                }
-            }
           }
 
         }
@@ -4480,19 +4044,83 @@
         {
             let changedstr="Value of enable has changed to "+changed_modbus_data.config.fieldManagement_modbus_gateway.enable;
             modbus_gateway_general_changedValues=[...modbus_gateway_general_changedValues, changedstr];
+            
         }
 
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.enable=changed_modbus_data.config.fieldManagement_modbus_gateway.enable;
+
+        if (changed_modbus_data.config.fieldManagement_modbus_gateway.type != modbus_data.config.fieldManagement_modbus_gateway.type)
+        {
+            let changedstr="Value of type has changed to "+changed_modbus_data.config.fieldManagement_modbus_gateway.type;
+            modbus_gateway_general_changedValues=[...modbus_gateway_general_changedValues, changedstr];
+
+        
+        }
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.type=changed_modbus_data.config.fieldManagement_modbus_gateway.type;
 
         if (changed_modbus_data.config.fieldManagement_modbus_gateway.mode != modbus_data.config.fieldManagement_modbus_gateway.mode)
         {
             let changedstr="Value of mode has changed to "+changed_modbus_data.config.fieldManagement_modbus_gateway.mode;
             modbus_gateway_general_changedValues=[...modbus_gateway_general_changedValues, changedstr];
+
+        }
+
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.mode=changed_modbus_data.config.fieldManagement_modbus_gateway.mode;
+
+
+        if (changed_modbus_data.config.fieldManagement_modbus_gateway.role != modbus_data.config.fieldManagement_modbus_gateway.role)
+        {
+            let changedstr="Value of role has changed to "+changed_modbus_data.config.fieldManagement_modbus_gateway.role;
+            modbus_gateway_general_changedValues=[...modbus_gateway_general_changedValues, changedstr];
+
+
         
         }
 
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.role=changed_modbus_data.config.fieldManagement_modbus_gateway.role;
+
+        if (changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerIP != modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerIP)
+        {
+            let changedstr="Value of transparentRemoteServerIP has changed to "+changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerIP;
+            modbus_gateway_general_changedValues=[...modbus_gateway_general_changedValues, changedstr];
+        
+
+        }
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerIP=changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerIP;
+
+
+        if (changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerPort != modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerPort)
+        {
+            let changedstr="Value of transparentRemoteServerPort has changed to "+changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerPort;
+            modbus_gateway_general_changedValues=[...modbus_gateway_general_changedValues, changedstr];
+
+
+        
+        }
+
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerPort=changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerPort;
+
+
+        if (changed_modbus_data.config.fieldManagement_modbus_gateway.transparentListenPort != modbus_data.config.fieldManagement_modbus_gateway.transparentListenPort)
+        {
+            let changedstr="Value of transparentListenPort has changed to "+changed_modbus_data.config.fieldManagement_modbus_gateway.transparentListenPort;
+            modbus_gateway_general_changedValues=[...modbus_gateway_general_changedValues, changedstr];
+        
+        }           
+            
+
+        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.transparentListenPort=changed_modbus_data.config.fieldManagement_modbus_gateway.transparentListenPort;
+
+
         ModbusGateway_General_ConfigChangedLog.set(modbus_gateway_general_changedValues);
-        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.enable=changed_modbus_data.config.fieldManagement_modbus_gateway.enable;
-        saved_changed_modbus_data.config.fieldManagement_modbus_gateway.mode=changed_modbus_data.config.fieldManagement_modbus_gateway.mode;        
+
+
+
         ChangedModbusConfig.set(saved_changed_modbus_data);
         console.log(modbus_gateway_general_changedValues);
 
@@ -4797,61 +4425,6 @@
     }
   }
 
-    async function getSmartDataLoggerData() {
-        const res = await fetch(window.location.origin+"/GETSmartDataLogger", {
-            method: 'POST',
-            body: sessionBinary
-        })
-
-        if (res.status == 200)
-        {
-            console.log("get smart data logger");
-            sdata_logger_data =await res.json();
-            console.log(sdata_logger_data);
-            sdataLoggerConfig.set(sdata_logger_data);
-            saved_changed_sdata_logger_data= JSON.parse(JSON.stringify(sdata_logger_data));
-            ChangedSDataLoggerConfig.set(saved_changed_sdata_logger_data);
-
-        }
-    }
-
-
-
-  async function getEventEngineData() {
-        const res = await fetch(window.location.origin+"/gEtEventEngine", {
-            method: 'POST',
-            body: sessionBinary
-        })
-
-        if (res.status == 200)
-        {
-          event_engine_data =await res.json();
-          console.log(event_engine_data);
-          eventEngineConfig.set(event_engine_data);
-
-          saved_changed_event_engine_data= JSON.parse(JSON.stringify(event_engine_data));
-          ChangedEventEngineConfig.set(saved_changed_event_engine_data);
-        }
-    }
-
-  async function getSmartConversionData () {
-    const res = await fetch(window.location.origin+"/gETsConveRsion", {
-      method: 'POST',
-      body: sessionBinary
-    })
-
-    if (res.status == 200)
-    {
-      sconversion_data =await res.json();
-      console.log(sconversion_data);
-      sconversionConfig.set(sconversion_data);
-
-      saved_changed_sconversion_data= JSON.parse(JSON.stringify(sconversion_data));
-      ChangedSConfigConfig.set(saved_changed_sconversion_data);
-    }
-  }
-
-
 
    async function getModbusData() {
     const res = await fetch(window.location.origin+"/GeTModbuS", {
@@ -4876,20 +4449,6 @@
             getPortConnectionData();
         }
 
-        if (saved_changed_sdata_logger_data == "")
-        {
-            getSmartDataLoggerData();
-        }
-
-        if (saved_changed_event_engine_data == "")
-        {
-            getEventEngineData();
-        }
-
-        if (saved_changed_sconversion_data=="")
-        {
-            getSmartConversionData()
-        }
     
     }
   }
@@ -4921,7 +4480,17 @@
         if (modbus_gateway_general_changedValues.length ==0)
         {
             changed_modbus_data.config.fieldManagement_modbus_gateway.enable=modbus_data.config.fieldManagement_modbus_gateway.enable;
-            changed_modbus_data.config.fieldManagement_modbus_gateway.mode=modbus_data.config.fieldManagement_modbus_gateway.mode;           
+            changed_modbus_data.config.fieldManagement_modbus_gateway.mode=modbus_data.config.fieldManagement_modbus_gateway.mode;   
+
+            changed_modbus_data.config.fieldManagement_modbus_gateway.type=modbus_data.config.fieldManagement_modbus_gateway.type;   
+
+            changed_modbus_data.config.fieldManagement_modbus_gateway.role=modbus_data.config.fieldManagement_modbus_gateway.role;   
+
+            changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerIP=modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerIP;   
+
+            changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerPort=modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerPort; 
+
+            changed_modbus_data.config.fieldManagement_modbus_gateway.transparentListenPort=modbus_data.config.fieldManagement_modbus_gateway.transparentListenPort; 
         }
 
         if (modbus_gateway_TtR_changedValues.length ==0)
@@ -4975,36 +4544,7 @@
             console.log(saved_changed_port_connection_data);
         }
 
-        if (saved_changed_sdata_logger_data == "")
-        {
-            getSmartDataLoggerData();
-        }
-        else
-        {
-            console.log("saved_changed_sdata_logger_data");
-            console.log(saved_changed_sdata_logger_data);
-        }
-
-
-        if (saved_changed_event_engine_data == "")
-        {
-            getEventEngineData();
-        }
-        else
-        {
-            console.log("saved_changed_event_engine_data");
-            console.log(saved_changed_event_engine_data);
-        }
-
-        if (saved_changed_sconversion_data=="")
-        {
-            getSmartConversionData()
-        }
-        else
-        {
-            console.log("saved_changed_sconversion_data");
-            console.log(saved_changed_sconversion_data);
-        }
+      
 
         getDataReady=1;
 
@@ -7121,11 +6661,25 @@
       </tr>
 
 
+      <tr>
+          <td></td><td><p class="pl-5 pt-5 text-lg font-light text-left">Type</p></td>
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+      <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_gateway.type} value={0}>RS485 Transparent</Radio>
+  <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_gateway.type} value={1}>Modbus RTU with Slave ID</Radio>
+
+</div></td>
+      </tr>
+
+ 
+
+{#if changed_modbus_data.config.fieldManagement_modbus_gateway.type==1}
 
       <tr>
           <td></td>
 
-{#if saved_changed_modbus_data.config.fieldManagement_modbus_gateway.enable == 1}    
+
+{#if changed_modbus_data.config.fieldManagement_modbus_gateway.enable == 1}    
           <td><p class="pl-5 pt-5 text-lg font-light text-left">Mode</p></td>
 
     <td class="pl-5 pt-5"><div class="flex gap-4">
@@ -7145,7 +6699,68 @@
 </div></td>
 {/if}
 
+
+
       </tr>
+
+{:else if changed_modbus_data.config.fieldManagement_modbus_gateway.type==0}
+      <tr>
+          <td></td>
+
+
+{#if changed_modbus_data.config.fieldManagement_modbus_gateway.enable == 1}    
+          <td><p class="pl-5 pt-5 text-lg font-light text-left">Role</p></td>
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+
+    <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_gateway.role} value={0}>TCP Client</Radio>
+
+<div class="relative">
+<input id="RemoteIP" placeholder=" " name="RemoteIP" type="text" class="block w-40 text-sm text-gray-900 bg-transparent appearance-none dark:text-white focus:outline-hidden focus:ring-0 peer disabled:cursor-not-allowed disabled:opacity-50 rounded-lg border border-gray-300 dark:border-gray-600 dark:focus:border-primary-500 focus:border-primary-600 px-2.5 pb-2.5 pt-4" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerIP}> <label for="RemoteIP" class="absolute text-sm duration-300 transform scale-75 z-10 origin-left rtl:origin-right peer-placeholder-shown:scale-100 peer-focus:scale-75 -translate-y-4 bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:-translate-y-4 start-1 text-gray-500 dark:text-gray-400 peer-focus:text-primary-600 dark:peer-focus:text-primary-500 top-2">Remote IP</label> 
+</div>
+
+
+<div class="relative">
+<input id="RemotePort" placeholder=" " name="RemotePort" type="number" class="block w-40 text-sm text-gray-900 bg-transparent appearance-none dark:text-white focus:outline-hidden focus:ring-0 peer disabled:cursor-not-allowed disabled:opacity-50 rounded-lg border border-gray-300 dark:border-gray-600 dark:focus:border-primary-500 focus:border-primary-600 px-2.5 pb-2.5 pt-4" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerPort}> <label for="RemotePort" class="absolute text-sm duration-300 transform scale-75 z-10 origin-left rtl:origin-right peer-placeholder-shown:scale-100 peer-focus:scale-75 -translate-y-4 bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:-translate-y-4 start-1 text-gray-500 dark:text-gray-400 peer-focus:text-primary-600 dark:peer-focus:text-primary-500 top-2">Remote Port</label> 
+</div>
+
+
+    <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_gateway.role} value={1}>TCP Server</Radio>
+
+<div class="relative">
+<input id="ListenPort" placeholder=" " name="ListenPort" type="number" class="block w-40 text-sm text-gray-900 bg-transparent appearance-none dark:text-white focus:outline-hidden focus:ring-0 peer disabled:cursor-not-allowed disabled:opacity-50 rounded-lg border border-gray-300 dark:border-gray-600 dark:focus:border-primary-500 focus:border-primary-600 px-2.5 pb-2.5 pt-4" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.transparentListenPort}> <label for="ListenPort" class="absolute text-sm duration-300 transform scale-75 z-10 origin-left rtl:origin-right peer-placeholder-shown:scale-100 peer-focus:scale-75 -translate-y-4 bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:-translate-y-4 start-1 text-gray-500 dark:text-gray-400 peer-focus:text-primary-600 dark:peer-focus:text-primary-500 top-2">Listen Port</label> 
+</div>
+
+</div></td>
+{:else}
+          <td><p class="pl-5 pt-5 text-lg font-light text-left">Role</p></td>
+
+    <td class="pl-5 pt-5"><div class="flex gap-4">
+
+    <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_gateway.role} value={0} disabled>TCP Client</Radio>
+
+
+<div class="relative">
+<input id="RemoteIP" placeholder=" " name="RemoteIP" type="text" class="block w-40 text-sm text-gray-900 bg-transparent appearance-none dark:text-white focus:outline-hidden focus:ring-0 peer disabled:cursor-not-allowed disabled:opacity-50 rounded-lg border border-gray-300 dark:border-gray-600 dark:focus:border-primary-500 focus:border-primary-600 px-2.5 pb-2.5 pt-4" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerIP} disabled> <label for="RemoteIP" class="absolute text-sm duration-300 transform scale-75 z-10 origin-left rtl:origin-right peer-placeholder-shown:scale-100 peer-focus:scale-75 -translate-y-4 bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:-translate-y-4 start-1 text-gray-500 dark:text-gray-400 peer-focus:text-primary-600 dark:peer-focus:text-primary-500 top-2">Remote IP</label> 
+</div>
+
+
+<div class="relative">
+<input id="RemotePort" placeholder=" " name="RemotePort" type="number" class="block w-40 text-sm text-gray-900 bg-transparent appearance-none dark:text-white focus:outline-hidden focus:ring-0 peer disabled:cursor-not-allowed disabled:opacity-50 rounded-lg border border-gray-300 dark:border-gray-600 dark:focus:border-primary-500 focus:border-primary-600 px-2.5 pb-2.5 pt-4" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.transparentRemoteServerPort} disabled> <label for="RemotePort" class="absolute text-sm duration-300 transform scale-75 z-10 origin-left rtl:origin-right peer-placeholder-shown:scale-100 peer-focus:scale-75 -translate-y-4 bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:-translate-y-4 start-1 text-gray-500 dark:text-gray-400 peer-focus:text-primary-600 dark:peer-focus:text-primary-500 top-2">Remote Port</label> 
+</div>
+
+    <Radio bind:group={changed_modbus_data.config.fieldManagement_modbus_gateway.role} value={1} disabled>TCP Server</Radio>
+
+    <div class="relative">
+<input id="ListenPort" placeholder=" " name="ListenPort" type="number" class="block w-40 text-sm text-gray-900 bg-transparent appearance-none dark:text-white focus:outline-hidden focus:ring-0 peer disabled:cursor-not-allowed disabled:opacity-50 rounded-lg border border-gray-300 dark:border-gray-600 dark:focus:border-primary-500 focus:border-primary-600 px-2.5 pb-2.5 pt-4" bind:value={changed_modbus_data.config.fieldManagement_modbus_gateway.transparentListenPort} disabled> <label for="ListenPort" class="absolute text-sm duration-300 transform scale-75 z-10 origin-left rtl:origin-right peer-placeholder-shown:scale-100 peer-focus:scale-75 -translate-y-4 bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:-translate-y-4 start-1 text-gray-500 dark:text-gray-400 peer-focus:text-primary-600 dark:peer-focus:text-primary-500 top-2">Listen Port</label> 
+</div>
+
+</div></td>
+{/if}
+
+</tr>
+{/if}
+
 
 
      <tr>
@@ -7181,7 +6796,9 @@
 
 
 {#if saved_changed_modbus_data.config.fieldManagement_modbus_gateway.enable == 1}    
- {#if saved_changed_modbus_data.config.fieldManagement_modbus_gateway.mode == 0}
+
+
+{#if saved_changed_modbus_data.config.fieldManagement_modbus_gateway.mode == 0 && saved_changed_modbus_data.config.fieldManagement_modbus_gateway.type==1}
 
 
  <AccordionItem {defaultClass}>
@@ -7243,7 +6860,7 @@
 
 </AccordionItem>
 
-{:else if saved_changed_modbus_data.config.fieldManagement_modbus_gateway.mode == 1}
+{:else if saved_changed_modbus_data.config.fieldManagement_modbus_gateway.mode == 1 && saved_changed_modbus_data.config.fieldManagement_modbus_gateway.type ==1}
 
  <AccordionItem {defaultClass}>
 
@@ -7602,6 +7219,7 @@
 {/if}
 {/if}
 {/if}
+
 
 
 {#if 0}

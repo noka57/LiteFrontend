@@ -1,14 +1,13 @@
 import { c as create_ssr_component, v as validate_component, e as escape, i as add_attribute } from "../../_app/immutable/chunks/index-54377ec4.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
-/* empty css                                                                            */import { M as Modal } from "../../_app/immutable/chunks/Modal-de764e50.js";
+/* empty css                                                                            */import { M as Modal } from "../../_app/immutable/chunks/Modal-e8760b90.js";
 import { S as Spinner } from "../../_app/immutable/chunks/Spinner-5981a62c.js";
 import { T as TabItem } from "../../_app/immutable/chunks/TabItem-0910d666.js";
 import { T as Tabs } from "../../_app/immutable/chunks/Tabs-92f4be17.js";
 import { sessionidG } from "../endpoints/sessionG.js";
-import { fakeTimeMSecSince1970, fakeTimeString, operationConfig, OperationConfigChangedLog, ChangedOperationConfig } from "../endpoints/configG.js";
+import { fakeTimeMSecSince1970, fakeTimeString, operationConfig, OperationConfig_Time_ChangedLog, OperationConfig_Reboot_ChangedLog, ChangedOperationConfig } from "../endpoints/configG.js";
 import "../../_app/immutable/chunks/Frame-c602be1d.js";
-import "../../_app/immutable/chunks/CloseButton-dd962073.js";
 import "../../_app/immutable/chunks/index-df2ccd83.js";
 let IDX = 36;
 let HEX = "";
@@ -26,6 +25,7 @@ const Operation = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   let MDay = 26;
   let MHour = 10;
   let MMin = 10;
+  let changed_operation_data = {};
   sessionidG.subscribe((val) => {
   });
   fakeTimeMSecSince1970.subscribe((val) => {
@@ -35,7 +35,9 @@ const Operation = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   });
   operationConfig.subscribe((val) => {
   });
-  OperationConfigChangedLog.subscribe((val) => {
+  OperationConfig_Time_ChangedLog.subscribe((val) => {
+  });
+  OperationConfig_Reboot_ChangedLog.subscribe((val) => {
   });
   ChangedOperationConfig.subscribe((val) => {
   });
@@ -156,9 +158,29 @@ ${validate_component(Modal, "Modal").$$render(
 </p></td></tr></table>`;
                 }
               }
-            )}</table>`;
+            )}</table>
+
+
+    <tr><td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">Scheduler</p></td><td class="pl-5 pt-5">${``}</td></tr>
+
+
+${changed_operation_data.config.system_reboot_scheduler.enable ? `<p class="pt-10"></p>
+
+
+
+${``}
+
+<p class="pt-10"></p>
+${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
+              default: () => {
+                return `<svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Save`;
+              }
+            })}` : ``}`;
           }
         })}
+
+
+
 
    ${validate_component(TabItem, "TabItem").$$render($$result, { title: "Reset" }, {}, {
           default: () => {

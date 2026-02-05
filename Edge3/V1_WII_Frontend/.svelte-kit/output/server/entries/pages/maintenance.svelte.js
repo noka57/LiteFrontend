@@ -1,25 +1,23 @@
 import { c as create_ssr_component, v as validate_component, e as escape, i as add_attribute } from "../../_app/immutable/chunks/index-54377ec4.js";
-import { A as Accordion, a as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-b4ae9971.js";
+import { A as Accordion } from "../../_app/immutable/chunks/Accordion-c8c12650.js";
+import { A as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-ab074a69.js";
 import "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
-/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-77cf2b36.js";
-import { T as Toggle } from "../../_app/immutable/chunks/Toggle-e6b9a75f.js";
-import { M as Modal } from "../../_app/immutable/chunks/Modal-de764e50.js";
+/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-5b795065.js";
+import { T as Toggle } from "../../_app/immutable/chunks/Toggle-93a31009.js";
+import { M as Modal } from "../../_app/immutable/chunks/Modal-e8760b90.js";
 import { S as Spinner } from "../../_app/immutable/chunks/Spinner-5981a62c.js";
-import { T as Table } from "../../_app/immutable/chunks/Table-297ce0df.js";
+import { T as Table } from "../../_app/immutable/chunks/Table-a510ae4f.js";
 import { T as TabItem } from "../../_app/immutable/chunks/TabItem-0910d666.js";
 import { T as Tabs } from "../../_app/immutable/chunks/Tabs-92f4be17.js";
 import { sessionidG } from "../endpoints/sessionG.js";
 import { dashboadData, maintenanceConfig, MaintenanceConfigChangedLog, ChangedMaintenanceConfig } from "../endpoints/configG.js";
 import "../../_app/immutable/chunks/index-df2ccd83.js";
 import "../../_app/immutable/chunks/Frame-c602be1d.js";
-import "../../_app/immutable/chunks/Label-44304d72.js";
-import "../../_app/immutable/chunks/CloseButton-dd962073.js";
 let defaultClass = "flex items-center justify-start w-full font-medium text-left group-first:rounded-t-xl";
 const Maintenance = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let changed_maintenance_data = {};
   let defaultModal = false;
-  let localUpdateKeepConfig = 1;
+  let localUpdateKeepConfig = 0;
   let fileFwName = "No file chosen";
   let PingType = 0;
   let PingHost = "";
@@ -80,67 +78,7 @@ const Maintenance = create_ssr_component(($$result, $$props, $$bindings, slots) 
                   }
                 })}
 
-
-
-  ${validate_component(AccordionItem, "AccordionItem").$$render($$result, { defaultClass }, {}, {
-                  header: () => {
-                    return `<span slot="header" class="pl-4">EW-FOTA
-    </span>`;
-                  },
-                  default: () => {
-                    return `<table><tr><td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Enable EW-FOTA</p></td>
-<td class="pl-5 pt-5">${``}</td></tr>
-
-<tr><td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">Keep Current Configuration</p></td>
-    <td class="pl-5 pt-5">${validate_component(Toggle, "Toggle").$$render(
-                      $$result,
-                      {
-                        checked: changed_maintenance_data.config.system_maintenance.fotaKeepConfig
-                      },
-                      {
-                        checked: ($$value) => {
-                          changed_maintenance_data.config.system_maintenance.fotaKeepConfig = $$value;
-                          $$settled = false;
-                        }
-                      },
-                      {}
-                    )}</td></tr>
-
-
- <tr><td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right">EW-FOTA Time Configuration</p></td>
-<td class="pl-5 pt-5 w-10">Weekday
-</td>
-
-<td class="pl-5 pt-5" colspan="2">${``}</td></tr>
-
-
-
- <tr><td class="w-85"><p class="pl-10 pt-5 text-lg font-light text-right"></p></td>
-<td class="pl-5 pt-5 w-10">Hour
-</td>
-
-<td class="pl-5 pt-5" colspan="2">${``}</td></tr>
-
-<tr class="pt-10"><td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-        <td></td>
-    <td></td>
-
-      <td></td>
-    <td></td>
-    <td>${validate_component(Button, "Button").$$render($$result, { color: "blue", pill: true }, {}, {
-                      default: () => {
-                        return `<svg class="mr-2 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Save`;
-                      }
-                    })}</td>
-    <td></td>
-    <td></td></tr></table>`;
-                  }
-                })}`;
+${``}`;
               }
             })}
 

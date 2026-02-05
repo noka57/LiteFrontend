@@ -26,7 +26,8 @@
     	StaticRouteConfigChangedLog,
     	ConfigurationP2EConfigChangedLog,
     	MaintenanceConfigChangedLog,
-    	OperationConfigChangedLog,
+    	OperationConfig_Time_ChangedLog,
+    	OperationConfig_Reboot_ChangedLog,    	
     	DockerConfigChangedLog,
         WAN_CWAN1_BASIC_ConfigChangedLog,
     	WAN_CWAN1_Advanced_ConfigChangedLog,
@@ -164,9 +165,9 @@
 		'pl-20 self-center text-3xl font-semibold text-gray-900 whitespace-nowrap dark:text-white';
 
 	// Nav component
-	let navClass = 'py-1 px-1 text-lg overflow-scroll';
+	let navClass = 'px-1 text-lg overflow-y-auto overflow-x-hidden';
 
-	let navDivClass = 'pb-8';
+	let navDivClass = '';
 
 
 	let transitionParams = {
@@ -207,7 +208,8 @@
   	let staticR_changedValues = [];
   	let maintenance_changedValues = [];
   	let configuration_p2e_changedValues = [];
-    let operation_changedValues = [];
+    let operation_time_changedValues = [];
+    let operation_reboot_changedValues = [];
     let docker_changedValues = [];
     let cwan1_basic_changedValues = [];
   	let cwan1_advanced_changedValues = [];
@@ -417,7 +419,8 @@
   			staticR_changedValues.length != 0 ||
   			maintenance_changedValues.length != 0 ||
   			configuration_p2e_changedValues.length !=0 ||
-  			operation_changedValues.length != 0 ||
+  			operation_time_changedValues.length != 0 ||
+  			operation_reboot_changedValues.length != 0 ||
   			docker_changedValues.length != 0 ||
   			cwan1_basic_changedValues.length !=0 ||
   			cwan1_advanced_changedValues.length != 0 ||
@@ -614,10 +617,13 @@
         JudgeChangedOrNot();
     });
 
+	OperationConfig_Reboot_ChangedLog.subscribe(val => {
+      	operation_reboot_changedValues = val;
+      	JudgeChangedOrNot();
+    });
 
-
-	OperationConfigChangedLog.subscribe(val => {
-      	operation_changedValues = val;
+	OperationConfig_Time_ChangedLog.subscribe(val => {
+      	operation_time_changedValues = val;
       	JudgeChangedOrNot();
     });
 
@@ -1188,11 +1194,20 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
   <path d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
         </svelte:fragment>
+
+        {#if 0}
 						<SidebarDropdownItem label="WAN" href='/wan' active={activeUrl === '/wan'}/>
+			
+{/if}
 						<SidebarDropdownItem label="WiFi" href='/wifi' active={activeUrl === '/wifi'}/>
 						<SidebarDropdownItem label="LAN" href='/lan' active={activeUrl === '/lan'}/>
+						
+
+{#if 0}
 						<SidebarDropdownItem label="Port Forwarding" href='/nat' active={activeUrl === '/nat'}/>
 						<SidebarDropdownItem label="Firewall" href='/firewall'  active={activeUrl === '/firewall'}/>
+
+{/if}
 
 {#if 0}						
 						<SidebarDropdownItem label="Static Route" href='/staticR' active={activeUrl === '/staticR'}/>
@@ -1327,6 +1342,7 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 						<SidebarDropdownItem label="Configuration" href='/configuration' active={activeUrl === '/configuration'}/>
 						<SidebarDropdownItem label="Operation" href='/operation' active={activeUrl === '/operation'}/>
 						<SidebarDropdownItem label="Maintenance" href='/maintenance' active={activeUrl === '/maintenance'}/>
+		
 					</SidebarDropdownWrapper>
 {/if}
 				</SidebarGroup>
@@ -1342,7 +1358,7 @@ const topMenuList = [{ href: '/dashboard', id: 0 },
 	<slot />
 </main>
 {:else}
-<main class="dark:text-white" style="padding-left: 48px;padding-top: 115px;padding-right: 10px;">
+<main class="dark:text-white" style="padding-left: 48px;padding-top: 115px;padding-right: 10px;box-sizing: border-box;">
 	<slot />
 </main>
 {/if}

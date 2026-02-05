@@ -3,8 +3,8 @@
   import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Badge } from 'flowbite-svelte';
   import { onMount} from 'svelte';
   import { sessionidG } from "./sessionG.js";
-  import { dashboadData,VPNdashboad} from "./configG.js";
-  let tdStyle="width:25%";
+  import { dashboadData,ioDashboard} from "./configG.js";
+  let style="width:25%";
   let tableBodyClass="";
   let tdClass="border-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium";
   let value1=0;
@@ -17,9 +17,11 @@
   let currentOrigin = '';
   let sessionid='';
   let interval;
-  let interval_vpn;
+  let interval_io;
   let sessionBinary;
   let hidden=0;
+  let io_data="";
+
 
   const options = {
     year: 'numeric',
@@ -40,10 +42,10 @@
         dashboard_data = val;
     });
 
-  VPNdashboad.subscribe(val => {
-        vpn_dashboard = val;
-  });
 
+  ioDashboard.subscribe(val => {
+        io_data = val;
+  });
 
 
   function GPSClick() {
@@ -208,7 +210,7 @@
         vpn_dashboard =await res.json();
         console.log("get vpn_dashboard 200 OK\r\n");
         console.log(vpn_dashboard);
-        VPNdashboad.set(vpn_dashboard);
+        //VPNdashboad.set(vpn_dashboard);
       }
       else
       {
@@ -224,6 +226,7 @@
       //RestartIntervalId = setInterval(sendPing, 1000);
     }
   }
+
 
 
   async function getDashboardData() {
@@ -252,6 +255,8 @@
        // path3=calculateProgressBarPath(value3,3);
       //  path4=calculateProgressBarPath(value4,4);
         AllpathReady=1;
+
+
       }
       else
       {
@@ -268,6 +273,22 @@
     }
   }
 
+  async function getIO() 
+  {
+    const res = await fetch(window.location.origin+"/GeTIOdaTa", {
+      method: 'POST',
+      body: sessionBinary
+    })
+
+    if (res.status == 200)
+    {
+      console.log ("-getiodata 200 ok");
+      io_data =await res.json();
+      console.log(io_data);
+      ioDashboard.set(io_data);
+    }
+  }
+
   const startInterval = () => {
     interval = setInterval(getDashboardData, 60000); // Send POST request every minute (60,000 milliseconds)
   };
@@ -277,13 +298,16 @@
   };
 
 
-  const startIntervalVPN = () => {
-    interval_vpn = setInterval(getVPNDashboard, 60000); // Send POST request every minute (60,000 milliseconds)
+  const startIntervalIO = () => {
+    interval_io = setInterval(getIO, 60000); // Send POST request every minute (60,000 milliseconds)
   };
 
-  const stopIntervalVPN = () => {
-    clearInterval(interval_vpn);
+  const stopIntervalIO = () => {
+    clearInterval(interval_io);
   };
+
+
+
 
 
   onMount(() => {
@@ -335,36 +359,39 @@
       getDashboardData();
     }
 
-    if (sessionid && vpn_dashboard=="")
+    if (sessionid && io_data=="")
     {
       const hexArray = sessionid.match(/.{1,2}/g); 
       const byteValues = hexArray.map(hex => parseInt(hex, 16));
       sessionBinary = new Uint8Array(byteValues);
-      //getVPNDashboard();
-      //startIntervalVPN();
+      getIO();
+
+      startIntervalIO();
     }
-    else if (sessionid && vpn_dashboard!="")
+    else if (sessionid && io_data!="")
     {
 
       const hexArray = sessionid.match(/.{1,2}/g); 
       const byteValues = hexArray.map(hex => parseInt(hex, 16));
       sessionBinary = new Uint8Array(byteValues);
 
-      console.log("onMount get vpn dashboard\r\n");
-     // getVPNDashboard();
+      console.log("onMount get io data\r\n");
+      getIO();
 
     }
+
 
   });
 
 
+
 </script>
 
-<Table>
+<Table tableNoWFull={true} forDashboard={true}>
 
   <TableBody>
     <TableBodyRow>
-      <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class=""><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-white bg-green-500 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
+      <TableBodyCell {style} {tdClass}><div class="flex"><div class=""><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-white bg-green-500 rounded-full mr-2 dark:text-pink-500 w-12 h-12">
   <path d="M5.636 5.636a9 9 0 1012.728 0M12 3v9" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg></div>
 <div class="w-full">
@@ -372,7 +399,7 @@
 <p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemUptime} {/if}</p>
 </div>
 </div></TableBodyCell>
-      <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class="">
+      <TableBodyCell {style} {tdClass}><div class="flex"><div class="">
 
 {#if 0}
       <svg class="w-16 h-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 -3 24 24">
@@ -387,85 +414,52 @@
 
 </div>
 <div class="w-full">
-{#if 0}
-<p class="pt-2 text-sm font-light">Internet Uptime</p>
-<p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.internetUptime} {/if}
+{#if 1}
+<p class="pt-2 text-sm font-light">SSID</p>
+<p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wifi11ah.ssid} {/if}
 
 
 </p>
 {/if}
 </div>
 </div></TableBodyCell>
-      <TableBodyCell {tdStyle} {tdClass}><div class="flex"><div class="">
-      {#if 0}
-<svg class="w-16 h-16 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45.3 25">
+      <TableBodyCell style="width:50%" {tdClass}><div class="flex"><div class="">
 
-    <path fill="#076291" d="M42,10.1c0-0.2,0-0.3,0-0.5c0-2.9-2.3-5.2-5.2-5.2c-0.5,0-1,0.1-1.5,0.2c-0.2-0.4-0.5-0.7-0.8-1L13.3,25h19.2
-      l0,0c0.1,0,0.2,0,0.3,0c2.7,0,5.1-1.3,6.6-3.3c3.3-0.1,5.9-2.8,5.9-6.1C45.3,13.2,44.1,11.1,42,10.1z M39.8,21
-      c0.8-1.3,1.2-2.7,1.2-4.3c0-3.3-1.9-6.1-4.6-7.4c0-0.3,0.1-0.6,0.1-0.9c0-1.2-0.3-2.3-0.8-3.2C36.1,5,36.5,5,36.9,5
-      c2.5,0,4.6,2.1,4.6,4.6c0,0.2,0,0.4,0,0.6v0.2l0.2,0.1c1.9,1,3.1,2.9,3.1,5C44.7,18.3,42.6,20.7,39.8,21z"/>
-
-    <path fill="#1A87C9" d="M29.7,1.5c-1.9,0-3.6,0.8-4.8,2c-1.7-2.1-4.2-3.5-7-3.5c-4.7,0-8.6,3.8-8.6,8.6c0,0.2,0,0.4,0.1,0.6
-      C9,9.1,8.5,9.1,8.1,9.1c-4.5,0-8.1,3.6-8.1,8c0,3.8,2.6,7,6.2,7.8h7.1L34.6,3.7C33.4,2.4,31.6,1.5,29.7,1.5z"/>
-
-<text transform="matrix(1.0002 0 0 1 7.4379 17.6826)" fill="#FFFFFF" font-family="OpenSans" font-size="6px">Pave2Edge</text>
-</svg>
-{/if}
       </div>
 <div class="w-full">
-{#if 0}
-<p class="text-sm font-light">Pave2Edge</p>
-<p class="text-xl font-bold">{#if dashboard_data!=""}{dashboard_data.config.dashboard.p2eStatus}{/if}</p>
+{#if 1}
+<p class="text-sm font-light">11ah mode</p>
+<p class="text-xl font-bold">{#if dashboard_data!=""}{#if dashboard_data.config.dashboard.wifi11ah.mode==1}AP (Number of STA: Actual {dashboard_data.config.dashboard.wifi11ah.number} Expected){:else if dashboard_data.config.dashboard.wifi11ah.mode==0}STATION (RSSI: {dashboard_data.config.dashboard.wifi11ah.rssi}){/if}{/if}</p>
 {/if}
 </div>
 </div></TableBodyCell>
-      <TableBodyCell {tdStyle} {tdClass}>
-{#if 0}
-      <div class="flex"><div class="">
-<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-white bg-blue-500 mr-2 rounded-full dark:text-pink-500 w-12 h-12" cursor=pointer on:click={GPSClick} on:keyup={() => {}} on:keydown={() => {}}>
-  <path d="M15 10.5C15 12.1569 13.6569 13.5 12 13.5C10.3431 13.5 9 12.1569 9 10.5C9 8.84315 10.3431 7.5 12 7.5C13.6569 7.5 15 8.84315 15 10.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path d="M19.5 10.5C19.5 17.6421 12 21.75 12 21.75C12 21.75 4.5 17.6421 4.5 10.5C4.5 6.35786 7.85786 3 12 3C16.1421 3 19.5 6.35786 19.5 10.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
 
-</div>
-<div class="w-full">
-<p class="text-sm font-light">GPS</p>
-
-<p class="text-xl font-bold">
-{#if hidden == 0}
-{#if dashboard_data!=""}
-{#if dashboard_data.config.dashboard.gpsInfo.lat!="--"}
-{parseFloat(dashboard_data.config.dashboard.gpsInfo.lat).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.long).toFixed(2)}, {parseFloat(dashboard_data.config.dashboard.gpsInfo.alt).toFixed(2)}
-{:else}
---,--,--
-{/if}
-{/if}
-{/if}
-{#if hidden ==1}
-NA
-{/if}
-</p>
-</div>
-</div>
-{/if}
-
-      </TableBodyCell>
     </TableBodyRow>
+
+
         <TableBodyRow>
 
 
         <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
+{#if 0}
+        
 <p class="text-red-600 text-lg">WAN Status</p>
+{/if}
 
               </TableBodyCell>
                       <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Ethernet</p>
               </TableBodyCell>
 
+
             </TableBodyRow>
 
 
                     <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
 
+
+
+        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
+{#if 0}
         <div class="flex"><div class="px-10"><p class="text-black text-lg">Active Link</p>
         <p class="text-black text-lg">IP Address</p>
 
@@ -473,7 +467,7 @@ NA
         <p class="text-black text-lg">DNS</p>
 
 </div>
-<div class="px-40"><p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.active_link}{/if}</p>
+<div class="px-10"><p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.active_link}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.ip}{/if}</p>
 
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.wanStatus.ipv4.gateway}{/if}</p>
@@ -482,12 +476,42 @@ NA
 </div>
 </div>
 
-
+{/if}
 
                       </TableBodyCell>
 
               <TableBodyCell class="border-l-8 border-r-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><div class="flex">
-              <div class="">
+
+<div class=""><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.wan[0].name}{/if}</p>
+{#if dashboard_data!=""}              
+{#if dashboard_data.config.dashboard.ethernet.wan[0].status}
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
+<path fill=blue d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
+     M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
+
+</svg>
+{:else}
+<svg xmlns="http://www.w3.org/2000/svg"  viewBox="-5 -5 24 24" class="w-16 h-16">
+  <path fill="none" d="M10.6,3.4V2.6V2.1h-0.3H9.5V1.4V0.8H4v0.6v0.8H3.2H2.9v0.4v0.8H2.1H0.8v6.1h11.9V3.4h-1.4H10.6z M3,8.3H2.2
+    V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8
+    V6.4h0.8V8.3z"/>
+  <path fill="#D0D0D0" d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M12.7,9.4H0.8V3.4h1.4h0.8V2.6V2.2h0.3H4V1.4V0.8
+    h5.5v0.6v0.8h0.8h0.3v0.4v0.8h0.8h1.4L12.7,9.4L12.7,9.4z"/>
+ 
+    <rect x="2.2" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
+    <rect x="3.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
+    <rect x="5.5" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
+    <rect x="7.2" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
+    <rect x="8.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
+    <rect x="10.5" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
+
+</svg>
+{/if}
+{/if}
+</div>
+
+
+              <div class="pl-20">
               <p class="text-black text-lg text-center">
               {#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.lan[0].name}{/if}
               </p>
@@ -520,33 +544,7 @@ NA
 </div>
 
 
-<div class="pl-20"><p class="text-black text-lg text-center">{#if dashboard_data!=""}{dashboard_data.config.dashboard.ethernet.wan[0].name}{/if}</p>
-{#if dashboard_data!=""}              
-{#if dashboard_data.config.dashboard.ethernet.wan[0].status}
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5 -5 24 24" class="w-16 h-16">
-<path fill=blue d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M3,8.3H2.2V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z
-     M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8V6.4h0.8V8.3z"/>
 
-</svg>
-{:else}
-<svg xmlns="http://www.w3.org/2000/svg"  viewBox="-5 -5 24 24" class="w-16 h-16">
-  <path fill="none" d="M10.6,3.4V2.6V2.1h-0.3H9.5V1.4V0.8H4v0.6v0.8H3.2H2.9v0.4v0.8H2.1H0.8v6.1h11.9V3.4h-1.4H10.6z M3,8.3H2.2
-    V6.4H3V8.3z M4.7,8.3H3.8V6.4h0.8V8.3z M6.3,8.3H5.5V6.4h0.8V8.3z M8,8.3H7.2V6.4H8V8.3z M9.7,8.3H8.8V6.4h0.8V8.3z M11.3,8.3h-0.8
-    V6.4h0.8V8.3z"/>
-  <path fill="#D0D0D0" d="M11.3,2.6V1.4h-1.1V0h-7v1.4H2.2v1.2H0v7.6h13.5V2.6H11.3z M12.7,9.4H0.8V3.4h1.4h0.8V2.6V2.2h0.3H4V1.4V0.8
-    h5.5v0.6v0.8h0.8h0.3v0.4v0.8h0.8h1.4L12.7,9.4L12.7,9.4z"/>
- 
-    <rect x="2.2" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
-    <rect x="3.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="5.5" y="6.4" fill="#D0D0D0" width="0.8" height="1.9"/>
-    <rect x="7.2" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="8.8" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-    <rect x="10.5" y="6.4" fill="#D0D0D0"  width="0.8" height="1.9"/>
-
-</svg>
-{/if}
-{/if}
-</div>
 </div>
               </TableBodyCell>
 
@@ -579,7 +577,7 @@ NA
         <p class="text-black text-lg">IP Address(IPv4)</p>
 
 </div>
-<div class="px-40">
+<div class="px-10">
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.ipMode}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.lanStatus.ipv4.ip}{/if}</p>
 
@@ -589,8 +587,9 @@ NA
 
 <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg"></p>
 
-<div class="flex"><div class="px-10">
+<div class="flex"><div class="px-4">
         <p class="text-black text-lg">Model Name</p>
+        <p class="text-black text-lg">Hostname</p>
         <p class="text-black text-lg">Serial Number</p>
         <p class="text-black text-lg">Firmware Version</p>
         <p class="text-black text-lg">WAN MAC Address</p>
@@ -599,6 +598,8 @@ NA
 </div>
 <div class="px-1">
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.modelName}{/if}</p>
+
+        <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.hostname}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.serialNumber}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.firmwareVersion}{/if}</p>
         <p class="text-lg font-light">{#if dashboard_data!=""}{dashboard_data.config.dashboard.systemInfo.macAddress}{/if}</p>
@@ -637,17 +638,17 @@ NA
 
 <div class="flex">
         <div class="px-10">
-                <p class="text-black text-lg">AI-1</p>
-                <p class="text-black text-lg">AI-2</p>
                 <p class="text-black text-lg">DI</p>
                 <p class="text-black text-lg">DO</p>
+                <p class="text-black text-lg">AI-1</p>
+                <p class="text-black text-lg">AI-2</p>
         </div>
 
         <div class="px-1">
-<p class="text-lg font-light">0</p>
-<p class="text-lg font-light">0</p>
-<p class="text-lg font-light">High</p>
-<p class="text-lg font-light">Close</p>
+<p class="text-lg font-light">{#if io_data!=""}{#if io_data.di==0}Low{:else if io_data.di==1}High{/if}{/if}</p>
+<p class="text-lg font-light">{#if io_data!=""}{#if io_data.do==1}Close{:else if io_data.do==0}Open{/if}{/if}</p>
+<p class="text-lg font-light">{#if io_data!=""}{#if io_data.ai1 != ""}{(parseInt(io_data.ai1, 10)/100).toFixed(1)} {/if}{#if io_data.ai1_type==0}(Current){:else if io_data.ai1_type==1}(Voltage){/if} {/if}</p>
+<p class="text-lg font-light">{#if io_data!=""}{#if io_data.ai2 != ""}{(parseInt(io_data.ai2, 10)/100).toFixed(1)} {/if}{#if io_data.ai2_type==0}(Current){:else if io_data.ai2_type==1}(Voltage){/if}{/if}</p>
         </div>
       </div>
 
@@ -662,7 +663,7 @@ NA
         </div>
 
         <div class="px-1">
-<p class="text-lg font-light">Disable</p>
+<p class="text-lg font-light">{#if dashboard_data!=""}{#if dashboard_data.config.dashboard.modbus.mode==-1}Disable{:else if dashboard_data.config.dashboard.modbus.mode==0}TCP Slave To RTU Master{:else if dashboard_data.config.dashboard.modbus.mode==1}RTU Slave To TCP Master{/if}{/if}</p>
 
         </div>
       </div>
@@ -673,156 +674,6 @@ NA
         </TableBodyRow>
 
 
-
-
-
-{#if 0}
-
-         <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">Cloud</p>
-
-
-              </TableBodyCell>
-                      <TableBodyCell class="border-x-8 border-t-8 border-b-4 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2"><p class="text-red-600 text-lg">VPN</p>
-              </TableBodyCell>
-
-            </TableBodyRow>
-
-
-             <TableBodyRow>      
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
-<div class="flex">
-        <div class="px-10">
-{#if hidden == 0}       
-{#if dashboard_data!=""}
-{#each dashboard_data.config.dashboard.cloudStatus as CloudStatus, index}
-        <p class="text-black text-lg">{CloudStatus.name}</p>
-{/each}
-{/if}
-{/if}
-        </div>
-
-        <div class="px-40">
-{#if hidden == 0}         
-{#if dashboard_data!=""}
-{#each dashboard_data.config.dashboard.cloudStatus as CloudStatus, index}
-        <p class="text-lg font-light">{CloudStatus.status}</p>
-{/each}
-{/if}
-{/if}
-        </div>
-
-</div>
-                      </TableBodyCell>
-
-   
-        <TableBodyCell class="border-x-8 border-t-4 border-b-8 border-solid border-zinc-400 px-6 py-4 whitespace-nowrap font-medium" colspan="2">
-
-{#if vpn_dashboard != ""}
-<div class="flex">
-<div class="px-10">
-{#if vpn_dashboard.openvpn[0] == 0}
-      <p class="text-black text-lg">OpenVPN Disable</p>
-{/if}
-{#if vpn_dashboard.openvpn[0] == 1}
-  <p class="text-black text-lg">OpenVPN
-
-{#if vpn_dashboard.openvpn[1] == 0} Server
-
-{:else if vpn_dashboard.openvpn[1] == 1} Client
-
-{/if}
-  </p>
-{/if}
-
-
-</div>
-<div class="px-1 pt-1">
-{#if vpn_dashboard.openvpn[1] == 0}
-
-  {#if vpn_dashboard.openvpn[2] == 0}
-    <Badge large color="red">Failed</Badge>
-  {:else if vpn_dashboard.openvpn[2] == 1}
-    <Badge large color="green">Listening</Badge>
-  {/if}
-
-{:else if vpn_dashboard.openvpn[1] == 1}
-  {#each vpn_dashboard.openvpn[2] as openvpnS, index}
-    {#if openvpnS}
-    <Badge large color="green">{index+1}</Badge>
-    {:else}
-    <Badge large color="red">{index+1}</Badge>
-    {/if}
-  {/each}
-
-{#each disabledOpenVPNTunnel as disabledT, index}
-  {#if index >= vpn_dashboard.openvpn[2].length}
-  <Badge large color="dark">{index+1}</Badge>
-  {/if}
-{/each}
-
-{/if}
-
-
-
-
-
-</div>
-</div>
-{/if}
-
-
-
-{#if vpn_dashboard != ""}
-<div class="flex">
-<div class="px-10">
-{#if vpn_dashboard.ipsec[0] == 0}
-      <p class="text-black text-lg">IPsec Disable</p>
-{/if}
-{#if vpn_dashboard.ipsec[0] == 1}
-  <p class="text-black text-lg">IPsec
-
-{#if vpn_dashboard.ipsec[1] == 0} Responder
-
-{:else if vpn_dashboard.ipsec[1] == 1} Initiator
-
-{/if}
-  </p>
-{/if}
-</div>
-<div class="px-1 pt-1">
-{#if vpn_dashboard.ipsec[1] == 0}
-
-  {#if vpn_dashboard.ipsec[2] == 0}
-    <Badge large color="red">Failed</Badge>
-  {:else if vpn_dashboard.ipsec[2] == 1}
-    <Badge large color="green">Listening</Badge>
-  {/if}
-
-{:else if vpn_dashboard.ipsec[1] == 1}
-  {#each vpn_dashboard.ipsec[2] as ipsecS, index}
-    {#if ipsecS}
-    <Badge large color="green">{index+1}</Badge>
-    {:else}
-    <Badge large color="red">{index+1}</Badge>
-    {/if}
-  {/each}
-
-{#each disabledIPsecTunnel as disabledT, index}
-  {#if index >= vpn_dashboard.ipsec[2].length}
-  <Badge large color="dark">{index+1}</Badge>
-  {/if}
-{/each}
-  {/if}
-</div>
-</div>
-{/if}
-
-
-                      </TableBodyCell>
-
-        </TableBodyRow>
-{/if}
 
 
 

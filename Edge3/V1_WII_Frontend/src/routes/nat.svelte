@@ -225,24 +225,7 @@
         console.log(dmz_changedValues);
     } 
 
-    function SaveVirtualComputer()
-    {
-      console.log("Save VirtualComputer");
-      if (vc_changedValues.length !=0)
-      {
-        vc_changedValues=[];
-      }
 
-      compareObjects(changed_nat_data.config.networking_nat_virtualComputer, nat_data.config.networking_nat_virtualComputer,2,0,0);
-
-
-      NAT_VC_ConfigChangedLog.set(vc_changedValues);
-
-      saved_changed_nat_data.config.networking_nat_virtualComputer=JSON.parse(JSON.stringify(changed_nat_data.config.networking_nat_virtualComputer));
-      ChangedNATConfig.set(saved_changed_nat_data);
-    
-      console.log(vc_changedValues);
-    }
 
     function SavePFW()
     {
@@ -296,23 +279,6 @@
       changed_nat_data.config.networking_port_forwarding.list[index].delete=true;
     }
 
-
-    function SaveNatLoopBack()
-    {
-      console.log("Save Loopback nat");      
-      if (loopback_changedValues.length !=0)
-      {
-        loopback_changedValues=[];
-      }
-
-      compareObjects(changed_nat_data.config.networking_nat_loopback, nat_data.config.networking_nat_loopback,0,0,0);
-      NAT_LoopBack_ConfigChangedLog.set(loopback_changedValues);
-
-      saved_changed_nat_data.config.networking_nat_loopback=JSON.parse(JSON.stringify(changed_nat_data.config.networking_nat_loopback));
-      ChangedNATConfig.set(saved_changed_nat_data);
-    
-      console.log(loopback_changedValues);
-    }
 
     let BackupPFWItem=
     {
@@ -2695,15 +2661,6 @@
         changed_nat_data.config.networking_port_forwarding = JSON.parse(JSON.stringify(nat_data.config.networking_port_forwarding));     
       }
 
-      if (vc_changedValues.length == 0)
-      { 
-        changed_nat_data.config.networking_nat_virtualComputer = JSON.parse(JSON.stringify(nat_data.config.networking_nat_virtualComputer)); 
-      }
-
-      if (loopback_changedValues.length == 0)
-      {
-        changed_nat_data.config.networking_nat_loopback = JSON.parse(JSON.stringify(nat_data.config.networking_nat_loopback));     
-      }
 
       if (saved_changed_wan_data == "")
       {
@@ -3865,6 +3822,9 @@ saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole ==1}
 
   </TabItem>
 
+
+  {#if 0}
+
  <TabItem title="DMZ">
 
 <label>
@@ -3915,6 +3875,8 @@ saved_changed_ipsec_data.config.vpn_ipsec_basic.ipsecRole ==1}
     </tr>
 </table>
   </TabItem>
+
+{/if}
 
 </Tabs>
 

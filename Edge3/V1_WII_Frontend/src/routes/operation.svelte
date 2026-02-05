@@ -4,7 +4,8 @@
   import { onMount } from 'svelte';
   import { sessionidG } from "./sessionG.js";
   import { operationConfig,
-  OperationConfigChangedLog,
+  OperationConfig_Time_ChangedLog,
+  OperationConfig_Reboot_ChangedLog,
   ChangedOperationConfig,
   fakeTimeMSecSince1970,
   fakeTimeString
@@ -46,8 +47,12 @@
     let operation_data="";
     let changed_operation_data = {};
     let saved_changed_operation_data = {};
-    let operation_changedValues = [];
+    let operation_time_changedValues = [];
+    let operation_reboot_changedValues = [];    
     let getDataReady=0;
+
+
+
 
     let sessionid;
     let sessionBinary;
@@ -75,10 +80,14 @@
 
 
 
-    OperationConfigChangedLog.subscribe(val => {
-      operation_changedValues = val;
+    OperationConfig_Time_ChangedLog.subscribe(val => {
+      operation_time_changedValues = val;
     });
 
+
+    OperationConfig_Reboot_ChangedLog.subscribe(val => {
+      operation_reboot_changedValues = val;
+    });
 
     ChangedOperationConfig.subscribe(val => {
       saved_changed_operation_data = val;
@@ -86,7 +95,99 @@
 
 
 
+
     let DateTimeContent="";
+
+    let activePreset = '';
+    let minute = '*';
+    let hour = '*';
+    let dayOfMonth = '*';
+    let month = '*';
+    let dayOfWeek = '*';
+
+    let action='reboot'
+
+
+    const presets = {
+    everyMinute: '* * * * * reboot',
+    hourly: '0 * * * * reboot',
+    daily: '0 0 * * * reboot',
+    weekly: '0 0 * * 7 reboot',
+    monthly: '0 0 1 * * reboot'
+    };
+
+
+    let cron = '* * * * * reboot';
+
+
+
+    let errors = {
+        minute: false,
+        hour: false,
+        dayOfMonth: false,
+        dayOfWeek: false
+    };
+
+    function updateCron() {
+        cron = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek} ${action}`;
+    }
+
+
+    function applyPreset(p) 
+    {
+        errors.minute=false;
+        errors.hour=false;
+        errors.dayOfMonth=false;
+        errors.dayOfWeek=false;
+        activePreset = p;
+        cron = presets[p];
+        [minute, hour, dayOfMonth, month, dayOfWeek, action] = cron.split(' ');
+    }
+
+
+
+
+    function isValidCronField(value, min, max) 
+    {
+        if (value === '*') return true;
+        const num = Number(value)
+        return !isNaN(num) && num >= min && num <= max;
+
+        //const parts = value.split(',');
+
+        //return parts.every(part => {
+          // step
+          //if (part.includes('/')) {
+         //   const [base, step] = part.split('/');
+          //  if (!step || isNaN(step)) return false;
+          //  return base === '*' || isValidCronField(base, min, max);
+        //  }
+
+          // range
+         // if (part.includes('-')) {
+          //  const [from, to] = part.split('-').map(Number);
+         //   return (
+          //    !isNaN(from) &&
+         //     !isNaN(to) &&
+          //    from >= min &&
+          //    to <= max &&
+          //    from <= to
+          //  );
+         // }
+
+          // single number
+         // const num = Number(part);
+         // return !isNaN(num) && num >= min && num <= max;
+       // });
+    }
+
+    const validators = {
+        minute: v => isValidCronField(v, 0, 59),
+        hour: v => isValidCronField(v, 0, 23),
+        dayOfMonth: v => isValidCronField(v, 1, 31),
+        month: v => isValidCronField(v, 1, 12),
+        dayOfWeek: v => isValidCronField(v, 1, 7)
+    };
 
 
     function formatDateToCustomString() 
@@ -169,28 +270,72 @@
       else if (obj1[key] != obj2[key]) 
       {
         let changedstr="Value of "+key+" has changed to "+obj1[key];
-        operation_changedValues=[...operation_changedValues, changedstr];
+        operation_time_changedValues=[...operation_time_changedValues, changedstr];
       }
     }
   }
 
-  function SaveOperationSettings(){
-    console.log("Save Operation Setting\r\n");
-    if (operation_changedValues.length !=0)
+  function SaveOperationTimeSettings(){
+    console.log("Save Operation Time Setting\r\n");
+    if (operation_time_changedValues.length !=0)
     {
-      operation_changedValues=[];
+      operation_time_changedValues=[];
     }
 
-    compareObjects(changed_operation_data, operation_data);
 
-    OperationConfigChangedLog.set(operation_changedValues);
 
-    saved_changed_operation_data=JSON.parse(JSON.stringify(changed_operation_data));
+    compareObjects(changed_operation_data.config.system_operation_time, operation_data.config.system_operation_time);
+
+    OperationConfig_Time_ChangedLog.set(operation_time_changedValues);
+
+    saved_changed_operation_data.config.system_operation_time=JSON.parse(JSON.stringify(changed_operation_data.config.system_operation_time));
     ChangedOperationConfig.set(saved_changed_operation_data);
     
-    console.log(operation_changedValues);
+    console.log(operation_time_changedValues);
 
   };
+
+
+  function SaveOperationRebootSettings(){
+
+    if (!errors.minute&&
+        !errors.hour&&
+        !errors.dayOfMonth&&
+        !errors.dayOfWeek)
+
+    {
+        console.log("Save Operation Reboot Setting\r\n");
+        if (operation_reboot_changedValues.length !=0)
+        {
+          operation_reboot_changedValues=[];
+        }
+
+        changed_operation_data.config.system_reboot_scheduler.preset=activePreset;
+        changed_operation_data.config.system_reboot_scheduler.cronString=cron;
+
+        if (changed_operation_data.config.system_reboot_scheduler.cronString !=operation_data.config.system_reboot_scheduler.cronString)
+        {
+            let changedstr="Value of cronString has changed to "+changed_operation_data.config.system_reboot_scheduler.cronString;
+            operation_reboot_changedValues=[...operation_reboot_changedValues, changedstr];
+        }
+
+        if (changed_operation_data.config.system_reboot_scheduler.preset !=operation_data.config.system_reboot_scheduler.preset)
+        {
+            let changedstr="Value of preset has changed to "+changed_operation_data.config.system_reboot_scheduler.preset;
+            operation_reboot_changedValues=[...operation_reboot_changedValues, changedstr];
+        }
+
+
+        OperationConfig_Reboot_ChangedLog.set(operation_reboot_changedValues);
+
+
+        saved_changed_operation_data.config.system_reboot_scheduler = JSON.parse(JSON.stringify(changed_operation_data.config.system_reboot_scheduler));
+        ChangedOperationConfig.set(saved_changed_operation_data);
+        console.log(operation_reboot_changedValues);
+    }
+
+  };
+
 
 
     async function PostReboot () {
@@ -203,6 +348,9 @@
         {
             console.log("reboot command sent\r\n");
             WaitToReboot=true;
+            setTimeout(() => {
+              window.location.href = window.location.origin;
+              }, 10000); 
         }
     }
 
@@ -218,6 +366,9 @@
         {
             console.log("reset command sent\r\n");
             WaitToReset=true;
+            setTimeout(() => {
+              window.location.href = window.location.origin;
+              }, 10000); 
         }
     }
 
@@ -281,6 +432,17 @@
             fakeTimeMSecSince1970.set(timestamp);
             formatDateToCustomString();
             startInterval();
+            cron = changed_operation_data.config.system_reboot_scheduler.cronString;
+            console.log("cron:", cron);
+
+            if (cron.length > 7)
+            {
+                [minute, hour, dayOfMonth, month, dayOfWeek, action] = cron.split(' ');
+            }
+
+            activePreset=changed_operation_data.config.system_reboot_scheduler.preset;
+
+
             getDataReady=1;
         }
       }
@@ -310,6 +472,9 @@
   }
 
 
+
+
+
   onMount(() => {
 
     console.log("operation sessionid: ");
@@ -329,15 +494,36 @@
         const byteValues = hexArray.map(hex => parseInt(hex, 16));
         sessionBinary = new Uint8Array(byteValues);
 
-        if (operation_changedValues.length == 0)
+        changed_operation_data = JSON.parse(JSON.stringify(saved_changed_operation_data));
+
+
+        if (operation_time_changedValues.length == 0)
         {
-            changed_operation_data = JSON.parse(JSON.stringify(operation_data));
+            changed_operation_data.config.system_operation_time = JSON.parse(JSON.stringify(operation_data.config.system_operation_time));
         }
         else
         {
-            changed_operation_data = JSON.parse(JSON.stringify(saved_changed_operation_data));
+            changed_operation_data.config.system_operation_time = JSON.parse(JSON.stringify(saved_changed_operation_data.config.system_operation_time));
         }
 
+
+        if (operation_reboot_changedValues.length == 0)
+        {
+            changed_operation_data.config.system_reboot_scheduler = JSON.parse(JSON.stringify(operation_data.config.system_reboot_scheduler));
+        }
+        else
+        {
+            changed_operation_data.config.system_reboot_scheduler = JSON.parse(JSON.stringify(saved_changed_operation_data.config.system_reboot_scheduler));
+        }
+
+        cron = changed_operation_data.config.system_reboot_scheduler.cronString;
+
+        if (cron.length > 7)
+        {
+            [minute, hour, dayOfMonth, month, dayOfWeek, action] = cron.split(' ');
+        }
+
+        activePreset=changed_operation_data.config.system_reboot_scheduler.preset;
 
         timezone=changed_operation_data.config.system_operation_time.tz;
         getDataReady=1;
@@ -429,7 +615,7 @@
     <td></td>
     <td></td>
     <td></td>
-    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveOperationSettings}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <td class="pl-10"><Button color="blue" pill={true} on:click={SaveOperationTimeSettings}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>Save</Button></td>
 
@@ -511,9 +697,162 @@
 
 
 </table>
+
+
+    <tr>
+    <td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">Scheduler</p></td><td class="pl-5 pt-5">
+{#if getDataReady == 1}
+    <Toggle bind:checked={changed_operation_data.config.system_reboot_scheduler.enable}></Toggle>
+{/if}
+    </td>
+    </tr>
+
+
+{#if changed_operation_data.config.system_reboot_scheduler.enable}
+
+
+<p class="pt-10"></p>
+
+
+
+{#if getDataReady}
+
+<div class="max-w-3xl p-6 rounded-2xl shadow-xl bg-gradient-to-br from-blue-400 via-blue-600 to-blue-800 text-white">
+<h2 class="text-2xl font-bold mb-4">Reboot Scheduler</h2>
+
+
+<h3 class="font-semibold">Presets</h3>
+<div class="flex flex-wrap gap-3 mt-2 mb-6">
+  <button
+    type="button"
+    on:click={() => applyPreset('daily')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {activePreset == 'daily'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Daily
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('weekly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {activePreset == 'weekly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Weekly
+  </button>
+
+  <button
+    type="button"
+    on:click={() => applyPreset('monthly')}
+    class="px-4 py-2 rounded-full transition transform duration-200 shadow-md
+      {activePreset == 'monthly'
+        ? 'bg-blue-800 text-white scale-105'
+        : 'bg-blue-100 text-black hover:bg-blue-400 hover:scale-105'}"
+  >
+    Monthly
+  </button>
+</div>
+
+
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-4 bg-white/20 p-4 rounded-xl">
+<div>
+<label for="cron-minute" class="text-sm">Minute</label>
+<input id="cron-minute" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.minute ? 'border-2 border-red-500' : ''}" bind:value={minute} on:input={() => {
+    errors.minute = !validators.minute(minute);
+    if (!errors.minute) updateCron();
+  }} placeholder="* 0-59" />
+</div>
+
+
+<div>
+<label for="cron-hour" class="text-sm">Hour</label>
+<input id="cron-hour" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.hour ? 'border-2 border-red-500' : ''}" bind:value={hour} on:input={() => {
+  errors.hour = !validators.hour(hour);
+  if (!errors.hour) updateCron();
+}} placeholder="* 0-23" />
+</div>
+
+
+<div>
+<label for="cron-dom" class="text-sm">Day</label>
+
+{#if dayOfMonth != '*'}
+
+<input id="cron-dom" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfMonth ? 'border-2 border-red-500' : ''}" bind:value={dayOfMonth} on:input={() => {
+  errors.dayOfMonth = !validators.dayOfMonth(dayOfMonth);
+  if (!errors.dayOfMonth) updateCron();
+}} placeholder="* 1-31" disabled={activePreset != 'monthly'} />
+
+{/if}
+</div>
+
+
+<div>
+<label for="cron-dow" class="text-sm">Weekday</label>
+
+{#if dayOfWeek != '*'}
+
+<input id="cron-dow" class="w-full mt-1 px-3 py-2 rounded-lg text-black disabled:cursor-not-allowed {errors.dayOfWeek ? 'border-2 border-red-500' : ''}" bind:value={dayOfWeek} on:input={() => {
+  errors.dayOfWeek = !validators.dayOfWeek(dayOfWeek);
+  if (!errors.dayOfWeek) updateCron();
+}} placeholder="* 1-7" disabled={activePreset != 'weekly'}/>
+
+{/if}
+
+</div>
+</div>
+
+{#if errors.minute}
+  <p class="text-red-200 text-xs mt-1">
+    Invalid Minute (0–59 and * allowed)
+  </p>
+{/if}
+
+{#if errors.hour}
+  <p class="text-red-200 text-xs mt-1">
+    Invalid Hour (0–23 and * allowed)
+  </p>
+{/if}
+
+{#if errors.dayOfMonth}
+  <p class="text-red-200 text-xs mt-1">
+    Invalid Day (1-31 and * allowed)
+  </p>
+{/if}
+
+
+{#if errors.dayOfWeek}
+  <p class="text-red-200 text-xs mt-1">
+    Invalid Weekday (1-7 and * allowed)
+  </p>
+{/if}
+
+</div>
+
+
+{/if}
+
+<p class="pt-10"></p>
+<Button color="blue" pill={true} on:click={SaveOperationRebootSettings}><svg class="mr-2 -ml-1 w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>Save</Button>
+
+
+
+
+
+{/if}
+
+
+
+
       </TabItem>
 
-{#if 0}
+
 
 
    <TabItem title="Reset">
@@ -540,7 +879,7 @@
 </table>
 
       </TabItem>
-{/if}
+
 
 
  </Tabs>

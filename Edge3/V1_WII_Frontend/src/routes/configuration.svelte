@@ -120,6 +120,9 @@
           {
             uploadconfigIsValid=1;
             console.log("200 OK (overwrite lan)");
+            setTimeout(() => {
+              window.location.href = window.location.origin;
+              }, 10000); 
 
           }
           else
@@ -144,6 +147,9 @@
           {
             uploadconfigIsValid=1;
             console.log("200 OK (non overwrite lan");
+            setTimeout(() => {
+              window.location.href = window.location.origin;
+              }, 10000); 
 
           }
           else
@@ -174,7 +180,7 @@
     if (response.status == 200)
     {
       const blob = await response.blob();
-      const export_filename = 'EW50V.config';
+      const export_filename = 'EDGE3.config';
 
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
@@ -298,7 +304,7 @@
 
 <Accordion>
 
-{#if 0}
+{#if 1}
 
   <AccordionItem {defaultClass}>
 

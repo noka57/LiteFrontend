@@ -1,14 +1,14 @@
-import { r as get_current_component, c as create_ssr_component, b as compute_rest_props, i as add_attribute, v as validate_component, t as globals, o as each, e as escape } from "../../_app/immutable/chunks/index-54377ec4.js";
-import { A as Accordion, a as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-b4ae9971.js";
+import { r as get_current_component, c as create_ssr_component, b as compute_rest_props, i as add_attribute, v as validate_component, t as globals, d as spread, f as escape_object, p as is_void, g as getContext, h as escape_attribute_value, e as escape, j as compute_slots, o as each } from "../../_app/immutable/chunks/index-54377ec4.js";
+import { A as Accordion } from "../../_app/immutable/chunks/Accordion-c8c12650.js";
+import { A as AccordionItem } from "../../_app/immutable/chunks/AccordionItem-ab074a69.js";
 import classNames from "classnames";
 import { B as Button } from "../../_app/immutable/chunks/Button-2553c295.js";
-/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-77cf2b36.js";
-import { T as Textarea } from "../../_app/immutable/chunks/Textarea-b5c73c57.js";
-import { M as Modal } from "../../_app/immutable/chunks/Modal-de764e50.js";
+/* empty css                                                                            */import { R as Radio } from "../../_app/immutable/chunks/Radio-5b795065.js";
+import { M as Modal } from "../../_app/immutable/chunks/Modal-e8760b90.js";
 import { createPopper } from "@popperjs/core";
 import { F as Frame } from "../../_app/immutable/chunks/Frame-c602be1d.js";
 import { S as StepIndicator } from "../../_app/immutable/chunks/StepIndicator-074b8cff.js";
-import { T as Table } from "../../_app/immutable/chunks/Table-297ce0df.js";
+import { T as Table } from "../../_app/immutable/chunks/Table-a510ae4f.js";
 import { T as TableBody } from "../../_app/immutable/chunks/TableBody-85264b11.js";
 import { T as TableBodyRow, a as TableBodyCell } from "../../_app/immutable/chunks/TableBodyRow-20bd2092.js";
 import { T as TableHead, a as TableHeadCell } from "../../_app/immutable/chunks/TableHeadCell-db67647d.js";
@@ -17,8 +17,6 @@ import { T as Tabs } from "../../_app/immutable/chunks/Tabs-92f4be17.js";
 /* empty css                                           */import { sessionidG } from "../endpoints/sessionG.js";
 import { sdataLoggerConfig, SDatalogger_General_ConfigChangedLog, SDatalogger_ProxyMode_Edge_ConfigChangedLog, SDatalogger_ProxyMode_Topic_ConfigChangedLog, SDatalogger_MonitorMode_Edge_ConfigChangedLog, SDatalogger_MonitorMode_Cloud_ConfigChangedLog, SDatalogger_MonitorMode_Topic_ConfigChangedLog, ChangedSDataLoggerConfig, modbusConfig, ChangedModbusConfig, genericMQTTConfig, ChangedGenericMQTTConfig, awsIoTcoreConfig, ChangedAWSIoTcoreConfig, azureConfig, ChangedAzureConfig } from "../endpoints/configG.js";
 import "../../_app/immutable/chunks/index-df2ccd83.js";
-import "../../_app/immutable/chunks/Label-44304d72.js";
-import "../../_app/immutable/chunks/CloseButton-dd962073.js";
 function createEventDispatcher() {
   const component = get_current_component();
   return (type, target, detail) => {
@@ -125,6 +123,64 @@ ${open && triggerEl ? `${validate_component(Frame, "Frame").$$render(
       }
     }
   )}` : ``}`;
+});
+const Wrapper = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$restProps = compute_rest_props($$props, ["tag", "show", "use"]);
+  let { tag = "div" } = $$props;
+  let { show } = $$props;
+  let { use = () => {
+  } } = $$props;
+  if ($$props.tag === void 0 && $$bindings.tag && tag !== void 0)
+    $$bindings.tag(tag);
+  if ($$props.show === void 0 && $$bindings.show && show !== void 0)
+    $$bindings.show(show);
+  if ($$props.use === void 0 && $$bindings.use && use !== void 0)
+    $$bindings.use(use);
+  return `${show ? `${((tag$1) => {
+    return tag$1 ? `<${tag}${spread([escape_object($$restProps)], {})}>${is_void(tag$1) ? "" : `${slots.default ? slots.default({}) : ``}`}${is_void(tag$1) ? "" : `</${tag$1}>`}` : "";
+  })(tag)}` : `${slots.default ? slots.default({}) : ``}`}`;
+});
+const Textarea = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$restProps = compute_rest_props($$props, ["value"]);
+  let $$slots = compute_slots(slots);
+  const background = getContext("background");
+  let { value = "" } = $$props;
+  let wrapped;
+  let wrapperClass;
+  let textareaClass;
+  const headerClass = (header) => classNames(header ? "border-b" : "border-t", "py-2 px-3 border-gray-200 dark:border-gray-600");
+  let innerWrapperClass;
+  if ($$props.value === void 0 && $$bindings.value && value !== void 0)
+    $$bindings.value(value);
+  wrapped = $$slots.header || $$slots.footer;
+  wrapperClass = classNames(
+    "w-full rounded-lg",
+    background ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-700",
+    "text-gray-900 dark:placeholder-gray-400 dark:text-white ",
+    "border border-gray-200 dark:border-gray-600",
+    $$props.class
+  );
+  textareaClass = wrapped ? classNames("block w-full", "text-sm", "border-0 px-0", "bg-inherit dark:bg-inherit", "focus:outline-none focus:ring-0") : classNames(wrapperClass, "p-2.5 text-sm", "focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500");
+  innerWrapperClass = classNames("py-2 px-4 bg-white dark:bg-gray-800", $$slots.footer || "rounded-b-lg", $$slots.header || "rounded-t-lg");
+  return `${validate_component(Wrapper, "Wrapper").$$render($$result, { show: wrapped, class: wrapperClass }, {}, {
+    default: () => {
+      return `${$$slots.header ? `<div${add_attribute("class", headerClass(true), 0)}>${slots.header ? slots.header({}) : ``}</div>` : ``}
+  ${validate_component(Wrapper, "Wrapper").$$render($$result, { show: wrapped, class: innerWrapperClass }, {}, {
+        default: () => {
+          return `<textarea${spread(
+            [
+              escape_object($$restProps),
+              {
+                class: escape_attribute_value(textareaClass)
+              }
+            ],
+            {}
+          )}>${escape(value || "")}</textarea>`;
+        }
+      })}
+  ${$$slots.footer ? `<div${add_attribute("class", headerClass(false), 0)}>${slots.footer ? slots.footer({}) : ``}</div>` : ``}`;
+    }
+  })}`;
 });
 const Tooltip = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$restProps = compute_rest_props($$props, ["style", "defaultClass"]);

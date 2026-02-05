@@ -864,13 +864,14 @@
     if (DOValue == 0)
     {
       SetDOLowReady=0;
-      console.log("Set DO Close");
+      console.log("Set DO Open");
       setDOLow();
     }
     else if (DOValue ==1)
     {
       SetDOHighReady=0;
-      console.log("Set DO Open");
+
+      console.log("Set DO Close");
       setDOHigh();
     }
 
@@ -1422,8 +1423,8 @@
 <tr>
    <td class="pl-10">  <div class="flex gap-1">
    <p class="w-26 pt-2">DO:</p>
-   <Radio bind:group={DOValue} class='pl-3' value={0}>Close</Radio>   
-   <Radio bind:group={DOValue} class='p-1' value={1}>Open</Radio>
+   <Radio bind:group={DOValue} class='pl-3' value={1}>Close</Radio>   
+   <Radio bind:group={DOValue} class='p-1' value={0}>Open</Radio>
    <Button class="w-20" pill={true} on:click={SetDOValue}>Set</Button>
    <p class="pl-2 pt-2">{#if DOValue==0 && SetDOLowReady==1}Command Executed{:else if DOValue==1 && SetDOHighReady==1}Command Executed{/if}</p>
    </div>
@@ -1479,7 +1480,7 @@
 
 <tr>
    <td class="pl-10 pt-10">  <div class="flex gap-1">
-   <p class="w-26 pt-2">DO: <span class="text-red-700">{#if DOValue ==0}Close{:else if DOValue ==1}Open{/if}</span></p>
+   <p class="w-26 pt-2">DO: <span class="text-red-700">{#if DOValue ==1}Close{:else if DOValue ==0}Open{/if}</span></p>
    </td>
 </tr>
 

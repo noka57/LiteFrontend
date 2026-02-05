@@ -18,9 +18,11 @@ const Lan = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   });
   ChangedLANConfig.subscribe((val) => {
   });
-  let firstThreeParts = "192.168.123.";
-  let lastPartBegin = "100";
+  let firstThreeParts = "192.168.1.";
+  let lastPartBegin = "101";
   let lastPartEnd = "250";
+  let Edge3lastPartBegin = "11";
+  let Edge3lastPartEnd = "100";
   let $$settled;
   let $$rendered;
   do {
@@ -43,7 +45,13 @@ const Lan = create_ssr_component(($$result, $$props, $$bindings, slots) => {
           default: () => {
             return `<table><tr><td class="w-60"><p class="pl-10 pt-5 text-lg font-light text-right">DHCP Server</p></td><td class="pl-5 pt-5">${``}</td></tr>
 
-${changed_lan_data.config.networking_lan.dhcpServer.enable ? `<tr><td><p class="pl-20 pt-4 text-lg font-light text-right">DHCP IP Pool</p></td>
+${changed_lan_data.config.networking_lan.dhcpServer.enable ? `<tr><td><p class="pl-10 pt-4 text-lg font-light text-right">DHCP IP Pool (EDGE3)</p></td>
+      <td class="pl-5 pt-5"><div class="flex gap-1"><p class="pl-1 pt-2">${escape(firstThreeParts)}</p>
+      <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" min="1" max="255"${add_attribute("value", Edge3lastPartBegin, 0)}>
+      <p class="pl-1 pt-2">- </p><p class="pl-1 pt-2">${escape(firstThreeParts)}</p>
+<input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" min="1" max="255"${add_attribute("value", Edge3lastPartEnd, 0)}></div></td></tr>
+
+<tr><td><p class="pl-10 pt-4 text-lg font-light text-right">DHCP IP Pool (Others)</p></td>
       <td class="pl-5 pt-5"><div class="flex gap-1"><p class="pl-1 pt-2">${escape(firstThreeParts)}</p>
       <input type="number" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500" min="1" max="255"${add_attribute("value", lastPartBegin, 0)}>
       <p class="pl-1 pt-2">- </p><p class="pl-1 pt-2">${escape(firstThreeParts)}</p>
@@ -52,7 +60,18 @@ ${changed_lan_data.config.networking_lan.dhcpServer.enable ? `<tr><td><p class="
 
 
 <tr><td><p class="pl-20 pt-4 text-lg font-light text-right">Lease</p></td><td class="pl-5 pt-5"><div class="flex gap-1"><input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_lan_data.config.networking_lan.dhcpServer.lease, 0)}>
-<p class="pl-1 pt-2">hr</p></div></td></tr>` : ``}
+<p class="pl-1 pt-2">hr</p></div></td></tr>
+
+
+
+  <tr><td><p class="pl-40 pt-4 text-lg font-light text-right">Netmask</p></td><td class="pl-5 pt-5">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_lan_data.config.networking_lan.dhcpServer.netmask, 0)}>`}</td>
+
+${``}</tr>
+
+
+  <tr><td><p class="pl-40 pt-4 text-lg font-light text-right">Gateway</p></td><td class="pl-5 pt-5">${`<input type="text" class="bg-blue-50 border border-blue-500 text-blue-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-green-500"${add_attribute("value", changed_lan_data.config.networking_lan.dhcpServer.gateway, 0)}>`}</td>
+
+${``}</tr>` : ``}
 
     <tr><td></td>
     <td></td>
@@ -69,7 +88,9 @@ ${changed_lan_data.config.networking_lan.dhcpServer.enable ? `<tr><td><p class="
               }
             })}</td></tr></table>`;
           }
-        })}`;
+        })}
+
+${``}`;
       }
     })}`;
   } while (!$$settled);
